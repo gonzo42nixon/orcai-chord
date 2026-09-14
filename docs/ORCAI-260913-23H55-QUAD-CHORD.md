@@ -288,6 +288,99 @@ Als KRITIS-relevante Hilfsorganisation und Klinikbetreiberin erfordert das Siche
 3. **OSI-Tags in der Tag-Cloud:**  
    `OSI-L7`, `OSI-L5 Tunnel`, `OSI-L3 VPN`, `OSI-L1/L2 Cellular` ermöglichen multidimensionale Kreuzfilterungen mit Fachdomänen und KRITIS-Vorgaben.
 
+> **System-Umfang:** 82 Systeme, 160 Integrationsverbindungen, 170 E2E-Integrationsketten, 13 Geschäftsprozesse, 8 Domänen (D1–D8), 3 Kern-Middleware-Hubs  
+> **Persistenz-Key:** `ORCAI-260913-23H55-QUAD-CHORD`  
+> **Stand:** September 2026 · Version 3.2 (Enterprise Scale: 170 E2E-Integrationsketten & 3-Säulen Middleware-Radar)
+
+---
+
+## 14. Das 170-Integrations-Portfolio & Die 3-Säulen-Middleware-Architektur
+
+### A. Warum ein Konzern mit 10.000+ Mitarbeitern 170 End-to-End-Integrationen benötigt
+In Großorganisationen des Gesundheits- und Sozialwesens wie der Johanniter-Unfall-Hilfe e.V. (über 10.000 Hauptamtliche, 40.000 Ehrenamtliche, bundesweite Kliniken, Pflegeheime, Rettungswachen und Kindertagesstätten) bilden Standard-Punkt-zu-Punkt-Verbindungen nur die Spitze des Eisbergs. Ein robuster, auditierbarer Betrieb erfordert ein ausdifferenziertes Portfolio von **170 realen End-to-End-Integrationsketten (`INT-001` bis `INT-170`)**, aufgeteilt auf 5 strategische Fachdomänen:
+
+1. **Kliniken & Medizinische Diagnostik (`INT-001` bis `INT-040` | 40 Ketten):**
+   * Laboraufträge (ORM) und validierte Befundrückübermittlung (ORU) zwischen KIS (`SYS-11`) und GLIMS LIS (`SYS-16`).
+   * Radiologie DICOM Modality Worklist (MWL) und Befundanzeige via Agfa PACS (`SYS-14`) und Dedalus RIS (`SYS-15`).
+   * Intensivstation Philips PDMS Vitaldaten-Streaming (`SYS-13`), AMTS Medikationsprüfung (`SYS-12`), SafeCross Blutbank (`SYS-20`), Instacount ZSVA Sterilgut (`SYS-17`).
+   * KHZG Patientenportal m.Doc (`SYS-68`), DMI PEGASOS VNA Langzeitarchiv (`SYS-78`), Dedalus FHIR CDR Replikation (`SYS-22`).
+
+2. **Stationäre & Ambulante Pflege sowie Soziale Dienste (`INT-041` bis `INT-075` | 35 Ketten):**
+   * Vivendi Mobil (`SYS-24`) Tourenplanung und Offline-Sync über Kong API Gateway (`SYS-61`) an Vivendi NG Backend (`SYS-23`).
+   * SmartWund (`SYS-32`) KI-Wundvermessung und mobile Leistungsdokumentation gem. SGB XI.
+   * DTA § 105 SGB XI Abrechnung und Fehleravis-Clearing mit gesetzlichen Pflegekassen über Seeburger BIS (`SYS-08`).
+   * Menüservice Essen auf Rädern (`SYS-31`), Kita-Verwaltung (`SYS-29`), PalliDoc SAPV Palliativversorgung (`SYS-30`).
+
+3. **Notfallrettung, Flotte & Katastrophenschutz (`INT-076` bis `INT-110` | 35 Ketten):**
+   * Einsatzalarmierung 112 aus Leitstelle Cobra (`SYS-33`) an medDV NIDAserver (`SYS-34`) und Übernahme auf NIDApad-Tablets im RTW.
+   * RescueTrack (`SYS-39`) Flottentelematik, GPS-Echtzeitortung und FMS-Statusübermittlung (Status 1–6).
+   * 12-Kanal-EKG Telemetrie bei STEMI und prähospitale Schockraum-Voranmeldung (ETA) an KIS/Katheterlabor.
+   * UMO Hausnotruf (`SYS-35`), GSM Telecare IoT (`SYS-36`), Katretter Ersthelfer-App (`SYS-41`), Smart Key Vault Notschlüsselfreigabe (`SYS-80`).
+   * DIVI Intensivregister (`SYS-38`), BBK deNIS Katastrophenschutz (`SYS-40`), Johanniter Luftrettung Christoph (`SYS-42`).
+
+4. **Enterprise ERP, Finanzen, Beschaffung & HR (`INT-111` bis `INT-150` | 40 Ketten):**
+   * S/4HANA Private Cloud (`SYS-01`) Hauptbuch-Konsolidierung der 16 Landesverbände und Kostenstellenrechnung.
+   * Peppol BIS 3.0 B2G E-Rechnungsausgang (`SYS-09`) und elektronischer Rechnungseingang mit OCR via Seeburger BIS (`SYS-08`).
+   * SAP Ariba (`SYS-07`) Katalogbeschaffung, GHX Healthcare Supply Chain (`SYS-10`), EBICS / CAMT.053 Bankauszüge.
+   * SAP SuccessFactors (`SYS-52`) Onboarding, SAP HCM (`SYS-53`) AVR-J Entgeltabrechnung, ATOSS Dienstplanung (`SYS-51`), Entra ID SCIM Provisionierung (`SYS-69`).
+   * Snowflake Data Lakehouse (`SYS-66`), Power BI Dashboards (`SYS-67`), Salesforce CRM (`SYS-64`), Kursportal Erste-Hilfe (`SYS-81`).
+
+5. **Telematikinfrastruktur & Gesetzliche gematik-Fachdienste (`INT-151` bis `INT-170` | 20 Ketten):**
+   * KIM Provider (`SYS-44`): eArztbrief Versand & Empfang, Laborbefund-Zustellung, Pflegeüberleitungsbogen.
+   * ePA 3.0 (`SYS-45`): Patientenakte Upload/Download gem. gematik Spezifikation.
+   * eRezept Fachdienst (`SYS-47`): QES-Signatur per eHBA (`SYS-49`) und Dispensierung über Krankenhausapotheke.
+   * VSDM (`SYS-46`): Online-Stammdatenprüfung der eGK am Kartenterminal via SICCT Port 9876.
+   * Notfalldaten-Management (NFDM), Elektronischer Medikationsplan (eMP), eImpfpass, DEMIS Infektionsschutz.
+
+---
+
+### B. Die 3-Säulen-Middleware-Architektur
+
+Statt eines monolithischen Integrations-Busses setzt die Johanniter Enterprise Architecture auf eine klare Arbeitsteilung über drei spezialisierte Kern-Middleware-Engines sowie flankierende Gateways:
+
+```
+┌──────────────────────────────────────────────────────────────────────────────────┐
+│                   JOHANNITER 3-SÄULEN-MIDDLEWARE-ARCHITEKTUR                     │
+├───────────────────────┬──────────────────────────┬───────────────────────────────┤
+│    SÄULE 1: KLINIK    │     SÄULE 2: ENTERPRISE  │       SÄULE 3: B2B / EDI      │
+│  InterSystems         │  SAP Integration Suite   │   SEEBURGER BIS               │
+│  HealthShare (SYS-60) │  (CPI) (SYS-04)          │   Cloud (SYS-08)              │
+├───────────────────────┼──────────────────────────┼───────────────────────────────┤
+│ • HL7 v2.5 / v2.6 MLLP│ • OData v4 / REST / cXML │ • EDIFACT (UN/EDIFACT)        │
+│ • HL7 FHIR R4         │ • SAP RFC / BAPI / ABAP  │ • Peppol AS4 / Peppol BIS 3.0 │
+│ • DICOM PS 3.0/WADO-RS│ • SCIM 2.0 User Mgmt     │ • DTA §301 (Klinik) / §105    │
+│ • IHE XDS.b / XDS-I   │ • Cloud Foundry Bridge   │ • EBICS 3.0 / CAMT Banken     │
+│ • AMTS & KIS-Adapter  │ • SuccessFactors & HCM   │ • GHX Healthcare Supply Chain │
+│ • 42 E2E-Ketten       │ • 42 E2E-Ketten          │ • 22 E2E-Ketten               │
+└───────────────────────┴──────────────────────────┴───────────────────────────────┘
+  │                       │                          │
+  ▼                       ▼                          ▼
+┌──────────────────────────────────────────────────────────────────────────────────┐
+│                             FLANKIERENDE GATEWAYS                                │
+├───────────────────────┬──────────────────────────┬───────────────────────────────┤
+│  Kong API Gateway     │  Apache Kafka Event Bus  │  TI-Konnektor Cluster         │
+│  (SYS-61)             │  (SYS-62)                │  (SYS-43)                     │
+├───────────────────────┼──────────────────────────┼───────────────────────────────┤
+│ • Mobile Apps Edge    │ • Realtime IoT Streams   │ • gematik VPN-Tunnel (SIS)    │
+│ • OAuth2 / Rate Limit │ • GPS Flottentelemetrie  │ • KIM / ePA / eRezept Fachd.  │
+│ • 5 E2E-Ketten        │ • 5 E2E-Ketten           │ • 20 E2E-Ketten               │
+└───────────────────────┴──────────────────────────┴───────────────────────────────┘
+```
+
+---
+
+### C. Das Middleware-Radar: Interaktives Cockpit auf der Zeichenfläche
+Zur intuitiven Steuerung dieser komplexen Landschaft bietet die Anwendung oberhalb der Zeichenfläche das **Middleware-Radar (`#middlewareRadarBar`)**:
+* **Schaltflächen (Pills):**
+  * `🌐 Alle (170)`: Standardansicht der gesamten Integrationslandschaft.
+  * `🏥 HealthShare (40)`: Hebt den klinischen Integrationshub (`SYS-60`) mit einem rotierenden Superhub-Halo-Ring hervor und blendet nicht-klinische Kanten ab.
+  * `🏢 SAP CPI (40)`: Isoliert die Enterprise-Cloud- und S/4HANA-Integrationsströme (`SYS-04`).
+  * `🌐 Seeburger BIS (35)`: Fokussiert B2B/EDIFACT-Clearing und Peppol-Transaktionen (`SYS-08`).
+  * `⚡ Kong Gateway (25)`: Hebt Mobile API Edge Routing hervor (`SYS-61`).
+  * `📡 Apache Kafka (20)`: Visualisiert IoT-, Flotten- und Event-Streaming (`SYS-62`).
+  * `🔐 TI-Cluster (20)`: Fokussiert alle Telematik- und eHealth-Pfade (`SYS-43`).
+* **Visuelle Beacon-Animation:** Der ausgewählte Hub pulsiert mit gegenläufig rotierenden Orbit-Ringen (`.superhub-halo`), während alle inaktiven Systeme dezent abgedunkelt werden (`.dimmed-by-radar`).
+
 ---
 
 > *Johanniter-Unfall-Hilfe e.V. · Enterprise Architecture Management (EAM) · Dokument generiert und persistiert in ORCAI.*
