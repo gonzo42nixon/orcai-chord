@@ -2186,7 +2186,99 @@
       font-weight: 700;
     }
     .sys-node-group.dimmed {
-      opacity: 0.15;
+      opacity: 0.12 !important;
+      pointer-events: auto;
+    }
+
+    /* Tag-filtering Visual Feedback on Canvas */
+    .sys-node-group.tag-matched .sys-node-circle {
+      stroke: var(--accent) !important;
+      stroke-width: 3.5px !important;
+      filter: drop-shadow(0 0 9px var(--accent)) !important;
+      animation: tagGlowPulse 2s ease-in-out infinite alternate;
+    }
+    .sys-node-group.tag-matched .sys-node-text {
+      fill: var(--text-bright) !important;
+      font-weight: 800 !important;
+      text-shadow: 0 0 6px var(--accent-glow);
+    }
+    .sys-node-group.tag-preview .sys-node-circle {
+      stroke: var(--accent) !important;
+      stroke-width: 2.6px !important;
+      filter: drop-shadow(0 0 6px var(--accent-glow)) !important;
+    }
+    .sys-node-group.tag-preview .sys-node-text {
+      fill: var(--text-bright) !important;
+      font-weight: 700 !important;
+    }
+    .edge-link.tag-matched {
+      stroke-opacity: 0.95 !important;
+      stroke-width: 2.8 !important;
+      filter: drop-shadow(0 0 6px var(--accent-glow)) !important;
+    }
+    .edge-link.tag-preview {
+      stroke-opacity: 0.85 !important;
+      stroke-width: 2.4 !important;
+    }
+
+    @keyframes tagGlowPulse {
+      0% {
+        filter: drop-shadow(0 0 4px var(--accent));
+      }
+      100% {
+        filter: drop-shadow(0 0 11px var(--accent));
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .sys-node-group.tag-matched .sys-node-circle {
+        animation: none !important;
+      }
+    }
+
+    /* Floating Tag Filter HUD Pill */
+    .floating-tag-hud {
+      position: absolute;
+      bottom: 64px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--pill-bg);
+      backdrop-filter: blur(16px);
+      border: 1.5px solid var(--accent);
+      border-radius: 30px;
+      padding: 6px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 36;
+      box-shadow: 0 8px 24px var(--accent-glow);
+      user-select: none;
+      transition: all 0.2s ease;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-bright);
+    }
+    .floating-tag-hud .hud-tag-icon {
+      font-size: 0.85rem;
+    }
+    .floating-tag-hud .hud-tag-clear {
+      background: none;
+      border: none;
+      color: var(--accent);
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 0 4px;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: all 0.15s ease;
+    }
+    .floating-tag-hud .hud-tag-clear:hover {
+      color: #ef4444;
+      background: rgba(239, 68, 68, 0.15);
+      transform: scale(1.15);
     }
 
     /* Intermediate station glowing effect on token arrival */
@@ -2539,6 +2631,13 @@
         <button class="control-btn" id="btnZoomOut" title="Verkleinern (-)">−</button>
         <button class="control-btn" id="btnZoomReset" title="Ansicht zentrieren (⟲)">⟲</button>
         <button class="control-btn" id="btnDownloadSvg" title="SVG exportieren">💾</button>
+      </div>
+
+      <!-- FLOATING TAG FILTER HUD PILL -->
+      <div class="floating-tag-hud" id="floatingTagHud" style="display:none;" title="Aktiver Tag-Filter auf der Zeichenfläche">
+        <span class="hud-tag-icon">🏷️</span>
+        <span class="hud-tag-text" id="floatingTagHudText">0 Tags aktiv</span>
+        <button class="hud-tag-clear" id="btnFloatingClearTags" title="Tag-Filter aufheben">✕</button>
       </div>
 
       <!-- FLOATING PILL AT BOTTOM CENTER: Reset Selection Action -->
@@ -4409,11 +4508,44 @@
           });
         }
 
-        const hasActiveSelection = (activeLinkIds.size > 0 || activeNodeIds.size > 0);
+        // =========================================================================
+        // TAG FILTERING LOGIC: Compute matching systems & connections
+        // =========================================================================
+        const hasActiveTags = Boolean(activeTags && activeTags.size > 0);
+        let tagMatchingNodeIds = new Set();
+        let tagMatchingLinkIds = new Set();
+
+        if (hasActiveTags) {
+          SYSTEMS_DATA.forEach(s => {
+            if (s.tags && s.tags.some(t => activeTags.has(t))) {
+              tagMatchingNodeIds.add(s.id);
+            }
+          });
+          CONNECTIONS_DATA.forEach(c => {
+            const hasTag = Boolean(c.tags && c.tags.some(t => activeTags.has(t)));
+            const endpointsMatch = tagMatchingNodeIds.has(c.from) && tagMatchingNodeIds.has(c.to);
+            if (hasTag || endpointsMatch) {
+              tagMatchingLinkIds.add(c.id);
+            }
+          });
+
+          if (activeNodeIds.size === 0 && activeLinkIds.size === 0) {
+            // No drilldown selection active: highlight all tag-matching systems and connections!
+            activeNodeIds = new Set(tagMatchingNodeIds);
+            activeLinkIds = new Set(tagMatchingLinkIds);
+          } else {
+            // Intersect with active drilldown selection:
+            activeNodeIds = new Set([...activeNodeIds].filter(id => tagMatchingNodeIds.has(id)));
+            activeLinkIds = new Set([...activeLinkIds].filter(id => tagMatchingLinkIds.has(id)));
+          }
+        }
+
+        const hasActiveSelection = (activeLinkIds.size > 0 || activeNodeIds.size > 0 || hasActiveTags);
 
         linkElements
           .classed("highlighted", d => activeLinkIds.has(d.id))
           .classed("focused-step", d => selectedLink && d.id === selectedLink.id)
+          .classed("tag-matched", d => hasActiveTags && tagMatchingLinkIds.has(d.id))
           .classed("dimmed", d => {
             if (selectedMessageType && d.messageType !== selectedMessageType) return true;
             if (hasActiveSelection) return !activeLinkIds.has(d.id);
@@ -4433,6 +4565,7 @@
 
         nodeElements
           .classed("active", d => activeNodeIds.has(d.id))
+          .classed("tag-matched", d => hasActiveTags && tagMatchingNodeIds.has(d.id))
           .classed("dimmed", d => {
             if (hasActiveSelection) return !activeNodeIds.has(d.id);
             const c = nodeCoords.get(d.id);
@@ -4443,6 +4576,34 @@
             if (selectedScope === 'BOUNDARY') return !d.isBoundaryEntity;
             return false;
           });
+
+        // Update Tag Count in Right Drawer
+        const tagCountEl = document.getElementById("tagCount");
+        if (tagCountEl) {
+          if (hasActiveTags) {
+            tagCountEl.textContent = activeTags.size + ' aktiv (' + tagMatchingNodeIds.size + ' Sys · ' + tagMatchingLinkIds.size + ' Kanten)';
+          } else {
+            tagCountEl.textContent = '0 ausgewählt';
+          }
+        }
+        const btnResetTEl = document.getElementById("btnResetTags");
+        if (btnResetTEl) {
+          btnResetTEl.style.display = hasActiveTags ? "inline" : "none";
+        }
+
+        // Update Canvas Floating Tag HUD Pill
+        const floatingTagHud = document.getElementById("floatingTagHud");
+        const floatingTagHudText = document.getElementById("floatingTagHudText");
+        if (floatingTagHud && floatingTagHudText) {
+          if (hasActiveTags) {
+            floatingTagHud.style.display = "flex";
+            const tagArr = Array.from(activeTags);
+            const labelStr = tagArr.length <= 2 ? tagArr.join(', ') : (tagArr.slice(0, 2).join(', ') + ' +' + (tagArr.length - 2));
+            floatingTagHudText.innerHTML = 'Tag-Filter: <strong>' + labelStr + '</strong> · ' + tagMatchingNodeIds.size + ' Systeme, ' + tagMatchingLinkIds.size + ' Kanten';
+          } else {
+            floatingTagHud.style.display = "none";
+          }
+        }
 
         // Stage 1: Domänen
         document.querySelectorAll(".domain-item").forEach(item => {
@@ -4629,6 +4790,31 @@
 
         // Case 3: Initial State (keine Auswahl)
         if (!selectedDomainId && !selectedProcess && !selectedIntegration && !selectedLink) {
+          const hasActiveTags = Boolean(activeTags && activeTags.size > 0);
+          if (hasActiveTags) {
+            const matchedSysCount = SYSTEMS_DATA.filter(s => s.tags && s.tags.some(t => activeTags.has(t))).length;
+            const matchedConCount = CONNECTIONS_DATA.filter(c => c.tags && c.tags.some(t => activeTags.has(t))).length;
+            const tagListStr = Array.from(activeTags).map(t => esc(t)).join(', ');
+            titleEl.innerHTML = 
+              '<span class="title-step-node active-stage" style="cursor:default;">' +
+                '<span class="title-step-num">🏷️</span>' +
+                '<span class="title-step-text">Tag-Filter: ' + esc(Array.from(activeTags).slice(0, 3).join(', ')) + (activeTags.size > 3 ? '…' : '') + '</span>' +
+                '<span class="title-step-clear" onclick="event.stopPropagation(); window.clearAllTags();" title="Tag-Filter aufheben">✕</span>' +
+              '</span>' +
+              '<span class="title-sep">*</span>' +
+              '<span class="title-step-node" style="cursor:default;">' +
+                '<span class="title-step-text" style="color:var(--accent);">' + matchedSysCount + ' Systeme</span>' +
+              '</span>' +
+              '<span class="title-sep">*</span>' +
+              '<span class="title-step-node" style="cursor:default;">' +
+                '<span class="title-step-text" style="color:var(--accent);">' + matchedConCount + ' Kanten</span>' +
+              '</span>';
+            subEl.innerHTML = 
+              '<span class="subtitle-stage-pill" style="background:var(--accent); color:#0b0f17; font-weight:700;">🏷️ Tag-Filter (' + activeTags.size + ' aktiv)</span>' +
+              '<span>Hervorgehoben: <strong>' + matchedSysCount + ' Systeme</strong> &amp; <strong>' + matchedConCount + ' Schnittstellen</strong> mit Tags: <strong>' + tagListStr + '</strong> · Restliche Objekte gedimmt</span>';
+            return;
+          }
+
           titleEl.innerHTML = 
             '<span class="title-step-node active-stage" style="cursor:default;">' +
               '<span class="title-step-text">Johanniter Enterprise Architecture</span>' +
@@ -5305,10 +5491,40 @@
       SYSTEMS_DATA.forEach(s => s.tags.forEach(t => allTags.add(t)));
       CONNECTIONS_DATA.forEach(c => c.tags.forEach(t => allTags.add(t)));
 
+      window.clearAllTags = function() {
+        activeTags.clear();
+        document.querySelectorAll(".tag-chip").forEach(c => c.classList.remove("active"));
+        updateUI();
+      };
+
+      const btnFloatingClearTags = document.getElementById("btnFloatingClearTags");
+      if (btnFloatingClearTags) {
+        btnFloatingClearTags.onclick = (e) => {
+          e.stopPropagation();
+          window.clearAllTags();
+        };
+      }
+
       Array.from(allTags).sort().forEach(tag => {
         const chip = document.createElement("div");
         chip.className = "tag-chip";
         chip.textContent = tag;
+
+        const sysCnt = SYSTEMS_DATA.filter(s => s.tags && s.tags.includes(tag)).length;
+        const conCnt = CONNECTIONS_DATA.filter(c => c.tags && c.tags.includes(tag)).length;
+        chip.title = "Tag '" + tag + "': in " + sysCnt + " Systemen und " + conCnt + " Schnittstellen";
+
+        chip.onmouseenter = () => {
+          if (activeTags.size === 0) {
+            d3.selectAll(".sys-node-group").classed("tag-preview", d => d.tags && d.tags.includes(tag));
+            d3.selectAll(".edge-link").classed("tag-preview", d => d.tags && d.tags.includes(tag));
+          }
+        };
+        chip.onmouseleave = () => {
+          d3.selectAll(".sys-node-group").classed("tag-preview", false);
+          d3.selectAll(".edge-link").classed("tag-preview", false);
+        };
+
         chip.onclick = () => {
           if (activeTags.has(tag)) {
             activeTags.delete(tag);
@@ -5317,9 +5533,6 @@
             activeTags.add(tag);
             chip.classList.add("active");
           }
-          document.getElementById("tagCount").textContent = activeTags.size + " ausgewählt";
-          const btnResetT = document.getElementById("btnResetTags");
-          if (btnResetT) btnResetT.style.display = activeTags.size > 0 ? "inline" : "none";
           updateUI();
         };
         tagCloudEl.appendChild(chip);
@@ -5328,11 +5541,7 @@
       const btnResetT = document.getElementById("btnResetTags");
       if (btnResetT) {
         btnResetT.onclick = () => {
-          activeTags.clear();
-          document.querySelectorAll(".tag-chip").forEach(c => c.classList.remove("active"));
-          document.getElementById("tagCount").textContent = "0 ausgewählt";
-          btnResetT.style.display = "none";
-          updateUI();
+          window.clearAllTags();
         };
       }
 

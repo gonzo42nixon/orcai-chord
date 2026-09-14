@@ -85,6 +85,12 @@ Die Johanniter Quad-Chord EA wurde nach Google-Enterprise-Standards (Material De
    - **Linker Drawer (Stufe 3: Integrationen):** Dynamische Filter- und Match-Hervorhebung (`★ Enthält CON-XX (Schritt 1/4)`) mit Section-Badge und sanfter Dimmung nicht-betroffener Ketten.
    - **Canvas Pop-out Karte:** Eigene Sektion `🔗 E2E-Integrationen dieser Kante` mit direkten Start-Buttons für jede übergeordnete Prozesskette.
    - **Rechter Inspektor:** Interaktive Stepper-Sequenz (`[Quelle] ➔ [★ CON-XX] ➔ [Ziel]`) mit Schritt-Markierung und 1-Klick Aktivierungs-Button (`[ ▶ E2E-Kette aktivieren ]`).
+6. **Interaktives Tag-Filtering mit Canvas-Feedback & Floating HUD:**
+   - **Zeichenflächen-Hervorhebung:** Auswahl eines oder mehrerer Tags in der Tag-Cloud hebt alle passenden Systeme und Schnittstellen mit leuchtendem Akzent-Halo (`.tag-matched`), pulsierender Kontur und fettem Schriftzug hervor.
+   - **Fokussierende Dimmung:** Nicht-betroffene Systeme und Schnittstellen werden auf der Zeichenfläche dezent abgedunkelt (`opacity: 0.12` bzw. `0.04`), sodass isolierte Technologie- und Aufgaben-Cluster (z. B. `Apple`, `Cloud Connector`, `SAP`, `API`) sofort ins Auge fallen.
+   - **Hover-Preview:** Beim Überfahren eines Tag-Chips mit der Maus erhalten Anwender eine verzögerungsfreie Voransicht der betroffenen Knoten und Kanten auf der Zeichenfläche.
+   - **Floating Tag HUD:** Eine schwebende Status-Pille am unteren Rand der Zeichenfläche zeigt die aktiven Tags sowie die Trefferzahlen an und ermöglicht das sofortige Aufheben des Filters mit 1 Klick (`[✕]`).
+   - **Synchronisierte Zähler:** Der Zähler in der Tag-Cloud aktualisiert sich in Echtzeit (`X aktiv (Y Sys · Z Kanten)`).
 
 ## Regulatorische Grundlagen & Legalitätsnachweis
 
