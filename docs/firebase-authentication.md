@@ -21,9 +21,24 @@ Die persistierte ORCAI-SPA `ORCAI-260913-16H03-SPA-CS745` wird erst nach einer e
 6. Nach der Abmeldung wird der Arbeitsbereich sofort wieder gesperrt.
 7. Popup-Abbruch durch den Benutzer wird nicht als Anwendungsfehler angezeigt; andere Fehler werden im Gate und Kontomenü ausgegeben.
 
-## Sicherheitsgrenze
+## Serverseitiger Zugriffsschutz
 
-Der clientseitige Gate verhindert die Nutzung der Anwendung durch nicht angemeldete Besucher, verschlüsselt aber das ausgelieferte HTML-Artefakt nicht. Der aktuelle Dokument-Endpunkt `/api/orcai/v1/docs/:key` liefert die SPA weiterhin vor der Ausführung des Firebase-Codes aus. Falls bereits der Abruf des HTML-Inhalts vertraulich sein muss, muss der ORCAI-Dokument-Endpunkt zusätzlich ein Firebase-ID-Token serverseitig validieren. Direkte Browsernavigation erfordert dafür ein Session-Cookie oder einen vorgeschalteten authentifizierten App-Loader.
+Der Dokument-Endpunkt erkennt den Key `ORCAI-260913-16H03-SPA-CS745` als geschütztes Artefakt. Direkte Browsernavigation liefert ohne Bearer-Token ausschließlich einen minimalen Login-Loader, nicht den Quad-Chord-Quelltext oder seine Architekturdaten.
+
+Nach erfolgreicher Google-Anmeldung ruft der Loader ein Firebase-ID-Token ab und fordert dasselbe Dokument erneut mit `Authorization: Bearer <token>` an. Die Cloud Function validiert dieses Token mit dem Firebase Admin SDK. Erst danach liest und liefert sie das gespeicherte SPA-Artefakt aus.
+
+```text
+Browser  -- GET ohne Token -->  ORCAI API  -- 200 --> Login-Loader
+Browser  -- Google Login ---->  Firebase Auth
+Browser  -- GET + ID-Token -->  ORCAI API  -- verifyIdToken()
+Browser  <-- geschützte SPA --  ORCAI API
+```
+
+Ungültige oder abgelaufene Token werden mit HTTP `401` abgewiesen. Der Loader enthält keine fachlichen Quad-Chord-Daten. Andere bestehende ORCAI-Dokumente bleiben vorerst unverändert erreichbar, damit deren Viewer und Integrationen nicht unbeabsichtigt unterbrochen werden.
+
+### Sicherheitsgrenze
+
+Die Schutzentscheidung erfolgt derzeit anhand einer expliziten serverseitigen Liste geschützter Dokument-Keys. Jeder weitere vertrauliche SPA-Key muss dieser Liste hinzugefügt oder zukünftig über Envelope-Metadaten als geschützt markiert werden. Ein gültiges Konto des Firebase-Projekts genügt; Domain- oder UID-Whitelists sind noch nicht aktiviert.
 
 ## Deployment
 
@@ -42,6 +57,8 @@ https://orcai-54321.web.app/api/orcai/v1/docs/ORCAI-260913-16H03-SPA-CS745
 ## Abnahmetests
 
 - Abgemeldet: Arbeitsbereich ist nicht sichtbar oder bedienbar; Login-Gate und Header-Avatar sind sichtbar.
+- Abruf ohne Token: Antwort enthält den Login-Loader, aber keine Konstanten wie `DOMAINS_DATA` oder `CONNECTIONS_DATA`.
+- Abruf mit manipuliertem Token: Server antwortet mit HTTP `401` und liefert keine SPA-Daten.
 - Anmeldung: Google-Popup startet und eine erfolgreiche Anmeldung entfernt den Gate.
 - Neu laden: Die Sitzung bleibt durch `Auth.Persistence.LOCAL` erhalten.
 - Avatar: Firebase-Profilbild wird angezeigt; bei Bildfehler oder fehlender URL erscheint ein Initial.

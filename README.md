@@ -13,4 +13,4 @@ Quad-Chord-Visualisierung der Johanniter Enterprise-Architecture-Landschaft im O
 
 Die Anwendung verwendet den zentralen Google/Firebase-Login des Projekts `orcai-54321`. Nicht angemeldete Benutzer sehen einen blockierenden Login-Gate; der Konto-Avatar befindet sich im Header unmittelbar rechts neben dem Day-/Night-Mode-Schalter.
 
-Die clientseitige Zugangssperre und ihre Sicherheitsgrenzen sind in der technischen Dokumentation beschrieben.
+Zusätzlich schützt die ORCAI Cloud Function das gespeicherte SPA-Artefakt serverseitig: Ohne ein validiertes Firebase-ID-Token wird nur ein minimaler Login-Loader ausgeliefert. Ablauf und Sicherheitsgrenzen sind in der technischen Dokumentation beschrieben.
