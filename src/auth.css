@@ -5,6 +5,7 @@
 .orcai-account-photo,.orcai-account-fallback{width:30px;height:30px;border-radius:50%}
 .orcai-account-photo{display:block;object-fit:cover}
 .orcai-account-photo[hidden]{display:none}
+.orcai-account-photo:not([hidden])+.orcai-account-fallback{display:none}
 .orcai-account-fallback{display:grid;place-items:center;background:#fff;color:#4285f4;font-size:14px;font-weight:800;border:1px solid #dadce0}
 .orcai-account-state{position:absolute;right:-1px;bottom:-1px;width:10px;height:10px;border:2px solid var(--header-bg);border-radius:50%;background:#94a3b8}
 .orcai-account[data-authenticated="true"] .orcai-account-state{background:#22c55e}
