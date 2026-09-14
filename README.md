@@ -96,6 +96,14 @@ Die Johanniter Quad-Chord EA wurde nach Google-Enterprise-Standards (Material De
    - **Clean Proxy Architecture:** Eliminierung direkter Cloud-to-On-Prem-Bypasses (Vivendi Sync `CON-12` und Qualitrans Faktura `CON-102` werden sauber über den Cloud Connector vermittelt).
    - **Transport Overlay Badge:** Jede Kante im Inspector weist ein standardisiertes Transport-Badge aus (z. B. `SAP Cloud Connector Tunnel`, `IPsec Site-to-Site VPN`, `TI-VPN (KIM)`, etc.).
    - **🛡️ Hybride Cloud-Sicherheit Spickzettel-Sektion:** Detaillierte Darstellung von Principal Propagation (X.509-Zertifikate), Virtual Host Masking und Resource Whitelisting bei Auswahl von `SYS-05` oder `SYS-82`.
+8. **4-Säulen Enterprise-Health Tagging-Taxonomie & CI/CD Qualitätssicherung:**
+   - **4 Säulen (34 kuratierte Tags):**
+     - *Regulatorik & Compliance:* `KRITIS`, `Telematik / TI`, `§ 301 SGB V`, `§ 105 SGB XI`, `§ 60 SGB V`, `KHZG`, `Peppol`
+     - *Fachdomänen:* `Klinik`, `Pflege`, `Notfallrettung`, `Hausnotruf`, `Finanzen / ERP`, `Personal / HR`
+     - *Standards & Interoperabilität:* `FHIR`, `HL7`, `DICOM`, `KIM`, `EDIFACT`, `Kafka`, `MQTT`
+     - *Plattformen & Infrastruktur:* `SAP`, `BTP`, `Microsoft`, `AWS`, `Apple`, `Google`, `Cloud Connector`, `Connectivity Services`, `Proxy`, `Firewall`, `Portal`, `Java`, `ABAP`, `C++`
+   - **Beseitigung von Tag-Verwässerung (Anti-Dilution):** Vollständige Entfernung von 13 Rausch- und CRUD-Tags (`GET`, `POST`, `PUT`, `CREATE`, `READ`, `UPDATE`, `SEND`, `RECEIVE`, `Non-SAP`, `Intern`, `Extern`, `Process`, `Integration`, `Service`). Maximale Systemabdeckung pro Tag liegt nun bei $\le 22\%$ (zuvor $88\%$).
+   - **Automatisierte CI/CD-Qualitätssicherung:** 6-stufiger Node.js-Linter (`test_tag_qa_lint.js`) und Playwright-E2E-Testsuite (`test_tag_qa_playwright.js`) sichern die Tag-Governance ab.
 
 ## Regulatorische Grundlagen & Legalitätsnachweis
 

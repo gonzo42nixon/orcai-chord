@@ -230,7 +230,41 @@ Die Systembezeichnungen und Schnittstellenarchitekturen basieren auf öffentlich
 > **100% Legale & Synthetische Architektur-Referenz:**  
 > 1. **Keine Verwendung proprietärer Geschäftsgeheimnisse:** Alle dargestellten Systeme, Protokolle, Portnummern und Integrationsabläufe wurden ausschließlich auf Basis öffentlich zugänglicher Vergabeunterlagen, Hersteller-Websites, gematik-Spezifikationen, FHIR-Implementation-Guides und branchenüblicher Fachliteratur synthetisiert.
 > 2. **Keine echten Patientendaten:** Alle IDs, Transaktionsgewichte und Sequenzschritte sind synthetische Demonstrationsdaten. Es werden zu keinem Zeitpunkt echte Patienten-, Kunden- oder Mitarbeiterdaten verarbeitet oder gespeichert.
-> 3. **Keine vertraulichen Zugangsdaten:** Die Anwendung enthält keinerlei private kryptografische Schlüssel, geheime Passwörter oder vertrauliche API-Tokens.
+---
+
+## 12. Enterprise Tagging-Governance & Qualitätssicherung
+
+Die Enterprise-Architecture-Plattform nutzt ein kuratiertes, streng typisiertes **4-Säulen-Tagging-Modell** anstelle unstrukturierter Freitext-Schlagwörter:
+
+### A. Die 4-Säulen Enterprise-Health-Taxonomie (34 Tags)
+1. **Regulatorik & Compliance (Healthcare & KRITIS):**
+   * `KRITIS`: Verbindliche Kennzeichnung aller Systeme der Kritischen Infrastruktur (Kliniken, Leitstellen, Notrufe, Perimeter, SIEM, PAM).
+   * `Telematik / TI`: TI-Konnektoren, ePA, KIM, VSDM, eRezept, Kartenterminals.
+   * `§ 301 SGB V`: EDIFACT-Krankenhausabrechnung.
+   * `§ 105 SGB XI`: Gesetzliche Pflegeleistungs-Abrechnung (DTA).
+   * `§ 60 SGB V`: Krankentransport-Disposition und Genehmigung.
+   * `KHZG`: Fördertatbestände des Krankenhauszukunftsgesetzes (Patientenportal, AMTS, Entlassmanagement).
+   * `Peppol`: B2G/B2B E-Invoicing via Peppol BIS 3.0.
+2. **Fachdomänen & Kerngeschäft:**
+   * `Klinik`, `Pflege`, `Notfallrettung`, `Hausnotruf`, `Finanzen / ERP`, `Personal / HR`.
+3. **Standards & Interoperabilität:**
+   * `FHIR`, `HL7`, `DICOM`, `KIM`, `EDIFACT`, `Kafka`, `MQTT`.
+4. **Plattformen & Infrastruktur:**
+   * `SAP`, `BTP`, `Microsoft`, `AWS`, `Apple`, `Google`, `Cloud Connector`, `Connectivity Services`, `Proxy`, `Firewall`, `Portal`, `Java`, `ABAP`, `C++`.
+
+### B. Beseitigung von Tag-Verwässerung (Anti-Dilution Policy)
+* **Verbot von HTTP- und CRUD-Verben:** Begriffe wie `GET`, `POST`, `PUT`, `CREATE`, `READ`, `UPDATE`, `SEND`, `RECEIVE` wurden eliminiert. Ein Enterprise-System ist kein Datenfluss-Verb.
+* **Verbot von Invertierungs-Flags:** Der Tag `Non-SAP` (zuvor auf 88% aller Systeme) wurde gelöscht, da Pseudo-Tags ohne Selektivität die UI verwässern.
+* **Verbot von Scope-Duplikaten:** `Intern` und `Extern` wurden entfernt, da der Quadranten-Bogen und das native Attribut `scope` diese Trennung bereits exakt bereitstellen.
+
+### C. Automatisierte CI/CD Qualitätssicherung (6-Stufen Linter & Playwright)
+Im Build-Prozess prüft das Testskript `test_tag_qa_lint.js` die Einhaltung folgender Qualitätsregeln:
+1. **Forbidden Tag Check:** Keine verbotenen CRUD-/HTTP-Tags.
+2. **Case Sensitivity & Naming Check:** Alle Herstellernamen (`AWS`, `C++`) standardisiert; keine Leerzeichen.
+3. **Orphan Tag Check:** Jeder Tag muss mindestens 2 Entitäten referenzieren.
+4. **Selectivity Threshold:** Kein Tag darf mehr als 30% der Systeme matchen.
+5. **Zero-Tag Protection:** Jedes System und jede Schnittstelle besitzt mindestens 2 valide Tags.
+6. **Plausibility Cross-Check:** Logische Validierung spezifischer Knoten (z. B. keine Cloud-Connector-Tags an Drittanbieter-Apps wie Katretter).
 
 ---
 
