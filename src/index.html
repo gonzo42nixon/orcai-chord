@@ -378,6 +378,254 @@
       font-weight: 700;
     }
 
+    /* Edge-to-Integration Context Selector (Kanten-Integrations-Selektor) */
+    .edge-integ-selector-bar {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: nowrap;
+    }
+    .edge-integ-selector-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+    .header-edge-integ-pills {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      flex-wrap: nowrap;
+    }
+    .header-edge-integ-pill-btn {
+      background: var(--card-inner-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 2px 9px;
+      font-family: inherit;
+      font-size: 0.72rem;
+      color: var(--text-bright);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+      user-select: none;
+    }
+    .header-edge-integ-pill-btn:hover {
+      border-color: var(--accent);
+      background: rgba(56, 189, 248, 0.18);
+      color: var(--text-bright);
+      box-shadow: 0 0 8px var(--accent-glow);
+      transform: translateY(-1px);
+    }
+    .header-edge-integ-pill-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #080d1a !important;
+      font-weight: 750;
+      box-shadow: 0 0 10px var(--accent-glow);
+    }
+    .header-edge-integ-pill-btn.active .pill-step {
+      color: #080d1a !important;
+    }
+    .header-edge-integ-pill-btn .pill-id {
+      font-weight: 800;
+      letter-spacing: 0.3px;
+    }
+    .header-edge-integ-pill-btn .pill-name {
+      opacity: 0.88;
+      font-weight: 500;
+    }
+    .header-edge-integ-pill-btn .pill-step {
+      font-size: 0.66rem;
+      color: var(--accent);
+      font-weight: 700;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 1px 5px;
+      border-radius: 6px;
+    }
+
+    /* Left Drawer Stage 3: Edge-Filter Bar & Highlight */
+    .drawer-edge-filter-box {
+      margin-bottom: 8px;
+      padding: 7px 10px;
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 0.72rem;
+    }
+    .drawer-edge-filter-info {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-bright);
+      font-weight: 600;
+    }
+    .drawer-edge-filter-badge {
+      background: var(--accent);
+      color: #080d1a;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .drawer-edge-filter-toggle {
+      background: var(--card-inner-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      border-radius: 6px;
+      padding: 2px 8px;
+      font-size: 0.68rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+    .drawer-edge-filter-toggle:hover {
+      border-color: var(--accent);
+      color: var(--text-bright);
+    }
+    .list-item.edge-match {
+      border: 1.5px solid var(--accent) !important;
+      background: rgba(56, 189, 248, 0.12) !important;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.22);
+    }
+    .list-item.edge-dimmed {
+      opacity: 0.35;
+      transition: opacity 0.2s ease;
+    }
+    .list-item.edge-dimmed:hover {
+      opacity: 0.9;
+    }
+    .integ-step-indicator-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: #080d1a;
+      background: var(--accent);
+      padding: 1px 6px;
+      border-radius: 8px;
+      margin-left: 6px;
+      box-shadow: 0 0 6px var(--accent-glow);
+    }
+
+    /* Floating Pop-out Card: Integration Selector */
+    .edge-popout-integs {
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px solid var(--card-border);
+    }
+    .edge-popout-integs-title {
+      font-size: 0.72rem;
+      font-weight: 750;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .edge-popout-integ-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .edge-popout-integ-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 6px 8px;
+      border-radius: 7px;
+      background: var(--card-inner-bg);
+      border: 1px solid var(--card-border);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .edge-popout-integ-row:hover {
+      border-color: var(--accent);
+      background: rgba(56, 189, 248, 0.15);
+    }
+    .edge-popout-integ-row.active {
+      border-color: var(--accent);
+      background: rgba(56, 189, 248, 0.22);
+      box-shadow: 0 0 8px var(--accent-glow);
+    }
+    .edge-popout-integ-id {
+      font-weight: 800;
+      font-size: 0.72rem;
+      color: var(--accent);
+    }
+    .edge-popout-integ-name {
+      font-size: 0.7rem;
+      color: var(--text-bright);
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .edge-popout-integ-step {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    /* Inspector Stepper Mini Sequence */
+    .insp-stepper-box {
+      margin-top: 6px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      background: var(--card-inner-bg);
+      border: 1px solid var(--card-border);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .insp-stepper-box:hover {
+      border-color: var(--accent);
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+    }
+    .insp-stepper-box.active {
+      border-color: var(--accent);
+      background: rgba(56, 189, 248, 0.12);
+      box-shadow: 0 0 12px var(--accent-glow);
+    }
+    .insp-stepper-path {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 6px;
+      flex-wrap: wrap;
+    }
+    .insp-stepper-node {
+      font-size: 0.63rem;
+      padding: 2px 5px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+    }
+    .insp-stepper-node.active-edge {
+      background: var(--accent);
+      color: #080d1a !important;
+      border-color: var(--accent);
+      font-weight: 800;
+      box-shadow: 0 0 8px var(--accent-glow);
+    }
+    .insp-stepper-arrow {
+      color: var(--text-muted);
+      font-size: 0.6rem;
+    }
+
     /* Header Actions: Unified Icon-Only Buttons, Share & Firebase Auth */
     .header-actions {
       display: flex;
@@ -1890,6 +2138,12 @@
       stroke-opacity: 0.95 !important;
       stroke-width: 2.8 !important;
     }
+    .edge-link.focused-step {
+      stroke: #f59e0b !important;
+      stroke-opacity: 1.0 !important;
+      stroke-width: 4.0 !important;
+      filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.9)) !important;
+    }
     .edge-link.dimmed {
       stroke-opacity: 0.04 !important;
     }
@@ -2969,6 +3223,46 @@
           'EXTERNAL_B2B': '🤝 Externe B2B/EDI-Kopplung'
         };
 
+        const parentIntegs = INTEGRATIONS_DATA.filter(i => i.steps && i.steps.some(s => s.connectionId === edge.id));
+        let parentIntegsHtml = '';
+        if (parentIntegs.length > 0) {
+          parentIntegsHtml =
+            '<div class="edge-popout-integs">' +
+              '<div class="edge-popout-integs-title">' +
+                '<span>🔗 E2E-Integrationen dieser Kante (' + parentIntegs.length + ')</span>' +
+                '<span style="font-size:0.6rem; color:var(--text-muted); font-weight:normal;">Klick aktiviert Flow</span>' +
+              '</div>' +
+              '<div class="edge-popout-integ-list">' +
+                parentIntegs.map(integ => {
+                  const stepIdx = integ.steps.findIndex(s => s.connectionId === edge.id);
+                  const stepOrder = stepIdx + 1;
+                  const totalSteps = integ.steps.length;
+                  const isCurrentInteg = selectedIntegration && selectedIntegration.id === integ.id;
+                  return '<div class="edge-popout-integ-row' + (isCurrentInteg ? ' active' : '') + '" onclick="window.activateIntegrationFromEdge(\'' + integ.id + '\', \'' + edge.id + '\')" title="Kette \'' + integ.name + '\' fokussieren & animieren">' +
+                    '<div style="display:flex; align-items:center; gap:6px; min-width:0; flex:1; overflow:hidden;">' +
+                      '<span class="edge-popout-integ-id">' + integ.id + '</span>' +
+                      '<span class="edge-popout-integ-name">' + integ.name + '</span>' +
+                    '</div>' +
+                    '<div style="display:flex; align-items:center; gap:4px; flex-shrink:0;">' +
+                      '<span class="edge-popout-integ-step">Schritt ' + stepOrder + '/' + totalSteps + '</span>' +
+                      '<span class="popout-btn-icon" style="padding:1px 6px; font-size:0.65rem; background:rgba(56,189,248,0.18); color:var(--accent);">' + (isCurrentInteg ? '● Aktiv' : '▶') + '</span>' +
+                    '</div>' +
+                  '</div>';
+                }).join('') +
+              '</div>' +
+            '</div>';
+        } else {
+          parentIntegsHtml =
+            '<div class="edge-popout-integs">' +
+              '<div class="edge-popout-integs-title" style="color:var(--text-muted);">' +
+                '<span>⚡ Verbindungstyp: Ad-hoc Direct Edge</span>' +
+              '</div>' +
+              '<div style="font-size:0.68rem; color:var(--text-muted); padding:2px 0;">' +
+                'Punkt-zu-Punkt Schnittstelle (in keiner vordefinierten E2E-Kette registriert).' +
+              '</div>' +
+            '</div>';
+        }
+
         const card = document.createElement("div");
         card.className = "edge-popout-card";
         card.id = "popout-" + edge.id;
@@ -3001,6 +3295,7 @@
             '<div class="insp-desc" style="font-size:0.7rem;">' +
               '<strong>Security / Boundary:</strong> ' + (edge.isCrossBoundary ? '🛡️ Durchquert Perimeter-Gateways / Firewalls' : 'Intra-Zone gesichert') +
             '</div>' +
+            parentIntegsHtml +
           '</div>';
 
         // Calculate Position (Staggered or at Mouse)
@@ -3814,7 +4109,9 @@
           const stepIdx = selectedIntegration.steps.findIndex(s => s.connectionId === edge.id);
           renderInspectorIntegration(selectedIntegration, stepIdx);
         } else {
-          // If no integration is active, render the rich Edge Architecture inspector
+          // If edge is not part of current integration, clear integration focus
+          selectedIntegration = null;
+          stopTokenAnimation();
           renderInspectorEdge(edge);
         }
 
@@ -3907,6 +4204,43 @@
       window.setDrilldownDomain = setDrilldownDomain;
       window.setDrilldownProcess = setDrilldownProcess;
       window.setDrilldownIntegration = setDrilldownIntegration;
+
+      function activateIntegrationFromEdge(integId, edgeId) {
+        const integ = INTEGRATIONS_DATA.find(i => i.id === integId);
+        if (!integ) return;
+
+        // Set or keep edge
+        const edge = CONNECTIONS_DATA.find(c => c.id === edgeId) || selectedLink;
+        selectedLink = edge;
+        selectedIntegration = integ;
+
+        // Auto-sync process & domain if needed
+        const matchingProc = PROCESSES_DATA.find(p => p.cleanIntegIds.includes(integ.id));
+        if (matchingProc) {
+          selectedProcess = matchingProc;
+          if (!selectedDomainId || !DOMAINS_DATA.some(d => d.id === selectedDomainId && (matchingProc.leadDomain === selectedDomainId || matchingProc.participatingDomains.includes(selectedDomainId)))) {
+            selectedDomainId = matchingProc.leadDomain;
+          }
+        }
+
+        // Find step index for edge
+        const stepIdx = integ.steps ? integ.steps.findIndex(s => s.connectionId === edgeId) : -1;
+
+        // Start token animation for integration
+        startTokenAnimationForIntegration(selectedIntegration);
+
+        // Highlight step in inspector
+        renderInspectorIntegration(selectedIntegration, stepIdx >= 0 ? stepIdx : 0);
+
+        // Update canvas ribbons and left drawer
+        updateUI();
+
+        // Feedback toast
+        if (typeof showToast === "function") {
+          showToast('⚡ E2E-Kette ' + integ.id + ' aktiviert · Schritt ' + (stepIdx >= 0 ? (stepIdx + 1) : 1) + '/' + integ.steps.length);
+        }
+      }
+      window.activateIntegrationFromEdge = activateIntegrationFromEdge;
 
       // Drilldown Header Navigation & Clear Actions
       function jumpToStage1() {
@@ -4079,6 +4413,7 @@
 
         linkElements
           .classed("highlighted", d => activeLinkIds.has(d.id))
+          .classed("focused-step", d => selectedLink && d.id === selectedLink.id)
           .classed("dimmed", d => {
             if (selectedMessageType && d.messageType !== selectedMessageType) return true;
             if (hasActiveSelection) return !activeLinkIds.has(d.id);
@@ -4140,7 +4475,7 @@
           badgeProcess.classList.toggle("active", selectedProcess !== null);
         }
 
-        // Stage 3: Integrationen (filter & status based on selectedProcess or selectedDomainId)
+        // Stage 3: Integrationen (filter & status based on selectedProcess, selectedDomainId, or selectedLink)
         let activeIntegs = INTEGRATIONS_DATA;
         if (selectedProcess) {
           const procIntegSet = new Set(selectedProcess.cleanIntegIds);
@@ -4156,22 +4491,60 @@
         }
         const activeIntegIds = new Set(activeIntegs.map(i => i.id));
 
+        // Compute edge match map if an edge is selected
+        const edgeMatchingIntegMap = new Map();
+        if (selectedLink) {
+          INTEGRATIONS_DATA.forEach(integ => {
+            const stepIdx = integ.steps ? integ.steps.findIndex(s => s.connectionId === selectedLink.id) : -1;
+            if (stepIdx !== -1) {
+              edgeMatchingIntegMap.set(integ.id, { stepIdx, totalSteps: integ.steps.length });
+            }
+          });
+        }
+
         document.querySelectorAll("#integrationList .list-item").forEach(item => {
           const iId = item.id.replace("integ-item-", "");
           const isMatch = activeIntegIds.has(iId);
-          item.classList.toggle("disabled", !isMatch);
+          const isEdgeMatch = edgeMatchingIntegMap.has(iId);
+
+          item.classList.toggle("disabled", !isMatch && !isEdgeMatch);
           item.classList.toggle("selected", selectedIntegration && selectedIntegration.id === iId);
+          item.classList.toggle("edge-match", isEdgeMatch);
+          item.classList.toggle("edge-dimmed", Boolean(selectedLink && !isEdgeMatch && edgeMatchingIntegMap.size > 0));
+
+          // Clean up any existing badge
+          const prevBadge = item.querySelector(".integ-step-indicator-badge");
+          if (prevBadge) prevBadge.remove();
+
+          if (isEdgeMatch) {
+            const stepInfo = edgeMatchingIntegMap.get(iId);
+            const badge = document.createElement("span");
+            badge.className = "integ-step-indicator-badge";
+            badge.innerHTML = '★ Schritt ' + (stepInfo.stepIdx + 1) + '/' + stepInfo.totalSteps;
+            badge.title = 'Kante ' + selectedLink.id + ' ist Schritt ' + (stepInfo.stepIdx + 1) + ' von ' + stepInfo.totalSteps;
+            const topRow = item.querySelector("div > div");
+            if (topRow) topRow.appendChild(badge);
+          }
         });
+
         const badgeIntegration = document.getElementById("badgeIntegration");
         if (badgeIntegration) {
-          if (selectedProcess) {
+          if (selectedLink && edgeMatchingIntegMap.size > 0) {
+            badgeIntegration.textContent = edgeMatchingIntegMap.size + ' für ' + selectedLink.id;
+            badgeIntegration.classList.add("active");
+          } else if (selectedLink && edgeMatchingIntegMap.size === 0) {
+            badgeIntegration.textContent = '0 für ' + selectedLink.id;
+            badgeIntegration.classList.remove("active");
+          } else if (selectedProcess) {
             badgeIntegration.textContent = activeIntegs.length + ' für ' + selectedProcess.id;
+            badgeIntegration.classList.toggle("active", selectedIntegration !== null);
           } else if (selectedDomainId) {
             badgeIntegration.textContent = activeIntegs.length + ' für ' + selectedDomainId;
+            badgeIntegration.classList.toggle("active", selectedIntegration !== null);
           } else {
             badgeIntegration.textContent = '12 E2E-Ketten';
+            badgeIntegration.classList.toggle("active", selectedIntegration !== null);
           }
-          badgeIntegration.classList.toggle("active", selectedIntegration !== null);
         }
 
         // 6. Update Centered Dynamic Drilldown Title & Subtitle in Header (Trennsymbol "*", Untertitel: "Stufe # ..")
@@ -4196,6 +4569,8 @@
           const toSys = SYSTEMS_DATA.find(s => s.id === selectedLink.to);
           const fromLabel = fromSys?.label || selectedLink.from;
           const toLabel = toSys?.label || selectedLink.to;
+          const parentIntegs = INTEGRATIONS_DATA.filter(i => i.steps && i.steps.some(s => s.connectionId === selectedLink.id));
+
           titleEl.innerHTML = 
             '<span class="title-step-node active-stage" onclick="event.stopPropagation();">' +
               '<span class="title-step-num">4</span>' +
@@ -4206,9 +4581,30 @@
             '<span class="title-step-node" style="cursor:default;">' +
               '<span class="title-step-text" style="color:var(--accent); font-weight:700;">' + esc(selectedLink.protocol || 'Schnittstelle') + '</span>' +
             '</span>';
-          subEl.innerHTML = 
-            '<span class="subtitle-stage-pill">Stufe 4 (Kante aktiv)</span>' +
-            '<span>Schnittstelle <strong>' + esc(selectedLink.id) + '</strong> (' + esc(selectedLink.protocol || 'Schnittstelle') + ') fokussiert · Details im Spickzettel &amp; Inspektor</span>';
+
+          if (parentIntegs.length > 0) {
+            subEl.innerHTML = 
+              '<span class="subtitle-stage-pill">Stufe 4 (Kante aktiv)</span>' +
+              '<div class="edge-integ-selector-bar">' +
+                '<span class="edge-integ-selector-label">🔗 In ' + parentIntegs.length + ' ' + (parentIntegs.length === 1 ? 'Kette' : 'Ketten') + ':</span>' +
+                '<div class="header-edge-integ-pills">' +
+                  parentIntegs.map(integ => {
+                    const stepIdx = integ.steps.findIndex(s => s.connectionId === selectedLink.id);
+                    const stepOrder = stepIdx + 1;
+                    const totalSteps = integ.steps.length;
+                    return '<button class="header-edge-integ-pill-btn" onclick="event.stopPropagation(); window.activateIntegrationFromEdge(\'' + integ.id + '\', \'' + selectedLink.id + '\')" title="Kette \'' + esc(integ.name) + '\' aktivieren (dies ist Schritt ' + stepOrder + ' von ' + totalSteps + ')">' +
+                      '<span class="pill-id">' + integ.id + '</span>' +
+                      '<span class="pill-name">' + esc(integ.name.length > 20 ? integ.name.substring(0, 18) + '…' : integ.name) + '</span>' +
+                      '<span class="pill-step">Schritt ' + stepOrder + '/' + totalSteps + ' ➔</span>' +
+                    '</button>';
+                  }).join('') +
+                '</div>' +
+              '</div>';
+          } else {
+            subEl.innerHTML = 
+              '<span class="subtitle-stage-pill" style="background:rgba(255,255,255,0.06); color:var(--text-muted);">Ad-hoc Schnittstelle</span>' +
+              '<span>Kante <strong>' + esc(selectedLink.id) + '</strong> (' + esc(selectedLink.protocol || 'Schnittstelle') + ') ist in keiner vordefinierten E2E-Kette registriert · Details im Spickzettel &amp; Inspektor</span>';
+          }
           return;
         }
 
@@ -4342,9 +4738,32 @@
 
         // Dynamischer Untertitel: "Stufe # .."
         if (selectedLink && selectedIntegration) {
+          const parentIntegs = INTEGRATIONS_DATA.filter(i => i.steps && i.steps.some(s => s.connectionId === selectedLink.id));
+          const stepIdx = selectedIntegration.steps.findIndex(s => s.connectionId === selectedLink.id);
+          const stepOrder = stepIdx >= 0 ? (stepIdx + 1) : 1;
+          const totalSteps = selectedIntegration.steps.length;
+
+          let integSwitcherHtml = '';
+          if (parentIntegs.length > 1) {
+            integSwitcherHtml =
+              '<div class="edge-integ-selector-bar" style="margin-left:8px;">' +
+                '<span class="edge-integ-selector-label">Wechseln:</span>' +
+                '<div class="header-edge-integ-pills">' +
+                  parentIntegs.filter(i => i.id !== selectedIntegration.id).map(integ => {
+                    const sIdx = integ.steps.findIndex(s => s.connectionId === selectedLink.id);
+                    return '<button class="header-edge-integ-pill-btn" onclick="event.stopPropagation(); window.activateIntegrationFromEdge(\'' + integ.id + '\', \'' + selectedLink.id + '\')" title="Zu Kette \'' + esc(integ.name) + '\' wechseln">' +
+                      '<span class="pill-id">' + integ.id + '</span>' +
+                      '<span class="pill-step">Schritt ' + (sIdx + 1) + '/' + integ.steps.length + ' ➔</span>' +
+                    '</button>';
+                  }).join('') +
+                '</div>' +
+              '</div>';
+          }
+
           subEl.innerHTML = 
-            '<span class="subtitle-stage-pill">Stufe 4 (Kante aktiv)</span>' +
-            '<span>Schnittstelle <strong>' + esc(selectedLink.id) + '</strong> in <strong>' + esc(selectedIntegration.id) + '</strong> fokussiert · Schritt-Details im Inspektor</span>';
+            '<span class="subtitle-stage-pill">Stufe 4 (Kante in Kette)</span>' +
+            '<span>Schnittstelle <strong>' + esc(selectedLink.id) + '</strong> ist <strong>Schritt ' + stepOrder + ' von ' + totalSteps + '</strong> in <strong>' + esc(selectedIntegration.id) + '</strong></span>' +
+            integSwitcherHtml;
         } else if (selectedIntegration) {
           subEl.innerHTML = 
             '<span class="subtitle-stage-pill">Stufe 3 (Integration aktiv)</span>' +
@@ -4441,21 +4860,43 @@
               '<span class="insp-badge">' + edge.flowType + '</span>' +
             '</div>' +
 
-            // Show parent integrations that utilize this edge
-            '<div style="font-size:0.75rem; font-weight:700; color:var(--text-bright); margin-top:8px;">Verwendet in End-to-End Integrationen (' + parentIntegs.length + ')</div>' +
-            '<div style="display:flex; flex-direction:column; gap:4px; margin-top:4px;">' +
+            // Show parent integrations that utilize this edge with visual stepper sequence
+            '<div style="font-size:0.75rem; font-weight:700; color:var(--text-bright); margin-top:10px; display:flex; align-items:center; justify-content:space-between;">' +
+              '<span>🔗 E2E-Integrationen (' + parentIntegs.length + ')</span>' +
+              '<span style="font-size:0.65rem; color:var(--text-muted); font-weight:normal;">Klick aktiviert Kette</span>' +
+            '</div>' +
+            '<div style="display:flex; flex-direction:column; gap:6px; margin-top:5px;">' +
               (parentIntegs.length > 0 ?
                 parentIntegs.map(i => {
                   const stepIndex = i.steps.findIndex(s => s.connectionId === edge.id);
-                  return '<div class="list-item" data-action="select-integ" data-id="' + i.id + '" style="cursor:pointer;" title="Integration explorieren">' +
-                    '<div style="flex:1; min-width:0;">' +
-                      '<div style="font-weight:700; font-size:0.73rem;">' + i.id + ' · ' + i.name + '</div>' +
-                      '<div style="font-size:0.67rem; color:var(--accent);">Schritt ' + (stepIndex + 1) + ' von ' + i.steps.length + ' in dieser E2E-Strecke ➔</div>' +
+                  const isCurrentInteg = selectedIntegration && selectedIntegration.id === i.id;
+                  return '<div class="insp-stepper-box' + (isCurrentInteg ? ' active' : '') + '" onclick="window.activateIntegrationFromEdge(\'' + i.id + '\', \'' + edge.id + '\')" title="Kette \'' + i.name + '\' fokussieren & animieren">' +
+                    '<div style="display:flex; align-items:center; justify-content:space-between; gap:6px;">' +
+                      '<div style="display:flex; align-items:center; gap:6px; min-width:0;">' +
+                        '<span class="insp-id" style="font-size:0.68rem; padding:1px 5px; background:var(--accent-glow); color:var(--accent);">' + i.id + '</span>' +
+                        '<span style="font-weight:700; font-size:0.75rem; color:var(--text-bright); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">' + i.name + '</span>' +
+                      '</div>' +
+                      '<button class="header-edge-integ-pill-btn' + (isCurrentInteg ? ' active' : '') + '" style="padding:1px 7px; font-size:0.65rem; flex-shrink:0;">' +
+                        (isCurrentInteg ? '● Aktiv' : '▶ Aktivieren') +
+                      '</button>' +
                     '</div>' +
-                    '<span class="traffic-tag">' + i.steps.length + ' Steps</span>' +
+                    '<div class="insp-stepper-path">' +
+                      i.steps.map((st, sIdx) => {
+                        const isThisEdge = st.connectionId === edge.id;
+                        const stSrc = sysById.get(st.from);
+                        const stTgt = sysById.get(st.to);
+                        return (sIdx === 0 ? '<span class="insp-stepper-node">' + (stSrc ? stSrc.name.slice(0, 10) : st.from) + '</span>' : '') +
+                          '<span class="insp-stepper-arrow">➔</span>' +
+                          '<span class="insp-stepper-node' + (isThisEdge ? ' active-edge' : '') + '" title="Schritt ' + (sIdx + 1) + ': ' + st.connectionId + '">' +
+                            (isThisEdge ? '★ ' + st.connectionId : st.connectionId) +
+                          '</span>' +
+                          '<span class="insp-stepper-arrow">➔</span>' +
+                          '<span class="insp-stepper-node">' + (stTgt ? stTgt.name.slice(0, 10) : st.to) + '</span>';
+                      }).join('') +
+                    '</div>' +
                   '</div>';
                 }).join('') :
-                '<div style="font-size:0.7rem; color:var(--text-muted); padding:6px 0;">Keine vordefinierte E2E-Kette (Ad-hoc Schnittstelle).</div>'
+                '<div style="font-size:0.7rem; color:var(--text-muted); padding:8px 0; background:rgba(255,255,255,0.03); border-radius:6px; text-align:center;">⚡ Ad-hoc Einzelschnittstelle · In keiner vordefinierten E2E-Kette registriert.</div>'
               ) +
             '</div>' +
 

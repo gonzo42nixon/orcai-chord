@@ -71,6 +71,11 @@ Die Johanniter Quad-Chord EA wurde nach Google-Enterprise-Standards (Material De
 4. **E2E-Inspektor & Multi-Pop-Outs:**
    - Dauerhafter Erhalt der Integrationskette im Inspektor bei Klicks auf System-Icons.
    - System-Spickzettel als schwebende, frei verschiebbare Pop-Out-Karten mit Location-Finder (`🎯 Lokalisieren`).
+5. **Kanten-Integrations-Selektor (Edge-to-Integration Context Selector):**
+   - **Header Subtitle (Mitte Oben):** Interaktive Quick-Switch Pill-Buttons (`[ ⚡ INT-01 (Schritt 1/4) ➔ ]`) zeigen sofort an, in welchen E2E-Integrationen eine selektierte Kante eingesetzt wird, und schalten mit 1 Klick um.
+   - **Linker Drawer (Stufe 3: Integrationen):** Dynamische Filter- und Match-Hervorhebung (`★ Enthält CON-XX (Schritt 1/4)`) mit Section-Badge `X Ketten für CON-XX` und sanfter Dimmung nicht-betroffener Ketten.
+   - **Canvas Pop-out Karte:** Eigene Sektion `🔗 E2E-Integrationen dieser Kante` mit direkten Start-Buttons für jede übergeordnete Prozesskette.
+   - **Rechter Inspektor:** Interaktive Stepper-Sequenz (`[Quelle] ➔ [★ CON-XX] ➔ [Ziel]`) mit Schritt-Markierung und 1-Klick Aktivierungs-Button (`[ ▶ E2E-Kette aktivieren ]`).
 
 ## Authentifizierung & Zugriffsschutz
 
