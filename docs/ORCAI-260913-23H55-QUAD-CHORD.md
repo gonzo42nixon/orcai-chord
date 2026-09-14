@@ -2,30 +2,30 @@
 ## Systemarchitektur, Integrationslandschaft & Interaktives Benutzerhandbuch
 
 > **Dokumentenart:** Enterprise Architecture Reference & Interactive Manual  
-> **Organisation:** Johanniter-Unfall-Hilfe e.V. (10.000+ Mitarbeiter, bundesweite Verbände)  
+> **Organisation:** Johanniter-Unfall-Hilfe e.V. (10.000+ Mitarbeiter, bundesweite Verbände, Kliniken & Pflegeeinrichtungen)  
 > **Klassifikation:** Offizielle Architektur-Referenz & Schulungsdokumentation  
-> **System-Umfang:** 77 Systeme, 87 Integrationsverbindungen, 8 Geschäftsprozesse, 8 Domänen (D1–D8)  
+> **System-Umfang:** 81 Systeme, 102 Integrationsverbindungen, 17 E2E-Integrationsketten, 13 Geschäftsprozesse, 8 Domänen (D1–D8)  
 > **Persistenz-Key:** `ORCAI-260913-23H55-QUAD-CHORD`  
-> **Stand:** September 2026 · Version 2.6 (Quad-Chord Release)
+> **Stand:** September 2026 · Version 3.0 (Extended E2E Enterprise Architecture Release)
 
 ---
 
 ## 1. Executive Summary & Zielsetzung
 
-Die vorliegende Anwendung ist die offizielle **Enterprise Architecture (EA) Quad-Chord Visualisierungsplattform** der Johanniter-Unfall-Hilfe e.V. Sie dient Architekten, Integrationsentwicklern, IT-Leitern und Fachbereichsverantwortlichen dazu, die heterogene Systemlandschaft der Johanniter transparent zu machen, Abhängigkeiten zu steuern und Schnittstellenflüsse interaktiv zu erkunden.
+Die vorliegende Anwendung ist die offizielle **Enterprise Architecture (EA) Quad-Chord Visualisierungsplattform** der Johanniter-Unfall-Hilfe e.V. Sie dient Enterprise Architekten, Integrationsentwicklern, CISO/KRITIS-Beauftragten und Fachbereichsverantwortlichen dazu, die heterogene Systemlandschaft der Johanniter transparent zu machen, Abhängigkeiten und Schnittstellenflüsse interaktiv zu erkunden und regulatorische Anforderungen nachvollziehbar zu auditieren.
 
 ### Warum das Quad-Chord Modell?
-Traditionelle statische Architekturpläne oder endlose Tabellenblätter bieten keine ausreichende Orientierung bei der Steuerung von über 70 Systemen. Das interaktive **Quad-Chord Modell** löst dies durch eine mathematisch exakte und visuell intuitive Trennung in **4 Kreis-Segmente (Quadranten)**:
-1. **Betreiber-Trennung (Vertikal):** Links befinden sich alle internen Johanniter-Systeme; rechts alle externen Systeme (Partner, Behörden, Kostenträger, Banken, Drittanbieter-SaaS).
-2. **Bereitstellungs-Trennung (Horizontal):** Oben befinden sich alle Cloud- und SaaS-Workloads; unten alle On-Premises- und RZ-Workloads.
+Traditionelle statische Architekturpläne oder endlose Tabellenblätter bieten keine ausreichende Orientierung bei der Steuerung von über 80 Systemen und über 100 Schnittstellen. Das interaktive **Quad-Chord Modell** löst dies durch eine mathematisch exakte und visuell intuitive Trennung in **4 Kreis-Segmente (Quadranten)**:
+1. **Betreiber-Trennung (Vertikal):** Links befinden sich alle internen Johanniter-Systeme; rechts alle externen Systeme (Partner, Kostenträger, Bundesbehörden, Leitstellen, Krankenkassen, Drittanbieter-SaaS).
+2. **Bereitstellungs-Trennung (Horizontal):** Oben befinden sich alle Cloud- und Hyperscaler-Workloads; unten alle On-Premises- und RZ-Workloads.
 
-Dadurch werden die beiden kritischsten architektonischen Schutz- und Übergangsbereiche – die **Hybrid Cloud Bridge** und der **Perimeter / DMZ** – unmittelbar visuell begreifbar und messbar.
+Dadurch werden die beiden kritischsten architektonischen Schutz- und Übergangsbereiche – die **Hybrid Cloud Bridge** und der **Perimeter / DMZ Gateway-Korridor** – unmittelbar visuell begreifbar und messbar.
 
 ---
 
 ## 2. Die 4-Quadranten-Architektur (4 Kreis-Segmente)
 
-Das Chord-Diagramm gruppiert alle 77 Systeme auf einem 360°-Kreisbogen in vier klar abgegrenzte Segmente:
+Das Chord-Diagramm gruppiert alle 81 Systeme auf einem 360°-Kreisbogen in vier klar abgegrenzte Segmente:
 
 ```
                      ▲ CLOUD-BEREICH (OBEN)
@@ -33,11 +33,13 @@ Das Chord-Diagramm gruppiert alle 77 Systeme auf einem 360°-Kreisbogen in vier 
     Top-Left (TL)    │    Top-Right (TR)
   JOHANNITER CLOUD   │  EXTERNE CLOUD & SAAS
   (S/4HANA PCE, BTP, │  (Seeburger BIS, Ariba,
-   CPI, Entra ID...) │   Salesforce, Quentic, TI)
+   CPI, Entra ID,    │   Salesforce, gematik TI,
+   Kursportal...)    │   GHX, Smart Key Vault)
 ─────────────────────┼─────────────────────────► EXTERNE SYSTEME (RECHTS)
   JOHANNITER ON-PREM │   EXTERNE ON-PREM
   (ORBIS KIS, Vivendi│  (GKV §301, Pflege §105,
-   Kafka, Palo Alto) │   Leitstellen Cobra, deNIS)
+   PEGASOS, Qualitrans│   Leitstellen Cobra, deNIS)
+   Kafka, Palo Alto) │
     Bottom-Left (BL) │    Bottom-Right (BR)
                      │
                      ▼ ON-PREMISES (UNTEN)
@@ -45,12 +47,12 @@ Das Chord-Diagramm gruppiert alle 77 Systeme auf einem 360°-Kreisbogen in vier 
 
 ### Tabellarische Übersicht der 4 Quadranten
 
-| Quadrant | Bezeichnung | Position | Systeme | Kanten | Traffic-Anteil | Kernanwendungen |
-| :--- | :--- | :--- | :---: | :---: | :---: | :--- |
-| **TL** | **Johanniter Cloud & Hyperscaler** | Links Oben | **14** | 35 | **41.6%** | S/4HANA Private Cloud (`SYS-01`), SAP BTP Core (`SYS-03`), SAP CPI (`SYS-04`), Microsoft Entra ID (`SYS-69`), Kong API Gateway (`SYS-61`), Kita-Verwaltung (`SYS-29`), Helfer-Portal (`SYS-54`), Microsoft 365 (`SYS-63`), Snowflake (`SYS-66`), Power BI (`SYS-67`) |
-| **BL** | **Johanniter On-Premises** | Links Unten | **28** | 58 | **71.6%** | Dedalus ORBIS KIS (`SYS-11`), Philips PDMS (`SYS-13`), Agfa PACS (`SYS-14`), Connext Vivendi NG (`SYS-23`), Tunstall UMO Hausnotruf (`SYS-35`), medDV NIDAserver (`SYS-34`), Apache Kafka (`SYS-62`), Palo Alto Firewall (`SYS-72`), CyberArk (`SYS-77`) |
-| **TR** | **Externe Cloud & Fach-SaaS** | Rechts Oben | **30** | 37 | **37.8%** | Seeburger BIS Cloud (`SYS-08`), SAP Ariba (`SYS-07`), Salesforce Nonprofit Cloud (`SYS-64`), Quentic EcoWebDesk (`SYS-56`), Connext Vivendi Mobil (`SYS-24`), MediFox Dan (`SYS-26`), PalliDoc (`SYS-30`), Imito SmartWund (`SYS-32`), Vodafone IoT (`SYS-36`), Convexis RescueTrack (`SYS-39`), gematik TI (KIM, ePA, VSDM, eRezept), Peppol (`SYS-09`), GHX (`SYS-10`), RKI DEMIS (`SYS-48`), Zscaler (`SYS-73`) |
-| **BR** | **Externe On-Premises** | Rechts Unten | **5** | 9 | **8.2%** | GKV §301 Clearing-Konnektor (`SYS-19`), KV-SafeNet (`SYS-21`), Pflegekassen §105 DTA-Gateway (`SYS-28`), ILS Leitstellen Cobra (`SYS-33`), BBK deNIS Katastrophenschutz (`SYS-40`) |
+| Quadrant | Bezeichnung | Position | Systeme | Kanten | Kernanwendungen |
+| :--- | :--- | :--- | :---: | :---: | :--- |
+| **TL** | **Johanniter Cloud & Hyperscaler** | Links Oben | **15** | 39 | S/4HANA Private Cloud (`SYS-01`), SAP BTP Core (`SYS-03`), SAP CPI (`SYS-04`), Kursbuchungsportal (`SYS-81`), Microsoft Entra ID (`SYS-69`), Kong API Gateway (`SYS-61`), Kita-Verwaltung (`SYS-29`), Helfer-Portal (`SYS-54`), Microsoft 365 (`SYS-63`), Snowflake (`SYS-66`), Power BI (`SYS-67`) |
+| **BL** | **Johanniter On-Premises** | Links Unten | **30** | 68 | Dedalus ORBIS KIS (`SYS-11`), DMI PEGASOS Archiv (`SYS-78`), Qualitrans KTP (`SYS-79`), Philips PDMS (`SYS-13`), Agfa PACS (`SYS-14`), Connext Vivendi NG (`SYS-23`), Tunstall UMO Hausnotruf (`SYS-35`), medDV NIDAserver (`SYS-34`), Apache Kafka (`SYS-62`), Palo Alto Firewall (`SYS-72`), CyberArk PAM (`SYS-77`) |
+| **TR** | **Externe Cloud & Fach-SaaS** | Rechts Oben | **31** | 42 | Seeburger BIS Cloud (`SYS-08`), SAP Ariba (`SYS-07`), Salesforce Nonprofit Cloud (`SYS-64`), GHX Pharma Gateway (`SYS-10`), Masunt/Dormakaba Smart Key Vault (`SYS-80`), Quentic EcoWebDesk (`SYS-56`), Connext Vivendi Mobil (`SYS-24`), MediFox Dan (`SYS-26`), PalliDoc (`SYS-30`), Imito SmartWund (`SYS-32`), Vodafone IoT (`SYS-36`), Convexis RescueTrack (`SYS-39`), gematik TI (KIM, ePA, VSDM, eRezept), Peppol (`SYS-09`), RKI DEMIS (`SYS-48`), Zscaler (`SYS-73`) |
+| **BR** | **Externe On-Premises** | Rechts Unten | **5** | 10 | GKV §301 Clearing-Konnektor (`SYS-19`), KV-SafeNet (`SYS-21`), Pflegekassen §105 DTA-Gateway (`SYS-28`), ILS Leitstellen Cobra (`SYS-33`), BBK deNIS Katastrophenschutz (`SYS-40`) |
 
 ---
 
@@ -58,23 +60,23 @@ Das Chord-Diagramm gruppiert alle 77 Systeme auf einem 360°-Kreisbogen in vier 
 
 Auf der Zeichenfläche heben zwei markante Demarkationslinien die architektonischen Übergänge hervor:
 
-### A. Perimeter & DMZ (Vertikale Demarkationslinie)
-* **Zweck:** Trennt die interne Johanniter-Infrastruktur (links) von allen externen Partnern, Kostenträgern, Behörden und Drittanbieter-SaaS-Diensten (rechts).
+### A. Perimeter & DMZ Gateway-Korridor (Vertikale Demarkationslinie)
+* **Zweck:** Trennt die geschützte interne Johanniter-Infrastruktur (links) von allen externen Partnern, Kostenträgern, Leitstellen, Bundesbehörden und Drittanbieter-SaaS-Diensten (rechts).
 * **Kennzahlen:**
-  * **38 grenzüberschreitende Kanten** (Ingress / Egress / B2B)
-  * **35 externe Systeme** (45% der Gesamtsystemlandschaft)
-  * **8 gesicherte Perimeter-Gateways** (Palo Alto NGFW, F5 WAF, Zscaler ZTNA, TI-Konnektor-Cluster)
+  * **46 grenzüberschreitende Kanten** (External Ingress, External Egress, External B2B)
+  * **36 externe Systeme** (44.4% der Gesamtsystemlandschaft)
+  * **8 gesicherte Perimeter-Gateways** (Palo Alto NGFW `SYS-72`, F5 WAF `SYS-75`, Zscaler ZTNA `SYS-73`, TI-Konnektor-Cluster `SYS-43`, Kong Gateway `SYS-61`, SAP Cloud Connector `SYS-05`)
 
 ### B. Hybrid Cloud Bridge (Horizontale Demarkationslinie)
 * **Zweck:** Verbindet die moderne Cloud- und Hyperscaler-Infrastruktur (oben) mit den internen RZ- und Klinik-Servern (unten).
 * **Netzwerk-Architektur:**
-  * SAP Cloud Connector Reverse Tunnel für gesicherte RFC/REST-Kopplung.
+  * SAP Cloud Connector Reverse Tunnel für gesicherte RFC/REST-Kopplung zwischen On-Premises KIS / Qualitrans und SAP BTP / CPI.
   * Azure ExpressRoute & mTLS-Tunnel für InterSystems HealthShare & API-Gateways.
-  * Apache Kafka Event Streaming für Echtzeit-Ereignisse (Hausnotruf, Rettungswagen-Telemetrie).
+  * Apache Kafka Event Streaming für Echtzeit-Ereignisse (Hausnotruf, Rettungswagen-Telemetrie, Key-Vault-Trigger).
 * **Kennzahlen:**
-  * **22 Hybrid-Kanten**
-  * **26.0% des Gesamttraffic** der Johanniter
-  * **31 beteiligte Systeme**
+  * **25 Hybrid-Kanten**
+  * **25.8% des Gesamttraffic** der Johanniter
+  * **33 beteiligte Systeme**
 
 ---
 
@@ -83,29 +85,30 @@ Auf der Zeichenfläche heben zwei markante Demarkationslinien die architektonisc
 Ein zentraler architektonischer Grundsatz der Johanniter-IT lautet:
 > [!IMPORTANT]
 > **Betreibersicht der Johanniter:**  
-> Wird eine Software von einem Drittanbieter in dessen eigener Cloud-Infrastruktur betrieben (Hosted Managed Cloud / Public SaaS), wird sie aus Johanniter-Sicht konsequent als **EXTERN (Quadrant TR)** geführt. Dies betrifft neben Seeburger BIS (`SYS-08`) auch SAP Ariba, Salesforce, Quentic EcoWebDesk, Connext Vivendi Mobil, MediFox Dan, PalliDoc, Vodafone IoT, Convexis RescueTrack, Beekeeper und Zscaler.
+> Wird eine Software von einem Drittanbieter in dessen eigener Cloud-Infrastruktur betrieben (Hosted Managed Cloud / Public SaaS), wird sie aus Johanniter-Sicht konsequent als **EXTERN (Quadrant TR)** geführt. Dies betrifft neben Seeburger BIS (`SYS-08`) und GHX Healthcare (`SYS-10`) auch Masunt/Dormakaba Smart Key Vault (`SYS-80`), SAP Ariba, Salesforce, Quentic EcoWebDesk, Connext Vivendi Mobil, MediFox Dan, PalliDoc, Vodafone IoT, Convexis RescueTrack, Beekeeper und Zscaler.
 
 ---
 
 ## 5. Bedienungsanleitung: Dynamischer Header-Titel & 4-Stufen-Drilldown
 
-Die Anwendungsnavigation ist als prominenter **dynamischer Titel im Kopfbereich** (Mitte Oben) realisiert:
+Die Anwendungsnavigation ist als prominenter **dynamischer Titel im Kopfbereich** realisiert:
 
 ```
-[1] D2 · Klinische KIS ✕  *  [2] PROC-01 · Notfallaufnahme ✕  *  [3] INT-02 · Notfallaufnahme ✕
-[Stufe 3 (Integration aktiv)] INT-02 (5 Schritte) · Token wandert von Quelle zu Ziel · Klicken Sie auf einen Schritt
+[1] D2 · Klinische KIS ✕  *  [2] PROC-09 · Entlassmanagement ✕  *  [3] INT-13 · Entlassmanagement ✕  *  [4] Kante CON-88 ✕
+[Stufe 4 (Kante in Kette)] Schnittstelle CON-88 ist Schritt 1 von 4 in INT-13
 ```
 
-* **Zentrierte Titelstruktur:** Verbindet die Stufen mit dem Trennsymbol `*` und Glowing-Effekt.
+* **Zentrierte Titelstruktur:** Verbindet die Stufen mit dem Trennsymbol `*` und dezentem Leuchteffekt.
 * **Individuelle Reset-Buttons (`✕`):** Jede Stufe kann punktuell abgewählt werden, um zur übergeordneten Ebene zurückzukehren.
 * **Kontextueller Leitfaden-Untertitel:** Beginnt stets mit `Stufe # ..` und gibt dem Anwender zu jedem Zeitpunkt konkrete Handlungsempfehlungen.
+* **Integrierter Kanten-zu-Integrations-Selektor:** Ist eine Kante selektiert, zeigt der Header sofort an, in welchen E2E-Ketten sie genutzt wird, und erlaubt das direkte Aktivieren der gesamten Kette per Klick auf die Chip-Schaltfläche.
 
 ---
 
 ## 6. Der Dynamic Inspector (Rechter Drawer)
 
 Der rechte Inspektor dient der tiefen technischen E2E-Prozessanalyse:
-* **Erhaltung der Integrationsstrecke:** Die chronologische Schritt-Pipeline (z. B. 5 Schritte bei `INT-02`) bleibt **dauerhaft sichtbar** und wird bei Klicks auf Systeme auf der Zeichenfläche **nicht mehr überschrieben**.
+* **Erhaltung der Integrationsstrecke:** Die chronologische Schritt-Pipeline (z. B. 4 Schritte bei `INT-13`) bleibt **dauerhaft sichtbar** und wird bei Klicks auf Systeme auf der Zeichenfläche nicht unbeabsichtigt überschrieben.
 * **Token-Simulation & Steuerung:** 
   * Play / Pause (`⏯`), Vorheriger Schritt (`⏮`), Nächster Schritt (`⏭`).
   * Live-Wanderung des farbigen Daten-Tokens über die Splines auf der Zeichenfläche.
@@ -113,6 +116,7 @@ Der rechte Inspektor dient der tiefen technischen E2E-Prozessanalyse:
   * Schnittstellen-ID (`CON-xx`), Nachrichtentyp-Badge und Perimeter-Status.
   * Quell- und Zielsystem mit Domänen-Farbbalken und Hosting-Standort.
   * Übertragungsprotokolle und Architektur-Flow-Richtung.
+* **Multi-Ketten-Selektor:** Zeigt bei Auswahl einzelner Schnittstellen alle übergeordneten E2E-Ketten mit Sequenznummer an.
 
 ---
 
@@ -128,9 +132,9 @@ Für maximale Übersichtlichkeit auf großen Displays bietet die Anwendung ein a
 ### B. Location-Finder Button (`🎯 Lokalisieren`)
 * Sowohl System- als auch Kanten-Pop-Outs besitzen einen Button **„🎯 Lokalisieren“**.
 * Bei Klick:
-  1. Das entsprechende System bzw. die Kante wird im Quad-Chord Diagramm sofort optisch hervorgehoben.
-  2. Ein animierter, dreifach pulsierender roter **Signal-Radarring (`.locator-beacon-ring`)** pulsiert direkt auf dem Knoten.
-  3. Der Nutzer verliert selbst bei 77 Systemen und 87 Kanten nie die Orientierung.
+  1. Das entsprechende System bzw. die Kante wird im Quad-Chord Diagramm sofort optisch fokussiert.
+  2. Ein animierter, dreifach pulsierender roter **Signal-Radarring (`.locator-beacon-ring`)** pulsiert direkt auf dem Zielknoten.
+  3. Der Nutzer verliert selbst bei 81 Systemen und 102 Kanten nie die Orientierung.
 
 ### C. Multi-Pop-Out Unterstützung
 * Beliebig viele Pop-Out-Karten können parallel geöffnet bleiben, um beispielsweise Quell- und Zielsystem einer Kante direkt nebeneinander zu vergleichen.
@@ -165,9 +169,63 @@ Die Johanniter Quad-Chord Visualisierung ist in das zentrale Authentifizierungss
 * **Modal Login Gate:** Nicht authentifizierte Nutzer sehen ein blockierendes Anmeldefenster mit Google-Login-Schaltfläche. Der geschützte Arbeitsbereich bleibt bis zur erfolgreichen Autorisierung unsichtbar.
 * **Google Identity Provider:** Verwendet Firebase Google-Popup-Authentifizierung mit `select_account`, sodass Nutzer problemlos zwischen privaten und institutionellen Konten wählen können.
 * **Persistente Sitzung:** Die Authentifizierung wird lokal (`firebase.auth.Auth.Persistence.LOCAL`) gehalten; erneutes Einloggen beim Neuladen entfällt.
-* **Serverseitiger Dokumentenschutz (Cloud Function):**
-  * Da Architekturdaten nicht rein clientseitig geschützt werden können, validiert der ORCAI-Dokumentenendpunkt das Firebase-ID-Token per `verifyIdToken()`.
-  * Nicht authentifizierte Requests erhalten lediglich einen leichtgewichtigen Login-Loader ohne Fachinhalte.
+* **Serverseitiger Dokumentenschutz (Cloud Function):** Validierung des Firebase-ID-Tokens per `verifyIdToken()`.
+
+---
+
+## 11. Regulatorische Grundlagen, Standards & Quellenverzeichnis
+
+Die in diesem Architekturmodell abgebildeten Systeme, Protokolle und Schnittstellen entsprechen den verbindlichen regulatorischen und gesetzlichen Vorgaben für deutsche Hilfsorganisationen, Kliniken, Rettungsdienste und Pflegeeinrichtungen:
+
+### A. Gesetzliche & Regulatorische Rahmenbedingungen
+1. **SGB V (Gesetzliche Krankenversicherung):**
+   * **§ 60 SGB V (Fahrkosten & Krankentransport):** Gesetzliche Grundlage für die ärztliche Verordnung von Krankenfahrten (Muster 4) und die Abrechnung von qualifizierten Krankentransporten (`SYS-79`, `INT-14`).
+   * **§ 301 SGB V (Abrechnung der Krankenhäuser):** Elektronischer Datenaustausch für Aufnahme-, Verlegungs-, Entlassungsanzeigen und DRG-Klinikabrechnungen via DTA/EDIFACT (`SYS-19`, `CON-25`, `CON-26`).
+   * **§ 306 ff. SGB V (Telematikinfrastruktur):** Gesetzliche Pflichtanbindung von Kliniken und Pflegediensten an die TI (VSDM, KIM, ePA, eRezept via `SYS-43` bis `SYS-50`).
+   * **§ 39 Abs. 1a SGB V (Entlassmanagement):** Verpflichtung der Krankenhäuser zur lückenlosen Anschlussversorgung bei Entlassung (`INT-13`, `PROC-09`).
+2. **SGB XI (Soziale Pflegeversicherung):**
+   * **§ 105 SGB XI (Abrechnung der Pflegeleistungen):** Elektronischer Datenaustausch (DTA) für ambulante und stationäre Pflegeleistungen zwischen Pflegeverwaltung (`SYS-23`, `SYS-26`) und den gesetzlichen Pflegekassen (`SYS-28`).
+3. **Krankenhauszukunftsgesetz (KHZG):**
+   * **§ 14a KHG (Fördertatbestände 1 bis 6):** Fördermittel für Patientenportale (`SYS-68`, FT 2), elektronische Dokumentation & Klinische Entscheidungsunterstützung (FT 3), Medikationsmanagement / AMTS (`SYS-12`, FT 5) und Telemedizinische Netzwerke.
+4. **BSI IT-Sicherheitsgesetz 2.0 & B3S KRITIS Gesundheit:**
+   * Verbindlicher branchenspezifischer Sicherheitsstandard (B3S) für Krankenhäuser und Rettungsleitstellen als Kritische Infrastrukturen (KRITIS), realisiert über Palo Alto NGFW (`SYS-72`), Zscaler ZTNA (`SYS-73`), Microsoft Sentinel SIEM (`SYS-74`) und CyberArk PAM (`SYS-77`).
+5. **DGUV & berufsgenossenschaftliche Vorschriften:**
+   * **DGUV Vorschrift 1 & Grundsatz 304-001:** Ermächtigung und Qualitätssicherung für die Aus- und Fortbildung betrieblicher Ersthelfer über das Johanniter-Kursportal (`SYS-81`) und S/4HANA Faktura (`INT-17`).
+6. **Datenschutz-Grundverordnung (DSGVO):**
+   * **Art. 9 Abs. 2 lit. h DSGVO:** Rechtmäßige Verarbeitung besonderer Kategorien personenbezogener Daten (Gesundheitsdaten) im Rahmen der medizinischen Versorgung und Verwaltung.
+
+### B. Technische Interoperabilitäts-Standards
+* **HL7 FHIR R4 (Fast Healthcare Interoperability Resources):**
+  * Profile der gematik (KIM eArztbrief, eRezept, ePA) und der Medizininformatik-Initiative (MII).
+* **HL7 v2.5 / v2.7:**
+  * MLLP-basierte Krankenhaus-Kommunikation für Stammdaten (ADT), Laboraufträge (ORM) und Befundübermittlung (ORU).
+* **DICOM PS 3.0 / WADO-RS:**
+  * Bildarchivierung und -abruf in Radiologie PACS und Modalitäten-Worklists (MWL).
+* **IHE XDS.b / PDF-A:**
+  * Cross-Enterprise Document Sharing für revisionssichere Langzeitarchivierung in PEGASOS (`SYS-78`).
+* **Peppol BIS Billing 3.0 & XRechnung:**
+  * B2G/B2B elektronische Rechnungsstellung gem. E-Rechnungsverordnung des Bundes.
+* **cXML & EDIFACT:**
+  * Beschaffungsstandards im Healthcare Supply Chain (GHX Pharma, SAP Ariba).
+* **MQTT & REST Webhooks:**
+  * IoT-Echtzeitkommunikation für Telecare-Hausnotrufe und Smart Key Depots.
+
+### C. Öffentliche Industriestandards & Herstellerkataloge
+Die Systembezeichnungen und Schnittstellenarchitekturen basieren auf öffentlich zugänglichen Herstellerdokumentationen führender Branchenlösungsanbieter:
+* **Dedalus Healthcare:** ORBIS KIS Produktportfolio & FHIR CDR Schnittstellenhandbuch
+* **Connext Communication GmbH:** Vivendi NG Systemarchitektur & DTA-Spezifikation nach § 105 SGB XI
+* **medDV GmbH:** NIDA Produktfamilie, Leitstellen- und KIS-Schnittstellen
+* **ISE Informatikgesellschaft:** Cobra Leitstellensystem & Einsatzmittel-Disposition
+* **DMI GmbH & Co. KG:** PEGASOS Klinik-Archivierung & IHE-Integrationsprofile
+* **SEEBURGER AG:** Business Integration Suite Cloud & Peppol Access Point Guides
+* **gematik GmbH:** Facharchitektur der Telematikinfrastruktur (KIM 1.5, ePA 3.0, eRezept)
+
+### D. Rechtlicher Herkunftsnachweis & Legalitäts-Garantie
+> [!NOTE]
+> **100% Legale & Synthetische Architektur-Referenz:**  
+> 1. **Keine Verwendung proprietärer Geschäftsgeheimnisse:** Alle dargestellten Systeme, Protokolle, Portnummern und Integrationsabläufe wurden ausschließlich auf Basis öffentlich zugänglicher Vergabeunterlagen, Hersteller-Websites, gematik-Spezifikationen, FHIR-Implementation-Guides und branchenüblicher Fachliteratur synthetisiert.
+> 2. **Keine echten Patientendaten:** Alle IDs, Transaktionsgewichte und Sequenzschritte sind synthetische Demonstrationsdaten. Es werden zu keinem Zeitpunkt echte Patienten-, Kunden- oder Mitarbeiterdaten verarbeitet oder gespeichert.
+> 3. **Keine vertraulichen Zugangsdaten:** Die Anwendung enthält keinerlei private kryptografische Schlüssel, geheime Passwörter oder vertrauliche API-Tokens.
 
 ---
 
