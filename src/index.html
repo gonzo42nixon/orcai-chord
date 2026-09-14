@@ -48,6 +48,16 @@
       --color-aws: #ff9900;
       --color-gcp: #34a853;
       --color-onprem: #3b82f6;
+
+      /* Material 3 Tonal Elevation Tokens (Night) */
+      --md-surface-0: var(--bg);
+      --md-surface-1: rgba(30, 41, 59, 0.45);
+      --md-surface-2: rgba(30, 41, 59, 0.7);
+      --md-surface-3: rgba(18, 24, 38, 0.95);
+      --md-surface-4: rgba(15, 23, 42, 0.98);
+      --md-shadow-1: 0 1px 3px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.12);
+      --md-shadow-2: 0 4px 12px rgba(0, 0, 0, 0.28), 0 2px 4px rgba(0, 0, 0, 0.16);
+      --md-shadow-3: 0 12px 28px rgba(0, 0, 0, 0.36), 0 4px 8px rgba(0, 0, 0, 0.22);
     }
 
     body.theme-day {
@@ -62,7 +72,7 @@
       --canvas-bg: radial-gradient(circle at center, #ffffff 0%, #f1f5f9 85%);
       --text: #334155;
       --text-bright: #0f172a;
-      --text-muted: #64748b;
+      --text-muted: #475569;
       --accent: #0284c7;
       --accent-glow: rgba(2, 132, 199, 0.25);
       --source: #059669;
@@ -86,6 +96,29 @@
       --color-aws: #d97706;
       --color-gcp: #16a34a;
       --color-onprem: #2563eb;
+
+      /* Material 3 Tonal Elevation Tokens (Day) */
+      --md-surface-0: #f1f5f9;
+      --md-surface-1: #ffffff;
+      --md-surface-2: #f8fafc;
+      --md-surface-3: #f1f5f9;
+      --md-surface-4: #ffffff;
+      --md-shadow-1: 0 1px 3px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.04);
+      --md-shadow-2: 0 4px 12px rgba(15, 23, 42, 0.1), 0 2px 4px rgba(15, 23, 42, 0.06);
+      --md-shadow-3: 0 12px 28px rgba(15, 23, 42, 0.14), 0 4px 8px rgba(15, 23, 42, 0.08);
+    }
+
+    /* WCAG 2.1 AA Reduced Motion Mandate */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+      }
+      .token-node, .locating-beacon, .locator-beacon-ring, .particle {
+        animation: none !important;
+        transition: none !important;
+      }
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -422,6 +455,232 @@
     .toast-icon {
       color: #22c55e;
       font-weight: 800;
+    }
+
+    /* Accessibility Focus Rings (WCAG 2.1 AA) */
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+    .svg-node-focusable {
+      cursor: pointer;
+    }
+    .svg-node-focusable:focus-visible {
+      outline: none;
+    }
+    .svg-node-focusable:focus-visible > circle.sys-node-circle {
+      stroke: var(--accent) !important;
+      stroke-width: 3.5px !important;
+      filter: drop-shadow(0 0 10px var(--accent)) !important;
+    }
+
+    /* Omni-Search & Command Palette (Ctrl+K / Cmd+K) */
+    .omni-search-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 5000;
+      background: rgba(11, 15, 23, 0.72);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: min(14vh, 110px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    body.theme-day .omni-search-backdrop {
+      background: rgba(15, 23, 42, 0.45);
+    }
+    .omni-search-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .omni-search-card {
+      width: min(640px, calc(100vw - 32px));
+      max-height: min(520px, 78vh);
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.55), 0 0 0 1px var(--accent-glow);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transform: scale(0.96) translateY(-10px);
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .omni-search-backdrop.open .omni-search-card {
+      transform: scale(1) translateY(0);
+    }
+    .omni-search-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--card-border);
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .omni-search-icon {
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+    .omni-search-input {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 0.96rem;
+      font-weight: 500;
+      color: var(--text-bright);
+      font-family: inherit;
+    }
+    .omni-search-input::placeholder {
+      color: var(--text-muted);
+      opacity: 0.75;
+    }
+    .omni-search-kbd {
+      font-size: 0.68rem;
+      padding: 3px 7px;
+      border-radius: 6px;
+      background: var(--card-inner-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      font-family: monospace;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+    }
+    .omni-search-kbd:hover {
+      color: var(--text-bright);
+      border-color: var(--accent);
+    }
+    .omni-filter-chips {
+      display: flex;
+      gap: 6px;
+      padding: 8px 18px;
+      border-bottom: 1px solid var(--card-border);
+      background: rgba(0, 0, 0, 0.08);
+      overflow-x: auto;
+    }
+    .omni-chip {
+      font-size: 0.72rem;
+      padding: 3px 10px;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+      background: var(--card-inner-bg);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+      user-select: none;
+    }
+    .omni-chip:hover {
+      border-color: var(--accent);
+      color: var(--text-bright);
+    }
+    .omni-chip.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #0b0f17;
+      font-weight: 700;
+    }
+    .omni-results-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px;
+      max-height: 340px;
+    }
+    .omni-result-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 9px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: background 0.12s ease, border-color 0.12s ease;
+    }
+    .omni-result-item:hover,
+    .omni-result-item.selected {
+      background: var(--card-inner-bg);
+      border-color: var(--card-border);
+    }
+    .omni-result-item.selected {
+      box-shadow: 0 0 0 1.5px var(--accent);
+    }
+    .omni-item-badge {
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 3px 7px;
+      border-radius: 5px;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .omni-badge-system { background: rgba(59, 130, 246, 0.18); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.35); }
+    .omni-badge-conn { background: rgba(16, 185, 129, 0.18); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.35); }
+    .omni-badge-proc { background: rgba(245, 158, 11, 0.18); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.35); }
+    .omni-badge-domain { background: rgba(139, 92, 246, 0.18); color: #a78bfa; border: 1px solid rgba(139, 92, 246, 0.35); }
+    .omni-badge-action { background: rgba(236, 72, 153, 0.18); color: #f472b6; border: 1px solid rgba(236, 72, 153, 0.35); }
+    .omni-item-info {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .omni-item-title {
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: var(--text-bright);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .omni-item-sub {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .omni-item-shortcut {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      flex-shrink: 0;
+    }
+    .omni-empty {
+      padding: 36px 16px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+    .omni-search-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 16px;
+      border-top: 1px solid var(--card-border);
+      background: rgba(0, 0, 0, 0.05);
+      font-size: 0.68rem;
+      color: var(--text-muted);
+    }
+    .omni-search-footer-hints {
+      display: flex;
+      gap: 12px;
+    }
+    .omni-hint-key {
+      display: inline-block;
+      padding: 1px 5px;
+      border-radius: 3px;
+      background: var(--card-inner-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-bright);
+      margin-right: 3px;
     }
 
     /* Firebase Auth Account & Trigger */
@@ -1849,6 +2108,11 @@
     </div>
 
     <div class="header-actions">
+      <!-- Omni-Search & Command Palette (Ctrl+K / Cmd+K) -->
+      <button class="header-action-btn" id="btnOmniSearch" type="button" title="Omni-Search &amp; Befehlspalette öffnen (Strg+K / ⌘K)" aria-label="Omni-Search &amp; Befehlspalette öffnen (Strg+K)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+
       <!-- (i) Dokumentation -->
       <a href="https://orcai-54321.web.app/markdown/?key=ORCAI-260913-23H55-QUAD-CHORD" target="_blank" rel="noopener noreferrer" class="header-action-btn" id="btnAppInfo" title="Architektur-Dokumentation &amp; Benutzerhandbuch im ORCAI Markdown Viewer öffnen (Key: ORCAI-260913-23H55-QUAD-CHORD)" aria-label="Architektur-Dokumentation öffnen">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
@@ -1882,6 +2146,39 @@
       </div>
     </div>
   </header>
+
+  <!-- Omni-Search & Command Palette Modal (Ctrl+K / Cmd+K) -->
+  <div class="omni-search-backdrop" id="omniSearchModal" role="dialog" aria-modal="true" aria-labelledby="omniSearchInput" hidden>
+    <div class="omni-search-card">
+      <div class="omni-search-header">
+        <svg class="omni-search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" class="omni-search-input" id="omniSearchInput" placeholder="Systeme, Schnittstellen, Prozesse, Tags suchen oder Befehle eingeben..." autocomplete="off" spellcheck="false">
+        <span class="omni-search-kbd" id="btnOmniClose" title="Schließen (ESC)">ESC</span>
+      </div>
+      <div class="omni-filter-chips" id="omniFilterChips">
+        <button type="button" class="omni-chip active" data-filter="all">Alle</button>
+        <button type="button" class="omni-chip" data-filter="system">Systeme</button>
+        <button type="button" class="omni-chip" data-filter="conn">Schnittstellen</button>
+        <button type="button" class="omni-chip" data-filter="proc">Prozesse</button>
+        <button type="button" class="omni-chip" data-filter="domain">Domänen</button>
+        <button type="button" class="omni-chip" data-filter="action">Aktionen</button>
+      </div>
+      <div class="omni-results-list" id="omniResultsList" role="listbox">
+        <!-- Dynamically rendered items -->
+      </div>
+      <div class="omni-search-footer">
+        <div class="omni-search-footer-hints">
+          <span><span class="omni-hint-key">↑</span><span class="omni-hint-key">↓</span> Navigieren</span>
+          <span><span class="omni-hint-key">↵</span> Auswählen</span>
+          <span><span class="omni-hint-key">ESC</span> Schließen</span>
+        </div>
+        <div>
+          <span><span class="omni-hint-key">[</span> <span class="omni-hint-key">]</span> Drawers</span>
+          <span style="margin-left:8px;"><span class="omni-hint-key">\</span> Fokus</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Toast Notification for Share / Clipboard Feedback -->
   <div class="orcai-toast" id="orcaiToast" role="status" aria-live="polite">
@@ -2412,30 +2709,58 @@
       document.getElementById("btnLeftS").onclick = () => { sidebarLeft.style.width = "340px"; updatePresetButtons(); };
       document.getElementById("btnLeftM").onclick = () => { sidebarLeft.style.width = "400px"; updatePresetButtons(); };
       document.getElementById("btnLeftL").onclick = () => { sidebarLeft.style.width = "640px"; updatePresetButtons(); };
-      document.getElementById("btnLeftCollapse").onclick = () => {
-        sidebarLeft.classList.add("collapsed");
-        resizerLeft.style.display = "none";
-        btnReopenLeft.style.display = "flex";
-      };
-      btnReopenLeft.onclick = () => {
-        sidebarLeft.classList.remove("collapsed");
-        resizerLeft.style.display = "block";
-        btnReopenLeft.style.display = "none";
-      };
+      function toggleLeftDrawer(forceOpen) {
+        const isCollapsed = sidebarLeft.classList.contains("collapsed");
+        const shouldCollapse = forceOpen === undefined ? !isCollapsed : !forceOpen;
+        if (shouldCollapse) {
+          sidebarLeft.classList.add("collapsed");
+          resizerLeft.style.display = "none";
+          btnReopenLeft.style.display = "flex";
+        } else {
+          sidebarLeft.classList.remove("collapsed");
+          resizerLeft.style.display = "block";
+          btnReopenLeft.style.display = "none";
+        }
+      }
+      window.toggleLeftDrawer = toggleLeftDrawer;
+
+      function toggleRightDrawer(forceOpen) {
+        const isCollapsed = sidebarRight.classList.contains("collapsed");
+        const shouldCollapse = forceOpen === undefined ? !isCollapsed : !forceOpen;
+        if (shouldCollapse) {
+          sidebarRight.classList.add("collapsed");
+          resizerRight.style.display = "none";
+          btnReopenRight.style.display = "flex";
+        } else {
+          sidebarRight.classList.remove("collapsed");
+          resizerRight.style.display = "block";
+          btnReopenRight.style.display = "none";
+        }
+      }
+      window.toggleRightDrawer = toggleRightDrawer;
+
+      function togglePresentationMode() {
+        const bothCollapsed = sidebarLeft.classList.contains("collapsed") && sidebarRight.classList.contains("collapsed");
+        if (bothCollapsed) {
+          toggleLeftDrawer(true);
+          toggleRightDrawer(true);
+          showToast("Standardansicht wiederhergestellt");
+        } else {
+          toggleLeftDrawer(false);
+          toggleRightDrawer(false);
+          showToast("Präsentationsmodus (Drawers minimiert)");
+        }
+      }
+      window.togglePresentationMode = togglePresentationMode;
+
+      document.getElementById("btnLeftCollapse").onclick = () => toggleLeftDrawer(false);
+      btnReopenLeft.onclick = () => toggleLeftDrawer(true);
 
       document.getElementById("btnRightS").onclick = () => { sidebarRight.style.width = "370px"; updatePresetButtons(); };
       document.getElementById("btnRightM").onclick = () => { sidebarRight.style.width = "480px"; updatePresetButtons(); };
       document.getElementById("btnRightL").onclick = () => { sidebarRight.style.width = "720px"; updatePresetButtons(); };
-      document.getElementById("btnRightCollapse").onclick = () => {
-        sidebarRight.classList.add("collapsed");
-        resizerRight.style.display = "none";
-        btnReopenRight.style.display = "flex";
-      };
-      btnReopenRight.onclick = () => {
-        sidebarRight.classList.remove("collapsed");
-        resizerRight.style.display = "block";
-        btnReopenRight.style.display = "none";
-      };
+      document.getElementById("btnRightCollapse").onclick = () => toggleRightDrawer(false);
+      btnReopenRight.onclick = () => toggleRightDrawer(true);
 
             // =========================================================================
       // DYNAMIC MULTI-POPOUT WINDOW MANAGER & LOCATION-FINDER
@@ -3321,8 +3646,11 @@
         .data(SYSTEMS_DATA)
         .enter()
         .append("g")
-        .attr("class", "sys-node-group")
+        .attr("class", "sys-node-group svg-node-focusable")
         .attr("id", d => "node-group-" + d.id)
+        .attr("tabindex", "0")
+        .attr("role", "button")
+        .attr("aria-label", d => d.id + ": " + d.name + " (" + d.domain + ")")
         .attr("transform", d => {
           const c = nodeCoords.get(d.id);
           return c ? "translate(" + c.x + "," + c.y + ")" : "translate(0,0)";
@@ -3330,6 +3658,13 @@
         .on("click", (event, d) => {
           event.stopPropagation();
           selectNode(d, event.clientX, event.clientY);
+        })
+        .on("keydown", (event, d) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            const bbox = event.currentTarget.getBoundingClientRect();
+            selectNode(d, bbox.left + bbox.width / 2, bbox.top + bbox.height / 2);
+          }
         });
 
       // Boundary entities halo
@@ -3841,6 +4176,9 @@
 
         // 6. Update Centered Dynamic Drilldown Title & Subtitle in Header (Trennsymbol "*", Untertitel: "Stufe # ..")
         updateHeaderDrilldownTitle();
+
+        // 7. Sync EA State to URL parameters for deep-linking & Web Share API
+        syncStateToUrl();
       }
 
       function updateHeaderDrilldownTitle() {
@@ -4573,6 +4911,542 @@
         a.click();
         URL.revokeObjectURL(url);
       };
+
+      // =========================================================================
+      // URL STATE SYNCHRONIZATION & DEEP-LINKING (WEB SHARE API INTEGRATION)
+      // =========================================================================
+      let isRestoringFromUrl = false;
+
+      function syncStateToUrl() {
+        if (isRestoringFromUrl) return;
+        try {
+          const url = new URL(window.location.href);
+          const p = url.searchParams;
+
+          // Preserve key parameter if present
+          const keyVal = p.get("key");
+
+          // Remove old EA parameters
+          p.delete("domain");
+          p.delete("proc");
+          p.delete("int");
+          p.delete("node");
+          p.delete("edge");
+          p.delete("msgType");
+          p.delete("tags");
+          p.delete("scope");
+          p.delete("theme");
+
+          if (keyVal) p.set("key", keyVal);
+          if (selectedDomainId) p.set("domain", selectedDomainId);
+          if (selectedProcess) p.set("proc", selectedProcess.id);
+          if (selectedIntegration) p.set("int", selectedIntegration.id);
+          if (selectedNodeId) p.set("node", selectedNodeId);
+          if (selectedLink) p.set("edge", selectedLink.id);
+          if (selectedMessageType) p.set("msgType", selectedMessageType);
+          if (activeTags && activeTags.size > 0) p.set("tags", Array.from(activeTags).join(","));
+          if (selectedScope && selectedScope !== 'ALL') p.set("scope", selectedScope);
+          const currentTheme = bodyEl.classList.contains("theme-day") ? "day" : "night";
+          if (currentTheme === "day") p.set("theme", "day");
+
+          const newSearch = p.toString();
+          const targetUrl = url.pathname + (newSearch ? "?" + newSearch : "") + url.hash;
+          if (window.location.href !== targetUrl) {
+            window.history.replaceState({ eaSync: true }, "", targetUrl);
+          }
+        } catch (err) {
+          // Ignore state sync errors in restricted environments
+        }
+      }
+
+      function restoreStateFromUrl() {
+        isRestoringFromUrl = true;
+        try {
+          const params = new URLSearchParams(window.location.search);
+          if (params.has("theme")) {
+            applyTheme(params.get("theme"));
+          }
+          if (params.has("scope")) {
+            const sc = params.get("scope");
+            selectedScope = sc;
+            document.querySelectorAll(".scope-chip").forEach(c => c.classList.toggle("active", c.dataset.scope === sc));
+          }
+          if (params.has("domain")) {
+            const domId = params.get("domain");
+            if (DOMAINS_DATA.some(d => d.id === domId)) {
+              setDrilldownDomain(domId);
+            }
+          }
+          if (params.has("proc")) {
+            const procId = params.get("proc");
+            const proc = PROCESSES_DATA.find(p => p.id === procId);
+            if (proc) {
+              setDrilldownProcess(proc);
+            }
+          }
+          if (params.has("int")) {
+            const intId = params.get("int");
+            const integ = INTEGRATIONS_DATA.find(i => i.id === intId);
+            if (integ) {
+              setDrilldownIntegration(integ);
+            }
+          }
+          if (params.has("msgType")) {
+            const mt = params.get("msgType");
+            if (MESSAGE_TYPES_DATA.some(m => m.id === mt)) {
+              selectedMessageType = mt;
+              document.querySelectorAll(".msg-type-row").forEach(r => {
+                r.classList.toggle("selected", r.id === "msg-type-" + mt);
+              });
+              const btnResetM = document.getElementById("btnResetMsgType");
+              if (btnResetM) btnResetM.style.display = "inline";
+            }
+          }
+          if (params.has("tags")) {
+            const rawTags = params.get("tags").split(",").map(t => t.trim()).filter(Boolean);
+            rawTags.forEach(t => activeTags.add(t));
+            document.querySelectorAll(".tag-chip").forEach(chip => {
+              chip.classList.toggle("active", activeTags.has(chip.textContent.trim()));
+            });
+            const tagCountEl = document.getElementById("tagCount");
+            if (tagCountEl) tagCountEl.textContent = activeTags.size + " ausgewählt";
+            const btnResetT = document.getElementById("btnResetTags");
+            if (btnResetT) btnResetT.style.display = activeTags.size > 0 ? "inline" : "none";
+          }
+          if (params.has("node")) {
+            const nodeId = params.get("node");
+            const node = SYSTEMS_DATA.find(s => s.id === nodeId);
+            if (node) {
+              setTimeout(() => {
+                selectNode(node, window.innerWidth / 2, window.innerHeight / 2);
+              }, 120);
+            }
+          } else if (params.has("edge")) {
+            const edgeId = params.get("edge");
+            const edge = CONNECTIONS_DATA.find(c => c.id === edgeId);
+            if (edge) {
+              setTimeout(() => {
+                selectEdge(edge, window.innerWidth / 2, window.innerHeight / 2);
+              }, 120);
+            }
+          }
+        } catch (e) {
+          console.warn("[Deep-Linking] Error restoring state:", e);
+        } finally {
+          isRestoringFromUrl = false;
+        }
+      }
+
+      // =========================================================================
+      // OMNI-SEARCH & ENTERPRISE COMMAND PALETTE (Ctrl+K / Cmd+K)
+      // =========================================================================
+      function initOmniSearch() {
+        const modal = document.getElementById("omniSearchModal");
+        const input = document.getElementById("omniSearchInput");
+        const btnOpen = document.getElementById("btnOmniSearch");
+        const btnClose = document.getElementById("btnOmniClose");
+        const filterChips = document.getElementById("omniFilterChips");
+        const resultsList = document.getElementById("omniResultsList");
+
+        if (!modal || !input || !resultsList) return;
+
+        let currentFilter = 'all';
+        let selectedIndex = 0;
+        let currentFilteredItems = [];
+
+        // Build Master Search Index
+        const items = [];
+
+        // 1. 77 Systems
+        SYSTEMS_DATA.forEach(s => {
+          items.push({
+            id: s.id,
+            type: 'system',
+            badgeClass: 'omni-badge-system',
+            badgeText: 'System',
+            title: s.id + ' · ' + s.name,
+            sub: s.domain + ' · ' + (s.scope === 'INTERNAL' ? 'Intern' : 'Drittanbieter') + ' · ' + s.deployment + ' · ' + (s.responsible || ''),
+            searchText: (s.id + ' ' + s.name + ' ' + s.domain + ' ' + s.description + ' ' + s.tags.join(' ') + ' ' + (s.responsible || '')).toLowerCase(),
+            onSelect: () => {
+              selectNode(s, window.innerWidth / 2, window.innerHeight / 2);
+              const nodeEl = document.getElementById("node-group-" + s.id);
+              if (nodeEl && nodeEl.focus) nodeEl.focus();
+            }
+          });
+        });
+
+        // 2. 87 Connections
+        CONNECTIONS_DATA.forEach(c => {
+          items.push({
+            id: c.id,
+            type: 'conn',
+            badgeClass: 'omni-badge-conn',
+            badgeText: 'Kante',
+            title: c.id + ' · ' + c.name,
+            sub: c.from + ' ➔ ' + c.to + ' (' + (c.protocol || '') + ' · ' + (c.payload || '') + ' · ' + (c.auth || '') + ')',
+            searchText: (c.id + ' ' + c.name + ' ' + c.from + ' ' + c.to + ' ' + (c.protocol || '') + ' ' + (c.payload || '') + ' ' + c.tags.join(' ')).toLowerCase(),
+            onSelect: () => {
+              selectEdge(c, window.innerWidth / 2, window.innerHeight / 2);
+              locateEdgeInChord(c.id);
+            }
+          });
+        });
+
+        // 3. 8 Core Processes
+        PROCESSES_DATA.forEach(p => {
+          items.push({
+            id: p.id,
+            type: 'proc',
+            badgeClass: 'omni-badge-proc',
+            badgeText: 'Prozess',
+            title: p.id + ' · ' + p.name,
+            sub: p.category + ' · SLA: ' + p.sla + ' · ' + (p.integrations ? p.integrations.length : 0) + ' E2E-Ketten',
+            searchText: (p.id + ' ' + p.name + ' ' + p.category + ' ' + p.description).toLowerCase(),
+            onSelect: () => {
+              setDrilldownProcess(p);
+            }
+          });
+        });
+
+        // 4. 8 Architecture Domains
+        DOMAINS_DATA.forEach(d => {
+          items.push({
+            id: d.id,
+            type: 'domain',
+            badgeClass: 'omni-badge-domain',
+            badgeText: 'Domäne',
+            title: d.id + ' · ' + d.name,
+            sub: d.description || '',
+            searchText: (d.id + ' ' + d.name + ' ' + (d.description || '')).toLowerCase(),
+            onSelect: () => {
+              setDrilldownDomain(d.id);
+            }
+          });
+        });
+
+        // 5. Actions & Commands
+        const actions = [
+          {
+            id: 'act-reset-all',
+            type: 'action',
+            badgeClass: 'omni-badge-action',
+            badgeText: 'Aktion',
+            title: 'Alle Filter zurücksetzen (Reset All)',
+            sub: 'Setzt Domänen-, Prozess-, Integrations- und Tag-Filter zurück',
+            shortcut: 'ESC',
+            searchText: 'reset filter alle zurucksetzen',
+            onSelect: () => {
+              const btn = document.getElementById("btnResetAll");
+              if (btn) btn.click();
+            }
+          },
+          {
+            id: 'act-toggle-theme',
+            type: 'action',
+            badgeClass: 'omni-badge-action',
+            badgeText: 'Aktion',
+            title: 'Day / Night Mode umschalten',
+            sub: 'Wechselt zwischen hellem und dunklem Farbschema',
+            shortcut: 'Theme',
+            searchText: 'theme mode dark light day night schema farbe',
+            onSelect: () => {
+              themeToggleBtn.click();
+            }
+          },
+          {
+            id: 'act-presentation',
+            type: 'action',
+            badgeClass: 'omni-badge-action',
+            badgeText: 'Aktion',
+            title: 'Präsentationsmodus umschalten',
+            sub: 'Minimiert oder öffnet beide Seitenleisten für maximale Canvas-Ansicht',
+            shortcut: '\\',
+            searchText: 'presentation prasentation fullscreen vollansicht canvas drawer',
+            onSelect: () => {
+              togglePresentationMode();
+            }
+          },
+          {
+            id: 'act-toggle-left',
+            type: 'action',
+            badgeClass: 'omni-badge-action',
+            badgeText: 'Aktion',
+            title: 'Linke Seitenleiste umschalten',
+            sub: 'Filter & Drilldown Drawer ein- oder ausblenden',
+            shortcut: '[',
+            searchText: 'drawer links left filter drilldown navigation',
+            onSelect: () => {
+              toggleLeftDrawer();
+            }
+          },
+          {
+            id: 'act-toggle-right',
+            type: 'action',
+            badgeClass: 'omni-badge-action',
+            badgeText: 'Aktion',
+            title: 'Rechte Seitenleiste umschalten',
+            sub: 'Inspektor Drawer ein- oder ausblenden',
+            shortcut: ']',
+            searchText: 'drawer rechts right inspektor inspector details',
+            onSelect: () => {
+              toggleRightDrawer();
+            }
+          },
+          {
+            id: 'act-share-link',
+            type: 'action',
+            badgeClass: 'omni-badge-action',
+            badgeText: 'Aktion',
+            title: 'Link teilen / in Zwischenablage kopieren',
+            sub: 'Kopiert den aktuellen Deep-Link mit allen aktiven Filtern',
+            shortcut: 'Share',
+            searchText: 'share teilen link kopieren zwischenablage url deep link',
+            onSelect: () => {
+              copyShareUrl();
+            }
+          },
+          {
+            id: 'act-export-svg',
+            type: 'action',
+            badgeClass: 'omni-badge-action',
+            badgeText: 'Aktion',
+            title: 'SVG Architekturdiagramm exportieren',
+            sub: 'Speichert das aktuelle Quad-Chord Chord-Diagramm als Vektordatei',
+            shortcut: 'Download',
+            searchText: 'svg export download bild grafik vektor chord diagramm',
+            onSelect: () => {
+              const btn = document.getElementById("btnDownloadSvg");
+              if (btn) btn.click();
+            }
+          },
+          {
+            id: 'act-open-docs',
+            type: 'action',
+            badgeClass: 'omni-badge-action',
+            badgeText: 'Aktion',
+            title: 'Architektur-Dokumentation & Handbuch öffnen',
+            sub: 'ORCAI Markdown Viewer (Key: ORCAI-260913-23H55-QUAD-CHORD)',
+            shortcut: 'Info',
+            searchText: 'dokumentation handbuch dsl e2e architektur info hilfe manual orcai',
+            onSelect: () => {
+              window.open("https://orcai-54321.web.app/markdown/?key=ORCAI-260913-23H55-QUAD-CHORD", "_blank", "noopener,noreferrer");
+            }
+          }
+        ];
+        actions.forEach(a => items.push(a));
+
+        function filterAndRankItems() {
+          const rawQuery = input.value.trim().toLowerCase();
+          let filtered = items;
+
+          if (currentFilter !== 'all') {
+            filtered = filtered.filter(it => it.type === currentFilter);
+          }
+
+          if (!rawQuery) {
+            currentFilteredItems = filtered.slice(0, 35);
+            return;
+          }
+
+          const scored = [];
+          for (let i = 0; i < filtered.length; i++) {
+            const it = filtered[i];
+            let score = -1;
+            const idLower = it.id.toLowerCase();
+            const titleLower = it.title.toLowerCase();
+
+            if (idLower === rawQuery) {
+              score = 120;
+            } else if (idLower.startsWith(rawQuery)) {
+              score = 90;
+            } else if (titleLower.startsWith(rawQuery)) {
+              score = 70;
+            } else if (titleLower.includes(rawQuery)) {
+              score = 50;
+            } else if (it.searchText.includes(rawQuery)) {
+              score = 30;
+            }
+
+            if (score > 0) {
+              scored.push({ item: it, score });
+            }
+          }
+
+          scored.sort((a, b) => b.score - a.score);
+          currentFilteredItems = scored.slice(0, 35).map(s => s.item);
+        }
+
+        function renderResults() {
+          filterAndRankItems();
+          resultsList.innerHTML = "";
+
+          if (currentFilteredItems.length === 0) {
+            resultsList.innerHTML = '<div class="omni-empty">Keine Ergebnisse gefunden</div>';
+            return;
+          }
+
+          if (selectedIndex >= currentFilteredItems.length) {
+            selectedIndex = 0;
+          }
+
+          currentFilteredItems.forEach((it, idx) => {
+            const el = document.createElement("div");
+            el.className = "omni-result-item" + (idx === selectedIndex ? " selected" : "");
+            el.setAttribute("role", "option");
+            el.setAttribute("aria-selected", idx === selectedIndex ? "true" : "false");
+            el.setAttribute("data-index", idx);
+
+            el.innerHTML =
+              '<span class="omni-item-badge ' + it.badgeClass + '">' + it.badgeText + '</span>' +
+              '<div class="omni-item-info">' +
+                '<div class="omni-item-title">' + it.title + '</div>' +
+                '<div class="omni-item-sub">' + it.sub + '</div>' +
+              '</div>' +
+              (it.shortcut ? '<span class="omni-item-shortcut">' + it.shortcut + '</span>' : '');
+
+            el.onclick = () => {
+              closeOmniSearch();
+              it.onSelect();
+            };
+
+            resultsList.appendChild(el);
+          });
+
+          scrollSelectedIntoView();
+        }
+
+        function updateSelectedResult() {
+          const domItems = resultsList.querySelectorAll(".omni-result-item");
+          domItems.forEach((d, idx) => {
+            const isSel = idx === selectedIndex;
+            d.classList.toggle("selected", isSel);
+            d.setAttribute("aria-selected", isSel ? "true" : "false");
+          });
+          scrollSelectedIntoView();
+        }
+
+        function scrollSelectedIntoView() {
+          const selEl = resultsList.querySelector(".omni-result-item.selected");
+          if (selEl) {
+            selEl.scrollIntoView({ block: "nearest" });
+          }
+        }
+
+        function openOmniSearch(filter = 'all') {
+          currentFilter = filter;
+          filterChips.querySelectorAll(".omni-chip").forEach(c => {
+            c.classList.toggle("active", c.dataset.filter === currentFilter);
+          });
+          modal.hidden = false;
+          void modal.offsetHeight;
+          modal.classList.add("open");
+          input.value = "";
+          selectedIndex = 0;
+          renderResults();
+          setTimeout(() => input.focus(), 60);
+        }
+        window.openOmniSearch = openOmniSearch;
+
+        function closeOmniSearch() {
+          if (input) input.blur();
+          modal.classList.remove("open");
+          setTimeout(() => {
+            modal.hidden = true;
+          }, 200);
+        }
+        window.closeOmniSearch = closeOmniSearch;
+
+        // Event Listeners
+        if (btnOpen) btnOpen.onclick = () => openOmniSearch('all');
+        if (btnClose) btnClose.onclick = closeOmniSearch;
+
+        modal.onclick = (e) => {
+          if (e.target === modal) closeOmniSearch();
+        };
+
+        filterChips.onclick = (e) => {
+          const chip = e.target.closest(".omni-chip");
+          if (!chip) return;
+          currentFilter = chip.dataset.filter;
+          filterChips.querySelectorAll(".omni-chip").forEach(c => c.classList.remove("active"));
+          chip.classList.add("active");
+          selectedIndex = 0;
+          renderResults();
+          input.focus();
+        };
+
+        input.addEventListener("input", () => {
+          selectedIndex = 0;
+          renderResults();
+        });
+
+        modal.addEventListener("keydown", (e) => {
+          if (e.key === "Escape") {
+            e.preventDefault();
+            closeOmniSearch();
+          } else if (e.key === "ArrowDown") {
+            e.preventDefault();
+            if (currentFilteredItems.length > 0) {
+              selectedIndex = (selectedIndex + 1) % currentFilteredItems.length;
+              updateSelectedResult();
+            }
+          } else if (e.key === "ArrowUp") {
+            e.preventDefault();
+            if (currentFilteredItems.length > 0) {
+              selectedIndex = (selectedIndex - 1 + currentFilteredItems.length) % currentFilteredItems.length;
+              updateSelectedResult();
+            }
+          } else if (e.key === "Enter") {
+            e.preventDefault();
+            if (currentFilteredItems[selectedIndex]) {
+              const chosen = currentFilteredItems[selectedIndex];
+              closeOmniSearch();
+              chosen.onSelect();
+            }
+          }
+        });
+      }
+
+      // =========================================================================
+      // GLOBAL SHORTCUTS LISTENER: Cmd+K / Ctrl+K, [, ], \
+      // =========================================================================
+      document.addEventListener("keydown", (e) => {
+        // 1. Ctrl+K or Cmd+K
+        if ((e.ctrlKey || e.metaKey) && (e.key === "k" || e.key === "K")) {
+          e.preventDefault();
+          const modal = document.getElementById("omniSearchModal");
+          if (modal && modal.classList.contains("open")) {
+            window.closeOmniSearch && window.closeOmniSearch();
+          } else {
+            window.openOmniSearch && window.openOmniSearch('all');
+          }
+          return;
+        }
+
+        // 2. Ignore if focused inside any input / textarea
+        const tag = e.target && e.target.tagName;
+        if (tag === "INPUT" || tag === "TEXTAREA" || (e.target && e.target.isContentEditable)) {
+          return;
+        }
+
+        // 3. Drawer ergonomic shortcuts
+        if (e.key === "[") {
+          e.preventDefault();
+          window.toggleLeftDrawer && window.toggleLeftDrawer();
+        } else if (e.key === "]") {
+          e.preventDefault();
+          window.toggleRightDrawer && window.toggleRightDrawer();
+        } else if (e.key === "\\") {
+          e.preventDefault();
+          window.togglePresentationMode && window.togglePresentationMode();
+        }
+      });
+
+      // Initialize Omni-Search Engine
+      initOmniSearch();
+
+      // Restore State from Deep-Link Query Parameters if present
+      restoreStateFromUrl();
 
       // Initial UI and Header Drilldown Title Rendering
       updateUI();
