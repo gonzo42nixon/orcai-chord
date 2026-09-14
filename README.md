@@ -14,12 +14,12 @@ Quad-Chord-Visualisierung der Johanniter Enterprise-Architecture-Landschaft im O
 
 ## Architektur-Dimensionen
 
-- **81 Systeme** (D1–D8, Johanniter intern & extern)
-- **102 Schnittstellen / Kanten** (HL7 FHIR, B2B EDI, REST APIs, IoT Streams, Security & Storage)
+- **82 Systeme** (D1–D8, Johanniter intern & extern, inkl. `SYS-82` SAP BTP Connectivity & Destination Service)
+- **103 Schnittstellen / Kanten** (HL7 FHIR, B2B EDI, REST APIs, IoT Streams, Security, RFC & Reverse-Invoke Tunnel)
 - **17 End-to-End Integrationsketten** mit geführter Token-Simulation und Schritt-Metadaten
 - **13 End-to-End Geschäftsprozesse** (Notfallversorgung, Pflege § 105, Entlassmanagement, KTP § 60, AMTS, etc.)
 - **4 Quadranten:**
-  - **TL (Top-Left):** Johanniter Cloud & Hyperscaler (**15 Systeme**)
+  - **TL (Top-Left):** Johanniter Cloud & Hyperscaler (**16 Systeme**)
   - **BL (Bottom-Left):** Johanniter On-Premises (**30 Systeme**)
   - **TR (Top-Right):** Externe Cloud & Fach-SaaS (**31 Systeme**)
   - **BR (Bottom-Right):** Externe On-Premises (**5 Systeme**)
@@ -29,7 +29,7 @@ Quad-Chord-Visualisierung der Johanniter Enterprise-Architecture-Landschaft im O
 Die Johanniter Quad-Chord EA wurde nach Google-Enterprise-Standards (Material Design 3, WCAG 2.1 AA, Command-Palette-Ergonomie) optimiert:
 
 ### 1. Omni-Search & Command Palette (`Cmd+K` / `Ctrl+K`)
-- Volltext-Indizierung über alle **81 Systeme**, **102 Kanten/Schnittstellen**, **13 Kernprozesse**, **8 Architekturdomänen** und **Aktionen**.
+- Volltext-Indizierung über alle **82 Systeme**, **103 Kanten/Schnittstellen**, **13 Kernprozesse**, **8 Architekturdomänen** und **Aktionen**.
 - Tastatur-Navigation mit `↑` / `↓`, `↵ Enter` zur sofortigen Auswahl, `ESC` zum Schließen.
 - Schnelle Filter-Chips (`Alle`, `Systeme`, `Schnittstellen`, `Prozesse`, `Domänen`, `Aktionen`).
 - Automatischer Fokus auf den Zielknoten im SVG-Canvas inklusive Radar-Beacon und Öffnen des System-Spickzettels.
@@ -91,6 +91,11 @@ Die Johanniter Quad-Chord EA wurde nach Google-Enterprise-Standards (Material De
    - **Hover-Preview:** Beim Überfahren eines Tag-Chips mit der Maus erhalten Anwender eine verzögerungsfreie Voransicht der betroffenen Knoten und Kanten auf der Zeichenfläche.
    - **Floating Tag HUD:** Eine schwebende Status-Pille am unteren Rand der Zeichenfläche zeigt die aktiven Tags sowie die Trefferzahlen an und ermöglicht das sofortige Aufheben des Filters mit 1 Klick (`[✕]`).
    - **Synchronisierte Zähler:** Der Zähler in der Tag-Cloud aktualisiert sich in Echtzeit (`X aktiv (Y Sys · Z Kanten)`).
+7. **SAP Hybride Cloud-Konnektivität, Reverse-Invoke & Clean Proxy:**
+   - **Reverse-Invoke Tunnel (`CON-04`):** Modellierung des Verbindungsaufbaus ausgehend vom On-Premises SAP Cloud Connector (`SYS-05`, DMZ) zum SAP BTP Connectivity & Destination Service (`SYS-82`, Cloud) über Port 443 TLS. Keine offenen Inbound-Ports in der Johanniter-Firewall.
+   - **Clean Proxy Architecture:** Eliminierung direkter Cloud-to-On-Prem-Bypasses (Vivendi Sync `CON-12` und Qualitrans Faktura `CON-102` werden sauber über den Cloud Connector vermittelt).
+   - **Transport Overlay Badge:** Jede Kante im Inspector weist ein standardisiertes Transport-Badge aus (z. B. `SAP Cloud Connector Tunnel`, `IPsec Site-to-Site VPN`, `TI-VPN (KIM)`, etc.).
+   - **🛡️ Hybride Cloud-Sicherheit Spickzettel-Sektion:** Detaillierte Darstellung von Principal Propagation (X.509-Zertifikate), Virtual Host Masking und Resource Whitelisting bei Auswahl von `SYS-05` oder `SYS-82`.
 
 ## Regulatorische Grundlagen & Legalitätsnachweis
 

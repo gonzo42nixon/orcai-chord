@@ -4,9 +4,9 @@
 > **Dokumentenart:** Enterprise Architecture Reference & Interactive Manual  
 > **Organisation:** Johanniter-Unfall-Hilfe e.V. (10.000+ Mitarbeiter, bundesweite Verbände, Kliniken & Pflegeeinrichtungen)  
 > **Klassifikation:** Offizielle Architektur-Referenz & Schulungsdokumentation  
-> **System-Umfang:** 81 Systeme, 102 Integrationsverbindungen, 17 E2E-Integrationsketten, 13 Geschäftsprozesse, 8 Domänen (D1–D8)  
+> **System-Umfang:** 82 Systeme, 103 Integrationsverbindungen, 17 E2E-Integrationsketten, 13 Geschäftsprozesse, 8 Domänen (D1–D8)  
 > **Persistenz-Key:** `ORCAI-260913-23H55-QUAD-CHORD`  
-> **Stand:** September 2026 · Version 3.0 (Extended E2E Enterprise Architecture Release)
+> **Stand:** September 2026 · Version 3.1 (SAP Hybrid Cloud Connectivity & Clean Proxy Release)
 
 ---
 
@@ -25,7 +25,7 @@ Dadurch werden die beiden kritischsten architektonischen Schutz- und Übergangsb
 
 ## 2. Die 4-Quadranten-Architektur (4 Kreis-Segmente)
 
-Das Chord-Diagramm gruppiert alle 81 Systeme auf einem 360°-Kreisbogen in vier klar abgegrenzte Segmente:
+Das Chord-Diagramm gruppiert alle 82 Systeme auf einem 360°-Kreisbogen in vier klar abgegrenzte Segmente:
 
 ```
                      ▲ CLOUD-BEREICH (OBEN)
@@ -33,8 +33,8 @@ Das Chord-Diagramm gruppiert alle 81 Systeme auf einem 360°-Kreisbogen in vier 
     Top-Left (TL)    │    Top-Right (TR)
   JOHANNITER CLOUD   │  EXTERNE CLOUD & SAAS
   (S/4HANA PCE, BTP, │  (Seeburger BIS, Ariba,
-   CPI, Entra ID,    │   Salesforce, gematik TI,
-   Kursportal...)    │   GHX, Smart Key Vault)
+   CPI, Connectivity │   Salesforce, gematik TI,
+   Entra ID, Portal) │   GHX, Smart Key Vault)
 ─────────────────────┼─────────────────────────► EXTERNE SYSTEME (RECHTS)
   JOHANNITER ON-PREM │   EXTERNE ON-PREM
   (ORBIS KIS, Vivendi│  (GKV §301, Pflege §105,
@@ -49,10 +49,10 @@ Das Chord-Diagramm gruppiert alle 81 Systeme auf einem 360°-Kreisbogen in vier 
 
 | Quadrant | Bezeichnung | Position | Systeme | Kanten | Kernanwendungen |
 | :--- | :--- | :--- | :---: | :---: | :--- |
-| **TL** | **Johanniter Cloud & Hyperscaler** | Links Oben | **15** | 39 | S/4HANA Private Cloud (`SYS-01`), SAP BTP Core (`SYS-03`), SAP CPI (`SYS-04`), Kursbuchungsportal (`SYS-81`), Microsoft Entra ID (`SYS-69`), Kong API Gateway (`SYS-61`), Kita-Verwaltung (`SYS-29`), Helfer-Portal (`SYS-54`), Microsoft 365 (`SYS-63`), Snowflake (`SYS-66`), Power BI (`SYS-67`) |
-| **BL** | **Johanniter On-Premises** | Links Unten | **30** | 68 | Dedalus ORBIS KIS (`SYS-11`), DMI PEGASOS Archiv (`SYS-78`), Qualitrans KTP (`SYS-79`), Philips PDMS (`SYS-13`), Agfa PACS (`SYS-14`), Connext Vivendi NG (`SYS-23`), Tunstall UMO Hausnotruf (`SYS-35`), medDV NIDAserver (`SYS-34`), Apache Kafka (`SYS-62`), Palo Alto Firewall (`SYS-72`), CyberArk PAM (`SYS-77`) |
-| **TR** | **Externe Cloud & Fach-SaaS** | Rechts Oben | **31** | 42 | Seeburger BIS Cloud (`SYS-08`), SAP Ariba (`SYS-07`), Salesforce Nonprofit Cloud (`SYS-64`), GHX Pharma Gateway (`SYS-10`), Masunt/Dormakaba Smart Key Vault (`SYS-80`), Quentic EcoWebDesk (`SYS-56`), Connext Vivendi Mobil (`SYS-24`), MediFox Dan (`SYS-26`), PalliDoc (`SYS-30`), Imito SmartWund (`SYS-32`), Vodafone IoT (`SYS-36`), Convexis RescueTrack (`SYS-39`), gematik TI (KIM, ePA, VSDM, eRezept), Peppol (`SYS-09`), RKI DEMIS (`SYS-48`), Zscaler (`SYS-73`) |
-| **BR** | **Externe On-Premises** | Rechts Unten | **5** | 10 | GKV §301 Clearing-Konnektor (`SYS-19`), KV-SafeNet (`SYS-21`), Pflegekassen §105 DTA-Gateway (`SYS-28`), ILS Leitstellen Cobra (`SYS-33`), BBK deNIS Katastrophenschutz (`SYS-40`) |
+| **TL** | **Johanniter Cloud & Hyperscaler** | Links Oben | **16** | 37 | S/4HANA Private Cloud (`SYS-01`), SAP BTP Core (`SYS-03`), SAP CPI (`SYS-04`), **SAP BTP Connectivity & Destination Service (`SYS-82`)**, Kursbuchungsportal (`SYS-81`), Microsoft Entra ID (`SYS-69`), Kong API Gateway (`SYS-61`), Kita-Verwaltung (`SYS-29`), Helfer-Portal (`SYS-54`), Microsoft 365 (`SYS-63`), Snowflake (`SYS-66`), Power BI (`SYS-67`) |
+| **BL** | **Johanniter On-Premises** | Links Unten | **30** | 67 | Dedalus ORBIS KIS (`SYS-11`), **SAP Cloud Connector (`SYS-05`)**, DMI PEGASOS Archiv (`SYS-78`), Qualitrans KTP (`SYS-79`), Philips PDMS (`SYS-13`), Agfa PACS (`SYS-14`), Connext Vivendi NG (`SYS-23`), Tunstall UMO Hausnotruf (`SYS-35`), medDV NIDAserver (`SYS-34`), Apache Kafka (`SYS-62`), Palo Alto Firewall (`SYS-72`), CyberArk PAM (`SYS-77`) |
+| **TR** | **Externe Cloud & Fach-SaaS** | Rechts Oben | **31** | 48 | Seeburger BIS Cloud (`SYS-08`), SAP Ariba (`SYS-07`), Salesforce Nonprofit Cloud (`SYS-64`), GHX Pharma Gateway (`SYS-10`), Masunt/Dormakaba Smart Key Vault (`SYS-80`), Quentic EcoWebDesk (`SYS-56`), Connext Vivendi Mobil (`SYS-24`), MediFox Dan (`SYS-26`), PalliDoc (`SYS-30`), Imito SmartWund (`SYS-32`), Vodafone IoT (`SYS-36`), Convexis RescueTrack (`SYS-39`), gematik TI (KIM, ePA, VSDM, eRezept), Peppol (`SYS-09`), RKI DEMIS (`SYS-48`), Zscaler (`SYS-73`) |
+| **BR** | **Externe On-Premises** | Rechts Unten | **5** | 12 | GKV §301 Clearing-Konnektor (`SYS-19`), KV-SafeNet (`SYS-21`), Pflegekassen §105 DTA-Gateway (`SYS-28`), ILS Leitstellen Cobra (`SYS-33`), BBK deNIS Katastrophenschutz (`SYS-40`) |
 
 ---
 
@@ -63,20 +63,25 @@ Auf der Zeichenfläche heben zwei markante Demarkationslinien die architektonisc
 ### A. Perimeter & DMZ Gateway-Korridor (Vertikale Demarkationslinie)
 * **Zweck:** Trennt die geschützte interne Johanniter-Infrastruktur (links) von allen externen Partnern, Kostenträgern, Leitstellen, Bundesbehörden und Drittanbieter-SaaS-Diensten (rechts).
 * **Kennzahlen:**
-  * **46 grenzüberschreitende Kanten** (External Ingress, External Egress, External B2B)
-  * **36 externe Systeme** (44.4% der Gesamtsystemlandschaft)
+  * **44 grenzüberschreitende Kanten** (External Ingress, External Egress, External B2B)
+  * **36 externe Systeme** (43.9% der Gesamtsystemlandschaft)
   * **8 gesicherte Perimeter-Gateways** (Palo Alto NGFW `SYS-72`, F5 WAF `SYS-75`, Zscaler ZTNA `SYS-73`, TI-Konnektor-Cluster `SYS-43`, Kong Gateway `SYS-61`, SAP Cloud Connector `SYS-05`)
 
-### B. Hybrid Cloud Bridge (Horizontale Demarkationslinie)
+### B. Hybrid Cloud Bridge & SAP Cloud Connector Reverse-Invoke Architektur (Horizontale Demarkationslinie)
 * **Zweck:** Verbindet die moderne Cloud- und Hyperscaler-Infrastruktur (oben) mit den internen RZ- und Klinik-Servern (unten).
-* **Netzwerk-Architektur:**
-  * SAP Cloud Connector Reverse Tunnel für gesicherte RFC/REST-Kopplung zwischen On-Premises KIS / Qualitrans und SAP BTP / CPI.
-  * Azure ExpressRoute & mTLS-Tunnel für InterSystems HealthShare & API-Gateways.
-  * Apache Kafka Event Streaming für Echtzeit-Ereignisse (Hausnotruf, Rettungswagen-Telemetrie, Key-Vault-Trigger).
+* **Sicherheits- & Netzwerk-Architektur:**
+  * **SAP Cloud Connector Reverse-Invoke Tunnel (`CON-04`):** Der On-Premises SAP Cloud Connector (`SYS-05`, DMZ) initiiert proaktiv einen verschlüsselten TLS-Tunnel über Port 443 ausgehend zum **SAP BTP Connectivity & Destination Service (`SYS-82`)**. Die On-Premises-Firewall benötigt **keinerlei eingehende Portfreigaben**.
+  * **Clean Proxy Architecture (Bypass-Freiheit):** Sämtlicher Cloud-zu-On-Premises-Verkehr (z. B. CPI `SYS-04` zu Vivendi NG `SYS-23` via `CON-12`, oder Qualitrans KTP `SYS-79` zu S/4HANA via `CON-102` und `CON-103`) wird strikt über den Cloud Connector vermittelt. Direkte Umgehungen (Bypasses) des DMZ-Proxies sind architektonisch unterbunden.
+  * **Virtual Host Masking:** Interne Netzwerknamen und IP-Adressen (wie `10.12.4.x` oder `s4hana-pce.rz.johanniter.de`) bleiben vor der Cloud verborgen. Die Cloud referenziert ausschließlich virtuelle Endpunkte (`s4-onprem.internal`, `vivendi-api.internal`).
+  * **Resource Whitelisting:** Der Cloud Connector blockiert standardmäßig jeglichen Zugriff und gibt nur explizit hinterlegte OData-/REST-Pfade sowie freigegebene RFC-Funktionsbausteine (`BAPI_*`) frei.
+  * **Principal Propagation (X.509):** Cloud-Benutzeridentitäten (aus Microsoft Entra ID `SYS-69` und SAP BTP Core `SYS-03`) werden über kurzlebige X.509-Clientzertifikate kryptografisch signiert und verlustfrei an die On-Premises-Backend-Systeme übertragen.
+  * **Transport Overlay Klassifikation (`transportOverlay`):** Jede der 103 Verbindungen ist präzise ihrer Transportschicht zugeordnet (`SAP_CLOUD_CONNECTOR_TUNNEL`, `HYBRID_EXPRESSROUTE_OR_TLS`, `IPSEC_VPN`, `TI_VPN_KIM`, `PUBLIC_INTERNET_TLS`, `INTRA_RZ_LAN`, `INTRA_CLOUD_MESH`, `INTRA_BTP_MESH`).
+  * **Azure ExpressRoute & mTLS-Tunnel:** Dedizierte Verbindung für InterSystems HealthShare und sichere API-Gateways.
+  * **Apache Kafka Event Streaming:** Echtzeit-Streaming für telemedizinische und infrastrukturelle Events.
 * **Kennzahlen:**
-  * **25 Hybrid-Kanten**
-  * **25.8% des Gesamttraffic** der Johanniter
-  * **33 beteiligte Systeme**
+  * **42 Hybrid-Kanten**
+  * **39.5% des Gesamttraffic** der Johanniter
+  * **34 beteiligte Systeme**
 
 ---
 
