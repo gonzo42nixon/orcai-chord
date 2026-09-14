@@ -1861,6 +1861,104 @@
       color: #ffffff;
     }
 
+    
+    /* ISO/OSI & TCP/IP Reference Stack Card in Edge Inspector */
+    .insp-osi-card {
+      margin-top: 10px;
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .insp-osi-header {
+      padding: 6px 10px;
+      background: rgba(56, 189, 248, 0.08);
+      font-size: 0.72rem;
+      font-weight: 750;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border-bottom: 1px solid var(--card-border);
+    }
+    .insp-osi-table {
+      display: flex;
+      flex-direction: column;
+    }
+    .insp-osi-row {
+      display: flex;
+      align-items: center;
+      padding: 5px 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      font-size: 0.68rem;
+      gap: 8px;
+    }
+    .insp-osi-row:last-child {
+      border-bottom: none;
+    }
+    .osi-layer-badge {
+      font-size: 0.60rem;
+      font-weight: 750;
+      padding: 2px 6px;
+      border-radius: 4px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      min-width: 68px;
+      text-align: center;
+    }
+    .osi-layer-desc {
+      color: var(--text-bright);
+      font-family: var(--font-mono, monospace);
+      font-size: 0.65rem;
+      word-break: break-word;
+      line-height: 1.3;
+    }
+    .insp-osi-row.l7 .osi-layer-badge { background: rgba(168, 85, 247, 0.2); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3); }
+    .insp-osi-row.l6 .osi-layer-badge { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }
+    .insp-osi-row.l5_l4 .osi-layer-badge { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .insp-osi-row.l3 .osi-layer-badge { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .insp-osi-row.l1_l2 .osi-layer-badge { background: rgba(236, 72, 153, 0.2); color: #f472b6; border: 1px solid rgba(236, 72, 153, 0.3); }
+
+    /* OSI-Schichten Schnellfilter Pills in Left Drawer */
+    .osi-layer-filter-container {
+      padding: 8px 12px 6px;
+      border-top: 1px solid var(--card-border);
+      background: var(--panel-bg-subtle, rgba(0,0,0,0.1));
+    }
+    .osi-filter-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 4px;
+    }
+    .osi-pill-btn {
+      font-size: 0.65rem;
+      font-weight: 600;
+      padding: 3px 7px;
+      border-radius: 4px;
+      background: var(--item-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+    .osi-pill-btn:hover {
+      border-color: var(--accent);
+      color: var(--text-bright);
+      background: var(--item-hover-bg);
+    }
+    .osi-pill-btn.active {
+      background: var(--accent);
+      color: #0b0f17;
+      font-weight: 750;
+      border-color: var(--accent);
+      box-shadow: 0 0 6px var(--accent-glow);
+    }
+    body.theme-day .osi-pill-btn.active {
+      color: #ffffff;
+    }
+
     /* Center Canvas & Floating Controls */
     .canvas-container {
       flex: 1;
@@ -2605,6 +2703,24 @@
 
       </div>
 
+      
+      <!-- OSI-SCHICHTEN SCHNELLFILTER -->
+      <div class="osi-layer-filter-container" id="osiFilterContainer">
+        <div style="display:flex; align-items:center; justify-content:space-between;">
+          <span style="font-size:0.70rem; font-weight:700; color:var(--text-bright); display:flex; align-items:center; gap:5px;">
+            <span>🌐</span> OSI-Referenz-Schichten
+          </span>
+          <span style="font-size:0.65rem; color:var(--text-muted);" id="osiFilterStatus">Alle</span>
+        </div>
+        <div class="osi-filter-pills" id="osiFilterPills">
+          <button class="osi-pill-btn active" data-osi="ALL">Alle</button>
+          <button class="osi-pill-btn" data-osi="L7" title="Layer 7: Fachprotokolle (FHIR, HL7, DICOM, EDIFACT, OData, Peppol)">L7 App</button>
+          <button class="osi-pill-btn" data-osi="L5_L6" title="Layer 5/6: Session Multiplex & Krypto (Reverse-Invoke, TLS 1.3, mTLS, Kafka)">L5/L6 Session</button>
+          <button class="osi-pill-btn" data-osi="L3" title="Layer 3: Network Overlays (IPsec, TI-VPN, ExpressRoute, RZ-LAN)">L3 VPN</button>
+          <button class="osi-pill-btn" data-osi="L1_L2" title="Layer 1/2: Mobilfunk & IoT (4G/5G, LTE Cat-M1, NB-IoT)">L1/L2 Funk</button>
+        </div>
+      </div>
+
       <!-- PINNED BOTTOM: Aktive Nachrichtentypen (Ohne Scrollbar) -->
       <div class="drawer-left-bottom">
         <div class="bottom-title">
@@ -2783,6 +2899,7 @@
       "Finanzen / ERP",
       "Firewall",
       "Java",
+      "OSI-L5 Tunnel",
       "Proxy",
       "SAP"
     ],
@@ -3147,6 +3264,7 @@
       "Apple",
       "FHIR",
       "Google",
+      "OSI-L1/L2 Cellular",
       "Pflege"
     ],
     "scope": "EXTERNAL",
@@ -3287,6 +3405,7 @@
       "Apple",
       "FHIR",
       "Google",
+      "OSI-L1/L2 Cellular",
       "Pflege"
     ],
     "scope": "EXTERNAL",
@@ -3364,7 +3483,8 @@
     "tags": [
       "Connectivity Services",
       "Hausnotruf",
-      "MQTT"
+      "MQTT",
+      "OSI-L1/L2 Cellular"
     ],
     "scope": "EXTERNAL",
     "deployment": "CLOUD",
@@ -3417,7 +3537,8 @@
     "vendor": "Convexis RescueTrack",
     "tags": [
       "Connectivity Services",
-      "Notfallrettung"
+      "Notfallrettung",
+      "OSI-L1/L2 Cellular"
     ],
     "scope": "EXTERNAL",
     "deployment": "CLOUD",
@@ -3453,6 +3574,7 @@
     "tags": [
       "AWS",
       "Notfallrettung",
+      "OSI-L1/L2 Cellular",
       "Portal"
     ],
     "scope": "EXTERNAL",
@@ -3490,6 +3612,7 @@
       "Connectivity Services",
       "Firewall",
       "KRITIS",
+      "OSI-L3 VPN",
       "Proxy",
       "Telematik / TI"
     ],
@@ -4000,7 +4123,8 @@
     "tags": [
       "Connectivity Services",
       "Firewall",
-      "KRITIS"
+      "KRITIS",
+      "OSI-L3 VPN"
     ],
     "scope": "INTERNAL",
     "deployment": "ON_PREM",
@@ -4018,6 +4142,7 @@
     "tags": [
       "Connectivity Services",
       "Firewall",
+      "OSI-L3 VPN",
       "Proxy"
     ],
     "scope": "EXTERNAL",
@@ -4181,6 +4306,7 @@
       "Cloud Connector",
       "Connectivity Services",
       "Finanzen / ERP",
+      "OSI-L5 Tunnel",
       "Proxy",
       "SAP"
     ],
@@ -4204,6 +4330,7 @@
       "BTP",
       "Finanzen / ERP",
       "Java",
+      "OSI-L7",
       "SAP"
     ],
     "rawWeight": 230,
@@ -4242,6 +4369,7 @@
       "BTP",
       "Finanzen / ERP",
       "Java",
+      "OSI-L7",
       "SAP"
     ],
     "rawWeight": 450,
@@ -4262,6 +4390,7 @@
       "Cloud Connector",
       "Connectivity Services",
       "Finanzen / ERP",
+      "OSI-L5 Tunnel",
       "Proxy",
       "SAP"
     ],
@@ -4283,6 +4412,8 @@
       "Connectivity Services",
       "Finanzen / ERP",
       "Klinik",
+      "OSI-L5 Tunnel",
+      "OSI-L7",
       "Proxy",
       "SAP"
     ],
@@ -4321,6 +4452,7 @@
     "tags": [
       "BTP",
       "Finanzen / ERP",
+      "OSI-L7",
       "Portal",
       "SAP"
     ],
@@ -4340,6 +4472,7 @@
     "tags": [
       "EDIFACT",
       "Finanzen / ERP",
+      "OSI-L7",
       "Portal",
       "SAP"
     ],
@@ -4396,6 +4529,7 @@
       "ABAP",
       "Connectivity Services",
       "Finanzen / ERP",
+      "OSI-L3 VPN",
       "SAP"
     ],
     "rawWeight": 90,
@@ -4415,6 +4549,8 @@
       "Cloud Connector",
       "Connectivity Services",
       "Finanzen / ERP",
+      "OSI-L5 Tunnel",
+      "OSI-L7",
       "Pflege",
       "Proxy",
       "SAP"
@@ -4437,7 +4573,8 @@
       "FHIR",
       "HL7",
       "Java",
-      "Klinik"
+      "Klinik",
+      "OSI-L7"
     ],
     "rawWeight": 680,
     "id": "CON-13",
@@ -4454,7 +4591,8 @@
     "messageType": "HL7_FHIR",
     "tags": [
       "HL7",
-      "Klinik"
+      "Klinik",
+      "OSI-L7"
     ],
     "rawWeight": 420,
     "id": "CON-14",
@@ -4471,7 +4609,8 @@
     "messageType": "HL7_FHIR",
     "tags": [
       "HL7",
-      "Klinik"
+      "Klinik",
+      "OSI-L7"
     ],
     "rawWeight": 480,
     "id": "CON-15",
@@ -4489,7 +4628,8 @@
     "tags": [
       "FHIR",
       "HL7",
-      "Klinik"
+      "Klinik",
+      "OSI-L7"
     ],
     "rawWeight": 500,
     "id": "CON-16",
@@ -4508,7 +4648,8 @@
       "FHIR",
       "HL7",
       "KRITIS",
-      "Klinik"
+      "Klinik",
+      "OSI-L7"
     ],
     "rawWeight": 260,
     "id": "CON-17",
@@ -4528,7 +4669,8 @@
       "Connectivity Services",
       "DICOM",
       "KRITIS",
-      "Klinik"
+      "Klinik",
+      "OSI-L7"
     ],
     "rawWeight": 310,
     "id": "CON-18",
@@ -4547,6 +4689,7 @@
       "DICOM",
       "KRITIS",
       "Klinik",
+      "OSI-L7",
       "Portal"
     ],
     "rawWeight": 350,
@@ -4566,7 +4709,8 @@
       "FHIR",
       "KHZG",
       "KRITIS",
-      "Klinik"
+      "Klinik",
+      "OSI-L7"
     ],
     "rawWeight": 340,
     "id": "CON-20",
@@ -4585,7 +4729,8 @@
       "FHIR",
       "HL7",
       "KRITIS",
-      "Klinik"
+      "Klinik",
+      "OSI-L7"
     ],
     "rawWeight": 320,
     "id": "CON-21",
@@ -4638,7 +4783,8 @@
     "messageType": "HL7_FHIR",
     "tags": [
       "HL7",
-      "Klinik"
+      "Klinik",
+      "OSI-L7"
     ],
     "rawWeight": 110,
     "id": "CON-24",
@@ -4656,6 +4802,7 @@
     "tags": [
       "EDIFACT",
       "Klinik",
+      "OSI-L7",
       "§ 301 SGB V"
     ],
     "rawWeight": 260,
@@ -4692,7 +4839,8 @@
     "tags": [
       "FHIR",
       "HL7",
-      "Klinik"
+      "Klinik",
+      "OSI-L7"
     ],
     "rawWeight": 310,
     "id": "CON-27",
@@ -4710,6 +4858,7 @@
     "tags": [
       "HL7",
       "Klinik",
+      "OSI-L7",
       "Telematik / TI"
     ],
     "rawWeight": 130,
@@ -4729,6 +4878,7 @@
       "Apple",
       "Connectivity Services",
       "Google",
+      "OSI-L1/L2 Cellular",
       "Pflege",
       "Proxy"
     ],
@@ -4747,6 +4897,7 @@
     "messageType": "REST_API",
     "tags": [
       "Connectivity Services",
+      "OSI-L3 VPN",
       "Pflege",
       "Proxy"
     ],
@@ -4781,6 +4932,7 @@
     "messageType": "B2B_EDI",
     "tags": [
       "EDIFACT",
+      "OSI-L7",
       "Pflege",
       "§ 105 SGB XI"
     ],
@@ -4799,6 +4951,7 @@
     "messageType": "B2B_EDI",
     "tags": [
       "EDIFACT",
+      "OSI-L7",
       "Pflege",
       "§ 105 SGB XI"
     ],
@@ -4856,6 +5009,7 @@
     "tags": [
       "Apple",
       "Google",
+      "OSI-L1/L2 Cellular",
       "Pflege"
     ],
     "rawWeight": 180,
@@ -4875,6 +5029,8 @@
       "Connectivity Services",
       "FHIR",
       "HL7",
+      "OSI-L3 VPN",
+      "OSI-L7",
       "Pflege"
     ],
     "rawWeight": 110,
@@ -4893,6 +5049,8 @@
     "tags": [
       "Connectivity Services",
       "Finanzen / ERP",
+      "OSI-L3 VPN",
+      "OSI-L7",
       "Pflege",
       "SAP"
     ],
@@ -4911,6 +5069,7 @@
     "messageType": "REST_API",
     "tags": [
       "Finanzen / ERP",
+      "OSI-L7",
       "Pflege",
       "SAP"
     ],
@@ -4946,6 +5105,7 @@
     "messageType": "REST_API",
     "tags": [
       "Notfallrettung",
+      "OSI-L1/L2 Cellular",
       "Portal"
     ],
     "rawWeight": 320,
@@ -4964,7 +5124,8 @@
     "tags": [
       "HL7",
       "Klinik",
-      "Notfallrettung"
+      "Notfallrettung",
+      "OSI-L7"
     ],
     "rawWeight": 290,
     "id": "CON-42",
@@ -4986,6 +5147,9 @@
       "KRITIS",
       "Klinik",
       "Notfallrettung",
+      "OSI-L1/L2 Cellular",
+      "OSI-L3 VPN",
+      "OSI-L7",
       "Telematik / TI"
     ],
     "rawWeight": 310,
@@ -5006,6 +5170,9 @@
       "Hausnotruf",
       "KIM",
       "MQTT",
+      "OSI-L1/L2 Cellular",
+      "OSI-L3 VPN",
+      "OSI-L7",
       "Telematik / TI"
     ],
     "rawWeight": 460,
@@ -5027,6 +5194,8 @@
       "Java",
       "KIM",
       "Kafka",
+      "OSI-L3 VPN",
+      "OSI-L7",
       "Telematik / TI"
     ],
     "rawWeight": 390,
@@ -5048,6 +5217,9 @@
       "Kafka",
       "MQTT",
       "Notfallrettung",
+      "OSI-L1/L2 Cellular",
+      "OSI-L3 VPN",
+      "OSI-L7",
       "Telematik / TI"
     ],
     "rawWeight": 410,
@@ -5068,6 +5240,7 @@
       "Hausnotruf",
       "KIM",
       "Klinik",
+      "OSI-L3 VPN",
       "Telematik / TI"
     ],
     "rawWeight": 140,
@@ -5088,6 +5261,8 @@
       "Connectivity Services",
       "KIM",
       "Notfallrettung",
+      "OSI-L1/L2 Cellular",
+      "OSI-L3 VPN",
       "Telematik / TI"
     ],
     "rawWeight": 120,
@@ -5107,6 +5282,7 @@
       "Connectivity Services",
       "KIM",
       "Notfallrettung",
+      "OSI-L3 VPN",
       "Personal / HR",
       "Telematik / TI"
     ],
@@ -5127,6 +5303,7 @@
       "Connectivity Services",
       "KIM",
       "Notfallrettung",
+      "OSI-L3 VPN",
       "Telematik / TI"
     ],
     "rawWeight": 100,
@@ -5184,6 +5361,7 @@
     "tags": [
       "Connectivity Services",
       "KIM",
+      "OSI-L3 VPN",
       "Proxy",
       "Telematik / TI"
     ],
@@ -5203,6 +5381,7 @@
     "tags": [
       "Connectivity Services",
       "FHIR",
+      "OSI-L7",
       "Proxy",
       "Telematik / TI"
     ],
@@ -5222,6 +5401,7 @@
     "tags": [
       "Connectivity Services",
       "FHIR",
+      "OSI-L7",
       "Proxy",
       "Telematik / TI"
     ],
@@ -5261,6 +5441,8 @@
       "FHIR",
       "KIM",
       "Klinik",
+      "OSI-L3 VPN",
+      "OSI-L7",
       "Telematik / TI"
     ],
     "rawWeight": 170,
@@ -5294,6 +5476,7 @@
     "messageType": "REST_API",
     "tags": [
       "ABAP",
+      "OSI-L7",
       "Personal / HR",
       "SAP"
     ],
@@ -5331,6 +5514,7 @@
     "tags": [
       "BTP",
       "Finanzen / ERP",
+      "OSI-L7",
       "Personal / HR",
       "SAP"
     ],
@@ -5351,6 +5535,7 @@
       "ABAP",
       "Connectivity Services",
       "Finanzen / ERP",
+      "OSI-L3 VPN",
       "Personal / HR",
       "SAP"
     ],
@@ -5424,6 +5609,7 @@
     "tags": [
       "Apple",
       "Google",
+      "OSI-L1/L2 Cellular",
       "Personal / HR"
     ],
     "rawWeight": 430,
@@ -5479,6 +5665,7 @@
       "FHIR",
       "HL7",
       "Klinik",
+      "OSI-L7",
       "Proxy"
     ],
     "rawWeight": 300,
@@ -5513,6 +5700,7 @@
     "tags": [
       "AWS",
       "Finanzen / ERP",
+      "OSI-L7",
       "SAP"
     ],
     "rawWeight": 180,
@@ -5549,7 +5737,8 @@
     "tags": [
       "AWS",
       "Connectivity Services",
-      "Klinik"
+      "Klinik",
+      "OSI-L3 VPN"
     ],
     "rawWeight": 320,
     "id": "CON-73",
@@ -5567,6 +5756,7 @@
     "tags": [
       "AWS",
       "Connectivity Services",
+      "OSI-L3 VPN",
       "Pflege"
     ],
     "rawWeight": 260,
@@ -5586,6 +5776,7 @@
       "AWS",
       "Connectivity Services",
       "Microsoft",
+      "OSI-L3 VPN",
       "Portal"
     ],
     "rawWeight": 360,
@@ -5620,7 +5811,8 @@
     "messageType": "SECURITY_AUDIT",
     "tags": [
       "Connectivity Services",
-      "Microsoft"
+      "Microsoft",
+      "OSI-L3 VPN"
     ],
     "rawWeight": 380,
     "id": "CON-77",
@@ -5640,6 +5832,7 @@
       "Connectivity Services",
       "Google",
       "Microsoft",
+      "OSI-L1/L2 Cellular",
       "Pflege"
     ],
     "rawWeight": 330,
@@ -5660,7 +5853,9 @@
       "Connectivity Services",
       "Google",
       "Microsoft",
-      "Notfallrettung"
+      "Notfallrettung",
+      "OSI-L1/L2 Cellular",
+      "OSI-L3 VPN"
     ],
     "rawWeight": 210,
     "id": "CON-79",
@@ -5679,7 +5874,8 @@
       "Connectivity Services",
       "Firewall",
       "KRITIS",
-      "Microsoft"
+      "Microsoft",
+      "OSI-L3 VPN"
     ],
     "rawWeight": 470,
     "id": "CON-80",
@@ -5753,7 +5949,8 @@
     "tags": [
       "AWS",
       "Connectivity Services",
-      "Klinik"
+      "Klinik",
+      "OSI-L3 VPN"
     ],
     "rawWeight": 310,
     "id": "CON-84",
@@ -5771,6 +5968,7 @@
     "tags": [
       "Connectivity Services",
       "Finanzen / ERP",
+      "OSI-L3 VPN",
       "SAP"
     ],
     "rawWeight": 140,
@@ -5826,6 +6024,7 @@
       "HL7",
       "KHZG",
       "Klinik",
+      "OSI-L7",
       "Portal"
     ],
     "rawWeight": 260,
@@ -5845,6 +6044,7 @@
       "Connectivity Services",
       "KHZG",
       "KIM",
+      "OSI-L3 VPN",
       "Telematik / TI"
     ],
     "rawWeight": 240,
@@ -5864,6 +6064,8 @@
       "Connectivity Services",
       "FHIR",
       "KIM",
+      "OSI-L3 VPN",
+      "OSI-L7",
       "Pflege",
       "Telematik / TI"
     ],
@@ -5883,7 +6085,8 @@
     "tags": [
       "DICOM",
       "Java",
-      "Klinik"
+      "Klinik",
+      "OSI-L7"
     ],
     "rawWeight": 310,
     "id": "CON-91",
@@ -5901,6 +6104,7 @@
     "tags": [
       "Connectivity Services",
       "Notfallrettung",
+      "OSI-L3 VPN",
       "§ 60 SGB V"
     ],
     "rawWeight": 280,
@@ -5920,6 +6124,7 @@
       "EDIFACT",
       "Finanzen / ERP",
       "Notfallrettung",
+      "OSI-L7",
       "§ 60 SGB V"
     ],
     "rawWeight": 250,
@@ -5974,7 +6179,8 @@
       "Connectivity Services",
       "Hausnotruf",
       "KRITIS",
-      "Notfallrettung"
+      "Notfallrettung",
+      "OSI-L3 VPN"
     ],
     "rawWeight": 210,
     "id": "CON-96",
@@ -5993,7 +6199,9 @@
       "Connectivity Services",
       "Hausnotruf",
       "MQTT",
-      "Notfallrettung"
+      "Notfallrettung",
+      "OSI-L1/L2 Cellular",
+      "OSI-L7"
     ],
     "rawWeight": 180,
     "id": "CON-97",
@@ -6066,6 +6274,7 @@
     "tags": [
       "BTP",
       "Finanzen / ERP",
+      "OSI-L7",
       "Personal / HR",
       "SAP"
     ],
@@ -6087,6 +6296,8 @@
       "Connectivity Services",
       "Finanzen / ERP",
       "Notfallrettung",
+      "OSI-L5 Tunnel",
+      "OSI-L7",
       "Proxy",
       "SAP",
       "§ 60 SGB V"
@@ -6109,6 +6320,7 @@
       "Cloud Connector",
       "Connectivity Services",
       "Finanzen / ERP",
+      "OSI-L5 Tunnel",
       "Proxy",
       "SAP"
     ],
@@ -8454,6 +8666,67 @@
           '</div>';
       }
 
+      
+      function esc(str) {
+        return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      }
+
+      function computeOsiStack(edge) {
+        const prot = (edge.protocol || '').toLowerCase();
+        const name = (edge.name || '').toLowerCase();
+        const overlay = (edge.transportOverlay || '').toUpperCase();
+        const msgType = edge.messageType || '';
+
+        // L7 Application
+        let l7 = edge.protocol || 'REST API / JSON';
+        if (prot.includes('fhir')) l7 = 'HL7 FHIR R4 (REST/JSON Resources)';
+        else if (prot.includes('hl7 v2')) l7 = 'HL7 v2.5 / v2.7 Healthcare Messaging';
+        else if (prot.includes('dicom')) l7 = 'DICOM PS 3.0 / WADO-RS Medical Imaging';
+        else if (prot.includes('edifact')) l7 = 'EDIFACT / DTA Clearing Interchange';
+        else if (prot.includes('odata')) l7 = 'OData v4 / SAP REST API';
+        else if (prot.includes('kafka')) l7 = 'Kafka Binary Protocol / Avro Event Stream';
+        else if (prot.includes('mqtt')) l7 = 'MQTT v3.1.1 / Telecare IoT Telemetry';
+
+        // L6 Presentation & Crypto
+        let l6 = 'JSON / UTF-8 · TLS 1.3 Encryption';
+        if (overlay === 'TI_VPN_KIM') l6 = 'KIM 1.5 XML-DSig / XML-Enc · gematik S/MIME';
+        else if (overlay === 'SAP_CLOUD_CONNECTOR_TUNNEL') l6 = 'TLS 1.3 · X.509 Principal Propagation · Virtual Host Masking';
+        else if (prot.includes('dicom')) l6 = 'DICOM Byte Stream · TLS 1.3 mTLS';
+        else if (prot.includes('edifact')) l6 = 'EDIFACT Syntax Level A/B · PGP / TLS';
+        else if (prot.includes('mllp')) l6 = 'ER7 / MLLP Envelope Framing';
+        else if (prot.includes('tls') || prot.includes('https')) l6 = 'TLS 1.3 · OAuth 2.0 Bearer JWT';
+
+        // L5/L4 Session & Transport
+        let l5_l4 = 'TCP Port 443 (HTTPS Session)';
+        if (overlay === 'SAP_CLOUD_CONNECTOR_TUNNEL') l5_l4 = 'Reverse-Invoke Persistent TCP 443 Handshake (SCC ➔ BTP)';
+        else if (prot.includes('mllp')) l5_l4 = 'TCP Port 2575 (MLLP Minimal Lower Layer Protocol)';
+        else if (prot.includes('kafka')) l5_l4 = 'TCP Port 9092/9094 (Persistent Kafka Broker Session)';
+        else if (prot.includes('mqtt')) l5_l4 = 'TCP Port 8883 (MQTT TLS Session Keep-Alive)';
+        else if (overlay === 'IPSEC_VPN') l5_l4 = 'ESP (IP Protocol 50) / UDP 500/4500 (IKEv2 Session)';
+        else if (prot.includes('ftps') || prot.includes('sftp')) l5_l4 = 'TCP Port 22 (SSH) / 990 (FTPS Control & Data)';
+
+        // L3 Network
+        let l3 = 'Public Internet Route (TLS Encrypted)';
+        if (overlay === 'SAP_CLOUD_CONNECTOR_TUNNEL') l3 = 'Hybrid Cloud Bridge · RZ-DMZ Outbound via Port 443';
+        else if (overlay === 'TI_VPN_KIM') l3 = 'gematik TI-VPN (IPsec SIS / Konnektor Tunnel)';
+        else if (overlay === 'IPSEC_VPN') l3 = 'IPsec Site-to-Site VPN Tunnel (AES-256-GCM)';
+        else if (overlay === 'HYBRID_EXPRESSROUTE_OR_TLS') l3 = 'Azure ExpressRoute Private Peering (BGP Routing)';
+        else if (overlay === 'INTRA_RZ_LAN') l3 = 'Intra-Datacenter LAN / 802.1Q Segmented VLAN';
+        else if (overlay === 'INTRA_CLOUD_MESH' || overlay === 'INTRA_BTP_MESH') l3 = 'Cloud VPC Peering / Service Mesh Virtual Overlay';
+
+        // L1/L2 Physical & Data Link
+        let l1_l2 = 'Ethernet 802.3 / 10-40 Gbps Fiber Backbone';
+        if (
+          ['CON-29','CON-36','CON-41','CON-43','CON-66','CON-78','CON-79'].includes(edge.id) ||
+          ['SYS-24','SYS-32','SYS-36','SYS-39','SYS-41'].includes(edge.from) ||
+          ['SYS-24','SYS-32','SYS-36','SYS-39','SYS-41'].includes(edge.to)
+        ) {
+          l1_l2 = '4G/5G Cellular Mobile Radio (LTE Cat-M1 / NB-IoT / 5G SA)';
+        }
+
+        return { l7, l6, l5_l4, l3, l1_l2 };
+      }
+
       function renderInspectorEdge(edge) {
         const src = sysById.get(edge.from);
         const tgt = sysById.get(edge.to);
@@ -8541,6 +8814,38 @@
               '<div class="insp-meta-box"><div class="insp-meta-lbl">Gewicht / Durchsatz</div><div class="insp-meta-val">' + edge.rawWeight + ' msg/s (' + edge.trafficPct + '%)</div></div>' +
               '<div class="insp-meta-box"><div class="insp-meta-lbl">Routing & Schutz</div><div class="insp-meta-val">' + (edge.isCrossBoundary ? 'Palo Alto / Kong' : 'Intra-Zone') + '</div></div>' +
             '</div>' +
+
+            // ISO/OSI & TCP/IP Protocol Stack Card
+            (function() {
+              const osi = computeOsiStack(edge);
+              return '<div class="insp-osi-card">' +
+                '<div class="insp-osi-header">' +
+                  '<span>🌐 ISO/OSI & TCP/IP Protokoll-Stack</span>' +
+                '</div>' +
+                '<div class="insp-osi-table">' +
+                  '<div class="insp-osi-row l7">' +
+                    '<span class="osi-layer-badge">L7 Applikation</span>' +
+                    '<span class="osi-layer-desc">' + esc(osi.l7) + '</span>' +
+                  '</div>' +
+                  '<div class="insp-osi-row l6">' +
+                    '<span class="osi-layer-badge">L6 Darstellung</span>' +
+                    '<span class="osi-layer-desc">' + esc(osi.l6) + '</span>' +
+                  '</div>' +
+                  '<div class="insp-osi-row l5_l4">' +
+                    '<span class="osi-layer-badge">L5/L4 Session</span>' +
+                    '<span class="osi-layer-desc">' + esc(osi.l5_l4) + '</span>' +
+                  '</div>' +
+                  '<div class="insp-osi-row l3">' +
+                    '<span class="osi-layer-badge">L3 Netzwerk</span>' +
+                    '<span class="osi-layer-desc">' + esc(osi.l3) + '</span>' +
+                  '</div>' +
+                  '<div class="insp-osi-row l1_l2">' +
+                    '<span class="osi-layer-badge">L2/L1 Physik</span>' +
+                    '<span class="osi-layer-desc">' + esc(osi.l1_l2) + '</span>' +
+                  '</div>' +
+                '</div>' +
+              '</div>';
+            })() +
           '</div>';
       }
       function renderInspectorDomain(dom) {
@@ -8977,6 +9282,42 @@
           window.clearAllTags();
         };
       }
+
+      
+      // OSI Schichten-Schnellfilter Logic
+      let selectedOsiLayer = 'ALL';
+      const osiPills = document.querySelectorAll('.osi-pill-btn');
+      const osiStatusEl = document.getElementById('osiFilterStatus');
+
+      osiPills.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const osiVal = btn.getAttribute('data-osi');
+          selectedOsiLayer = osiVal;
+          osiPills.forEach(b => b.classList.toggle('active', b === btn));
+          if (osiStatusEl) {
+            osiStatusEl.textContent = btn.textContent;
+          }
+
+          // Map OSI layer to active tag for instant visual highlighting & dimming
+          window.clearAllTags();
+          if (osiVal === 'L7') {
+            activeTags.add('OSI-L7');
+          } else if (osiVal === 'L5_L6') {
+            activeTags.add('OSI-L5 Tunnel');
+          } else if (osiVal === 'L3') {
+            activeTags.add('OSI-L3 VPN');
+          } else if (osiVal === 'L1_L2') {
+            activeTags.add('OSI-L1/L2 Cellular');
+          }
+
+          // Synchronize tag chips in right drawer
+          document.querySelectorAll('.tag-chip').forEach(chip => {
+            chip.classList.toggle('active', activeTags.has(chip.textContent.trim()));
+          });
+
+          updateUI();
+        });
+      });
 
       // Canvas Zoom Controls
       document.getElementById("btnZoomIn").onclick = () => svg.transition().duration(300).call(zoom.scaleBy, 1.3);

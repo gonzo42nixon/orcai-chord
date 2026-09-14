@@ -104,6 +104,15 @@ Die Johanniter Quad-Chord EA wurde nach Google-Enterprise-Standards (Material De
      - *Plattformen & Infrastruktur:* `SAP`, `BTP`, `Microsoft`, `AWS`, `Apple`, `Google`, `Cloud Connector`, `Connectivity Services`, `Proxy`, `Firewall`, `Portal`, `Java`, `ABAP`, `C++`
    - **Beseitigung von Tag-Verwässerung (Anti-Dilution):** Vollständige Entfernung von 13 Rausch- und CRUD-Tags (`GET`, `POST`, `PUT`, `CREATE`, `READ`, `UPDATE`, `SEND`, `RECEIVE`, `Non-SAP`, `Intern`, `Extern`, `Process`, `Integration`, `Service`). Maximale Systemabdeckung pro Tag liegt nun bei $\le 22\%$ (zuvor $88\%$).
    - **Automatisierte CI/CD-Qualitätssicherung:** 6-stufiger Node.js-Linter (`test_tag_qa_lint.js`) und Playwright-E2E-Testsuite (`test_tag_qa_playwright.js`) sichern die Tag-Governance ab.
+9. **ISO/OSI & TCP/IP Referenzmodell-Integration (Schichten-Transparenz):**
+   - **Interaktive OSI-Stack-Kaskade im Edge Inspector:** Detaillierte 5-stufige Aufschlüsselung jeder Kante nach dem OSI- und TCP/IP-Referenzmodell:
+     - *Layer 7 (Applikation):* FHIR, HL7 v2.5 MLLP, DICOM PS 3.0, OData, EDIFACT, Kafka, MQTT.
+     - *Layer 6 (Darstellung & Krypto):* TLS 1.3, mTLS (x.509 Principal Propagation), KIM 1.5 XML-DSig/S-MIME.
+     - *Layer 5/4 (Session & Transport):* Reverse-Invoke TCP 443 Handshake, TCP 2575 MLLP, TCP 9092 Kafka.
+     - *Layer 3 (Netzwerk & Overlay):* gematik TI-VPN, IPsec Site-to-Site, ExpressRoute, RZ-VLAN.
+     - *Layer 1/2 (Sicherung & Physik):* 4G/5G Cellular Radio (LTE Cat-M1, 5G SA) vs. 10-40 Gbps Glasfaser-Backbone.
+   - **OSI-Schichten-Schnellfilter im linken Drawer:** 5 Quick-Pills (`Alle`, `L7 App`, `L5/L6 Session`, `L3 VPN`, `L1/L2 Funk`) zur gezielten Durchleuchtung („Röntgenblick“) der gesamten Schnittstellenlandschaft.
+   - **4 selektive OSI-Tags:** `OSI-L7`, `OSI-L5 Tunnel`, `OSI-L3 VPN`, `OSI-L1/L2 Cellular`.
 
 ## Regulatorische Grundlagen & Legalitätsnachweis
 

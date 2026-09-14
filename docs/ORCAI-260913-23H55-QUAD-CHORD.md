@@ -264,7 +264,29 @@ Im Build-Prozess prüft das Testskript `test_tag_qa_lint.js` die Einhaltung folg
 3. **Orphan Tag Check:** Jeder Tag muss mindestens 2 Entitäten referenzieren.
 4. **Selectivity Threshold:** Kein Tag darf mehr als 30% der Systeme matchen.
 5. **Zero-Tag Protection:** Jedes System und jede Schnittstelle besitzt mindestens 2 valide Tags.
-6. **Plausibility Cross-Check:** Logische Validierung spezifischer Knoten (z. B. keine Cloud-Connector-Tags an Drittanbieter-Apps wie Katretter).
+---
+
+## 13. ISO/OSI & TCP/IP Referenzmodell in der Integrationsarchitektur
+
+Als KRITIS-relevante Hilfsorganisation und Klinikbetreiberin erfordert das Sicherheits- und Architekturmanagement der Johanniter eine lückenlose Transparenz darüber, auf welchen Schichten des **ISO/OSI 7-Schichten-Modells** bzw. des **TCP/IP 4-Schichten-Modells** die 103 Integrationsverbindungen operieren:
+
+### A. Technische Schichten-Matrix der Johanniter-Schnittstellen
+
+| OSI-Schicht | Bezeichnung | Relevanz & Implementierung in der Johanniter-Architektur | Beispiel-Schnittstellen |
+| :--- | :--- | :--- | :--- |
+| **Layer 7** | **Application** | Funktionale Fachprotokolle & Datenmodelle: HL7 FHIR R4, HL7 v2.5 MLLP, DICOM PS 3.0 WADO-RS, EDIFACT / DTA, Peppol BIS 3.0, SAP OData v4, Kafka Avro Streams, MQTT Telemetrie. | `CON-14` (Labor ORM), `CON-88` (eArztbrief), `CON-10` (Peppol) |
+| **Layer 6** | **Presentation** | Serialisierung, Datenkompression & Kryptografie: TLS 1.3, mTLS (Client-Zertifikate), X.509 Principal Propagation, gematik KIM XML-DSig / XML-Enc, JSON/REST, ER7 Framing. | `CON-04` (SCC TLS 1.3), `CON-45` (KIM S/MIME) |
+| **Layer 5/4** | **Session & Transport** | Verbindungssteuerung & Port-Multiplexing: SAP Cloud Connector Reverse-Invoke Persistent Handshakes, TCP Port 2575 (MLLP), TCP Port 9092 (Kafka), TCP Port 8883 (MQTT TLS). Keine offenen Inbound-Ports im internen RZ. | `CON-04` (SCC Port 443), `CON-31` (Kafka Broker) |
+| **Layer 3** | **Network & Overlay** | Routing & logische Netzwerksegmentierung: IPsec Site-to-Site VPN-Tunnel, gematik TI-VPN (SIS), Azure ExpressRoute Private Peering, segmentierte 802.1Q Intra-RZ-VLANs. | `CON-44` (TI Konnektor), `CON-61` (ExpressRoute) |
+| **Layer 1/2** | **Physical & Data Link** | Physische Übertragungsmedien: 4G/5G Mobilfunk (LTE Cat-M1, NB-IoT, 5G SA) für Rettungsdienste (NIDApad) und Telecare-Hausnotrufgeräte vs. redundanter 10-40 Gbps Glasfaser-Backbone im RZ. | `CON-36` (LTE Hausnotruf), `CON-41` (Katretter 5G) |
+
+### B. Ordnungsstiftende Filter & Inspector-Integration
+1. **Interaktiver OSI-Stack im Edge Inspector:**  
+   Bei Auswahl einer beliebigen Schnittstelle generiert die Anwendung automatisch eine 5-stufige Farbkaskade (L7 bis L1/L2) mit präziser Ausweisung von Port, Verschlüsselungsverfahren und Netz-Overlay.
+2. **OSI-Schichten-Schnellfilter (Linker Drawer):**  
+   Schaltflächen zur sofortigen Isolation von Applikations- (L7), Session/Krypto- (L5/L6), VPN- (L3) und Mobilfunkstrecken (L1/L2).
+3. **OSI-Tags in der Tag-Cloud:**  
+   `OSI-L7`, `OSI-L5 Tunnel`, `OSI-L3 VPN`, `OSI-L1/L2 Cellular` ermöglichen multidimensionale Kreuzfilterungen mit Fachdomänen und KRITIS-Vorgaben.
 
 ---
 
