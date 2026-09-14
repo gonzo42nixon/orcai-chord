@@ -4,7 +4,8 @@ Quad-Chord-Visualisierung der Johanniter Enterprise-Architecture-Landschaft im O
 
 ## Anwendung & Links
 
-- **Live SPA:** [ORCAI Quad-Chord EA](https://orcai-54321.web.app/api/orcai/v1/docs/ORCAI-260913-16H03-SPA-CS745)
+- **Live SPA (Direktaufruf mit Header & Share-Button):** [ORCAI Quad-Chord EA Live](https://orcai-54321.web.app/api/orcai/v1/docs/ORCAI-260914-10H25-SPA-CHORD)
+- **Kanonischer Endpunkt:** [ORCAI Quad-Chord EA](https://orcai-54321.web.app/api/orcai/v1/docs/ORCAI-260913-16H03-SPA-CS745)
 - **Live Handbuch & Dokumentation:** [ORCAI Markdown Studio (Key: ORCAI-260913-23H55-QUAD-CHORD)](https://orcai-54321.web.app/markdown/?key=ORCAI-260913-23H55-QUAD-CHORD)
 - **Versionierte SPA-Quelle:** [`src/index.html`](src/index.html)
 - **Architekturhandbuch:** [`docs/ORCAI-260913-23H55-QUAD-CHORD.md`](docs/ORCAI-260913-23H55-QUAD-CHORD.md)
