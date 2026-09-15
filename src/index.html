@@ -1924,6 +1924,20 @@
       gap: 6px;
       flex-shrink: 0;
     }
+    .radar-dimension-select {
+      min-width: 108px;
+      padding: 3px 24px 3px 8px;
+      border: 1px solid var(--card-border);
+      border-radius: 5px;
+      background: var(--item-bg);
+      color: var(--text-bright);
+      font: 700 0.68rem/1.2 inherit;
+      cursor: pointer;
+    }
+    .radar-dimension-select:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
     .radar-pills {
       display: flex;
       align-items: center;
@@ -2009,7 +2023,7 @@
       z-index: 45;
       overflow: visible;
     }
-    .edge-popout-card, .sys-popout-card {
+    .edge-popout-card, .sys-popout-card, .domain-popout-card, .process-popout-card, .integration-popout-card {
       position: absolute;
       width: 380px;
       max-height: calc(100% - 130px);
@@ -2026,7 +2040,7 @@
       transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.2s ease, border-color 0.2s ease;
       bottom: 58px;
     }
-    .edge-popout-card.popout-bay-hovered, .sys-popout-card.popout-bay-hovered {
+    .edge-popout-card.popout-bay-hovered, .sys-popout-card.popout-bay-hovered, .domain-popout-card.popout-bay-hovered, .process-popout-card.popout-bay-hovered, .integration-popout-card.popout-bay-hovered {
       z-index: 300 !important;
       transform: translateY(-8px) scale(1.01);
       box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75), 0 0 0 2px var(--accent);
@@ -2922,16 +2936,22 @@
       <div class="middleware-radar-bar" id="middlewareRadarBar">
         <div class="radar-title">
           <span style="font-size:0.9rem;">📡</span>
-          <span style="font-weight:750; color:var(--text-bright); font-size:0.75rem;">Middleware-Radar:</span>
+          <label for="radarDimension" style="font-weight:750; color:var(--text-bright); font-size:0.75rem;">Middleware-Radar</label>
+          <select class="radar-dimension-select" id="radarDimension" aria-label="Zähldimension des Middleware-Radars">
+            <option value="DOMAIN">Domäne</option>
+            <option value="PROCESS">Prozess</option>
+            <option value="INTEGRATION">Integration</option>
+            <option value="SYSTEM" selected>System</option>
+          </select>
         </div>
         <div class="radar-pills" id="radarPills">
-          <button class="radar-pill active" data-hub="ALL">🌐 Alle (243)</button>
-          <button class="radar-pill" data-hub="SYS-60" title="InterSystems HealthShare: Klinische Integrations-Engine (0 Integrationen)">🏥 HealthShare (0)</button>
-          <button class="radar-pill" data-hub="SYS-04" title="SAP Integration Suite (CPI): Enterprise ERP & Cloud EAI (0 Integrationen)">🏢 SAP CPI (0)</button>
-          <button class="radar-pill" data-hub="SYS-08" title="SEEBURGER BIS Cloud: B2B, EDIFACT & Kassen-Clearing (0 Integrationen)">🌐 Seeburger BIS (0)</button>
-          <button class="radar-pill" data-hub="SYS-61" title="Kong / Azure API Gateway: L7 Mobile & Web APIs (0 Integrationen)">⚡ Kong Gateway (0)</button>
-          <button class="radar-pill" data-hub="SYS-62" title="Apache Kafka: Realtime Event Streaming Bus (0 Integrationen)">📡 Apache Kafka (0)</button>
-          <button class="radar-pill" data-hub="SYS-43" title="TI-Konnektor Cluster: Telematikinfrastruktur (0 Integrationen)">🔐 TI-Cluster (0)</button>
+          <button class="radar-pill active" data-hub="ALL" data-label="🌐 Alle">🌐 Alle</button>
+          <button class="radar-pill" data-hub="SYS-60" data-label="🏥 HealthShare">🏥 HealthShare</button>
+          <button class="radar-pill" data-hub="SYS-04" data-label="🏢 SAP CPI">🏢 SAP CPI</button>
+          <button class="radar-pill" data-hub="SYS-08" data-label="🌐 Seeburger BIS">🌐 Seeburger BIS</button>
+          <button class="radar-pill" data-hub="SYS-61" data-label="⚡ Kong Gateway">⚡ Kong Gateway</button>
+          <button class="radar-pill" data-hub="SYS-62" data-label="📡 Apache Kafka">📡 Apache Kafka</button>
+          <button class="radar-pill" data-hub="SYS-43" data-label="🔐 TI-Cluster">🔐 TI-Cluster</button>
         </div>
       </div>
 
@@ -17741,6 +17761,16 @@
           activeLinkIds.add(selectedLink.id);
           activeNodeIds.add(selectedLink.from);
           activeNodeIds.add(selectedLink.to);
+        } else if (selectedRadarHub && selectedRadarHub !== 'ALL') {
+          const radarIntegrations = INTEGRATIONS_DATA.filter(i => i.middlewareHub === selectedRadarHub);
+          radarIntegrations.forEach(integ => {
+            (integ.steps || []).forEach(step => {
+              activeLinkIds.add(step.connectionId);
+              activeNodeIds.add(step.from);
+              activeNodeIds.add(step.to);
+            });
+          });
+          activeNodeIds.add(selectedRadarHub);
         } else if (selectedNodeId) {
           activeNodeIds.add(selectedNodeId);
           CONNECTIONS_DATA.forEach(c => {
@@ -18925,8 +18955,140 @@
       
       // MIDDLEWARE RADAR LOGIC
       let selectedRadarHub = 'ALL';
+      let selectedRadarDimension = 'SYSTEM';
       let selectedIntegCluster = 'ALL';
       let integSearchTerm = '';
+
+      const RADAR_DIMENSION_META = {
+        DOMAIN: { singular: 'Domäne', plural: 'Domänen', icon: '🏛️', className: 'domain-popout-card' },
+        PROCESS: { singular: 'Prozess', plural: 'Prozesse', icon: '📂', className: 'process-popout-card' },
+        INTEGRATION: { singular: 'Integration', plural: 'Integrationen', icon: '⚡', className: 'integration-popout-card' },
+        SYSTEM: { singular: 'System', plural: 'Systeme', icon: '🖥️', className: 'sys-popout-card' }
+      };
+
+      function getRadarIntegrations(hubId) {
+        return hubId === 'ALL'
+          ? INTEGRATIONS_DATA
+          : INTEGRATIONS_DATA.filter(i => i.middlewareHub === hubId);
+      }
+
+      function getRadarEntities(dimension, hubId) {
+        if (hubId === 'ALL') {
+          if (dimension === 'DOMAIN') return DOMAINS_DATA;
+          if (dimension === 'PROCESS') return PROCESSES_DATA;
+          if (dimension === 'INTEGRATION') return INTEGRATIONS_DATA;
+          return SYSTEMS_DATA;
+        }
+
+        const integrations = getRadarIntegrations(hubId);
+        if (dimension === 'INTEGRATION') return integrations;
+
+        const integrationIds = new Set(integrations.map(i => i.id));
+        if (dimension === 'PROCESS') {
+          return PROCESSES_DATA.filter(p => (p.cleanIntegIds || p.integrations || []).some(id => integrationIds.has(id)));
+        }
+
+        const systemIds = new Set();
+        integrations.forEach(i => (i.steps || []).forEach(step => {
+          systemIds.add(step.from);
+          systemIds.add(step.to);
+        }));
+        systemIds.add(hubId);
+        if (dimension === 'SYSTEM') return SYSTEMS_DATA.filter(s => systemIds.has(s.id));
+
+        const domainIds = new Set(
+          SYSTEMS_DATA.filter(s => systemIds.has(s.id)).map(s => s.domain)
+        );
+        return DOMAINS_DATA.filter(d => domainIds.has(d.id));
+      }
+
+      function updateRadarCounts() {
+        const meta = RADAR_DIMENSION_META[selectedRadarDimension];
+        document.querySelectorAll('.radar-pill').forEach(btn => {
+          const count = getRadarEntities(selectedRadarDimension, btn.dataset.hub).length;
+          btn.textContent = (btn.dataset.label || btn.textContent.replace(/\s*\(\d+\)$/, '')) + ' (' + count + ')';
+          btn.title = count + ' berührte ' + (count === 1 ? meta.singular : meta.plural);
+          btn.setAttribute('aria-label', (btn.dataset.label || '').replace(/^\S+\s*/, '') + ': ' + count + ' ' + (count === 1 ? meta.singular : meta.plural));
+        });
+      }
+
+      function showRadarEntityPopout(dimension, hubId) {
+        const entities = getRadarEntities(dimension, hubId);
+        const meta = RADAR_DIMENSION_META[dimension];
+        const hub = SYSTEMS_DATA.find(s => s.id === hubId);
+        const popoutId = 'RADAR-' + dimension + '-' + hubId;
+        if (openPopouts.has(popoutId)) {
+          const existingCard = openPopouts.get(popoutId);
+          existingCard.style.zIndex = ++popoutZIndexCounter;
+          existingCard.classList.add('popout-focus-flash');
+          setTimeout(() => existingCard.classList.remove('popout-focus-flash'), 600);
+          return existingCard;
+        }
+
+        const card = document.createElement('div');
+        card.className = 'edge-popout-card ' + meta.className;
+        card.id = 'popout-' + popoutId;
+        card.dataset.popoutId = popoutId;
+        const entityLabel = entity => {
+          if (dimension === 'DOMAIN') return entity.id + ' · ' + entity.name;
+          return entity.id + ' · ' + entity.name;
+        };
+        card.innerHTML =
+          '<div class="edge-popout-header">' +
+            '<div class="popout-title-box">' +
+              '<span class="popout-title-label">' + meta.icon + ' Radar · ' + meta.singular + ':</span>' +
+              '<span class="popout-badge-id">' + (hub ? hub.id : 'ALLE') + '</span>' +
+            '</div>' +
+            '<div class="popout-actions"><button class="popout-btn-icon close-btn" title="Pop-Out schließen (✕)">✕</button></div>' +
+          '</div>' +
+          '<div class="edge-popout-body">' +
+            '<div style="font-size:0.82rem;font-weight:750;color:var(--text-bright);">' + (hub ? hub.name : 'Gesamte Architektur') + '</div>' +
+            '<div style="font-size:0.7rem;color:var(--text-muted);margin-bottom:4px;">Berührt ' + entities.length + ' ' + (entities.length === 1 ? meta.singular : meta.plural) + '</div>' +
+            '<div class="radar-popout-entity-list" style="display:flex;flex-direction:column;gap:4px;max-height:240px;overflow-y:auto;">' +
+              (entities.length ? entities.map(entity =>
+                '<button type="button" class="list-item radar-entity-row" data-entity-id="' + entity.id + '" style="width:100%;text-align:left;cursor:pointer;color:var(--text-bright);">' +
+                  '<span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + esc(entityLabel(entity)) + '</span>' +
+                  '<span class="traffic-tag">Öffnen</span>' +
+                '</button>'
+              ).join('') : '<div style="font-size:0.7rem;color:var(--text-muted);">Keine Zuordnung vorhanden.</div>') +
+            '</div>' +
+          '</div>';
+
+        card.querySelector('.close-btn').addEventListener('click', event => {
+          event.stopPropagation();
+          closePopout(popoutId);
+        });
+        card.querySelectorAll('.radar-entity-row').forEach(row => row.addEventListener('click', () => {
+          const id = row.dataset.entityId;
+          if (dimension === 'DOMAIN') setDrilldownDomain(id);
+          else if (dimension === 'PROCESS') setDrilldownProcess(PROCESSES_DATA.find(p => p.id === id));
+          else if (dimension === 'INTEGRATION') setDrilldownIntegration(INTEGRATIONS_DATA.find(i => i.id === id));
+          else selectNode(SYSTEMS_DATA.find(s => s.id === id));
+        }));
+        card.addEventListener('mouseenter', () => {
+          card.style.zIndex = '300';
+          card.classList.add('popout-bay-hovered');
+        });
+        card.addEventListener('mouseleave', () => {
+          card.style.zIndex = 100 + parseInt(card.dataset.bayIndex || '0', 10);
+          card.classList.remove('popout-bay-hovered');
+        });
+        card.addEventListener('mousedown', () => { card.style.zIndex = ++popoutZIndexCounter; });
+        popoutsContainer.appendChild(card);
+        openPopouts.set(popoutId, card);
+        updatePopoutBayLayout();
+        return card;
+      }
+
+      const radarDimensionSelect = document.getElementById('radarDimension');
+      radarDimensionSelect.addEventListener('change', () => {
+        selectedRadarDimension = radarDimensionSelect.value;
+        updateRadarCounts();
+        if (selectedRadarHub !== 'ALL') {
+          const activePill = document.querySelector('.radar-pill.active');
+          if (activePill) activePill.focus();
+        }
+      });
 
       const radarPillBtns = document.querySelectorAll('.radar-pill');
       radarPillBtns.forEach(btn => {
@@ -18939,13 +19101,25 @@
           if (hubId === 'ALL') {
             d3.selectAll('.superhub-halo').remove();
             selectedNode = null;
+            selectedNodeId = null;
             selectedLink = null;
             updateUI();
+            showRadarEntityPopout(selectedRadarDimension, hubId);
           } else {
             // Locate the Hub Node
             const hubNode = SYSTEMS_DATA.find(s => s.id === hubId);
             if (hubNode) {
-              selectNode(hubNode);
+              selectedNodeId = null;
+              selectedDomainId = null;
+              selectedProcess = null;
+              selectedIntegration = null;
+              selectedLink = null;
+              if (selectedRadarDimension === 'SYSTEM') {
+                selectNode(hubNode);
+              } else {
+                updateUI();
+                showRadarEntityPopout(selectedRadarDimension, hubId);
+              }
               
               // Draw rotating superhub halo
               d3.selectAll('.superhub-halo').remove();
@@ -18964,6 +19138,7 @@
           }
         });
       });
+      updateRadarCounts();
 
       // =====================================================================
       // POPOUT "BAY"-PHILOSOPHIE (Between Drawers, Static Fan & Elevating Hover)

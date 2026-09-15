@@ -15,18 +15,18 @@ Quad-Chord-Visualisierung der Johanniter Enterprise-Architecture-Landschaft im O
 ## Architektur-Dimensionen
 
 - **82 Systeme** (D1–D8, Johanniter intern & extern, inkl. `SYS-82` SAP BTP Connectivity & Destination Service)
-- **160 Schnittstellen / Kanten** (HL7 FHIR, B2B EDI, REST APIs, IoT Streams, Security, RFC & Reverse-Invoke Tunnel)
-- **170 End-to-End Integrationsketten (`INT-001` bis `INT-170`)** in 5 Fachclustern:
-  - Klinik & Medizinische Diagnostik (40 Ketten, `INT-001` bis `INT-040`)
-  - Pflege & Soziale Dienste (35 Ketten, `INT-041` bis `INT-075`)
-  - Notfallrettung & Katastrophenschutz (35 Ketten, `INT-076` bis `INT-110`)
-  - Enterprise ERP, Finanzen & HR (40 Ketten, `INT-111` bis `INT-150`)
-  - Telematikinfrastruktur & eHealth (20 Ketten, `INT-151` bis `INT-170`)
+- **229 Schnittstellen / Kanten** (HL7 FHIR, B2B EDI, REST APIs, IoT Streams, Security, RFC & Reverse-Invoke Tunnel)
+- **243 End-to-End- und Einzelschritt-Integrationen (`INT-001` bis `INT-243`)** in 5 Fachclustern:
+  - Klinik & Medizinische Diagnostik (61 Integrationen)
+  - Pflege & Soziale Dienste (42 Integrationen)
+  - Notfallrettung & Katastrophenschutz (44 Integrationen)
+  - Enterprise ERP, Finanzen & HR (73 Integrationen)
+  - Telematikinfrastruktur & eHealth (23 Integrationen)
 - **3-Säulen Middleware-Architektur & Middleware-Radar:**
-  - **InterSystems HealthShare (`SYS-60`):** Klinische EAI, HL7/FHIR, DICOM, LIS, PACS, AMTS (42 Ketten)
-  - **SAP Integration Suite / CPI (`SYS-04`):** Enterprise Cloud EAI, S/4HANA, SuccessFactors, HCM, SCIM (25 Ketten)
-  - **SEEBURGER BIS Cloud (`SYS-08`):** B2B EDI, EDIFACT, Peppol AS4, DTA §301/§105/§60, EBICS (22 Ketten)
-  - **Flankierende Gateways:** Kong API Gateway (`SYS-61`, 5 Ketten), Apache Kafka (`SYS-62`, 5 Ketten), TI-Konnektor Cluster (`SYS-43`, 20 Ketten)
+  - **InterSystems HealthShare (`SYS-60`):** Klinische EAI, HL7/FHIR, DICOM, LIS, PACS, AMTS (44 Integrationen)
+  - **SAP Integration Suite / CPI (`SYS-04`):** Enterprise Cloud EAI, S/4HANA, SuccessFactors, HCM, SCIM (30 Integrationen)
+  - **SEEBURGER BIS Cloud (`SYS-08`):** B2B EDI, EDIFACT, Peppol AS4, DTA §301/§105/§60, EBICS (25 Integrationen)
+  - **Flankierende Gateways:** Kong API Gateway (`SYS-61`, 8 Integrationen), Apache Kafka (`SYS-62`, 7 Integrationen), TI-Konnektor Cluster (`SYS-43`, 22 Integrationen)
 - **13 End-to-End Geschäftsprozesse** (Notfallversorgung, Pflege § 105, Entlassmanagement, KTP § 60, AMTS, etc.)
 - **4 Quadranten:**
   - **TL (Top-Left):** Johanniter Cloud & Hyperscaler (**16 Systeme**)

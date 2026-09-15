@@ -371,15 +371,13 @@ Statt eines monolithischen Integrations-Busses setzt die Johanniter Enterprise A
 
 ### C. Das Middleware-Radar: Interaktives Cockpit auf der Zeichenfläche
 Zur intuitiven Steuerung dieser komplexen Landschaft bietet die Anwendung oberhalb der Zeichenfläche das **Middleware-Radar (`#middlewareRadarBar`)**:
-* **Schaltflächen (Pills):**
-  * `🌐 Alle (170)`: Standardansicht der gesamten Integrationslandschaft.
-  * `🏥 HealthShare (40)`: Hebt den klinischen Integrationshub (`SYS-60`) mit einem rotierenden Superhub-Halo-Ring hervor und blendet nicht-klinische Kanten ab.
-  * `🏢 SAP CPI (40)`: Isoliert die Enterprise-Cloud- und S/4HANA-Integrationsströme (`SYS-04`).
-  * `🌐 Seeburger BIS (35)`: Fokussiert B2B/EDIFACT-Clearing und Peppol-Transaktionen (`SYS-08`).
-  * `⚡ Kong Gateway (25)`: Hebt Mobile API Edge Routing hervor (`SYS-61`).
-  * `📡 Apache Kafka (20)`: Visualisiert IoT-, Flotten- und Event-Streaming (`SYS-62`).
-  * `🔐 TI-Cluster (20)`: Fokussiert alle Telematik- und eHealth-Pfade (`SYS-43`).
-* **Visuelle Beacon-Animation:** Der ausgewählte Hub pulsiert mit gegenläufig rotierenden Orbit-Ringen (`.superhub-halo`), während alle inaktiven Systeme dezent abgedunkelt werden (`.dimmed-by-radar`).
+* **Auswählbare Zähldimension:** Das Dropdown schaltet zwischen `Domäne`, `Prozess`, `Integration` und `System`. Die Zahlen aller Pills werden jeweils aus den aktuellen Modelldaten neu berechnet.
+* **Schaltflächen (Pills):** `Alle`, `HealthShare`, `SAP CPI`, `Seeburger BIS`, `Kong Gateway`, `Apache Kafka` und `TI-Cluster` zeigen die Anzahl der in der gewählten Dimension berührten Entitäten.
+* **Typgerechte Bay-Pop-outs:**
+  * Die Systemsicht öffnet das vorhandene System-Spickzettel des Middleware-Hubs.
+  * Domänen-, Prozess- und Integrationssicht öffnen jeweils eine typisierte Ergebnis-Karte im Pop-out-Bay.
+  * Ein Klick auf einen Eintrag übernimmt die Entität in den Drilldown und zeigt ihre große Detailansicht im Inspektor.
+* **Visuelle Fokussierung:** Der ausgewählte Hub pulsiert mit gegenläufig rotierenden Orbit-Ringen (`.superhub-halo`). Alle Connections der über den Hub geführten Integrationen werden als vollständiges Kantenbündel hervorgehoben; nicht beteiligte Systeme und Kanten werden abgedunkelt.
 
 ---
 
