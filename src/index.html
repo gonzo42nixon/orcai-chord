@@ -1890,6 +1890,7 @@
     
     
     
+    
     /* Middleware Radar Control Bar (Top Centered inside Canvas) */
     .middleware-radar-bar {
       position: absolute;
@@ -2002,8 +2003,8 @@
 
     /* Dynamic Popout Bay Container inside Canvas */
     #popoutsContainer {
-      position: absolute;
-      inset: 0;
+      position: absolute !important;
+      inset: 0 !important;
       pointer-events: none;
       z-index: 45;
       overflow: visible;
@@ -2022,15 +2023,15 @@
       box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
       pointer-events: auto;
       user-select: text;
-      transition: left 0.28s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.2s ease;
+      transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.2s ease, border-color 0.2s ease;
       bottom: 58px;
     }
     .edge-popout-card.popout-bay-hovered, .sys-popout-card.popout-bay-hovered {
-      z-index: 250 !important;
-      transform: translateY(-8px);
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 0 2px var(--accent);
+      z-index: 300 !important;
+      transform: translateY(-8px) scale(1.01);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75), 0 0 0 2px var(--accent);
+      border-color: var(--accent);
     }
-
 
     /* ISO/OSI & TCP/IP Reference Stack Card in Edge Inspector */
     .insp-osi-card {
@@ -2203,13 +2204,6 @@
     }
 
     /* Dynamic Multi-Popout Container & Locator Button */
-    #popoutsContainer {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 100;
-      overflow: hidden;
-    }
     .edge-popout-card {
       position: absolute;
       width: 395px;
@@ -2864,20 +2858,20 @@
         <div class="drilldown-section">
           <div class="section-header" id="secHeaderIntegration">
             <div class="section-header-title">
-              <span>3. Integration (E2E-Kette)</span>
+              <span>3. Integration (End-to-End)</span>
             </div>
-            <span class="section-badge" id="badgeIntegration">170 E2E-Ketten</span>
+            <span class="section-badge" id="badgeIntegration">243 Integrationen</span>
           </div>
           
             <div class="integ-cluster-tabs" id="integClusterTabs" style="display:flex; flex-wrap:wrap; gap:3px; margin: 6px 0 8px;">
-              <button class="integ-tab-pill active" data-cluster="ALL">Alle (170)</button>
-              <button class="integ-tab-pill" data-cluster="KLINIK">Klinik (40)</button>
-              <button class="integ-tab-pill" data-cluster="PFLEGE">Pflege (35)</button>
-              <button class="integ-tab-pill" data-cluster="RETTUNG">Rettung (35)</button>
-              <button class="integ-tab-pill" data-cluster="ERP_HR">ERP/HR (40)</button>
-              <button class="integ-tab-pill" data-cluster="TI">TI (20)</button>
+              <button class="integ-tab-pill active" data-cluster="ALL">Alle (243)</button>
+              <button class="integ-tab-pill" data-cluster="KLINIK">Klinik (61)</button>
+              <button class="integ-tab-pill" data-cluster="PFLEGE">Pflege (42)</button>
+              <button class="integ-tab-pill" data-cluster="RETTUNG">Rettung (44)</button>
+              <button class="integ-tab-pill" data-cluster="ERP_HR">ERP/HR (73)</button>
+              <button class="integ-tab-pill" data-cluster="TI">TI (23)</button>
             </div>
-            <input type="text" id="integSearchInput" placeholder="🔍 170 E2E-Ketten durchsuchen..." style="width:100%; box-sizing:border-box; padding:4px 8px; font-size:0.7rem; border-radius:4px; border:1px solid var(--card-border); background:var(--item-bg); color:var(--text-bright); margin-bottom:6px;">
+            <input type="text" id="integSearchInput" placeholder="🔍 243 Integrationen durchsuchen..." style="width:100%; box-sizing:border-box; padding:4px 8px; font-size:0.7rem; border-radius:4px; border:1px solid var(--card-border); background:var(--item-bg); color:var(--text-bright); margin-bottom:6px;">
 
           <div class="section-content" id="integrationList"></div>
         </div>
@@ -2931,15 +2925,19 @@
           <span style="font-weight:750; color:var(--text-bright); font-size:0.75rem;">Middleware-Radar:</span>
         </div>
         <div class="radar-pills" id="radarPills">
-          <button class="radar-pill active" data-hub="ALL">🌐 Alle (170)</button>
-          <button class="radar-pill" data-hub="SYS-60" title="InterSystems HealthShare: Klinische Integrations-Engine (40 Ketten)">🏥 HealthShare (40)</button>
-          <button class="radar-pill" data-hub="SYS-04" title="SAP Integration Suite (CPI): Enterprise ERP & Cloud EAI (40 Ketten)">🏢 SAP CPI (40)</button>
-          <button class="radar-pill" data-hub="SYS-08" title="SEEBURGER BIS Cloud: B2B, EDIFACT & Kassen-Clearing (35 Ketten)">🌐 Seeburger BIS (35)</button>
-          <button class="radar-pill" data-hub="SYS-61" title="Kong / Azure API Gateway: L7 Mobile & Web APIs (25 Ketten)">⚡ Kong Gateway (25)</button>
-          <button class="radar-pill" data-hub="SYS-62" title="Apache Kafka: Realtime Event Streaming Bus (20 Ketten)">📡 Apache Kafka (20)</button>
-          <button class="radar-pill" data-hub="SYS-43" title="TI-Konnektor Cluster: Telematikinfrastruktur (20 Ketten)">🔐 TI-Cluster (20)</button>
+          <button class="radar-pill active" data-hub="ALL">🌐 Alle (243)</button>
+          <button class="radar-pill" data-hub="SYS-60" title="InterSystems HealthShare: Klinische Integrations-Engine (0 Integrationen)">🏥 HealthShare (0)</button>
+          <button class="radar-pill" data-hub="SYS-04" title="SAP Integration Suite (CPI): Enterprise ERP & Cloud EAI (0 Integrationen)">🏢 SAP CPI (0)</button>
+          <button class="radar-pill" data-hub="SYS-08" title="SEEBURGER BIS Cloud: B2B, EDIFACT & Kassen-Clearing (0 Integrationen)">🌐 Seeburger BIS (0)</button>
+          <button class="radar-pill" data-hub="SYS-61" title="Kong / Azure API Gateway: L7 Mobile & Web APIs (0 Integrationen)">⚡ Kong Gateway (0)</button>
+          <button class="radar-pill" data-hub="SYS-62" title="Apache Kafka: Realtime Event Streaming Bus (0 Integrationen)">📡 Apache Kafka (0)</button>
+          <button class="radar-pill" data-hub="SYS-43" title="TI-Konnektor Cluster: Telematikinfrastruktur (0 Integrationen)">🔐 TI-Cluster (0)</button>
         </div>
       </div>
+
+
+      <!-- MIDDLEWARE RADAR CONTROL BAR (Top Centered inside Canvas) -->
+      
 
       <svg id="hebSvg"></svg>
 
@@ -2959,6 +2957,9 @@
       </div>
 
       <!-- FLOATING PILL AT BOTTOM CENTER: Reset Selection Action -->
+      
+      
+
       <!-- MULTI-POPOUT BAY CONTAINER -->
       <div id="popoutsContainer"></div>
 
@@ -13647,6 +13648,1831 @@
         "connectionId": "CON-56"
       }
     ]
+  },
+  {
+    "id": "INT-171",
+    "name": "S4HANA to SAP BTP Side-by-Side Extensibility",
+    "cluster": "ERP_HR",
+    "clusterLabel": "Finanzen / ERP / HR",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "REST / OData v4 / CAP over HTTPS",
+    "desc": "Ein-Schritt-Integration: S4HANA to SAP BTP Side-by-Side Extensibility (REST / OData v4 / CAP over HTTPS)",
+    "description": "Ein-Schritt-Integration: S4HANA to SAP BTP Side-by-Side Extensibility (REST / OData v4 / CAP over HTTPS)",
+    "triples": [
+      "SYS-01 -> CON-01 -> SYS-03"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-01",
+    "targetSystem": "SYS-03",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-01",
+        "to": "SYS-03",
+        "connectionId": "CON-01"
+      }
+    ]
+  },
+  {
+    "id": "INT-172",
+    "name": "BTP Core to Integration Suite (CPI)",
+    "cluster": "ERP_HR",
+    "clusterLabel": "Finanzen / ERP / HR",
+    "middlewareHub": "SYS-04",
+    "middlewareName": "SAP Integration Suite (CPI)",
+    "messageType": "Internal Cloud Mesh / Event Mesh",
+    "desc": "Ein-Schritt-Integration: BTP Core to Integration Suite (CPI) (Internal Cloud Mesh / Event Mesh)",
+    "description": "Ein-Schritt-Integration: BTP Core to Integration Suite (CPI) (Internal Cloud Mesh / Event Mesh)",
+    "triples": [
+      "SYS-03 -> CON-02 -> SYS-04"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-03",
+    "targetSystem": "SYS-04",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-03",
+        "to": "SYS-04",
+        "connectionId": "CON-02"
+      }
+    ]
+  },
+  {
+    "id": "INT-173",
+    "name": "S4HANA to CPI Event Mesh & RFC",
+    "cluster": "ERP_HR",
+    "clusterLabel": "Finanzen / ERP / HR",
+    "middlewareHub": "SYS-04",
+    "middlewareName": "SAP Integration Suite (CPI)",
+    "messageType": "RFC / OData / HTTPS",
+    "desc": "Ein-Schritt-Integration: S4HANA to CPI Event Mesh & RFC (RFC / OData / HTTPS)",
+    "description": "Ein-Schritt-Integration: S4HANA to CPI Event Mesh & RFC (RFC / OData / HTTPS)",
+    "triples": [
+      "SYS-01 -> CON-03 -> SYS-04"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-01",
+    "targetSystem": "SYS-04",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-01",
+        "to": "SYS-04",
+        "connectionId": "CON-03"
+      }
+    ]
+  },
+  {
+    "id": "INT-174",
+    "name": "SCC to BTP Connectivity Service (Outbound Reverse-Invoke TLS Tunnel)",
+    "cluster": "ERP_HR",
+    "clusterLabel": "Finanzen / ERP / HR",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "TLS Reverse Tunnel / mTLS (Port 443)",
+    "desc": "Ein-Schritt-Integration: SCC to BTP Connectivity Service (Outbound Reverse-Invoke TLS Tunnel) (TLS Reverse Tunnel / mTLS (Port 443))",
+    "description": "Ein-Schritt-Integration: SCC to BTP Connectivity Service (Outbound Reverse-Invoke TLS Tunnel) (TLS Reverse Tunnel / mTLS (Port 443))",
+    "triples": [
+      "SYS-05 -> CON-04 -> SYS-82"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-05",
+    "targetSystem": "SYS-82",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-05",
+        "to": "SYS-82",
+        "connectionId": "CON-04"
+      }
+    ]
+  },
+  {
+    "id": "INT-175",
+    "name": "Cloud Connector to KIS Financial Sync",
+    "cluster": "KLINIK",
+    "clusterLabel": "Klinik",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "REST / JSON / OData",
+    "desc": "Ein-Schritt-Integration: Cloud Connector to KIS Financial Sync (REST / JSON / OData)",
+    "description": "Ein-Schritt-Integration: Cloud Connector to KIS Financial Sync (REST / JSON / OData)",
+    "triples": [
+      "SYS-05 -> CON-05 -> SYS-11"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-05",
+    "targetSystem": "SYS-11",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-05",
+        "to": "SYS-11",
+        "connectionId": "CON-05"
+      }
+    ]
+  },
+  {
+    "id": "INT-176",
+    "name": "S4HANA Financial Data to SAC",
+    "cluster": "ERP_HR",
+    "clusterLabel": "Finanzen / ERP / HR",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "In-Memory CDS Views / HTTPS",
+    "desc": "Ein-Schritt-Integration: S4HANA Financial Data to SAC (In-Memory CDS Views / HTTPS)",
+    "description": "Ein-Schritt-Integration: S4HANA Financial Data to SAC (In-Memory CDS Views / HTTPS)",
+    "triples": [
+      "SYS-01 -> CON-06 -> SYS-06"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-01",
+    "targetSystem": "SYS-06",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-01",
+        "to": "SYS-06",
+        "connectionId": "CON-06"
+      }
+    ]
+  },
+  {
+    "id": "INT-177",
+    "name": "S4HANA to Ariba Procurement Hub",
+    "cluster": "ERP_HR",
+    "clusterLabel": "Finanzen / ERP / HR",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "cXML / OData",
+    "desc": "Ein-Schritt-Integration: S4HANA to Ariba Procurement Hub (cXML / OData)",
+    "description": "Ein-Schritt-Integration: S4HANA to Ariba Procurement Hub (cXML / OData)",
+    "triples": [
+      "SYS-01 -> CON-07 -> SYS-07"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-01",
+    "targetSystem": "SYS-07",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-01",
+        "to": "SYS-07",
+        "connectionId": "CON-07"
+      }
+    ]
+  },
+  {
+    "id": "INT-178",
+    "name": "Procurement Hub to GHX Medical Exchange",
+    "cluster": "ERP_HR",
+    "clusterLabel": "Finanzen / ERP / HR",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "EDIFACT / cXML / AS2",
+    "desc": "Ein-Schritt-Integration: Procurement Hub to GHX Medical Exchange (EDIFACT / cXML / AS2)",
+    "description": "Ein-Schritt-Integration: Procurement Hub to GHX Medical Exchange (EDIFACT / cXML / AS2)",
+    "triples": [
+      "SYS-07 -> CON-08 -> SYS-10"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-07",
+    "targetSystem": "SYS-10",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-07",
+        "to": "SYS-10",
+        "connectionId": "CON-08"
+      }
+    ]
+  },
+  {
+    "id": "INT-179",
+    "name": "Seeburger BIS to Peppol Access Point",
+    "cluster": "ERP_HR",
+    "clusterLabel": "Finanzen / ERP / HR",
+    "middlewareHub": "SYS-08",
+    "middlewareName": "SEEBURGER BIS",
+    "messageType": "AS4 / Peppol BIS 3.0",
+    "desc": "Ein-Schritt-Integration: Seeburger BIS to Peppol Access Point (AS4 / Peppol BIS 3.0)",
+    "description": "Ein-Schritt-Integration: Seeburger BIS to Peppol Access Point (AS4 / Peppol BIS 3.0)",
+    "triples": [
+      "SYS-08 -> CON-10 -> SYS-09"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-08",
+    "targetSystem": "SYS-09",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-08",
+        "to": "SYS-09",
+        "connectionId": "CON-10"
+      }
+    ]
+  },
+  {
+    "id": "INT-180",
+    "name": "Legacy R3 Altdaten-Replikation zu S4HANA",
+    "cluster": "ERP_HR",
+    "clusterLabel": "Finanzen / ERP / HR",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "SAP SLT / RFC Data Migration",
+    "desc": "Ein-Schritt-Integration: Legacy R3 Altdaten-Replikation zu S4HANA (SAP SLT / RFC Data Migration)",
+    "description": "Ein-Schritt-Integration: Legacy R3 Altdaten-Replikation zu S4HANA (SAP SLT / RFC Data Migration)",
+    "triples": [
+      "SYS-02 -> CON-11 -> SYS-01"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-02",
+    "targetSystem": "SYS-01",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-02",
+        "to": "SYS-01",
+        "connectionId": "CON-11"
+      }
+    ]
+  },
+  {
+    "id": "INT-181",
+    "name": "Cloud Connector to Vivendi NG Billing Data Sync (Virtual Host)",
+    "cluster": "PFLEGE",
+    "clusterLabel": "Pflege",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "OData / REST Web Service via SCC Reverse Proxy",
+    "desc": "Ein-Schritt-Integration: Cloud Connector to Vivendi NG Billing Data Sync (Virtual Host) (OData / REST Web Service via SCC Reverse Proxy)",
+    "description": "Ein-Schritt-Integration: Cloud Connector to Vivendi NG Billing Data Sync (Virtual Host) (OData / REST Web Service via SCC Reverse Proxy)",
+    "triples": [
+      "SYS-05 -> CON-12 -> SYS-23"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-05",
+    "targetSystem": "SYS-23",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-05",
+        "to": "SYS-23",
+        "connectionId": "CON-12"
+      }
+    ]
+  },
+  {
+    "id": "INT-182",
+    "name": "ORBIS KIS to RIS Untersuchungsanforderung",
+    "cluster": "KLINIK",
+    "clusterLabel": "Klinik",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "HL7 v2.5 OMG / FHIR ServiceRequest",
+    "desc": "Ein-Schritt-Integration: ORBIS KIS to RIS Untersuchungsanforderung (HL7 v2.5 OMG / FHIR ServiceRequest)",
+    "description": "Ein-Schritt-Integration: ORBIS KIS to RIS Untersuchungsanforderung (HL7 v2.5 OMG / FHIR ServiceRequest)",
+    "triples": [
+      "SYS-11 -> CON-17 -> SYS-15"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-11",
+    "targetSystem": "SYS-15",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-11",
+        "to": "SYS-15",
+        "connectionId": "CON-17"
+      }
+    ]
+  },
+  {
+    "id": "INT-183",
+    "name": "RIS to PACS Modalitäten-Worklist (DICOM MWL)",
+    "cluster": "KLINIK",
+    "clusterLabel": "Klinik",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "DICOM C-FIND / C-STORE",
+    "desc": "Ein-Schritt-Integration: RIS to PACS Modalitäten-Worklist (DICOM MWL) (DICOM C-FIND / C-STORE)",
+    "description": "Ein-Schritt-Integration: RIS to PACS Modalitäten-Worklist (DICOM MWL) (DICOM C-FIND / C-STORE)",
+    "triples": [
+      "SYS-15 -> CON-18 -> SYS-14"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-15",
+    "targetSystem": "SYS-14",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-15",
+        "to": "SYS-14",
+        "connectionId": "CON-18"
+      }
+    ]
+  },
+  {
+    "id": "INT-184",
+    "name": "PACS Bildaufruf aus KIS (DICOM WADO-RS)",
+    "cluster": "KLINIK",
+    "clusterLabel": "Klinik",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "DICOM WADO-RS / HTTPS REST",
+    "desc": "Ein-Schritt-Integration: PACS Bildaufruf aus KIS (DICOM WADO-RS) (DICOM WADO-RS / HTTPS REST)",
+    "description": "Ein-Schritt-Integration: PACS Bildaufruf aus KIS (DICOM WADO-RS) (DICOM WADO-RS / HTTPS REST)",
+    "triples": [
+      "SYS-14 -> CON-19 -> SYS-11"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-14",
+    "targetSystem": "SYS-11",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-14",
+        "to": "SYS-11",
+        "connectionId": "CON-19"
+      }
+    ]
+  },
+  {
+    "id": "INT-185",
+    "name": "ORBIS KIS to ORBIS AMTS Medikationsverordnung",
+    "cluster": "KLINIK",
+    "clusterLabel": "Klinik",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "Internal IPC / REST FHIR MedicationRequest",
+    "desc": "Ein-Schritt-Integration: ORBIS KIS to ORBIS AMTS Medikationsverordnung (Internal IPC / REST FHIR MedicationRequest)",
+    "description": "Ein-Schritt-Integration: ORBIS KIS to ORBIS AMTS Medikationsverordnung (Internal IPC / REST FHIR MedicationRequest)",
+    "triples": [
+      "SYS-11 -> CON-20 -> SYS-12"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-11",
+    "targetSystem": "SYS-12",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-11",
+        "to": "SYS-12",
+        "connectionId": "CON-20"
+      }
+    ]
+  },
+  {
+    "id": "INT-186",
+    "name": "IntelliSpace PDMS to KIS Intensivkurve & Vitalwerte",
+    "cluster": "KLINIK",
+    "clusterLabel": "Klinik",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "HL7 v2.5 MDM / FHIR Observation",
+    "desc": "Ein-Schritt-Integration: IntelliSpace PDMS to KIS Intensivkurve & Vitalwerte (HL7 v2.5 MDM / FHIR Observation)",
+    "description": "Ein-Schritt-Integration: IntelliSpace PDMS to KIS Intensivkurve & Vitalwerte (HL7 v2.5 MDM / FHIR Observation)",
+    "triples": [
+      "SYS-13 -> CON-21 -> SYS-11"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-13",
+    "targetSystem": "SYS-11",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-13",
+        "to": "SYS-11",
+        "connectionId": "CON-21"
+      }
+    ]
+  },
+  {
+    "id": "INT-187",
+    "name": "Instacount OP-Sterilgut-Freigabe to KIS OP-Doku",
+    "cluster": "KLINIK",
+    "clusterLabel": "Klinik",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "REST API / JSON",
+    "desc": "Ein-Schritt-Integration: Instacount OP-Sterilgut-Freigabe to KIS OP-Doku (REST API / JSON)",
+    "description": "Ein-Schritt-Integration: Instacount OP-Sterilgut-Freigabe to KIS OP-Doku (REST API / JSON)",
+    "triples": [
+      "SYS-17 -> CON-22 -> SYS-11"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-17",
+    "targetSystem": "SYS-11",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-17",
+        "to": "SYS-11",
+        "connectionId": "CON-22"
+      }
+    ]
+  },
+  {
+    "id": "INT-188",
+    "name": "ORBIS KIS to SafeCross Blutkonserven-Anforderung",
+    "cluster": "KLINIK",
+    "clusterLabel": "Klinik",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "HL7 v2.5 OMB / OML",
+    "desc": "Ein-Schritt-Integration: ORBIS KIS to SafeCross Blutkonserven-Anforderung (HL7 v2.5 OMB / OML)",
+    "description": "Ein-Schritt-Integration: ORBIS KIS to SafeCross Blutkonserven-Anforderung (HL7 v2.5 OMB / OML)",
+    "triples": [
+      "SYS-11 -> CON-24 -> SYS-20"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-11",
+    "targetSystem": "SYS-20",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-11",
+        "to": "SYS-20",
+        "connectionId": "CON-24"
+      }
+    ]
+  },
+  {
+    "id": "INT-189",
+    "name": "ORBIS KIS to Clinical Data Repository (FHIR CDR)",
+    "cluster": "KLINIK",
+    "clusterLabel": "Klinik",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "HL7 FHIR R4 over HTTPS",
+    "desc": "Ein-Schritt-Integration: ORBIS KIS to Clinical Data Repository (FHIR CDR) (HL7 FHIR R4 over HTTPS)",
+    "description": "Ein-Schritt-Integration: ORBIS KIS to Clinical Data Repository (FHIR CDR) (HL7 FHIR R4 over HTTPS)",
+    "triples": [
+      "SYS-11 -> CON-27 -> SYS-22"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-11",
+    "targetSystem": "SYS-22",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-11",
+        "to": "SYS-22",
+        "connectionId": "CON-27"
+      }
+    ]
+  },
+  {
+    "id": "INT-190",
+    "name": "Ambulanz MVZ Abrechnungsdaten to HL7 Engine",
+    "cluster": "KLINIK",
+    "clusterLabel": "Klinik",
+    "middlewareHub": "SYS-60",
+    "middlewareName": "InterSystems HealthShare",
+    "messageType": "xDT / HL7 v2.5 / HTTPS",
+    "desc": "Ein-Schritt-Integration: Ambulanz MVZ Abrechnungsdaten to HL7 Engine (xDT / HL7 v2.5 / HTTPS)",
+    "description": "Ein-Schritt-Integration: Ambulanz MVZ Abrechnungsdaten to HL7 Engine (xDT / HL7 v2.5 / HTTPS)",
+    "triples": [
+      "SYS-21 -> CON-28 -> SYS-60"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-21",
+    "targetSystem": "SYS-60",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-21",
+        "to": "SYS-60",
+        "connectionId": "CON-28"
+      }
+    ]
+  },
+  {
+    "id": "INT-191",
+    "name": "Vivendi NG to Vivendi PEP Dienstplanabgleich",
+    "cluster": "PFLEGE",
+    "clusterLabel": "Pflege",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "Database Link / Shared Service",
+    "desc": "Ein-Schritt-Integration: Vivendi NG to Vivendi PEP Dienstplanabgleich (Database Link / Shared Service)",
+    "description": "Ein-Schritt-Integration: Vivendi NG to Vivendi PEP Dienstplanabgleich (Database Link / Shared Service)",
+    "triples": [
+      "SYS-23 -> CON-31 -> SYS-25"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-23",
+    "targetSystem": "SYS-25",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-23",
+        "to": "SYS-25",
+        "connectionId": "CON-31"
+      }
+    ]
+  },
+  {
+    "id": "INT-192",
+    "name": "Angehörigenportal to Kong Gateway",
+    "cluster": "PFLEGE",
+    "clusterLabel": "Pflege",
+    "middlewareHub": "SYS-61",
+    "middlewareName": "Kong API Gateway",
+    "messageType": "HTTPS / TLS 1.3 / OpenID Connect",
+    "desc": "Ein-Schritt-Integration: Angehörigenportal to Kong Gateway (HTTPS / TLS 1.3 / OpenID Connect)",
+    "description": "Ein-Schritt-Integration: Angehörigenportal to Kong Gateway (HTTPS / TLS 1.3 / OpenID Connect)",
+    "triples": [
+      "SYS-27 -> CON-35 -> SYS-61"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-27",
+    "targetSystem": "SYS-61",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-27",
+        "to": "SYS-61",
+        "connectionId": "CON-35"
+      }
+    ]
+  },
+  {
+    "id": "INT-193",
+    "name": "SmartWund Foto-Upload to Vivendi Wundakte",
+    "cluster": "PFLEGE",
+    "clusterLabel": "Pflege",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "HTTPS REST / JSON Multipart",
+    "desc": "Ein-Schritt-Integration: SmartWund Foto-Upload to Vivendi Wundakte (HTTPS REST / JSON Multipart)",
+    "description": "Ein-Schritt-Integration: SmartWund Foto-Upload to Vivendi Wundakte (HTTPS REST / JSON Multipart)",
+    "triples": [
+      "SYS-32 -> CON-36 -> SYS-23"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-32",
+    "targetSystem": "SYS-23",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-32",
+        "to": "SYS-23",
+        "connectionId": "CON-36"
+      }
+    ]
+  },
+  {
+    "id": "INT-194",
+    "name": "NIDApad Notfallprotokoll to KIS Notaufnahmeakte",
+    "cluster": "KLINIK",
+    "clusterLabel": "Klinik",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "NIDA-Arrival / PDF/A & XML / DICOM WADO",
+    "desc": "Ein-Schritt-Integration: NIDApad Notfallprotokoll to KIS Notaufnahmeakte (NIDA-Arrival / PDF/A & XML / DICOM WADO)",
+    "description": "Ein-Schritt-Integration: NIDApad Notfallprotokoll to KIS Notaufnahmeakte (NIDA-Arrival / PDF/A & XML / DICOM WADO)",
+    "triples": [
+      "SYS-34 -> CON-43 -> SYS-11"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-34",
+    "targetSystem": "SYS-11",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-34",
+        "to": "SYS-11",
+        "connectionId": "CON-43"
+      }
+    ]
+  },
+  {
+    "id": "INT-195",
+    "name": "Hausnotruf-Alarme to Kafka Event Streaming Hub",
+    "cluster": "RETTUNG",
+    "clusterLabel": "Notfallrettung",
+    "middlewareHub": "SYS-62",
+    "middlewareName": "Apache Kafka",
+    "messageType": "Kafka Producer / Avro / TLS",
+    "desc": "Ein-Schritt-Integration: Hausnotruf-Alarme to Kafka Event Streaming Hub (Kafka Producer / Avro / TLS)",
+    "description": "Ein-Schritt-Integration: Hausnotruf-Alarme to Kafka Event Streaming Hub (Kafka Producer / Avro / TLS)",
+    "triples": [
+      "SYS-35 -> CON-45 -> SYS-62"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-35",
+    "targetSystem": "SYS-62",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-35",
+        "to": "SYS-62",
+        "connectionId": "CON-45"
+      }
+    ]
+  },
+  {
+    "id": "INT-196",
+    "name": "RescueTrack GPS Flottentelemetrie to Kafka Hub",
+    "cluster": "RETTUNG",
+    "clusterLabel": "Notfallrettung",
+    "middlewareHub": "SYS-62",
+    "middlewareName": "Apache Kafka",
+    "messageType": "MQTT / Kafka Broker Protocol",
+    "desc": "Ein-Schritt-Integration: RescueTrack GPS Flottentelemetrie to Kafka Hub (MQTT / Kafka Broker Protocol)",
+    "description": "Ein-Schritt-Integration: RescueTrack GPS Flottentelemetrie to Kafka Hub (MQTT / Kafka Broker Protocol)",
+    "triples": [
+      "SYS-39 -> CON-46 -> SYS-62"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-39",
+    "targetSystem": "SYS-62",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-39",
+        "to": "SYS-62",
+        "connectionId": "CON-46"
+      }
+    ]
+  },
+  {
+    "id": "INT-197",
+    "name": "deNIS KatSchutz to Johanniter Helfer-Portal",
+    "cluster": "RETTUNG",
+    "clusterLabel": "Notfallrettung",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "REST API / Token Auth",
+    "desc": "Ein-Schritt-Integration: deNIS KatSchutz to Johanniter Helfer-Portal (REST API / Token Auth)",
+    "description": "Ein-Schritt-Integration: deNIS KatSchutz to Johanniter Helfer-Portal (REST API / Token Auth)",
+    "triples": [
+      "SYS-40 -> CON-49 -> SYS-54"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-40",
+    "targetSystem": "SYS-54",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-40",
+        "to": "SYS-54",
+        "connectionId": "CON-49"
+      }
+    ]
+  },
+  {
+    "id": "INT-198",
+    "name": "Johanniter Luftrettung to IVENA Klinikkapazitäten",
+    "cluster": "RETTUNG",
+    "clusterLabel": "Notfallrettung",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "HTTPS REST API",
+    "desc": "Ein-Schritt-Integration: Johanniter Luftrettung to IVENA Klinikkapazitäten (HTTPS REST API)",
+    "description": "Ein-Schritt-Integration: Johanniter Luftrettung to IVENA Klinikkapazitäten (HTTPS REST API)",
+    "triples": [
+      "SYS-42 -> CON-50 -> SYS-37"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-42",
+    "targetSystem": "SYS-37",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-42",
+        "to": "SYS-37",
+        "connectionId": "CON-50"
+      }
+    ]
+  },
+  {
+    "id": "INT-199",
+    "name": "TI-Konnektor to KIM Provider (eArztbrief/eAU)",
+    "cluster": "TI",
+    "clusterLabel": "Telematikinfrastruktur",
+    "middlewareHub": "SYS-43",
+    "middlewareName": "TI-Konnektor Cluster",
+    "messageType": "KIM S/MIME over POP3S/SMTPS",
+    "desc": "Ein-Schritt-Integration: TI-Konnektor to KIM Provider (eArztbrief/eAU) (KIM S/MIME over POP3S/SMTPS)",
+    "description": "Ein-Schritt-Integration: TI-Konnektor to KIM Provider (eArztbrief/eAU) (KIM S/MIME over POP3S/SMTPS)",
+    "triples": [
+      "SYS-43 -> CON-53 -> SYS-44"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-43",
+    "targetSystem": "SYS-44",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-43",
+        "to": "SYS-44",
+        "connectionId": "CON-53"
+      }
+    ]
+  },
+  {
+    "id": "INT-200",
+    "name": "Labor LIMS to RKI DEMIS Infektionsmeldung",
+    "cluster": "KLINIK",
+    "clusterLabel": "Klinik",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "FHIR Messaging / DEMIS Adapter",
+    "desc": "Ein-Schritt-Integration: Labor LIMS to RKI DEMIS Infektionsmeldung (FHIR Messaging / DEMIS Adapter)",
+    "description": "Ein-Schritt-Integration: Labor LIMS to RKI DEMIS Infektionsmeldung (FHIR Messaging / DEMIS Adapter)",
+    "triples": [
+      "SYS-16 -> CON-57 -> SYS-48"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-16",
+    "targetSystem": "SYS-48",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-16",
+        "to": "SYS-48",
+        "connectionId": "CON-57"
+      }
+    ]
+  },
+  {
+    "id": "INT-201",
+    "name": "ORBIS KIS to IQTIG Qualitätssicherung QS-Export",
+    "cluster": "KLINIK",
+    "clusterLabel": "Klinik",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "XML / BQS Verschlüsselung / HTTPS",
+    "desc": "Ein-Schritt-Integration: ORBIS KIS to IQTIG Qualitätssicherung QS-Export (XML / BQS Verschlüsselung / HTTPS)",
+    "description": "Ein-Schritt-Integration: ORBIS KIS to IQTIG Qualitätssicherung QS-Export (XML / BQS Verschlüsselung / HTTPS)",
+    "triples": [
+      "SYS-11 -> CON-58 -> SYS-50"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-11",
+    "targetSystem": "SYS-50",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-11",
+        "to": "SYS-50",
+        "connectionId": "CON-58"
+      }
+    ]
+  },
+  {
+    "id": "INT-202",
+    "name": "ATOSS Dienstplan Ist-Stunden to SAP Payroll AVR-J",
+    "cluster": "ERP_HR",
+    "clusterLabel": "Finanzen / ERP / HR",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "BAPI / IDoc / OData",
+    "desc": "Ein-Schritt-Integration: ATOSS Dienstplan Ist-Stunden to SAP Payroll AVR-J (BAPI / IDoc / OData)",
+    "description": "Ein-Schritt-Integration: ATOSS Dienstplan Ist-Stunden to SAP Payroll AVR-J (BAPI / IDoc / OData)",
+    "triples": [
+      "SYS-51 -> CON-59 -> SYS-53"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-51",
+    "targetSystem": "SYS-53",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-51",
+        "to": "SYS-53",
+        "connectionId": "CON-59"
+      }
+    ]
+  },
+  {
+    "id": "INT-203",
+    "name": "SuccessFactors EC to S4HANA Kostenstellen-Zuordnung",
+    "cluster": "ERP_HR",
+    "clusterLabel": "Finanzen / ERP / HR",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "SAP CPI iFlow / OData",
+    "desc": "Ein-Schritt-Integration: SuccessFactors EC to S4HANA Kostenstellen-Zuordnung (SAP CPI iFlow / OData)",
+    "description": "Ein-Schritt-Integration: SuccessFactors EC to S4HANA Kostenstellen-Zuordnung (SAP CPI iFlow / OData)",
+    "triples": [
+      "SYS-52 -> CON-61 -> SYS-01"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-52",
+    "targetSystem": "SYS-01",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-52",
+        "to": "SYS-01",
+        "connectionId": "CON-61"
+      }
+    ]
+  },
+  {
+    "id": "INT-204",
+    "name": "Digitale Personalakte d.velop to SuccessFactors EC",
+    "cluster": "ERP_HR",
+    "clusterLabel": "Finanzen / ERP / HR",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "REST / CMIS / OAuth2",
+    "desc": "Ein-Schritt-Integration: Digitale Personalakte d.velop to SuccessFactors EC (REST / CMIS / OAuth2)",
+    "description": "Ein-Schritt-Integration: Digitale Personalakte d.velop to SuccessFactors EC (REST / CMIS / OAuth2)",
+    "triples": [
+      "SYS-57 -> CON-64 -> SYS-52"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-57",
+    "targetSystem": "SYS-52",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-57",
+        "to": "SYS-52",
+        "connectionId": "CON-64"
+      }
+    ]
+  },
+  {
+    "id": "INT-205",
+    "name": "Helfer-Portal to Bildungscampus Schulungsabgleich",
+    "cluster": "ERP_HR",
+    "clusterLabel": "Finanzen / ERP / HR",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "REST API / Token Auth",
+    "desc": "Ein-Schritt-Integration: Helfer-Portal to Bildungscampus Schulungsabgleich (REST API / Token Auth)",
+    "description": "Ein-Schritt-Integration: Helfer-Portal to Bildungscampus Schulungsabgleich (REST API / Token Auth)",
+    "triples": [
+      "SYS-54 -> CON-65 -> SYS-55"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-54",
+    "targetSystem": "SYS-55",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-54",
+        "to": "SYS-55",
+        "connectionId": "CON-65"
+      }
+    ]
+  },
+  {
+    "id": "INT-206",
+    "name": "Mitarbeiter-App Flip to ATOSS Dienstplan-Ansicht",
+    "cluster": "ERP_HR",
+    "clusterLabel": "Finanzen / ERP / HR",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "HTTPS REST API / JWT",
+    "desc": "Ein-Schritt-Integration: Mitarbeiter-App Flip to ATOSS Dienstplan-Ansicht (HTTPS REST API / JWT)",
+    "description": "Ein-Schritt-Integration: Mitarbeiter-App Flip to ATOSS Dienstplan-Ansicht (HTTPS REST API / JWT)",
+    "triples": [
+      "SYS-58 -> CON-66 -> SYS-51"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-58",
+    "targetSystem": "SYS-51",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-58",
+        "to": "SYS-51",
+        "connectionId": "CON-66"
+      }
+    ]
+  },
+  {
+    "id": "INT-207",
+    "name": "EcoWebDesk Unfallbericht to Digitale Personalakte",
+    "cluster": "ERP_HR",
+    "clusterLabel": "Finanzen / ERP / HR",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "REST / PDF Archivierung",
+    "desc": "Ein-Schritt-Integration: EcoWebDesk Unfallbericht to Digitale Personalakte (REST / PDF Archivierung)",
+    "description": "Ein-Schritt-Integration: EcoWebDesk Unfallbericht to Digitale Personalakte (REST / PDF Archivierung)",
+    "triples": [
+      "SYS-56 -> CON-67 -> SYS-57"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-56",
+    "targetSystem": "SYS-57",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-56",
+        "to": "SYS-57",
+        "connectionId": "CON-67"
+      }
+    ]
+  },
+  {
+    "id": "INT-208",
+    "name": "Patienten-Portal m.Doc to Kong API Gateway",
+    "cluster": "ERP_HR",
+    "clusterLabel": "Finanzen / ERP / HR",
+    "middlewareHub": "SYS-61",
+    "middlewareName": "Kong API Gateway",
+    "messageType": "HTTPS TLS 1.3 / OpenID Connect",
+    "desc": "Ein-Schritt-Integration: Patienten-Portal m.Doc to Kong API Gateway (HTTPS TLS 1.3 / OpenID Connect)",
+    "description": "Ein-Schritt-Integration: Patienten-Portal m.Doc to Kong API Gateway (HTTPS TLS 1.3 / OpenID Connect)",
+    "triples": [
+      "SYS-68 -> CON-68 -> SYS-61"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-68",
+    "targetSystem": "SYS-61",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-68",
+        "to": "SYS-61",
+        "connectionId": "CON-68"
+      }
+    ]
+  },
+  {
+    "id": "INT-209",
+    "name": "Kong API Gateway to Dedalus FHIR CDR",
+    "cluster": "KLINIK",
+    "clusterLabel": "Klinik",
+    "middlewareHub": "SYS-61",
+    "middlewareName": "Kong API Gateway",
+    "messageType": "HL7 FHIR R4 over HTTPS",
+    "desc": "Ein-Schritt-Integration: Kong API Gateway to Dedalus FHIR CDR (HL7 FHIR R4 over HTTPS)",
+    "description": "Ein-Schritt-Integration: Kong API Gateway to Dedalus FHIR CDR (HL7 FHIR R4 over HTTPS)",
+    "triples": [
+      "SYS-61 -> CON-69 -> SYS-22"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-61",
+    "targetSystem": "SYS-22",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-61",
+        "to": "SYS-22",
+        "connectionId": "CON-69"
+      }
+    ]
+  },
+  {
+    "id": "INT-210",
+    "name": "FundraisingBox Online-Spenden to Salesforce CRM",
+    "cluster": "ERP_HR",
+    "clusterLabel": "Finanzen / ERP / HR",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "Webhook / REST API",
+    "desc": "Ein-Schritt-Integration: FundraisingBox Online-Spenden to Salesforce CRM (Webhook / REST API)",
+    "description": "Ein-Schritt-Integration: FundraisingBox Online-Spenden to Salesforce CRM (Webhook / REST API)",
+    "triples": [
+      "SYS-65 -> CON-70 -> SYS-64"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-65",
+    "targetSystem": "SYS-64",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-65",
+        "to": "SYS-64",
+        "connectionId": "CON-70"
+      }
+    ]
+  },
+  {
+    "id": "INT-211",
+    "name": "Salesforce Spendenbuchungen to S4HANA Debitorenbuchhaltung",
+    "cluster": "ERP_HR",
+    "clusterLabel": "Finanzen / ERP / HR",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "SAP CPI / OData / HTTPS",
+    "desc": "Ein-Schritt-Integration: Salesforce Spendenbuchungen to S4HANA Debitorenbuchhaltung (SAP CPI / OData / HTTPS)",
+    "description": "Ein-Schritt-Integration: Salesforce Spendenbuchungen to S4HANA Debitorenbuchhaltung (SAP CPI / OData / HTTPS)",
+    "triples": [
+      "SYS-64 -> CON-71 -> SYS-01"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-64",
+    "targetSystem": "SYS-01",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-64",
+        "to": "SYS-01",
+        "connectionId": "CON-71"
+      }
+    ]
+  },
+  {
+    "id": "INT-212",
+    "name": "S4HANA ERP Datenexport to Snowflake Lakehouse",
+    "cluster": "ERP_HR",
+    "clusterLabel": "Finanzen / ERP / HR",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "Snowflake Connector / JDBC / Parquet",
+    "desc": "Ein-Schritt-Integration: S4HANA ERP Datenexport to Snowflake Lakehouse (Snowflake Connector / JDBC / Parquet)",
+    "description": "Ein-Schritt-Integration: S4HANA ERP Datenexport to Snowflake Lakehouse (Snowflake Connector / JDBC / Parquet)",
+    "triples": [
+      "SYS-01 -> CON-72 -> SYS-66"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-01",
+    "targetSystem": "SYS-66",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-01",
+        "to": "SYS-66",
+        "connectionId": "CON-72"
+      }
+    ]
+  },
+  {
+    "id": "INT-213",
+    "name": "ORBIS KIS Falldaten-Export to Snowflake Lakehouse",
+    "cluster": "KLINIK",
+    "clusterLabel": "Klinik",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "ETL Pipeline / Azure Data Factory / S3",
+    "desc": "Ein-Schritt-Integration: ORBIS KIS Falldaten-Export to Snowflake Lakehouse (ETL Pipeline / Azure Data Factory / S3)",
+    "description": "Ein-Schritt-Integration: ORBIS KIS Falldaten-Export to Snowflake Lakehouse (ETL Pipeline / Azure Data Factory / S3)",
+    "triples": [
+      "SYS-11 -> CON-73 -> SYS-66"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-11",
+    "targetSystem": "SYS-66",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-11",
+        "to": "SYS-66",
+        "connectionId": "CON-73"
+      }
+    ]
+  },
+  {
+    "id": "INT-214",
+    "name": "Vivendi Belegungs- & Pflegedaten to Snowflake",
+    "cluster": "PFLEGE",
+    "clusterLabel": "Pflege",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "ETL / REST API Data Lake Push",
+    "desc": "Ein-Schritt-Integration: Vivendi Belegungs- & Pflegedaten to Snowflake (ETL / REST API Data Lake Push)",
+    "description": "Ein-Schritt-Integration: Vivendi Belegungs- & Pflegedaten to Snowflake (ETL / REST API Data Lake Push)",
+    "triples": [
+      "SYS-23 -> CON-74 -> SYS-66"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-23",
+    "targetSystem": "SYS-66",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-23",
+        "to": "SYS-66",
+        "connectionId": "CON-74"
+      }
+    ]
+  },
+  {
+    "id": "INT-215",
+    "name": "M365 & SharePoint to Microsoft Entra ID Auth",
+    "cluster": "ERP_HR",
+    "clusterLabel": "Finanzen / ERP / HR",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "SAML 2.0 / OpenID Connect",
+    "desc": "Ein-Schritt-Integration: M365 & SharePoint to Microsoft Entra ID Auth (SAML 2.0 / OpenID Connect)",
+    "description": "Ein-Schritt-Integration: M365 & SharePoint to Microsoft Entra ID Auth (SAML 2.0 / OpenID Connect)",
+    "triples": [
+      "SYS-63 -> CON-76 -> SYS-69"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-63",
+    "targetSystem": "SYS-69",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-63",
+        "to": "SYS-69",
+        "connectionId": "CON-76"
+      }
+    ]
+  },
+  {
+    "id": "INT-216",
+    "name": "Microsoft Entra ID to On-Prem Active Directory Sync",
+    "cluster": "ERP_HR",
+    "clusterLabel": "Finanzen / ERP / HR",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "Entra Connect / Kerberos / LDAPS",
+    "desc": "Ein-Schritt-Integration: Microsoft Entra ID to On-Prem Active Directory Sync (Entra Connect / Kerberos / LDAPS)",
+    "description": "Ein-Schritt-Integration: Microsoft Entra ID to On-Prem Active Directory Sync (Entra Connect / Kerberos / LDAPS)",
+    "triples": [
+      "SYS-69 -> CON-77 -> SYS-70"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-69",
+    "targetSystem": "SYS-70",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-69",
+        "to": "SYS-70",
+        "connectionId": "CON-77"
+      }
+    ]
+  },
+  {
+    "id": "INT-217",
+    "name": "Microsoft Intune MDM Richtlinien to Vivendi Mobil iPads",
+    "cluster": "PFLEGE",
+    "clusterLabel": "Pflege",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "Apple MDM Push Protocol / HTTPS",
+    "desc": "Ein-Schritt-Integration: Microsoft Intune MDM Richtlinien to Vivendi Mobil iPads (Apple MDM Push Protocol / HTTPS)",
+    "description": "Ein-Schritt-Integration: Microsoft Intune MDM Richtlinien to Vivendi Mobil iPads (Apple MDM Push Protocol / HTTPS)",
+    "triples": [
+      "SYS-71 -> CON-78 -> SYS-24"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-71",
+    "targetSystem": "SYS-24",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-71",
+        "to": "SYS-24",
+        "connectionId": "CON-78"
+      }
+    ]
+  },
+  {
+    "id": "INT-218",
+    "name": "Intune MDM Profilverteilung to medDV NIDA Rettungs-Tablets",
+    "cluster": "RETTUNG",
+    "clusterLabel": "Notfallrettung",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "Android Enterprise MDM / HTTPS",
+    "desc": "Ein-Schritt-Integration: Intune MDM Profilverteilung to medDV NIDA Rettungs-Tablets (Android Enterprise MDM / HTTPS)",
+    "description": "Ein-Schritt-Integration: Intune MDM Profilverteilung to medDV NIDA Rettungs-Tablets (Android Enterprise MDM / HTTPS)",
+    "triples": [
+      "SYS-71 -> CON-79 -> SYS-34"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-71",
+    "targetSystem": "SYS-34",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-71",
+        "to": "SYS-34",
+        "connectionId": "CON-79"
+      }
+    ]
+  },
+  {
+    "id": "INT-219",
+    "name": "Zscaler SASE Cloud-Proxy to Perimeter Firewall Tunnel",
+    "cluster": "ERP_HR",
+    "clusterLabel": "Finanzen / ERP / HR",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "IPsec VPN / GRE Tunnel",
+    "desc": "Ein-Schritt-Integration: Zscaler SASE Cloud-Proxy to Perimeter Firewall Tunnel (IPsec VPN / GRE Tunnel)",
+    "description": "Ein-Schritt-Integration: Zscaler SASE Cloud-Proxy to Perimeter Firewall Tunnel (IPsec VPN / GRE Tunnel)",
+    "triples": [
+      "SYS-73 -> CON-81 -> SYS-72"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-73",
+    "targetSystem": "SYS-72",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-73",
+        "to": "SYS-72",
+        "connectionId": "CON-81"
+      }
+    ]
+  },
+  {
+    "id": "INT-220",
+    "name": "F5 BIG-IP Load Balancer to ORBIS KIS Web Application",
+    "cluster": "KLINIK",
+    "clusterLabel": "Klinik",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "HTTPS Reverse Proxy / TLS Offload",
+    "desc": "Ein-Schritt-Integration: F5 BIG-IP Load Balancer to ORBIS KIS Web Application (HTTPS Reverse Proxy / TLS Offload)",
+    "description": "Ein-Schritt-Integration: F5 BIG-IP Load Balancer to ORBIS KIS Web Application (HTTPS Reverse Proxy / TLS Offload)",
+    "triples": [
+      "SYS-75 -> CON-82 -> SYS-11"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-75",
+    "targetSystem": "SYS-11",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-75",
+        "to": "SYS-11",
+        "connectionId": "CON-82"
+      }
+    ]
+  },
+  {
+    "id": "INT-221",
+    "name": "S4HANA Database Snapshot to Veeam Backup Vault",
+    "cluster": "ERP_HR",
+    "clusterLabel": "Finanzen / ERP / HR",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "VSS / SAP HANA Backint over TLS",
+    "desc": "Ein-Schritt-Integration: S4HANA Database Snapshot to Veeam Backup Vault (VSS / SAP HANA Backint over TLS)",
+    "description": "Ein-Schritt-Integration: S4HANA Database Snapshot to Veeam Backup Vault (VSS / SAP HANA Backint over TLS)",
+    "triples": [
+      "SYS-01 -> CON-83 -> SYS-76"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-01",
+    "targetSystem": "SYS-76",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-01",
+        "to": "SYS-76",
+        "connectionId": "CON-83"
+      }
+    ]
+  },
+  {
+    "id": "INT-222",
+    "name": "Veeam Immutable Backup to KIS Oracle/SQL Datenbank",
+    "cluster": "KLINIK",
+    "clusterLabel": "Klinik",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "VSS / Block-Level SAN Snapshot",
+    "desc": "Ein-Schritt-Integration: Veeam Immutable Backup to KIS Oracle/SQL Datenbank (VSS / Block-Level SAN Snapshot)",
+    "description": "Ein-Schritt-Integration: Veeam Immutable Backup to KIS Oracle/SQL Datenbank (VSS / Block-Level SAN Snapshot)",
+    "triples": [
+      "SYS-76 -> CON-84 -> SYS-11"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-76",
+    "targetSystem": "SYS-11",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-76",
+        "to": "SYS-11",
+        "connectionId": "CON-84"
+      }
+    ]
+  },
+  {
+    "id": "INT-223",
+    "name": "CyberArk PAM Vault to S4HANA OS/DB Admin Sessions",
+    "cluster": "ERP_HR",
+    "clusterLabel": "Finanzen / ERP / HR",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "RDP / SSH Proxy with Session Recording",
+    "desc": "Ein-Schritt-Integration: CyberArk PAM Vault to S4HANA OS/DB Admin Sessions (RDP / SSH Proxy with Session Recording)",
+    "description": "Ein-Schritt-Integration: CyberArk PAM Vault to S4HANA OS/DB Admin Sessions (RDP / SSH Proxy with Session Recording)",
+    "triples": [
+      "SYS-77 -> CON-85 -> SYS-01"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-77",
+    "targetSystem": "SYS-01",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-77",
+        "to": "SYS-01",
+        "connectionId": "CON-85"
+      }
+    ]
+  },
+  {
+    "id": "INT-224",
+    "name": "CyberArk PAM Vault to Firewall & Network Switch Admins",
+    "cluster": "ERP_HR",
+    "clusterLabel": "Finanzen / ERP / HR",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "SSH / TACACS+ / RADIUS",
+    "desc": "Ein-Schritt-Integration: CyberArk PAM Vault to Firewall & Network Switch Admins (SSH / TACACS+ / RADIUS)",
+    "description": "Ein-Schritt-Integration: CyberArk PAM Vault to Firewall & Network Switch Admins (SSH / TACACS+ / RADIUS)",
+    "triples": [
+      "SYS-77 -> CON-86 -> SYS-72"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-77",
+    "targetSystem": "SYS-72",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-77",
+        "to": "SYS-72",
+        "connectionId": "CON-86"
+      }
+    ]
+  },
+  {
+    "id": "INT-225",
+    "name": "Veeam KRITIS Backup Audit & Ransomware Alerting to Sentinel SIEM",
+    "cluster": "ERP_HR",
+    "clusterLabel": "Finanzen / ERP / HR",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "Syslog / REST API over TLS",
+    "desc": "Ein-Schritt-Integration: Veeam KRITIS Backup Audit & Ransomware Alerting to Sentinel SIEM (Syslog / REST API over TLS)",
+    "description": "Ein-Schritt-Integration: Veeam KRITIS Backup Audit & Ransomware Alerting to Sentinel SIEM (Syslog / REST API over TLS)",
+    "triples": [
+      "SYS-76 -> CON-87 -> SYS-74"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-76",
+    "targetSystem": "SYS-74",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-76",
+        "to": "SYS-74",
+        "connectionId": "CON-87"
+      }
+    ]
+  },
+  {
+    "id": "INT-226",
+    "name": "ORBIS KIS to Patientenportal Entlassplan & Dokumente",
+    "cluster": "KLINIK",
+    "clusterLabel": "Klinik",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "HL7 FHIR R4 / REST HTTPS",
+    "desc": "Ein-Schritt-Integration: ORBIS KIS to Patientenportal Entlassplan & Dokumente (HL7 FHIR R4 / REST HTTPS)",
+    "description": "Ein-Schritt-Integration: ORBIS KIS to Patientenportal Entlassplan & Dokumente (HL7 FHIR R4 / REST HTTPS)",
+    "triples": [
+      "SYS-11 -> CON-88 -> SYS-68"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-11",
+    "targetSystem": "SYS-68",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-11",
+        "to": "SYS-68",
+        "connectionId": "CON-88"
+      }
+    ]
+  },
+  {
+    "id": "INT-227",
+    "name": "Patientenportal to KIM Provider eArztbrief Versand",
+    "cluster": "TI",
+    "clusterLabel": "Telematikinfrastruktur",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "KIM 1.5 Fachdienst / S/MIME",
+    "desc": "Ein-Schritt-Integration: Patientenportal to KIM Provider eArztbrief Versand (KIM 1.5 Fachdienst / S/MIME)",
+    "description": "Ein-Schritt-Integration: Patientenportal to KIM Provider eArztbrief Versand (KIM 1.5 Fachdienst / S/MIME)",
+    "triples": [
+      "SYS-68 -> CON-89 -> SYS-44"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-68",
+    "targetSystem": "SYS-44",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-68",
+        "to": "SYS-44",
+        "connectionId": "CON-89"
+      }
+    ]
+  },
+  {
+    "id": "INT-228",
+    "name": "ORBIS KIS to PEGASOS Archivierung digitaler Patientenakten",
+    "cluster": "KLINIK",
+    "clusterLabel": "Klinik",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "IHE XDS.b / PDF-A / DICOM WADO",
+    "desc": "Ein-Schritt-Integration: ORBIS KIS to PEGASOS Archivierung digitaler Patientenakten (IHE XDS.b / PDF-A / DICOM WADO)",
+    "description": "Ein-Schritt-Integration: ORBIS KIS to PEGASOS Archivierung digitaler Patientenakten (IHE XDS.b / PDF-A / DICOM WADO)",
+    "triples": [
+      "SYS-11 -> CON-91 -> SYS-78"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-11",
+    "targetSystem": "SYS-78",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-11",
+        "to": "SYS-78",
+        "connectionId": "CON-91"
+      }
+    ]
+  },
+  {
+    "id": "INT-229",
+    "name": "Qualitrans to Seeburger BIS Transportschein-DTA",
+    "cluster": "RETTUNG",
+    "clusterLabel": "Notfallrettung",
+    "middlewareHub": "SYS-08",
+    "middlewareName": "SEEBURGER BIS",
+    "messageType": "DTA-Verfahren / XML / SFTP",
+    "desc": "Ein-Schritt-Integration: Qualitrans to Seeburger BIS Transportschein-DTA (DTA-Verfahren / XML / SFTP)",
+    "description": "Ein-Schritt-Integration: Qualitrans to Seeburger BIS Transportschein-DTA (DTA-Verfahren / XML / SFTP)",
+    "triples": [
+      "SYS-79 -> CON-93 -> SYS-08"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-79",
+    "targetSystem": "SYS-08",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-79",
+        "to": "SYS-08",
+        "connectionId": "CON-93"
+      }
+    ]
+  },
+  {
+    "id": "INT-230",
+    "name": "Seeburger BIS to GKV Transportschein Clearing (§ 60 SGB V)",
+    "cluster": "KLINIK",
+    "clusterLabel": "Klinik",
+    "middlewareHub": "SYS-08",
+    "middlewareName": "SEEBURGER BIS",
+    "messageType": "AS2 / Peppol / SFTP",
+    "desc": "Ein-Schritt-Integration: Seeburger BIS to GKV Transportschein Clearing (§ 60 SGB V) (AS2 / Peppol / SFTP)",
+    "description": "Ein-Schritt-Integration: Seeburger BIS to GKV Transportschein Clearing (§ 60 SGB V) (AS2 / Peppol / SFTP)",
+    "triples": [
+      "SYS-08 -> CON-94 -> SYS-19"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-08",
+    "targetSystem": "SYS-19",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-08",
+        "to": "SYS-19",
+        "connectionId": "CON-94"
+      }
+    ]
+  },
+  {
+    "id": "INT-231",
+    "name": "Smart Key Box Statusrückmeldung an RescueTrack Einsatzflotte",
+    "cluster": "RETTUNG",
+    "clusterLabel": "Notfallrettung",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "MQTT / TLS / GPS Fleet Telematics",
+    "desc": "Ein-Schritt-Integration: Smart Key Box Statusrückmeldung an RescueTrack Einsatzflotte (MQTT / TLS / GPS Fleet Telematics)",
+    "description": "Ein-Schritt-Integration: Smart Key Box Statusrückmeldung an RescueTrack Einsatzflotte (MQTT / TLS / GPS Fleet Telematics)",
+    "triples": [
+      "SYS-80 -> CON-97 -> SYS-39"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-80",
+    "targetSystem": "SYS-39",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-80",
+        "to": "SYS-39",
+        "connectionId": "CON-97"
+      }
+    ]
+  },
+  {
+    "id": "INT-232",
+    "name": "ORBIS AMTS to GHX Pharma-Bestellpipeline",
+    "cluster": "KLINIK",
+    "clusterLabel": "Klinik",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "cXML / REST / AS2",
+    "desc": "Ein-Schritt-Integration: ORBIS AMTS to GHX Pharma-Bestellpipeline (cXML / REST / AS2)",
+    "description": "Ein-Schritt-Integration: ORBIS AMTS to GHX Pharma-Bestellpipeline (cXML / REST / AS2)",
+    "triples": [
+      "SYS-12 -> CON-98 -> SYS-10"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-12",
+    "targetSystem": "SYS-10",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-12",
+        "to": "SYS-10",
+        "connectionId": "CON-98"
+      }
+    ]
+  },
+  {
+    "id": "INT-233",
+    "name": "GHX Pharma-Lieferavis & Rechnung to S/4HANA MM/FI",
+    "cluster": "ERP_HR",
+    "clusterLabel": "Finanzen / ERP / HR",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "cXML / IDoc / HTTPS",
+    "desc": "Ein-Schritt-Integration: GHX Pharma-Lieferavis & Rechnung to S/4HANA MM/FI (cXML / IDoc / HTTPS)",
+    "description": "Ein-Schritt-Integration: GHX Pharma-Lieferavis & Rechnung to S/4HANA MM/FI (cXML / IDoc / HTTPS)",
+    "triples": [
+      "SYS-10 -> CON-99 -> SYS-01"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-10",
+    "targetSystem": "SYS-01",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-10",
+        "to": "SYS-01",
+        "connectionId": "CON-99"
+      }
+    ]
+  },
+  {
+    "id": "INT-234",
+    "name": "Kursbuchungsportal to Bildungscampus Kursbelegung",
+    "cluster": "ERP_HR",
+    "clusterLabel": "Finanzen / ERP / HR",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "OAuth2 / REST API / JSON",
+    "desc": "Ein-Schritt-Integration: Kursbuchungsportal to Bildungscampus Kursbelegung (OAuth2 / REST API / JSON)",
+    "description": "Ein-Schritt-Integration: Kursbuchungsportal to Bildungscampus Kursbelegung (OAuth2 / REST API / JSON)",
+    "triples": [
+      "SYS-81 -> CON-100 -> SYS-55"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-81",
+    "targetSystem": "SYS-55",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-81",
+        "to": "SYS-55",
+        "connectionId": "CON-100"
+      }
+    ]
+  },
+  {
+    "id": "INT-235",
+    "name": "Bildungscampus to S/4HANA Kursfakturierung & DGUV-Abrechnung",
+    "cluster": "ERP_HR",
+    "clusterLabel": "Finanzen / ERP / HR",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "OData v4 / CPI Web Service",
+    "desc": "Ein-Schritt-Integration: Bildungscampus to S/4HANA Kursfakturierung & DGUV-Abrechnung (OData v4 / CPI Web Service)",
+    "description": "Ein-Schritt-Integration: Bildungscampus to S/4HANA Kursfakturierung & DGUV-Abrechnung (OData v4 / CPI Web Service)",
+    "triples": [
+      "SYS-55 -> CON-101 -> SYS-01"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-55",
+    "targetSystem": "SYS-01",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-55",
+        "to": "SYS-01",
+        "connectionId": "CON-101"
+      }
+    ]
+  },
+  {
+    "id": "INT-236",
+    "name": "Qualitrans to Cloud Connector On-Premises Ingress (RFC/OData Tunnel)",
+    "cluster": "RETTUNG",
+    "clusterLabel": "Notfallrettung",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "RFC / OData Tunnel via SCC",
+    "desc": "Ein-Schritt-Integration: Qualitrans to Cloud Connector On-Premises Ingress (RFC/OData Tunnel) (RFC / OData Tunnel via SCC)",
+    "description": "Ein-Schritt-Integration: Qualitrans to Cloud Connector On-Premises Ingress (RFC/OData Tunnel) (RFC / OData Tunnel via SCC)",
+    "triples": [
+      "SYS-79 -> CON-102 -> SYS-05"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-79",
+    "targetSystem": "SYS-05",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-79",
+        "to": "SYS-05",
+        "connectionId": "CON-102"
+      }
+    ]
+  },
+  {
+    "id": "INT-237",
+    "name": "CPI Destination Service Binding (OnPremise Proxy Resolution)",
+    "cluster": "ERP_HR",
+    "clusterLabel": "Finanzen / ERP / HR",
+    "middlewareHub": "SYS-04",
+    "middlewareName": "SAP Integration Suite (CPI)",
+    "messageType": "Internal BTP Service Mesh",
+    "desc": "Ein-Schritt-Integration: CPI Destination Service Binding (OnPremise Proxy Resolution) (Internal BTP Service Mesh)",
+    "description": "Ein-Schritt-Integration: CPI Destination Service Binding (OnPremise Proxy Resolution) (Internal BTP Service Mesh)",
+    "triples": [
+      "SYS-04 -> CON-103 -> SYS-82"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-04",
+    "targetSystem": "SYS-82",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-04",
+        "to": "SYS-82",
+        "connectionId": "CON-103"
+      }
+    ]
+  },
+  {
+    "id": "INT-238",
+    "name": "KIM Fachdienst to HealthShare Befund-Import",
+    "cluster": "TI",
+    "clusterLabel": "Telematikinfrastruktur",
+    "middlewareHub": "SYS-60",
+    "middlewareName": "InterSystems HealthShare",
+    "messageType": "FHIR / S-MIME / TLS",
+    "desc": "Ein-Schritt-Integration: KIM Fachdienst to HealthShare Befund-Import (FHIR / S-MIME / TLS)",
+    "description": "Ein-Schritt-Integration: KIM Fachdienst to HealthShare Befund-Import (FHIR / S-MIME / TLS)",
+    "triples": [
+      "SYS-44 -> CON-119 -> SYS-60"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-44",
+    "targetSystem": "SYS-60",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-44",
+        "to": "SYS-60",
+        "connectionId": "CON-119"
+      }
+    ]
+  },
+  {
+    "id": "INT-239",
+    "name": "UMO Hausnotruf to GSM Telecare IoT Gateway",
+    "cluster": "RETTUNG",
+    "clusterLabel": "Notfallrettung",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "MQTT / TLS",
+    "desc": "Ein-Schritt-Integration: UMO Hausnotruf to GSM Telecare IoT Gateway (MQTT / TLS)",
+    "description": "Ein-Schritt-Integration: UMO Hausnotruf to GSM Telecare IoT Gateway (MQTT / TLS)",
+    "triples": [
+      "SYS-35 -> CON-139 -> SYS-36"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-35",
+    "targetSystem": "SYS-36",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-35",
+        "to": "SYS-36",
+        "connectionId": "CON-139"
+      }
+    ]
+  },
+  {
+    "id": "INT-240",
+    "name": "BTP Connectivity to S/4HANA Private Cloud",
+    "cluster": "ERP_HR",
+    "clusterLabel": "Finanzen / ERP / HR",
+    "middlewareHub": "DIRECT",
+    "middlewareName": "Direktschnittstelle",
+    "messageType": "OData v4 / RFC / HTTPS",
+    "desc": "Ein-Schritt-Integration: BTP Connectivity to S/4HANA Private Cloud (OData v4 / RFC / HTTPS)",
+    "description": "Ein-Schritt-Integration: BTP Connectivity to S/4HANA Private Cloud (OData v4 / RFC / HTTPS)",
+    "triples": [
+      "SYS-82 -> CON-142 -> SYS-01"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-82",
+    "targetSystem": "SYS-01",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-82",
+        "to": "SYS-01",
+        "connectionId": "CON-142"
+      }
+    ]
+  },
+  {
+    "id": "INT-241",
+    "name": "SAP CPI to SuccessFactors Employee Central",
+    "cluster": "ERP_HR",
+    "clusterLabel": "Finanzen / ERP / HR",
+    "middlewareHub": "SYS-04",
+    "middlewareName": "SAP Integration Suite (CPI)",
+    "messageType": "OData v4 / HTTPS",
+    "desc": "Ein-Schritt-Integration: SAP CPI to SuccessFactors Employee Central (OData v4 / HTTPS)",
+    "description": "Ein-Schritt-Integration: SAP CPI to SuccessFactors Employee Central (OData v4 / HTTPS)",
+    "triples": [
+      "SYS-04 -> CON-143 -> SYS-52"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-04",
+    "targetSystem": "SYS-52",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-04",
+        "to": "SYS-52",
+        "connectionId": "CON-143"
+      }
+    ]
+  },
+  {
+    "id": "INT-242",
+    "name": "SAP CPI to Seeburger BIS B2B Converter",
+    "cluster": "ERP_HR",
+    "clusterLabel": "Finanzen / ERP / HR",
+    "middlewareHub": "SYS-04",
+    "middlewareName": "SAP Integration Suite (CPI)",
+    "messageType": "AS2 / EDIFACT / TLS",
+    "desc": "Ein-Schritt-Integration: SAP CPI to Seeburger BIS B2B Converter (AS2 / EDIFACT / TLS)",
+    "description": "Ein-Schritt-Integration: SAP CPI to Seeburger BIS B2B Converter (AS2 / EDIFACT / TLS)",
+    "triples": [
+      "SYS-04 -> CON-148 -> SYS-08"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-04",
+    "targetSystem": "SYS-08",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-04",
+        "to": "SYS-08",
+        "connectionId": "CON-148"
+      }
+    ]
+  },
+  {
+    "id": "INT-243",
+    "name": "Vivendi NG to TI-Konnektor KIM/VSDM",
+    "cluster": "PFLEGE",
+    "clusterLabel": "Pflege",
+    "middlewareHub": "SYS-43",
+    "middlewareName": "TI-Konnektor Cluster",
+    "messageType": "SOAP / XML / TLS",
+    "desc": "Ein-Schritt-Integration: Vivendi NG to TI-Konnektor KIM/VSDM (SOAP / XML / TLS)",
+    "description": "Ein-Schritt-Integration: Vivendi NG to TI-Konnektor KIM/VSDM (SOAP / XML / TLS)",
+    "triples": [
+      "SYS-23 -> CON-160 -> SYS-43"
+    ],
+    "trafficSum": "0.82%",
+    "sourceSystem": "SYS-23",
+    "targetSystem": "SYS-43",
+    "steps": [
+      {
+        "order": 0,
+        "from": "SYS-23",
+        "to": "SYS-43",
+        "connectionId": "CON-160"
+      }
+    ]
   }
 ];
     const PROCESSES_DATA = [
@@ -13683,8 +15509,13 @@
       "D7"
     ],
     "cleanIntegIds": [
-      "INT-02",
-      "INT-03"
+      "INT-001",
+      "INT-002",
+      "INT-003",
+      "INT-004",
+      "INT-005",
+      "INT-007",
+      "INT-008"
     ],
     "description": "Vollständiger Lebenszyklus von der Notrufeingabe über Rettungstransport, Voranmeldung, Triage, KIS-Aufnahme bis zur TI-Validierung."
   },
@@ -13721,9 +15552,13 @@
       "D6"
     ],
     "cleanIntegIds": [
-      "INT-01",
-      "INT-05",
-      "INT-07"
+      "INT-041",
+      "INT-042",
+      "INT-043",
+      "INT-046",
+      "INT-047",
+      "INT-048",
+      "INT-049"
     ],
     "description": "Tourenplanung der ambulanten Pflege, Vitalwerterfassung via iPads, DTA-Abrechnung mit Pflegekassen und SEPA-Buchung in S/4HANA."
   },
@@ -13753,7 +15588,12 @@
       "D7"
     ],
     "cleanIntegIds": [
-      "INT-06"
+      "INT-088",
+      "INT-089",
+      "INT-090",
+      "INT-091",
+      "INT-109",
+      "INT-110"
     ],
     "description": "Automatisierte Signalverarbeitung von 250.000 Hausnotrufgeräten, Dispatching von Einsatzkräften und Echtzeit-Monitoring."
   },
@@ -13792,10 +15632,13 @@
       "D8"
     ],
     "cleanIntegIds": [
-      "INT-04",
-      "INT-12",
-      "INT-07",
-      "INT-09"
+      "INT-111",
+      "INT-112",
+      "INT-113",
+      "INT-114",
+      "INT-115",
+      "INT-116",
+      "INT-117"
     ],
     "description": "Umstellung der Altsysteme auf SAP S/4HANA Private Cloud, Cloud Integration Suite (CPI) und automatisierter Einkauf über Peppol/GHX."
   },
@@ -13831,8 +15674,13 @@
       "D1"
     ],
     "cleanIntegIds": [
-      "INT-05",
-      "INT-07"
+      "INT-125",
+      "INT-126",
+      "INT-127",
+      "INT-128",
+      "INT-129",
+      "INT-130",
+      "INT-131"
     ],
     "description": "Recruiting über d.vinci, Stammdatenverwaltung in SuccessFactors, Dienstplanung in ATOSS/Vivendi PEP, Abrechnung nach AVR-J und Auszahlung."
   },
@@ -13858,8 +15706,9 @@
       "D1"
     ],
     "cleanIntegIds": [
-      "INT-08",
-      "INT-07"
+      "INT-119",
+      "INT-120",
+      "INT-121"
     ],
     "description": "Verwaltung von Spendenkampagnen über Salesforce Non-Profit, Online-Payment (Stripe/PayPal) und automatisierte Spenden- und Zuwendungsverbuchung in SAP S/4HANA."
   },
@@ -13891,8 +15740,11 @@
       "D8"
     ],
     "cleanIntegIds": [
-      "INT-10",
-      "INT-09"
+      "INT-146",
+      "INT-147",
+      "INT-148",
+      "INT-149",
+      "INT-150"
     ],
     "description": "24/7 Security Operations Center (SOC), automatisierte SIEM-Korrelation von Zscaler & Firewalls sowie immutable Ransomware-Schutz über Veeam Vaulting."
   },
@@ -13922,7 +15774,12 @@
       "D6"
     ],
     "cleanIntegIds": [
-      "INT-11"
+      "INT-100",
+      "INT-101",
+      "INT-102",
+      "INT-140",
+      "INT-141",
+      "INT-142"
     ],
     "description": "Lage- und Einsatzkoordination über das BBK deNIS-System, Johanniter Helfer-Portal für 40.000 Helfer und automatisierter Abgleich von Ausbildungs- und Einsatznachweisen im Bildungscampus."
   },
@@ -13937,7 +15794,13 @@
       "D7"
     ],
     "cleanIntegIds": [
-      "INT-13"
+      "INT-016",
+      "INT-017",
+      "INT-020",
+      "INT-021",
+      "INT-022",
+      "INT-032",
+      "INT-038"
     ],
     "participatingSystems": [
       "SYS-11",
@@ -13965,7 +15828,10 @@
       "D1"
     ],
     "cleanIntegIds": [
-      "INT-14"
+      "INT-033",
+      "INT-085",
+      "INT-086",
+      "INT-087"
     ],
     "participatingSystems": [
       "SYS-33",
@@ -13989,8 +15855,14 @@
       "D4"
     ],
     "cleanIntegIds": [
-      "INT-15",
-      "INT-06"
+      "INT-076",
+      "INT-077",
+      "INT-078",
+      "INT-079",
+      "INT-080",
+      "INT-081",
+      "INT-082",
+      "INT-083"
     ],
     "participatingSystems": [
       "SYS-36",
@@ -14019,8 +15891,12 @@
       "D1"
     ],
     "cleanIntegIds": [
-      "INT-16",
-      "INT-04"
+      "INT-007",
+      "INT-008",
+      "INT-024",
+      "INT-027",
+      "INT-163",
+      "INT-164"
     ],
     "participatingSystems": [
       "SYS-11",
@@ -14046,7 +15922,9 @@
       "D1"
     ],
     "cleanIntegIds": [
-      "INT-17"
+      "INT-122",
+      "INT-123",
+      "INT-124"
     ],
     "participatingSystems": [
       "SYS-81",
@@ -14701,7 +16579,7 @@
                   const stepOrder = stepIdx + 1;
                   const totalSteps = integ.steps.length;
                   const isCurrentInteg = selectedIntegration && selectedIntegration.id === integ.id;
-                  return '<div class="edge-popout-integ-row' + (isCurrentInteg ? ' active' : '') + '" onclick="window.activateIntegrationFromEdge(\'' + integ.id + '\', \'' + edge.id + '\')" title="Kette \'' + integ.name + '\' fokussieren & animieren">' +
+                  return '<div class="edge-popout-integ-row' + (isCurrentInteg ? ' active' : '') + '" onclick="window.activateIntegrationFromEdge(\'' + integ.id + '\', \'' + edge.id + '\')" title="Integration \'' + integ.name + '\' fokussieren & animieren">' +
                     '<div style="display:flex; align-items:center; gap:6px; min-width:0; flex:1; overflow:hidden;">' +
                       '<span class="edge-popout-integ-id">' + integ.id + '</span>' +
                       '<span class="edge-popout-integ-name">' + integ.name + '</span>' +
@@ -14718,10 +16596,10 @@
           parentIntegsHtml =
             '<div class="edge-popout-integs">' +
               '<div class="edge-popout-integs-title" style="color:var(--text-muted);">' +
-                '<span>⚡ Verbindungstyp: Ad-hoc Direct Edge</span>' +
+                '<span>⚡ Verbindungstyp: Ein-Schritt-Integration: Direkte Ende-zu-Ende Verbindung</span>' +
               '</div>' +
               '<div style="font-size:0.68rem; color:var(--text-muted); padding:2px 0;">' +
-                'Punkt-zu-Punkt Schnittstelle (in keiner vordefinierten E2E-Kette registriert).' +
+                'Punkt-zu-Punkt Schnittstelle (in keiner vordefinierten End-to-End registriert).' +
               '</div>' +
             '</div>';
         }
@@ -14762,8 +16640,15 @@
           '</div>';
 
         card.dataset.popoutId = edge.id;
-        card.addEventListener('mouseenter', () => updatePopoutBayLayout(edge.id));
-        card.addEventListener('mouseleave', () => updatePopoutBayLayout(null));
+        card.addEventListener('mouseenter', () => {
+          card.style.zIndex = '300';
+          card.classList.add('popout-bay-hovered');
+        });
+        card.addEventListener('mouseleave', () => {
+          const idx = parseInt(card.dataset.bayIndex || '0', 10);
+          card.style.zIndex = 100 + idx;
+          card.classList.remove('popout-bay-hovered');
+        });
 
         // Bring to front on mousedown anywhere on card
         card.addEventListener("mousedown", () => {
@@ -14904,8 +16789,15 @@
           '</div>';
 
         card.dataset.popoutId = sys.id;
-        card.addEventListener('mouseenter', () => updatePopoutBayLayout(sys.id));
-        card.addEventListener('mouseleave', () => updatePopoutBayLayout(null));
+        card.addEventListener('mouseenter', () => {
+          card.style.zIndex = '300';
+          card.classList.add('popout-bay-hovered');
+        });
+        card.addEventListener('mouseleave', () => {
+          const idx = parseInt(card.dataset.bayIndex || '0', 10);
+          card.style.zIndex = 100 + idx;
+          card.classList.remove('popout-bay-hovered');
+        });
 
         // Bring to front on mousedown anywhere on card
         card.addEventListener("mousedown", () => {
@@ -15063,6 +16955,8 @@
         .on("zoom", (event) => gMain.attr("transform", event.transform));
 
       svg.call(zoom);
+      const defaultZoomTransform = d3.zoomIdentity.translate(0, -90).scale(0.82);
+      svg.call(zoom.transform, defaultZoomTransform);
 
       // Marker definitions for BPMN
       const defs = svg.append("defs");
@@ -15686,7 +17580,7 @@
 
         // Feedback toast
         if (typeof showToast === "function") {
-          showToast('⚡ E2E-Kette ' + integ.id + ' aktiviert · Schritt ' + (stepIdx >= 0 ? (stepIdx + 1) : 1) + '/' + integ.steps.length);
+          showToast('⚡ End-to-End ' + integ.id + ' aktiviert · Schritt ' + (stepIdx >= 0 ? (stepIdx + 1) : 1) + '/' + integ.steps.length);
         }
       }
       window.activateIntegrationFromEdge = activateIntegrationFromEdge;
@@ -15982,7 +17876,7 @@
         });
         const badgeProcess = document.getElementById("badgeProcess");
         if (badgeProcess) {
-          badgeProcess.textContent = selectedDomainId ? (activeProcs.length + ' für ' + selectedDomainId) : '13 Prozesse';
+          badgeProcess.textContent = selectedDomainId ? (activeProcs.length + ' Prozesse (' + selectedDomainId + '-Beteiligung)') : '13 Prozesse';
           badgeProcess.classList.toggle("active", selectedProcess !== null);
         }
 
@@ -16047,18 +17941,19 @@
             badgeIntegration.textContent = '0 für ' + selectedLink.id;
             badgeIntegration.classList.remove("active");
           } else if (selectedProcess) {
-            badgeIntegration.textContent = activeIntegs.length + ' für ' + selectedProcess.id;
+            badgeIntegration.textContent = activeIntegs.length + ' (' + selectedProcess.id + ')';
             badgeIntegration.classList.toggle("active", selectedIntegration !== null);
           } else if (selectedDomainId) {
-            badgeIntegration.textContent = activeIntegs.length + ' für ' + selectedDomainId;
+            badgeIntegration.textContent = activeIntegs.length + ' (' + selectedDomainId + '-relevant)';
             badgeIntegration.classList.toggle("active", selectedIntegration !== null);
           } else {
-            badgeIntegration.textContent = '17 E2E-Ketten';
+            badgeIntegration.textContent = '243 Integrationen';
             badgeIntegration.classList.toggle("active", selectedIntegration !== null);
           }
         }
 
         // 6. Update Centered Dynamic Drilldown Title & Subtitle in Header (Trennsymbol "*", Untertitel: "Stufe # ..")
+        renderClusterIntegrations();
         updateHeaderDrilldownTitle();
 
         // 7. Sync EA State to URL parameters for deep-linking & Web Share API
@@ -16103,7 +17998,7 @@
                     const stepIdx = integ.steps.findIndex(s => s.connectionId === selectedLink.id);
                     const stepOrder = stepIdx + 1;
                     const totalSteps = integ.steps.length;
-                    return '<button class="header-edge-integ-pill-btn" onclick="event.stopPropagation(); window.activateIntegrationFromEdge(\'' + integ.id + '\', \'' + selectedLink.id + '\')" title="Kette \'' + esc(integ.name) + '\' aktivieren (dies ist Schritt ' + stepOrder + ' von ' + totalSteps + ')">' +
+                    return '<button class="header-edge-integ-pill-btn" onclick="event.stopPropagation(); window.activateIntegrationFromEdge(\'' + integ.id + '\', \'' + selectedLink.id + '\')" title="Integration \'' + esc(integ.name) + '\' aktivieren (dies ist Schritt ' + stepOrder + ' von ' + totalSteps + ')">' +
                       '<span class="pill-id">' + integ.id + '</span>' +
                       '<span class="pill-name">' + esc(integ.name.length > 20 ? integ.name.substring(0, 18) + '…' : integ.name) + '</span>' +
                       '<span class="pill-step">Schritt ' + stepOrder + '/' + totalSteps + ' ➔</span>' +
@@ -16114,7 +18009,7 @@
           } else {
             subEl.innerHTML = 
               '<span class="subtitle-stage-pill" style="background:rgba(255,255,255,0.06); color:var(--text-muted);">Ad-hoc Schnittstelle</span>' +
-              '<span>Kante <strong>' + esc(selectedLink.id) + '</strong> (' + esc(selectedLink.protocol || 'Schnittstelle') + ') ist in keiner vordefinierten E2E-Kette registriert · Details im Spickzettel &amp; Inspektor</span>';
+              '<span>Kante <strong>' + esc(selectedLink.id) + '</strong> (' + esc(selectedLink.protocol || 'Schnittstelle') + ') ist in keiner vordefinierten End-to-End registriert · Details im Spickzettel &amp; Inspektor</span>';
           }
           return;
         }
@@ -16287,7 +18182,7 @@
                 '<div class="header-edge-integ-pills">' +
                   parentIntegs.filter(i => i.id !== selectedIntegration.id).map(integ => {
                     const sIdx = integ.steps.findIndex(s => s.connectionId === selectedLink.id);
-                    return '<button class="header-edge-integ-pill-btn" onclick="event.stopPropagation(); window.activateIntegrationFromEdge(\'' + integ.id + '\', \'' + selectedLink.id + '\')" title="Zu Kette \'' + esc(integ.name) + '\' wechseln">' +
+                    return '<button class="header-edge-integ-pill-btn" onclick="event.stopPropagation(); window.activateIntegrationFromEdge(\'' + integ.id + '\', \'' + selectedLink.id + '\')" title="Zu Integration \'' + esc(integ.name) + '\' wechseln">' +
                       '<span class="pill-id">' + integ.id + '</span>' +
                       '<span class="pill-step">Schritt ' + (sIdx + 1) + '/' + integ.steps.length + ' ➔</span>' +
                     '</button>';
@@ -16468,7 +18363,7 @@
                 parentIntegs.map(i => {
                   const stepIndex = i.steps.findIndex(s => s.connectionId === edge.id);
                   const isCurrentInteg = selectedIntegration && selectedIntegration.id === i.id;
-                  return '<div class="insp-stepper-box' + (isCurrentInteg ? ' active' : '') + '" onclick="window.activateIntegrationFromEdge(\'' + i.id + '\', \'' + edge.id + '\')" title="Kette \'' + i.name + '\' fokussieren & animieren">' +
+                  return '<div class="insp-stepper-box' + (isCurrentInteg ? ' active' : '') + '" onclick="window.activateIntegrationFromEdge(\'' + i.id + '\', \'' + edge.id + '\')" title="Integration \'' + i.name + '\' fokussieren & animieren">' +
                     '<div style="display:flex; align-items:center; justify-content:space-between; gap:6px;">' +
                       '<div style="display:flex; align-items:center; gap:6px; min-width:0;">' +
                         '<span class="insp-id" style="font-size:0.68rem; padding:1px 5px; background:var(--accent-glow); color:var(--accent);">' + i.id + '</span>' +
@@ -16494,7 +18389,7 @@
                     '</div>' +
                   '</div>';
                 }).join('') :
-                '<div style="font-size:0.7rem; color:var(--text-muted); padding:8px 0; background:rgba(255,255,255,0.03); border-radius:6px; text-align:center;">⚡ Ad-hoc Einzelschnittstelle · In keiner vordefinierten E2E-Kette registriert.</div>'
+                '<div style="font-size:0.7rem; color:var(--text-muted); padding:8px 0; background:rgba(255,255,255,0.03); border-radius:6px; text-align:center;">⚡ Ad-hoc Einzelschnittstelle · In keiner vordefinierten End-to-End registriert.</div>'
               ) +
             '</div>' +
 
@@ -17027,6 +18922,7 @@
 
       
       
+      
       // MIDDLEWARE RADAR LOGIC
       let selectedRadarHub = 'ALL';
       let selectedIntegCluster = 'ALL';
@@ -17070,9 +18966,9 @@
       });
 
       // =====================================================================
-      // POPOUT "BAY"-PHILOSOPHIE (Bottom-Centered, Group Re-centering & Hover Push-Aside)
+      // POPOUT "BAY"-PHILOSOPHIE (Between Drawers, Static Fan & Elevating Hover)
       // =====================================================================
-      function updatePopoutBayLayout(hoveredId) {
+      function updatePopoutBayLayout() {
         const bay = document.getElementById('popoutsContainer');
         const canvasEl = document.getElementById('canvasContainer');
         if (!bay || !canvasEl) return;
@@ -17085,99 +18981,38 @@
         const paddingX = 16;
         const availWidth = Math.max(300, canvasWidth - (paddingX * 2));
         const cardWidth = Math.min(380, availWidth);
-        const standardGap = 16;
+        const standardGap = 14;
         const totalNeeded = n * cardWidth + (n - 1) * standardGap;
 
-        const hoveredIdx = (hoveredId !== undefined && hoveredId !== null)
-          ? cards.findIndex(c => c.dataset.popoutId === hoveredId || c.id === 'popout-' + hoveredId)
-          : -1;
-
         if (totalNeeded <= availWidth) {
-          // Case A: Non-overfilled - center group side-by-side
+          // Case A: Group centered side-by-side
           const startX = paddingX + (availWidth - totalNeeded) / 2;
           cards.forEach((card, i) => {
             const leftPos = startX + i * (cardWidth + standardGap);
-            card.style.left = leftPos + 'px';
+            card.style.left = Math.round(leftPos) + 'px';
             card.style.width = cardWidth + 'px';
             card.style.bottom = '58px';
             card.style.top = 'auto';
-            card.style.zIndex = (i === hoveredIdx) ? 250 : (100 + i);
-            card.classList.toggle('popout-bay-hovered', i === hoveredIdx);
+            card.dataset.bayIndex = i;
+            if (!card.classList.contains('popout-bay-hovered')) {
+              card.style.zIndex = 100 + i;
+            }
           });
         } else {
-          // Case B: Overfilled Bay - cards overlap across availWidth
+          // Case B: Overfilled Bay - static fan layout across availWidth
           const maxSpan = availWidth - cardWidth;
-          const defaultStep = (n > 1) ? (maxSpan / (n - 1)) : 0;
-
-          if (hoveredIdx === -1) {
-            // Resting overlapping layout
-            cards.forEach((card, i) => {
-              const leftPos = paddingX + i * defaultStep;
-              card.style.left = leftPos + 'px';
-              card.style.width = cardWidth + 'px';
-              card.style.bottom = '58px';
-              card.style.top = 'auto';
+          const step = (n > 1) ? (maxSpan / (n - 1)) : 0;
+          cards.forEach((card, i) => {
+            const leftPos = paddingX + i * step;
+            card.style.left = Math.round(leftPos) + 'px';
+            card.style.width = cardWidth + 'px';
+            card.style.bottom = '58px';
+            card.style.top = 'auto';
+            card.dataset.bayIndex = i;
+            if (!card.classList.contains('popout-bay-hovered')) {
               card.style.zIndex = 100 + i;
-              card.classList.remove('popout-bay-hovered');
-            });
-          } else {
-            // Case C: Hover Expansion - push neighbor cards aside!
-            const targetLeft = paddingX + hoveredIdx * defaultStep;
-            const minLeftSpace = hoveredIdx * 38;
-            const minRightSpace = (n - 1 - hoveredIdx) * 38;
-            const minHovLeft = paddingX + minLeftSpace;
-            const maxHovLeft = paddingX + availWidth - cardWidth - minRightSpace;
-            const clampedHovLeft = (minHovLeft <= maxHovLeft)
-              ? Math.max(minHovLeft, Math.min(maxHovLeft, targetLeft))
-              : paddingX + (availWidth - cardWidth) / 2;
-
-            // Left cards (0 ... hoveredIdx - 1)
-            if (hoveredIdx > 0) {
-              const leftAvail = clampedHovLeft - paddingX;
-              const leftStep = (hoveredIdx === 1) ? 0 : ((leftAvail - 38) / (hoveredIdx - 1));
-              for (let i = 0; i < hoveredIdx; i++) {
-                const card = cards[i];
-                const leftPos = (hoveredIdx === 1)
-                  ? Math.max(paddingX, clampedHovLeft - 48)
-                  : (paddingX + i * leftStep);
-                card.style.left = Math.max(paddingX, Math.min(clampedHovLeft - 38, leftPos)) + 'px';
-                card.style.width = cardWidth + 'px';
-                card.style.bottom = '58px';
-                card.style.top = 'auto';
-                card.style.zIndex = 100 + i;
-                card.classList.remove('popout-bay-hovered');
-              }
             }
-
-            // Hovered card: 100% uncovered, elevated
-            const hovCard = cards[hoveredIdx];
-            hovCard.style.left = clampedHovLeft + 'px';
-            hovCard.style.width = cardWidth + 'px';
-            hovCard.style.bottom = '58px';
-            hovCard.style.top = 'auto';
-            hovCard.style.zIndex = 250;
-            hovCard.classList.add('popout-bay-hovered');
-
-            // Right cards (hoveredIdx + 1 ... n - 1)
-            const numRight = n - 1 - hoveredIdx;
-            if (numRight > 0) {
-              const rightStart = clampedHovLeft + cardWidth + 8;
-              const rightEnd = paddingX + availWidth - cardWidth;
-              const rSpace = Math.max(0, rightEnd - rightStart);
-              const rStep = (numRight > 1) ? (rSpace / (numRight - 1)) : 0;
-              for (let j = 0; j < numRight; j++) {
-                const idx = hoveredIdx + 1 + j;
-                const card = cards[idx];
-                const leftPos = (numRight === 1) ? rightStart : (rightStart + j * rStep);
-                card.style.left = Math.max(rightStart, Math.min(rightEnd, leftPos)) + 'px';
-                card.style.width = cardWidth + 'px';
-                card.style.bottom = '58px';
-                card.style.top = 'auto';
-                card.style.zIndex = 100 + (numRight - j);
-                card.classList.remove('popout-bay-hovered');
-              }
-            }
-          }
+          });
         }
       }
       window.updatePopoutBayLayout = updatePopoutBayLayout;
@@ -17190,43 +19025,103 @@
       if (cContainer) bayResizeObserver.observe(cContainer);
       window.addEventListener('resize', () => updatePopoutBayLayout());
 
-      // Filter Integrations in Left Drawer by Cluster & Search
+      // Filter & Render Integrations in Left Drawer with Domain/Process Context Prioritization
       function renderClusterIntegrations() {
         const listEl = document.getElementById('integrationList');
         if (!listEl) return;
         listEl.innerHTML = '';
 
         const term = (integSearchTerm || '').toLowerCase().trim();
+
+        // Identify relevant integrations based on active Domain, Process, or Link selection
+        let relevantIntegIds = new Set();
+        let hasContextFilter = false;
+
+        if (selectedProcess) {
+          hasContextFilter = true;
+          const procIntegSet = new Set(selectedProcess.cleanIntegIds || selectedProcess.integrations || []);
+          relevantIntegIds = procIntegSet;
+        } else if (selectedDomainId) {
+          hasContextFilter = true;
+          INTEGRATIONS_DATA.forEach(i => {
+            const touchesDomain = (i.steps || []).some(st => {
+              const sFrom = sysById.get(st.from);
+              const sTo = sysById.get(st.to);
+              return sFrom?.domain === selectedDomainId || sTo?.domain === selectedDomainId;
+            });
+            if (touchesDomain) relevantIntegIds.add(i.id);
+          });
+        } else if (selectedLink) {
+          hasContextFilter = true;
+          INTEGRATIONS_DATA.forEach(i => {
+            if ((i.steps || []).some(st => st.connectionId === selectedLink.id)) {
+              relevantIntegIds.add(i.id);
+            }
+          });
+        }
+
+        // Apply Cluster Tab & Text Search Filter
         const filtered = INTEGRATIONS_DATA.filter(i => {
           const matchCluster = (selectedIntegCluster === 'ALL' || i.cluster === selectedIntegCluster);
-          const matchSearch = !term || i.id.toLowerCase().includes(term) || i.name.toLowerCase().includes(term) || i.desc.toLowerCase().includes(term);
+          const matchSearch = !term || i.id.toLowerCase().includes(term) || i.name.toLowerCase().includes(term) || (i.desc && i.desc.toLowerCase().includes(term));
           return matchCluster && matchSearch;
         });
 
-        filtered.slice(0, 50).forEach(i => {
+        // Prioritize relevant integrations to the top of the list!
+        filtered.sort((a, b) => {
+          if (hasContextFilter) {
+            const aRel = relevantIntegIds.has(a.id);
+            const bRel = relevantIntegIds.has(b.id);
+            if (aRel && !bRel) return -1;
+            if (!aRel && bRel) return 1;
+          }
+          return a.id.localeCompare(b.id);
+        });
+
+        filtered.slice(0, 80).forEach(i => {
           const isSel = selectedIntegration && selectedIntegration.id === i.id;
+          const isRelevant = !hasContextFilter || relevantIntegIds.has(i.id);
+
           const row = document.createElement('div');
-          row.className = 'integ-row' + (isSel ? ' selected' : '');
+          row.className = 'list-item' + (isSel ? ' selected' : '') + (hasContextFilter && isRelevant ? ' edge-match' : (hasContextFilter && !isRelevant ? ' edge-dimmed' : ''));
+          row.id = 'integ-item-' + i.id;
           row.style.cursor = 'pointer';
+          row.style.marginBottom = '4px';
+          row.style.display = 'block';
+
+          const isSingle = (i.steps || []).length === 1;
+          const stepBadge = isSingle
+            ? '<span style="font-size:0.60rem; padding:1px 5px; border-radius:3px; background:rgba(16,185,129,0.18); color:#10b981; font-weight:700;">1-Schritt</span>'
+            : '<span style="font-size:0.60rem; color:var(--text-muted);">' + i.steps.length + ' Schritte</span>';
+
+          const relBadge = (hasContextFilter && isRelevant)
+            ? '<span style="font-size:0.58rem; padding:1px 5px; border-radius:3px; background:var(--accent); color:#0b0f17; font-weight:800; margin-left:4px;">● Relevant</span>'
+            : '';
+
           row.innerHTML = 
             '<div style="display:flex; align-items:center; justify-content:space-between;">' +
-              '<span class="integ-id" style="font-size:0.65rem; font-weight:700;">' + i.id + '</span>' +
-              '<span style="font-size:0.60rem; color:var(--text-muted);">' + i.steps.length + ' Schritte</span>' +
+              '<div style="display:flex; align-items:center; gap:4px;">' +
+                '<span class="integ-id" style="font-size:0.65rem; font-weight:700; color:var(--accent);">' + i.id + '</span>' +
+                relBadge +
+              '</div>' +
+              stepBadge +
             '</div>' +
-            '<div style="font-size:0.72rem; font-weight:650; color:var(--text-bright); margin-top:2px; line-height:1.2;">' + i.name + '</div>';
+            '<div style="font-size:0.72rem; font-weight:650; color:var(--text-bright); margin-top:2px; line-height:1.25;">' + i.name + '</div>' +
+            '<div style="font-size:0.63rem; color:var(--text-muted); margin-top:1px;">Hub: ' + (i.hubName || i.hub || 'Direct') + ' · ' + (i.protocol || '') + '</div>';
+
           row.onclick = () => {
-            selectIntegration(i);
+            setDrilldownIntegration(i);
           };
           listEl.appendChild(row);
         });
 
-        if (filtered.length > 50) {
+        if (filtered.length > 80) {
           const info = document.createElement('div');
           info.style.fontSize = '0.65rem';
           info.style.color = 'var(--text-muted)';
           info.style.textAlign = 'center';
-          info.style.padding = '4px 0';
-          info.textContent = '+ ' + (filtered.length - 50) + ' weitere Ketten (Suchfeld nutzen)';
+          info.style.padding = '6px 0';
+          info.textContent = '+ ' + (filtered.length - 80) + ' weitere Integrationen (Suchfeld nutzen)';
           listEl.appendChild(info);
         }
       }
@@ -17252,7 +19147,7 @@
       // Canvas Zoom Controls
       document.getElementById("btnZoomIn").onclick = () => svg.transition().duration(300).call(zoom.scaleBy, 1.3);
       document.getElementById("btnZoomOut").onclick = () => svg.transition().duration(300).call(zoom.scaleBy, 0.75);
-      document.getElementById("btnZoomReset").onclick = () => svg.transition().duration(400).call(zoom.transform, d3.zoomIdentity);
+      document.getElementById("btnZoomReset").onclick = () => svg.transition().duration(400).call(zoom.transform, defaultZoomTransform);
       document.getElementById("btnDownloadSvg").onclick = () => {
         const svgEl = document.getElementById("hebSvg");
         const serializer = new XMLSerializer();
@@ -17454,7 +19349,7 @@
             badgeClass: 'omni-badge-proc',
             badgeText: 'Prozess',
             title: p.id + ' · ' + p.name,
-            sub: p.category + ' · SLA: ' + p.sla + ' · ' + (p.integrations ? p.integrations.length : 0) + ' E2E-Ketten',
+            sub: p.category + ' · SLA: ' + p.sla + ' · ' + (p.integrations ? p.integrations.length : 0) + ' Integrationen',
             searchText: (p.id + ' ' + p.name + ' ' + p.category + ' ' + p.description).toLowerCase(),
             onSelect: () => {
               setDrilldownProcess(p);
