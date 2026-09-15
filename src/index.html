@@ -1889,21 +1889,33 @@
 
     
     
-    /* Middleware Radar Control Bar */
+    
+    /* Middleware Radar Control Bar (Top Centered inside Canvas) */
     .middleware-radar-bar {
       position: absolute;
-      top: 54px;
-      left: 310px;
-      right: 360px;
-      height: 38px;
-      background: var(--panel-bg);
-      border-bottom: 1px solid var(--card-border);
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      height: 36px;
+      max-width: calc(100% - 130px);
+      background: var(--pill-bg, rgba(15, 23, 42, 0.88));
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
       display: flex;
       align-items: center;
-      padding: 0 14px;
-      gap: 12px;
-      z-index: 90;
-      backdrop-filter: blur(8px);
+      padding: 0 12px;
+      gap: 8px;
+      z-index: 35;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+      white-space: nowrap;
+      overflow-x: auto;
+      scrollbar-width: none;
+      transition: all 0.2s ease;
+    }
+    .middleware-radar-bar::-webkit-scrollbar {
+      display: none;
     }
     .radar-title {
       display: flex;
@@ -1960,6 +1972,65 @@
       from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
     }
+
+    /* Selection Reset Button Positioning */
+    .floating-pill {
+      position: absolute;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--pill-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      border-radius: 30px;
+      padding: 7px 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 40;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s ease;
+    }
+    .floating-pill:hover {
+      border-color: var(--accent);
+      box-shadow: 0 0 16px var(--accent-glow);
+      transform: translateX(-50%) translateY(-2px);
+    }
+
+    /* Dynamic Popout Bay Container inside Canvas */
+    #popoutsContainer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 45;
+      overflow: visible;
+    }
+    .edge-popout-card, .sys-popout-card {
+      position: absolute;
+      width: 380px;
+      max-height: calc(100% - 130px);
+      background: var(--popout-bg, rgba(15, 23, 42, 0.94));
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
+      pointer-events: auto;
+      user-select: text;
+      transition: left 0.28s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.2s ease;
+      bottom: 58px;
+    }
+    .edge-popout-card.popout-bay-hovered, .sys-popout-card.popout-bay-hovered {
+      z-index: 250 !important;
+      transform: translateY(-8px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 0 2px var(--accent);
+    }
+
 
     /* ISO/OSI & TCP/IP Reference Stack Card in Edge Inspector */
     .insp-osi-card {
@@ -2060,7 +2131,6 @@
 
     /* Center Canvas & Floating Controls */
     .canvas-container {
-      margin-top: 38px;
       flex: 1;
       height: 100%;
       position: relative;
@@ -2850,7 +2920,11 @@
 
     <!-- CENTER CANVAS -->
     
-      <!-- MIDDLEWARE RADAR CONTROL BAR -->
+      
+
+    <main class="canvas-container" id="canvasContainer">
+
+      <!-- MIDDLEWARE RADAR CONTROL BAR (Top Centered inside Canvas) -->
       <div class="middleware-radar-bar" id="middlewareRadarBar">
         <div class="radar-title">
           <span style="font-size:0.9rem;">📡</span>
@@ -2867,7 +2941,6 @@
         </div>
       </div>
 
-    <main class="canvas-container" id="canvasContainer">
       <svg id="hebSvg"></svg>
 
       <!-- Top-right Canvas Zoom / Reset controls -->
@@ -2886,6 +2959,9 @@
       </div>
 
       <!-- FLOATING PILL AT BOTTOM CENTER: Reset Selection Action -->
+      <!-- MULTI-POPOUT BAY CONTAINER -->
+      <div id="popoutsContainer"></div>
+
       <div class="floating-pill" id="btnResetAll" title="Filter und Hervorhebung aufheben">
         <span style="font-size:0.75rem; font-weight:700; color:var(--text-bright); display:flex; align-items:center; gap:6px;">
           <span>⟲</span>
@@ -2934,7 +3010,7 @@
   </div>
 
   <!-- DYNAMIC MULTI-POPOUT CONTAINER (supports multiple concurrent pop-outs with location-finder) -->
-  <div id="popoutsContainer"></div>
+  
 
   <!-- Architecture Data injected from Node -->
   <script>
@@ -4464,7 +4540,7 @@
     ],
     "rawWeight": 230,
     "id": "CON-01",
-    "trafficPct": 0.598,
+    "trafficPct": 0.452,
     "flowType": "INTRA_CLOUD",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_CLOUD_MESH"
@@ -4482,7 +4558,7 @@
     ],
     "rawWeight": 260,
     "id": "CON-02",
-    "trafficPct": 0.676,
+    "trafficPct": 0.511,
     "flowType": "INTRA_CLOUD",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_CLOUD_MESH"
@@ -4503,7 +4579,7 @@
     ],
     "rawWeight": 450,
     "id": "CON-03",
-    "trafficPct": 1.17,
+    "trafficPct": 0.884,
     "flowType": "INTRA_CLOUD",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_CLOUD_MESH"
@@ -4525,7 +4601,7 @@
     ],
     "rawWeight": 440,
     "id": "CON-04",
-    "trafficPct": 1.144,
+    "trafficPct": 0.865,
     "flowType": "HYBRID_ONPREM_CLOUD",
     "isCrossBoundary": true,
     "transportOverlay": "SAP_CLOUD_CONNECTOR_TUNNEL"
@@ -4548,7 +4624,7 @@
     ],
     "rawWeight": 280,
     "id": "CON-05",
-    "trafficPct": 0.728,
+    "trafficPct": 0.55,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "SAP_CLOUD_CONNECTOR_TUNNEL"
@@ -4567,7 +4643,7 @@
     ],
     "rawWeight": 180,
     "id": "CON-06",
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "INTRA_CLOUD",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_CLOUD_MESH"
@@ -4587,7 +4663,7 @@
     ],
     "rawWeight": 160,
     "id": "CON-07",
-    "trafficPct": 0.416,
+    "trafficPct": 0.314,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -4607,7 +4683,7 @@
     ],
     "rawWeight": 140,
     "id": "CON-08",
-    "trafficPct": 0.364,
+    "trafficPct": 0.275,
     "flowType": "EXTERNAL_B2B",
     "isCrossBoundary": true,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -4626,7 +4702,7 @@
     ],
     "rawWeight": 220,
     "id": "CON-09",
-    "trafficPct": 0.572,
+    "trafficPct": 0.432,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -4643,7 +4719,7 @@
     ],
     "rawWeight": 150,
     "id": "CON-10",
-    "trafficPct": 0.39,
+    "trafficPct": 0.295,
     "flowType": "EXTERNAL_B2B",
     "isCrossBoundary": true,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -4663,7 +4739,7 @@
     ],
     "rawWeight": 90,
     "id": "CON-11",
-    "trafficPct": 0.234,
+    "trafficPct": 0.177,
     "flowType": "HYBRID_ONPREM_CLOUD",
     "isCrossBoundary": true,
     "transportOverlay": "HYBRID_EXPRESSROUTE_OR_TLS"
@@ -4686,7 +4762,7 @@
     ],
     "rawWeight": 210,
     "id": "CON-12",
-    "trafficPct": 0.546,
+    "trafficPct": 0.413,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "SAP_CLOUD_CONNECTOR_TUNNEL"
@@ -4707,7 +4783,7 @@
     ],
     "rawWeight": 680,
     "id": "CON-13",
-    "trafficPct": 1.768,
+    "trafficPct": 1.336,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -4725,7 +4801,7 @@
     ],
     "rawWeight": 420,
     "id": "CON-14",
-    "trafficPct": 1.092,
+    "trafficPct": 0.825,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -4743,7 +4819,7 @@
     ],
     "rawWeight": 480,
     "id": "CON-15",
-    "trafficPct": 1.248,
+    "trafficPct": 0.943,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -4762,7 +4838,7 @@
     ],
     "rawWeight": 500,
     "id": "CON-16",
-    "trafficPct": 1.3,
+    "trafficPct": 0.983,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -4782,7 +4858,7 @@
     ],
     "rawWeight": 260,
     "id": "CON-17",
-    "trafficPct": 0.676,
+    "trafficPct": 0.511,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -4803,7 +4879,7 @@
     ],
     "rawWeight": 310,
     "id": "CON-18",
-    "trafficPct": 0.806,
+    "trafficPct": 0.609,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -4823,7 +4899,7 @@
     ],
     "rawWeight": 350,
     "id": "CON-19",
-    "trafficPct": 0.91,
+    "trafficPct": 0.688,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -4843,7 +4919,7 @@
     ],
     "rawWeight": 340,
     "id": "CON-20",
-    "trafficPct": 0.884,
+    "trafficPct": 0.668,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -4863,7 +4939,7 @@
     ],
     "rawWeight": 320,
     "id": "CON-21",
-    "trafficPct": 0.832,
+    "trafficPct": 0.629,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -4880,7 +4956,7 @@
     ],
     "rawWeight": 140,
     "id": "CON-22",
-    "trafficPct": 0.364,
+    "trafficPct": 0.275,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -4899,7 +4975,7 @@
     ],
     "rawWeight": 220,
     "id": "CON-23",
-    "trafficPct": 0.572,
+    "trafficPct": 0.432,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -4917,7 +4993,7 @@
     ],
     "rawWeight": 110,
     "id": "CON-24",
-    "trafficPct": 0.286,
+    "trafficPct": 0.216,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -4936,7 +5012,7 @@
     ],
     "rawWeight": 260,
     "id": "CON-25",
-    "trafficPct": 0.676,
+    "trafficPct": 0.511,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -4954,7 +5030,7 @@
     ],
     "rawWeight": 240,
     "id": "CON-26",
-    "trafficPct": 0.624,
+    "trafficPct": 0.472,
     "flowType": "EXTERNAL_B2B",
     "isCrossBoundary": true,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -4973,7 +5049,7 @@
     ],
     "rawWeight": 310,
     "id": "CON-27",
-    "trafficPct": 0.806,
+    "trafficPct": 0.609,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -4992,7 +5068,7 @@
     ],
     "rawWeight": 130,
     "id": "CON-28",
-    "trafficPct": 0.338,
+    "trafficPct": 0.256,
     "flowType": "EXTERNAL_INGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -5013,7 +5089,7 @@
     ],
     "rawWeight": 520,
     "id": "CON-29",
-    "trafficPct": 1.352,
+    "trafficPct": 1.022,
     "flowType": "EXTERNAL_INGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -5032,7 +5108,7 @@
     ],
     "rawWeight": 510,
     "id": "CON-30",
-    "trafficPct": 1.326,
+    "trafficPct": 1.002,
     "flowType": "HYBRID_ONPREM_CLOUD",
     "isCrossBoundary": true,
     "transportOverlay": "HYBRID_EXPRESSROUTE_OR_TLS"
@@ -5048,7 +5124,7 @@
     ],
     "rawWeight": 240,
     "id": "CON-31",
-    "trafficPct": 0.624,
+    "trafficPct": 0.472,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -5067,7 +5143,7 @@
     ],
     "rawWeight": 190,
     "id": "CON-32",
-    "trafficPct": 0.494,
+    "trafficPct": 0.373,
     "flowType": "EXTERNAL_B2B",
     "isCrossBoundary": true,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -5086,7 +5162,7 @@
     ],
     "rawWeight": 310,
     "id": "CON-33",
-    "trafficPct": 0.806,
+    "trafficPct": 0.609,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -5105,7 +5181,7 @@
     ],
     "rawWeight": 270,
     "id": "CON-34",
-    "trafficPct": 0.702,
+    "trafficPct": 0.531,
     "flowType": "EXTERNAL_B2B",
     "isCrossBoundary": true,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -5124,7 +5200,7 @@
     ],
     "rawWeight": 160,
     "id": "CON-35",
-    "trafficPct": 0.416,
+    "trafficPct": 0.314,
     "flowType": "EXTERNAL_INGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -5143,7 +5219,7 @@
     ],
     "rawWeight": 180,
     "id": "CON-36",
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_INGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -5164,7 +5240,7 @@
     ],
     "rawWeight": 110,
     "id": "CON-37",
-    "trafficPct": 0.286,
+    "trafficPct": 0.216,
     "flowType": "EXTERNAL_INGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "IPSEC_VPN"
@@ -5185,7 +5261,7 @@
     ],
     "rawWeight": 130,
     "id": "CON-38",
-    "trafficPct": 0.338,
+    "trafficPct": 0.256,
     "flowType": "HYBRID_ONPREM_CLOUD",
     "isCrossBoundary": true,
     "transportOverlay": "HYBRID_EXPRESSROUTE_OR_TLS"
@@ -5204,7 +5280,7 @@
     ],
     "rawWeight": 120,
     "id": "CON-39",
-    "trafficPct": 0.312,
+    "trafficPct": 0.236,
     "flowType": "INTRA_CLOUD",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_CLOUD_MESH"
@@ -5221,7 +5297,7 @@
     ],
     "rawWeight": 380,
     "id": "CON-40",
-    "trafficPct": 0.988,
+    "trafficPct": 0.747,
     "flowType": "EXTERNAL_INGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -5239,7 +5315,7 @@
     ],
     "rawWeight": 320,
     "id": "CON-41",
-    "trafficPct": 0.832,
+    "trafficPct": 0.629,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -5258,7 +5334,7 @@
     ],
     "rawWeight": 290,
     "id": "CON-42",
-    "trafficPct": 0.754,
+    "trafficPct": 0.57,
     "flowType": "EXTERNAL_INGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -5283,7 +5359,7 @@
     ],
     "rawWeight": 310,
     "id": "CON-43",
-    "trafficPct": 0.806,
+    "trafficPct": 0.609,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "TI_VPN_KIM"
@@ -5306,7 +5382,7 @@
     ],
     "rawWeight": 460,
     "id": "CON-44",
-    "trafficPct": 1.196,
+    "trafficPct": 0.904,
     "flowType": "EXTERNAL_INGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "TI_VPN_KIM"
@@ -5329,7 +5405,7 @@
     ],
     "rawWeight": 390,
     "id": "CON-45",
-    "trafficPct": 1.014,
+    "trafficPct": 0.767,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "TI_VPN_KIM"
@@ -5353,7 +5429,7 @@
     ],
     "rawWeight": 410,
     "id": "CON-46",
-    "trafficPct": 1.066,
+    "trafficPct": 0.806,
     "flowType": "EXTERNAL_INGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "TI_VPN_KIM"
@@ -5374,7 +5450,7 @@
     ],
     "rawWeight": 140,
     "id": "CON-47",
-    "trafficPct": 0.364,
+    "trafficPct": 0.275,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "TI_VPN_KIM"
@@ -5396,7 +5472,7 @@
     ],
     "rawWeight": 120,
     "id": "CON-48",
-    "trafficPct": 0.312,
+    "trafficPct": 0.236,
     "flowType": "EXTERNAL_B2B",
     "isCrossBoundary": true,
     "transportOverlay": "TI_VPN_KIM"
@@ -5417,7 +5493,7 @@
     ],
     "rawWeight": 130,
     "id": "CON-49",
-    "trafficPct": 0.338,
+    "trafficPct": 0.256,
     "flowType": "EXTERNAL_INGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "TI_VPN_KIM"
@@ -5437,7 +5513,7 @@
     ],
     "rawWeight": 100,
     "id": "CON-50",
-    "trafficPct": 0.26,
+    "trafficPct": 0.197,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "TI_VPN_KIM"
@@ -5458,7 +5534,7 @@
     ],
     "rawWeight": 540,
     "id": "CON-51",
-    "trafficPct": 1.404,
+    "trafficPct": 1.061,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -5476,7 +5552,7 @@
     ],
     "rawWeight": 490,
     "id": "CON-52",
-    "trafficPct": 1.274,
+    "trafficPct": 0.963,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -5496,7 +5572,7 @@
     ],
     "rawWeight": 370,
     "id": "CON-53",
-    "trafficPct": 0.962,
+    "trafficPct": 0.727,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "TI_VPN_KIM"
@@ -5516,7 +5592,7 @@
     ],
     "rawWeight": 330,
     "id": "CON-54",
-    "trafficPct": 0.858,
+    "trafficPct": 0.649,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -5536,7 +5612,7 @@
     ],
     "rawWeight": 290,
     "id": "CON-55",
-    "trafficPct": 0.754,
+    "trafficPct": 0.57,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -5554,7 +5630,7 @@
     ],
     "rawWeight": 480,
     "id": "CON-56",
-    "trafficPct": 1.248,
+    "trafficPct": 0.943,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -5576,7 +5652,7 @@
     ],
     "rawWeight": 170,
     "id": "CON-57",
-    "trafficPct": 0.442,
+    "trafficPct": 0.334,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "TI_VPN_KIM"
@@ -5592,7 +5668,7 @@
     ],
     "rawWeight": 140,
     "id": "CON-58",
-    "trafficPct": 0.364,
+    "trafficPct": 0.275,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -5611,7 +5687,7 @@
     ],
     "rawWeight": 260,
     "id": "CON-59",
-    "trafficPct": 0.676,
+    "trafficPct": 0.511,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -5629,7 +5705,7 @@
     ],
     "rawWeight": 240,
     "id": "CON-60",
-    "trafficPct": 0.624,
+    "trafficPct": 0.472,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -5649,7 +5725,7 @@
     ],
     "rawWeight": 220,
     "id": "CON-61",
-    "trafficPct": 0.572,
+    "trafficPct": 0.432,
     "flowType": "EXTERNAL_INGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -5670,7 +5746,7 @@
     ],
     "rawWeight": 270,
     "id": "CON-62",
-    "trafficPct": 0.702,
+    "trafficPct": 0.531,
     "flowType": "HYBRID_ONPREM_CLOUD",
     "isCrossBoundary": true,
     "transportOverlay": "HYBRID_EXPRESSROUTE_OR_TLS"
@@ -5689,7 +5765,7 @@
     ],
     "rawWeight": 160,
     "id": "CON-63",
-    "trafficPct": 0.416,
+    "trafficPct": 0.314,
     "flowType": "EXTERNAL_B2B",
     "isCrossBoundary": true,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -5707,7 +5783,7 @@
     ],
     "rawWeight": 190,
     "id": "CON-64",
-    "trafficPct": 0.494,
+    "trafficPct": 0.373,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -5724,7 +5800,7 @@
     ],
     "rawWeight": 170,
     "id": "CON-65",
-    "trafficPct": 0.442,
+    "trafficPct": 0.334,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -5743,7 +5819,7 @@
     ],
     "rawWeight": 430,
     "id": "CON-66",
-    "trafficPct": 1.118,
+    "trafficPct": 0.845,
     "flowType": "EXTERNAL_INGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -5759,7 +5835,7 @@
     ],
     "rawWeight": 110,
     "id": "CON-67",
-    "trafficPct": 0.286,
+    "trafficPct": 0.216,
     "flowType": "EXTERNAL_INGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -5778,7 +5854,7 @@
     ],
     "rawWeight": 310,
     "id": "CON-68",
-    "trafficPct": 0.806,
+    "trafficPct": 0.609,
     "flowType": "EXTERNAL_INGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -5799,7 +5875,7 @@
     ],
     "rawWeight": 300,
     "id": "CON-69",
-    "trafficPct": 0.78,
+    "trafficPct": 0.59,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -5815,7 +5891,7 @@
     ],
     "rawWeight": 190,
     "id": "CON-70",
-    "trafficPct": 0.494,
+    "trafficPct": 0.373,
     "flowType": "EXTERNAL_B2B",
     "isCrossBoundary": true,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -5834,7 +5910,7 @@
     ],
     "rawWeight": 180,
     "id": "CON-71",
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_INGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -5852,7 +5928,7 @@
     ],
     "rawWeight": 290,
     "id": "CON-72",
-    "trafficPct": 0.754,
+    "trafficPct": 0.57,
     "flowType": "INTRA_CLOUD",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_CLOUD_MESH"
@@ -5871,7 +5947,7 @@
     ],
     "rawWeight": 320,
     "id": "CON-73",
-    "trafficPct": 0.832,
+    "trafficPct": 0.629,
     "flowType": "HYBRID_ONPREM_CLOUD",
     "isCrossBoundary": true,
     "transportOverlay": "HYBRID_EXPRESSROUTE_OR_TLS"
@@ -5890,7 +5966,7 @@
     ],
     "rawWeight": 260,
     "id": "CON-74",
-    "trafficPct": 0.676,
+    "trafficPct": 0.511,
     "flowType": "HYBRID_ONPREM_CLOUD",
     "isCrossBoundary": true,
     "transportOverlay": "HYBRID_EXPRESSROUTE_OR_TLS"
@@ -5910,7 +5986,7 @@
     ],
     "rawWeight": 360,
     "id": "CON-75",
-    "trafficPct": 0.936,
+    "trafficPct": 0.708,
     "flowType": "INTRA_CLOUD",
     "isCrossBoundary": false,
     "transportOverlay": "IPSEC_VPN"
@@ -5927,7 +6003,7 @@
     ],
     "rawWeight": 490,
     "id": "CON-76",
-    "trafficPct": 1.274,
+    "trafficPct": 0.963,
     "flowType": "INTRA_CLOUD",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_CLOUD_MESH"
@@ -5945,7 +6021,7 @@
     ],
     "rawWeight": 380,
     "id": "CON-77",
-    "trafficPct": 0.988,
+    "trafficPct": 0.747,
     "flowType": "HYBRID_ONPREM_CLOUD",
     "isCrossBoundary": true,
     "transportOverlay": "HYBRID_EXPRESSROUTE_OR_TLS"
@@ -5966,7 +6042,7 @@
     ],
     "rawWeight": 330,
     "id": "CON-78",
-    "trafficPct": 0.858,
+    "trafficPct": 0.649,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -5988,7 +6064,7 @@
     ],
     "rawWeight": 210,
     "id": "CON-79",
-    "trafficPct": 0.546,
+    "trafficPct": 0.413,
     "flowType": "HYBRID_ONPREM_CLOUD",
     "isCrossBoundary": true,
     "transportOverlay": "HYBRID_EXPRESSROUTE_OR_TLS"
@@ -6008,7 +6084,7 @@
     ],
     "rawWeight": 470,
     "id": "CON-80",
-    "trafficPct": 1.222,
+    "trafficPct": 0.924,
     "flowType": "HYBRID_ONPREM_CLOUD",
     "isCrossBoundary": true,
     "transportOverlay": "HYBRID_EXPRESSROUTE_OR_TLS"
@@ -6026,7 +6102,7 @@
     ],
     "rawWeight": 460,
     "id": "CON-81",
-    "trafficPct": 1.196,
+    "trafficPct": 0.904,
     "flowType": "EXTERNAL_INGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -6045,7 +6121,7 @@
     ],
     "rawWeight": 530,
     "id": "CON-82",
-    "trafficPct": 1.378,
+    "trafficPct": 1.042,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -6064,7 +6140,7 @@
     ],
     "rawWeight": 280,
     "id": "CON-83",
-    "trafficPct": 0.728,
+    "trafficPct": 0.55,
     "flowType": "INTRA_CLOUD",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_CLOUD_MESH"
@@ -6083,7 +6159,7 @@
     ],
     "rawWeight": 310,
     "id": "CON-84",
-    "trafficPct": 0.806,
+    "trafficPct": 0.609,
     "flowType": "HYBRID_ONPREM_CLOUD",
     "isCrossBoundary": true,
     "transportOverlay": "HYBRID_EXPRESSROUTE_OR_TLS"
@@ -6102,7 +6178,7 @@
     ],
     "rawWeight": 140,
     "id": "CON-85",
-    "trafficPct": 0.364,
+    "trafficPct": 0.275,
     "flowType": "HYBRID_ONPREM_CLOUD",
     "isCrossBoundary": true,
     "transportOverlay": "HYBRID_EXPRESSROUTE_OR_TLS"
@@ -6120,7 +6196,7 @@
     ],
     "rawWeight": 130,
     "id": "CON-86",
-    "trafficPct": 0.338,
+    "trafficPct": 0.256,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -6137,7 +6213,7 @@
     ],
     "rawWeight": 190,
     "id": "CON-87",
-    "trafficPct": 0.494,
+    "trafficPct": 0.373,
     "flowType": "INTRA_CLOUD",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_CLOUD_MESH"
@@ -6160,7 +6236,7 @@
     "id": "CON-88",
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
-    "trafficPct": 0.676,
+    "trafficPct": 0.511,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
   },
   {
@@ -6180,7 +6256,7 @@
     "id": "CON-89",
     "flowType": "INTRA_CLOUD",
     "isCrossBoundary": false,
-    "trafficPct": 0.624,
+    "trafficPct": 0.472,
     "transportOverlay": "TI_VPN_KIM"
   },
   {
@@ -6202,7 +6278,7 @@
     "id": "CON-90",
     "flowType": "EXTERNAL_INGRESS",
     "isCrossBoundary": true,
-    "trafficPct": 0.572,
+    "trafficPct": 0.432,
     "transportOverlay": "TI_VPN_KIM"
   },
   {
@@ -6221,7 +6297,7 @@
     "id": "CON-91",
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
-    "trafficPct": 0.806,
+    "trafficPct": 0.609,
     "transportOverlay": "INTRA_RZ_LAN"
   },
   {
@@ -6240,7 +6316,7 @@
     "id": "CON-92",
     "flowType": "EXTERNAL_INGRESS",
     "isCrossBoundary": true,
-    "trafficPct": 0.728,
+    "trafficPct": 0.55,
     "transportOverlay": "IPSEC_VPN"
   },
   {
@@ -6260,7 +6336,7 @@
     "id": "CON-93",
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
-    "trafficPct": 0.65,
+    "trafficPct": 0.491,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
   },
   {
@@ -6278,7 +6354,7 @@
     "id": "CON-94",
     "flowType": "EXTERNAL_B2B",
     "isCrossBoundary": false,
-    "trafficPct": 0.598,
+    "trafficPct": 0.452,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
   },
   {
@@ -6295,7 +6371,7 @@
     "id": "CON-95",
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
-    "trafficPct": 0.494,
+    "trafficPct": 0.373,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
   },
   {
@@ -6315,7 +6391,7 @@
     "id": "CON-96",
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
-    "trafficPct": 0.546,
+    "trafficPct": 0.413,
     "transportOverlay": "IPSEC_VPN"
   },
   {
@@ -6336,7 +6412,7 @@
     "id": "CON-97",
     "flowType": "INTRA_CLOUD",
     "isCrossBoundary": false,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "transportOverlay": "INTRA_CLOUD_MESH"
   },
   {
@@ -6355,7 +6431,7 @@
     "id": "CON-98",
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
-    "trafficPct": 0.52,
+    "trafficPct": 0.393,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
   },
   {
@@ -6373,7 +6449,7 @@
     "id": "CON-99",
     "flowType": "EXTERNAL_INGRESS",
     "isCrossBoundary": true,
-    "trafficPct": 0.494,
+    "trafficPct": 0.373,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
   },
   {
@@ -6391,7 +6467,7 @@
     "id": "CON-100",
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
-    "trafficPct": 0.546,
+    "trafficPct": 0.413,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
   },
   {
@@ -6411,7 +6487,7 @@
     "id": "CON-101",
     "flowType": "EXTERNAL_INGRESS",
     "isCrossBoundary": true,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
   },
   {
@@ -6435,7 +6511,7 @@
     "id": "CON-102",
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
-    "trafficPct": 0.442,
+    "trafficPct": 0.334,
     "transportOverlay": "SAP_CLOUD_CONNECTOR_TUNNEL"
   },
   {
@@ -6458,7 +6534,7 @@
     "flowType": "INTRA_CLOUD",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_BTP_MESH",
-    "trafficPct": 0.572
+    "trafficPct": 0.432
   },
   {
     "id": "CON-104",
@@ -6474,7 +6550,7 @@
       "OSI-L7"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -6494,7 +6570,7 @@
       "OSI-L7"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -6514,7 +6590,7 @@
       "OSI-L7"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -6534,7 +6610,7 @@
       "OSI-L7"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -6554,7 +6630,7 @@
       "OSI-L7"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -6572,7 +6648,7 @@
       "Klinik"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -6590,7 +6666,7 @@
       "Klinik"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -6609,7 +6685,7 @@
       "OSI-L7"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -6628,7 +6704,7 @@
       "OSI-L7"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -6647,7 +6723,7 @@
       "§ 301 SGB V"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -6665,7 +6741,7 @@
       "Klinik"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -6682,7 +6758,7 @@
       "Klinik"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -6702,7 +6778,7 @@
       "Portal"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_INGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "HYBRID_EXPRESSROUTE_OR_TLS"
@@ -6722,7 +6798,7 @@
       "Portal"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "HYBRID_EXPRESSROUTE_OR_TLS"
@@ -6742,7 +6818,7 @@
       "Telematik / TI"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "TI_VPN_KIM"
@@ -6762,7 +6838,7 @@
       "Telematik / TI"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_INGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "TI_VPN_KIM"
@@ -6780,7 +6856,7 @@
       "OSI-L7"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -6799,7 +6875,7 @@
       "Pflege"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -6819,7 +6895,7 @@
       "OSI-L7"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -6837,7 +6913,7 @@
       "Notfallrettung"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -6855,7 +6931,7 @@
       "Telematik / TI"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -6872,7 +6948,7 @@
       "Telematik / TI"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -6892,7 +6968,7 @@
       "Pflege"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_INGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -6909,7 +6985,7 @@
       "Portal"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -6926,7 +7002,7 @@
       "Pflege"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -6943,7 +7019,7 @@
       "Pflege"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -6961,7 +7037,7 @@
       "SAP"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "HYBRID_BRIDGE",
     "isCrossBoundary": true,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -6978,7 +7054,7 @@
       "Notfallrettung"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -6995,7 +7071,7 @@
       "Notfallrettung"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -7012,7 +7088,7 @@
       "Notfallrettung"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_B2B",
     "isCrossBoundary": true,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -7030,7 +7106,7 @@
       "Notfallrettung"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_B2B",
     "isCrossBoundary": true,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -7048,7 +7124,7 @@
       "Portal"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_B2B",
     "isCrossBoundary": true,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -7065,7 +7141,7 @@
       "Notfallrettung"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_B2B",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -7083,7 +7159,7 @@
       "Notfallrettung"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_INGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -7103,7 +7179,7 @@
       "§ 60 SGB V"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -7121,7 +7197,7 @@
       "MQTT"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -7138,7 +7214,7 @@
       "Kafka"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_INGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "HYBRID_EXPRESSROUTE_OR_TLS"
@@ -7155,7 +7231,7 @@
       "Kafka"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -7173,7 +7249,7 @@
       "SAP"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "INTRA_CLOUD",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_CLOUD_MESH"
@@ -7192,7 +7268,7 @@
       "SAP"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "INTRA_CLOUD_MESH"
@@ -7211,7 +7287,7 @@
       "SAP"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_INGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "INTRA_CLOUD_MESH"
@@ -7230,7 +7306,7 @@
       "SAP"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "HYBRID_BRIDGE",
     "isCrossBoundary": true,
     "transportOverlay": "HYBRID_EXPRESSROUTE_OR_TLS"
@@ -7248,7 +7324,7 @@
       "SAP"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "HYBRID_BRIDGE",
     "isCrossBoundary": true,
     "transportOverlay": "HYBRID_EXPRESSROUTE_OR_TLS"
@@ -7266,7 +7342,7 @@
       "SAP"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_INGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -7286,7 +7362,7 @@
       "SAP"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "INTRA_CLOUD_MESH"
@@ -7304,7 +7380,7 @@
       "SAP"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "INTRA_CLOUD_MESH"
@@ -7322,7 +7398,7 @@
       "Peppol"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_B2B",
     "isCrossBoundary": false,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -7340,7 +7416,7 @@
       "OSI-L7"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_B2B",
     "isCrossBoundary": false,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -7358,7 +7434,7 @@
       "SAP"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_INGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -7376,7 +7452,7 @@
       "SAP"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_INGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -7395,7 +7471,7 @@
       "SAP"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "INTRA_CLOUD",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_CLOUD_MESH"
@@ -7414,7 +7490,7 @@
       "Personal / HR"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -7432,7 +7508,7 @@
       "SAP"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "HYBRID_BRIDGE",
     "isCrossBoundary": true,
     "transportOverlay": "HYBRID_EXPRESSROUTE_OR_TLS"
@@ -7450,7 +7526,7 @@
       "Kafka"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "HYBRID_BRIDGE",
     "isCrossBoundary": true,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -7469,7 +7545,7 @@
       "SAP"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "INTRA_CLOUD",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_CLOUD_MESH"
@@ -7488,7 +7564,7 @@
       "SAP"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "INTRA_CLOUD",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_CLOUD_MESH"
@@ -7506,7 +7582,7 @@
       "Telematik / TI"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.468,
+    "trafficPct": 0.354,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -7524,7 +7600,7 @@
       "OSI-L7"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -7542,7 +7618,7 @@
       "OSI-L7"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -7559,7 +7635,7 @@
       "OSI-L7"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "HYBRID_EXPRESSROUTE_OR_TLS"
@@ -7577,7 +7653,7 @@
       "OSI-L7"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -7594,7 +7670,7 @@
       "OSI-L7"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "HYBRID_EXPRESSROUTE_OR_TLS"
@@ -7613,7 +7689,7 @@
       "Telematik / TI"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "TI_VPN_KIM"
@@ -7630,7 +7706,7 @@
       "OSI-L7"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -7646,7 +7722,7 @@
       "Pflege"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "HYBRID_BRIDGE",
     "isCrossBoundary": true,
     "transportOverlay": "HYBRID_EXPRESSROUTE_OR_TLS"
@@ -7663,7 +7739,7 @@
       "Pflege"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "INTRA_CLOUD_MESH"
@@ -7682,7 +7758,7 @@
       "Pflege"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_B2B",
     "isCrossBoundary": true,
     "transportOverlay": "HYBRID_EXPRESSROUTE_OR_TLS"
@@ -7699,7 +7775,7 @@
       "Pflege"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_INGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -7715,7 +7791,7 @@
       "Pflege"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_INGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "HYBRID_EXPRESSROUTE_OR_TLS"
@@ -7733,7 +7809,7 @@
       "Pflege"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "HYBRID_EXPRESSROUTE_OR_TLS"
@@ -7752,7 +7828,7 @@
       "Telematik / TI"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "TI_VPN_KIM"
@@ -7771,7 +7847,7 @@
       "Pflege"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_INGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "HYBRID_EXPRESSROUTE_OR_TLS"
@@ -7788,7 +7864,7 @@
       "Pflege"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -7805,7 +7881,7 @@
       "Pflege"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_INGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "HYBRID_EXPRESSROUTE_OR_TLS"
@@ -7823,7 +7899,7 @@
       "Pflege"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_INGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "HYBRID_EXPRESSROUTE_OR_TLS"
@@ -7841,7 +7917,7 @@
       "Pflege"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "HYBRID_EXPRESSROUTE_OR_TLS"
@@ -7858,7 +7934,7 @@
       "Pflege"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -7876,7 +7952,7 @@
       "Pflege"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_B2B",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_CLOUD_MESH"
@@ -7894,7 +7970,7 @@
       "Pflege"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -7911,7 +7987,7 @@
       "Pflege"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "HYBRID_EXPRESSROUTE_OR_TLS"
@@ -7928,7 +8004,7 @@
       "Pflege"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "HYBRID_BRIDGE",
     "isCrossBoundary": true,
     "transportOverlay": "HYBRID_EXPRESSROUTE_OR_TLS"
@@ -7947,7 +8023,7 @@
       "OSI-L7"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -7965,7 +8041,7 @@
       "OSI-L7"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -7982,7 +8058,7 @@
       "Notfallrettung"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "HYBRID_EXPRESSROUTE_OR_TLS"
@@ -7998,7 +8074,7 @@
       "Notfallrettung"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_B2B",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_CLOUD_MESH"
@@ -8015,7 +8091,7 @@
       "Notfallrettung"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -8032,7 +8108,7 @@
       "Notfallrettung"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_B2B",
     "isCrossBoundary": false,
     "transportOverlay": "PUBLIC_INTERNET_TLS"
@@ -8050,7 +8126,7 @@
       "SAP"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_INGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "INTRA_CLOUD_MESH"
@@ -8068,7 +8144,7 @@
       "Personal / HR"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "HYBRID_EXPRESSROUTE_OR_TLS"
@@ -8086,7 +8162,7 @@
       "Personal / HR"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_RZ_LAN"
@@ -8105,7 +8181,7 @@
       "Telematik / TI"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "TI_VPN_KIM"
@@ -8123,7 +8199,7 @@
       "SAP"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "HYBRID_BRIDGE",
     "isCrossBoundary": true,
     "transportOverlay": "HYBRID_EXPRESSROUTE_OR_TLS"
@@ -8140,7 +8216,7 @@
       "SAP"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "INTRA_CLOUD",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_CLOUD_MESH"
@@ -8158,7 +8234,7 @@
       "SAP"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_INGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "INTRA_CLOUD_MESH"
@@ -8175,7 +8251,7 @@
       "SAP"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "INTRA_CLOUD",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_CLOUD_MESH"
@@ -8193,7 +8269,7 @@
       "OSI-L7"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_B2B",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_CLOUD_MESH"
@@ -8209,7 +8285,7 @@
       "Connectivity Services"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_INGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "INTRA_CLOUD_MESH"
@@ -8226,7 +8302,7 @@
       "Personal / HR"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "INTRA_CLOUD",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_CLOUD_MESH"
@@ -8245,7 +8321,7 @@
       "SAP"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "HYBRID_EXPRESSROUTE_OR_TLS"
@@ -8262,7 +8338,7 @@
       "SAP"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_INGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "HYBRID_EXPRESSROUTE_OR_TLS"
@@ -8278,7 +8354,7 @@
       "Personal / HR"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "INTRA_CLOUD_MESH"
@@ -8295,7 +8371,7 @@
       "SAP"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_B2B",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_CLOUD_MESH"
@@ -8313,7 +8389,7 @@
       "SAP"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_INGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "INTRA_CLOUD_MESH"
@@ -8329,7 +8405,7 @@
       "Connectivity Services"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "INTRA_CLOUD",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_CLOUD_MESH"
@@ -8346,7 +8422,7 @@
       "SAP"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "INTRA_CLOUD_MESH"
@@ -8363,7 +8439,7 @@
       "SAP"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "INTRA_CLOUD",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_CLOUD_MESH"
@@ -8379,7 +8455,7 @@
       "KRITIS"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "HYBRID_BRIDGE",
     "isCrossBoundary": true,
     "transportOverlay": "HYBRID_EXPRESSROUTE_OR_TLS"
@@ -8395,7 +8471,7 @@
       "Connectivity Services"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_INGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "INTRA_CLOUD_MESH"
@@ -8411,7 +8487,7 @@
       "Connectivity Services"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "INTRA_CLOUD_MESH"
@@ -8427,7 +8503,7 @@
       "Connectivity Services"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "INTRA_CLOUD",
     "isCrossBoundary": false,
     "transportOverlay": "INTRA_CLOUD_MESH"
@@ -8447,7 +8523,7 @@
       "Telematik / TI"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "TI_VPN_KIM"
@@ -8465,7 +8541,7 @@
       "Telematik / TI"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_INGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "TI_VPN_KIM"
@@ -8485,7 +8561,7 @@
       "Telematik / TI"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "TI_VPN_KIM"
@@ -8504,7 +8580,7 @@
       "Telematik / TI"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "TI_VPN_KIM"
@@ -8522,7 +8598,7 @@
       "Telematik / TI"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_INGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "TI_VPN_KIM"
@@ -8540,7 +8616,7 @@
       "Telematik / TI"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_INGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "TI_VPN_KIM"
@@ -8559,7 +8635,7 @@
       "Telematik / TI"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "TI_VPN_KIM"
@@ -8576,7 +8652,7 @@
       "Telematik / TI"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_INGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "TI_VPN_KIM"
@@ -8593,7 +8669,7 @@
       "Telematik / TI"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "TI_VPN_KIM"
@@ -8613,7 +8689,7 @@
       "Telematik / TI"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "TI_VPN_KIM"
@@ -8633,7 +8709,7 @@
       "Telematik / TI"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "TI_VPN_KIM"
@@ -8653,7 +8729,7 @@
       "Telematik / TI"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "TI_VPN_KIM"
@@ -8672,7 +8748,7 @@
       "Telematik / TI"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "TI_VPN_KIM"
@@ -8692,7 +8768,7 @@
       "Telematik / TI"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "INTRA_ON_PREM",
     "isCrossBoundary": false,
     "transportOverlay": "TI_VPN_KIM"
@@ -8710,7 +8786,7 @@
       "Telematik / TI"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "TI_VPN_KIM"
@@ -8727,7 +8803,7 @@
       "Telematik / TI"
     ],
     "rawWeight": 180,
-    "trafficPct": 0.62,
+    "trafficPct": 0.354,
     "flowType": "EXTERNAL_EGRESS",
     "isCrossBoundary": true,
     "transportOverlay": "TI_VPN_KIM"
@@ -14537,6 +14613,7 @@
         if (card) {
           card.remove();
           openPopouts.delete(popoutId);
+          updatePopoutBayLayout();
         }
 
         // If it was a system node pop-out:
@@ -14575,6 +14652,7 @@
       function closeAllPopouts() {
         openPopouts.forEach(card => card.remove());
         openPopouts.clear();
+        updatePopoutBayLayout();
         d3.selectAll(".edge-link").classed("locating-beacon", false);
         d3.selectAll(".sys-node-group").classed("locating-beacon-node", false);
         d3.selectAll(".locator-beacon-ring").remove();
@@ -14683,23 +14761,9 @@
             parentIntegsHtml +
           '</div>';
 
-        // Calculate Position (Staggered or at Mouse)
-        let left, top;
-        if (mouseX !== undefined && mouseY !== undefined) {
-          const maxLeft = window.innerWidth - 420;
-          const maxTop = window.innerHeight - 280;
-          left = Math.min(maxLeft, Math.max(20, mouseX + 15));
-          top = Math.min(maxTop, Math.max(60, mouseY - 40));
-        } else {
-          const count = openPopouts.size;
-          left = 430 + ((count % 6) * 35);
-          top = 85 + ((count % 6) * 35);
-        }
-
-        card.style.left = left + "px";
-        card.style.top = top + "px";
-        popoutZIndexCounter++;
-        card.style.zIndex = popoutZIndexCounter;
+        card.dataset.popoutId = edge.id;
+        card.addEventListener('mouseenter', () => updatePopoutBayLayout(edge.id));
+        card.addEventListener('mouseleave', () => updatePopoutBayLayout(null));
 
         // Bring to front on mousedown anywhere on card
         card.addEventListener("mousedown", () => {
@@ -14750,6 +14814,7 @@
 
         popoutsContainer.appendChild(card);
         openPopouts.set(edge.id, card);
+        updatePopoutBayLayout();
         return card;
       }
       window.showEdgePopout = showEdgePopout;
@@ -14838,23 +14903,9 @@
             '</div>' +
           '</div>';
 
-        // Calculate Position (Staggered or at Mouse)
-        let left, top;
-        if (mouseX !== undefined && mouseY !== undefined) {
-          const maxLeft = window.innerWidth - 420;
-          const maxTop = window.innerHeight - 380;
-          left = Math.min(maxLeft, Math.max(20, mouseX + 15));
-          top = Math.min(maxTop, Math.max(60, mouseY - 40));
-        } else {
-          const count = openPopouts.size;
-          left = 400 + ((count % 6) * 35);
-          top = 90 + ((count % 6) * 35);
-        }
-
-        card.style.left = left + "px";
-        card.style.top = top + "px";
-        popoutZIndexCounter++;
-        card.style.zIndex = popoutZIndexCounter;
+        card.dataset.popoutId = sys.id;
+        card.addEventListener('mouseenter', () => updatePopoutBayLayout(sys.id));
+        card.addEventListener('mouseleave', () => updatePopoutBayLayout(null));
 
         // Bring to front on mousedown anywhere on card
         card.addEventListener("mousedown", () => {
@@ -14905,6 +14956,7 @@
 
         popoutsContainer.appendChild(card);
         openPopouts.set(sys.id, card);
+        updatePopoutBayLayout();
         return card;
       }
       window.showNodePopout = showNodePopout;
@@ -15389,6 +15441,10 @@
 
       // Reset All Action
       document.getElementById("btnResetAll").onclick = () => {
+        closeAllPopouts();
+        selectedRadarHub = "ALL";
+        document.querySelectorAll(".radar-pill").forEach(b => b.classList.toggle("active", b.getAttribute("data-hub") === "ALL"));
+        d3.selectAll(".superhub-halo").remove();
         selectedScope = 'ALL';
         selectedDomainId = null;
         selectedProcess = null;
@@ -16970,6 +17026,7 @@
       });
 
       
+      
       // MIDDLEWARE RADAR LOGIC
       let selectedRadarHub = 'ALL';
       let selectedIntegCluster = 'ALL';
@@ -16992,7 +17049,7 @@
             // Locate the Hub Node
             const hubNode = SYSTEMS_DATA.find(s => s.id === hubId);
             if (hubNode) {
-              selectNode(hubNode, window.innerWidth / 2, window.innerHeight / 2);
+              selectNode(hubNode);
               
               // Draw rotating superhub halo
               d3.selectAll('.superhub-halo').remove();
@@ -17011,6 +17068,127 @@
           }
         });
       });
+
+      // =====================================================================
+      // POPOUT "BAY"-PHILOSOPHIE (Bottom-Centered, Group Re-centering & Hover Push-Aside)
+      // =====================================================================
+      function updatePopoutBayLayout(hoveredId) {
+        const bay = document.getElementById('popoutsContainer');
+        const canvasEl = document.getElementById('canvasContainer');
+        if (!bay || !canvasEl) return;
+
+        const cards = Array.from(openPopouts.values()).filter(c => c && c.parentNode === bay);
+        const n = cards.length;
+        if (n === 0) return;
+
+        const canvasWidth = canvasEl.clientWidth;
+        const paddingX = 16;
+        const availWidth = Math.max(300, canvasWidth - (paddingX * 2));
+        const cardWidth = Math.min(380, availWidth);
+        const standardGap = 16;
+        const totalNeeded = n * cardWidth + (n - 1) * standardGap;
+
+        const hoveredIdx = (hoveredId !== undefined && hoveredId !== null)
+          ? cards.findIndex(c => c.dataset.popoutId === hoveredId || c.id === 'popout-' + hoveredId)
+          : -1;
+
+        if (totalNeeded <= availWidth) {
+          // Case A: Non-overfilled - center group side-by-side
+          const startX = paddingX + (availWidth - totalNeeded) / 2;
+          cards.forEach((card, i) => {
+            const leftPos = startX + i * (cardWidth + standardGap);
+            card.style.left = leftPos + 'px';
+            card.style.width = cardWidth + 'px';
+            card.style.bottom = '58px';
+            card.style.top = 'auto';
+            card.style.zIndex = (i === hoveredIdx) ? 250 : (100 + i);
+            card.classList.toggle('popout-bay-hovered', i === hoveredIdx);
+          });
+        } else {
+          // Case B: Overfilled Bay - cards overlap across availWidth
+          const maxSpan = availWidth - cardWidth;
+          const defaultStep = (n > 1) ? (maxSpan / (n - 1)) : 0;
+
+          if (hoveredIdx === -1) {
+            // Resting overlapping layout
+            cards.forEach((card, i) => {
+              const leftPos = paddingX + i * defaultStep;
+              card.style.left = leftPos + 'px';
+              card.style.width = cardWidth + 'px';
+              card.style.bottom = '58px';
+              card.style.top = 'auto';
+              card.style.zIndex = 100 + i;
+              card.classList.remove('popout-bay-hovered');
+            });
+          } else {
+            // Case C: Hover Expansion - push neighbor cards aside!
+            const targetLeft = paddingX + hoveredIdx * defaultStep;
+            const minLeftSpace = hoveredIdx * 38;
+            const minRightSpace = (n - 1 - hoveredIdx) * 38;
+            const minHovLeft = paddingX + minLeftSpace;
+            const maxHovLeft = paddingX + availWidth - cardWidth - minRightSpace;
+            const clampedHovLeft = (minHovLeft <= maxHovLeft)
+              ? Math.max(minHovLeft, Math.min(maxHovLeft, targetLeft))
+              : paddingX + (availWidth - cardWidth) / 2;
+
+            // Left cards (0 ... hoveredIdx - 1)
+            if (hoveredIdx > 0) {
+              const leftAvail = clampedHovLeft - paddingX;
+              const leftStep = (hoveredIdx === 1) ? 0 : ((leftAvail - 38) / (hoveredIdx - 1));
+              for (let i = 0; i < hoveredIdx; i++) {
+                const card = cards[i];
+                const leftPos = (hoveredIdx === 1)
+                  ? Math.max(paddingX, clampedHovLeft - 48)
+                  : (paddingX + i * leftStep);
+                card.style.left = Math.max(paddingX, Math.min(clampedHovLeft - 38, leftPos)) + 'px';
+                card.style.width = cardWidth + 'px';
+                card.style.bottom = '58px';
+                card.style.top = 'auto';
+                card.style.zIndex = 100 + i;
+                card.classList.remove('popout-bay-hovered');
+              }
+            }
+
+            // Hovered card: 100% uncovered, elevated
+            const hovCard = cards[hoveredIdx];
+            hovCard.style.left = clampedHovLeft + 'px';
+            hovCard.style.width = cardWidth + 'px';
+            hovCard.style.bottom = '58px';
+            hovCard.style.top = 'auto';
+            hovCard.style.zIndex = 250;
+            hovCard.classList.add('popout-bay-hovered');
+
+            // Right cards (hoveredIdx + 1 ... n - 1)
+            const numRight = n - 1 - hoveredIdx;
+            if (numRight > 0) {
+              const rightStart = clampedHovLeft + cardWidth + 8;
+              const rightEnd = paddingX + availWidth - cardWidth;
+              const rSpace = Math.max(0, rightEnd - rightStart);
+              const rStep = (numRight > 1) ? (rSpace / (numRight - 1)) : 0;
+              for (let j = 0; j < numRight; j++) {
+                const idx = hoveredIdx + 1 + j;
+                const card = cards[idx];
+                const leftPos = (numRight === 1) ? rightStart : (rightStart + j * rStep);
+                card.style.left = Math.max(rightStart, Math.min(rightEnd, leftPos)) + 'px';
+                card.style.width = cardWidth + 'px';
+                card.style.bottom = '58px';
+                card.style.top = 'auto';
+                card.style.zIndex = 100 + (numRight - j);
+                card.classList.remove('popout-bay-hovered');
+              }
+            }
+          }
+        }
+      }
+      window.updatePopoutBayLayout = updatePopoutBayLayout;
+
+      // Reactive Popout Bay Observer
+      const bayResizeObserver = new ResizeObserver(() => {
+        updatePopoutBayLayout();
+      });
+      const cContainer = document.getElementById('canvasContainer');
+      if (cContainer) bayResizeObserver.observe(cContainer);
+      window.addEventListener('resize', () => updatePopoutBayLayout());
 
       // Filter Integrations in Left Drawer by Cluster & Search
       function renderClusterIntegrations() {
