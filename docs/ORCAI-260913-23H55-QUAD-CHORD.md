@@ -381,4 +381,38 @@ Zur intuitiven Steuerung dieser komplexen Landschaft bietet die Anwendung oberha
 
 ---
 
-> *Johanniter-Unfall-Hilfe e.V. · Enterprise Architecture Management (EAM) · Dokument generiert und persistiert in ORCAI.*
+## 7. Interaktive PlantUML-Sequenzdiagramme & Schwebendes Prozessmodell-Pop-Out
+
+Für jeden Geschäftsprozess der IT-Landschaft steht ein synchronisiertes **UML 2.5 Sequenzdiagramm** zur Verfügung. Das Feature überbrückt die Lücke zwischen makroskopischer Enterprise Architecture (EAM) und mikroskopischer Integrations- und Sequenzmodellierung:
+
+### A. Schwebendes Pop-Out-Fenster (Floating Window)
+- **Verschiebbar & Skalierbar (Draggable & Resizable):** Das Pop-Out kann am oberen Header frei auf der Zeichenfläche verschoben und an allen Seiten beliebig vergrößert werden.
+- **Kein Blur / Keine Verdunklung (Zero Background Blur):** Das Pop-Out arbeitet ohne modales Backdrop. Der gesamte Hintergrund – D3-Chord-Diagramm, linker Drilldown und rechter Inspektor – bleibt gestochen scharf sichtbar, lesbar und interaktiv bedienbar.
+- **Vollbild-Umschaltung (`⛶ Vollbild` / `🗗 Wiederherstellen`):** Für komplexe Sequenzen mit vielen Akteuren und asynchronen Rückkanälen.
+- **Zoom & Navigation:** Stufenlose Zoom-Regelung (`🔍 +`, `🔍 -`, `1:1` Reset) mit dynamischer SVG-Skalierung.
+
+### B. Klickbare, bidirektionale Links im Diagramm (SVG Hyperlinks)
+Alle Akteure, Schnittstellen und Abschnitte im gerenderten SVG-Sequenzdiagramm sind aktive Hyperlinks, die direkt mit dem EAM-Modell interagieren:
+- **Akteur / Teilnehmer (`[[#sys-SYS_ID]]`):** Klick auf einen Akteur öffnet sofort dessen System-Spickzettel und fokussiert das System im Chord-Diagramm.
+- **Nachrichtenpfeil / Kante (`[[#conn-CONN_ID]]`):** Klick auf eine Nachricht fokussiert die physikalische Schnittstelle im EAM-Modell.
+- **Sequenz-Abschnitt (`== [[#integ-INTEG_ID]] ==`):** Klick auf einen Trennbalken aktiviert die gesamte E2E-Integrationskette inkl. Token-Animation auf der Zeichenfläche.
+
+### C. Der Selbstreferenz-Link (`🔗` im Pop-Out Header)
+Wenn Anwender bei geöffnetem Diagramm im Hintergrund navigieren (z. B. andere Systeme oder Kanten explorieren), ändert sich die aktive Auswahl der Plattform. 
+- Ein Klick auf das **🔗-Icon direkt im Titellabel des Pop-Outs** stellt die ursprüngliche Aufrufumgebung des Prozesses sofort wieder her:
+  - Aktiviert den aufrufenden Prozess im 5-Stufen-Drilldown (Stufe 2).
+  - Öffnet die Prozess-Detailansicht im rechten Inspektor.
+  - Selektiert die zugehörige Leit-Domäne (Stufe 1).
+  - Aktualisiert die zentrierte Breadcrumb-Headerleiste.
+  - Bereinigt isolierte System- oder Kantenfokusse – **ohne** das schwebende Sequenzdiagramm zu schließen.
+
+### D. Native 64-Bit PlantUML Deflate-Kompression & Externe Editoren
+- **1-Klick-Direktübergabe an externe Editoren:**
+  - **PlantText-Integration (`↗ PlantText`):** Öffnet das Sequenzdiagramm direkt im beliebten Online-Editor via nativer PlantUML-Deflate-Codierung (`CompressionStream('deflate-raw')` mit 6-Bit-Zeichenmapping `~1...`).
+  - **Offizieller PlantUML Server (`↗ PlantUML.com`):** Öffnet das Modell direkt auf dem offiziellen Server für Syntaxvalidierung und PDF/PNG-Generierung.
+- **SVG-Vektorgrafik-Download (`💾 SVG Download`):** Exportiert das Diagramm als gestochen scharfe Vektorgrafik für Präsentationen oder Fachkonzepte.
+- **Code in Zwischenablage (`📋 Kopieren`):** Kopiert den vollständigen PlantUML-Quelltext mit einem Klick.
+
+---
+
+> *Enterprise Architecture Management (EAM) · Dokument generiert und persistiert in ORCAI.*

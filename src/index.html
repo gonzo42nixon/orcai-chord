@@ -3880,6 +3880,27 @@
     .plantuml-popout-header:active {
       cursor: grabbing;
     }
+    .puml-selfref-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      color: var(--accent, #38bdf8);
+      border-radius: 4px;
+      padding: 1px 5px;
+      font-size: 0.82rem;
+      line-height: 1.2;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+    .puml-selfref-btn:hover {
+      background: rgba(56, 189, 248, 0.35);
+      border-color: var(--accent, #38bdf8);
+      transform: scale(1.15);
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
+    }
     .plantuml-popout-footer {
       padding: 6px 14px;
       background: rgba(15, 23, 42, 0.95);
@@ -19058,6 +19079,42 @@
       window.getSelectedNodeId = () => selectedNodeId;
       window.getSelectedNode = () => selectedNode;
 
+      window.restoreCallingProcessContext = function(procId) {
+        if (!procId) return;
+        const proc = PROCESSES_DATA.find(p => p.id === procId);
+        if (!proc) return;
+
+        // Reset isolated node and link focus
+        selectedNodeId = null;
+        selectedNode = null;
+        window.selectedNodeId = null;
+        window.selectedNode = null;
+        selectedLink = null;
+        window.selectedLink = null;
+        selectedIntegration = null;
+        window.selectedIntegration = null;
+        if (typeof stopTokenAnimation === 'function') {
+          stopTokenAnimation();
+        }
+
+        // Ensure lead domain is selected
+        if (proc.leadDomain) {
+          selectedDomainId = proc.leadDomain;
+        } else if (proc.domain) {
+          selectedDomainId = proc.domain;
+        } else if (proc.participatingDomains && proc.participatingDomains[0]) {
+          selectedDomainId = proc.participatingDomains[0];
+        }
+
+        // Set process and render inspector
+        selectedProcess = proc;
+        if (typeof renderInspectorProcess === 'function') {
+          renderInspectorProcess(selectedProcess);
+        }
+        updateUI();
+        updateHeaderDrilldownTitle();
+      };
+
       // Scope Chips in Left Drawer
       document.querySelectorAll(".scope-chip").forEach(chip => {
         chip.addEventListener("click", () => {
@@ -20149,6 +20206,7 @@
             '</div>' +
           '</div>';
       }
+      window.renderInspectorProcess = renderInspectorProcess;
 
       function renderInspectorIntegration(integ, activeStepOrder) {
         const src = sysById.get(integ.sourceSystem);
@@ -32254,7 +32312,12 @@
           modal.style.zIndex = popoutZIndexCounter;
         }
 
-        if (titleEl) titleEl.textContent = proc.id + ' · ' + proc.name;
+        const titleText = document.getElementById('plantUmlModalTitleText') || titleEl;
+        if (titleText) titleText.textContent = proc.id + ' · ' + proc.name;
+        const refBtn = document.getElementById('btnPumlRestoreContext');
+        if (refBtn) {
+          refBtn.title = 'Aufrufumgebung im EAM-Modell wiederherstellen (' + proc.id + ' · ' + proc.name + ')';
+        }
         if (spinner) spinner.style.display = 'flex';
         if (container) container.innerHTML = '';
         if (fallback) fallback.style.display = 'none';
@@ -32306,6 +32369,20 @@
       window.closePlantUmlModal = function() {
         const modal = document.getElementById('plantUmlViewerModal');
         if (modal) modal.style.display = 'none';
+      };
+
+      window.restorePlantUmlCallingContext = function() {
+        if (!currentPumlProcId) return;
+        const proc = PROCESSES_DATA.find(p => p.id === currentPumlProcId);
+        if (!proc) return;
+
+        if (typeof window.restoreCallingProcessContext === 'function') {
+          window.restoreCallingProcessContext(currentPumlProcId);
+        }
+
+        if (typeof window.showCrudToast === 'function') {
+          window.showCrudToast('📍 Aufrufumgebung für ' + proc.id + ' (' + proc.name + ') wiederhergestellt!');
+        }
       };
 
       window.copyPlantUml = function(procId) {
@@ -32462,9 +32539,12 @@
        ===================================================================== -->
   <div id="plantUmlViewerModal" class="plantuml-floating-popout" style="display:none;">
     <div class="plantuml-popout-header" id="plantUmlPopoutHeader">
-      <div style="display:flex; align-items:center; gap:8px; pointer-events:none;">
+      <div style="display:flex; align-items:center; gap:8px;">
         <span style="font-size:1.1rem;">📊</span>
-        <div class="crud-modal-title" id="plantUmlModalTitle" style="font-size:0.92rem; font-weight:750; color:var(--text-bright);">Prozess-Sequenzdiagramm</div>
+        <div class="crud-modal-title" id="plantUmlModalTitle" style="font-size:0.92rem; font-weight:750; color:var(--text-bright); display:flex; align-items:center; gap:6px;">
+          <span id="plantUmlModalTitleText">Prozess-Sequenzdiagramm</span>
+          <button type="button" class="puml-selfref-btn" id="btnPumlRestoreContext" onclick="window.restorePlantUmlCallingContext()" title="Aufrufumgebung im EAM-Modell wiederherstellen (Inspektor &amp; Prozess fokussieren)">🔗</button>
+        </div>
         <span class="traffic-tag" id="plantUmlModalBadge" style="background:rgba(56,189,248,0.2); color:var(--accent); font-weight:700;">UML 2.5</span>
       </div>
       <div style="display:flex; align-items:center; gap:6px;">

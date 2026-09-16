@@ -123,6 +123,11 @@ Die Johanniter Quad-Chord EA wurde nach Google-Enterprise-Standards (Material De
      - *Layer 1/2 (Sicherung & Physik):* 4G/5G Cellular Radio (LTE Cat-M1, 5G SA) vs. 10-40 Gbps Glasfaser-Backbone.
    - **OSI-Schichten-Schnellfilter im linken Drawer:** 5 Quick-Pills (`Alle`, `L7 App`, `L5/L6 Session`, `L3 VPN`, `L1/L2 Funk`) zur gezielten Durchleuchtung („Röntgenblick“) der gesamten Schnittstellenlandschaft.
    - **4 selektive OSI-Tags:** `OSI-L7`, `OSI-L5 Tunnel`, `OSI-L3 VPN`, `OSI-L1/L2 Cellular`.
+10. **Interaktive PlantUML-Sequenzdiagramme & Schwebendes Prozessmodell-Pop-Out:**
+    - **Schwebendes Multi-Window (Draggable & Resizable, Zero Blur):** Frei verschiebbares und in der Größe anpassbares Pop-Out-Fenster für UML 2.5 Sequenzdiagramme. Kein abdeckender Blur/Backdrop – das D3-Chord-Diagramm, der linke Navigationsbaum und der rechte Inspektor bleiben im Hintergrund vollständig sichtbar und interaktiv.
+    - **Klickbare SVG-Hyperlinks:** Alle Akteure (`[[#sys-SYS_ID]]`), Verbindungen/Nachrichten (`[[#conn-CONN_ID]]`) und E2E-Phasen (`== [[#integ-INTEG_ID]] ==`) sind interaktive Links, die das System im Modell fokussieren, Kanten aktivieren oder Token-Simulationen starten.
+    - **🔗 Selbstreferenz-Link im Pop-Out Header:** Ein Klick auf das Link-Icon im Titel stellt unmittelbar die vollständige Aufrufumgebung des Prozesses (Stufe 1 Domäne, Stufe 2 Prozess, Prozess-Inspektor, zentrierte Breadcrumb-Headerzeile) wieder her, falls im Hintergrund andere Knoten oder Kanten angeklickt wurden.
+    - **Native 64-Bit Deflate-Kompression & Externe Editoren:** Nahtlose 1-Klick-Übergabe an **PlantText** und den offiziellen **PlantUML.com Server** über `CompressionStream('deflate-raw')` und PlantUML-6-Bit-Encoding (`~1...`). SVG-Vektorexport und Zwischenablage-Kopierfunktion.
 
 ## Regulatorische Grundlagen & Legalitätsnachweis
 
