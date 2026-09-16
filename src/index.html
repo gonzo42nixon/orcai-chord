@@ -24290,18 +24290,18 @@
     "modelTitle": "Bruker Corporation Enterprise Architecture (Global High-Tech Instruments, CALID & BioSpin)",
     "description": "Konzernweite Enterprise- und Produkt-Architektur der Bruker Corporation (NASDAQ: BRKR, ~$3.4 Mrd. Umsatz, ~11.400 Mitarbeiter, Billerica HQ, Bremen Mass Spectrometry, Ettlingen BioSpin NMR). Umfasst globale ERP-Systeme (SAP S/4HANA, Ariba), R&D- und PLM-Plattformen (Siemens Teamcenter, SolidWorks, Jira), Life-Science- und Diagnostik-Schnittstellen (MALDI Biotyper MBT Compass, timsTOF PaSER GPU Proteomics, Mass Dynamics Cloud), globale Service-Steuerung (Salesforce Service Cloud / FSL) und LabScape Remote IoT Magnet-Telemetrie.",
     "version": "1.0.0",
-    "updatedAt": "2026-09-16T18:15:47.957Z",
+    "updatedAt": "2026-09-16T18:19:53.480Z",
     "author": "Bruker Corporation Enterprise Architecture Team & ORCAI",
     "stats": {
-      "systemsCount": 47,
-      "connectionsCount": 79,
-      "integrationsCount": 26,
-      "processesCount": 14,
+      "systemsCount": 48,
+      "connectionsCount": 84,
+      "integrationsCount": 27,
+      "processesCount": 15,
       "domainsCount": 6,
-      "systems": 47,
-      "connections": 79,
-      "integrations": 26,
-      "processes": 14,
+      "systems": 48,
+      "connections": 84,
+      "integrations": 27,
+      "processes": 15,
       "domains": 6
     }
   },
@@ -24341,8 +24341,8 @@
     "D1": {
       "name": "Globale Unternehmenssteuerung & ERP",
       "shortName": "ERP / FIN",
-      "focus": "SAP S/4HANA Core, BTP/CPI, Bruker Supplier Portal, SAP Ariba CIG, SAP TRM (ELITech), SAP DRC (LATAM), Bruker API-Portal, SEEBURGER BIS Cloud Peppol Gate, MasterControl QMS, Onventis Procurement, Bloomberg FX, AEB & ASSIST4 Zoll.",
-      "sysCount": 18,
+      "focus": "SAP S/4HANA Core, BTP/CPI, SAP Cloud Connector (SCC) Hybrid Uplink, Bruker Supplier Portal, SAP Ariba CIG, SAP TRM (ELITech), SAP DRC (LATAM), Bruker API-Portal, SEEBURGER BIS Cloud Peppol Gate, MasterControl QMS, Onventis Procurement, Bloomberg FX, AEB & ASSIST4 Zoll.",
+      "sysCount": 19,
       "leadSystem": "BRK-01"
     },
     "D2": {
@@ -24571,6 +24571,19 @@
         "BRK-INT-10"
       ],
       "desc": "Ganzheitliche Beschaffungsabwicklung mit direkter Einbindung globaler Teile- und Komponentenlieferanten über das Bruker Supplier Portal, Ariba CIG und automatisierte S/4HANA Disposition."
+    },
+    {
+      "id": "BRK-P-15",
+      "name": "Hybride On-Premises-zu-Cloud Integration (SAP Cloud Connector, BTP & S/4HANA)",
+      "leadDomain": "D1",
+      "involvedDomains": [
+        "D1",
+        "D2"
+      ],
+      "cleanIntegIds": [
+        "BRK-INT-27"
+      ],
+      "desc": "Standardisierter Übertragungsweg für sensible Fertigungs-, Qualitäts- und Revisionsdaten aus den On-Premises-Werken in Bremen und Ettlingen über den SAP Cloud Connector in die globale BTP- und S/4HANA-Cloudlandschaft."
     }
   ],
   "integrations": [
@@ -25209,6 +25222,37 @@
           "from": "BRK-47",
           "to": "BRK-03",
           "desc": "Synchronisation mit Ariba Supplier Network"
+        }
+      ]
+    },
+    {
+      "id": "BRK-INT-27",
+      "name": "Hybride On-Prem-zu-Cloud Integration via SAP Cloud Connector & BTP",
+      "cluster": "HYBRID_INTEGRATION",
+      "hub": "BRK-48",
+      "hubName": "SAP Cloud Connector (SCC) Hybrid Uplink Gateway",
+      "protocol": "TLS 1.3 Reverse Tunnel / RFC / OData",
+      "desc": "Gesicherter Uplink von internen Fertigungs- und Entwicklungsdaten (Teamcenter Stücklisten, Opcenter MES Produktionsaufträge) über den SAP Cloud Connector in die SAP BTP Integration Suite und SAP S/4HANA.",
+      "sourceSystem": "BRK-07",
+      "targetSystem": "BRK-01",
+      "steps": [
+        {
+          "connectionId": "BRK-C-81",
+          "from": "BRK-07",
+          "to": "BRK-48",
+          "desc": "mBOM-Export an lokalen SAP Cloud Connector"
+        },
+        {
+          "connectionId": "BRK-C-80",
+          "from": "BRK-48",
+          "to": "BRK-02",
+          "desc": "Sicherer TLS-Reverse-Tunnel Uplink an SAP BTP"
+        },
+        {
+          "connectionId": "BRK-C-01",
+          "from": "BRK-01",
+          "to": "BRK-02",
+          "desc": "Materialstamm-Synchronisation mit S/4HANA"
         }
       ]
     }
@@ -26912,6 +26956,118 @@
         "Garantie",
         "Service"
       ]
+    },
+    {
+      "id": "BRK-C-80",
+      "from": "BRK-48",
+      "to": "BRK-02",
+      "name": "SAP Cloud Connector ➔ SAP BTP TLS Reverse-Tunnel Uplink",
+      "protocol": "TLS 1.3 Reverse Tunnel over HTTPS",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "PREM_TO_CLOUD",
+      "transportOverlay": "HYBRID_CONNECTOR",
+      "overlay": "HYBRID_CONNECTOR",
+      "isCrossBoundary": true,
+      "rawWeight": 380,
+      "trafficPct": 3.8,
+      "tags": [
+        "SAP",
+        "SCC",
+        "BTP",
+        "Tunnel",
+        "Uplink",
+        "Security"
+      ]
+    },
+    {
+      "id": "BRK-C-81",
+      "from": "BRK-07",
+      "to": "BRK-48",
+      "name": "Siemens Teamcenter PLM ➔ SAP Cloud Connector mBOM Uplink",
+      "protocol": "REST / OData over LAN",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "INTRA_ON_PREM",
+      "transportOverlay": "ON_PREM_LAN",
+      "overlay": "ON_PREM_LAN",
+      "isCrossBoundary": false,
+      "rawWeight": 260,
+      "trafficPct": 2.6,
+      "tags": [
+        "Teamcenter",
+        "PLM",
+        "SCC",
+        "mBOM",
+        "REST"
+      ]
+    },
+    {
+      "id": "BRK-C-82",
+      "from": "BRK-10",
+      "to": "BRK-48",
+      "name": "Siemens Opcenter MES ➔ SAP Cloud Connector Fertigungsrückmeldungen",
+      "protocol": "RFC / OData over LAN",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "INTRA_ON_PREM",
+      "transportOverlay": "ON_PREM_LAN",
+      "overlay": "ON_PREM_LAN",
+      "isCrossBoundary": false,
+      "rawWeight": 280,
+      "trafficPct": 2.8,
+      "tags": [
+        "MES",
+        "Opcenter",
+        "SCC",
+        "Fertigung",
+        "RFC"
+      ]
+    },
+    {
+      "id": "BRK-C-83",
+      "from": "BRK-48",
+      "to": "BRK-05",
+      "name": "SAP Cloud Connector ➔ OpenText GxP Archiv-Kopplung",
+      "protocol": "HTTPS / CMIS over LAN",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "INTRA_ON_PREM",
+      "transportOverlay": "ON_PREM_LAN",
+      "overlay": "ON_PREM_LAN",
+      "isCrossBoundary": false,
+      "rawWeight": 190,
+      "trafficPct": 1.9,
+      "tags": [
+        "SCC",
+        "OpenText",
+        "GxP",
+        "Archiv",
+        "REST"
+      ]
+    },
+    {
+      "id": "BRK-C-84",
+      "from": "BRK-48",
+      "to": "BRK-01",
+      "name": "SAP Cloud Connector ➔ SAP S/4HANA Direct SNC/RFC Hybrid Tunnel",
+      "protocol": "SNC / RFC over TLS Tunnel",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "PREM_TO_CLOUD",
+      "transportOverlay": "HYBRID_CONNECTOR",
+      "overlay": "HYBRID_CONNECTOR",
+      "isCrossBoundary": true,
+      "rawWeight": 340,
+      "trafficPct": 3.4,
+      "tags": [
+        "SAP",
+        "SCC",
+        "S/4HANA",
+        "RFC",
+        "Tunnel",
+        "Hybrid"
+      ]
     }
   ],
   "systems": [
@@ -27728,6 +27884,27 @@
         "Cloud",
         "Extern"
       ]
+    },
+    {
+      "id": "BRK-48",
+      "name": "SAP Cloud Connector (SCC) Hybrid Uplink Gateway",
+      "domain": "D1",
+      "scope": "INTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "Bruker Datacenter DMZ (Ettlingen & Bremen)",
+      "vendor": "SAP SE",
+      "desc": "Zentraler SAP Cloud Connector (SCC) für hybride Konnektivität. Baut sichere, verschlüsselte TLS-Reverse-Tunnel von internen On-Premises-Systemen (Siemens Teamcenter PLM, Opcenter MES, OpenText GxP) zur SAP Business Technology Platform (BTP) und SAP S/4HANA auf, ohne eingehende Firewall-Ports im RZ zu öffnen.",
+      "tags": [
+        "SAP",
+        "CloudConnector",
+        "SCC",
+        "Hybrid",
+        "BTP",
+        "Tunnel",
+        "On-Prem",
+        "Security",
+        "Gateway"
+      ]
     }
   ]
 };
@@ -27768,9 +27945,9 @@
           organization: 'Bruker Corporation (Scientific Instruments & Diagnostics)',
           shortName: 'BRUKER CORP',
           title: 'Bruker Corporation Enterprise Architecture (Global High-Tech Instruments, CALID & BioSpin)',
-          desc: 'Konzernweite Enterprise- und Produkt-Architektur der Bruker Corporation (NASDAQ: BRKR, ~$3.4 Mrd. Umsatz, ~11.400 Mitarbeiter, Billerica HQ, Bremen Mass Spectrometry, Ettlingen BioSpin NMR). Umfasst globale ERP-Systeme (SAP S/4HANA Core, Bruker Supplier Portal, Ariba CIG, Onventis Procurement, Bloomberg FX), B2B- & E-Invoicing-Plattformen (SAP Trading Partner Management (=TRM) für ELITech, SAP DRC LATAM, Bruker Enterprise API-Portal, SEEBURGER BIS Cloud Peppol E-Invoicing Gate, AEB & ASSIST4 Zoll), QMS & Fertigung (MasterControl, VKS Werkerführung, Siemens Teamcenter, Opcenter MES), Life-Science- und Diagnostik-Schnittstellen (MALDI Biotyper MBT Compass, timsTOF PaSER, Mass Dynamics Cloud), globale Service-Steuerung (Salesforce FSL) und LabScape Remote IoT.',
+          desc: 'Konzernweite Enterprise- und Produkt-Architektur der Bruker Corporation (NASDAQ: BRKR, ~$3.4 Mrd. Umsatz, ~11.400 Mitarbeiter, Billerica HQ, Bremen Mass Spectrometry, Ettlingen BioSpin NMR). Umfasst globale ERP-Systeme (SAP S/4HANA Core, SAP Cloud Connector (SCC) Hybrid Uplink, Bruker Supplier Portal, Ariba CIG, Onventis Procurement, Bloomberg FX), B2B- & E-Invoicing-Plattformen (SAP Trading Partner Management (=TRM) für ELITech, SAP DRC LATAM, Bruker Enterprise API-Portal, SEEBURGER BIS Cloud Peppol E-Invoicing Gate, AEB & ASSIST4 Zoll), QMS & Fertigung (MasterControl, VKS Werkerführung, Siemens Teamcenter, Opcenter MES), Life-Science- und Diagnostik-Schnittstellen (MALDI Biotyper MBT Compass, timsTOF PaSER, Mass Dynamics Cloud), globale Service-Steuerung (Salesforce FSL) und LabScape Remote IoT.',
           url: 'https://orcai-54321.web.app/api/orcai/v1/docs/ORCAI-MODEL-BRUKER-EA?v=1.0.0',
-          stats: { systems: 47, connections: 79, integrations: 26, processes: 14, domains: 6 },
+          stats: { systems: 48, connections: 84, integrations: 27, processes: 15, domains: 6 },
           data: cachedBrukerModel
         }
       ];
