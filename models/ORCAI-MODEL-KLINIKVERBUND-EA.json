@@ -1,0 +1,1432 @@
+{
+  "$schema": "https://orcai-54321.web.app/schemas/ea-landscape-v1.json",
+  "meta": {
+    "id": "ORCAI-MODEL-KLINIKVERBUND-EA",
+    "orcaiKey": "ORCAI-MODEL-KLINIKVERBUND-EA",
+    "orcaiUrl": "https://orcai-54321.web.app/api/orcai/v1/docs/ORCAI-MODEL-KLINIKVERBUND-EA",
+    "organization": "Städtischer Klinikverbund & Maximalversorger Nord",
+    "shortName": "KLINIKVERBUND NORD",
+    "modelTitle": "Klinikverbund Nord Enterprise Architecture (Akutmedizin & KHZG)",
+    "description": "Schwerpunkt-Kliniklandschaft mit 32 Systemen, 28 Schnittstellen, 14 E2E-Integrationen, ZNA-Triage, TI-Konnektoren, Sectra PACS, Dedalus KIS & SAP Finance.",
+    "version": "1.0.0",
+    "updatedAt": "2026-09-16T07:29:21.200Z",
+    "author": "Klinikverbund EA Board & ORCAI",
+    "stats": {
+      "systemsCount": 32,
+      "connectionsCount": 28,
+      "integrationsCount": 14,
+      "processesCount": 8,
+      "domainsCount": 6
+    }
+  },
+  "domains": [
+    {
+      "id": "D1",
+      "name": "Finanzwesen & Kommunal-ERP",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "D2",
+      "name": "Klinische KIS & Fachabteilungen",
+      "color": "#10b981"
+    },
+    {
+      "id": "D3",
+      "name": "Radiologie, Bildgebung & Archiv",
+      "color": "#f59e0b"
+    },
+    {
+      "id": "D4",
+      "name": "Notaufnahme & Telemedizin",
+      "color": "#ef4444"
+    },
+    {
+      "id": "D5",
+      "name": "Telematik-Infrastruktur (TI)",
+      "color": "#8b5cf6"
+    },
+    {
+      "id": "D6",
+      "name": "Integration, KI & Sicherheit",
+      "color": "#06b6d4"
+    }
+  ],
+  "domainDetails": {
+    "D1": {
+      "shortName": "D1 · Finanzen & ERP",
+      "sysRange": "KV-01 bis KV-06",
+      "desc": "SAP S/4HANA Finance, Kommunales HKR, Personalabrechnung & Beschaffung"
+    },
+    "D2": {
+      "shortName": "D2 · KIS & Stationen",
+      "sysRange": "KV-07 bis KV-18",
+      "desc": "Dedalus ORBIS KIS, Intensiv-PDMS, Medikations-AMTS, Labor-LIMS & OP-Planung"
+    },
+    "D3": {
+      "shortName": "D3 · PACS & Bildgebung",
+      "sysRange": "KV-19 bis KV-26",
+      "desc": "Sectra PACS/VNA, Siemens RIS, Nuklearmedizin & revisionssicheres DMI Langzeitarchiv"
+    },
+    "D4": {
+      "shortName": "D4 · ZNA & Notruf",
+      "sysRange": "KV-27 bis KV-33",
+      "desc": "Zentrale Notaufnahme E-Care, Telenotarzt-Hub, IVENA Zuweisung & Rettungsdienst-Schnittstelle"
+    },
+    "D5": {
+      "shortName": "D5 · Telematik (TI)",
+      "sysRange": "KV-34 bis KV-38",
+      "desc": "Konnektoren, eRezept, ePA 3.0, KIM-Fachdienst, TI-Messenger & eHBA"
+    },
+    "D6": {
+      "shortName": "D6 · Integration & Security",
+      "sysRange": "KV-39 bis KV-45",
+      "desc": "InterSystems HealthShare, Apache Kafka, Zscaler Zero Trust & Fortinet Firewall Core"
+    }
+  },
+  "processes": [
+    {
+      "id": "KP-01",
+      "name": "Notfallaufnahme & Telenotarzt ZNA",
+      "leadDomain": "D4",
+      "involvedDomains": [
+        "D4",
+        "D2",
+        "D3"
+      ],
+      "cleanIntegIds": [
+        "KINT-01",
+        "KINT-02",
+        "KINT-05"
+      ],
+      "desc": "Echtzeit-Aufnahme von Notfallpatienten über Telenotarzt, IVENA und ZNA Triage."
+    },
+    {
+      "id": "KP-02",
+      "name": "Klinische Diagnostik & Zentrallabor",
+      "leadDomain": "D2",
+      "involvedDomains": [
+        "D2",
+        "D6"
+      ],
+      "cleanIntegIds": [
+        "KINT-02",
+        "KINT-06"
+      ],
+      "desc": "Elektronische Laboranforderung, Vollautomaten-Analyse und KIS-Rückmeldung."
+    },
+    {
+      "id": "KP-03",
+      "name": "Radiologie, PACS & KI-Befundung",
+      "leadDomain": "D3",
+      "involvedDomains": [
+        "D3",
+        "D2"
+      ],
+      "cleanIntegIds": [
+        "KINT-03",
+        "KINT-04"
+      ],
+      "desc": "Modalitäten-Steuerung, DICOM-Bildarchivierung und KI-Schlaganfall-Analyse."
+    },
+    {
+      "id": "KP-04",
+      "name": "Intensivüberwachung & Vitaldaten-Analytics",
+      "leadDomain": "D2",
+      "involvedDomains": [
+        "D2",
+        "D6"
+      ],
+      "cleanIntegIds": [
+        "KINT-05",
+        "KINT-07"
+      ],
+      "desc": "Streaming von Vitalparametern von Philips PDMS über Kafka an Snowflake Data Lakehouse."
+    },
+    {
+      "id": "KP-05",
+      "name": "Stationäre Abrechnung & GKV § 301 SGB V",
+      "leadDomain": "D1",
+      "involvedDomains": [
+        "D1",
+        "D2"
+      ],
+      "cleanIntegIds": [
+        "KINT-08",
+        "KINT-09"
+      ],
+      "desc": "DRG-Leistungserfassung in ORBIS, Transfer an SAP S/4HANA Finance und DTA-Abrechnung."
+    },
+    {
+      "id": "KP-06",
+      "name": "Telematik, eArztbrief & KIM",
+      "leadDomain": "D5",
+      "involvedDomains": [
+        "D5",
+        "D2"
+      ],
+      "cleanIntegIds": [
+        "KINT-10",
+        "KINT-11"
+      ],
+      "desc": "Elektronischer Arztbriefversand über KIM 1.5 und ePA 3.0 Anbindung."
+    },
+    {
+      "id": "KP-07",
+      "name": "Patientenportal & KHZG-Entlassmanagement",
+      "leadDomain": "D2",
+      "involvedDomains": [
+        "D2",
+        "D4",
+        "D3"
+      ],
+      "cleanIntegIds": [
+        "KINT-12",
+        "KINT-13"
+      ],
+      "desc": "Befund-Download im m.Doc Portal und revisionssichere Langzeitarchivierung in PEGASOS."
+    },
+    {
+      "id": "KP-08",
+      "name": "Medikamentenversorgung & GHX Pharma Exchange",
+      "leadDomain": "D1",
+      "involvedDomains": [
+        "D1",
+        "D2"
+      ],
+      "cleanIntegIds": [
+        "KINT-14"
+      ],
+      "desc": "Automatisierte OP-Material- und Zytostatika-Bestellung über GHX und Peppol."
+    }
+  ],
+  "integrations": [
+    {
+      "id": "KINT-01",
+      "name": "Telenotarzt ➔ ZNA E-Care Notfallaufnahme",
+      "cluster": "RETTUNG",
+      "hub": "HealthShare",
+      "hubName": "InterSystems HealthShare",
+      "protocol": "HL7 FHIR / MQTT",
+      "desc": "Echtzeitübertragung von Vitalwerten und Voranmeldung aus dem RTW in die Notaufnahme.",
+      "steps": [
+        {
+          "connectionId": "KC-24",
+          "from": "KV-27",
+          "to": "KV-16",
+          "desc": "RTW-Mobilfunkdaten an Telenotarzt Hub"
+        },
+        {
+          "connectionId": "KC-25",
+          "from": "KV-16",
+          "to": "KV-15",
+          "desc": "Telenotarzt Protokoll an ZNA E-Care"
+        }
+      ]
+    },
+    {
+      "id": "KINT-02",
+      "name": "ZNA Notfall-Laborauftrag & Sofort-Befundung",
+      "cluster": "KLINIK",
+      "hub": "HealthShare",
+      "hubName": "InterSystems HealthShare",
+      "protocol": "HL7 v2.5 MLLP",
+      "desc": "Notfall-Laboranforderung aus ORBIS an Swisslab LIMS mit prioritärer Rückmeldung.",
+      "steps": [
+        {
+          "connectionId": "KC-01",
+          "from": "KV-08",
+          "to": "KV-17",
+          "desc": "ORBIS Order Entry an HealthShare"
+        },
+        {
+          "connectionId": "KC-02",
+          "from": "KV-17",
+          "to": "KV-11",
+          "desc": "Laborauftrag an Swisslab LIMS"
+        },
+        {
+          "connectionId": "KC-03",
+          "from": "KV-11",
+          "to": "KV-17",
+          "desc": "Laborbefund an HealthShare"
+        },
+        {
+          "connectionId": "KC-04",
+          "from": "KV-17",
+          "to": "KV-08",
+          "desc": "Befundanzeige in ORBIS KIS"
+        }
+      ]
+    },
+    {
+      "id": "KINT-03",
+      "name": "Radiologie DICOM-Workflow & PACS-Archivierung",
+      "cluster": "KLINIK",
+      "hub": "HealthShare",
+      "hubName": "InterSystems HealthShare",
+      "protocol": "HL7 / DICOM C-FIND",
+      "desc": "Auftragsweiterleitung an Syngo RIS und Bildarchivierung im Sectra VNA.",
+      "steps": [
+        {
+          "connectionId": "KC-01",
+          "from": "KV-08",
+          "to": "KV-17",
+          "desc": "ORBIS Order an HealthShare"
+        },
+        {
+          "connectionId": "KC-05",
+          "from": "KV-17",
+          "to": "KV-13",
+          "desc": "Auftrag an Siemens Syngo RIS"
+        },
+        {
+          "connectionId": "KC-06",
+          "from": "KV-13",
+          "to": "KV-12",
+          "desc": "Modality Worklist an Sectra PACS"
+        }
+      ]
+    },
+    {
+      "id": "KINT-04",
+      "name": "Cloud-KI Schlaganfall-Analyse Pipeline",
+      "cluster": "KLINIK",
+      "hub": "Direct",
+      "hubName": "Direct Cloud Bridge",
+      "protocol": "DICOMweb WADO-RS / HTTPS",
+      "desc": "Automatisierter Upload von Notfall-CT-Bildern an die Brainomix KI-Cloud.",
+      "steps": [
+        {
+          "connectionId": "KC-07",
+          "from": "KV-12",
+          "to": "KV-05",
+          "desc": "DICOM-Upload an Cloud-KI"
+        },
+        {
+          "connectionId": "KC-08",
+          "from": "KV-05",
+          "to": "KV-13",
+          "desc": "KI-Analyse an Syngo RIS"
+        }
+      ]
+    },
+    {
+      "id": "KINT-05",
+      "name": "Intensivstation Vitaldaten-Streaming & Lakehouse",
+      "cluster": "KLINIK",
+      "hub": "Kafka",
+      "hubName": "Apache Kafka",
+      "protocol": "Kafka / Snowpipe",
+      "desc": "Vitaldaten-Streaming von Philips PDMS über Apache Kafka in das Snowflake Lakehouse.",
+      "steps": [
+        {
+          "connectionId": "KC-11",
+          "from": "KV-10",
+          "to": "KV-18",
+          "desc": "Vitaldaten-Streaming an Kafka"
+        },
+        {
+          "connectionId": "KC-12",
+          "from": "KV-18",
+          "to": "KV-06",
+          "desc": "Snowpipe Streaming an Snowflake"
+        }
+      ]
+    },
+    {
+      "id": "KINT-06",
+      "name": "DEMIS IfSG Infektionsschutz-Meldung an RKI",
+      "cluster": "KLINIK",
+      "hub": "Direct",
+      "hubName": "Direct Interface",
+      "protocol": "FHIR R4 / HTTPS",
+      "desc": "Gesetzliche Labormeldepflicht an das Robert Koch-Institut.",
+      "steps": [
+        {
+          "connectionId": "KC-28",
+          "from": "KV-11",
+          "to": "KV-26",
+          "desc": "Meldung Erreger an RKI DEMIS"
+        }
+      ]
+    },
+    {
+      "id": "KINT-07",
+      "name": "ILS 112 Notrufeingang ➔ ZNA E-Care Triage",
+      "cluster": "RETTUNG",
+      "hub": "Direct",
+      "hubName": "Direct Interface",
+      "protocol": "REST Webhook",
+      "desc": "Automatische Zuweisungs-Voranmeldung aus der Feuerwehr-Leitstelle.",
+      "steps": [
+        {
+          "connectionId": "KC-22",
+          "from": "KV-28",
+          "to": "KV-15",
+          "desc": "ILS Notruf Voranmeldung an ZNA"
+        },
+        {
+          "connectionId": "KC-23",
+          "from": "KV-15",
+          "to": "KV-23",
+          "desc": "ZNA Kapazität an IVENA"
+        }
+      ]
+    },
+    {
+      "id": "KINT-08",
+      "name": "Stationäre Abrechnung ORBIS ➔ SAP S/4HANA Finance",
+      "cluster": "ERP_HR",
+      "hub": "SAP_CPI",
+      "hubName": "SAP BTP Integration Suite",
+      "protocol": "RFC / OData v4",
+      "desc": "Übertrag abrechnungsrelevanter DRG-Falldaten an das Finanzwesen.",
+      "steps": [
+        {
+          "connectionId": "KC-13",
+          "from": "KV-08",
+          "to": "KV-20",
+          "desc": "Abrechnungsdaten an Cloud Connector"
+        },
+        {
+          "connectionId": "KC-14",
+          "from": "KV-20",
+          "to": "KV-02",
+          "desc": "Reverse-Invoke Tunnel an SAP BTP"
+        },
+        {
+          "connectionId": "KC-15",
+          "from": "KV-02",
+          "to": "KV-01",
+          "desc": "Buchungsbeleg an SAP S/4HANA"
+        }
+      ]
+    },
+    {
+      "id": "KINT-09",
+      "name": "DTA § 301 SGB V DRG-Schlussrechnung an GKV",
+      "cluster": "ERP_HR",
+      "hub": "Direct",
+      "hubName": "Direct EDI Interface",
+      "protocol": "FTPS EDIFACT / TLS",
+      "desc": "Gesetzlicher Datenträgeraustausch mit gesetzlichen Krankenkassen.",
+      "steps": [
+        {
+          "connectionId": "KC-16",
+          "from": "KV-01",
+          "to": "KV-29",
+          "desc": "DTA § 301 Rechnung an GKV Clearing"
+        }
+      ]
+    },
+    {
+      "id": "KINT-10",
+      "name": "eArztbrief-Versand über KIM Fachdienst",
+      "cluster": "TI",
+      "hub": "Direct",
+      "hubName": "TI Konnektor Cluster",
+      "protocol": "KIM 1.5 S/MIME",
+      "desc": "Kryptografisch signierter Entlassbrief-Versand an weiterbehandelnde Ärzte.",
+      "steps": [
+        {
+          "connectionId": "KC-19",
+          "from": "KV-08",
+          "to": "KV-19",
+          "desc": "Signaturanforderung an Konnektor"
+        },
+        {
+          "connectionId": "KC-21",
+          "from": "KV-19",
+          "to": "KV-07",
+          "desc": "eArztbrief-Versand an KIM Provider"
+        }
+      ]
+    },
+    {
+      "id": "KINT-11",
+      "name": "Zentrale gematik TI-Dienste (ePA 3.0 & eRezept)",
+      "cluster": "TI",
+      "hub": "Direct",
+      "hubName": "TI Konnektor Cluster",
+      "protocol": "IPSec VPN / SOAP",
+      "desc": "Konnektor-Anbindung an das gematik Bundessicherheitsnetz.",
+      "steps": [
+        {
+          "connectionId": "KC-20",
+          "from": "KV-19",
+          "to": "KV-22",
+          "desc": "VPN-Tunnel an gematik Dienste"
+        }
+      ]
+    },
+    {
+      "id": "KINT-12",
+      "name": "Patientenportal KHZG Entlassbrief-Bereitstellung",
+      "cluster": "KLINIK",
+      "hub": "Direct",
+      "hubName": "Direct FHIR Bridge",
+      "protocol": "HL7 FHIR R4",
+      "desc": "Bereitstellung digitaler Dokumente im m.Doc Patientenportal gem. KHZG FTB 2.",
+      "steps": [
+        {
+          "connectionId": "KC-26",
+          "from": "KV-08",
+          "to": "KV-03",
+          "desc": "FHIR-Dokument an Portal"
+        }
+      ]
+    },
+    {
+      "id": "KINT-13",
+      "name": "30-Jahre Revisionsarchivierung in DMI PEGASOS",
+      "cluster": "KLINIK",
+      "hub": "Direct",
+      "hubName": "Direct Archive Interface",
+      "protocol": "IHE XDS.b / PDF-A",
+      "desc": "Gesetzeskonforme Archivierung der Entlassakte im WORM-Speicher.",
+      "steps": [
+        {
+          "connectionId": "KC-27",
+          "from": "KV-08",
+          "to": "KV-14",
+          "desc": "Archivierung an PEGASOS"
+        }
+      ]
+    },
+    {
+      "id": "KINT-14",
+      "name": "GHX Pharma- & OP-Material E-Procurement",
+      "cluster": "ERP_HR",
+      "hub": "Direct",
+      "hubName": "Direct EDI Interface",
+      "protocol": "EDIFACT ORDERS / AS2",
+      "desc": "Automatisierte Beschaffung von Implantaten und Medikamenten über GHX.",
+      "steps": [
+        {
+          "connectionId": "KC-17",
+          "from": "KV-01",
+          "to": "KV-24",
+          "desc": "Bestellung an GHX Exchange"
+        }
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "KC-01",
+      "from": "KV-08",
+      "to": "KV-17",
+      "name": "ORBIS ADT & Order Entry an HealthShare",
+      "protocol": "HL7 v2.5 / MLLP",
+      "msgType": "HL7_FHIR",
+      "flowType": "INTRA_ON_PREM",
+      "overlay": "INTRA_RZ_LAN",
+      "isCrossBoundary": false,
+      "tags": [
+        "Klinik",
+        "HL7",
+        "KRITIS"
+      ]
+    },
+    {
+      "id": "KC-02",
+      "from": "KV-17",
+      "to": "KV-11",
+      "name": "Laboraufträge an Swisslab LIMS",
+      "protocol": "HL7 OML_O21 / MLLP",
+      "msgType": "HL7_FHIR",
+      "flowType": "INTRA_ON_PREM",
+      "overlay": "INTRA_RZ_LAN",
+      "isCrossBoundary": false,
+      "tags": [
+        "Klinik",
+        "HL7",
+        "Labor"
+      ]
+    },
+    {
+      "id": "KC-03",
+      "from": "KV-11",
+      "to": "KV-17",
+      "name": "Laborbefunde an HealthShare",
+      "protocol": "HL7 ORU_R01 / MLLP",
+      "msgType": "HL7_FHIR",
+      "flowType": "INTRA_ON_PREM",
+      "overlay": "INTRA_RZ_LAN",
+      "isCrossBoundary": false,
+      "tags": [
+        "Klinik",
+        "HL7",
+        "Labor"
+      ]
+    },
+    {
+      "id": "KC-04",
+      "from": "KV-17",
+      "to": "KV-08",
+      "name": "Befundübermittlung in KIS-Patientenakte",
+      "protocol": "HL7 ORU_R01 / MLLP",
+      "msgType": "HL7_FHIR",
+      "flowType": "INTRA_ON_PREM",
+      "overlay": "INTRA_RZ_LAN",
+      "isCrossBoundary": false,
+      "tags": [
+        "Klinik",
+        "HL7",
+        "KRITIS"
+      ]
+    },
+    {
+      "id": "KC-05",
+      "from": "KV-17",
+      "to": "KV-13",
+      "name": "Radiologie-Aufträge an Syngo RIS",
+      "protocol": "HL7 OMG_O19 / MLLP",
+      "msgType": "HL7_FHIR",
+      "flowType": "INTRA_ON_PREM",
+      "overlay": "INTRA_RZ_LAN",
+      "isCrossBoundary": false,
+      "tags": [
+        "Radiologie",
+        "HL7"
+      ]
+    },
+    {
+      "id": "KC-06",
+      "from": "KV-13",
+      "to": "KV-12",
+      "name": "Modality Worklist an Sectra PACS",
+      "protocol": "DICOM C-FIND / TLS",
+      "msgType": "DICOM_IMAGE",
+      "flowType": "INTRA_ON_PREM",
+      "overlay": "INTRA_RZ_LAN",
+      "isCrossBoundary": false,
+      "tags": [
+        "Radiologie",
+        "DICOM"
+      ]
+    },
+    {
+      "id": "KC-07",
+      "from": "KV-12",
+      "to": "KV-05",
+      "name": "DICOM-Upload an Cloud-KI-Analyse",
+      "protocol": "DICOMweb WADO-RS / TLS",
+      "msgType": "DICOM_IMAGE",
+      "flowType": "HYBRID_BRIDGE",
+      "overlay": "HYBRID_EXPRESSROUTE_OR_TLS",
+      "isCrossBoundary": true,
+      "tags": [
+        "Radiologie",
+        "DICOM",
+        "Cloud"
+      ]
+    },
+    {
+      "id": "KC-08",
+      "from": "KV-05",
+      "to": "KV-13",
+      "name": "KI-Analyseergebnisse an RIS",
+      "protocol": "HTTPS REST / JSON",
+      "msgType": "REST_API",
+      "flowType": "HYBRID_BRIDGE",
+      "overlay": "HYBRID_EXPRESSROUTE_OR_TLS",
+      "isCrossBoundary": true,
+      "tags": [
+        "Radiologie",
+        "REST_API",
+        "Cloud"
+      ]
+    },
+    {
+      "id": "KC-09",
+      "from": "KV-08",
+      "to": "KV-09",
+      "name": "ORBIS Patientendaten an AMTS Medikation",
+      "protocol": "HL7 ADT_A08 / MLLP",
+      "msgType": "HL7_FHIR",
+      "flowType": "INTRA_ON_PREM",
+      "overlay": "INTRA_RZ_LAN",
+      "isCrossBoundary": false,
+      "tags": [
+        "Klinik",
+        "HL7",
+        "AMTS"
+      ]
+    },
+    {
+      "id": "KC-10",
+      "from": "KV-08",
+      "to": "KV-10",
+      "name": "Aufnahmedaten an Intensiv-PDMS",
+      "protocol": "HL7 ADT_A01 / MLLP",
+      "msgType": "HL7_FHIR",
+      "flowType": "INTRA_ON_PREM",
+      "overlay": "INTRA_RZ_LAN",
+      "isCrossBoundary": false,
+      "tags": [
+        "Klinik",
+        "HL7",
+        "KRITIS"
+      ]
+    },
+    {
+      "id": "KC-11",
+      "from": "KV-10",
+      "to": "KV-18",
+      "name": "Vitalparameter-Streaming an Event Hub",
+      "protocol": "Kafka / TLS",
+      "msgType": "IOT_STREAM",
+      "flowType": "INTRA_ON_PREM",
+      "overlay": "INTRA_RZ_LAN",
+      "isCrossBoundary": false,
+      "tags": [
+        "Klinik",
+        "Kafka",
+        "KRITIS"
+      ]
+    },
+    {
+      "id": "KC-12",
+      "from": "KV-18",
+      "to": "KV-06",
+      "name": "Vitaldaten-Ingestion an Snowflake",
+      "protocol": "Snowpipe Streaming / TLS",
+      "msgType": "IOT_STREAM",
+      "flowType": "HYBRID_BRIDGE",
+      "overlay": "HYBRID_EXPRESSROUTE_OR_TLS",
+      "isCrossBoundary": true,
+      "tags": [
+        "Analytics",
+        "Cloud",
+        "Kafka"
+      ]
+    },
+    {
+      "id": "KC-13",
+      "from": "KV-08",
+      "to": "KV-20",
+      "name": "Abrechnungs- & Leistungsdaten an SAP Cloud Connector",
+      "protocol": "RFC / SNC TLS",
+      "msgType": "SOAP_XML",
+      "flowType": "INTRA_ON_PREM",
+      "overlay": "INTRA_RZ_LAN",
+      "isCrossBoundary": false,
+      "tags": [
+        "Finanzen / ERP",
+        "SAP",
+        "KRITIS"
+      ]
+    },
+    {
+      "id": "KC-14",
+      "from": "KV-20",
+      "to": "KV-02",
+      "name": "Reverse-Invoke Tunnel an SAP BTP",
+      "protocol": "HTTPS TLS Outbound 443",
+      "msgType": "REST_API",
+      "flowType": "HYBRID_BRIDGE",
+      "overlay": "HYBRID_EXPRESSROUTE_OR_TLS",
+      "isCrossBoundary": true,
+      "tags": [
+        "Cloud Connector",
+        "SAP",
+        "Cloud",
+        "KRITIS"
+      ]
+    },
+    {
+      "id": "KC-15",
+      "from": "KV-02",
+      "to": "KV-01",
+      "name": "Buchungsbelege an SAP S/4HANA Finance",
+      "protocol": "OData v4 / HTTPS",
+      "msgType": "REST_API",
+      "flowType": "INTRA_CLOUD",
+      "overlay": "INTRA_CLOUD_MESH",
+      "isCrossBoundary": false,
+      "tags": [
+        "Finanzen / ERP",
+        "SAP",
+        "Cloud"
+      ]
+    },
+    {
+      "id": "KC-16",
+      "from": "KV-01",
+      "to": "KV-29",
+      "name": "DTA § 301 DRG-Schlussrechnung an GKV",
+      "protocol": "FTPS EDIFACT / TLS",
+      "msgType": "B2B_EDI",
+      "flowType": "EXTERNAL_EGRESS",
+      "overlay": "PUBLIC_INTERNET_TLS",
+      "isCrossBoundary": true,
+      "tags": [
+        "Finanzen / ERP",
+        "EDIFACT",
+        "KRITIS"
+      ]
+    },
+    {
+      "id": "KC-17",
+      "from": "KV-01",
+      "to": "KV-24",
+      "name": "OP-Materialbestellung an GHX Pharma Exchange",
+      "protocol": "EDIFACT ORDERS / AS2",
+      "msgType": "B2B_EDI",
+      "flowType": "EXTERNAL_B2B",
+      "overlay": "PUBLIC_INTERNET_TLS",
+      "isCrossBoundary": true,
+      "tags": [
+        "Finanzen / ERP",
+        "EDIFACT",
+        "Cloud"
+      ]
+    },
+    {
+      "id": "KC-18",
+      "from": "KV-01",
+      "to": "KV-25",
+      "name": "E-Rechnungen an Peppol Behördennetz",
+      "protocol": "AS4 Peppol / TLS",
+      "msgType": "B2B_EDI",
+      "flowType": "EXTERNAL_B2B",
+      "overlay": "PUBLIC_INTERNET_TLS",
+      "isCrossBoundary": true,
+      "tags": [
+        "Finanzen / ERP",
+        "EDIFACT"
+      ]
+    },
+    {
+      "id": "KC-19",
+      "from": "KV-08",
+      "to": "KV-19",
+      "name": "KIS-Anbindung an KoCoBox TI-Konnektoren",
+      "protocol": "SOAP XML / TLS",
+      "msgType": "SOAP_XML",
+      "flowType": "INTRA_ON_PREM",
+      "overlay": "INTRA_RZ_LAN",
+      "isCrossBoundary": false,
+      "tags": [
+        "Telematik / TI",
+        "KRITIS"
+      ]
+    },
+    {
+      "id": "KC-20",
+      "from": "KV-19",
+      "to": "KV-22",
+      "name": "VPN-Tunnel an zentrale gematik TI-Dienste",
+      "protocol": "IPSec VPN / TLS",
+      "msgType": "SOAP_XML",
+      "flowType": "HYBRID_BRIDGE",
+      "overlay": "TI_VPN_KIM",
+      "isCrossBoundary": true,
+      "tags": [
+        "Telematik / TI",
+        "KRITIS"
+      ]
+    },
+    {
+      "id": "KC-21",
+      "from": "KV-19",
+      "to": "KV-07",
+      "name": "eArztbrief-Versand an KIM Cloud Fachdienst",
+      "protocol": "KIM 1.5 S/MIME / SMTP",
+      "msgType": "HL7_FHIR",
+      "flowType": "HYBRID_BRIDGE",
+      "overlay": "TI_VPN_KIM",
+      "isCrossBoundary": true,
+      "tags": [
+        "Telematik / TI",
+        "Cloud",
+        "KRITIS"
+      ]
+    },
+    {
+      "id": "KC-22",
+      "from": "KV-28",
+      "to": "KV-15",
+      "name": "ILS Notruf-Voranmeldung an E-Care ZNA",
+      "protocol": "REST Webhook / TLS",
+      "msgType": "REST_API",
+      "flowType": "EXTERNAL_INGRESS",
+      "overlay": "PUBLIC_INTERNET_TLS",
+      "isCrossBoundary": true,
+      "tags": [
+        "Notfallrettung",
+        "KRITIS"
+      ]
+    },
+    {
+      "id": "KC-23",
+      "from": "KV-15",
+      "to": "KV-23",
+      "name": "ZNA-Kapazitätsstatus an IVENA eHealth",
+      "protocol": "HTTPS REST / JSON",
+      "msgType": "REST_API",
+      "flowType": "EXTERNAL_EGRESS",
+      "overlay": "PUBLIC_INTERNET_TLS",
+      "isCrossBoundary": true,
+      "tags": [
+        "Notfallrettung",
+        "REST_API"
+      ]
+    },
+    {
+      "id": "KC-24",
+      "from": "KV-27",
+      "to": "KV-16",
+      "name": "Mobilfunk RTW-Daten an Telenotarzt Hub",
+      "protocol": "MQTT / TLS VPN",
+      "msgType": "IOT_STREAM",
+      "flowType": "EXTERNAL_INGRESS",
+      "overlay": "PUBLIC_INTERNET_TLS",
+      "isCrossBoundary": true,
+      "tags": [
+        "Notfallrettung",
+        "IOT_STREAM"
+      ]
+    },
+    {
+      "id": "KC-25",
+      "from": "KV-16",
+      "to": "KV-15",
+      "name": "Telenotarzt Protokoll an ZNA Notaufnahme",
+      "protocol": "HL7 FHIR R4 / HTTPS",
+      "msgType": "HL7_FHIR",
+      "flowType": "INTRA_ON_PREM",
+      "overlay": "INTRA_RZ_LAN",
+      "isCrossBoundary": false,
+      "tags": [
+        "Notfallrettung",
+        "FHIR",
+        "KRITIS"
+      ]
+    },
+    {
+      "id": "KC-26",
+      "from": "KV-08",
+      "to": "KV-03",
+      "name": "Termine & Entlassdokumente an Patientenportal",
+      "protocol": "HL7 FHIR R4 / HTTPS",
+      "msgType": "HL7_FHIR",
+      "flowType": "HYBRID_BRIDGE",
+      "overlay": "HYBRID_EXPRESSROUTE_OR_TLS",
+      "isCrossBoundary": true,
+      "tags": [
+        "Klinik",
+        "FHIR",
+        "Cloud",
+        "Patientenportal"
+      ]
+    },
+    {
+      "id": "KC-27",
+      "from": "KV-08",
+      "to": "KV-14",
+      "name": "Archivierung Entlassakte an DMI PEGASOS",
+      "protocol": "IHE XDS.b / PDF-A",
+      "msgType": "SOAP_XML",
+      "flowType": "INTRA_ON_PREM",
+      "overlay": "INTRA_RZ_LAN",
+      "isCrossBoundary": false,
+      "tags": [
+        "Klinik",
+        "DMS",
+        "KRITIS"
+      ]
+    },
+    {
+      "id": "KC-28",
+      "from": "KV-11",
+      "to": "KV-26",
+      "name": "Labormeldepflichtige Erreger an RKI DEMIS",
+      "protocol": "FHIR R4 / TLS",
+      "msgType": "HL7_FHIR",
+      "flowType": "EXTERNAL_EGRESS",
+      "overlay": "PUBLIC_INTERNET_TLS",
+      "isCrossBoundary": true,
+      "tags": [
+        "Klinik",
+        "FHIR"
+      ]
+    }
+  ],
+  "systems": [
+    {
+      "id": "KV-01",
+      "name": "SAP S/4HANA Cloud Finance",
+      "domain": "D1",
+      "scope": "INTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "SAP PCE Frankfurt",
+      "vendor": "SAP",
+      "desc": "Zentrales Rechnungswesen, Debitorenbuchhaltung und KHZG-Fördermittel-Controlling.",
+      "tags": [
+        "Finanzen / ERP",
+        "SAP",
+        "Cloud",
+        "KRITIS"
+      ]
+    },
+    {
+      "id": "KV-02",
+      "name": "SAP BTP Integration Suite",
+      "domain": "D6",
+      "scope": "INTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "AWS Frankfurt",
+      "vendor": "SAP",
+      "desc": "Cloud Integration & API Gateway für mobile Krankenhaus-Services.",
+      "tags": [
+        "Middleware",
+        "SAP",
+        "Cloud"
+      ]
+    },
+    {
+      "id": "KV-03",
+      "name": "Klinikverbund Patienten-Portal",
+      "domain": "D4",
+      "scope": "INTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "Azure Deutschland West",
+      "vendor": "m.Doc",
+      "desc": "Digitales Patientenportal für Online-Termine, Aufklärungsbögen und Befundabruf gem. KHZG.",
+      "tags": [
+        "Klinik",
+        "FHIR",
+        "Cloud",
+        "Patientenportal"
+      ]
+    },
+    {
+      "id": "KV-04",
+      "name": "Microsoft Entra ID Klinikum",
+      "domain": "D6",
+      "scope": "INTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "Azure Europe",
+      "vendor": "Microsoft",
+      "desc": "Identitätsverwaltung, SSO und Conditional Access für 6.500 Klinikmitarbeiter.",
+      "tags": [
+        "Security",
+        "Cloud",
+        "KRITIS"
+      ]
+    },
+    {
+      "id": "KV-05",
+      "name": "Telekonsil- & KI-Plattform",
+      "domain": "D3",
+      "scope": "INTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "Google Cloud Frankfurt",
+      "vendor": "Brainomix / AI",
+      "desc": "KI-basierte Schlaganfall- und Thorax-Bildanalyse im Cloud-Verbund.",
+      "tags": [
+        "Radiologie",
+        "Cloud",
+        "REST_API"
+      ]
+    },
+    {
+      "id": "KV-06",
+      "name": "Snowflake Clinical Data Lakehouse",
+      "domain": "D6",
+      "scope": "INTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "AWS Frankfurt",
+      "vendor": "Snowflake",
+      "desc": "Zentrales Data Warehouse für klinische Studien, QM-Reporting und Belegungsanalysen.",
+      "tags": [
+        "Analytics",
+        "Cloud"
+      ]
+    },
+    {
+      "id": "KV-07",
+      "name": "KIM Provider Fachdienst Cloud",
+      "domain": "D5",
+      "scope": "INTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "gematik Cloud",
+      "vendor": "akquinet / TI",
+      "desc": "Bundesweiter KIM-Mailservice für eArztbriefe und Befundübermittlung.",
+      "tags": [
+        "Telematik / TI",
+        "Cloud",
+        "KRITIS"
+      ]
+    },
+    {
+      "id": "KV-08",
+      "name": "Dedalus ORBIS KIS Core",
+      "domain": "D2",
+      "scope": "INTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "Klinik-RZ Serverraum A",
+      "vendor": "Dedalus",
+      "desc": "Zentrales Krankenhausinformationssystem für Aufnahme, Stationen, Entlassung und Abrechnung.",
+      "tags": [
+        "Klinik",
+        "KRITIS",
+        "HL7",
+        "FHIR"
+      ]
+    },
+    {
+      "id": "KV-09",
+      "name": "ORBIS AMTS & Medikationsmodul",
+      "domain": "D2",
+      "scope": "INTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "Klinik-RZ Serverraum A",
+      "vendor": "Dedalus",
+      "desc": "Arzneimitteltherapiesicherheit, Interaktionsprüfung und elektronische Kurve.",
+      "tags": [
+        "Klinik",
+        "AMTS",
+        "KRITIS"
+      ]
+    },
+    {
+      "id": "KV-10",
+      "name": "Philips IntelliSpace Critical Care PDMS",
+      "domain": "D2",
+      "scope": "INTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "Klinik-RZ Serverraum B",
+      "vendor": "Philips Healthcare",
+      "desc": "Intensivstation-PDMS für Beatmung, Hämodialyse, Vitaldaten-Streaming und Perfusoren.",
+      "tags": [
+        "Klinik",
+        "KRITIS",
+        "HL7"
+      ]
+    },
+    {
+      "id": "KV-11",
+      "name": "Swisslab LIMS Klinische Chemie",
+      "domain": "D2",
+      "scope": "INTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "Klinik-RZ Serverraum A",
+      "vendor": "Nexus / Swisslab",
+      "desc": "Zentrallabor-System mit Vollautomaten-Anbindung und Notfallabor-Befundung.",
+      "tags": [
+        "Klinik",
+        "HL7",
+        "Labor"
+      ]
+    },
+    {
+      "id": "KV-12",
+      "name": "Sectra Enterprise VNA & PACS",
+      "domain": "D3",
+      "scope": "INTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "Klinik-RZ SAN-Storage",
+      "vendor": "Sectra",
+      "desc": "Vendor Neutral Archive für 15 Mio. DICOM-Studien, CT, MRT, Röntgen und Angiographie.",
+      "tags": [
+        "Radiologie",
+        "DICOM",
+        "KRITIS"
+      ]
+    },
+    {
+      "id": "KV-13",
+      "name": "Siemens Syngo RIS",
+      "domain": "D3",
+      "scope": "INTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "Klinik-RZ Serverraum A",
+      "vendor": "Siemens Healthineers",
+      "desc": "Radiologie-Informationssystem für Terminplanung, Befundung und Spracherkennung.",
+      "tags": [
+        "Radiologie",
+        "HL7"
+      ]
+    },
+    {
+      "id": "KV-14",
+      "name": "DMI PEGASOS Langzeitarchiv",
+      "domain": "D3",
+      "scope": "INTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "Klinik-RZ WORM-Archiv",
+      "vendor": "DMI",
+      "desc": "Revisionssicheres 30-Jahre-Patientenaktenarchiv gem. § 630f BGB und Röntgenverordnung.",
+      "tags": [
+        "Klinik",
+        "DMS",
+        "KRITIS"
+      ]
+    },
+    {
+      "id": "KV-15",
+      "name": "E-Care ZNA Notaufnahme-System",
+      "domain": "D4",
+      "scope": "INTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "Klinik-RZ Notstrom-Cluster",
+      "vendor": "E-Care Healthcare",
+      "desc": "Triage nach Manchester Triage System (MTS), Schockraum-Dokumentation und Monitor-Anbindung.",
+      "tags": [
+        "Notfallrettung",
+        "Klinik",
+        "KRITIS"
+      ]
+    },
+    {
+      "id": "KV-16",
+      "name": "Telenotarzt & Rettungs-Hub",
+      "domain": "D4",
+      "scope": "INTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "Klinik-RZ Serverraum A",
+      "vendor": "P3 telepresence",
+      "desc": "Echtzeit-Video, 12-Kanal-EKG und Tele-Konsultation für RTW im Rettungsdienstbereich.",
+      "tags": [
+        "Notfallrettung",
+        "IOT_STREAM",
+        "KRITIS"
+      ]
+    },
+    {
+      "id": "KV-17",
+      "name": "InterSystems HealthShare HL7/FHIR Engine",
+      "domain": "D6",
+      "scope": "INTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "Klinik-RZ DMZ",
+      "vendor": "InterSystems",
+      "desc": "Zentraler Integrations- und Kommunikationsserver für 110 Klinik-Schnittstellen.",
+      "tags": [
+        "Middleware",
+        "HL7",
+        "FHIR",
+        "KRITIS"
+      ]
+    },
+    {
+      "id": "KV-18",
+      "name": "Apache Kafka Event Hub",
+      "domain": "D6",
+      "scope": "INTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "Klinik-RZ Cluster",
+      "vendor": "Apache",
+      "desc": "Hochperformantes Streaming klinischer Alarme, Sensorwerte und Telemetrie.",
+      "tags": [
+        "Middleware",
+        "Kafka",
+        "KRITIS"
+      ]
+    },
+    {
+      "id": "KV-19",
+      "name": "TI-Konnektoren KoCoBox Med+ Cluster",
+      "domain": "D5",
+      "scope": "INTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "Klinik-RZ TI-Rack",
+      "vendor": "KoCo Connector",
+      "desc": "Redundanter Rechenzentrums-Konnektor für ePA 3.0, eRezept, VSDM und KIM.",
+      "tags": [
+        "Telematik / TI",
+        "KRITIS"
+      ]
+    },
+    {
+      "id": "KV-20",
+      "name": "SAP Cloud Connector Klinikum",
+      "domain": "D1",
+      "scope": "INTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "Klinik-RZ DMZ",
+      "vendor": "SAP",
+      "desc": "Sicherer TLS-Reverse-Invoke-Tunnel zur SAP BTP Cloud ohne offene Inbound-Firewall-Ports.",
+      "tags": [
+        "Cloud Connector",
+        "SAP",
+        "Security",
+        "KRITIS"
+      ]
+    },
+    {
+      "id": "KV-21",
+      "name": "Fortinet Core Firewall & Micro-Segmentation",
+      "domain": "D6",
+      "scope": "INTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "Klinik-RZ Perimeter",
+      "vendor": "Fortinet",
+      "desc": "B3S-KRITIS zertifizierte Zonentrennung zwischen Medizintechnik, KIS und Verwaltungsnetz.",
+      "tags": [
+        "Security",
+        "KRITIS"
+      ]
+    },
+    {
+      "id": "KV-22",
+      "name": "gematik Zentrale Telematik-Dienste",
+      "domain": "D5",
+      "scope": "EXTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "gematik Bundessicherheitsnetz",
+      "vendor": "gematik",
+      "desc": "Zentrale Bundestelematic mit ePA Aktensystem, eRezept Fachdienst und VSDM.",
+      "tags": [
+        "Telematik / TI",
+        "KRITIS"
+      ]
+    },
+    {
+      "id": "KV-23",
+      "name": "Zentraler Krankentransport-Server (IVENA eHealth)",
+      "domain": "D4",
+      "scope": "EXTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "Rechenzentrum Region Hessen/Nord",
+      "vendor": "IVENA eHealth",
+      "desc": "Interdisziplinärer Versorgungsnachweis zur Belegungsanzeige für Rettungsleitstellen.",
+      "tags": [
+        "Notfallrettung",
+        "REST_API"
+      ]
+    },
+    {
+      "id": "KV-24",
+      "name": "GHX Pharma & OP-Material Clearing",
+      "domain": "D1",
+      "scope": "EXTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "GHX Cloud Frankfurt",
+      "vendor": "GHX Global Healthcare Exchange",
+      "desc": "B2B-Bestellplattform für Implantate, OP-Besteck, Pharmazeutika und Medikalprodukte.",
+      "tags": [
+        "Finanzen / ERP",
+        "EDIFACT",
+        "B2B_EDI"
+      ]
+    },
+    {
+      "id": "KV-25",
+      "name": "Peppol E-Invoicing Behördennetz",
+      "domain": "D1",
+      "scope": "EXTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "Peppol Authority EU",
+      "vendor": "OpenPeppol",
+      "desc": "Elektronischer XRechnung- und ZUGFeRD-Standard für Lieferanten und öffentliche Träger.",
+      "tags": [
+        "Finanzen / ERP",
+        "EDIFACT"
+      ]
+    },
+    {
+      "id": "KV-26",
+      "name": "RKI DEMIS Meldeportal Cloud",
+      "domain": "D5",
+      "scope": "EXTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "RKI Bund",
+      "vendor": "Robert Koch-Institut",
+      "desc": "Deutsches Elektronisches Melde- und Informationssystem für Infektionsschutz nach IfSG.",
+      "tags": [
+        "Klinik",
+        "FHIR",
+        "REST_API"
+      ]
+    },
+    {
+      "id": "KV-27",
+      "name": "Telefónica IoT Medical SIM Gateway",
+      "domain": "D4",
+      "scope": "EXTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "Telefónica Germany",
+      "vendor": "Telefónica",
+      "desc": "Gesichertes Mobilfunknetz für Rettungswagen, Notarzt-Tablets und Telemetrie.",
+      "tags": [
+        "Notfallrettung",
+        "IOT_STREAM"
+      ]
+    },
+    {
+      "id": "KV-28",
+      "name": "Integrierte Leitstelle (ILS) Feuerwehr",
+      "domain": "D4",
+      "scope": "EXTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "ILS Zentrale Stadt",
+      "vendor": "Eurofunk / Cobra",
+      "desc": "Städtische Rettungsleitstelle für Notrufe 112 und Notarzteinsatz-Disposition.",
+      "tags": [
+        "Notfallrettung",
+        "KRITIS"
+      ]
+    },
+    {
+      "id": "KV-29",
+      "name": "GKV Clearingstelle DTA § 301 SGB V",
+      "domain": "D1",
+      "scope": "EXTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "Bitmarck / ITSG RZ",
+      "vendor": "ITSG / GKV",
+      "desc": "Datenträgeraustausch für stationäre Aufnahme-, Entlass- und DRG-Rechnungsanzeigen.",
+      "tags": [
+        "Finanzen / ERP",
+        "EDIFACT",
+        "KRITIS"
+      ]
+    },
+    {
+      "id": "KV-30",
+      "name": "Private Krankenversicherungen (PKV) Clearing",
+      "domain": "D1",
+      "scope": "EXTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "PKV Verband Köln",
+      "vendor": "PKV Verband",
+      "desc": "Elektronischer Abrechnungsaustausch für Privatpatienten und Wahlleistungen.",
+      "tags": [
+        "Finanzen / ERP",
+        "EDIFACT"
+      ]
+    },
+    {
+      "id": "KV-31",
+      "name": "Blutspendedienst & DRK Transfusionsnetz",
+      "domain": "D2",
+      "scope": "EXTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "DRK Blutspendedienst RZ",
+      "vendor": "DRK Blutspendedienst",
+      "desc": "Bestellung, Chargenverfolgung und Verträglichkeitsprüfung von Blutkonserven.",
+      "tags": [
+        "Klinik",
+        "HL7"
+      ]
+    },
+    {
+      "id": "KV-32",
+      "name": "Landeskrebsregister (LKR) Onkologie-Clearing",
+      "domain": "D2",
+      "scope": "EXTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "Landesgesundheitsamt",
+      "vendor": "LKR",
+      "desc": "Gesetzliche Tumormeldungen gem. § 65c SGB V und oBDS-Standard.",
+      "tags": [
+        "Klinik",
+        "REST_API"
+      ]
+    }
+  ]
+}
