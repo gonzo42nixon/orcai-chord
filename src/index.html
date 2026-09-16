@@ -18394,10 +18394,30 @@
         // Case 1: Intra-Circle (Both nodes in same quadrant)
         if (src.quad === tgt.quad) {
           const c = src.center;
-          const ctrl1X = src.x * (1 - BETA) + c.x * BETA;
-          const ctrl1Y = src.y * (1 - BETA) + c.y * BETA;
-          const ctrl2X = tgt.x * (1 - BETA) + c.x * BETA;
-          const ctrl2Y = tgt.y * (1 - BETA) + c.y * BETA;
+          const srcAngle = typeof src.angle === 'number' ? src.angle : Math.atan2(src.y - c.y, src.x - c.x);
+          const tgtAngle = typeof tgt.angle === 'number' ? tgt.angle : Math.atan2(tgt.y - c.y, tgt.x - c.x);
+
+          let diff = tgtAngle - srcAngle;
+          while (diff < -Math.PI) diff += 2 * Math.PI;
+          while (diff > Math.PI) diff -= 2 * Math.PI;
+          const dAngle = Math.abs(diff);
+
+          // Adaptive bundling: clearance from rim is at least 52px, scaling up with angular distance
+          const minDip = 52;
+          const maxDip = c.r * 0.76;
+          const dip = Math.min(maxDip, Math.max(minDip, c.r * Math.sin(dAngle / 2) * 1.45));
+
+          const midAngle = srcAngle + diff / 2;
+          const ctrlR = Math.max(25, c.r - dip);
+          const midX = c.x + ctrlR * Math.cos(midAngle);
+          const midY = c.y + ctrlR * Math.sin(midAngle);
+
+          const k = 0.55;
+          const ctrl1X = src.x * (1 - k) + midX * k;
+          const ctrl1Y = src.y * (1 - k) + midY * k;
+          const ctrl2X = tgt.x * (1 - k) + midX * k;
+          const ctrl2Y = tgt.y * (1 - k) + midY * k;
+
           return "M" + src.x.toFixed(2) + "," + src.y.toFixed(2) + " C" + ctrl1X.toFixed(2) + "," + ctrl1Y.toFixed(2) + " " + ctrl2X.toFixed(2) + "," + ctrl2Y.toFixed(2) + " " + tgt.x.toFixed(2) + "," + tgt.y.toFixed(2);
         }
 
@@ -18773,7 +18793,9 @@
           }
         } else {
           selectedIntegration = integ;
-          selectedLink = null;
+          selectedLink = integ.steps && integ.steps.length > 0
+            ? (CONNECTIONS_DATA.find(c => c.id === integ.steps[0].connectionId) || null)
+            : null;
           // Auto-sync process if none active
           if (!selectedProcess) {
             const matchingProc = PROCESSES_DATA.find(p => p.cleanIntegIds.includes(integ.id));
@@ -18784,9 +18806,10 @@
               }
             }
           }
-          renderInspectorIntegration(selectedIntegration);
+          renderInspectorIntegration(selectedIntegration, 0);
           startTokenAnimationForIntegration(selectedIntegration);
         }
+        if (typeof window.renderConnections === 'function') window.renderConnections();
         updateUI();
       }
 
@@ -29081,7 +29104,20 @@
                  (c.desc && c.desc.toLowerCase().includes(term));
         });
 
-        filtered.slice(0, 100).forEach(c => {
+        let displayList = [...filtered];
+        if (selectedIntegration && selectedIntegration.steps) {
+          const stepConnIds = selectedIntegration.steps.map(s => s.connectionId);
+          displayList.sort((a, b) => {
+            const idxA = stepConnIds.indexOf(a.id);
+            const idxB = stepConnIds.indexOf(b.id);
+            if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+            if (idxA !== -1) return -1;
+            if (idxB !== -1) return 1;
+            return 0;
+          });
+        }
+
+        displayList.slice(0, 100).forEach(c => {
           const fromSys = sysById.get(c.from);
           const toSys = sysById.get(c.to);
           const fromDom = DOMAINS_DATA.find(d => d.id === fromSys?.domain);
@@ -29139,6 +29175,7 @@
           applyOnlyActiveFilters();
         }
       }
+      window.renderConnections = renderConnections;
 
       const connSearchInp = document.getElementById('connSearchInput');
       if (connSearchInp) {
