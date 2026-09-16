@@ -20109,6 +20109,7 @@
                 '<button type="button" class="insp-action-btn" style="background:rgba(56,189,248,0.2); border-color:var(--accent); color:var(--accent); font-weight:750;" onclick="window.openPlantUmlModal(\'' + proc.id + '\')">▶ Diagramm-Vorschau</button>' +
                 '<button type="button" class="insp-action-btn" onclick="window.copyPlantUml(\'' + proc.id + '\')">📋 Kopieren</button>' +
                 '<button type="button" class="insp-action-btn" onclick="window.openPlantUmlEditor(\'' + proc.id + '\')">↗ In PlantText</button>' +
+                '<button type="button" class="insp-action-btn" onclick="window.openOfficialPlantUmlEditor(\'' + proc.id + '\')">↗ PlantUML.com</button>' +
                 '<button type="button" class="insp-action-btn" onclick="window.regeneratePlantUmlForProcess(\'' + proc.id + '\')" title="Aus Integrationsschritten neu generieren">⚡ Auto-Gen</button>' +
               '</div>' +
               '<details style="background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.06); border-radius:6px; padding:6px 8px; font-size:0.65rem;">' +
@@ -32318,11 +32319,82 @@
         });
       };
 
-      window.openPlantUmlEditor = function(procId) {
+      function encode6bit(b) {
+        if (b < 10) return String.fromCharCode(48 + b);
+        b -= 10;
+        if (b < 26) return String.fromCharCode(65 + b);
+        b -= 26;
+        if (b < 26) return String.fromCharCode(97 + b);
+        b -= 26;
+        if (b === 0) return '-';
+        if (b === 1) return '_';
+        return '?';
+      }
+
+      function append3bytes(b1, b2, b3) {
+        const c1 = b1 >> 2;
+        const c2 = ((b1 & 0x3) << 4) | (b2 >> 4);
+        const c3 = ((b2 & 0xF) << 2) | (b3 >> 6);
+        const c4 = b3 & 0x3F;
+        return encode6bit(c1 & 0x3F) + encode6bit(c2 & 0x3F) + encode6bit(c3 & 0x3F) + encode6bit(c4 & 0x3F);
+      }
+
+      function encode64(data) {
+        let r = '';
+        for (let i = 0; i < data.length; i += 3) {
+          if (i + 2 === data.length) {
+            r += append3bytes(data[i], data[i + 1], 0);
+          } else if (i + 1 === data.length) {
+            r += append3bytes(data[i], 0, 0);
+          } else {
+            r += append3bytes(data[i], data[i + 1], data[i + 2]);
+          }
+        }
+        return r;
+      }
+
+      window.encodePlantUml = async function(pumlText) {
+        try {
+          const stream = new Blob([pumlText]).stream().pipeThrough(new CompressionStream('deflate-raw'));
+          const response = new Response(stream);
+          const buffer = await response.arrayBuffer();
+          return encode64(new Uint8Array(buffer));
+        } catch (err) {
+          console.warn('CompressionStream deflate-raw fallback:', err);
+          return null;
+        }
+      };
+
+      window.openPlantUmlEditor = async function(procId) {
         const proc = PROCESSES_DATA.find(p => p.id === procId);
         if (!proc) return;
         const puml = proc.plantUml || window.generatePlantUmlFromProcess(proc);
+        try {
+          const encoded = await window.encodePlantUml(puml);
+          if (encoded) {
+            window.open('https://www.planttext.com/?text=' + encoded, '_blank');
+            return;
+          }
+        } catch (err) {
+          console.warn('PlantUML encode error:', err);
+        }
         window.open('https://www.planttext.com/?text=' + encodeURIComponent(puml), '_blank');
+      };
+
+      window.openOfficialPlantUmlEditor = async function(procId) {
+        const proc = PROCESSES_DATA.find(p => p.id === procId);
+        if (!proc) return;
+        const puml = proc.plantUml || window.generatePlantUmlFromProcess(proc);
+        try {
+          const encoded = await window.encodePlantUml(puml);
+          if (encoded) {
+            window.open('https://www.plantuml.com/plantuml/uml/' + encoded, '_blank');
+            return;
+          }
+        } catch (err) {
+          console.warn('PlantUML encode error:', err);
+        }
+        window.open('https://www.plantuml.com/plantuml/uml/~1' + encodeURIComponent(puml), '_blank');
       };
 
       window.regeneratePlantUmlForProcess = function(procId) {
@@ -32402,6 +32474,8 @@
         <button class="insp-action-btn" id="btnPumlFullscreen" onclick="window.togglePlantUmlFullscreen()" title="Vollbild umschalten">⛶ Vollbild</button>
         <button class="insp-action-btn" onclick="window.downloadPumlSvg()" title="SVG Vektorgrafik herunterladen">💾 SVG Download</button>
         <button class="insp-action-btn" onclick="window.copyPlantUml(currentPumlProcId)" title="PlantUML-Code kopieren">📋 Kopieren</button>
+        <button class="insp-action-btn" onclick="window.openPlantUmlEditor(currentPumlProcId)" title="In externem Editor (PlantText) bearbeiten">↗ PlantText</button>
+        <button class="insp-action-btn" onclick="window.openOfficialPlantUmlEditor(currentPumlProcId)" title="Auf offiziellem PlantUML-Server öffnen">↗ PlantUML.com</button>
         <button onclick="window.closePlantUmlModal()" style="background:none; border:none; color:var(--text-muted); font-size:1.4rem; cursor:pointer; padding:0 6px; line-height:1;" title="Schließen">&times;</button>
       </div>
     </div>
