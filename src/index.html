@@ -2789,8 +2789,9 @@
       stroke-width: 3.0 !important;
     }
     .edge-link.highlighted {
-      stroke-opacity: 0.95 !important;
-      stroke-width: 2.8 !important;
+      stroke-opacity: 1.0 !important;
+      stroke-width: 3.2 !important;
+      filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.85)) !important;
     }
     .edge-link.focused-step {
       stroke: #f59e0b !important;
@@ -18994,7 +18995,17 @@
           radarSets = getRadarEntitySets(selectedRadarHub);
         }
 
-        if (selectedIntegration) {
+        // System selection (Level 1: Systemfokus) has absolute priority for link highlighting!
+        if (selectedNodeId) {
+          activeNodeIds.add(selectedNodeId);
+          CONNECTIONS_DATA.forEach(c => {
+            if (c.from === selectedNodeId || c.to === selectedNodeId) {
+              activeLinkIds.add(c.id);
+              activeNodeIds.add(c.from);
+              activeNodeIds.add(c.to);
+            }
+          });
+        } else if (selectedIntegration) {
           selectedIntegration.steps.forEach((s, idx) => {
             activeLinkIds.add(s.connectionId);
             activeNodeIds.add(s.from);
@@ -19035,15 +19046,6 @@
         } else if (radarSets) {
           activeLinkIds = new Set(radarSets.connSet);
           activeNodeIds = new Set(radarSets.sysSet);
-        } else if (selectedNodeId) {
-          activeNodeIds.add(selectedNodeId);
-          CONNECTIONS_DATA.forEach(c => {
-            if (c.from === selectedNodeId || c.to === selectedNodeId) {
-              activeLinkIds.add(c.id);
-              activeNodeIds.add(c.from);
-              activeNodeIds.add(c.to);
-            }
-          });
         }
 
         // =========================================================================
@@ -19446,7 +19448,7 @@
           titleEl.innerHTML = 
             '<span class="title-step-node active-stage" onclick="event.stopPropagation();">' +
               '<span class="title-step-num">SYS</span>' +
-              '<span class="title-step-text">System ' + esc(selectedNode.id) + ' · ' + esc(selectedNode.label) + '</span>' +
+              '<span class="title-step-text">System ' + esc(selectedNode.id) + ' · ' + esc((selectedNode.label || selectedNode.name)) + '</span>' +
               '<span class="title-step-clear" onclick="event.stopPropagation(); clearNode();" title="Systemfokus aufheben">✕</span>' +
             '</span>' +
             '<span class="title-sep">*</span>' +
@@ -19455,7 +19457,7 @@
             '</span>';
           subEl.innerHTML = 
             '<span class="subtitle-stage-pill">Stufe 1 (Systemfokus)</span>' +
-            '<span>System <strong>' + esc(selectedNode.id) + ' (' + esc(selectedNode.label) + ')</strong> · ' + esc(selectedNode.subdomain || selectedNode.type) + ' · Details im Spickzettel</span>';
+            '<span>System <strong>' + esc(selectedNode.id) + ' (' + esc((selectedNode.label || selectedNode.name)) + ')</strong> · ' + esc(selectedNode.subdomain || selectedNode.type) + ' · Details im Spickzettel</span>';
           return;
         }
 
@@ -24288,18 +24290,18 @@
     "modelTitle": "Bruker Corporation Enterprise Architecture (Global High-Tech Instruments, CALID & BioSpin)",
     "description": "Konzernweite Enterprise- und Produkt-Architektur der Bruker Corporation (NASDAQ: BRKR, ~$3.4 Mrd. Umsatz, ~11.400 Mitarbeiter, Billerica HQ, Bremen Mass Spectrometry, Ettlingen BioSpin NMR). Umfasst globale ERP-Systeme (SAP S/4HANA, Ariba), R&D- und PLM-Plattformen (Siemens Teamcenter, SolidWorks, Jira), Life-Science- und Diagnostik-Schnittstellen (MALDI Biotyper MBT Compass, timsTOF PaSER GPU Proteomics, Mass Dynamics Cloud), globale Service-Steuerung (Salesforce Service Cloud / FSL) und LabScape Remote IoT Magnet-Telemetrie.",
     "version": "1.0.0",
-    "updatedAt": "2026-09-16T17:59:29.272Z",
+    "updatedAt": "2026-09-16T18:15:47.957Z",
     "author": "Bruker Corporation Enterprise Architecture Team & ORCAI",
     "stats": {
-      "systemsCount": 46,
-      "connectionsCount": 70,
-      "integrationsCount": 25,
-      "processesCount": 13,
+      "systemsCount": 47,
+      "connectionsCount": 79,
+      "integrationsCount": 26,
+      "processesCount": 14,
       "domainsCount": 6,
-      "systems": 46,
-      "connections": 70,
-      "integrations": 25,
-      "processes": 13,
+      "systems": 47,
+      "connections": 79,
+      "integrations": 26,
+      "processes": 14,
       "domains": 6
     }
   },
@@ -24339,8 +24341,8 @@
     "D1": {
       "name": "Globale Unternehmenssteuerung & ERP",
       "shortName": "ERP / FIN",
-      "focus": "SAP S/4HANA Core, BTP/CPI, SAP TRM (ELITech), SAP DRC (LATAM), Bruker API-Portal, SEEBURGER BIS Cloud Peppol Gate, MasterControl QMS, Onventis Procurement, Bloomberg FX, AEB & ASSIST4 Zoll.",
-      "sysCount": 17,
+      "focus": "SAP S/4HANA Core, BTP/CPI, Bruker Supplier Portal, SAP Ariba CIG, SAP TRM (ELITech), SAP DRC (LATAM), Bruker API-Portal, SEEBURGER BIS Cloud Peppol Gate, MasterControl QMS, Onventis Procurement, Bloomberg FX, AEB & ASSIST4 Zoll.",
+      "sysCount": 18,
       "leadSystem": "BRK-01"
     },
     "D2": {
@@ -24556,6 +24558,19 @@
         "BRK-INT-24"
       ],
       "desc": "Lückenloses GxP-Qualitätsmanagement: Bearbeitung von Reklamationen und Abweichungen in MasterControl, Steuerung digitaler SOP-Arbeitsanweisungen über VKS und Archivierung im OpenText DHR."
+    },
+    {
+      "id": "BRK-P-14",
+      "name": "Lieferanten-Kollaboration & Procurement-Abwicklung (Supplier Portal, Ariba & S/4HANA)",
+      "leadDomain": "D1",
+      "involvedDomains": [
+        "D1"
+      ],
+      "cleanIntegIds": [
+        "BRK-INT-26",
+        "BRK-INT-10"
+      ],
+      "desc": "Ganzheitliche Beschaffungsabwicklung mit direkter Einbindung globaler Teile- und Komponentenlieferanten über das Bruker Supplier Portal, Ariba CIG und automatisierte S/4HANA Disposition."
     }
   ],
   "integrations": [
@@ -25169,6 +25184,31 @@
           "from": "BRK-44",
           "to": "BRK-32",
           "desc": "Historische Kurse an Snowflake Lakehouse"
+        }
+      ]
+    },
+    {
+      "id": "BRK-INT-26",
+      "name": "Lieferanten-Kollaboration via Bruker Supplier Portal & S/4HANA",
+      "cluster": "PROCUREMENT",
+      "hub": "BRK-47",
+      "hubName": "Bruker Supplier Portal (Lieferanten- & Vendor-Portal)",
+      "protocol": "REST / OData / cXML",
+      "desc": "Zentraler Kollaborationsworkflow mit externen Lieferanten: Digitale Bestellannahme, Lieferavise (ASN), Zertifikats-Upload und nahtlose Verbuchung in SAP S/4HANA MM/FI.",
+      "sourceSystem": "BRK-47",
+      "targetSystem": "BRK-01",
+      "steps": [
+        {
+          "connectionId": "BRK-C-71",
+          "from": "BRK-47",
+          "to": "BRK-01",
+          "desc": "Bestellbestätigung & ASN an S/4HANA"
+        },
+        {
+          "connectionId": "BRK-C-72",
+          "from": "BRK-47",
+          "to": "BRK-03",
+          "desc": "Synchronisation mit Ariba Supplier Network"
         }
       ]
     }
@@ -26676,6 +26716,202 @@
         "Export",
         "Logistik"
       ]
+    },
+    {
+      "id": "BRK-C-71",
+      "from": "BRK-47",
+      "to": "BRK-01",
+      "name": "Bruker Supplier Portal ➔ SAP S/4HANA Bestellabwicklung & Lieferavise (ASN)",
+      "protocol": "REST / OData v4 over TLS",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "CLOUD_TO_CLOUD",
+      "transportOverlay": "CLOUD_VPC",
+      "overlay": "CLOUD_VPC",
+      "isCrossBoundary": true,
+      "rawWeight": 310,
+      "trafficPct": 3.1,
+      "tags": [
+        "SupplierPortal",
+        "SAP",
+        "Bestellung",
+        "ASN",
+        "REST"
+      ]
+    },
+    {
+      "id": "BRK-C-72",
+      "from": "BRK-47",
+      "to": "BRK-03",
+      "name": "Bruker Supplier Portal ➔ SAP Ariba Supplier Network Bridge",
+      "protocol": "cXML / REST API over TLS",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "CLOUD_TO_CLOUD",
+      "transportOverlay": "CLOUD_VPC",
+      "overlay": "CLOUD_VPC",
+      "isCrossBoundary": false,
+      "rawWeight": 220,
+      "trafficPct": 2.2,
+      "tags": [
+        "SupplierPortal",
+        "Ariba",
+        "B2B",
+        "cXML"
+      ]
+    },
+    {
+      "id": "BRK-C-73",
+      "from": "BRK-47",
+      "to": "BRK-43",
+      "name": "Bruker Supplier Portal ➔ Onventis Punchout- & Katalog-Sync",
+      "protocol": "OCI / cXML over HTTPS",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "CLOUD_TO_CLOUD",
+      "transportOverlay": "CLOUD_VPC",
+      "overlay": "CLOUD_VPC",
+      "isCrossBoundary": false,
+      "rawWeight": 190,
+      "trafficPct": 1.9,
+      "tags": [
+        "SupplierPortal",
+        "Onventis",
+        "Katalog",
+        "OCI"
+      ]
+    },
+    {
+      "id": "BRK-C-74",
+      "from": "BRK-03",
+      "to": "BRK-01",
+      "name": "SAP Ariba ➔ SAP S/4HANA Direkte Beschaffung & CIG Integration",
+      "protocol": "cXML / OData CIG über TLS",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "CLOUD_TO_CLOUD",
+      "transportOverlay": "CLOUD_VPC",
+      "overlay": "CLOUD_VPC",
+      "isCrossBoundary": true,
+      "rawWeight": 330,
+      "trafficPct": 3.3,
+      "tags": [
+        "Ariba",
+        "SAP",
+        "S/4HANA",
+        "Beschaffung",
+        "CIG"
+      ]
+    },
+    {
+      "id": "BRK-C-75",
+      "from": "BRK-26",
+      "to": "BRK-01",
+      "name": "MyBruker WebStore ➔ SAP S/4HANA Kundenaufträge & Lagerdisposition",
+      "protocol": "REST / OData v4 over TLS",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "INTRA_CLOUD",
+      "transportOverlay": "CLOUD_VPC",
+      "overlay": "CLOUD_VPC",
+      "isCrossBoundary": false,
+      "rawWeight": 280,
+      "trafficPct": 2.8,
+      "tags": [
+        "MyBruker",
+        "SAP",
+        "eCommerce",
+        "Auftrag",
+        "REST"
+      ]
+    },
+    {
+      "id": "BRK-C-76",
+      "from": "BRK-38",
+      "to": "BRK-01",
+      "name": "Bruker API-Portal ➔ SAP S/4HANA Managed Enterprise Core APIs",
+      "protocol": "REST / OpenAPI v3 over mTLS",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "INTRA_CLOUD",
+      "transportOverlay": "SAP_BTP_MESH",
+      "overlay": "SAP_BTP_MESH",
+      "isCrossBoundary": false,
+      "rawWeight": 350,
+      "trafficPct": 3.5,
+      "tags": [
+        "API",
+        "SAP",
+        "S/4HANA",
+        "Gateway",
+        "REST"
+      ]
+    },
+    {
+      "id": "BRK-C-77",
+      "from": "BRK-01",
+      "to": "BRK-41",
+      "name": "SAP S/4HANA ➔ VKS Fertigungsaufträge & Arbeitsstammplandaten",
+      "protocol": "OData / REST Webhook over TLS",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "INTRA_CLOUD",
+      "transportOverlay": "CLOUD_VPC",
+      "overlay": "CLOUD_VPC",
+      "isCrossBoundary": false,
+      "rawWeight": 240,
+      "trafficPct": 2.4,
+      "tags": [
+        "SAP",
+        "VKS",
+        "Fertigung",
+        "SOP",
+        "REST"
+      ]
+    },
+    {
+      "id": "BRK-C-78",
+      "from": "BRK-01",
+      "to": "BRK-32",
+      "name": "SAP S/4HANA ➔ Snowflake Data Lakehouse Direct Analytics Feed",
+      "protocol": "Snowflake Connector / SQL over TLS",
+      "messageType": "SQL",
+      "msgType": "SQL",
+      "flowType": "INTRA_CLOUD",
+      "transportOverlay": "CLOUD_VPC",
+      "overlay": "CLOUD_VPC",
+      "isCrossBoundary": false,
+      "rawWeight": 390,
+      "trafficPct": 3.9,
+      "tags": [
+        "SAP",
+        "Snowflake",
+        "Analytics",
+        "SQL",
+        "DataLake"
+      ]
+    },
+    {
+      "id": "BRK-C-79",
+      "from": "BRK-25",
+      "to": "BRK-01",
+      "name": "Bruker LabScape IoT ➔ SAP S/4HANA Garantie- & Serviceabgleich",
+      "protocol": "REST / HTTPS API over TLS",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "INTRA_CLOUD",
+      "transportOverlay": "CLOUD_VPC",
+      "overlay": "CLOUD_VPC",
+      "isCrossBoundary": false,
+      "rawWeight": 210,
+      "trafficPct": 2.1,
+      "tags": [
+        "LabScape",
+        "IoT",
+        "SAP",
+        "Garantie",
+        "Service"
+      ]
     }
   ],
   "systems": [
@@ -27473,6 +27709,25 @@
         "Logistik",
         "Außenhandel"
       ]
+    },
+    {
+      "id": "BRK-47",
+      "name": "Bruker Supplier Portal (Lieferanten- & Vendor-Portal)",
+      "domain": "D1",
+      "scope": "EXTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "Bruker Cloud B2B Platform (Frankfurt)",
+      "vendor": "Bruker Corporation / Cloud SaaS",
+      "desc": "Zentrales Lieferantenportal (Vendor Portal) für Lieferanten-Onboarding, digitale Bestellbestätigungen, Lieferavise (ASN), Rechnungsübermittlung, Qualitätsprüfberichte und Zeichnungsdownloads mit nativer S/4HANA-Kopplung.",
+      "tags": [
+        "SupplierPortal",
+        "Lieferanten",
+        "B2B",
+        "Procurement",
+        "ASN",
+        "Cloud",
+        "Extern"
+      ]
     }
   ]
 };
@@ -27513,9 +27768,9 @@
           organization: 'Bruker Corporation (Scientific Instruments & Diagnostics)',
           shortName: 'BRUKER CORP',
           title: 'Bruker Corporation Enterprise Architecture (Global High-Tech Instruments, CALID & BioSpin)',
-          desc: 'Konzernweite Enterprise- und Produkt-Architektur der Bruker Corporation (NASDAQ: BRKR, ~$3.4 Mrd. Umsatz, ~11.400 Mitarbeiter, Billerica HQ, Bremen Mass Spectrometry, Ettlingen BioSpin NMR). Umfasst globale ERP-Systeme (SAP S/4HANA, Ariba, Onventis Procurement, Bloomberg FX), B2B- & E-Invoicing-Plattformen (SAP Trading Partner Management (=TRM) für ELITech, SAP DRC LATAM, Bruker API-Portal, SEEBURGER BIS Cloud Peppol E-Invoicing Gate, AEB & ASSIST4 Zoll), QMS & Fertigung (MasterControl, VKS Werkerführung, Siemens Teamcenter, Opcenter MES), Life-Science- und Diagnostik-Schnittstellen (MALDI Biotyper MBT Compass, timsTOF PaSER, Mass Dynamics Cloud), globale Service-Steuerung (Salesforce FSL) und LabScape Remote IoT.',
+          desc: 'Konzernweite Enterprise- und Produkt-Architektur der Bruker Corporation (NASDAQ: BRKR, ~$3.4 Mrd. Umsatz, ~11.400 Mitarbeiter, Billerica HQ, Bremen Mass Spectrometry, Ettlingen BioSpin NMR). Umfasst globale ERP-Systeme (SAP S/4HANA Core, Bruker Supplier Portal, Ariba CIG, Onventis Procurement, Bloomberg FX), B2B- & E-Invoicing-Plattformen (SAP Trading Partner Management (=TRM) für ELITech, SAP DRC LATAM, Bruker Enterprise API-Portal, SEEBURGER BIS Cloud Peppol E-Invoicing Gate, AEB & ASSIST4 Zoll), QMS & Fertigung (MasterControl, VKS Werkerführung, Siemens Teamcenter, Opcenter MES), Life-Science- und Diagnostik-Schnittstellen (MALDI Biotyper MBT Compass, timsTOF PaSER, Mass Dynamics Cloud), globale Service-Steuerung (Salesforce FSL) und LabScape Remote IoT.',
           url: 'https://orcai-54321.web.app/api/orcai/v1/docs/ORCAI-MODEL-BRUKER-EA?v=1.0.0',
-          stats: { systems: 46, connections: 70, integrations: 25, processes: 13, domains: 6 },
+          stats: { systems: 47, connections: 79, integrations: 26, processes: 14, domains: 6 },
           data: cachedBrukerModel
         }
       ];
