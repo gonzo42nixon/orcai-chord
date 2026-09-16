@@ -3834,6 +3834,96 @@
       transform: translateY(0);
     }
 
+
+    /* Floating Draggable & Resizable PlantUML Popout Window (No Backdrop, No Blur) */
+    .plantuml-floating-popout {
+      position: fixed;
+      top: 50px;
+      left: calc(50vw - 480px);
+      width: 960px;
+      height: 680px;
+      min-width: 480px;
+      min-height: 380px;
+      max-width: calc(100vw - 20px);
+      max-height: calc(100vh - 20px);
+      z-index: 10000;
+      background: var(--card-bg, #0b0f17);
+      border: 1px solid rgba(56, 189, 248, 0.45);
+      border-radius: 12px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(255, 255, 255, 0.1), 0 0 35px rgba(56, 189, 248, 0.2);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      resize: both;
+      animation: popIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .plantuml-floating-popout.is-fullscreen {
+      top: 8px !important;
+      left: 8px !important;
+      width: calc(100vw - 16px) !important;
+      height: calc(100vh - 16px) !important;
+      max-width: none !important;
+      max-height: none !important;
+      resize: none !important;
+      border-radius: 8px;
+    }
+    .plantuml-popout-header {
+      padding: 10px 14px;
+      background: var(--item-bg, #1e293b);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: grab;
+      user-select: none;
+    }
+    .plantuml-popout-header:active {
+      cursor: grabbing;
+    }
+    .plantuml-popout-footer {
+      padding: 6px 14px;
+      background: rgba(15, 23, 42, 0.95);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+    }
+    .plantuml-resize-indicator {
+      font-size: 0.75rem;
+      color: var(--accent);
+      opacity: 0.75;
+      pointer-events: none;
+      font-family: monospace;
+    }
+
+    /* PlantUML SVG Interactive Links */
+    #pumlSvgContainer a {
+      cursor: pointer !important;
+      transition: all 0.2s ease;
+    }
+    #pumlSvgContainer a text {
+      transition: fill 0.18s ease, font-weight 0.18s ease;
+    }
+    #pumlSvgContainer a:hover text {
+      fill: #0284c7 !important;
+      font-weight: 750 !important;
+      text-decoration: underline !important;
+    }
+    #pumlSvgContainer a:hover rect {
+      stroke: #0284c7 !important;
+      stroke-width: 2.5px !important;
+      filter: drop-shadow(0 0 6px rgba(2, 132, 199, 0.55)) !important;
+    }
+    #pumlSvgContainer a:hover polygon,
+    #pumlSvgContainer a:hover path {
+      stroke: #0284c7 !important;
+      stroke-width: 2px !important;
+      filter: drop-shadow(0 0 5px rgba(2, 132, 199, 0.55)) !important;
+    }
+
   </style>
 </head>
 <body class="theme-night">
@@ -22758,7 +22848,7 @@
         "JSD-INT-02"
       ],
       "desc": "Echtzeit-Notfallzuweisung aus RTW/Feuerwehr über Telemedizin, IVENA-Kapazitätsabgleich und ZNA-Manchester-Triage.",
-      "plantUml": "@startuml\ntitle JSD-P-01: Notfallaufnahme, ZNA Manchester-Triage & Voranmeldung\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"Prähospital & Rettungsdienst\" #e0f2fe\nactor \"Rettungsdienst (RTW)\" as RTW\nparticipant \"JSD-28: Medical IoT Gateway\" as IoT\nend box\n\nbox \"Telemedizin & Hub (Conciliamus)\" #fef3c7\nparticipant \"JSD-05: Telemedizin Hub\" as TM\nparticipant \"JSD-10: HealthShare Clinical Hub\" as HS\nend box\n\nbox \"Akutklinik & Notaufnahme\" #dcfce7\nparticipant \"JSD-15: ZNA E-Care & Triage\" as ZNA\nparticipant \"JSD-08: CGM MEDICO KIS\" as KIS\nend box\n\nRTW -> IoT: Notfalldaten, EKG & ETA (MQTT / TLS)\nIoT -> TM: Live-Vitalparameter & Telenotarzt-Stream (WebRTC)\nTM -> ZNA: Notfall-Encounter Voranmeldung (REST FHIR)\nactivate ZNA\nZNA -> ZNA: Automatisierte Manchester-Triage Einstufung\nZNA -> HS: Notfall-Aufnahme ADT (HL7 v2.5 ADT_A04 / MLLP)\nactivate HS\nHS -> KIS: Stammdatenabgleich & vorstationäre Anlage (HL7 v2.5 MLLP)\nactivate KIS\nKIS --> HS: Bestätigung Fallnummer\ndeactivate KIS\nHS --> ZNA: KIS-Fall verknüpft (HL7 ACK)\ndeactivate HS\ndeactivate ZNA\n@enduml"
+      "plantUml": "@startuml\ntitle JSD-P-01: Notfallaufnahme, ZNA Manchester-Triage & Voranmeldung\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"Praehospital & Rettung\" #e0f2fe\nactor \"Rettungsdienst (RTW)\" as RTW\nparticipant \"[[#sys-JSD-28 JSD-28: Medical IoT Gateway]]\" as IoT\nend box\n\nbox \"Telemedizin & Hub\" #fef3c7\nparticipant \"[[#sys-JSD-05 JSD-05: Telemedizin Hub]]\" as TM\nparticipant \"[[#sys-JSD-10 JSD-10: HealthShare Hub]]\" as HS\nend box\n\nbox \"Akutklinik & Notaufnahme\" #dcfce7\nparticipant \"[[#sys-JSD-15 JSD-15: ZNA E-Care & Triage]]\" as ZNA\nparticipant \"[[#sys-JSD-08 JSD-08: CGM MEDICO KIS]]\" as KIS\nend box\n\nRTW -> IoT: Notfalldaten, EKG & GPS\n== [[#integ-JSD-INT-01 JSD-INT-01: Notfall-Voranmeldung RTW ➔ ZNA E-Care]] ==\nIoT -> TM: [[#conn-JSD-C-15 RTW-Daten an Telemedizin Hub (MQTT / TLS)]]\nTM -> ZNA: [[#conn-JSD-C-16 Voranmeldung an ZNA E-Care (REST FHIR R4)]]\nactivate ZNA\nZNA -> ZNA: Manchester-Triage Einstufung & Bettenzuweisung\n\n== [[#integ-JSD-INT-02 JSD-INT-02: ZNA Aufnahme ➔ CGM MEDICO KIS Sync]] ==\nZNA -> HS: [[#conn-JSD-C-14 Notfall-ADT an HealthShare (HL7 v2.5 ADT_A04)]]\nactivate HS\nHS -> KIS: [[#conn-JSD-C-01 KIS Fallanlage & Stammdaten (HL7 v2.5 MLLP)]]\nactivate KIS\nKIS --> HS: KIS-Fallnummer Bestaetigung (HL7 ACK)\ndeactivate KIS\nHS --> ZNA: KIS-Fall verknuepft (HL7 ACK)\ndeactivate HS\ndeactivate ZNA\n@enduml"
     },
     {
       "id": "JSD-P-02",
@@ -22774,7 +22864,7 @@
         "JSD-INT-04"
       ],
       "desc": "Order Entry für Laboruntersuchungen aus CGM MEDICO / Martin Luther KIS an Swisslab LIMS mit prioritärer Rückmeldung.",
-      "plantUml": "@startuml\ntitle JSD-P-02: Klinischer Diagnostikpfad & Zentrallabor-Befundung\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"Klinik & Stationen\" #e0f2fe\nactor \"Klinikarzt / Station\" as Doc\nparticipant \"JSD-08: CGM MEDICO KIS\" as KIS\nparticipant \"JSD-07: Meona eKurve\" as Meona\nend box\n\nbox \"Enterprise Integration Core\" #fef3c7\nparticipant \"JSD-10: HealthShare Clinical Hub\" as HS\nend box\n\nbox \"Diagnostikzentrum\" #ffedd5\nparticipant \"JSD-11: Swisslab LIMS\" as LIMS\nend box\n\nDoc -> KIS: Labor-Order erfassen (Order Entry)\nactivate KIS\nKIS -> HS: Untersuchungsauftrag (HL7 v2.5 ORM_O01 / MLLP)\nactivate HS\nHS -> LIMS: Laborauftrag mit Proben-Barcodes (HL7 v2.5 ORM / MLLP)\nactivate LIMS\nLIMS --> HS: Auftragsbestätigung (HL7 ORR)\ndeactivate LIMS\nHS --> KIS: Status: Probe im Labor eingegangen\ndeactivate HS\n\n... Laboranalyse & Freigabe durch Laborarzt ...\n\nLIMS -> HS: Validierter Laborbefund (HL7 v2.5 ORU_R01 / MLLP)\nactivate HS\nHS -> KIS: Befundübermittlung in Patientenakte (HL7 v2.5 ORU)\nHS -> Meona: Laborwerte an digitale Patientenkurve (HL7 FHIR R4)\nactivate Meona\nMeona -> Meona: Automatische Prüfung kritischer Grenzwerte\nMeona --> Doc: Push-Alarm bei pathologischem Befund\ndeactivate Meona\ndeactivate HS\ndeactivate KIS\n@enduml"
+      "plantUml": "@startuml\ntitle JSD-P-02: Klinischer Diagnostikpfad & Zentrallabor-Befundung\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"Station & Ambulanz\" #e0f2fe\nactor \"Klinikarzt / Station\" as Doc\nparticipant \"[[#sys-JSD-08 JSD-08: CGM MEDICO KIS]]\" as KIS\nparticipant \"[[#sys-JSD-07 JSD-07: Meona Kurve]]\" as Meona\nend box\n\nbox \"Klinischer Integrations-Hub\" #fef3c7\nparticipant \"[[#sys-JSD-10 JSD-10: HealthShare Hub]]\" as HS\nend box\n\nbox \"Diagnostik & Zentrallabor\" #dcfce7\nparticipant \"[[#sys-JSD-11 JSD-11: Swisslab LIMS]]\" as LIMS\nactor \"Laboranalytik (Cobas)\" as Analyzer\nend box\n\nDoc -> KIS: Laboranforderung erfassen\nactivate KIS\n== [[#integ-JSD-INT-03 JSD-INT-03: KIS Laboranforderung ➔ Swisslab LIMS]] ==\nKIS -> HS: [[#conn-JSD-C-01 Labor-Order an HealthShare (HL7 v2.5 ORM_O01)]]\nactivate HS\nHS -> LIMS: [[#conn-JSD-C-03 Labor-Auftrag an Swisslab (HL7 v2.5 MLLP)]]\nactivate LIMS\ndeactivate HS\nLIMS -> Analyzer: Proben-Scan & Barcode-Routing\nAnalyzer --> LIMS: Analysenergebnisse & Validierung\n\n== [[#integ-JSD-INT-04 JSD-INT-04: Swisslab Laborbefund-Rueckmeldung]] ==\nLIMS -> HS: [[#conn-JSD-C-04 Laborbefund an HealthShare (HL7 v2.5 ORU_R01)]]\nactivate HS\ndeactivate LIMS\nHS -> KIS: [[#conn-JSD-C-05 Laborbefund-Anzeige im KIS (HL7 ORU)]]\nHS -> Meona: [[#conn-JSD-C-13 Laborwerte an Meona eKurve (HL7 / FHIR)]]\ndeactivate HS\ndeactivate KIS\n@enduml"
     },
     {
       "id": "JSD-P-03",
@@ -22790,7 +22880,7 @@
         "JSD-INT-06"
       ],
       "desc": "Modalitäten-Steuerung über Siemens Syngo RIS, Bildarchivierung im Agfa VNA und KI-Schlaganfall-Triage via Brainomix.",
-      "plantUml": "@startuml\ntitle JSD-P-03: Radiologie DICOM-Workflow, PACS & KI-Diagnostik\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"Klinik & Radiologie\" #e0f2fe\nparticipant \"JSD-08: CGM MEDICO KIS\" as KIS\nparticipant \"JSD-10: HealthShare Clinical Hub\" as HS\nparticipant \"JSD-13: Siemens Syngo RIS\" as RIS\nparticipant \"JSD-12: Agfa Enterprise PACS\" as PACS\nend box\n\nbox \"KI Cloud Services\" #ede9fe\nparticipant \"JSD-27: Brainomix AI Cloud\" as AI\nend box\n\nKIS -> HS: Radiologieanforderung (HL7 v2.5 OMG_O19 / MLLP)\nactivate HS\nHS -> RIS: Terminierte Untersuchung (HL7 v2.5 OMG / MLLP)\nactivate RIS\nRIS -> PACS: Modality Worklist Bereitstellung (DICOM C-FIND)\nactivate PACS\n\n... CT-/MRT-Untersuchung an der Modalität ...\n\nPACS -> PACS: Langzeit-Archivierung VNA\nPACS -> AI: Relevante CT-Bilderserie übertragen (DICOMweb WADO-RS)\nactivate AI\nAI -> AI: Tiefe neuronale Netze: Ischämie- & Blutungsdetektion\nAI -> RIS: KI-Triage-Score & Schlaganfallmarker (REST API JSON)\ndeactivate AI\nRIS -> KIS: Radiologischer Befundbericht & KI-Report (HL7 v2.5 ORU)\ndeactivate RIS\ndeactivate PACS\ndeactivate HS\n@enduml"
+      "plantUml": "@startuml\ntitle JSD-P-03: Radiologie DICOM-Workflow, PACS & KI-Diagnostik\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"Klinische Anforderung\" #e0f2fe\nparticipant \"[[#sys-JSD-08 JSD-08: CGM MEDICO KIS]]\" as KIS\nparticipant \"[[#sys-JSD-10 JSD-10: HealthShare Hub]]\" as HS\nend box\n\nbox \"Radiologie & Bildarchivierung\" #fef3c7\nparticipant \"[[#sys-JSD-13 JSD-13: Syngo RIS]]\" as RIS\nactor \"CT / MRT Modalitaet\" as Modality\nparticipant \"[[#sys-JSD-12 JSD-12: Agfa Enterprise PACS]]\" as PACS\nend box\n\nbox \"KI-Cloud & Diagnostik-Support\" #fee2e2\nparticipant \"[[#sys-JSD-27 JSD-27: Brainomix KI]]\" as KI\nend box\n\n== [[#integ-JSD-INT-05 JSD-INT-05: Radiologie DICOM-Workflow & PACS]] ==\nKIS -> HS: [[#conn-JSD-C-01 Untersuchungsauftrag an HealthShare (HL7 ORM)]]\nactivate HS\nHS -> RIS: [[#conn-JSD-C-07 Anforderung an Syngo RIS (HL7 ORM_O01)]]\nactivate RIS\ndeactivate HS\nRIS -> Modality: DICOM Modality Worklist (MWL)\nModality -> PACS: DICOM C-STORE Bilddatensatz\nRIS -> PACS: [[#conn-JSD-C-08 Worklist & Untersuchungs-Metadaten (HL7 / DICOM)]]\nactivate PACS\n\n== [[#integ-JSD-INT-06 JSD-INT-06: Agfa PACS ➔ Brainomix Cloud-KI]] ==\nPACS -> KI: [[#conn-JSD-C-09 CT-Bilddaten an Brainomix KI (DICOMweb TLS / AWS)]]\nactivate KI\nKI -> KI: Automatisierte e-ASPECTS Schlaganfall-Analyse\nKI -> RIS: [[#conn-JSD-C-10 KI-Ergebnis an Syngo RIS (REST FHIR / DICOM SR)]]\ndeactivate KI\nRIS --> KIS: Freigegebener Radiologiebefund (HL7 ORU)\ndeactivate RIS\ndeactivate PACS\n@enduml"
     },
     {
       "id": "JSD-P-04",
@@ -22806,7 +22896,7 @@
         "JSD-INT-08"
       ],
       "desc": "Digitale OP-Siebanforderung, AEMP-Chargenfreigabe nach MPG in Instacount und Translog-Belieferung der OP-Säle.",
-      "plantUml": "@startuml\ntitle JSD-P-04: JSD Services AEMP Instrumentenaufbereitung & Sterilgutlogistik\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"OP-Bereich & Kliniken\" #e0f2fe\nparticipant \"JSD-08: CGM MEDICO OP-Planung\" as OP\nend box\n\nbox \"JSD Services RZ Spandau\" #ffedd5\nparticipant \"JSD-16: JSD AEMP Instacount\" as AEMP\nparticipant \"JSD-17: Translog Versorgungslogistik\" as Translog\nend box\n\nbox \"Enterprise ERP Cloud\" #f3e8ff\nparticipant \"JSD-04: SAP CPI Integration Suite\" as CPI\nparticipant \"JSD-01: SAP S/4HANA Finance & MM\" as S4\nend box\n\nOP -> AEMP: OP-Siebanforderung für OP-Programm (HL7 v2.5 ORM / MLLP)\nactivate AEMP\nAEMP -> AEMP: Chargenprüfung, Sterilisations-Validierung (MPG)\nAEMP -> Translog: Bereitstellung & Tourenplanung (REST API JSON / TLS)\nactivate Translog\nTranslog -> Translog: Barcode-Scans, Tourenoptimierung & OP-Belieferung\nTranslog --> AEMP: Zustellquittung übergeben\ndeactivate Translog\n\nAEMP -> CPI: Sterilgut-Verbrauch & Instrumentenabnutzung (OData v4 / HTTPS)\nactivate CPI\nCPI -> S4: Automatische Kostenstellenbuchung & MM-Bestandsabgleich (OData v4)\nactivate S4\nS4 --> CPI: Belegnummer gebucht\ndeactivate S4\ndeactivate CPI\ndeactivate AEMP\n@enduml"
+      "plantUml": "@startuml\ntitle JSD-P-04: JSD Services AEMP Instrumentenaufbereitung & Sterilgutlogistik\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"OP-Bereich & KIS\" #e0f2fe\nactor \"OP-Leitung / Saal\" as OP\nparticipant \"[[#sys-JSD-08 JSD-08: CGM MEDICO KIS]]\" as KIS\nend box\n\nbox \"AEMP Sterilgutmanagement\" #fef3c7\nparticipant \"[[#sys-JSD-16 JSD-16: Instacount AEMP]]\" as AEMP\nparticipant \"[[#sys-JSD-17 JSD-17: Translog Fuhrpark]]\" as Trans\nend box\n\nbox \"ERP & Integrations-Plattform\" #dcfce7\nparticipant \"[[#sys-JSD-04 JSD-04: SAP CPI]]\" as CPI\nparticipant \"[[#sys-JSD-01 JSD-01: SAP S/4HANA]]\" as S4H\nend box\n\nOP -> KIS: OP-Saalplanung & Sieblisten reservieren\nactivate KIS\n== [[#integ-JSD-INT-07 JSD-INT-07: OP-Planung ➔ AEMP Instacount]] ==\nKIS -> AEMP: [[#conn-JSD-C-19 Siebanforderung an Instacount (REST / TCP)]]\nactivate AEMP\ndeactivate KIS\nAEMP -> AEMP: Pack- & Sterilisationszyklus freigegeben\n\n== [[#integ-JSD-INT-08 JSD-INT-08: AEMP Freigabe ➔ Translog & SAP Buchung]] ==\nAEMP -> Trans: [[#conn-JSD-C-20 Tourenplanung an Translog (REST JSON)]]\nactivate Trans\nTrans --> OP: Physische Sieblieferung an OP-Schleuse\ndeactivate Trans\nAEMP -> CPI: [[#conn-JSD-C-21 Materialmeldung an SAP CPI (HTTPS REST)]]\nactivate CPI\ndeactivate AEMP\nCPI -> S4H: [[#conn-JSD-C-22 Kostenstellenbuchung in S/4HANA (OData / RFC)]]\nactivate S4H\nS4H --> CPI: Belegnummer generiert\ndeactivate S4H\ndeactivate CPI\n@enduml"
     },
     {
       "id": "JSD-P-05",
@@ -22823,7 +22913,7 @@
         "JSD-INT-10"
       ],
       "desc": "Online-Terminbuchung, digitale Patientenaufnahme und Bereitstellung von Entlassbriefen im m.Doc Portal (FTB 2).",
-      "plantUml": "@startuml\ntitle JSD-P-05: KHZG Patientenportal, Termine & Entlassdokumente\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"Patient (Mobil / Web)\" #e0f2fe\nactor \"Patient\" as Pat\nparticipant \"JSD-02: m.Doc Cloud (FTB 2)\" as Portal\nend box\n\nbox \"Conciliamus Cloud Integration\" #fef3c7\nparticipant \"JSD-04: SAP CPI Integration Suite\" as CPI\nparticipant \"JSD-10: HealthShare Clinical Hub\" as HS\nend box\n\nbox \"Krankenhaus-Informationssystem\" #dcfce7\nparticipant \"JSD-08: CGM MEDICO KIS\" as KIS\nend box\n\nPat -> Portal: Online-Terminauswahl & Anamnese-Fragebogen\nactivate Portal\nPortal -> CPI: Voraufnahme FHIR Patient / QuestionnaireResponse (REST FHIR R4)\nactivate CPI\nCPI -> KIS: Validierter Import & Fallanlage (HL7 FHIR / MLLP Bridge)\nactivate KIS\nKIS --> CPI: Aufnahmenummer & Vorstationäre Kennung\ndeactivate KIS\nCPI --> Portal: Terminbestätigung & Voraufnahme abgeschlossen\ndeactivate CPI\nPortal --> Pat: Benachrichtigung mit QR-Code Einchecken\ndeactivate Portal\n\n... Stationärer Aufenthalt & Entlassung ...\n\nKIS -> CPI: Digitaler Entlassbrief & Laborauszug (SAP RFC / BAPI over TLS)\nactivate CPI\nCPI -> Portal: Bereitstellung eDokumente gem. FTB 2 (REST FHIR R4)\nactivate Portal\nPortal --> Pat: Push: Neuer Arztbrief im Portal abrufbar\ndeactivate Portal\ndeactivate CPI\n@enduml"
+      "plantUml": "@startuml\ntitle JSD-P-05: KHZG Patientenportal, Termine & Entlassdokumente\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"Patient & Mobile App (FTB 2)\" #e0f2fe\nactor \"Patient (Smartphone / Web)\" as Pat\nparticipant \"[[#sys-JSD-02 JSD-02: m.Doc Portal Cloud]]\" as mDoc\nend box\n\nbox \"Hybrid Integration Platform\" #fef3c7\nparticipant \"[[#sys-JSD-04 JSD-04: SAP CPI]]\" as CPI\nend box\n\nbox \"Klinik & Enterprise Core\" #dcfce7\nparticipant \"[[#sys-JSD-08 JSD-08: CGM MEDICO KIS]]\" as KIS\nend box\n\nPat -> mDoc: Online-Terminbuchung & Frageboegen\nactivate mDoc\n== [[#integ-JSD-INT-09 JSD-INT-09: m.Doc Voraufnahme ➔ KIS Import]] ==\nmDoc -> CPI: [[#conn-JSD-C-28 FHIR Patient Payload an SAP CPI (REST HTTPS / Azure)]]\nactivate CPI\nCPI -> KIS: [[#conn-JSD-C-29 Voraufnahme-Import in KIS (REST FHIR R4)]]\nactivate KIS\nKIS --> CPI: Encounter-ID bestaetigt\ndeactivate KIS\nCPI --> mDoc: Sync Status OK\ndeactivate CPI\ndeactivate mDoc\n\n== [[#integ-JSD-INT-10 JSD-INT-10: Befundfreigabe ➔ m.Doc Portal]] ==\nKIS -> CPI: [[#conn-JSD-C-26 Befund-Export an SAP CPI (REST HTTPS)]]\nactivate CPI\nCPI -> mDoc: [[#conn-JSD-C-28 Bereitstellung in m.Doc Cloud (REST HTTPS)]]\nactivate mDoc\nmDoc --> Pat: Push-Benachrichtigung \"Neuer Befund verfuegbar\"\ndeactivate mDoc\ndeactivate CPI\n@enduml"
     },
     {
       "id": "JSD-P-06",
@@ -22839,7 +22929,7 @@
         "JSD-INT-12"
       ],
       "desc": "Sicherer Versand strukturierter eArztbriefe über KIM 1.5 und Upload von Notfalldatensätzen in die ePA 3.0 via TI-Cluster.",
-      "plantUml": "@startuml\ntitle JSD-P-06: Telematik, eArztbrief & KIM-Fachdienste\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"Klinik & Stationsarbeitsplatz\" #e0f2fe\nactor \"Klinikarzt\" as Doc\nparticipant \"JSD-08: CGM MEDICO KIS\" as KIS\nparticipant \"JSD-10: HealthShare Clinical Hub\" as HS\nend box\n\nbox \"TI-Perimeter Rechenzentrum\" #ffedd5\nparticipant \"JSD-18: TI Kocobox Cluster\" as TI\nend box\n\nbox \"Telematikinfrastruktur Bund\" #ede9fe\nparticipant \"JSD-22: CGM KIM Provider\" as KIM\nparticipant \"JSD-21: gematik ePA 3.0\" as ePA\nactor \"Niedergelassener Arzt\" as ExDoc\nend box\n\nDoc -> KIS: eArztbrief finalisieren & mit eHBA signieren (QES)\nactivate KIS\nKIS -> HS: Brief-Payload & Empfänger-KIM-Adresse (HL7 v2.5 MLLP)\nactivate HS\nHS -> TI: Versandauftrag an Konnektor-Farm (SOAP XML / IPsec VPN)\nactivate TI\nTI -> KIM: E2E-verschlüsselte KIM-Nachricht (SMTP over TLS / S-MIME)\nactivate KIM\nKIM -> ExDoc: Zustellung in Praxis-KIM-Postfach\nKIM --> TI: Zustellquittung (MDN)\ndeactivate KIM\n\nTI -> ePA: Upload in Patienten-ePA 3.0 (HTTPS / Bundessicherheitsnetz)\nactivate ePA\nePA --> TI: Ablagebestätigung (FHIR DocumentReference)\ndeactivate ePA\n\nTI --> HS: Vollzugsbestätigung\ndeactivate TI\nHS --> KIS: Status: eArztbrief zugestellt & in ePA hinterlegt\ndeactivate HS\ndeactivate KIS\n@enduml"
+      "plantUml": "@startuml\ntitle JSD-P-06: Telematik, eArztbrief & KIM-Fachdienste\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"Klinische Dokumentation\" #e0f2fe\nactor \"Chefarzt / Stationsarzt\" as Doc\nparticipant \"[[#sys-JSD-08 JSD-08: CGM MEDICO KIS]]\" as KIS\nparticipant \"[[#sys-JSD-10 JSD-10: HealthShare Hub]]\" as HS\nend box\n\nbox \"Telematikinfrastruktur (TI)\" #fef3c7\nparticipant \"[[#sys-JSD-18 JSD-18: TI Konnektor Cluster]]\" as TI\nend box\n\nbox \"Nationale Fachdienste (gematik)\" #dcfce7\nparticipant \"[[#sys-JSD-22 JSD-22: CGM KIM Fachdienst]]\" as KIM\nparticipant \"[[#sys-JSD-21 JSD-21: gematik ePA 3.0]]\" as ePA\nend box\n\nDoc -> KIS: eArztbrief finalisieren & mit HBA signieren\nactivate KIS\n== [[#integ-JSD-INT-11 JSD-INT-11: eArztbrief-Versand ueber KIM]] ==\nKIS -> HS: [[#conn-JSD-C-01 Brief-Payload an HealthShare (HL7 CDA / FHIR)]]\nactivate HS\nHS -> TI: [[#conn-JSD-C-30 Uebergabe an TI-Konnektor (SOAP / TLS)]]\nactivate TI\ndeactivate HS\nTI -> KIM: [[#conn-JSD-C-31 KIM-Mail an Weiterbehandler (SMTP / S-MIME)]]\nactivate KIM\nKIM --> TI: MDN Empfangsbestaetigung\ndeactivate KIM\ndeactivate TI\n\n== [[#integ-JSD-INT-12 JSD-INT-12: ePA 3.0 Dokumenten-Upload]] ==\nHS -> TI: [[#conn-JSD-C-30 Dokument an TI-Konnektor (SOAP / TLS)]]\nactivate TI\nTI -> ePA: [[#conn-JSD-C-32 ePA-Ablage in gematik Bundestelematic (IHE XDS.b)]]\nactivate ePA\nePA --> TI: Registry Stored Document OK\ndeactivate ePA\ndeactivate TI\ndeactivate KIS\n@enduml"
     },
     {
       "id": "JSD-P-07",
@@ -22855,7 +22945,7 @@
         "JSD-INT-14"
       ],
       "desc": "Klinische Leistungserfassung in MEDICO, Übernahme in SAP S/4HANA Finance und DTA § 301 EDIFACT-Abrechnung an Krankenkassen.",
-      "plantUml": "@startuml\ntitle JSD-P-07: Stationäre DRG-Abrechnung & GKV-Clearing § 301\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"Klinische Leistungsabrechnung\" #e0f2fe\nparticipant \"JSD-08: CGM MEDICO KIS\" as KIS\nend box\n\nbox \"Conciliamus Middleware & ERP\" #fef3c7\nparticipant \"JSD-04: SAP CPI Integration Suite\" as CPI\nparticipant \"JSD-01: SAP S/4HANA Finance\" as S4\nend box\n\nbox \"Kostenträger & Gesetzliche Kassen\" #dcfce7\nparticipant \"JSD-30: GKV Clearingstelle\" as GKV\nparticipant \"JSD-31: PKV Verband\" as PKV\nend box\n\nKIS -> KIS: Entlassung, ICD-10/OPS-Kodierung & DRG-Grouping\nKIS -> CPI: Falldaten, Entgeltkatalog & Abrechnungssumme (SAP RFC / BAPI)\nactivate CPI\nCPI -> S4: Debitorenbuchung & Erlösrealisierung (OData v4 / HTTPS)\nactivate S4\nS4 --> CPI: Buchungsbeleg generiert\ndeactivate S4\n\nCPI -> GKV: Gesetzlicher Datenträgeraustausch (FTPS EDIFACT DTA § 301 SGB V)\nactivate GKV\nGKV --> CPI: Elektronische Übernahmebestätigung / Zahlungsanzeige\ndeactivate GKV\n\nCPI -> PKV: Privatliquidation & Wahlleistungsabrechnung (REST JSON / TLS)\nactivate PKV\nPKV --> CPI: Clearing-Bestätigung\ndeactivate PKV\ndeactivate CPI\n@enduml"
+      "plantUml": "@startuml\ntitle JSD-P-07: Stationaere DRG-Abrechnung & GKV-Clearing § 301\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"Medizincontrolling & KIS\" #e0f2fe\nactor \"Medizincontroller\" as Controller\nparticipant \"[[#sys-JSD-08 JSD-08: CGM MEDICO KIS]]\" as KIS\nend box\n\nbox \"Enterprise Integration & Finance\" #fef3c7\nparticipant \"[[#sys-JSD-04 JSD-04: SAP CPI]]\" as CPI\nparticipant \"[[#sys-JSD-01 JSD-01: SAP S/4HANA]]\" as S4H\nend box\n\nbox \"Kostentraeger & Clearing\" #dcfce7\nparticipant \"[[#sys-JSD-30 JSD-30: GKV Clearing DTA]]\" as GKV\nactor \"Gesetzliche Krankenkasse\" as Payer\nend box\n\nController -> KIS: DRG-Kodierung & Fallabschluss\nactivate KIS\n== [[#integ-JSD-INT-13 JSD-INT-13: KIS Falldaten ➔ SAP S/4HANA]] ==\nKIS -> CPI: [[#conn-JSD-C-26 Falldaten an SAP CPI (HTTPS REST)]]\nactivate CPI\nCPI -> S4H: [[#conn-JSD-C-22 Buchungsbeleg in SAP S/4HANA (OData / RFC)]]\nactivate S4H\ndeactivate KIS\nS4H -> S4H: Debitorenbuchung & § 301 EDIFACT Generierung\n\n== [[#integ-JSD-INT-14 JSD-INT-14: DTA § 301 DRG-Schlussrechnung]] ==\nS4H -> GKV: [[#conn-JSD-C-27 DTA § 301 Daten an GKV Clearing (FTAM / AS2)]]\nactivate GKV\ndeactivate S4H\nGKV -> Payer: Rechnungsweiterleitung & Kostengutsprache\nPayer --> GKV: Zahlungsavis\nGKV --> S4H: Elektronischer Zahlungsavis (EDIFACT)\ndeactivate GKV\ndeactivate CPI\n@enduml"
     },
     {
       "id": "JSD-P-08",
@@ -22870,7 +22960,7 @@
         "JSD-INT-16"
       ],
       "desc": "Zentralisierter Einkauf durch JSD Services GmbH, elektronische Bestellungen via GHX Exchange und Peppol XRechnung.",
-      "plantUml": "@startuml\ntitle JSD-P-08: JSD Einkauf, Materialwirtschaft & GHX B2B-Clearing\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"JSD Materialwirtschaft & ERP\" #e0f2fe\nparticipant \"JSD-01: SAP S/4HANA Finance & MM\" as S4\nend box\n\nbox \"Conciliamus B2B Integration\" #fef3c7\nparticipant \"JSD-04: SAP CPI Integration Suite\" as CPI\nend box\n\nbox \"B2B Medical Exchange & Behördennetz\" #ffedd5\nparticipant \"JSD-24: GHX Medical Exchange\" as GHX\nparticipant \"JSD-25: OpenPeppol E-Invoicing\" as Peppol\nend box\n\nS4 -> GHX: Elektronische OP- & Pharma-Bestellung (EDIFACT ORDERS / AS2)\nactivate GHX\nGHX --> S4: Bestellbestätigung & Lieferavis (EDIFACT ORDRSP / DESADV)\ndeactivate GHX\n\n... Lieferung & Wareneingang ...\n\nPeppol -> CPI: Elektronische XRechnung / ZUGFeRD (AS4 Peppol TLS)\nactivate CPI\nCPI -> CPI: XRechnung Schematron- & Signatur-Validierung\nCPI -> S4: Automatische Rechnungseingangserfassung (OData v4 / HTTPS)\nactivate S4\nS4 -> S4: Dreifacher automatischer Abgleich (Bestellung - Wareneingang - Rechnung)\nS4 --> CPI: Buchungsbestätigung & Zahlungsfreigabe\ndeactivate S4\ndeactivate CPI\n@enduml"
+      "plantUml": "@startuml\ntitle JSD-P-08: JSD Einkauf, Materialwirtschaft & GHX B2B-Clearing\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"JSD Zentraleinkauf\" #e0f2fe\nactor \"Einkaeufer / Logistik\" as Buyer\nparticipant \"[[#sys-JSD-01 JSD-01: SAP S/4HANA]]\" as S4H\nend box\n\nbox \"B2B Medical Exchange & EDI\" #fef3c7\nparticipant \"[[#sys-JSD-24 JSD-24: GHX Medical Exchange]]\" as GHX\nparticipant \"[[#sys-JSD-25 JSD-25: OpenPeppol Access Point]]\" as Peppol\nend box\n\nbox \"Hybrid Integration Hub\" #dcfce7\nparticipant \"[[#sys-JSD-04 JSD-04: SAP CPI]]\" as CPI\nactor \"Medizintechnik-Lieferant\" as Vendor\nend box\n\nBuyer -> S4H: Bestellbanf generieren & freigeben\nactivate S4H\n== [[#integ-JSD-INT-15 JSD-INT-15: JSD Einkauf ➔ GHX Exchange]] ==\nS4H -> GHX: [[#conn-JSD-C-23 Bestellung an GHX Exchange (cXML / EDIFACT)]]\nactivate GHX\nGHX -> Vendor: Purchase Order Routing\nVendor --> GHX: Order Confirmation & Lieferavis\nGHX --> S4H: Auftragsbestaetigung verbucht\ndeactivate GHX\ndeactivate S4H\n\n== [[#integ-JSD-INT-16 JSD-INT-16: Rechnungen OpenPeppol ➔ SAP]] ==\nVendor -> Peppol: XRechnung elektronisch einreichen\nactivate Peppol\nPeppol -> CPI: [[#conn-JSD-C-24 XRechnung an SAP CPI (AS4 Peppol)]]\nactivate CPI\nCPI -> S4H: [[#conn-JSD-C-25 Kontierung in SAP S/4HANA (OData / IDoc)]]\nactivate S4H\nS4H --> CPI: Buchungsbeleg & Rechnungsfreigabe\ndeactivate S4H\ndeactivate CPI\ndeactivate Peppol\n@enduml"
     }
   ],
   "integrations": [
@@ -31948,12 +32038,12 @@
         sysMap.forEach((sys, sysId) => {
           const cleanName = sys ? (sys.name || '').replace(/"/g, "'").slice(0, 30) : sysId;
           const safeAlias = sysId.replace(/[^a-zA-Z0-9]/g, '_');
-          puml += 'participant "' + sysId + ': ' + cleanName + '" as ' + safeAlias + '\n';
+          puml += 'participant "[[' + '#sys-' + sysId + ' ' + sysId + ': ' + cleanName + ']]" as ' + safeAlias + '\n';
         });
         puml += '\n';
 
         integs.forEach(integ => {
-          puml += '== ' + integ.id + ': ' + (integ.name || '').replace(/"/g, "'") + ' ==\n';
+          puml += '== [[' + '#integ-' + integ.id + ' ' + integ.id + ': ' + (integ.name || '').replace(/"/g, "'") + ']] ==\n';
           if (integ.steps && integ.steps.length > 0) {
             integ.steps.forEach(st => {
               const fromAlias = (st.from || integ.sourceSystem).replace(/[^a-zA-Z0-9]/g, '_');
@@ -31961,12 +32051,17 @@
               const conn = CONNECTIONS_DATA.find(c => c.id === st.connectionId);
               const proto = conn ? conn.protocol : 'REST';
               const desc = (st.desc || conn?.name || 'Datentransfer').replace(/"/g, "'");
-              puml += fromAlias + ' -> ' + toAlias + ': ' + desc + ' (' + proto + ')\n';
+              const connLink = st.connectionId ? ('#conn-' + st.connectionId) : '';
+              if (connLink) {
+                puml += fromAlias + ' -> ' + toAlias + ': [[' + connLink + ' ' + desc + ' (' + proto + ')]]\n';
+              } else {
+                puml += fromAlias + ' -> ' + toAlias + ': ' + desc + ' (' + proto + ')\n';
+              }
             });
           } else {
             const fromAlias = integ.sourceSystem.replace(/[^a-zA-Z0-9]/g, '_');
             const toAlias = integ.targetSystem.replace(/[^a-zA-Z0-9]/g, '_');
-            puml += fromAlias + ' -> ' + toAlias + ': ' + (integ.name || 'Transfer').replace(/"/g, "'") + ' (' + (integ.protocol || 'REST') + ')\n';
+            puml += fromAlias + ' -> ' + toAlias + ': [[' + '#integ-' + integ.id + ' ' + (integ.name || 'Transfer').replace(/"/g, "'") + ' (' + (integ.protocol || 'REST') + ')]]\n';
           }
         });
 
@@ -31977,8 +32072,156 @@
       let currentPumlZoom = 1.0;
       let currentPumlSvgText = '';
       let currentPumlProcId = '';
+      let savedPumlBounds = null;
+      let pumlPopoutInitialized = false;
+
+      if (typeof SVGAElement !== 'undefined' && !SVGAElement.prototype.click) {
+        SVGAElement.prototype.click = function() {
+          const evt = new MouseEvent('click', { bubbles: true, cancelable: true, view: window });
+          this.dispatchEvent(evt);
+        };
+      }
+
+      function initPumlPopoutInteractions() {
+        if (pumlPopoutInitialized) return;
+        pumlPopoutInitialized = true;
+
+        const modal = document.getElementById('plantUmlViewerModal');
+        const header = document.getElementById('plantUmlPopoutHeader');
+        const container = document.getElementById('pumlSvgContainer');
+        if (!modal || !header) return;
+
+        // Bring to front on mousedown anywhere on the window
+        modal.addEventListener('mousedown', () => {
+          if (typeof popoutZIndexCounter === 'number') {
+            popoutZIndexCounter++;
+            modal.style.zIndex = popoutZIndexCounter;
+          }
+        });
+
+        // Draggable via header
+        let isDragging = false;
+        let dragStartX, dragStartY, initLeft, initTop;
+
+        header.addEventListener('mousedown', (e) => {
+          if (e.target.closest('button')) return;
+          if (modal.classList.contains('is-fullscreen')) return;
+
+          isDragging = true;
+          dragStartX = e.clientX;
+          dragStartY = e.clientY;
+          initLeft = modal.offsetLeft;
+          initTop = modal.offsetTop;
+          document.body.style.userSelect = 'none';
+
+          if (typeof popoutZIndexCounter === 'number') {
+            popoutZIndexCounter++;
+            modal.style.zIndex = popoutZIndexCounter;
+          }
+        });
+
+        window.addEventListener('mousemove', (e) => {
+          if (!isDragging) return;
+          const dx = e.clientX - dragStartX;
+          const dy = e.clientY - dragStartY;
+          const newLeft = Math.max(10, Math.min(window.innerWidth - 120, initLeft + dx));
+          const newTop = Math.max(10, Math.min(window.innerHeight - 60, initTop + dy));
+          modal.style.left = newLeft + 'px';
+          modal.style.top = newTop + 'px';
+          modal.style.right = 'auto';
+          modal.style.bottom = 'auto';
+        });
+
+        window.addEventListener('mouseup', () => {
+          if (isDragging) {
+            isDragging = false;
+            document.body.style.userSelect = 'auto';
+          }
+        });
+
+        // Event delegation for interactive PlantUML SVG links
+        if (container) {
+          container.addEventListener('click', (e) => {
+            const a = e.target.closest('a');
+            if (!a) return;
+            const href = a.getAttribute('href') || a.getAttribute('xlink:href') || '';
+            if (!href || !href.startsWith('#')) return;
+
+            e.preventDefault();
+            e.stopPropagation();
+
+            const rect = a.getBoundingClientRect();
+            const clickX = rect.left + rect.width / 2;
+            const clickY = rect.top + rect.height / 2;
+
+            if (href.startsWith('#sys-')) {
+              const sysId = href.replace(/^#sys-/, '');
+              const sys = SYSTEMS_DATA.find(s => s.id === sysId);
+              if (sys) {
+                if (typeof selectNode === 'function') {
+                  selectNode(sys, clickX, clickY);
+                }
+                if (typeof window.showCrudToast === 'function') {
+                  window.showCrudToast('🎯 System ' + sys.id + ' (' + (sys.name || '') + ') im Modell ausgewählt');
+                }
+              }
+            } else if (href.startsWith('#conn-')) {
+              const connId = href.replace(/^#conn-/, '');
+              const conn = CONNECTIONS_DATA.find(c => c.id === connId);
+              if (conn) {
+                if (typeof selectEdge === 'function') {
+                  selectEdge(conn, clickX, clickY);
+                }
+                if (typeof window.showCrudToast === 'function') {
+                  window.showCrudToast('🔗 Verbindung ' + conn.id + ' (' + (conn.name || '') + ') im Modell fokussiert');
+                }
+              }
+            } else if (href.startsWith('#integ-')) {
+              const integId = href.replace(/^#integ-/, '');
+              const integ = INTEGRATIONS_DATA.find(i => i.id === integId);
+              if (integ) {
+                if (typeof setDrilldownIntegration === 'function') {
+                  setDrilldownIntegration(integ);
+                }
+                if (typeof window.showCrudToast === 'function') {
+                  window.showCrudToast('⚡ Integrationsfluss ' + integ.id + ' (' + (integ.name || '') + ') aktiviert');
+                }
+              }
+            }
+          });
+        }
+      }
+
+      window.togglePlantUmlFullscreen = function() {
+        const modal = document.getElementById('plantUmlViewerModal');
+        const btn = document.getElementById('btnPumlFullscreen');
+        if (!modal) return;
+
+        if (modal.classList.contains('is-fullscreen')) {
+          modal.classList.remove('is-fullscreen');
+          if (savedPumlBounds) {
+            modal.style.top = savedPumlBounds.top;
+            modal.style.left = savedPumlBounds.left;
+            modal.style.width = savedPumlBounds.width;
+            modal.style.height = savedPumlBounds.height;
+            modal.style.right = 'auto';
+            modal.style.bottom = 'auto';
+          }
+          if (btn) btn.innerHTML = '⛶ Vollbild';
+        } else {
+          savedPumlBounds = {
+            top: modal.style.top || (modal.offsetTop + 'px'),
+            left: modal.style.left || (modal.offsetLeft + 'px'),
+            width: modal.style.width || (modal.offsetWidth + 'px'),
+            height: modal.style.height || (modal.offsetHeight + 'px')
+          };
+          modal.classList.add('is-fullscreen');
+          if (btn) btn.innerHTML = '🗗 Wiederherstellen';
+        }
+      };
 
       window.openPlantUmlModal = async function(procId) {
+        initPumlPopoutInteractions();
         const proc = PROCESSES_DATA.find(p => p.id === procId);
         if (!proc) return;
         currentPumlProcId = procId;
@@ -31991,7 +32234,25 @@
         const fallback = document.getElementById('pumlErrorFallback');
 
         if (!modal) return;
+
+        // Position window nicely on first opening or if offscreen
+        if (!modal.style.left || modal.style.left === 'auto' || parseInt(modal.style.left, 10) < 0) {
+          const w = Math.min(960, window.innerWidth - 40);
+          const h = Math.min(680, window.innerHeight - 60);
+          modal.style.width = w + 'px';
+          modal.style.height = h + 'px';
+          modal.style.left = Math.max(20, Math.floor((window.innerWidth - w) / 2)) + 'px';
+          modal.style.top = Math.max(30, Math.floor((window.innerHeight - h) / 2)) + 'px';
+          modal.style.right = 'auto';
+          modal.style.bottom = 'auto';
+        }
+
         modal.style.display = 'flex';
+        if (typeof popoutZIndexCounter === 'number') {
+          popoutZIndexCounter++;
+          modal.style.zIndex = popoutZIndexCounter;
+        }
+
         if (titleEl) titleEl.textContent = proc.id + ' · ' + proc.name;
         if (spinner) spinner.style.display = 'flex';
         if (container) container.innerHTML = '';
@@ -32100,7 +32361,6 @@
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
       };
-
 </script>
 
   <!-- =====================================================================
@@ -32126,39 +32386,44 @@
 
 
   <!-- =====================================================================
-       PLANTUML SEQUENCE DIAGRAM VIEWER MODAL
+       PLANTUML SEQUENCE DIAGRAM FLOATING POPOUT (DRAGGABLE, RESIZABLE, NO BLUR)
        ===================================================================== -->
-  <div id="plantUmlViewerModal" class="crud-modal-backdrop" style="display:none;" onclick="if (event.target === this) window.closePlantUmlModal();">
-    <div class="crud-modal-window" style="max-width:1150px; width:92vw; height:86vh; max-height:850px;">
-      <div class="crud-modal-header" style="display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.1); padding:10px 16px;">
-        <div style="display:flex; align-items:center; gap:8px;">
-          <span style="font-size:1.1rem;">📊</span>
-          <div class="crud-modal-title" id="plantUmlModalTitle" style="font-size:0.92rem; font-weight:750;">Prozess-Sequenzdiagramm</div>
-          <span class="traffic-tag" id="plantUmlModalBadge" style="background:rgba(56,189,248,0.2); color:var(--accent); font-weight:700;">UML 2.5</span>
-        </div>
-        <div style="display:flex; align-items:center; gap:6px;">
-          <button class="insp-action-btn" onclick="window.zoomPuml(0.2)" title="Vergrößern (+)">🔍 +</button>
-          <button class="insp-action-btn" onclick="window.zoomPuml(-0.2)" title="Verkleinern (-)">🔍 -</button>
-          <button class="insp-action-btn" onclick="window.resetPumlZoom()" title="100 %">1:1</button>
-          <button class="insp-action-btn" onclick="window.downloadPumlSvg()" title="SVG Vektorgrafik herunterladen">💾 SVG Download</button>
-          <button class="insp-action-btn" onclick="window.copyPlantUml(currentPumlProcId)" title="PlantUML-Code kopieren">📋 Kopieren</button>
-          <button onclick="window.closePlantUmlModal()" style="background:none; border:none; color:var(--text-muted); font-size:1.3rem; cursor:pointer; padding:0 4px;" title="Schließen">&times;</button>
-        </div>
+  <div id="plantUmlViewerModal" class="plantuml-floating-popout" style="display:none;">
+    <div class="plantuml-popout-header" id="plantUmlPopoutHeader">
+      <div style="display:flex; align-items:center; gap:8px; pointer-events:none;">
+        <span style="font-size:1.1rem;">📊</span>
+        <div class="crud-modal-title" id="plantUmlModalTitle" style="font-size:0.92rem; font-weight:750; color:var(--text-bright);">Prozess-Sequenzdiagramm</div>
+        <span class="traffic-tag" id="plantUmlModalBadge" style="background:rgba(56,189,248,0.2); color:var(--accent); font-weight:700;">UML 2.5</span>
       </div>
-      <div class="crud-modal-body" id="plantUmlModalBody" style="flex:1; display:flex; flex-direction:column; padding:0; overflow:hidden; position:relative; background:#0b0f17;">
-        <div id="pumlLoadingSpinner" style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; background:rgba(11,15,23,0.85); z-index:10; color:var(--accent);">
-          <div style="font-size:1.8rem; margin-bottom:8px;">⏳</div>
-          <div style="font-size:0.85rem; font-weight:600;">Generiere PlantUML Vektordiagramm...</div>
-        </div>
-        <div id="pumlSvgContainer" style="flex:1; width:100%; height:100%; overflow:auto; display:flex; align-items:center; justify-content:center; padding:20px;">
-          <!-- Inline SVG rendered here -->
-        </div>
-        <div id="pumlErrorFallback" style="display:none; padding:24px; text-align:center; color:var(--text-bright);">
-          <!-- Offline Fallback -->
-        </div>
+      <div style="display:flex; align-items:center; gap:6px;">
+        <button class="insp-action-btn" onclick="window.zoomPuml(0.2)" title="Vergrößern (+)">🔍 +</button>
+        <button class="insp-action-btn" onclick="window.zoomPuml(-0.2)" title="Verkleinern (-)">🔍 -</button>
+        <button class="insp-action-btn" onclick="window.resetPumlZoom()" title="Standardgröße (100%)">1:1</button>
+        <button class="insp-action-btn" id="btnPumlFullscreen" onclick="window.togglePlantUmlFullscreen()" title="Vollbild umschalten">⛶ Vollbild</button>
+        <button class="insp-action-btn" onclick="window.downloadPumlSvg()" title="SVG Vektorgrafik herunterladen">💾 SVG Download</button>
+        <button class="insp-action-btn" onclick="window.copyPlantUml(currentPumlProcId)" title="PlantUML-Code kopieren">📋 Kopieren</button>
+        <button onclick="window.closePlantUmlModal()" style="background:none; border:none; color:var(--text-muted); font-size:1.4rem; cursor:pointer; padding:0 6px; line-height:1;" title="Schließen">&times;</button>
       </div>
     </div>
+    <div class="plantuml-popout-body" id="plantUmlModalBody" style="flex:1; display:flex; flex-direction:column; padding:0; overflow:hidden; position:relative; background:#0b0f17;">
+      <div id="pumlLoadingSpinner" style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; background:rgba(11,15,23,0.85); z-index:10; color:var(--accent);">
+        <div style="font-size:1.8rem; margin-bottom:8px;">⏳</div>
+        <div style="font-size:0.85rem; font-weight:600;">Generiere interaktives PlantUML Vektordiagramm...</div>
+      </div>
+      <div id="pumlSvgContainer" style="flex:1; width:100%; height:100%; overflow:auto; display:flex; align-items:center; justify-content:center; padding:16px;">
+        <!-- Inline SVG rendered here -->
+      </div>
+      <div id="pumlErrorFallback" style="display:none; padding:24px; text-align:center; color:var(--text-bright); overflow:auto;">
+        <!-- Offline Fallback -->
+      </div>
+    </div>
+    <div class="plantuml-popout-footer">
+      <div style="display:flex; align-items:center; gap:6px;">
+        <span style="color:var(--accent);">💡</span>
+        <span>Klicken Sie auf <strong>Systeme</strong>, <strong>Kanten</strong> oder <strong>Abschnitte</strong> im Diagramm, um sie im EAM-Modell zu fokussieren.</span>
+      </div>
+      <div class="plantuml-resize-indicator" title="Größe anpassen (unten rechts ziehen)">⤡ Resize</div>
+    </div>
   </div>
-
 </body>
 </html>
