@@ -3545,10 +3545,10 @@
               <span>1. Domäne (Wurzel)</span>
             </div>
             <div class="section-header-controls" onclick="event.stopPropagation();">
-              <div class="toggle-active-wrap" id="toggleWrap_domain" onclick="window.toggleOnlyActiveFilter('domain')" title="Umschalten: Alle Domänen vs. Nur aktive">
+              <div class="toggle-active-wrap active" id="toggleWrap_domain" onclick="window.toggleOnlyActiveFilter('domain')" title="Umschalten: Alle Domänen vs. Nur aktive">
                 <span class="toggle-active-label">Nur Aktive</span>
                 <label class="switch-pill">
-                  <input type="checkbox" id="toggleActive_domain">
+                  <input type="checkbox" id="toggleActive_domain" checked>
                   <span class="switch-pill-slider"></span>
                 </label>
               </div>
@@ -3567,10 +3567,10 @@
               <span>2. Prozess</span>
             </div>
             <div class="section-header-controls" onclick="event.stopPropagation();">
-              <div class="toggle-active-wrap" id="toggleWrap_process" onclick="window.toggleOnlyActiveFilter('process')" title="Umschalten: Alle Prozesse vs. Nur aktive">
+              <div class="toggle-active-wrap active" id="toggleWrap_process" onclick="window.toggleOnlyActiveFilter('process')" title="Umschalten: Alle Prozesse vs. Nur aktive">
                 <span class="toggle-active-label">Nur Aktive</span>
                 <label class="switch-pill">
-                  <input type="checkbox" id="toggleActive_process">
+                  <input type="checkbox" id="toggleActive_process" checked>
                   <span class="switch-pill-slider"></span>
                 </label>
               </div>
@@ -3589,10 +3589,10 @@
               <span>3. Integration (End-to-End)</span>
             </div>
             <div class="section-header-controls" onclick="event.stopPropagation();">
-              <div class="toggle-active-wrap" id="toggleWrap_integration" onclick="window.toggleOnlyActiveFilter('integration')" title="Umschalten: Alle Integrationen vs. Nur relevante">
+              <div class="toggle-active-wrap active" id="toggleWrap_integration" onclick="window.toggleOnlyActiveFilter('integration')" title="Umschalten: Alle Integrationen vs. Nur relevante">
                 <span class="toggle-active-label">Nur Aktive</span>
                 <label class="switch-pill">
-                  <input type="checkbox" id="toggleActive_integration">
+                  <input type="checkbox" id="toggleActive_integration" checked>
                   <span class="switch-pill-slider"></span>
                 </label>
               </div>
@@ -3609,9 +3609,56 @@
               <button class="integ-tab-pill" data-cluster="ERP_HR">ERP/HR (73)</button>
               <button class="integ-tab-pill" data-cluster="TI">TI (23)</button>
             </div>
-            <input type="text" id="integSearchInput" placeholder="🔍 243 Integrationen durchsuchen..." style="width:100%; box-sizing:border-box; padding:4px 8px; font-size:0.7rem; border-radius:4px; border:1px solid var(--card-border); background:var(--item-bg); color:var(--text-bright); margin-bottom:6px;">
+            <input type="text" id="integSearchInput" placeholder="🔍 Integrationen durchsuchen..." style="width:100%; box-sizing:border-box; padding:4px 8px; font-size:0.7rem; border-radius:4px; border:1px solid var(--card-border); background:var(--item-bg); color:var(--text-bright); margin-bottom:6px;">
 
           <div class="section-content" id="integrationList"></div>
+          <div class="drawer-section-resizer" data-target="integration" title="Höhe der Integrationen-Tabelle anpassen"></div>
+        </div>
+
+        <!-- STAGE 4: Verbindungen (Connections) -->
+        <div class="drilldown-section">
+          <div class="section-header" id="secHeaderConnection">
+            <div class="section-header-title-box">
+              <span>4. Verbindungen</span>
+            </div>
+            <div class="section-header-controls" onclick="event.stopPropagation();">
+              <div class="toggle-active-wrap active" id="toggleWrap_connection" onclick="window.toggleOnlyActiveFilter('connection')" title="Umschalten: Alle Verbindungen vs. Nur aktive">
+                <span class="toggle-active-label">Nur Aktive</span>
+                <label class="switch-pill">
+                  <input type="checkbox" id="toggleActive_connection" checked>
+                  <span class="switch-pill-slider"></span>
+                </label>
+              </div>
+              <button class="section-popout-btn" id="btnPopoutConnection" onclick="window.openSectionPopout('connection')" title="Verbindungs-Tabelle als vergrößerbares Pop-Out öffnen">⧉</button>
+            </div>
+            <span class="section-badge" id="badgeConnection">229 Verbindungen</span>
+          </div>
+          <input type="text" id="connSearchInput" placeholder="🔍 Verbindungen durchsuchen..." style="width:100%; box-sizing:border-box; padding:4px 8px; font-size:0.7rem; border-radius:4px; border:1px solid var(--card-border); background:var(--item-bg); color:var(--text-bright); margin-bottom:6px;">
+          <div class="section-content" id="connectionList"></div>
+          <div class="drawer-section-resizer" data-target="connection" title="Höhe der Verbindungs-Tabelle anpassen"></div>
+        </div>
+
+        <!-- STAGE 5: Systeme (Systems) -->
+        <div class="drilldown-section">
+          <div class="section-header" id="secHeaderSystem">
+            <div class="section-header-title-box">
+              <span>5. Systeme</span>
+            </div>
+            <div class="section-header-controls" onclick="event.stopPropagation();">
+              <div class="toggle-active-wrap active" id="toggleWrap_system" onclick="window.toggleOnlyActiveFilter('system')" title="Umschalten: Alle Systeme vs. Nur aktive">
+                <span class="toggle-active-label">Nur Aktive</span>
+                <label class="switch-pill">
+                  <input type="checkbox" id="toggleActive_system" checked>
+                  <span class="switch-pill-slider"></span>
+                </label>
+              </div>
+              <button class="section-popout-btn" id="btnPopoutSystem" onclick="window.openSectionPopout('system')" title="System-Tabelle als vergrößerbares Pop-Out öffnen">⧉</button>
+            </div>
+            <span class="section-badge" id="badgeSystem">82 Systeme</span>
+          </div>
+          <input type="text" id="sysSearchInput" placeholder="🔍 Systeme durchsuchen..." style="width:100%; box-sizing:border-box; padding:4px 8px; font-size:0.7rem; border-radius:4px; border:1px solid var(--card-border); background:var(--item-bg); color:var(--text-bright); margin-bottom:6px;">
+          <div class="section-content" id="systemList"></div>
+          <div class="drawer-section-resizer" data-target="system" title="Höhe der Systeme-Tabelle anpassen"></div>
         </div>
 
       </div>
@@ -16819,8 +16866,8 @@
 
         if (!root || !gate) return;
 
-        if (!window.firebase || !window.firebase.auth) {
-          console.warn("[ORCAI Quad-Chord Auth] Firebase Auth SDK nicht verfügbar. Lokale Standalone-Vorschau aktiv.");
+        if (!window.firebase || !window.firebase.auth || window.location.protocol === 'file:') {
+          console.warn("[ORCAI Quad-Chord Auth] Standalone-Modus aktiv (keine Authentifizierung erforderlich).");
           document.body.classList.remove("orcai-auth-pending");
           gate.hidden = true;
           return;
@@ -17460,9 +17507,11 @@
         const incoming = CONNECTIONS_DATA.filter(c => c.to === sys.id);
         const outgoing = CONNECTIONS_DATA.filter(c => c.from === sys.id);
         const cCoord = nodeCoords.get(sys.id);
+        const activeModelObj = registeredLandscapeModels.find(m => m.id === currentModelId);
+        const orgShort = activeModelObj?.shortName || activeModelObj?.organization || 'EA';
         const quadLabels = {
-          'TL': 'Oben-Links · Johanniter Cloud',
-          'BL': 'Unten-Links · Johanniter On-Premises',
+          'TL': 'Oben-Links · ' + orgShort + ' Cloud',
+          'BL': 'Unten-Links · ' + orgShort + ' On-Premises',
           'TR': 'Oben-Rechts · Externe Cloud & SaaS',
           'BR': 'Unten-Rechts · Externe On-Premises'
         };
@@ -17485,9 +17534,9 @@
           '</div>' +
           '<div class="edge-popout-body">' +
             '<div style="font-size:0.86rem; font-weight:700; color:var(--text-bright); line-height:1.25;">' + sys.name + '</div>' +
-            '<div style="font-size:0.72rem; color:var(--text-muted);">' + (dom ? dom.name : sys.domain) + ' · <strong>' + (sys.vendor || 'Johanniter') + '</strong></div>' +
+            '<div style="font-size:0.72rem; color:var(--text-muted);">' + (dom ? dom.name : sys.domain) + ' · <strong>' + (sys.vendor || orgShort) + '</strong></div>' +
             '<div class="insp-badges" style="margin-top:2px;">' +
-              '<span class="insp-badge ' + (sys.scope === 'INTERNAL' ? 'scope-intern' : 'scope-extern') + '">' + (sys.scope === 'INTERNAL' ? '🏢 JOHANNITER' : '🌐 EXTERN') + '</span>' +
+              '<span class="insp-badge ' + (sys.scope === 'INTERNAL' ? 'scope-intern' : 'scope-extern') + '">' + (sys.scope === 'INTERNAL' ? ('🏢 ' + orgShort) : '🌐 EXTERN') + '</span>' +
               '<span class="insp-badge ' + (sys.deployment === 'ON_PREM' ? 'deploy-onprem' : 'deploy-cloud') + '">' + (sys.deployment === 'ON_PREM' ? 'On-Premises' : 'Cloud') + '</span>' +
               '<span class="insp-badge" style="background:var(--accent-glow); color:var(--accent); font-weight:700;">' + (quadLabels[cCoord?.quad] || cCoord?.quad) + '</span>' +
               (sys.hyperscaler ? '<span class="insp-badge" style="background:#f59e0b22; color:#f59e0b; border-color:#f59e0b;">' + sys.hyperscaler + '</span>' : '') +
@@ -17999,7 +18048,7 @@
       let animTimer = null;
 
       // Render Links
-      const linkElements = gLinks.selectAll(".edge-link")
+      let linkElements = gLinks.selectAll(".edge-link")
         .data(CONNECTIONS_DATA)
         .enter()
         .append("path")
@@ -18017,7 +18066,7 @@
         });
 
       // Render Nodes
-      const nodeElements = gNodes.selectAll(".sys-node-group")
+      let nodeElements = gNodes.selectAll(".sys-node-group")
         .data(SYSTEMS_DATA)
         .enter()
         .append("g")
@@ -18216,7 +18265,8 @@
         } else {
           selectedDomainId = domainId;
           // Clear selectedProcess if it does not match new domain
-          if (selectedProcess && !selectedProcess.participatingDomains.includes(selectedDomainId) && selectedProcess.leadDomain !== selectedDomainId) {
+          const procParts = selectedProcess ? (selectedProcess.participatingDomains || selectedProcess.involvedDomains || (selectedProcess.leadDomain ? [selectedProcess.leadDomain] : [])) : [];
+          if (selectedProcess && !procParts.includes(selectedDomainId) && selectedProcess.leadDomain !== selectedDomainId) {
             selectedProcess = null;
           }
           selectedIntegration = null;
@@ -18614,14 +18664,17 @@
         });
         const badgeDomain = document.getElementById("badgeDomain");
         if (badgeDomain) {
-          badgeDomain.textContent = selectedDomainId ? (selectedDomainId + ' gewählt') : '8 Domänen';
+          badgeDomain.textContent = selectedDomainId ? (selectedDomainId + ' gewählt') : (DOMAINS_DATA.length + ' Domänen');
           badgeDomain.classList.toggle("active", selectedDomainId !== null);
         }
 
         // Stage 2: Prozesse (filter & status based on selectedDomainId)
         let activeProcs = PROCESSES_DATA;
         if (selectedDomainId) {
-          activeProcs = PROCESSES_DATA.filter(p => p.participatingDomains.includes(selectedDomainId) || p.leadDomain === selectedDomainId);
+          activeProcs = PROCESSES_DATA.filter(p => {
+            const parts = p.participatingDomains || p.involvedDomains || (p.leadDomain ? [p.leadDomain] : []);
+            return parts.includes(selectedDomainId) || p.leadDomain === selectedDomainId;
+          });
         }
         const activeProcIds = new Set(activeProcs.map(p => p.id));
 
@@ -18633,18 +18686,18 @@
         });
         const badgeProcess = document.getElementById("badgeProcess");
         if (badgeProcess) {
-          badgeProcess.textContent = selectedDomainId ? (activeProcs.length + ' Prozesse (' + selectedDomainId + '-Beteiligung)') : '13 Prozesse';
+          badgeProcess.textContent = selectedDomainId ? (activeProcs.length + ' Prozesse (' + selectedDomainId + '-Beteiligung)') : (PROCESSES_DATA.length + ' Prozesse');
           badgeProcess.classList.toggle("active", selectedProcess !== null);
         }
 
         // Stage 3: Integrationen (filter & status based on selectedProcess, selectedDomainId, or selectedLink)
         let activeIntegs = INTEGRATIONS_DATA;
         if (selectedProcess) {
-          const procIntegSet = new Set(selectedProcess.cleanIntegIds);
+          const procIntegSet = new Set(selectedProcess.cleanIntegIds || selectedProcess.integrations || []);
           activeIntegs = INTEGRATIONS_DATA.filter(i => procIntegSet.has(i.id));
         } else if (selectedDomainId) {
           activeIntegs = INTEGRATIONS_DATA.filter(i => {
-            return i.steps.some(st => {
+            return (i.steps || []).some(st => {
               const sFrom = sysById.get(st.from);
               const sTo = sysById.get(st.to);
               return sFrom?.domain === selectedDomainId || sTo?.domain === selectedDomainId;
@@ -18704,8 +18757,48 @@
             badgeIntegration.textContent = activeIntegs.length + ' (' + selectedDomainId + '-relevant)';
             badgeIntegration.classList.toggle("active", selectedIntegration !== null);
           } else {
-            badgeIntegration.textContent = '243 Integrationen';
+            badgeIntegration.textContent = INTEGRATIONS_DATA.length + ' Integrationen';
             badgeIntegration.classList.toggle("active", selectedIntegration !== null);
+          }
+        }
+
+        // Stage 4: Verbindungen
+        document.querySelectorAll("#connectionList .list-item").forEach(item => {
+          const cId = item.id.replace("conn-item-", "");
+          const isSel = selectedLink && selectedLink.id === cId;
+          const isActive = !hasActiveSelection || activeLinkIds.has(cId);
+          item.classList.toggle("selected", isSel);
+          item.classList.toggle("disabled", !isActive);
+          item.classList.toggle("edge-dimmed", !isActive && hasActiveSelection);
+        });
+        const badgeConnection = document.getElementById("badgeConnection");
+        if (badgeConnection) {
+          if (hasActiveSelection && activeLinkIds.size > 0) {
+            badgeConnection.textContent = activeLinkIds.size + ' aktiv (' + CONNECTIONS_DATA.length + ' Ges.)';
+            badgeConnection.classList.add("active");
+          } else {
+            badgeConnection.textContent = CONNECTIONS_DATA.length + ' Verbindungen';
+            badgeConnection.classList.toggle("active", Boolean(selectedLink));
+          }
+        }
+
+        // Stage 5: Systeme
+        document.querySelectorAll("#systemList .list-item").forEach(item => {
+          const sId = item.id.replace("sys-item-", "");
+          const isSel = (selectedNodeId === sId) || (selectedNode && selectedNode.id === sId);
+          const isActive = !hasActiveSelection || activeNodeIds.has(sId);
+          item.classList.toggle("selected", isSel);
+          item.classList.toggle("disabled", !isActive);
+          item.classList.toggle("edge-dimmed", !isActive && hasActiveSelection);
+        });
+        const badgeSystem = document.getElementById("badgeSystem");
+        if (badgeSystem) {
+          if (hasActiveSelection && activeNodeIds.size > 0) {
+            badgeSystem.textContent = activeNodeIds.size + ' aktiv (' + SYSTEMS_DATA.length + ' Ges.)';
+            badgeSystem.classList.add("active");
+          } else {
+            badgeSystem.textContent = SYSTEMS_DATA.length + ' Systeme';
+            badgeSystem.classList.toggle("active", Boolean(selectedNodeId || selectedNode));
           }
         }
 
@@ -18817,21 +18910,25 @@
             return;
           }
 
+          const activeEntry = registeredLandscapeModels.find(m => m.id === currentModelId);
+          const activeModelTitle = activeEntry?.title || activeEntry?.organization || 'Enterprise Architecture';
+          const domRangeStr = DOMAINS_DATA.length > 0 ? (DOMAINS_DATA[0].id + '–' + DOMAINS_DATA[DOMAINS_DATA.length - 1].id) : 'D1–D8';
+
           titleEl.innerHTML = 
             '<span class="title-step-node active-stage" style="cursor:default;">' +
-              '<span class="title-step-text">Johanniter Enterprise Architecture</span>' +
+              '<span class="title-step-text">' + esc(activeModelTitle) + '</span>' +
             '</span>' +
-            '<span class="title-sep">*</span>' +
+            '<span class="title-sep">✦</span>' +
             '<span class="title-step-node" style="cursor:default;">' +
               '<span class="title-step-text" style="color:var(--accent);">Quad-Chord Landschaft</span>' +
             '</span>' +
-            '<span class="title-sep">*</span>' +
+            '<span class="title-sep">✦</span>' +
             '<span class="title-step-node" style="cursor:default;">' +
               '<span class="title-step-text" style="color:var(--text-muted); font-weight:600;">4 Kreis-Segmente</span>' +
             '</span>';
           subEl.innerHTML = 
             '<span class="subtitle-stage-pill">Stufe 1 (Wurzel)</span>' +
-            '<span>Wählen Sie eine <strong>Domäne (D1–D8)</strong> im linken Menü oder auf der Zeichenfläche</span>';
+            '<span>Wählen Sie eine <strong>Domäne (' + domRangeStr + ')</strong> im linken Menü oder auf der Zeichenfläche</span>';
           return;
         }
 
@@ -18986,11 +19083,11 @@
         const dom = DOMAINS_DATA.find(d => d.id === sys.domain);
         const details = DOMAIN_DETAILS_DATA[sys.domain] || {};
         const incoming = CONNECTIONS_DATA.filter(c => c.to === sys.id);
-        const outgoing = CONNECTIONS_DATA.filter(c => c.from === sys.id);
-        const cCoord = nodeCoords.get(sys.id);
+        const activeModelObj = registeredLandscapeModels.find(m => m.id === currentModelId);
+        const orgShort = activeModelObj?.shortName || activeModelObj?.organization || 'EA';
         const quadLabels = {
-          'TL': 'Oben-Links · Johanniter Cloud',
-          'BL': 'Unten-Links · Johanniter On-Premises',
+          'TL': 'Oben-Links · ' + orgShort + ' Cloud',
+          'BL': 'Unten-Links · ' + orgShort + ' On-Premises',
           'TR': 'Oben-Rechts · Externe Cloud',
           'BR': 'Unten-Rechts · Externe On-Premises'
         };
@@ -19000,12 +19097,12 @@
             '<div class="insp-header">' +
               '<div>' +
                 '<div class="insp-title">' + sys.name + '</div>' +
-                '<div class="insp-sub">' + (details.shortName || sys.domain) + ' · ' + sys.vendor + '</div>' +
+                '<div class="insp-sub">' + (details.shortName || sys.domain) + ' · ' + (sys.vendor || orgShort) + '</div>' +
               '</div>' +
               '<span class="insp-id">' + sys.id + '</span>' +
             '</div>' +
             '<div class="insp-badges">' +
-              '<span class="insp-badge ' + (sys.scope === 'INTERNAL' ? 'scope-intern' : 'scope-extern') + '">' + (sys.scope === 'INTERNAL' ? '🏢 JOHANNITER' : '🌐 EXTERN') + '</span>' +
+              '<span class="insp-badge ' + (sys.scope === 'INTERNAL' ? 'scope-intern' : 'scope-extern') + '">' + (sys.scope === 'INTERNAL' ? ('🏢 ' + orgShort) : '🌐 EXTERN') + '</span>' +
               '<span class="insp-badge ' + (sys.deployment === 'ON_PREM' ? 'deploy-onprem' : 'deploy-cloud') + '">' + (sys.deployment === 'ON_PREM' ? 'On-Premises' : 'Cloud') + '</span>' +
               '<span class="insp-badge" style="background:var(--accent-glow); color:var(--accent); font-weight:700;">' + (quadLabels[cCoord?.quad] || cCoord?.quad) + '</span>' +
               (sys.hyperscaler ? '<span class="insp-badge" style="background:#f59e0b22; color:#f59e0b; border-color:#f59e0b;">' + sys.hyperscaler + '</span>' : '') +
@@ -19263,8 +19360,10 @@
 
       function renderInspectorProcess(proc) {
         const leadDom = DOMAINS_DATA.find(d => d.id === proc.leadDomain);
-        const integs = proc.cleanIntegIds.map(id => INTEGRATIONS_DATA.find(i => i.id === id)).filter(Boolean);
-        const partSys = proc.participatingSystems.map(id => SYSTEMS_DATA.find(s => s.id === id)).filter(Boolean);
+        const cleanIds = proc.cleanIntegIds || proc.integrations || [];
+        const integs = cleanIds.map(id => INTEGRATIONS_DATA.find(i => i.id === id)).filter(Boolean);
+        const partSysIds = proc.participatingSystems || proc.systems || [];
+        const partSys = partSysIds.map(id => SYSTEMS_DATA.find(s => s.id === id)).filter(Boolean);
 
         inspectorBody.innerHTML =
           '<div class="inspector-card">' +
@@ -21531,8 +21630,8 @@
         }
 
         if (modelJson) {
-          window.loadLandscapeModel(modelJson);
           currentModelId = modelId;
+          window.loadLandscapeModel(modelJson);
           renderModelCatalogueCards();
         } else {
           alert('Modell konnte nicht geladen werden.');
@@ -21669,7 +21768,27 @@
         Object.assign(DOMAIN_DETAILS_DATA, model.domainDetails || {});
 
         PROCESSES_DATA.length = 0;
-        (model.processes || []).forEach(p => PROCESSES_DATA.push(p));
+        (model.processes || []).forEach(p => {
+          p.participatingDomains = p.participatingDomains || p.involvedDomains || (p.leadDomain ? [p.leadDomain] : []);
+          p.involvedDomains = p.participatingDomains;
+          p.cleanIntegIds = p.cleanIntegIds || p.integrations || [];
+          if (!p.participatingSystems) {
+            const sSet = new Set();
+            (p.cleanIntegIds || []).forEach(intId => {
+              const integ = (model.integrations || []).find(i => i.id === intId);
+              if (integ) {
+                if (integ.sourceSystem) sSet.add(integ.sourceSystem);
+                if (integ.targetSystem) sSet.add(integ.targetSystem);
+                (integ.steps || []).forEach(st => {
+                  if (st.from) sSet.add(st.from);
+                  if (st.to) sSet.add(st.to);
+                });
+              }
+            });
+            p.participatingSystems = Array.from(sSet);
+          }
+          PROCESSES_DATA.push(p);
+        });
 
         INTEGRATIONS_DATA.length = 0;
         (model.integrations || []).forEach(i => INTEGRATIONS_DATA.push(i));
@@ -21678,11 +21797,19 @@
         sysById.clear();
         SYSTEMS_DATA.forEach(s => sysById.set(s.id, s));
 
-        // Update Brand Header
+        if (model.meta?.id) currentModelId = model.meta.id;
+
+        // Update Brand Header & Title
         const titleEl = document.getElementById('brandTitleText');
         const subEl = document.getElementById('brandSubText');
-        if (titleEl) titleEl.textContent = model.meta?.shortName || model.meta?.organization || 'ENTERPRISE';
-        if (subEl) subEl.textContent = model.meta?.modelTitle ? (model.meta.modelTitle.length > 25 ? model.meta.modelTitle.substring(0, 23) + '…' : model.meta.modelTitle) : 'Quad-Chord EA';
+        const found = registeredLandscapeModels.find(m => m.id === currentModelId);
+        const orgShort = model.meta?.shortName || found?.shortName || model.meta?.organization || 'EA';
+        if (titleEl) titleEl.textContent = orgShort;
+        if (subEl) subEl.textContent = 'Quad-Chord EA';
+
+        document.title = orgShort + ' · Quad-Chord Architecture';
+        const catBtn = document.getElementById('btnLandscapeCatalog');
+        if (catBtn) catBtn.title = '🏛️ IT-Landschaften & Modell-Katalog (Aktiv: ' + orgShort + ')';
 
         // Reset Selections
         selectedNodeId = null;
@@ -21702,12 +21829,24 @@
         renderDomains();
         renderProcesses();
         renderClusterIntegrations();
+        renderConnections();
+        renderSystems();
 
         // Re-render Radar Control Bar Hubs
         renderDynamicRadarBar();
 
         // Close Popouts and Update UI
         closeAllPopouts();
+        window.closeLandscapeCatalogPopout && window.closeLandscapeCatalogPopout();
+        if (typeof openSectionPopouts !== 'undefined') {
+          openSectionPopouts.forEach((pop) => {
+            if (pop) {
+              pop.style.display = 'none';
+              pop.classList.add('popout-closed');
+              pop.hidden = true;
+            }
+          });
+        }
         updateUI();
 
         console.log('✅ Successfully loaded Landscape Model:', model.meta?.organization);
@@ -21717,9 +21856,11 @@
       // TOGGLE-SWITCH FILTER LOGIC ("Alle" <-> "Nur Aktive")
       // =====================================================================
       const filterOnlyActive = {
-        domain: false,
-        process: false,
-        integration: false
+        domain: true,
+        process: true,
+        integration: true,
+        connection: true,
+        system: true
       };
 
       window.toggleOnlyActiveFilter = function(section) {
@@ -21739,6 +21880,8 @@
       };
 
       function applyOnlyActiveFilters() {
+        const hasActiveSelection = Boolean(selectedDomainId || selectedProcess || selectedLink || selectedIntegration || selectedNodeId || (typeof activeTags !== 'undefined' && activeTags.size > 0));
+
         // 1. Domain Filter
         const domItems = document.querySelectorAll('#domainList .domain-item, #popoutList_domain .domain-item');
         const activeNode = (typeof selectedNodeId !== 'undefined' && selectedNodeId)
@@ -21769,6 +21912,8 @@
         procItems.forEach(item => {
           if (!filterOnlyActive.process) {
             item.classList.remove('item-hidden-inactive');
+          } else if (!hasActiveSelection) {
+            item.classList.remove('item-hidden-inactive');
           } else {
             // Active if it is NOT disabled (or has edge-match / selected)
             const isInactive = item.classList.contains('disabled') || item.classList.contains('edge-dimmed');
@@ -21778,15 +21923,39 @@
 
         // 3. Integration Filter
         const integItems = document.querySelectorAll('#integrationList .list-item, #popoutList_integration .list-item');
-        const hasIntegContextFilter = Boolean(selectedDomainId || selectedProcess || selectedLink || selectedIntegration);
         integItems.forEach(item => {
           if (!filterOnlyActive.integration) {
             item.classList.remove('item-hidden-inactive');
-          } else if (!hasIntegContextFilter) {
+          } else if (!hasActiveSelection) {
             item.classList.remove('item-hidden-inactive');
           } else {
-            // Active if relevant (has edge-match and not edge-dimmed)
-            const isDimmed = item.classList.contains('edge-dimmed') || !item.classList.contains('edge-match');
+            const isDimmed = item.classList.contains('edge-dimmed') || item.classList.contains('disabled') || !item.classList.contains('edge-match');
+            item.classList.toggle('item-hidden-inactive', isDimmed);
+          }
+        });
+
+        // 4. Connection Filter
+        const connItems = document.querySelectorAll('#connectionList .list-item, #popoutList_connection .list-item');
+        connItems.forEach(item => {
+          if (!filterOnlyActive.connection) {
+            item.classList.remove('item-hidden-inactive');
+          } else if (!hasActiveSelection) {
+            item.classList.remove('item-hidden-inactive');
+          } else {
+            const isDimmed = item.classList.contains('disabled') || item.classList.contains('edge-dimmed');
+            item.classList.toggle('item-hidden-inactive', isDimmed);
+          }
+        });
+
+        // 5. System Filter
+        const sysItems = document.querySelectorAll('#systemList .list-item, #popoutList_system .list-item');
+        sysItems.forEach(item => {
+          if (!filterOnlyActive.system) {
+            item.classList.remove('item-hidden-inactive');
+          } else if (!hasActiveSelection) {
+            item.classList.remove('item-hidden-inactive');
+          } else {
+            const isDimmed = item.classList.contains('disabled') || item.classList.contains('edge-dimmed');
             item.classList.toggle('item-hidden-inactive', isDimmed);
           }
         });
@@ -21832,7 +22001,9 @@
         const titles = {
           domain: '📋 Domänen-Katalog',
           process: '⚙️ Geschäftsprozesse',
-          integration: '🔗 End-to-End Integrationen'
+          integration: '🔗 End-to-End Integrationen',
+          connection: '⚡ Verbindungen & Schnittstellen',
+          system: '🖥️ Systeme & Applikationen'
         };
 
         pop.innerHTML = 
@@ -21886,7 +22057,7 @@
         // Clone nodes with click behavior preserved
         popBody.innerHTML = '';
         if (section === 'integration') {
-          // Add search & tabs in integration popout
+          // Add search in integration popout
           const searchInp = document.createElement('input');
           searchInp.type = 'text';
           searchInp.placeholder = '🔍 ' + INTEGRATIONS_DATA.length + ' Integrationen durchsuchen...';
@@ -21896,6 +22067,30 @@
             integSearchTerm = e.target.value;
             renderClusterIntegrations();
             syncPopoutListContent('integration');
+          };
+          popBody.appendChild(searchInp);
+        } else if (section === 'connection') {
+          const searchInp = document.createElement('input');
+          searchInp.type = 'text';
+          searchInp.placeholder = '🔍 ' + CONNECTIONS_DATA.length + ' Verbindungen durchsuchen...';
+          searchInp.style.cssText = 'width:100%; box-sizing:border-box; padding:4px 8px; font-size:0.7rem; border-radius:4px; border:1px solid var(--card-border); background:var(--item-bg); color:var(--text-bright); margin-bottom:6px;';
+          searchInp.value = connSearchTerm || '';
+          searchInp.oninput = (e) => {
+            connSearchTerm = e.target.value;
+            renderConnections();
+            syncPopoutListContent('connection');
+          };
+          popBody.appendChild(searchInp);
+        } else if (section === 'system') {
+          const searchInp = document.createElement('input');
+          searchInp.type = 'text';
+          searchInp.placeholder = '🔍 ' + SYSTEMS_DATA.length + ' Systeme durchsuchen...';
+          searchInp.style.cssText = 'width:100%; box-sizing:border-box; padding:4px 8px; font-size:0.7rem; border-radius:4px; border:1px solid var(--card-border); background:var(--item-bg); color:var(--text-bright); margin-bottom:6px;';
+          searchInp.value = sysSearchTerm || '';
+          searchInp.oninput = (e) => {
+            sysSearchTerm = e.target.value;
+            renderSystems();
+            syncPopoutListContent('system');
           };
           popBody.appendChild(searchInp);
         }
@@ -21914,6 +22109,14 @@
             const iId = ch.id.replace('integ-item-', '');
             const integ = INTEGRATIONS_DATA.find(i => i.id === iId);
             if (integ) clone.onclick = () => setDrilldownIntegration(integ);
+          } else if (section === 'connection') {
+            const cId = ch.id.replace('conn-item-', '');
+            const conn = CONNECTIONS_DATA.find(c => c.id === cId);
+            if (conn) clone.onclick = () => selectEdge(conn, window.innerWidth / 2, window.innerHeight / 2);
+          } else if (section === 'system') {
+            const sId = ch.id.replace('sys-item-', '');
+            const sys = SYSTEMS_DATA.find(s => s.id === sId);
+            if (sys) clone.onclick = () => selectNode(sys, window.innerWidth / 2, window.innerHeight / 2);
           }
           popBody.appendChild(clone);
         });
@@ -21957,13 +22160,118 @@
         applyOnlyActiveFilters();
       };
 
-      // Helper to dynamically re-render radar bar pills
+      // Dynamic Middleware Radar Bar (Discovers Hubs for Active Model)
       function renderDynamicRadarBar() {
-        const bar = document.getElementById('middlewareRadarBar');
-        if (!bar) return;
-        // Keep standard pills, update counts if needed
-        bar.querySelectorAll('.radar-pill').forEach(b => {
-          b.classList.toggle('active', b.getAttribute('data-hub') === 'ALL');
+        const pillsContainer = document.getElementById('radarPills');
+        if (!pillsContainer) return;
+
+        // Discover middleware hubs dynamically
+        const hubCandidates = [];
+        const addedSysIds = new Set();
+
+        SYSTEMS_DATA.forEach(s => {
+          const isMiddlewareTag = s.tags && s.tags.some(t => t.toLowerCase() === 'middleware');
+          const isD6 = s.domain === 'D6';
+          const nameLower = (s.name || '').toLowerCase();
+          const descLower = (s.desc || s.description || '').toLowerCase();
+          const isHubWord = /healthshare|integration|kafka|broker|gateway|cpi|btp|seeburger|mule|konnektor|connector|kocobox|esb|hub/i.test(nameLower + ' ' + descLower);
+
+          if (isMiddlewareTag || (isD6 && isHubWord)) {
+            if (!addedSysIds.has(s.id)) {
+              addedSysIds.add(s.id);
+              hubCandidates.push(s);
+            }
+          }
+        });
+
+        INTEGRATIONS_DATA.forEach(i => {
+          if (i.middlewareHub) {
+            const s = SYSTEMS_DATA.find(sys => sys.id === i.middlewareHub);
+            if (s && !addedSysIds.has(s.id)) {
+              addedSysIds.add(s.id);
+              hubCandidates.push(s);
+            }
+          }
+        });
+
+        const hubsWithCounts = hubCandidates.map(s => {
+          const count = INTEGRATIONS_DATA.filter(i => {
+            if (i.middlewareHub === s.id) return true;
+            if (i.hub && (s.name.toLowerCase().includes(i.hub.toLowerCase()) || s.id === i.hub)) return true;
+            if (i.steps && i.steps.some(st => st.from === s.id || st.to === s.id)) return true;
+            return false;
+          }).length;
+
+          let icon = '⚡';
+          const nl = (s.name || '').toLowerCase();
+          if (nl.includes('healthshare') || nl.includes('klinik')) icon = '🏥';
+          else if (nl.includes('sap') || nl.includes('btp') || nl.includes('cpi')) icon = '🏢';
+          else if (nl.includes('seeburger')) icon = '🌐';
+          else if (nl.includes('kafka')) icon = '📡';
+          else if (nl.includes('ti') || nl.includes('konnektor') || nl.includes('kocobox')) icon = '🔐';
+          else if (nl.includes('kong') || nl.includes('gateway')) icon = '⚡';
+
+          let label = s.name.length > 18 ? s.name.slice(0, 16) + '…' : s.name;
+          if (nl.includes('healthshare')) label = 'HealthShare';
+          else if (nl.includes('sap btp')) label = 'SAP BTP';
+          else if (nl.includes('sap integration') || nl.includes('cpi')) label = 'SAP CPI';
+          else if (nl.includes('seeburger')) label = 'Seeburger BIS';
+          else if (nl.includes('kafka')) label = 'Apache Kafka';
+          else if (nl.includes('kong')) label = 'Kong Gateway';
+          else if (nl.includes('konnektor') || nl.includes('kocobox')) label = 'TI-Cluster';
+
+          return { sys: s, count, icon, label };
+        });
+
+        hubsWithCounts.sort((a, b) => b.count - a.count);
+
+        pillsContainer.innerHTML = '';
+
+        // ALL pill
+        const allBtn = document.createElement('button');
+        allBtn.className = 'radar-pill' + (selectedRadarHub === 'ALL' ? ' active' : '');
+        allBtn.setAttribute('data-hub', 'ALL');
+        allBtn.textContent = '🌐 Alle (' + INTEGRATIONS_DATA.length + ')';
+        allBtn.onclick = () => {
+          selectedRadarHub = 'ALL';
+          pillsContainer.querySelectorAll('.radar-pill').forEach(b => b.classList.toggle('active', b === allBtn));
+          d3.selectAll('.superhub-halo').remove();
+          selectedNodeId = null;
+          selectedNode = null;
+          window.selectedNodeId = null;
+          window.selectedNode = null;
+          selectedLink = null;
+          updateUI();
+        };
+        pillsContainer.appendChild(allBtn);
+
+        // Hub pills
+        hubsWithCounts.slice(0, 7).forEach(h => {
+          const btn = document.createElement('button');
+          btn.className = 'radar-pill' + (selectedRadarHub === h.sys.id ? ' active' : '');
+          btn.setAttribute('data-hub', h.sys.id);
+          btn.title = h.sys.id + ' · ' + h.sys.name + ' (' + h.count + ' Integrationen)';
+          btn.textContent = h.icon + ' ' + h.label + ' (' + h.count + ')';
+          btn.onclick = () => {
+            selectedRadarHub = h.sys.id;
+            pillsContainer.querySelectorAll('.radar-pill').forEach(b => b.classList.toggle('active', b === btn));
+            selectNode(h.sys, window.innerWidth / 2, window.innerHeight / 2);
+
+            d3.selectAll('.superhub-halo').remove();
+            const gNode = d3.select('#node-group-' + h.sys.id);
+            if (!gNode.empty()) {
+              gNode.append('circle')
+                .attr('class', 'superhub-halo')
+                .attr('r', 28);
+              gNode.append('circle')
+                .attr('class', 'superhub-halo')
+                .attr('r', 34)
+                .style('stroke-dasharray', '2,4')
+                .style('animation-direction', 'reverse');
+            }
+            updateUI();
+          };
+          pillsContainer.appendChild(btn);
         });
       }
 
@@ -22022,6 +22330,165 @@
 
         const badgeProc = document.getElementById('badgeProcess');
         if (badgeProc) badgeProc.textContent = PROCESSES_DATA.length + ' Prozesse';
+      }
+
+      // Populate Connections (Stage 4)
+      let connSearchTerm = '';
+      function renderConnections() {
+        const listEl = document.getElementById('connectionList');
+        if (!listEl) return;
+        listEl.innerHTML = '';
+
+        const term = (connSearchTerm || '').toLowerCase().trim();
+        const filtered = CONNECTIONS_DATA.filter(c => {
+          if (!term) return true;
+          return c.id.toLowerCase().includes(term) ||
+                 (c.name && c.name.toLowerCase().includes(term)) ||
+                 c.from.toLowerCase().includes(term) ||
+                 c.to.toLowerCase().includes(term) ||
+                 (c.protocol && c.protocol.toLowerCase().includes(term)) ||
+                 (c.desc && c.desc.toLowerCase().includes(term));
+        });
+
+        filtered.slice(0, 100).forEach(c => {
+          const fromSys = sysById.get(c.from);
+          const toSys = sysById.get(c.to);
+          const fromDom = DOMAINS_DATA.find(d => d.id === fromSys?.domain);
+          const toDom = DOMAINS_DATA.find(d => d.id === toSys?.domain);
+          const isSel = selectedLink && selectedLink.id === c.id;
+
+          const row = document.createElement('div');
+          row.className = 'list-item' + (isSel ? ' selected' : '');
+          row.id = 'conn-item-' + c.id;
+          row.style.cursor = 'pointer';
+          row.style.marginBottom = '4px';
+          row.style.display = 'block';
+
+          const fromColor = fromDom?.color || '#38bdf8';
+          const toColor = toDom?.color || '#38bdf8';
+
+          row.innerHTML =
+            '<div style="display:flex; align-items:center; justify-content:space-between;">' +
+              '<div style="display:flex; align-items:center; gap:5px;">' +
+                '<span style="font-size:0.68rem; font-weight:750; color:var(--accent);">' + c.id + '</span>' +
+                '<span class="dom-lead-badge" style="background:' + fromColor + '22; color:' + fromColor + '; border:1px solid ' + fromColor + '55;">' + c.from + '</span>' +
+                '<span style="font-size:0.65rem; color:var(--text-muted);">➔</span>' +
+                '<span class="dom-lead-badge" style="background:' + toColor + '22; color:' + toColor + '; border:1px solid ' + toColor + '55;">' + c.to + '</span>' +
+              '</div>' +
+              '<span class="traffic-tag" style="font-size:0.60rem;">' + (c.protocol || 'Schnittstelle') + '</span>' +
+            '</div>' +
+            '<div style="font-size:0.69rem; color:var(--text-bright); font-weight:600; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="' + (c.name || c.desc || '') + '">' +
+              (c.name || c.desc || (c.from + ' ➔ ' + c.to)) +
+            '</div>';
+
+          row.onclick = () => {
+            selectEdge(c, window.innerWidth / 2, window.innerHeight / 2);
+          };
+          listEl.appendChild(row);
+        });
+
+        if (filtered.length > 100) {
+          const info = document.createElement('div');
+          info.style.fontSize = '0.65rem';
+          info.style.color = 'var(--text-muted)';
+          info.style.textAlign = 'center';
+          info.style.padding = '6px 0';
+          info.textContent = '+ ' + (filtered.length - 100) + ' weitere Verbindungen (Suchfeld nutzen)';
+          listEl.appendChild(info);
+        }
+
+        const badgeConn = document.getElementById('badgeConnection');
+        if (badgeConn) badgeConn.textContent = CONNECTIONS_DATA.length + ' Verbindungen';
+
+        if (typeof applyOnlyActiveFilters === 'function') {
+          applyOnlyActiveFilters();
+        }
+      }
+
+      const connSearchInp = document.getElementById('connSearchInput');
+      if (connSearchInp) {
+        connSearchInp.addEventListener('input', (e) => {
+          connSearchTerm = e.target.value;
+          renderConnections();
+        });
+      }
+
+      // Populate Systems (Stage 5)
+      let sysSearchTerm = '';
+      function renderSystems() {
+        const listEl = document.getElementById('systemList');
+        if (!listEl) return;
+        listEl.innerHTML = '';
+
+        const term = (sysSearchTerm || '').toLowerCase().trim();
+        const filtered = SYSTEMS_DATA.filter(s => {
+          if (!term) return true;
+          return s.id.toLowerCase().includes(term) ||
+                 s.name.toLowerCase().includes(term) ||
+                 (s.domain && s.domain.toLowerCase().includes(term)) ||
+                 (s.desc && s.desc.toLowerCase().includes(term)) ||
+                 (s.tags && s.tags.some(t => t.toLowerCase().includes(term)));
+        });
+
+        filtered.slice(0, 100).forEach(s => {
+          const dom = DOMAINS_DATA.find(d => d.id === s.domain);
+          const domColor = dom?.color || '#38bdf8';
+          const isSel = (selectedNodeId === s.id) || (selectedNode && selectedNode.id === s.id);
+
+          const row = document.createElement('div');
+          row.className = 'list-item' + (isSel ? ' selected' : '');
+          row.id = 'sys-item-' + s.id;
+          row.style.cursor = 'pointer';
+          row.style.marginBottom = '4px';
+          row.style.display = 'block';
+
+          const scopeBadge = s.scope === 'INTERNAL'
+            ? '<span style="font-size:0.58rem; padding:1px 4px; border-radius:3px; background:rgba(56,189,248,0.15); color:var(--accent); font-weight:600;">' + (s.deployment === 'CLOUD' ? 'Cloud Intern' : 'On-Prem') + '</span>'
+            : '<span style="font-size:0.58rem; padding:1px 4px; border-radius:3px; background:rgba(245,158,11,0.15); color:#f59e0b; font-weight:600;">Drittanbieter</span>';
+
+          row.innerHTML =
+            '<div style="display:flex; align-items:center; justify-content:space-between;">' +
+              '<div style="display:flex; align-items:center; gap:5px;">' +
+                '<span style="font-size:0.68rem; font-weight:750; color:var(--accent);">' + s.id + '</span>' +
+                '<span class="dom-lead-badge" style="background:' + domColor + '22; color:' + domColor + '; border:1px solid ' + domColor + '55;">' + (dom?.id || s.domain) + '</span>' +
+              '</div>' +
+              scopeBadge +
+            '</div>' +
+            '<div style="font-size:0.69rem; color:var(--text-bright); font-weight:600; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="' + s.name + '">' +
+              s.name +
+            '</div>' +
+            '<div style="font-size:0.62rem; color:var(--text-muted); margin-top:1px;">' + (s.hosting || s.vendor || s.responsible || '') + '</div>';
+
+          row.onclick = () => {
+            selectNode(s, window.innerWidth / 2, window.innerHeight / 2);
+          };
+          listEl.appendChild(row);
+        });
+
+        if (filtered.length > 100) {
+          const info = document.createElement('div');
+          info.style.fontSize = '0.65rem';
+          info.style.color = 'var(--text-muted)';
+          info.style.textAlign = 'center';
+          info.style.padding = '6px 0';
+          info.textContent = '+ ' + (filtered.length - 100) + ' weitere Systeme (Suchfeld nutzen)';
+          listEl.appendChild(info);
+        }
+
+        const badgeSys = document.getElementById('badgeSystem');
+        if (badgeSys) badgeSys.textContent = SYSTEMS_DATA.length + ' Systeme';
+
+        if (typeof applyOnlyActiveFilters === 'function') {
+          applyOnlyActiveFilters();
+        }
+      }
+
+      const sysSearchInp = document.getElementById('sysSearchInput');
+      if (sysSearchInp) {
+        sysSearchInp.addEventListener('input', (e) => {
+          sysSearchTerm = e.target.value;
+          renderSystems();
+        });
       }
 
       // Rebuild Quad-Chord D3 Diagram from scratch
@@ -22129,6 +22596,128 @@
             return c && Math.cos(c.angle) > 0 ? 'start' : 'end';
           })
           .text(d => d.id);
+
+        // Re-bind D3 selection variables so updateUI() operates on the current elements!
+        linkElements = gLinks.selectAll('.edge-link');
+        nodeElements = gNodes.selectAll('.sys-node-group');
+
+        // Update CIRCLES titles and KPIs dynamically
+        const activeModelObj = registeredLandscapeModels.find(m => m.id === currentModelId);
+        const orgShort = activeModelObj?.shortName || activeModelObj?.organization || 'EA';
+
+        CIRCLES.TL.title = orgShort + ' · CLOUD & HYPERSCALER';
+        CIRCLES.TL.kpi = nqTL.length + ' Systeme';
+        CIRCLES.TL.sub = 'Azure · SAP BTP · AWS · GCP (Private Cloud & IAM)';
+
+        CIRCLES.BL.title = orgShort + ' · ON-PREMISES';
+        CIRCLES.BL.kpi = nqBL.length + ' Systeme';
+        CIRCLES.BL.sub = 'RZ & Klinische Standorte (' + (DOMAINS_DATA.length > 0 ? (DOMAINS_DATA[0].id + '-' + DOMAINS_DATA[DOMAINS_DATA.length - 1].id) : 'D1-D8') + ')';
+
+        CIRCLES.TR.kpi = nqTR.length + ' Externe SaaS / Cloud';
+        CIRCLES.BR.kpi = nqBR.length + ' Drittanbieter On-Prem';
+
+        // Re-render quadrant circle background texts
+        gBack.selectAll('.chord-center-title, .chord-center-kpi, .chord-center-sub').remove();
+        Object.values(CIRCLES).forEach(c => {
+          gBack.append('text')
+            .attr('class', 'chord-center-title')
+            .attr('x', c.x)
+            .attr('y', c.y - 20)
+            .text(c.title);
+
+          gBack.append('text')
+            .attr('class', 'chord-center-kpi')
+            .attr('x', c.x)
+            .attr('y', c.y - 4)
+            .text(c.kpi);
+
+          gBack.append('text')
+            .attr('class', 'chord-center-sub')
+            .attr('x', c.x)
+            .attr('y', c.y + 12)
+            .text(c.sub);
+        });
+
+        // Re-render Hyperscaler Sector Arcs for Top-Left
+        gHyperscalerArcs.selectAll('*').remove();
+        const hsColors = { 'SAP_BTP': '#f59e0b', 'AZURE': '#0078d4', 'AWS': '#ff9900', 'GCP': '#34a853' };
+        const hsNames = { 'SAP_BTP': 'SAP BTP', 'AZURE': 'Microsoft Azure', 'AWS': 'Amazon Web Services', 'GCP': 'Google Cloud' };
+
+        ['SAP_BTP', 'AZURE', 'AWS', 'GCP'].forEach(hsKey => {
+          const hsNodes = nqTL.filter(s => s.hyperscaler === hsKey);
+          if (hsNodes.length === 0) return;
+          const coords = hsNodes.map(s => nodeCoords.get(s.id)).filter(Boolean);
+          if (coords.length === 0) return;
+          const angles = coords.map(c => c.angle);
+          const minA = Math.min(...angles);
+          const maxA = Math.max(...angles);
+          const pad = 0.05;
+
+          const arcGen = d3.arc()
+            .innerRadius(CIRCLES.TL.r + 22)
+            .outerRadius(CIRCLES.TL.r + 30)
+            .startAngle(minA + Math.PI/2 - pad)
+            .endAngle(maxA + Math.PI/2 + pad)
+            .cornerRadius(3);
+
+          gHyperscalerArcs.append('path')
+            .attr('transform', 'translate(' + CIRCLES.TL.x + ',' + CIRCLES.TL.y + ')')
+            .attr('d', arcGen)
+            .attr('fill', hsColors[hsKey] || '#38bdf8')
+            .attr('opacity', 0.75);
+
+          const midA = (minA + maxA) / 2;
+          const lx = CIRCLES.TL.x + (CIRCLES.TL.r + 42) * Math.cos(midA);
+          const ly = CIRCLES.TL.y + (CIRCLES.TL.r + 42) * Math.sin(midA);
+          gHyperscalerArcs.append('text')
+            .attr('x', lx)
+            .attr('y', ly)
+            .attr('text-anchor', Math.cos(midA) > 0 ? 'start' : 'end')
+            .attr('dominant-baseline', 'middle')
+            .style('font-size', '8.5px')
+            .style('font-weight', '700')
+            .style('fill', hsColors[hsKey])
+            .text(hsNames[hsKey] + ' (' + hsNodes.length + ')');
+        });
+
+        // Re-render Domain Sector Arcs for Bottom-Left
+        gDomainArcs.selectAll('*').remove();
+        DOMAINS_DATA.forEach(dom => {
+          const dNodes = nqBL.filter(s => s.domain === dom.id);
+          if (dNodes.length === 0) return;
+          const coords = dNodes.map(s => nodeCoords.get(s.id)).filter(Boolean);
+          if (coords.length === 0) return;
+          const angles = coords.map(c => c.angle);
+          const minA = Math.min(...angles);
+          const maxA = Math.max(...angles);
+          const pad = 0.04;
+
+          const arcGen = d3.arc()
+            .innerRadius(CIRCLES.BL.r + 22)
+            .outerRadius(CIRCLES.BL.r + 30)
+            .startAngle(minA + Math.PI/2 - pad)
+            .endAngle(maxA + Math.PI/2 + pad)
+            .cornerRadius(3);
+
+          gDomainArcs.append('path')
+            .attr('transform', 'translate(' + CIRCLES.BL.x + ',' + CIRCLES.BL.y + ')')
+            .attr('d', arcGen)
+            .attr('fill', dom.color || '#38bdf8')
+            .attr('opacity', 0.75);
+
+          const midA = (minA + maxA) / 2;
+          const lx = CIRCLES.BL.x + (CIRCLES.BL.r + 42) * Math.cos(midA);
+          const ly = CIRCLES.BL.y + (CIRCLES.BL.r + 42) * Math.sin(midA);
+          gDomainArcs.append('text')
+            .attr('x', lx)
+            .attr('y', ly)
+            .attr('text-anchor', Math.cos(midA) > 0 ? 'start' : 'end')
+            .attr('dominant-baseline', 'middle')
+            .style('font-size', '8px')
+            .style('font-weight', '700')
+            .style('fill', dom.color)
+            .text(dom.id + ' (' + dNodes.length + ')');
+        });
       }
 
       // Canvas Zoom Controls
@@ -22683,6 +23272,11 @@
 
       // Restore State from Deep-Link Query Parameters if present
       restoreStateFromUrl();
+
+      // Initial Drawer Lists & Radar Rendering
+      renderConnections();
+      renderSystems();
+      renderDynamicRadarBar();
 
       // Initial UI and Header Drilldown Title Rendering
       updateUI();
