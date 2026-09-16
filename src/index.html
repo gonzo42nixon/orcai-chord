@@ -18828,6 +18828,33 @@
         });
       });
 
+            function edgeMatchesOsiLayer(edge, osiLayer) {
+        if (!osiLayer || osiLayer === 'ALL') return true;
+        const str = [
+          edge.protocol || '',
+          edge.transportOverlay || edge.overlay || '',
+          edge.messageType || edge.msgType || '',
+          edge.name || '',
+          (edge.tags || []).join(' ')
+        ].join(' ').toUpperCase();
+
+        if (osiLayer === 'L1_L2') {
+          return /\b(CELLULAR|4G|5G|LTE|NB-IOT|LORAWAN|FIBER|ETHERNET|L1|L2|BLE|BLUETOOTH|CANBUS|IOT|TELEFONICA|VODAFONE)\b/i.test(str);
+        }
+        if (osiLayer === 'L3') {
+          return /\b(IPSEC|VPN|TI-VPN|B3S|PERIMETER|L3|ROUTING|WAN|OVERLAY|SD-WAN|CROSS-BOUNDARY|FIREWALL|CISCO|FORTINET|GEMATIK|KONA)\b/i.test(str);
+        }
+        if (osiLayer === 'L5_L6') {
+          return /\b(MTLS|TLS|HTTPS|REVERSE-INVOKE|WSS|L5|L6|SSL|SFTP|SSH|AS2|ENCRYPTION|ZUGFERD|CERTIFICATE|PKI|EDIFACT)\b/i.test(str);
+        }
+        if (osiLayer === 'L7') {
+          return /\b(REST|FHIR|HL7|DICOM|SOAP|KAFKA|SQL|ODATA|API|JSON|XML|ADT|ORM|MDM|MLLP|PEPPOL|EDIFACT|DEMIS|IFSG|BMECAT|BPMN|HTTP|WEBHOOK|SMED|OBDS)\b/i.test(str)
+            || (!/\b(IPSEC|CELLULAR|LORAWAN)\b/i.test(str));
+        }
+        return true;
+      }
+      window.edgeMatchesOsiLayer = edgeMatchesOsiLayer;
+
       function updateUI() {
         window.selectedDomainId = selectedDomainId;
         window.selectedProcess = selectedProcess;
@@ -18898,6 +18925,31 @@
         }
 
         // =========================================================================
+        // OSI LAYER FILTERING LOGIC: Compute matching systems & connections
+        // =========================================================================
+        const hasOsiFilter = Boolean(selectedOsiLayer && selectedOsiLayer !== 'ALL');
+        let osiMatchingLinkIds = new Set();
+        let osiMatchingNodeIds = new Set();
+
+        if (hasOsiFilter) {
+          CONNECTIONS_DATA.forEach(c => {
+            if (edgeMatchesOsiLayer(c, selectedOsiLayer)) {
+              osiMatchingLinkIds.add(c.id);
+              osiMatchingNodeIds.add(c.from);
+              osiMatchingNodeIds.add(c.to);
+            }
+          });
+
+          if (activeNodeIds.size === 0 && activeLinkIds.size === 0) {
+            activeNodeIds = new Set(osiMatchingNodeIds);
+            activeLinkIds = new Set(osiMatchingLinkIds);
+          } else {
+            activeNodeIds = new Set([...activeNodeIds].filter(id => osiMatchingNodeIds.has(id)));
+            activeLinkIds = new Set([...activeLinkIds].filter(id => osiMatchingLinkIds.has(id)));
+          }
+        }
+
+        // =========================================================================
         // TAG FILTERING LOGIC: Compute matching systems & connections
         // =========================================================================
         const hasActiveTags = Boolean(activeTags && activeTags.size > 0);
@@ -18929,7 +18981,7 @@
           }
         }
 
-        const hasActiveSelection = (activeLinkIds.size > 0 || activeNodeIds.size > 0 || hasActiveTags || (selectedRadarHub && selectedRadarHub !== 'ALL'));
+        const hasActiveSelection = (activeLinkIds.size > 0 || activeNodeIds.size > 0 || hasActiveTags || hasOsiFilter || (selectedRadarHub && selectedRadarHub !== 'ALL'));
 
         linkElements
           .classed("highlighted", d => activeLinkIds.has(d.id))
@@ -20105,10 +20157,56 @@
         };
       }
 
-      const tagCloudEl = document.getElementById("tagCloud");
-      const allTags = new Set();
-      SYSTEMS_DATA.forEach(s => s.tags.forEach(t => allTags.add(t)));
-      CONNECTIONS_DATA.forEach(c => c.tags.forEach(t => allTags.add(t)));
+      // Dynamic Tag Cloud Renderer
+      window.renderTagCloud = function() {
+        const tagCloudEl = document.getElementById("tagCloud");
+        if (!tagCloudEl) return;
+        tagCloudEl.innerHTML = "";
+
+        const allTags = new Set();
+        SYSTEMS_DATA.forEach(s => (s.tags || []).forEach(t => allTags.add(t)));
+        CONNECTIONS_DATA.forEach(c => (c.tags || []).forEach(t => allTags.add(t)));
+
+        const sortedTags = Array.from(allTags).filter(Boolean).sort((a, b) => a.localeCompare(b, 'de'));
+
+        sortedTags.forEach(tag => {
+          const chip = document.createElement("div");
+          chip.className = "tag-chip" + (activeTags.has(tag) ? " active" : "");
+          chip.textContent = tag;
+
+          const sysCnt = SYSTEMS_DATA.filter(s => s.tags && s.tags.includes(tag)).length;
+          const conCnt = CONNECTIONS_DATA.filter(c => c.tags && c.tags.includes(tag)).length;
+          chip.title = "Tag '" + tag + "': in " + sysCnt + " Systemen und " + conCnt + " Schnittstellen";
+
+          chip.onmouseenter = () => {
+            if (activeTags.size === 0) {
+              d3.selectAll(".sys-node-group").classed("tag-preview", d => d.tags && d.tags.includes(tag));
+              d3.selectAll(".edge-link").classed("tag-preview", d => d.tags && d.tags.includes(tag));
+            }
+          };
+          chip.onmouseleave = () => {
+            d3.selectAll(".sys-node-group").classed("tag-preview", false);
+            d3.selectAll(".edge-link").classed("tag-preview", false);
+          };
+
+          chip.onclick = () => {
+            if (activeTags.has(tag)) {
+              activeTags.delete(tag);
+              chip.classList.remove("active");
+            } else {
+              activeTags.add(tag);
+              chip.classList.add("active");
+            }
+            updateUI();
+          };
+          tagCloudEl.appendChild(chip);
+        });
+
+        const tagCountEl = document.getElementById("tagCount");
+        if (tagCountEl) {
+          tagCountEl.textContent = activeTags.size > 0 ? (activeTags.size + " ausgewählt") : "0 ausgewählt";
+        }
+      };
 
       window.clearAllTags = function() {
         activeTags.clear();
@@ -20124,39 +20222,6 @@
         };
       }
 
-      Array.from(allTags).sort().forEach(tag => {
-        const chip = document.createElement("div");
-        chip.className = "tag-chip";
-        chip.textContent = tag;
-
-        const sysCnt = SYSTEMS_DATA.filter(s => s.tags && s.tags.includes(tag)).length;
-        const conCnt = CONNECTIONS_DATA.filter(c => c.tags && c.tags.includes(tag)).length;
-        chip.title = "Tag '" + tag + "': in " + sysCnt + " Systemen und " + conCnt + " Schnittstellen";
-
-        chip.onmouseenter = () => {
-          if (activeTags.size === 0) {
-            d3.selectAll(".sys-node-group").classed("tag-preview", d => d.tags && d.tags.includes(tag));
-            d3.selectAll(".edge-link").classed("tag-preview", d => d.tags && d.tags.includes(tag));
-          }
-        };
-        chip.onmouseleave = () => {
-          d3.selectAll(".sys-node-group").classed("tag-preview", false);
-          d3.selectAll(".edge-link").classed("tag-preview", false);
-        };
-
-        chip.onclick = () => {
-          if (activeTags.has(tag)) {
-            activeTags.delete(tag);
-            chip.classList.remove("active");
-          } else {
-            activeTags.add(tag);
-            chip.classList.add("active");
-          }
-          updateUI();
-        };
-        tagCloudEl.appendChild(chip);
-      });
-
       const btnResetT = document.getElementById("btnResetTags");
       if (btnResetT) {
         btnResetT.onclick = () => {
@@ -20164,45 +20229,25 @@
         };
       }
 
-      
       // OSI Schichten-Schnellfilter Logic
       let selectedOsiLayer = 'ALL';
+      window.selectedOsiLayer = 'ALL';
       const osiPills = document.querySelectorAll('.osi-pill-btn');
       const osiStatusEl = document.getElementById('osiFilterStatus');
 
       osiPills.forEach(btn => {
         btn.addEventListener('click', () => {
-          const osiVal = btn.getAttribute('data-osi');
+          const osiVal = btn.getAttribute('data-osi') || 'ALL';
           selectedOsiLayer = osiVal;
+          window.selectedOsiLayer = osiVal;
           osiPills.forEach(b => b.classList.toggle('active', b === btn));
           if (osiStatusEl) {
             osiStatusEl.textContent = btn.textContent;
           }
-
-          // Map OSI layer to active tag for instant visual highlighting & dimming
-          window.clearAllTags();
-          if (osiVal === 'L7') {
-            activeTags.add('OSI-L7');
-          } else if (osiVal === 'L5_L6') {
-            activeTags.add('OSI-L5 Tunnel');
-          } else if (osiVal === 'L3') {
-            activeTags.add('OSI-L3 VPN');
-          } else if (osiVal === 'L1_L2') {
-            activeTags.add('OSI-L1/L2 Cellular');
-          }
-
-          // Synchronize tag chips in right drawer
-          document.querySelectorAll('.tag-chip').forEach(chip => {
-            chip.classList.toggle('active', activeTags.has(chip.textContent.trim()));
-          });
-
           updateUI();
         });
       });
 
-      
-      
-      
       // =====================================================================
       // MIDDLEWARE RADAR LOGIC (Dynamic Highlighting Fokus & Discovery)
       // =====================================================================
@@ -22117,7 +22162,8 @@
       "connectionsCount": 32,
       "integrationsCount": 16,
       "processesCount": 8,
-      "domainsCount": 6
+      "domainsCount": 6,
+      "connections": 45
     }
   },
   "domains": [
@@ -23211,6 +23257,223 @@
         "Telematik / TI",
         "KRITIS"
       ]
+    },
+    {
+      "id": "JSD-C-33",
+      "from": "JSD-01",
+      "to": "JSD-03",
+      "name": "SAP HCM ➔ Atoss Personal-Stammdaten & Dienstplan-Sync",
+      "protocol": "HTTPS / REST JSON",
+      "msgType": "REST",
+      "flowType": "INTRA_CLOUD",
+      "overlay": "CLOUD_VPC",
+      "isCrossBoundary": true,
+      "tags": [
+        "HR",
+        "Cloud",
+        "SAP",
+        "REST"
+      ]
+    },
+    {
+      "id": "JSD-C-34",
+      "from": "JSD-03",
+      "to": "JSD-08",
+      "name": "Atoss ➔ CGM MEDICO OP- & Dienstplan-Verfügbarkeit",
+      "protocol": "REST / JSON Webhook",
+      "msgType": "REST",
+      "flowType": "CLOUD_TO_PREM",
+      "overlay": "HTTPS_MTLS",
+      "isCrossBoundary": true,
+      "tags": [
+        "Klinik",
+        "HR",
+        "REST",
+        "Cloud"
+      ]
+    },
+    {
+      "id": "JSD-C-35",
+      "from": "JSD-10",
+      "to": "JSD-06",
+      "name": "HealthShare Hub ➔ Data Lakehouse Realtime FHIR Stream",
+      "protocol": "Kafka / FHIR Bulk Data (ndjson)",
+      "msgType": "FHIR",
+      "flowType": "PREM_TO_CLOUD",
+      "overlay": "AZURE_EXPRESSROUTE",
+      "isCrossBoundary": true,
+      "tags": [
+        "Analytics",
+        "FHIR",
+        "Streaming",
+        "Cloud"
+      ]
+    },
+    {
+      "id": "JSD-C-36",
+      "from": "JSD-01",
+      "to": "JSD-06",
+      "name": "SAP Finance ➔ Lakehouse Kostenrechnung & Controlling ETL",
+      "protocol": "OData / JDBC SQL ETL",
+      "msgType": "SQL",
+      "flowType": "CLOUD_VPC",
+      "overlay": "TLS_1_3",
+      "isCrossBoundary": false,
+      "tags": [
+        "Finanzen",
+        "Analytics",
+        "SQL",
+        "Cloud"
+      ]
+    },
+    {
+      "id": "JSD-C-37",
+      "from": "JSD-08",
+      "to": "JSD-19",
+      "name": "CGM MEDICO ➔ d.velop Revisionssichere Patientenakte (IHE XDS.b)",
+      "protocol": "IHE XDS.b / HL7 MDM",
+      "msgType": "HL7",
+      "flowType": "INTRA_ON_PREM",
+      "overlay": "ON_PREM_LAN",
+      "isCrossBoundary": false,
+      "tags": [
+        "Klinik",
+        "Archiv",
+        "IHE",
+        "HL7"
+      ]
+    },
+    {
+      "id": "JSD-C-38",
+      "from": "JSD-09",
+      "to": "JSD-19",
+      "name": "MLK KIS ➔ d.velop Dokumenten-Archivierung (IHE XDS.b)",
+      "protocol": "IHE XDS.b WebDAV / PDF/A",
+      "msgType": "REST",
+      "flowType": "INTRA_ON_PREM",
+      "overlay": "ON_PREM_LAN",
+      "isCrossBoundary": false,
+      "tags": [
+        "Klinik",
+        "Archiv",
+        "IHE"
+      ]
+    },
+    {
+      "id": "JSD-C-39",
+      "from": "JSD-20",
+      "to": "JSD-10",
+      "name": "KRITIS Perimeter ➔ HealthShare Hub (B3S Zero-Trust Gateway)",
+      "protocol": "TLS 1.3 Inspection / B3S WAF",
+      "msgType": "REST",
+      "flowType": "PERIMETER_TO_PREM",
+      "overlay": "B3S_PERIMETER",
+      "isCrossBoundary": true,
+      "tags": [
+        "Sicherheit",
+        "KRITIS",
+        "Perimeter",
+        "VPN"
+      ]
+    },
+    {
+      "id": "JSD-C-40",
+      "from": "JSD-21",
+      "to": "JSD-20",
+      "name": "gematik TI Backbone ➔ KRITIS-Perimeter (Sicherer VPN-Tunnel)",
+      "protocol": "gematik TI IPsec VPN Tunnel",
+      "msgType": "VPN",
+      "flowType": "EXT_TO_PERIMETER",
+      "overlay": "TI_VPN",
+      "isCrossBoundary": true,
+      "tags": [
+        "TI",
+        "VPN",
+        "Sicherheit",
+        "KRITIS"
+      ]
+    },
+    {
+      "id": "JSD-C-41",
+      "from": "JSD-11",
+      "to": "JSD-26",
+      "name": "Swisslab LIMS ➔ RKI DEMIS Erregernachweis-Meldung (§ 6, 7 IfSG)",
+      "protocol": "HL7 FHIR R4 IfSG REST API",
+      "msgType": "FHIR",
+      "flowType": "PREM_TO_EXT",
+      "overlay": "BUND_DE_MTLS",
+      "isCrossBoundary": true,
+      "tags": [
+        "Labor",
+        "FHIR",
+        "DEMIS",
+        "Behörde"
+      ]
+    },
+    {
+      "id": "JSD-C-42",
+      "from": "JSD-08",
+      "to": "JSD-31",
+      "name": "CGM MEDICO ➔ PKV Verband Elektronische Abrechnung § 301",
+      "protocol": "DTA PKV § 301 EDIFACT / SFTP",
+      "msgType": "EDIFACT",
+      "flowType": "PREM_TO_EXT",
+      "overlay": "SFTP_SSH",
+      "isCrossBoundary": true,
+      "tags": [
+        "Abrechnung",
+        "EDIFACT",
+        "PKV"
+      ]
+    },
+    {
+      "id": "JSD-C-43",
+      "from": "JSD-11",
+      "to": "JSD-32",
+      "name": "Swisslab LIMS ➔ DRK Blutspende Konserven-Bestellung & Kreuzprobe",
+      "protocol": "HL7 v2.5 OML / REST JSON",
+      "msgType": "HL7",
+      "flowType": "PREM_TO_EXT",
+      "overlay": "HTTPS_MTLS",
+      "isCrossBoundary": true,
+      "tags": [
+        "Labor",
+        "HL7",
+        "Blutspende"
+      ]
+    },
+    {
+      "id": "JSD-C-44",
+      "from": "JSD-33",
+      "to": "JSD-15",
+      "name": "KV Berlin 116117 ➔ ZNA E-Care Notfall-Patientenzuweisung (SmED)",
+      "protocol": "HL7 FHIR SmED REST API",
+      "msgType": "FHIR",
+      "flowType": "EXT_TO_PREM",
+      "overlay": "KV_CONNECT_MTLS",
+      "isCrossBoundary": true,
+      "tags": [
+        "Notaufnahme",
+        "FHIR",
+        "KV-Berlin"
+      ]
+    },
+    {
+      "id": "JSD-C-45",
+      "from": "JSD-08",
+      "to": "JSD-34",
+      "name": "CGM MEDICO ➔ GKR Berlin-BB Onkologische Basisdaten-Meldung",
+      "protocol": "oBDS § 65c SGB V REST / XML",
+      "msgType": "REST",
+      "flowType": "PREM_TO_EXT",
+      "overlay": "HTTPS_MTLS",
+      "isCrossBoundary": true,
+      "tags": [
+        "Klinik",
+        "Krebsregister",
+        "REST",
+        "Behörde"
+      ]
     }
   ],
   "systems": [
@@ -23740,7 +24003,7 @@
           title: 'Johannesstift Diakonie Enterprise Architecture (Conciliamus IT, Kliniken & Services)',
           desc: 'Konzernweite IT-Landschaft der Johannesstift Diakonie gAG, betrieben durch den internen IT-Vollversorger Conciliamus GmbH (10 Kliniken, 20 Pflegeeinrichtungen, JSD Services AEMP & Logistik, CGM MEDICO/ORBIS KIS, HealthShare Hub, SAP BTP/S4 & TI-Cluster).',
           url: 'https://orcai-54321.web.app/api/orcai/v1/docs/ORCAI-MODEL-JOHANNESSTIFT-DIAKONIE-EA?v=1.0.0',
-          stats: { systems: 34, connections: 32, integrations: 16, processes: 8, domains: 6 },
+          stats: { systems: 34, connections: 45, integrations: 16, processes: 8, domains: 6 },
           data: cachedJohannesstiftModel
         }
       ];
@@ -24139,6 +24402,17 @@
         document.title = orgShort + ' · Quad-Chord Architecture';
         const catBtn = document.getElementById('btnLandscapeCatalog');
         if (catBtn) catBtn.title = '🏛️ IT-Landschaften & Modell-Katalog (Aktiv: ' + orgShort + ')';
+
+        // Reset tag filter & OSI filter on model switch
+        activeTags.clear();
+        selectedOsiLayer = 'ALL';
+        window.selectedOsiLayer = 'ALL';
+        document.querySelectorAll('.osi-pill-btn').forEach(b => b.classList.toggle('active', b.getAttribute('data-osi') === 'ALL'));
+        const osiStatusEl = document.getElementById('osiFilterStatus');
+        if (osiStatusEl) osiStatusEl.textContent = 'Alle';
+
+        // Re-render Dynamic Tag Cloud
+        if (typeof renderTagCloud === 'function') renderTagCloud();
 
         // Reset Selections
         selectedNodeId = null;
@@ -25650,6 +25924,7 @@
         renderConnections();
         renderSystems();
         renderDynamicRadarBar();
+        if (typeof renderTagCloud === 'function') renderTagCloud();
         updateUI();
       }
 
@@ -25738,6 +26013,7 @@
 
         // 4. Update UI filters & Dynamic Radar
         if (typeof renderDynamicRadarBar === 'function') renderDynamicRadarBar();
+        if (typeof renderTagCloud === 'function') renderTagCloud();
         if (typeof updateUI === 'function') updateUI();
 
         // 5. Persist draft
