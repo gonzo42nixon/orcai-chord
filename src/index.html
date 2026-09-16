@@ -1898,7 +1898,7 @@
       left: 50%;
       transform: translateX(-50%);
       height: 36px;
-      max-width: calc(100% - 130px);
+      max-width: calc(100% - 64px);
       background: var(--pill-bg, rgba(15, 23, 42, 0.88));
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
@@ -1906,13 +1906,12 @@
       border-radius: 24px;
       display: flex;
       align-items: center;
-      padding: 0 12px;
+      padding: 0 10px;
       gap: 8px;
       z-index: 35;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
       white-space: nowrap;
-      overflow-x: auto;
-      scrollbar-width: none;
+      overflow: hidden;
       transition: all 0.2s ease;
     }
     .middleware-radar-bar::-webkit-scrollbar {
@@ -1921,8 +1920,39 @@
     .radar-title {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       flex-shrink: 0;
+    }
+    .radar-dimension-select {
+      min-width: 92px;
+      height: 23px;
+      padding: 1px 6px;
+      border: 1px solid var(--card-border);
+      border-radius: 4px;
+      background: var(--item-bg, rgba(255, 255, 255, 0.06));
+      color: var(--text-bright);
+      font-family: inherit;
+      font-size: 0.68rem;
+      font-weight: 700;
+      cursor: pointer;
+      outline: none;
+      transition: all 0.15s ease;
+    }
+    .radar-dimension-select:hover {
+      border-color: var(--accent);
+    }
+    .radar-dimension-select:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 1px;
+    }
+    body.theme-day .radar-dimension-select {
+      background: #ffffff;
+      color: #0f172a;
+      border-color: #cbd5e1;
+    }
+    body.theme-day .radar-dimension-select option {
+      background: #ffffff;
+      color: #0f172a;
     }
     .radar-pills {
       display: flex;
@@ -1930,6 +1960,8 @@
       gap: 6px;
       overflow-x: auto;
       scrollbar-width: none;
+      flex: 1 1 auto;
+      min-width: 0;
     }
     .radar-pill {
       font-size: 0.68rem;
@@ -3707,16 +3739,17 @@
       <div class="middleware-radar-bar" id="middlewareRadarBar">
         <div class="radar-title">
           <span style="font-size:0.9rem;">📡</span>
-          <span style="font-weight:750; color:var(--text-bright); font-size:0.75rem;">Middleware-Radar:</span>
+          <label for="radarDimension" style="font-weight:750; color:var(--text-bright); font-size:0.75rem;">Middleware-Radar:</label>
+          <select class="radar-dimension-select" id="radarDimension" aria-label="Highlighting-Fokus des Middleware-Radars">
+            <option value="DOMAIN">Domäne</option>
+            <option value="PROCESS">Prozess</option>
+            <option value="INTEGRATION">Integration</option>
+            <option value="CONNECTION">Connection</option>
+            <option value="SYSTEM" selected>System</option>
+          </select>
         </div>
         <div class="radar-pills" id="radarPills">
-          <button class="radar-pill active" data-hub="ALL">🌐 Alle (243)</button>
-          <button class="radar-pill" data-hub="SYS-60" title="InterSystems HealthShare: Klinische Integrations-Engine (0 Integrationen)">🏥 HealthShare (0)</button>
-          <button class="radar-pill" data-hub="SYS-04" title="SAP Integration Suite (CPI): Enterprise ERP & Cloud EAI (0 Integrationen)">🏢 SAP CPI (0)</button>
-          <button class="radar-pill" data-hub="SYS-08" title="SEEBURGER BIS Cloud: B2B, EDIFACT & Kassen-Clearing (0 Integrationen)">🌐 Seeburger BIS (0)</button>
-          <button class="radar-pill" data-hub="SYS-61" title="Kong / Azure API Gateway: L7 Mobile & Web APIs (0 Integrationen)">⚡ Kong Gateway (0)</button>
-          <button class="radar-pill" data-hub="SYS-62" title="Apache Kafka: Realtime Event Streaming Bus (0 Integrationen)">📡 Apache Kafka (0)</button>
-          <button class="radar-pill" data-hub="SYS-43" title="TI-Konnektor Cluster: Telematikinfrastruktur (0 Integrationen)">🔐 TI-Cluster (0)</button>
+          <button class="radar-pill active" data-hub="ALL" data-label="🌐 Alle">🌐 Alle</button>
         </div>
       </div>
 
@@ -18509,6 +18542,10 @@
 
         let activeLinkIds = new Set();
         let activeNodeIds = new Set();
+        let radarSets = null;
+        if (selectedRadarHub && selectedRadarHub !== 'ALL') {
+          radarSets = getRadarEntitySets(selectedRadarHub);
+        }
 
         if (selectedIntegration) {
           selectedIntegration.steps.forEach((s, idx) => {
@@ -18548,6 +18585,9 @@
           activeLinkIds.add(selectedLink.id);
           activeNodeIds.add(selectedLink.from);
           activeNodeIds.add(selectedLink.to);
+        } else if (radarSets) {
+          activeLinkIds = new Set(radarSets.connSet);
+          activeNodeIds = new Set(radarSets.sysSet);
         } else if (selectedNodeId) {
           activeNodeIds.add(selectedNodeId);
           CONNECTIONS_DATA.forEach(c => {
@@ -18591,7 +18631,7 @@
           }
         }
 
-        const hasActiveSelection = (activeLinkIds.size > 0 || activeNodeIds.size > 0 || hasActiveTags);
+        const hasActiveSelection = (activeLinkIds.size > 0 || activeNodeIds.size > 0 || hasActiveTags || (selectedRadarHub && selectedRadarHub !== 'ALL'));
 
         linkElements
           .classed("highlighted", d => activeLinkIds.has(d.id))
@@ -18659,38 +18699,63 @@
         // Stage 1: Domänen
         document.querySelectorAll(".domain-item").forEach(item => {
           const domId = item.id.replace("domain-item-", "");
-          item.classList.toggle("selected", domId === selectedDomainId);
-          item.classList.toggle("dimmed", selectedDomainId !== null && domId !== selectedDomainId);
+          const isSelected = (domId === selectedDomainId);
+          const isRadarMatch = Boolean(radarSets && radarSets.domSet.has(domId));
+          const isDimmed = selectedDomainId !== null ? (domId !== selectedDomainId) : (radarSets ? !isRadarMatch : false);
+          item.classList.toggle("selected", isSelected);
+          item.classList.toggle("dimmed", isDimmed);
+          item.classList.toggle("radar-match", isRadarMatch);
         });
         const badgeDomain = document.getElementById("badgeDomain");
         if (badgeDomain) {
-          badgeDomain.textContent = selectedDomainId ? (selectedDomainId + ' gewählt') : (DOMAINS_DATA.length + ' Domänen');
-          badgeDomain.classList.toggle("active", selectedDomainId !== null);
+          if (selectedDomainId) {
+            badgeDomain.textContent = selectedDomainId + ' gewählt';
+            badgeDomain.classList.add("active");
+          } else if (radarSets) {
+            badgeDomain.textContent = radarSets.domains.length + ' Domänen (Radar)';
+            badgeDomain.classList.add("active");
+          } else {
+            badgeDomain.textContent = DOMAINS_DATA.length + ' Domänen';
+            badgeDomain.classList.remove("active");
+          }
         }
 
-        // Stage 2: Prozesse (filter & status based on selectedDomainId)
+        // Stage 2: Prozesse (filter & status based on selectedDomainId or radarSets)
         let activeProcs = PROCESSES_DATA;
         if (selectedDomainId) {
           activeProcs = PROCESSES_DATA.filter(p => {
             const parts = p.participatingDomains || p.involvedDomains || (p.leadDomain ? [p.leadDomain] : []);
             return parts.includes(selectedDomainId) || p.leadDomain === selectedDomainId;
           });
+        } else if (radarSets) {
+          activeProcs = radarSets.processes;
         }
         const activeProcIds = new Set(activeProcs.map(p => p.id));
 
-        document.querySelectorAll("#processList .list-item").forEach(item => {
+        document.querySelectorAll("#processList .list-item, #popoutList_process .list-item").forEach(item => {
           const pId = item.id.replace("proc-item-", "");
-          const isMatch = activeProcIds.has(pId);
+          const isMatch = (radarSets || selectedDomainId) ? activeProcIds.has(pId) : true;
           item.classList.toggle("disabled", !isMatch);
-          item.classList.toggle("selected", selectedProcess && selectedProcess.id === pId);
+          item.classList.toggle("selected", Boolean(selectedProcess && selectedProcess.id === pId));
         });
         const badgeProcess = document.getElementById("badgeProcess");
         if (badgeProcess) {
-          badgeProcess.textContent = selectedDomainId ? (activeProcs.length + ' Prozesse (' + selectedDomainId + '-Beteiligung)') : (PROCESSES_DATA.length + ' Prozesse');
-          badgeProcess.classList.toggle("active", selectedProcess !== null);
+          if (selectedProcess) {
+            badgeProcess.textContent = selectedProcess.id + ' gewählt';
+            badgeProcess.classList.add("active");
+          } else if (selectedDomainId) {
+            badgeProcess.textContent = activeProcs.length + ' Prozesse (' + selectedDomainId + ')';
+            badgeProcess.classList.add("active");
+          } else if (radarSets) {
+            badgeProcess.textContent = radarSets.processes.length + ' Prozesse (Radar)';
+            badgeProcess.classList.add("active");
+          } else {
+            badgeProcess.textContent = PROCESSES_DATA.length + ' Prozesse';
+            badgeProcess.classList.remove("active");
+          }
         }
 
-        // Stage 3: Integrationen (filter & status based on selectedProcess, selectedDomainId, or selectedLink)
+        // Stage 3: Integrationen (filter & status based on selectedProcess, selectedDomainId, or radarSets)
         let activeIntegs = INTEGRATIONS_DATA;
         if (selectedProcess) {
           const procIntegSet = new Set(selectedProcess.cleanIntegIds || selectedProcess.integrations || []);
@@ -18703,6 +18768,8 @@
               return sFrom?.domain === selectedDomainId || sTo?.domain === selectedDomainId;
             });
           });
+        } else if (radarSets) {
+          activeIntegs = radarSets.integrations;
         }
         const activeIntegIds = new Set(activeIntegs.map(i => i.id));
 
@@ -18717,13 +18784,13 @@
           });
         }
 
-        document.querySelectorAll("#integrationList .list-item").forEach(item => {
+        document.querySelectorAll("#integrationList .list-item, #popoutList_integration .list-item").forEach(item => {
           const iId = item.id.replace("integ-item-", "");
-          const isMatch = activeIntegIds.has(iId);
+          const isMatch = (radarSets || selectedProcess || selectedDomainId) ? activeIntegIds.has(iId) : true;
           const isEdgeMatch = edgeMatchingIntegMap.has(iId);
 
           item.classList.toggle("disabled", !isMatch && !isEdgeMatch);
-          item.classList.toggle("selected", selectedIntegration && selectedIntegration.id === iId);
+          item.classList.toggle("selected", Boolean(selectedIntegration && selectedIntegration.id === iId));
           item.classList.toggle("edge-match", isEdgeMatch);
           item.classList.toggle("edge-dimmed", Boolean(selectedLink && !isEdgeMatch && edgeMatchingIntegMap.size > 0));
 
@@ -18750,12 +18817,18 @@
           } else if (selectedLink && edgeMatchingIntegMap.size === 0) {
             badgeIntegration.textContent = '0 für ' + selectedLink.id;
             badgeIntegration.classList.remove("active");
+          } else if (selectedIntegration) {
+            badgeIntegration.textContent = selectedIntegration.id + ' gewählt';
+            badgeIntegration.classList.add("active");
           } else if (selectedProcess) {
             badgeIntegration.textContent = activeIntegs.length + ' (' + selectedProcess.id + ')';
             badgeIntegration.classList.toggle("active", selectedIntegration !== null);
           } else if (selectedDomainId) {
             badgeIntegration.textContent = activeIntegs.length + ' (' + selectedDomainId + '-relevant)';
             badgeIntegration.classList.toggle("active", selectedIntegration !== null);
+          } else if (radarSets) {
+            badgeIntegration.textContent = radarSets.integrations.length + ' Integrationen (Radar)';
+            badgeIntegration.classList.add("active");
           } else {
             badgeIntegration.textContent = INTEGRATIONS_DATA.length + ' Integrationen';
             badgeIntegration.classList.toggle("active", selectedIntegration !== null);
@@ -18763,7 +18836,7 @@
         }
 
         // Stage 4: Verbindungen
-        document.querySelectorAll("#connectionList .list-item").forEach(item => {
+        document.querySelectorAll("#connectionList .list-item, #popoutList_connection .list-item").forEach(item => {
           const cId = item.id.replace("conn-item-", "");
           const isSel = selectedLink && selectedLink.id === cId;
           const isActive = !hasActiveSelection || activeLinkIds.has(cId);
@@ -18783,7 +18856,7 @@
         }
 
         // Stage 5: Systeme
-        document.querySelectorAll("#systemList .list-item").forEach(item => {
+        document.querySelectorAll("#systemList .list-item, #popoutList_system .list-item").forEach(item => {
           const sId = item.id.replace("sys-item-", "");
           const isSel = (selectedNodeId === sId) || (selectedNode && selectedNode.id === sId);
           const isActive = !hasActiveSelection || activeNodeIds.has(sId);
@@ -18817,6 +18890,37 @@
 
         function esc(str) {
           return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+
+        // Case 0: Middleware-Radar Active Focus
+        if (selectedRadarHub && selectedRadarHub !== 'ALL' && !selectedIntegration && !selectedProcess && !selectedDomainId && !selectedLink) {
+          const hubSys = SYSTEMS_DATA.find(s => s.id === selectedRadarHub);
+          const hubLabel = hubSys ? (hubSys.id + ' · ' + (hubSys.name || hubSys.id)) : selectedRadarHub;
+          const meta = RADAR_DIMENSION_META[selectedRadarDimension] || RADAR_DIMENSION_META.SYSTEM;
+          const count = getRadarCount(selectedRadarDimension, selectedRadarHub);
+          const rSets = getRadarEntitySets(selectedRadarHub);
+
+          titleEl.innerHTML = 
+            '<span class="title-step-node active-stage" onclick="event.stopPropagation();">' +
+              '<span class="title-step-num">📡</span>' +
+              '<span class="title-step-text">Radar: ' + esc(hubLabel) + '</span>' +
+              '<span class="title-step-clear" onclick="event.stopPropagation(); window.resetRadarFilter();" title="Radar-Filter aufheben">✕</span>' +
+            '</span>' +
+            '<span class="title-sep">*</span>' +
+            '<span class="title-step-node" style="cursor:default;">' +
+              '<span class="title-step-text" style="color:var(--accent); font-weight:700;">Fokus: ' + esc(meta.singular) + ' (' + count + ')</span>' +
+            '</span>';
+
+          subEl.innerHTML = 
+            '<span class="subtitle-stage-pill">Middleware-Radar aktiv</span>' +
+            '<span style="color:var(--text-bright);font-size:0.75rem;">' +
+              'Berührt ' + (rSets ? rSets.systems.length : 0) + ' Systeme · ' +
+              (rSets ? rSets.connections.length : 0) + ' Verbindungen · ' +
+              (rSets ? rSets.integrations.length : 0) + ' Integrationen · ' +
+              (rSets ? rSets.processes.length : 0) + ' Prozesse · ' +
+              (rSets ? rSets.domains.length : 0) + ' Domänen' +
+            '</span>';
+          return;
         }
 
         // Case 1: Standalone Link Focus (without active integration)
@@ -19083,8 +19187,10 @@
         const dom = DOMAINS_DATA.find(d => d.id === sys.domain);
         const details = DOMAIN_DETAILS_DATA[sys.domain] || {};
         const incoming = CONNECTIONS_DATA.filter(c => c.to === sys.id);
+        const outgoing = CONNECTIONS_DATA.filter(c => c.from === sys.id);
         const activeModelObj = registeredLandscapeModels.find(m => m.id === currentModelId);
         const orgShort = activeModelObj?.shortName || activeModelObj?.organization || 'EA';
+        const cCoord = (typeof nodeCoords !== 'undefined' && nodeCoords) ? nodeCoords.get(sys.id) : null;
         const quadLabels = {
           'TL': 'Oben-Links · ' + orgShort + ' Cloud',
           'BL': 'Unten-Links · ' + orgShort + ' On-Premises',
@@ -19779,50 +19885,250 @@
       
       
       
-      // MIDDLEWARE RADAR LOGIC
+      // =====================================================================
+      // MIDDLEWARE RADAR LOGIC (Dynamic Highlighting Fokus & Discovery)
+      // =====================================================================
       let selectedRadarHub = 'ALL';
+      let selectedRadarDimension = 'SYSTEM';
       let selectedIntegCluster = 'ALL';
       let integSearchTerm = '';
 
-      const radarPillBtns = document.querySelectorAll('.radar-pill');
-      radarPillBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-          const hubId = btn.getAttribute('data-hub');
-          selectedRadarHub = hubId;
-          radarPillBtns.forEach(b => b.classList.toggle('active', b === btn));
+      const RADAR_DIMENSION_META = {
+        DOMAIN: { singular: 'Domäne', plural: 'Domänen', icon: '🏛️', className: 'domain-popout-card' },
+        PROCESS: { singular: 'Prozess', plural: 'Prozesse', icon: '📂', className: 'process-popout-card' },
+        INTEGRATION: { singular: 'Integration', plural: 'Integrationen', icon: '⚡', className: 'integration-popout-card' },
+        CONNECTION: { singular: 'Connection', plural: 'Connections', icon: '🔗', className: 'connection-popout-card' },
+        SYSTEM: { singular: 'System', plural: 'Systeme', icon: '🖥️', className: 'sys-popout-card' }
+      };
 
-          // Visual feedback on Canvas
-          if (hubId === 'ALL') {
-            d3.selectAll('.superhub-halo').remove();
-            selectedNodeId = null;
-            selectedNode = null;
-            window.selectedNodeId = null;
-            window.selectedNode = null;
-            selectedLink = null;
-            updateUI();
-          } else {
-            // Locate the Hub Node
-            const hubNode = SYSTEMS_DATA.find(s => s.id === hubId);
-            if (hubNode) {
-              selectNode(hubNode);
-              
-              // Draw rotating superhub halo
-              d3.selectAll('.superhub-halo').remove();
-              const gNode = d3.select('#node-group-' + hubId);
-              if (!gNode.empty()) {
-                gNode.append('circle')
-                  .attr('class', 'superhub-halo')
-                  .attr('r', 28);
-                gNode.append('circle')
-                  .attr('class', 'superhub-halo')
-                  .attr('r', 34)
-                  .style('stroke-dasharray', '2,4')
-                  .style('animation-direction', 'reverse');
-              }
-            }
+      function getRadarEntitySets(hubId) {
+        if (!hubId || hubId === 'ALL') {
+          return {
+            integrations: INTEGRATIONS_DATA,
+            connections: CONNECTIONS_DATA,
+            systems: SYSTEMS_DATA,
+            processes: PROCESSES_DATA,
+            domains: DOMAINS_DATA,
+            integSet: new Set(INTEGRATIONS_DATA.map(i => i.id)),
+            connSet: new Set(CONNECTIONS_DATA.map(c => c.id)),
+            sysSet: new Set(SYSTEMS_DATA.map(s => s.id)),
+            procSet: new Set(PROCESSES_DATA.map(p => p.id)),
+            domSet: new Set(DOMAINS_DATA.map(d => d.id))
+          };
+        }
+
+        const hubSys = SYSTEMS_DATA.find(s => s.id === hubId);
+        const hubNameLower = hubSys ? (hubSys.name || '').toLowerCase() : '';
+
+        // 1. Integrations routed or touched by this hub
+        const matchedIntegrations = INTEGRATIONS_DATA.filter(i => {
+          if (i.middlewareHub === hubId) return true;
+          if (i.hub && (i.hub === hubId || (hubNameLower && hubNameLower.includes(i.hub.toLowerCase())) || i.hub.toLowerCase().includes(hubNameLower))) return true;
+          if (i.steps && i.steps.some(st => st.from === hubId || st.to === hubId)) return true;
+          return false;
+        });
+        const integSet = new Set(matchedIntegrations.map(i => i.id));
+
+        // 2. Connections used in matched integrations OR directly connected to hubId
+        const connSet = new Set();
+        CONNECTIONS_DATA.forEach(c => {
+          if (c.from === hubId || c.to === hubId) {
+            connSet.add(c.id);
           }
         });
-      });
+        matchedIntegrations.forEach(i => {
+          (i.steps || []).forEach(st => {
+            if (st.connectionId) connSet.add(st.connectionId);
+          });
+        });
+        const matchedConnections = CONNECTIONS_DATA.filter(c => connSet.has(c.id));
+
+        // 3. Systems: hubId itself + endpoints of connections + endpoints of integration steps + integration source/target
+        const sysSet = new Set();
+        sysSet.add(hubId);
+        matchedConnections.forEach(c => {
+          sysSet.add(c.from);
+          sysSet.add(c.to);
+        });
+        matchedIntegrations.forEach(i => {
+          if (i.sourceSystem) sysSet.add(i.sourceSystem);
+          if (i.targetSystem) sysSet.add(i.targetSystem);
+          (i.steps || []).forEach(st => {
+            if (st.from) sysSet.add(st.from);
+            if (st.to) sysSet.add(st.to);
+          });
+        });
+        const matchedSystems = SYSTEMS_DATA.filter(s => sysSet.has(s.id));
+
+        // 4. Processes: processes containing any of the matched integrations OR listing hubId/connected systems
+        const matchedProcesses = PROCESSES_DATA.filter(p => {
+          const pIntegIds = p.cleanIntegIds || p.integrations || [];
+          if (pIntegIds.some(id => integSet.has(id))) return true;
+          if (p.participatingSystems && p.participatingSystems.includes(hubId)) return true;
+          return false;
+        });
+        const procSet = new Set(matchedProcesses.map(p => p.id));
+
+        // 5. Domains: domains of matched systems + lead/participating domains of matched processes
+        const domSet = new Set();
+        matchedSystems.forEach(s => {
+          if (s.domain) domSet.add(s.domain);
+        });
+        matchedProcesses.forEach(p => {
+          if (p.leadDomain) domSet.add(p.leadDomain);
+          const parts = p.participatingDomains || p.involvedDomains || [];
+          parts.forEach(d => domSet.add(d));
+        });
+        const matchedDomains = DOMAINS_DATA.filter(d => domSet.has(d.id));
+
+        return {
+          integrations: matchedIntegrations,
+          connections: matchedConnections,
+          systems: matchedSystems,
+          processes: matchedProcesses,
+          domains: matchedDomains,
+          integSet,
+          connSet,
+          sysSet,
+          procSet,
+          domSet
+        };
+      }
+
+      function getRadarCount(dimension, hubId) {
+        const sets = getRadarEntitySets(hubId);
+        if (dimension === 'DOMAIN') return sets.domains.length;
+        if (dimension === 'PROCESS') return sets.processes.length;
+        if (dimension === 'INTEGRATION') return sets.integrations.length;
+        if (dimension === 'CONNECTION') return sets.connections.length;
+        if (dimension === 'SYSTEM') return sets.systems.length;
+        return sets.systems.length;
+      }
+
+      function updateRadarCounts() {
+        const meta = RADAR_DIMENSION_META[selectedRadarDimension] || RADAR_DIMENSION_META.SYSTEM;
+        document.querySelectorAll('.radar-pill').forEach(btn => {
+          const hubId = btn.getAttribute('data-hub');
+          const label = btn.getAttribute('data-label') || btn.textContent.replace(/\s*\(\d+\)$/, '').trim();
+          const count = getRadarCount(selectedRadarDimension, hubId);
+          btn.textContent = label + ' (' + count + ')';
+          btn.title = count + ' berührte ' + (count === 1 ? meta.singular : meta.plural);
+        });
+      }
+
+      function showRadarEntityPopout(dimension, hubId) {
+        const sets = getRadarEntitySets(hubId);
+        let entities = [];
+        if (dimension === 'DOMAIN') entities = sets.domains;
+        else if (dimension === 'PROCESS') entities = sets.processes;
+        else if (dimension === 'INTEGRATION') entities = sets.integrations;
+        else if (dimension === 'CONNECTION') entities = sets.connections;
+        else entities = sets.systems;
+
+        const meta = RADAR_DIMENSION_META[dimension] || RADAR_DIMENSION_META.SYSTEM;
+        const hub = SYSTEMS_DATA.find(s => s.id === hubId);
+        const popoutId = 'RADAR-' + dimension + '-' + hubId;
+        const popoutsContainer = document.getElementById('popoutsContainer') || document.getElementById('canvasContainer') || document.body;
+        if (typeof openPopouts !== 'undefined' && openPopouts.has(popoutId)) {
+          const existingCard = openPopouts.get(popoutId);
+          existingCard.style.zIndex = ++popoutZIndexCounter;
+          existingCard.classList.add('popout-focus-flash');
+          setTimeout(() => existingCard.classList.remove('popout-focus-flash'), 600);
+          return existingCard;
+        }
+
+        function escHtml(str) {
+          return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+
+        const card = document.createElement('div');
+        card.className = 'edge-popout-card ' + meta.className;
+        card.id = 'popout-' + popoutId;
+        card.dataset.popoutId = popoutId;
+        const entityLabel = entity => {
+          if (dimension === 'CONNECTION') return entity.id + ' · ' + (entity.name || (entity.from + ' ➔ ' + entity.to));
+          return entity.id + ' · ' + (entity.name || entity.shortName || entity.id);
+        };
+        card.innerHTML =
+          '<div class="edge-popout-header">' +
+            '<div class="popout-title-box">' +
+              '<span class="popout-title-label">' + meta.icon + ' Radar · ' + meta.singular + ':</span>' +
+              '<span class="popout-badge-id">' + (hub ? hub.id : 'ALLE') + '</span>' +
+            '</div>' +
+            '<div class="popout-actions"><button class="popout-btn-icon close-btn" title="Pop-Out schließen (✕)">✕</button></div>' +
+          '</div>' +
+          '<div class="edge-popout-body">' +
+            '<div style="font-size:0.82rem;font-weight:750;color:var(--text-bright);">' + (hub ? hub.name : 'Gesamte Architektur') + '</div>' +
+            '<div style="font-size:0.7rem;color:var(--text-muted);margin-bottom:4px;">Berührt ' + entities.length + ' ' + (entities.length === 1 ? meta.singular : meta.plural) + '</div>' +
+            '<div class="radar-popout-entity-list" style="display:flex;flex-direction:column;gap:4px;max-height:240px;overflow-y:auto;">' +
+              (entities.length ? entities.map(entity =>
+                '<button type="button" class="list-item radar-entity-row" data-entity-id="' + entity.id + '" style="width:100%;text-align:left;cursor:pointer;color:var(--text-bright);">' +
+                  '<span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + escHtml(entityLabel(entity)) + '</span>' +
+                  '<span class="traffic-tag">Öffnen</span>' +
+                '</button>'
+              ).join('') : '<div style="font-size:0.7rem;color:var(--text-muted);">Keine Zuordnung vorhanden.</div>') +
+            '</div>' +
+          '</div>';
+
+        card.querySelector('.close-btn').addEventListener('click', event => {
+          event.stopPropagation();
+          closePopout(popoutId);
+        });
+        card.querySelectorAll('.radar-entity-row').forEach(row => row.addEventListener('click', () => {
+          const id = row.dataset.entityId;
+          if (dimension === 'DOMAIN') setDrilldownDomain(id);
+          else if (dimension === 'PROCESS') setDrilldownProcess(PROCESSES_DATA.find(p => p.id === id));
+          else if (dimension === 'INTEGRATION') setDrilldownIntegration(INTEGRATIONS_DATA.find(i => i.id === id));
+          else if (dimension === 'CONNECTION') selectEdge(CONNECTIONS_DATA.find(c => c.id === id), window.innerWidth / 2, window.innerHeight / 2);
+          else selectNode(SYSTEMS_DATA.find(s => s.id === id), window.innerWidth / 2, window.innerHeight / 2);
+        }));
+        card.addEventListener('mouseenter', () => {
+          card.style.zIndex = '300';
+          card.classList.add('popout-bay-hovered');
+        });
+        card.addEventListener('mouseleave', () => {
+          card.style.zIndex = 100 + parseInt(card.dataset.bayIndex || '0', 10);
+          card.classList.remove('popout-bay-hovered');
+        });
+        card.addEventListener('mousedown', () => { card.style.zIndex = ++popoutZIndexCounter; });
+        popoutsContainer.appendChild(card);
+        if (typeof openPopouts !== 'undefined') openPopouts.set(popoutId, card);
+        updatePopoutBayLayout();
+        return card;
+      }
+
+      window.resetRadarFilter = function() {
+        selectedRadarHub = 'ALL';
+        const pillsContainer = document.getElementById('radarPills');
+        if (pillsContainer) {
+          pillsContainer.querySelectorAll('.radar-pill').forEach(b => b.classList.toggle('active', b.getAttribute('data-hub') === 'ALL'));
+        }
+        d3.selectAll('.superhub-halo').remove();
+        selectedNodeId = null;
+        selectedNode = null;
+        window.selectedNodeId = null;
+        window.selectedNode = null;
+        selectedLink = null;
+        closeAllPopouts();
+        renderPlaceholder();
+        updateUI();
+        applyOnlyActiveFilters();
+      };
+
+      const radarDimensionSelect = document.getElementById('radarDimension');
+      if (radarDimensionSelect) {
+        radarDimensionSelect.addEventListener('change', () => {
+          selectedRadarDimension = radarDimensionSelect.value;
+          updateRadarCounts();
+          if (selectedRadarHub !== 'ALL') {
+            if (selectedRadarDimension !== 'SYSTEM') {
+              showRadarEntityPopout(selectedRadarDimension, selectedRadarHub);
+            }
+            updateUI();
+            applyOnlyActiveFilters();
+          }
+        });
+      }
 
       // =====================================================================
       // POPOUT "BAY"-PHILOSOPHIE (Between Drawers, Static Fan & Elevating Hover)
@@ -21880,7 +22186,8 @@
       };
 
       function applyOnlyActiveFilters() {
-        const hasActiveSelection = Boolean(selectedDomainId || selectedProcess || selectedLink || selectedIntegration || selectedNodeId || (typeof activeTags !== 'undefined' && activeTags.size > 0));
+        const hasActiveSelection = Boolean(selectedDomainId || selectedProcess || selectedLink || selectedIntegration || (selectedRadarHub && selectedRadarHub !== 'ALL') || selectedNodeId || (typeof activeTags !== 'undefined' && activeTags.size > 0));
+        const radarSets = (selectedRadarHub && selectedRadarHub !== 'ALL') ? getRadarEntitySets(selectedRadarHub) : null;
 
         // 1. Domain Filter
         const domItems = document.querySelectorAll('#domainList .domain-item, #popoutList_domain .domain-item');
@@ -21892,17 +22199,18 @@
           if (!filterOnlyActive.domain) {
             item.classList.remove('item-hidden-inactive');
           } else {
-            // Active if it has active systems or is selected
+            // Active if it has active systems, is selected, or is in radarSets
             const dId = item.id.replace('domain-item-', '');
             const hasProcDomain = Boolean(selectedProcess && (
               selectedProcess.leadDomain === dId ||
               (Array.isArray(selectedProcess.participatingDomains) && selectedProcess.participatingDomains.includes(dId)) ||
               (Array.isArray(selectedProcess.involvedDomains) && selectedProcess.involvedDomains.includes(dId))
             ));
-            const isMatch = (!selectedDomainId && !selectedProcess && !selectedLink && !activeNode)
+            const isMatch = (!selectedDomainId && !selectedProcess && !selectedLink && !activeNode && !radarSets)
               || (selectedDomainId === dId)
               || hasProcDomain
-              || (activeNode && activeNode.domain === dId);
+              || (activeNode && !radarSets && activeNode.domain === dId)
+              || (radarSets && radarSets.domSet.has(dId));
             item.classList.toggle('item-hidden-inactive', !isMatch);
           }
         });
@@ -21929,7 +22237,7 @@
           } else if (!hasActiveSelection) {
             item.classList.remove('item-hidden-inactive');
           } else {
-            const isDimmed = item.classList.contains('edge-dimmed') || item.classList.contains('disabled') || !item.classList.contains('edge-match');
+            const isDimmed = item.classList.contains('disabled') || item.classList.contains('edge-dimmed') || (Boolean(selectedLink) && !item.classList.contains('edge-match'));
             item.classList.toggle('item-hidden-inactive', isDimmed);
           }
         });
@@ -22231,17 +22539,10 @@
         const allBtn = document.createElement('button');
         allBtn.className = 'radar-pill' + (selectedRadarHub === 'ALL' ? ' active' : '');
         allBtn.setAttribute('data-hub', 'ALL');
-        allBtn.textContent = '🌐 Alle (' + INTEGRATIONS_DATA.length + ')';
+        allBtn.setAttribute('data-label', '🌐 Alle');
+        allBtn.textContent = '🌐 Alle';
         allBtn.onclick = () => {
-          selectedRadarHub = 'ALL';
-          pillsContainer.querySelectorAll('.radar-pill').forEach(b => b.classList.toggle('active', b === allBtn));
-          d3.selectAll('.superhub-halo').remove();
-          selectedNodeId = null;
-          selectedNode = null;
-          window.selectedNodeId = null;
-          window.selectedNode = null;
-          selectedLink = null;
-          updateUI();
+          resetRadarFilter();
         };
         pillsContainer.appendChild(allBtn);
 
@@ -22250,12 +22551,21 @@
           const btn = document.createElement('button');
           btn.className = 'radar-pill' + (selectedRadarHub === h.sys.id ? ' active' : '');
           btn.setAttribute('data-hub', h.sys.id);
-          btn.title = h.sys.id + ' · ' + h.sys.name + ' (' + h.count + ' Integrationen)';
-          btn.textContent = h.icon + ' ' + h.label + ' (' + h.count + ')';
+          btn.setAttribute('data-label', h.icon + ' ' + h.label);
+          btn.title = h.sys.id + ' · ' + h.sys.name;
+          btn.textContent = h.icon + ' ' + h.label;
           btn.onclick = () => {
             selectedRadarHub = h.sys.id;
             pillsContainer.querySelectorAll('.radar-pill').forEach(b => b.classList.toggle('active', b === btn));
-            selectNode(h.sys, window.innerWidth / 2, window.innerHeight / 2);
+            
+            selectedDomainId = null;
+            selectedProcess = null;
+            selectedIntegration = null;
+            selectedLink = null;
+            selectedNodeId = h.sys.id;
+            selectedNode = h.sys;
+            window.selectedNodeId = h.sys.id;
+            window.selectedNode = h.sys;
 
             d3.selectAll('.superhub-halo').remove();
             const gNode = d3.select('#node-group-' + h.sys.id);
@@ -22269,10 +22579,22 @@
                 .style('stroke-dasharray', '2,4')
                 .style('animation-direction', 'reverse');
             }
+
+            if (selectedRadarDimension === 'SYSTEM') {
+              showNodePopout(h.sys, window.innerWidth / 2, window.innerHeight / 2);
+              renderInspectorNode(h.sys);
+            } else {
+              showRadarEntityPopout(selectedRadarDimension, h.sys.id);
+            }
+
             updateUI();
+            applyOnlyActiveFilters();
           };
           pillsContainer.appendChild(btn);
         });
+
+        // Compute dimension-aware counts on all pills
+        updateRadarCounts();
       }
 
       // Re-populate Domains
