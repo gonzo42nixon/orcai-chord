@@ -3380,6 +3380,128 @@
     }
 
     /* =========================================================================
+       HIGH CONTRAST PILLS, BADGES & BUTTONS (ACCESSIBILITY & CONTRAST REPAIR)
+       ========================================================================= */
+    .btn-activate-model {
+      font-size: 0.68rem !important;
+      padding: 3px 10px !important;
+      border-radius: 4px !important;
+      background: #0284c7 !important;
+      color: #ffffff !important;
+      font-weight: 750 !important;
+      border: none !important;
+      cursor: pointer !important;
+      box-shadow: 0 1px 3px rgba(2, 132, 199, 0.35) !important;
+      transition: all 0.15s ease !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 4px !important;
+    }
+    .btn-activate-model:hover {
+      background: #0369a1 !important;
+      color: #ffffff !important;
+      box-shadow: 0 2px 6px rgba(2, 132, 199, 0.5) !important;
+      transform: translateY(-1px) !important;
+    }
+
+    .start-model-radio-pill {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 5px !important;
+      font-size: 0.68rem !important;
+      cursor: pointer !important;
+      padding: 3px 8px !important;
+      border-radius: 4px !important;
+      transition: all 0.2s ease !important;
+      user-select: none !important;
+    }
+    body.theme-day .start-model-radio-pill.selected {
+      color: #0369a1 !important;
+      background: #e0f2fe !important;
+      border: 1px solid #0284c7 !important;
+      font-weight: 750 !important;
+    }
+    body.theme-day .start-model-radio-pill:not(.selected) {
+      color: #334155 !important;
+      background: #f1f5f9 !important;
+      border: 1px solid #cbd5e1 !important;
+      font-weight: 500 !important;
+    }
+    body:not(.theme-day) .start-model-radio-pill.selected {
+      color: #38bdf8 !important;
+      background: rgba(56, 189, 248, 0.16) !important;
+      border: 1px solid #38bdf8 !important;
+      font-weight: 750 !important;
+    }
+    body:not(.theme-day) .start-model-radio-pill:not(.selected) {
+      color: #94a3b8 !important;
+      background: rgba(255, 255, 255, 0.05) !important;
+      border: 1px solid rgba(255, 255, 255, 0.12) !important;
+      font-weight: 500 !important;
+    }
+
+    /* Popout Badge IDs & Inspector Pills (White text on solid #0284c7) */
+    .popout-badge-id,
+    .edge-popout-card .popout-badge-id,
+    .sys-popout-card .popout-badge-id {
+      background: #0284c7 !important;
+      color: #ffffff !important;
+      font-weight: 800 !important;
+      font-size: 0.72rem !important;
+      padding: 2px 7px !important;
+      border-radius: 4px !important;
+      letter-spacing: 0.3px !important;
+    }
+    .insp-id,
+    .popout-title-box .insp-id,
+    .edge-popout-card .insp-id,
+    .sys-popout-card .insp-id {
+      background: #0284c7 !important;
+      color: #ffffff !important;
+      font-weight: 800 !important;
+      font-size: 0.68rem !important;
+      padding: 2px 6px !important;
+      border-radius: 4px !important;
+      letter-spacing: 0.3px !important;
+      flex-shrink: 0 !important;
+      border: none !important;
+    }
+
+    body.theme-day .insp-id,
+    body.theme-day .popout-badge-id,
+    body.theme-day .edge-popout-card .popout-badge-id,
+    body.theme-day .edge-popout-card .insp-id,
+    body.theme-day .sys-popout-card .popout-badge-id,
+    body.theme-day .sys-popout-card .insp-id,
+    body.theme-day .popout-title-box .insp-id,
+    body.theme-day .header-edge-integ-pill-btn.active,
+    body.theme-day .header-edge-integ-pill-btn.active .pill-step,
+    body.theme-day .tag-chip.active,
+    body.theme-day .osi-pill-btn.active,
+    body.theme-day .scope-chip.active,
+    body.theme-day .omni-chip.active,
+    body.theme-day .step-card-badge.active,
+    body.theme-day .active-indicator-tag,
+    body.theme-day .btn-activate-model,
+    body.theme-day .insp-action-btn:hover,
+    body.theme-day .insp-btn-save {
+      background: #0284c7 !important;
+      color: #ffffff !important;
+      border-color: #0369a1 !important;
+    }
+
+    body:not(.theme-day) .insp-id,
+    body:not(.theme-day) .popout-badge-id,
+    body:not(.theme-day) .edge-popout-card .popout-badge-id,
+    body:not(.theme-day) .edge-popout-card .insp-id,
+    body:not(.theme-day) .sys-popout-card .popout-badge-id,
+    body:not(.theme-day) .sys-popout-card .insp-id,
+    body:not(.theme-day) .popout-title-box .insp-id {
+      background: #0284c7 !important;
+      color: #ffffff !important;
+    }
+
+    /* =========================================================================
        HIGH CONTRAST DAY-MODE FIXES (NO DARK TEXT ON DARK BLUE BACKGROUNDS)
        ========================================================================= */
     .badge-relevant {
@@ -17721,7 +17843,7 @@
             '<div class="popout-title-box">' +
               '<span class="popout-title-label">Kante:</span>' +
               '<span class="popout-badge-id">' + edge.id + '</span>' +
-              '<span class="insp-id" style="padding:1px 5px; font-size:0.65rem;">' + edge.messageType + '</span>' +
+              '<span class="insp-id" style="padding:1px 6px; font-size:0.65rem;">' + (edge.messageType || edge.msgType || 'REST') + '</span>' +
             '</div>' +
             '<div class="popout-actions">' +
               '<button class="popout-btn-icon locator-btn" data-id="' + edge.id + '" title="Kante im Chord-Diagramm lokalisieren & aufleuchten lassen (🎯)">🎯 Lokalisieren</button>' +
@@ -17738,8 +17860,8 @@
             '<div class="insp-meta-grid" style="margin-top:4px;">' +
               '<div class="insp-meta-box"><div class="insp-meta-lbl">Protokoll</div><div class="insp-meta-val">' + edge.protocol + '</div></div>' +
               '<div class="insp-meta-box"><div class="insp-meta-lbl">Architektur-Flow</div><div class="insp-meta-val" style="color:var(--accent);">' + (flowTypeLabels[edge.flowType] || edge.flowType) + '</div></div>' +
-              '<div class="insp-meta-box"><div class="insp-meta-lbl">Traffic-Volumen</div><div class="insp-meta-val">' + edge.trafficPct + '% (' + edge.rawWeight + ' msg/s)</div></div>' +
-              '<div class="insp-meta-box"><div class="insp-meta-lbl">Nachrichtentyp</div><div class="insp-meta-val">' + edge.messageType + '</div></div>' +
+              '<div class="insp-meta-box"><div class="insp-meta-lbl">Traffic-Volumen</div><div class="insp-meta-val">' + ((edge.trafficPct != null && edge.rawWeight != null) ? (edge.trafficPct + '% (' + edge.rawWeight + ' msg/s)') : (edge.trafficPct != null ? (edge.trafficPct + '%') : (edge.rawWeight != null ? (edge.rawWeight + ' msg/s') : 'Aktiv (Normal)'))) + '</div></div>' +
+              '<div class="insp-meta-box"><div class="insp-meta-lbl">Nachrichtentyp</div><div class="insp-meta-val">' + (edge.messageType || edge.msgType || 'REST') + '</div></div>' +
             '</div>' +
             '<div class="insp-desc" style="font-size:0.7rem;">' +
               '<strong>Security / Boundary:</strong> ' + (edge.isCrossBoundary ? '🛡️ Durchquert Perimeter-Gateways / Firewalls' : 'Intra-Zone gesichert') +
@@ -19665,7 +19787,7 @@
               '<button class="insp-action-btn delete" onclick="window.confirmDeleteEntity(\'connection\', \'' + edge.id + '\')">🗑 Löschen</button>' +
             '</div>' +
             '<div class="insp-badges">' +
-              '<span class="insp-badge" style="background:var(--accent-glow); color:var(--accent); font-weight:700;">' + edge.messageType + '</span>' +
+              '<span class="insp-badge" style="background:var(--accent-glow); color:var(--accent); font-weight:700;">' + (edge.messageType || edge.msgType || 'REST') + '</span>' +
               (edge.isCrossBoundary ? '<span class="insp-badge boundary-badge">🛡️ Perimeter / DMZ Kopplung</span>' : '<span class="insp-badge">Intra-Zone</span>') +
               '<span class="insp-badge">' + edge.flowType + '</span>' +
               (edge.transportOverlay ? '<span class="insp-badge" style="background:rgba(56,189,248,0.14); color:var(--accent); font-weight:700;">🔒 ' + edge.transportOverlay + '</span>' : '') +
@@ -19730,7 +19852,7 @@
 
             // Interface metrics
             '<div class="insp-meta-grid" style="margin-top:8px;">' +
-              '<div class="insp-meta-box"><div class="insp-meta-lbl">Gewicht / Durchsatz</div><div class="insp-meta-val">' + edge.rawWeight + ' msg/s (' + edge.trafficPct + '%)</div></div>' +
+              '<div class="insp-meta-box"><div class="insp-meta-lbl">Gewicht / Durchsatz</div><div class="insp-meta-val">' + ((edge.rawWeight != null && edge.trafficPct != null) ? (edge.rawWeight + ' msg/s (' + edge.trafficPct + '%)') : (edge.rawWeight != null ? (edge.rawWeight + ' msg/s') : (edge.trafficPct != null ? (edge.trafficPct + '%)') : 'Aktiv'))) + '</div></div>' +
               '<div class="insp-meta-box"><div class="insp-meta-lbl">Routing & Schutz</div><div class="insp-meta-val">' + (edge.isCrossBoundary ? 'Palo Alto / Kong' : 'Intra-Zone') + '</div></div>' +
             '</div>' +
 
@@ -22782,7 +22904,11 @@
         "Klinik",
         "HL7",
         "Middleware"
-      ]
+      ],
+      "messageType": "HL7",
+      "transportOverlay": "ON_PREM_LAN",
+      "rawWeight": 240,
+      "trafficPct": 2.4
     },
     {
       "id": "JSD-C-02",
@@ -22798,7 +22924,11 @@
         "Klinik",
         "HL7",
         "Middleware"
-      ]
+      ],
+      "messageType": "HL7",
+      "transportOverlay": "ON_PREM_LAN",
+      "rawWeight": 247,
+      "trafficPct": 2.5
     },
     {
       "id": "JSD-C-03",
@@ -22813,7 +22943,11 @@
       "tags": [
         "Diagnostik / Labor",
         "HL7"
-      ]
+      ],
+      "messageType": "HL7",
+      "transportOverlay": "ON_PREM_LAN",
+      "rawWeight": 254,
+      "trafficPct": 2.6
     },
     {
       "id": "JSD-C-04",
@@ -22828,7 +22962,11 @@
       "tags": [
         "Diagnostik / Labor",
         "HL7"
-      ]
+      ],
+      "messageType": "HL7",
+      "transportOverlay": "ON_PREM_LAN",
+      "rawWeight": 261,
+      "trafficPct": 2.7
     },
     {
       "id": "JSD-C-05",
@@ -22843,7 +22981,11 @@
       "tags": [
         "Klinik",
         "HL7"
-      ]
+      ],
+      "messageType": "HL7",
+      "transportOverlay": "ON_PREM_LAN",
+      "rawWeight": 268,
+      "trafficPct": 2.8
     },
     {
       "id": "JSD-C-06",
@@ -22858,7 +23000,11 @@
       "tags": [
         "Klinik",
         "HL7"
-      ]
+      ],
+      "messageType": "HL7",
+      "transportOverlay": "ON_PREM_LAN",
+      "rawWeight": 275,
+      "trafficPct": 2.9
     },
     {
       "id": "JSD-C-07",
@@ -22873,7 +23019,11 @@
       "tags": [
         "Radiologie / PACS",
         "HL7"
-      ]
+      ],
+      "messageType": "HL7",
+      "transportOverlay": "ON_PREM_LAN",
+      "rawWeight": 282,
+      "trafficPct": 3
     },
     {
       "id": "JSD-C-08",
@@ -22888,7 +23038,11 @@
       "tags": [
         "Radiologie / PACS",
         "DICOM"
-      ]
+      ],
+      "messageType": "DICOM",
+      "transportOverlay": "ON_PREM_LAN",
+      "rawWeight": 429,
+      "trafficPct": 4.5
     },
     {
       "id": "JSD-C-09",
@@ -22903,7 +23057,11 @@
       "tags": [
         "Radiologie / PACS",
         "Cloud"
-      ]
+      ],
+      "messageType": "REST_API",
+      "transportOverlay": "PUBLIC_INTERNET_TLS",
+      "rawWeight": 106,
+      "trafficPct": 1
     },
     {
       "id": "JSD-C-10",
@@ -22918,7 +23076,11 @@
       "tags": [
         "Radiologie / PACS",
         "Cloud"
-      ]
+      ],
+      "messageType": "REST_API",
+      "transportOverlay": "PUBLIC_INTERNET_TLS",
+      "rawWeight": 113,
+      "trafficPct": 1.1
     },
     {
       "id": "JSD-C-11",
@@ -22933,7 +23095,11 @@
       "tags": [
         "Klinik",
         "HL7"
-      ]
+      ],
+      "messageType": "HL7",
+      "transportOverlay": "ON_PREM_LAN",
+      "rawWeight": 260,
+      "trafficPct": 2.6
     },
     {
       "id": "JSD-C-12",
@@ -22948,7 +23114,11 @@
       "tags": [
         "Klinik",
         "HL7"
-      ]
+      ],
+      "messageType": "HL7",
+      "transportOverlay": "ON_PREM_LAN",
+      "rawWeight": 267,
+      "trafficPct": 2.7
     },
     {
       "id": "JSD-C-13",
@@ -22964,7 +23134,11 @@
         "Klinik",
         "FHIR",
         "Cloud"
-      ]
+      ],
+      "messageType": "FHIR",
+      "transportOverlay": "HYBRID_VPN_IPSEC",
+      "rawWeight": 214,
+      "trafficPct": 2.2
     },
     {
       "id": "JSD-C-14",
@@ -22979,7 +23153,11 @@
       "tags": [
         "Notfallrettung",
         "HL7"
-      ]
+      ],
+      "messageType": "HL7",
+      "transportOverlay": "ON_PREM_LAN",
+      "rawWeight": 281,
+      "trafficPct": 2.9
     },
     {
       "id": "JSD-C-15",
@@ -22994,7 +23172,11 @@
       "tags": [
         "Notfallrettung",
         "Cloud"
-      ]
+      ],
+      "messageType": "IOT_STREAM",
+      "transportOverlay": "PUBLIC_INTERNET_TLS",
+      "rawWeight": 148,
+      "trafficPct": 1.6
     },
     {
       "id": "JSD-C-16",
@@ -23009,7 +23191,11 @@
       "tags": [
         "Notfallrettung",
         "Cloud"
-      ]
+      ],
+      "messageType": "FHIR",
+      "transportOverlay": "HYBRID_VPN_IPSEC",
+      "rawWeight": 185,
+      "trafficPct": 2.5
     },
     {
       "id": "JSD-C-17",
@@ -23024,7 +23210,11 @@
       "tags": [
         "Notfallrettung",
         "REST_API"
-      ]
+      ],
+      "messageType": "REST_API",
+      "transportOverlay": "PUBLIC_INTERNET_TLS",
+      "rawWeight": 112,
+      "trafficPct": 1
     },
     {
       "id": "JSD-C-18",
@@ -23039,7 +23229,11 @@
       "tags": [
         "Notfallrettung",
         "KRITIS"
-      ]
+      ],
+      "messageType": "REST_API",
+      "transportOverlay": "PUBLIC_INTERNET_TLS",
+      "rawWeight": 119,
+      "trafficPct": 1.1
     },
     {
       "id": "JSD-C-19",
@@ -23055,7 +23249,11 @@
         "JSD Services",
         "Logistik",
         "HL7"
-      ]
+      ],
+      "messageType": "HL7",
+      "transportOverlay": "ON_PREM_LAN",
+      "rawWeight": 266,
+      "trafficPct": 2.6
     },
     {
       "id": "JSD-C-20",
@@ -23070,7 +23268,11 @@
       "tags": [
         "JSD Services",
         "Logistik"
-      ]
+      ],
+      "messageType": "REST_API",
+      "transportOverlay": "ON_PREM_LAN",
+      "rawWeight": 133,
+      "trafficPct": 1.3
     },
     {
       "id": "JSD-C-21",
@@ -23086,7 +23288,11 @@
         "JSD Services",
         "Logistik",
         "SAP"
-      ]
+      ],
+      "messageType": "REST_API",
+      "transportOverlay": "HYBRID_VPN_IPSEC",
+      "rawWeight": 140,
+      "trafficPct": 1.4
     },
     {
       "id": "JSD-C-22",
@@ -23102,7 +23308,11 @@
         "Finanzen / ERP",
         "SAP",
         "Cloud"
-      ]
+      ],
+      "messageType": "REST_API",
+      "transportOverlay": "INTRA_CLOUD_MESH",
+      "rawWeight": 147,
+      "trafficPct": 1.5
     },
     {
       "id": "JSD-C-23",
@@ -23117,7 +23327,11 @@
       "tags": [
         "Finanzen / ERP",
         "EDIFACT"
-      ]
+      ],
+      "messageType": "B2B_EDI",
+      "transportOverlay": "PUBLIC_INTERNET_TLS",
+      "rawWeight": 104,
+      "trafficPct": 1.6
     },
     {
       "id": "JSD-C-24",
@@ -23132,7 +23346,11 @@
       "tags": [
         "Finanzen / ERP",
         "EDIFACT"
-      ]
+      ],
+      "messageType": "B2B_EDI",
+      "transportOverlay": "PUBLIC_INTERNET_TLS",
+      "rawWeight": 111,
+      "trafficPct": 1.7
     },
     {
       "id": "JSD-C-25",
@@ -23148,7 +23366,11 @@
         "Finanzen / ERP",
         "SAP",
         "Cloud"
-      ]
+      ],
+      "messageType": "REST_API",
+      "transportOverlay": "INTRA_CLOUD_MESH",
+      "rawWeight": 118,
+      "trafficPct": 1
     },
     {
       "id": "JSD-C-26",
@@ -23163,7 +23385,11 @@
       "tags": [
         "Finanzen / ERP",
         "SAP"
-      ]
+      ],
+      "messageType": "REST_API",
+      "transportOverlay": "HYBRID_VPN_IPSEC",
+      "rawWeight": 125,
+      "trafficPct": 1.1
     },
     {
       "id": "JSD-C-27",
@@ -23179,7 +23405,11 @@
         "Finanzen / ERP",
         "EDIFACT",
         "KRITIS"
-      ]
+      ],
+      "messageType": "B2B_EDI",
+      "transportOverlay": "PUBLIC_INTERNET_TLS",
+      "rawWeight": 132,
+      "trafficPct": 1.2
     },
     {
       "id": "JSD-C-28",
@@ -23195,7 +23425,11 @@
         "Telematik / TI",
         "Cloud",
         "FHIR"
-      ]
+      ],
+      "messageType": "FHIR",
+      "transportOverlay": "INTRA_CLOUD_MESH",
+      "rawWeight": 219,
+      "trafficPct": 2.1
     },
     {
       "id": "JSD-C-29",
@@ -23210,7 +23444,11 @@
       "tags": [
         "Klinik",
         "FHIR"
-      ]
+      ],
+      "messageType": "FHIR",
+      "transportOverlay": "HYBRID_VPN_IPSEC",
+      "rawWeight": 226,
+      "trafficPct": 2.2
     },
     {
       "id": "JSD-C-30",
@@ -23226,7 +23464,11 @@
         "Telematik / TI",
         "Middleware",
         "KRITIS"
-      ]
+      ],
+      "messageType": "REST_API",
+      "transportOverlay": "ON_PREM_LAN",
+      "rawWeight": 103,
+      "trafficPct": 1.5
     },
     {
       "id": "JSD-C-31",
@@ -23241,7 +23483,11 @@
       "tags": [
         "Telematik / TI",
         "KRITIS"
-      ]
+      ],
+      "messageType": "REST_API",
+      "transportOverlay": "PUBLIC_INTERNET_TLS",
+      "rawWeight": 110,
+      "trafficPct": 1.6
     },
     {
       "id": "JSD-C-32",
@@ -23256,7 +23502,11 @@
       "tags": [
         "Telematik / TI",
         "KRITIS"
-      ]
+      ],
+      "messageType": "FHIR",
+      "transportOverlay": "PUBLIC_INTERNET_TLS",
+      "rawWeight": 197,
+      "trafficPct": 2.5
     },
     {
       "id": "JSD-C-33",
@@ -23273,7 +23523,11 @@
         "Cloud",
         "SAP",
         "REST"
-      ]
+      ],
+      "messageType": "REST",
+      "transportOverlay": "CLOUD_VPC",
+      "rawWeight": 174,
+      "trafficPct": 1.5
     },
     {
       "id": "JSD-C-34",
@@ -23290,7 +23544,11 @@
         "HR",
         "REST",
         "Cloud"
-      ]
+      ],
+      "messageType": "REST",
+      "transportOverlay": "HTTPS_MTLS",
+      "rawWeight": 181,
+      "trafficPct": 1.6
     },
     {
       "id": "JSD-C-35",
@@ -23307,7 +23565,11 @@
         "FHIR",
         "Streaming",
         "Cloud"
-      ]
+      ],
+      "messageType": "FHIR",
+      "transportOverlay": "AZURE_EXPRESSROUTE",
+      "rawWeight": 218,
+      "trafficPct": 2
     },
     {
       "id": "JSD-C-36",
@@ -23324,7 +23586,11 @@
         "Analytics",
         "SQL",
         "Cloud"
-      ]
+      ],
+      "messageType": "SQL",
+      "transportOverlay": "TLS_1_3",
+      "rawWeight": 165,
+      "trafficPct": 1.5
     },
     {
       "id": "JSD-C-37",
@@ -23341,7 +23607,11 @@
         "Archiv",
         "IHE",
         "HL7"
-      ]
+      ],
+      "messageType": "HL7",
+      "transportOverlay": "ON_PREM_LAN",
+      "rawWeight": 242,
+      "trafficPct": 2.8
     },
     {
       "id": "JSD-C-38",
@@ -23357,7 +23627,11 @@
         "Klinik",
         "Archiv",
         "IHE"
-      ]
+      ],
+      "messageType": "REST",
+      "transportOverlay": "ON_PREM_LAN",
+      "rawWeight": 159,
+      "trafficPct": 2
     },
     {
       "id": "JSD-C-39",
@@ -23374,7 +23648,11 @@
         "KRITIS",
         "Perimeter",
         "VPN"
-      ]
+      ],
+      "messageType": "REST",
+      "transportOverlay": "B3S_PERIMETER",
+      "rawWeight": 166,
+      "trafficPct": 2.1
     },
     {
       "id": "JSD-C-40",
@@ -23391,7 +23669,11 @@
         "VPN",
         "Sicherheit",
         "KRITIS"
-      ]
+      ],
+      "messageType": "VPN",
+      "transportOverlay": "TI_VPN",
+      "rawWeight": 233,
+      "trafficPct": 2.8
     },
     {
       "id": "JSD-C-41",
@@ -23408,7 +23690,11 @@
         "FHIR",
         "DEMIS",
         "Behörde"
-      ]
+      ],
+      "messageType": "FHIR",
+      "transportOverlay": "BUND_DE_MTLS",
+      "rawWeight": 210,
+      "trafficPct": 2.6
     },
     {
       "id": "JSD-C-42",
@@ -23424,7 +23710,11 @@
         "Abrechnung",
         "EDIFACT",
         "PKV"
-      ]
+      ],
+      "messageType": "EDIFACT",
+      "transportOverlay": "SFTP_SSH",
+      "rawWeight": 122,
+      "trafficPct": 1
     },
     {
       "id": "JSD-C-43",
@@ -23440,7 +23730,11 @@
         "Labor",
         "HL7",
         "Blutspende"
-      ]
+      ],
+      "messageType": "HL7",
+      "transportOverlay": "HTTPS_MTLS",
+      "rawWeight": 284,
+      "trafficPct": 2.6
     },
     {
       "id": "JSD-C-44",
@@ -23456,7 +23750,11 @@
         "Notaufnahme",
         "FHIR",
         "KV-Berlin"
-      ]
+      ],
+      "messageType": "FHIR",
+      "transportOverlay": "KV_CONNECT_MTLS",
+      "rawWeight": 181,
+      "trafficPct": 2.1
     },
     {
       "id": "JSD-C-45",
@@ -23473,7 +23771,11 @@
         "Krebsregister",
         "REST",
         "Behörde"
-      ]
+      ],
+      "messageType": "REST",
+      "transportOverlay": "HTTPS_MTLS",
+      "rawWeight": 158,
+      "trafficPct": 1.9
     }
   ],
   "systems": [
@@ -24080,7 +24382,7 @@
               '<div style="font-size:0.75rem; font-weight:700; color:var(--text-bright); margin-bottom:6px;">☁ Modell von ORCAI laden oder importieren</div>' +
               '<div style="display:flex; gap:6px; margin-bottom:8px;">' +
                 '<input type="text" id="inpOrcaiKey" placeholder="ORCAI Key (z.B. ORCAI-MODEL-KLINIKVERBUND-EA)" style="flex:1; padding:4px 8px; font-size:0.7rem; border-radius:4px; border:1px solid var(--card-border); background:var(--card-bg); color:var(--text-bright);">' +
-                '<button onclick="window.loadModelFromOrcaiInput()" style="padding:4px 10px; font-size:0.7rem; font-weight:700; background:var(--accent); color:#0b0f17; border:none; border-radius:4px; cursor:pointer;">Laden</button>' +
+                '<button onclick="window.loadModelFromOrcaiInput()" class="btn-activate-model" style="padding:4px 12px; font-size:0.7rem;">Laden</button>' +
               '</div>' +
               '<div style="display:flex; gap:6px; flex-wrap:wrap;">' +
                 '<label style="padding:4px 8px; font-size:0.68rem; background:rgba(255,255,255,0.06); border:1px solid var(--card-border); border-radius:4px; cursor:pointer;">' +
@@ -24135,10 +24437,10 @@
               '</div>' +
               '<div style="display:flex; flex-direction:column; align-items:flex-end; gap:5px; flex-shrink:0;">' +
                 (isActive 
-                  ? '<span style="font-size:0.62rem; padding:2px 7px; border-radius:4px; background:rgba(16,185,129,0.2); color:#10b981; font-weight:750;">● Aktiv</span>'
-                  : '<button onclick="window.activateLandscapeModel(\'' + m.id + '\')" style="font-size:0.68rem; padding:3px 9px; border-radius:4px; background:var(--accent); color:#0b0f17; font-weight:750; border:none; cursor:pointer;">▶ Modell laden</button>') +
-                '<label style="display:inline-flex; align-items:center; gap:5px; font-size:0.68rem; cursor:pointer; color:' + (isStartModel ? 'var(--accent)' : 'var(--text-muted)') + '; font-weight:' + (isStartModel ? '750' : 'normal') + '; background:' + (isStartModel ? 'rgba(56,189,248,0.14)' : 'rgba(255,255,255,0.04)') + '; border:1px solid ' + (isStartModel ? 'var(--accent)' : 'var(--card-border)') + '; padding:2px 7px; border-radius:4px; transition:all 0.2s;" title="Als Start-Modell festlegen">' +
-                  '<input type="radio" name="startLandscapeModelRadio" value="' + m.id + '" ' + (isStartModel ? 'checked' : '') + ' onchange="window.setStartupModel(\'' + m.id + '\')" style="margin:0; cursor:pointer; accent-color:var(--accent);" />' +
+                  ? '<span style="font-size:0.65rem; padding:3px 8px; border-radius:4px; background:rgba(16,185,129,0.18); color:#10b981; font-weight:750; border:1px solid #10b981;">● Aktiv</span>'
+                  : '<button onclick="window.activateLandscapeModel(\'' + m.id + '\')" class="btn-activate-model">▶ Modell laden</button>') +
+                '<label class="start-model-radio-pill ' + (isStartModel ? 'selected' : '') + '" title="Als Start-Modell festlegen">' +
+                  '<input type="radio" name="startLandscapeModelRadio" value="' + m.id + '" ' + (isStartModel ? 'checked' : '') + ' onchange="window.setStartupModel(\'' + m.id + '\')" style="margin:0; cursor:pointer; accent-color:#0284c7;" />' +
                   '<span>Show on Start</span>' +
                 '</label>' +
               '</div>' +
@@ -24351,7 +24653,15 @@
         model.systems.forEach(s => SYSTEMS_DATA.push(s));
 
         CONNECTIONS_DATA.length = 0;
-        model.connections.forEach(c => CONNECTIONS_DATA.push(c));
+        model.connections.forEach(c => {
+          c.messageType = c.messageType || c.msgType || 'REST';
+          c.msgType = c.msgType || c.messageType || 'REST';
+          c.transportOverlay = c.transportOverlay || c.overlay || 'ON_PREM_LAN';
+          c.overlay = c.overlay || c.transportOverlay || 'ON_PREM_LAN';
+          if (c.rawWeight === undefined) c.rawWeight = 120;
+          if (c.trafficPct === undefined) c.trafficPct = 1.2;
+          CONNECTIONS_DATA.push(c);
+        });
 
         DOMAINS_DATA.length = 0;
         (model.domains || []).forEach(d => DOMAINS_DATA.push(d));
