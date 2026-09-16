@@ -17985,7 +17985,11 @@
               '<span class="insp-badge ' + (sys.scope === 'INTERNAL' ? 'scope-intern' : 'scope-extern') + '">' + (sys.scope === 'INTERNAL' ? ('🏢 ' + orgShort) : '🌐 EXTERN') + '</span>' +
               '<span class="insp-badge ' + (sys.deployment === 'ON_PREM' ? 'deploy-onprem' : 'deploy-cloud') + '">' + (sys.deployment === 'ON_PREM' ? 'On-Premises' : 'Cloud') + '</span>' +
               '<span class="insp-badge" style="background:var(--accent-glow); color:var(--accent); font-weight:700;">' + (quadLabels[cCoord?.quad] || cCoord?.quad) + '</span>' +
-              (sys.hyperscaler ? '<span class="insp-badge" style="background:#f59e0b22; color:#f59e0b; border-color:#f59e0b;">' + sys.hyperscaler + '</span>' : '') +
+              (sys.hyperscaler ? (function(){
+                const hc = ({ 'SAP_BTP': '#f59e0b', 'AZURE': '#0078d4', 'AWS': '#ff9900', 'GCP': '#34a853' })[sys.hyperscaler] || '#f59e0b';
+                const hn = ({ 'SAP_BTP': 'SAP BTP', 'AZURE': 'Microsoft Azure', 'AWS': 'Amazon Web Services', 'GCP': 'Google Cloud' })[sys.hyperscaler] || sys.hyperscaler;
+                return '<span class="insp-badge" style="background:' + hc + '22; color:' + hc + '; border-color:' + hc + '; font-weight:700;">☁️ ' + hn + '</span>';
+              })() : '') +
               (sys.isBoundaryEntity ? '<span class="insp-badge boundary-badge">🛡️ ' + (sys.boundaryType || 'Perimeter Gateway') + '</span>' : '') +
             '</div>' +
             '<div class="insp-desc" style="font-size:0.72rem; line-height:1.35; margin:4px 0;">' + sys.desc + '</div>' +
@@ -19712,7 +19716,11 @@
               '<span class="insp-badge ' + (sys.scope === 'INTERNAL' ? 'scope-intern' : 'scope-extern') + '">' + (sys.scope === 'INTERNAL' ? ('🏢 ' + orgShort) : '🌐 EXTERN') + '</span>' +
               '<span class="insp-badge ' + (sys.deployment === 'ON_PREM' ? 'deploy-onprem' : 'deploy-cloud') + '">' + (sys.deployment === 'ON_PREM' ? 'On-Premises' : 'Cloud') + '</span>' +
               '<span class="insp-badge" style="background:var(--accent-glow); color:var(--accent); font-weight:700;">' + (quadLabels[cCoord?.quad] || cCoord?.quad) + '</span>' +
-              (sys.hyperscaler ? '<span class="insp-badge" style="background:#f59e0b22; color:#f59e0b; border-color:#f59e0b;">' + sys.hyperscaler + '</span>' : '') +
+              (sys.hyperscaler ? (function(){
+                const hc = ({ 'SAP_BTP': '#f59e0b', 'AZURE': '#0078d4', 'AWS': '#ff9900', 'GCP': '#34a853' })[sys.hyperscaler] || '#f59e0b';
+                const hn = ({ 'SAP_BTP': 'SAP BTP', 'AZURE': 'Microsoft Azure', 'AWS': 'Amazon Web Services', 'GCP': 'Google Cloud' })[sys.hyperscaler] || sys.hyperscaler;
+                return '<span class="insp-badge" style="background:' + hc + '22; color:' + hc + '; border-color:' + hc + '; font-weight:700;">☁️ ' + hn + '</span>';
+              })() : '') +
               (sys.isBoundaryEntity ? '<span class="insp-badge boundary-badge">🛡️ ' + (sys.boundaryType || 'Perimeter Gateway') + '</span>' : '') +
             '</div>' +
             '<div class="insp-desc">' + sys.desc + '</div>' +
@@ -24391,14 +24399,15 @@
       "domain": "D1",
       "scope": "INTERNAL",
       "deployment": "CLOUD",
-      "hosting": "SAP PCE Frankfurt",
+      "hosting": "SAP PCE Frankfurt (SAP BTP)",
       "vendor": "SAP",
       "desc": "Zentrales Finanz- und Rechnungswesen, Debitorenbuchhaltung und Materialwirtschaft der Johannesstift Diakonie.",
       "tags": [
         "Finanzen / ERP",
         "SAP",
         "Cloud"
-      ]
+      ],
+      "hyperscaler": "SAP_BTP"
     },
     {
       "id": "JSD-02",
@@ -24413,7 +24422,8 @@
         "Telematik / TI",
         "Cloud",
         "REST_API"
-      ]
+      ],
+      "hyperscaler": "AWS"
     },
     {
       "id": "JSD-03",
@@ -24421,14 +24431,15 @@
       "domain": "D1",
       "scope": "INTERNAL",
       "deployment": "CLOUD",
-      "hosting": "Atoss Cloud München",
+      "hosting": "Atoss Cloud München (Azure)",
       "vendor": "Atoss",
       "desc": "Dienstplanung, Arbeitszeitmanagement und Pflegepersonalregelung (PPR 2.0) für alle JSD Standorte.",
       "tags": [
         "Finanzen / ERP",
         "HR",
         "Cloud"
-      ]
+      ],
+      "hyperscaler": "AZURE"
     },
     {
       "id": "JSD-04",
@@ -24444,7 +24455,8 @@
         "Middleware",
         "Cloud",
         "REST_API"
-      ]
+      ],
+      "hyperscaler": "SAP_BTP"
     },
     {
       "id": "JSD-05",
@@ -24459,7 +24471,8 @@
         "Notfallrettung",
         "Cloud",
         "WebRTC"
-      ]
+      ],
+      "hyperscaler": "AZURE"
     },
     {
       "id": "JSD-06",
@@ -24474,7 +24487,8 @@
         "Finanzen / ERP",
         "Cloud",
         "Analytics"
-      ]
+      ],
+      "hyperscaler": "AZURE"
     },
     {
       "id": "JSD-07",
@@ -24482,14 +24496,15 @@
       "domain": "D2",
       "scope": "INTERNAL",
       "deployment": "CLOUD",
-      "hosting": "Dedalus Health Cloud",
+      "hosting": "Dedalus Health Cloud (AWS)",
       "vendor": "Dedalus / Meona",
       "desc": "Digitale Patientenkurve, Vitaldatenüberwachung und Arzneimitteltherapiesicherheit (AMTS) mit Wechselwirkungsprüfung.",
       "tags": [
         "Klinik",
         "Cloud",
         "REST_API"
-      ]
+      ],
+      "hyperscaler": "AWS"
     },
     {
       "id": "JSD-08",
@@ -24504,7 +24519,8 @@
         "Klinik",
         "KIS",
         "HL7"
-      ]
+      ],
+      "hyperscaler": null
     },
     {
       "id": "JSD-09",
@@ -24519,7 +24535,8 @@
         "Klinik",
         "KIS",
         "HL7"
-      ]
+      ],
+      "hyperscaler": null
     },
     {
       "id": "JSD-10",
@@ -24535,7 +24552,8 @@
         "Middleware",
         "HL7",
         "FHIR"
-      ]
+      ],
+      "hyperscaler": null
     },
     {
       "id": "JSD-11",
@@ -24549,7 +24567,8 @@
       "tags": [
         "Diagnostik / Labor",
         "HL7"
-      ]
+      ],
+      "hyperscaler": null
     },
     {
       "id": "JSD-12",
@@ -24563,7 +24582,8 @@
       "tags": [
         "Radiologie / PACS",
         "DICOM"
-      ]
+      ],
+      "hyperscaler": null
     },
     {
       "id": "JSD-13",
@@ -24578,7 +24598,8 @@
         "Radiologie / PACS",
         "HL7",
         "DICOM"
-      ]
+      ],
+      "hyperscaler": null
     },
     {
       "id": "JSD-14",
@@ -24593,7 +24614,8 @@
         "Klinik",
         "PDMS",
         "HL7"
-      ]
+      ],
+      "hyperscaler": null
     },
     {
       "id": "JSD-15",
@@ -24608,7 +24630,8 @@
         "Notfallrettung",
         "Klinik",
         "HL7"
-      ]
+      ],
+      "hyperscaler": null
     },
     {
       "id": "JSD-16",
@@ -24623,7 +24646,8 @@
         "JSD Services",
         "Logistik",
         "REST_API"
-      ]
+      ],
+      "hyperscaler": null
     },
     {
       "id": "JSD-17",
@@ -24637,7 +24661,8 @@
       "tags": [
         "JSD Services",
         "Logistik"
-      ]
+      ],
+      "hyperscaler": null
     },
     {
       "id": "JSD-18",
@@ -24652,7 +24677,8 @@
         "Telematik / TI",
         "Middleware",
         "KRITIS"
-      ]
+      ],
+      "hyperscaler": null
     },
     {
       "id": "JSD-19",
@@ -24666,7 +24692,8 @@
       "tags": [
         "Archiv / DMS",
         "REST_API"
-      ]
+      ],
+      "hyperscaler": null
     },
     {
       "id": "JSD-20",
@@ -24680,7 +24707,8 @@
       "tags": [
         "Security",
         "KRITIS"
-      ]
+      ],
+      "hyperscaler": null
     },
     {
       "id": "JSD-21",
@@ -24694,7 +24722,8 @@
       "tags": [
         "Telematik / TI",
         "KRITIS"
-      ]
+      ],
+      "hyperscaler": null
     },
     {
       "id": "JSD-22",
@@ -24708,7 +24737,8 @@
       "tags": [
         "Telematik / TI",
         "KIM"
-      ]
+      ],
+      "hyperscaler": null
     },
     {
       "id": "JSD-23",
@@ -24722,7 +24752,8 @@
       "tags": [
         "Notfallrettung",
         "REST_API"
-      ]
+      ],
+      "hyperscaler": null
     },
     {
       "id": "JSD-24",
@@ -24736,7 +24767,8 @@
       "tags": [
         "Finanzen / ERP",
         "B2B_EDI"
-      ]
+      ],
+      "hyperscaler": null
     },
     {
       "id": "JSD-25",
@@ -24750,7 +24782,8 @@
       "tags": [
         "Finanzen / ERP",
         "EDIFACT"
-      ]
+      ],
+      "hyperscaler": null
     },
     {
       "id": "JSD-26",
@@ -24764,7 +24797,8 @@
       "tags": [
         "Klinik",
         "FHIR"
-      ]
+      ],
+      "hyperscaler": null
     },
     {
       "id": "JSD-27",
@@ -24779,7 +24813,8 @@
         "Radiologie / PACS",
         "Cloud",
         "REST_API"
-      ]
+      ],
+      "hyperscaler": null
     },
     {
       "id": "JSD-28",
@@ -24793,7 +24828,8 @@
       "tags": [
         "Notfallrettung",
         "IOT_STREAM"
-      ]
+      ],
+      "hyperscaler": null
     },
     {
       "id": "JSD-29",
@@ -24807,7 +24843,8 @@
       "tags": [
         "Notfallrettung",
         "KRITIS"
-      ]
+      ],
+      "hyperscaler": null
     },
     {
       "id": "JSD-30",
@@ -24822,7 +24859,8 @@
         "Finanzen / ERP",
         "EDIFACT",
         "KRITIS"
-      ]
+      ],
+      "hyperscaler": null
     },
     {
       "id": "JSD-31",
@@ -24836,7 +24874,8 @@
       "tags": [
         "Finanzen / ERP",
         "EDIFACT"
-      ]
+      ],
+      "hyperscaler": null
     },
     {
       "id": "JSD-32",
@@ -24850,7 +24889,8 @@
       "tags": [
         "Klinik",
         "HL7"
-      ]
+      ],
+      "hyperscaler": null
     },
     {
       "id": "JSD-33",
@@ -24864,7 +24904,8 @@
       "tags": [
         "Telematik / TI",
         "REST_API"
-      ]
+      ],
+      "hyperscaler": null
     },
     {
       "id": "JSD-34",
@@ -24878,7 +24919,8 @@
       "tags": [
         "Klinik",
         "REST_API"
-      ]
+      ],
+      "hyperscaler": null
     }
   ]
 };
@@ -29929,9 +29971,14 @@
           row.style.marginBottom = '4px';
           row.style.display = 'block';
 
-          const scopeBadge = s.scope === 'INTERNAL'
+          const hsPill = s.hyperscaler ? (function(){
+            const hc = ({ 'SAP_BTP': '#f59e0b', 'AZURE': '#0078d4', 'AWS': '#ff9900', 'GCP': '#34a853' })[s.hyperscaler] || '#f59e0b';
+            const hn = ({ 'SAP_BTP': 'SAP BTP', 'AZURE': 'Azure', 'AWS': 'AWS', 'GCP': 'GCP' })[s.hyperscaler] || s.hyperscaler;
+            return '<span style="font-size:0.58rem; padding:1px 4px; border-radius:3px; background:' + hc + '22; color:' + hc + '; border:1px solid ' + hc + '55; font-weight:700; margin-left:3px;">' + hn + '</span>';
+          })() : '';
+          const scopeBadge = (s.scope === 'INTERNAL'
             ? '<span style="font-size:0.58rem; padding:1px 4px; border-radius:3px; background:rgba(56,189,248,0.15); color:var(--accent); font-weight:600;">' + (s.deployment === 'CLOUD' ? 'Cloud Intern' : 'On-Prem') + '</span>'
-            : '<span style="font-size:0.58rem; padding:1px 4px; border-radius:3px; background:rgba(245,158,11,0.15); color:#f59e0b; font-weight:600;">Drittanbieter</span>';
+            : '<span style="font-size:0.58rem; padding:1px 4px; border-radius:3px; background:rgba(245,158,11,0.15); color:#f59e0b; font-weight:600;">Drittanbieter</span>') + hsPill;
 
           row.innerHTML =
             '<div class="row-hover-actions">' +
