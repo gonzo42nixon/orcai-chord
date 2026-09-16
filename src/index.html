@@ -24290,16 +24290,16 @@
     "modelTitle": "Bruker Corporation Enterprise Architecture (Global High-Tech Instruments, CALID & BioSpin)",
     "description": "Konzernweite Enterprise- und Produkt-Architektur der Bruker Corporation (NASDAQ: BRKR, ~$3.4 Mrd. Umsatz, ~11.400 Mitarbeiter, Billerica HQ, Bremen Mass Spectrometry, Ettlingen BioSpin NMR). Umfasst globale ERP-Systeme (SAP S/4HANA, Ariba), R&D- und PLM-Plattformen (Siemens Teamcenter, SolidWorks, Jira), Life-Science- und Diagnostik-Schnittstellen (MALDI Biotyper MBT Compass, timsTOF PaSER GPU Proteomics, Mass Dynamics Cloud), globale Service-Steuerung (Salesforce Service Cloud / FSL) und LabScape Remote IoT Magnet-Telemetrie.",
     "version": "1.0.0",
-    "updatedAt": "2026-09-16T19:02:56.594Z",
+    "updatedAt": "2026-09-16T19:07:30.531Z",
     "author": "Bruker Corporation Enterprise Architecture Team & ORCAI",
     "stats": {
       "systemsCount": 49,
-      "connectionsCount": 86,
+      "connectionsCount": 87,
       "integrationsCount": 28,
       "processesCount": 16,
       "domainsCount": 6,
       "systems": 49,
-      "connections": 86,
+      "connections": 87,
       "integrations": 28,
       "processes": 16,
       "domains": 6
@@ -24547,7 +24547,7 @@
     },
     {
       "id": "BRK-P-13",
-      "name": "Qualitätssicherung & CAPA-Management im Life-Science-Umfeld (MasterControl QMS)",
+      "name": "GxP-Fertigungsqualität & Werkerführung (S/4HANA LOIPRO ➔ BTP iFlow ➔ MasterControl & VKS)",
       "leadDomain": "D1",
       "involvedDomains": [
         "D1",
@@ -24557,7 +24557,7 @@
         "BRK-INT-23",
         "BRK-INT-24"
       ],
-      "desc": "Lückenloses GxP-Qualitätsmanagement: Bearbeitung von Reklamationen und Abweichungen in MasterControl, Steuerung digitaler SOP-Arbeitsanweisungen über VKS und Archivierung im OpenText DHR."
+      "desc": "Fertigungsauftragsinitiierte Qualitätssicherung: S/4HANA stößt die Fertigung per LOIPRO-IDoc an. BTP iFlows versorgen parallel MasterControl mit elektronischen Chargenakten (eDHR) und VKS mit visuellen Werkerführungs-SOPs."
     },
     {
       "id": "BRK-P-14",
@@ -25140,51 +25140,63 @@
     },
     {
       "id": "BRK-INT-23",
-      "name": "Qualitätsmanagement & GxP-Abweichungssteuerung via MasterControl",
+      "name": "Qualitäts- und eDHR-Steuerung via S/4HANA LOIPRO & BTP iFlow ➔ MasterControl",
       "cluster": "QUALITY_MANAGEMENT",
-      "hub": "BRK-42",
-      "hubName": "MasterControl Quality Excellence (QMS)",
-      "protocol": "REST API / CMIS GxP Archive",
-      "desc": "Regelkonforme Verwaltung von Abweichungen (Non-Conformance) und CAPA-Maßnahmen mit automatisierter SAP-Lagersperre und Revisionsarchivierung in OpenText.",
-      "sourceSystem": "BRK-42",
-      "targetSystem": "BRK-01",
+      "hub": "BRK-02",
+      "hubName": "SAP BTP Integration Suite (LOIPRO iFlow)",
+      "protocol": "IDoc LOIPRO01 / tRFC ➔ BTP iFlow ➔ REST API JSON",
+      "desc": "S/4HANA initiiert die Kommunikation mit einem LOIPRO-IDoc an die SAP BTP Integration Suite. Der iFlow transformiert die Auftragsdaten und erzeugt in MasterControl elektronische Chargenprotokolle (eDHR) und Prüfpläne.",
+      "sourceSystem": "BRK-01",
+      "targetSystem": "BRK-42",
       "steps": [
         {
+          "connectionId": "BRK-C-87",
+          "from": "BRK-01",
+          "to": "BRK-02",
+          "desc": "LOIPRO IDoc Dispatch aus S/4HANA Core"
+        },
+        {
           "connectionId": "BRK-C-62",
-          "from": "BRK-42",
-          "to": "BRK-01",
-          "desc": "Qualitätssperre bei CAPA-Eröffnung"
+          "from": "BRK-02",
+          "to": "BRK-42",
+          "desc": "iFlow REST-Payload an MasterControl QMS"
         },
         {
           "connectionId": "BRK-C-63",
           "from": "BRK-42",
           "to": "BRK-05",
-          "desc": "Archivierung von Audit-Trail und Freigabedokumenten"
+          "desc": "Audit-Trail & DHR-Archivierung in OpenText"
         }
       ]
     },
     {
       "id": "BRK-INT-24",
-      "name": "Digitale Werkerführung in der Instrumentenfertigung via VKS",
+      "name": "Digitale Werkerführung via S/4HANA LOIPRO & BTP iFlow ➔ VKS",
       "cluster": "MANUFACTURING",
-      "hub": "BRK-41",
-      "hubName": "VKS Visual Knowledge Share",
-      "protocol": "REST Webhook / OPC UA",
-      "desc": "Interaktive Bereitstellung visueller Arbeitsanweisungen (SOP) am Montagearbeitsplatz aus dem Opcenter MES mit Rückmeldung an das Endprüffeld.",
-      "sourceSystem": "BRK-10",
-      "targetSystem": "BRK-11",
+      "hub": "BRK-02",
+      "hubName": "SAP BTP Integration Suite (LOIPRO iFlow)",
+      "protocol": "IDoc LOIPRO01 / tRFC ➔ BTP iFlow ➔ REST Webhook JSON",
+      "desc": "S/4HANA initiiert die Kommunikation mit einem LOIPRO-IDoc an die SAP BTP Integration Suite. Der iFlow generiert auftrags- und stücklistengenaue Arbeitsanweisungen in VKS für die Reinraum-Montage.",
+      "sourceSystem": "BRK-01",
+      "targetSystem": "BRK-41",
       "steps": [
         {
-          "connectionId": "BRK-C-60",
-          "from": "BRK-10",
+          "connectionId": "BRK-C-87",
+          "from": "BRK-01",
+          "to": "BRK-02",
+          "desc": "LOIPRO IDoc Dispatch aus S/4HANA Core"
+        },
+        {
+          "connectionId": "BRK-C-77",
+          "from": "BRK-02",
           "to": "BRK-41",
-          "desc": "Auftrags- und Bauteil-SOP-Aufruf im VKS"
+          "desc": "iFlow SOP-Payload an VKS Werkerführung"
         },
         {
           "connectionId": "BRK-C-61",
           "from": "BRK-41",
           "to": "BRK-11",
-          "desc": "Montagefreigabe an Kalibrierprüffeld"
+          "desc": "Montageabschluss-Meldung an Kalibrierprüffeld"
         }
       ]
     },
@@ -26602,23 +26614,25 @@
     },
     {
       "id": "BRK-C-62",
-      "from": "BRK-42",
-      "to": "BRK-01",
-      "name": "MasterControl ➔ SAP S/4HANA CAPA-Sperre & Chargenfreigabe",
-      "protocol": "OData v4 / REST API over TLS",
+      "from": "BRK-02",
+      "to": "BRK-42",
+      "name": "SAP BTP iFlow ➔ MasterControl QMS (LOIPRO eDHR-Transformation)",
+      "protocol": "HTTPS / REST API JSON (iFlow)",
       "messageType": "REST",
       "msgType": "REST",
       "flowType": "CLOUD_TO_CLOUD",
       "transportOverlay": "CLOUD_VPC",
       "overlay": "CLOUD_VPC",
       "isCrossBoundary": true,
-      "rawWeight": 240,
-      "trafficPct": 2.4,
+      "rawWeight": 270,
+      "trafficPct": 2.7,
       "tags": [
+        "BTP",
+        "iFlow",
         "MasterControl",
-        "SAP",
+        "LOIPRO",
         "QMS",
-        "CAPA",
+        "eDHR",
         "REST"
       ]
     },
@@ -26934,23 +26948,25 @@
     },
     {
       "id": "BRK-C-77",
-      "from": "BRK-01",
+      "from": "BRK-02",
       "to": "BRK-41",
-      "name": "SAP S/4HANA ➔ VKS Fertigungsaufträge & Arbeitsstammplandaten",
-      "protocol": "OData / REST Webhook over TLS",
+      "name": "SAP BTP iFlow ➔ VKS Werkerführung (LOIPRO SOP-Transformation)",
+      "protocol": "HTTPS / REST Webhook JSON (iFlow)",
       "messageType": "REST",
       "msgType": "REST",
       "flowType": "INTRA_CLOUD",
       "transportOverlay": "CLOUD_VPC",
       "overlay": "CLOUD_VPC",
       "isCrossBoundary": false,
-      "rawWeight": 240,
-      "trafficPct": 2.4,
+      "rawWeight": 260,
+      "trafficPct": 2.6,
       "tags": [
-        "SAP",
+        "BTP",
+        "iFlow",
         "VKS",
-        "Fertigung",
+        "LOIPRO",
         "SOP",
+        "Werkerführung",
         "REST"
       ]
     },
@@ -27155,6 +27171,30 @@
         "Fiori",
         "EventMesh",
         "REST"
+      ]
+    },
+    {
+      "id": "BRK-C-87",
+      "from": "BRK-01",
+      "to": "BRK-02",
+      "name": "SAP S/4HANA Core ➔ SAP BTP LOIPRO Fertigungsauftrags-Dispatch (IDoc)",
+      "protocol": "IDoc LOIPRO01 / tRFC over TLS",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "INTRA_CLOUD",
+      "transportOverlay": "SAP_BTP_MESH",
+      "overlay": "SAP_BTP_MESH",
+      "isCrossBoundary": false,
+      "rawWeight": 370,
+      "trafficPct": 3.7,
+      "tags": [
+        "SAP",
+        "S/4HANA",
+        "BTP",
+        "LOIPRO",
+        "IDoc",
+        "Fertigung",
+        "PP"
       ]
     }
   ],
@@ -27850,15 +27890,16 @@
       "deployment": "CLOUD",
       "hosting": "VKS Cloud (SaaS High-Security)",
       "vendor": "VKS (Visual Knowledge Share)",
-      "desc": "Digitale Arbeitsanweisungs- und Werkerführungsplattform (Electronic Work Instructions) für Reinraum-Montage, Drehmoment-Erfassung und GxP-konforme visuelle SOP-Schrittfolgen bei der Spektrometer-Endmontage.",
+      "desc": "Digitale Arbeitsanweisungs- und Werkerführungsplattform (Electronic Work Instructions). Wird über einen iFlow der SAP BTP Integration Suite an das SAP ERP Core System (S/4HANA) angebunden. S/4HANA initiiert die Kommunikation mit einem LOIPRO-IDoc, woraufhin der BTP-iFlow auftragsspezifische visuelle SOP-Schrittfolgen für die Reinraum-Montage erzeugt.",
       "tags": [
         "VKS",
         "Werkerführung",
         "SOP",
+        "LOIPRO",
+        "iFlow",
+        "BTP",
         "Fertigung",
-        "Qualität",
-        "Cloud",
-        "MES"
+        "Cloud"
       ]
     },
     {
@@ -27869,14 +27910,15 @@
       "deployment": "CLOUD",
       "hosting": "MasterControl Life Science Cloud",
       "vendor": "MasterControl Inc.",
-      "desc": "Cloud-basiertes Qualitätsmanagementsystem (QMS) für Life Sciences und Medizintechnik zur Verwaltung von CAPA, Audit-Management, Schulungsnachweisen, Abweichungen und ISO 13485 / FDA 21 CFR Part 820 Compliance.",
+      "desc": "Cloud-basiertes Qualitätsmanagementsystem (QMS) für Life Sciences. Wird über einen iFlow der SAP BTP Integration Suite an das SAP ERP Core System (S/4HANA) angebunden. S/4HANA initiiert die Kommunikation mit einem LOIPRO-IDoc zur automatisierten Anlage elektronischer Chargenprotokolle (eDHR), Prüflose und CAPA-Prüfungen.",
       "tags": [
         "MasterControl",
         "QMS",
         "GxP",
-        "Compliance",
+        "LOIPRO",
+        "iFlow",
+        "BTP",
         "FDA",
-        "ISO13485",
         "Cloud"
       ]
     },
@@ -28055,9 +28097,9 @@
           organization: 'Bruker Corporation (Scientific Instruments & Diagnostics)',
           shortName: 'BRUKER CORP',
           title: 'Bruker Corporation Enterprise Architecture (Global High-Tech Instruments, CALID & BioSpin)',
-          desc: 'Konzernweite Enterprise- und Produkt-Architektur der Bruker Corporation (NASDAQ: BRKR, ~$3.4 Mrd. Umsatz, ~11.400 Mitarbeiter, Billerica HQ, Bremen Mass Spectrometry, Ettlingen BioSpin NMR). Umfasst globale ERP-Systeme (SAP S/4HANA Core, direkte Bloomberg FX-Schnittstelle, SAP BTP mit Integration Suite & Fiori Launchpad, SAP Cloud Connector On-Prem-Uplink, Bruker Supplier Portal, Ariba CIG, Onventis Procurement), B2B- & E-Invoicing-Plattformen (SAP Trading Partner Management (=TRM) für ELITech, SAP DRC LATAM, Bruker Enterprise API-Portal, SEEBURGER BIS Cloud Peppol E-Invoicing Gate, AEB & ASSIST4 Zoll), QMS & Fertigung (MasterControl, VKS Werkerführung, Siemens Teamcenter, Opcenter MES), Life-Science- und Diagnostik-Schnittstellen (MALDI Biotyper MBT Compass, timsTOF PaSER, Mass Dynamics Cloud), globale Service-Steuerung (Salesforce FSL) und LabScape Remote IoT.',
+          desc: 'Konzernweite Enterprise- und Produkt-Architektur der Bruker Corporation (NASDAQ: BRKR, ~$3.4 Mrd. Umsatz, ~11.400 Mitarbeiter, Billerica HQ, Bremen Mass Spectrometry, Ettlingen BioSpin NMR). Umfasst globale ERP-Systeme (SAP S/4HANA Core mit LOIPRO Fertigungsauftrags-Initiierung, Bloomberg FX Direktfeed, SAP BTP mit Integration Suite iFlows & Fiori Launchpad, SAP Cloud Connector On-Prem-Uplink, Bruker Supplier Portal, Ariba CIG, Onventis Procurement), B2B- & E-Invoicing-Plattformen (SAP Trading Partner Management (=TRM) für ELITech, SAP DRC LATAM, Bruker Enterprise API-Portal, SEEBURGER BIS Cloud Peppol E-Invoicing Gate, AEB & ASSIST4 Zoll), QMS & Fertigung (MasterControl QMS via LOIPRO iFlow, VKS Werkerführung via LOIPRO iFlow, Siemens Teamcenter, Opcenter MES), Life-Science- und Diagnostik-Schnittstellen (MALDI Biotyper MBT Compass, timsTOF PaSER, Mass Dynamics Cloud), globale Service-Steuerung (Salesforce FSL) und LabScape Remote IoT.',
           url: 'https://orcai-54321.web.app/api/orcai/v1/docs/ORCAI-MODEL-BRUKER-EA?v=1.0.0',
-          stats: { systems: 49, connections: 86, integrations: 28, processes: 16, domains: 6 },
+          stats: { systems: 49, connections: 87, integrations: 28, processes: 16, domains: 6 },
           data: cachedBrukerModel
         }
       ];
