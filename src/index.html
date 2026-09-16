@@ -21368,6 +21368,181 @@
           "desc": "Bestellung an GHX Exchange"
         }
       ]
+    },
+    {
+      "id": "KV-INT-15",
+      "name": "IAM Single Sign-On & Zero-Trust Zugriff (Entra ID ➔ ORBIS KIS & BTP)",
+      "cluster": "SECURITY",
+      "hub": "KV-04",
+      "hubName": "Microsoft Entra ID Klinikum",
+      "protocol": "SAML 2.0 / OIDC over TLS",
+      "desc": "Zentral gesteuerte Authentifizierung und Autorisierung aller Klinikmitarbeiter über Microsoft Entra ID mit bedingtem Zugriff (MFA/Smartcard) auf das Dedalus ORBIS KIS und SAP BTP.",
+      "sourceSystem": "KV-04",
+      "targetSystem": "KV-08",
+      "steps": [
+        {
+          "connectionId": "KC-29",
+          "from": "KV-04",
+          "to": "KV-08",
+          "desc": "SAML 2.0 SSO an ORBIS KIS"
+        },
+        {
+          "connectionId": "KC-30",
+          "from": "KV-04",
+          "to": "KV-02",
+          "desc": "OIDC Token-Austausch an SAP BTP"
+        }
+      ]
+    },
+    {
+      "id": "KV-INT-16",
+      "name": "KRITIS-Perimeterschutz & Telematik-Inspektion (KoCoBox ➔ Fortinet ➔ HealthShare)",
+      "cluster": "PERIMETER_SECURITY",
+      "hub": "KV-21",
+      "hubName": "Fortinet Core Firewall & Micro-Segmentation",
+      "protocol": "IPSec VPN & TLS Deep Packet Inspection",
+      "desc": "Durchgängige Kapselung und Sicherheitsinspektion des TI- und Schnittstellen-Datenverkehrs durch die Fortinet Core Firewall zur Einhaltung der BSI IT-Sicherheitsgesetze (B3S Krankenhaus).",
+      "sourceSystem": "KV-19",
+      "targetSystem": "KV-17",
+      "steps": [
+        {
+          "connectionId": "KC-32",
+          "from": "KV-19",
+          "to": "KV-21",
+          "desc": "KoCoBox TI-Verkehr in KRITIS-DMZ"
+        },
+        {
+          "connectionId": "KC-31",
+          "from": "KV-21",
+          "to": "KV-17",
+          "desc": "Geprüfter HL7/FHIR Ingress an HealthShare"
+        }
+      ]
+    },
+    {
+      "id": "KV-INT-17",
+      "name": "Privatärztliche Abrechnung & GOÄ-Clearing (ORBIS ➔ SAP Finance ➔ PKV)",
+      "cluster": "FINANCE",
+      "hub": "KV-02",
+      "hubName": "SAP BTP Integration Suite",
+      "protocol": "RFC ➔ BTP iFlow ➔ FTPS / DTA § 301/302",
+      "desc": "Ende-zu-Ende Abrechnungskette von der ärztlichen Leistungsdokumentation in ORBIS über den SAP Cloud Connector und S/4HANA Finance bis zum PKV-Clearingportal.",
+      "sourceSystem": "KV-08",
+      "targetSystem": "KV-30",
+      "steps": [
+        {
+          "connectionId": "KC-13",
+          "from": "KV-08",
+          "to": "KV-20",
+          "desc": "Leistungsdaten an SAP Cloud Connector"
+        },
+        {
+          "connectionId": "KC-14",
+          "from": "KV-20",
+          "to": "KV-02",
+          "desc": "Reverse-Invoke Tunnel an SAP BTP"
+        },
+        {
+          "connectionId": "KC-15",
+          "from": "KV-02",
+          "to": "KV-01",
+          "desc": "Buchungsbeleg in S/4HANA Finance"
+        },
+        {
+          "connectionId": "KC-33",
+          "from": "KV-01",
+          "to": "KV-30",
+          "desc": "DTA § 301/302 XML Rechnungsversand an PKV"
+        }
+      ]
+    },
+    {
+      "id": "KV-INT-18",
+      "name": "Transfusionsmanagement & Notfall-Blutversorgung (ORBIS ➔ Swisslab ➔ DRK)",
+      "cluster": "LABORATORY",
+      "hub": "KV-17",
+      "hubName": "InterSystems HealthShare",
+      "protocol": "HL7 ADT ➔ OML ➔ HL7 v2.5 BPS",
+      "desc": "Integrierter Prozess zur Bereitstellung von Notfallblutkonserven: KIS-Anforderung ➔ HealthShare ➔ Swisslab LIMS ➔ direkte elektronische Bestellung beim DRK Blutspendedienst.",
+      "sourceSystem": "KV-08",
+      "targetSystem": "KV-31",
+      "steps": [
+        {
+          "connectionId": "KC-01",
+          "from": "KV-08",
+          "to": "KV-17",
+          "desc": "Blutanforderung an HealthShare"
+        },
+        {
+          "connectionId": "KC-02",
+          "from": "KV-17",
+          "to": "KV-11",
+          "desc": "Laborauftrag an Swisslab LIMS"
+        },
+        {
+          "connectionId": "KC-34",
+          "from": "KV-11",
+          "to": "KV-31",
+          "desc": "HL7 BPS Anforderung an DRK Blutspendedienst"
+        }
+      ]
+    },
+    {
+      "id": "KV-INT-19",
+      "name": "Gesetzliche Onkologie-Meldung an das Landeskrebsregister (ORBIS ➔ LKR)",
+      "cluster": "REGULATORY",
+      "hub": null,
+      "hubName": "Direkte HTTPS Schnittstelle",
+      "protocol": "HTTPS / oBDS XML Schema over TLS",
+      "desc": "Gesetzlich vorgeschriebene Meldung onkologischer Verlaufsdaten (§ 65c SGB V) aus dem Dedalus ORBIS Tumorzentrum direkt an das Landeskrebsregister.",
+      "sourceSystem": "KV-08",
+      "targetSystem": "KV-32",
+      "steps": [
+        {
+          "connectionId": "KC-35",
+          "from": "KV-08",
+          "to": "KV-32",
+          "desc": "oBDS XML Tumormeldung an Landeskrebsregister"
+        }
+      ]
+    },
+    {
+      "id": "KV-INT-20",
+      "name": "AMTS Medikationssicherheit und Kurvenvisite (ORBIS KIS ➔ AMTS)",
+      "cluster": "MEDICATION",
+      "hub": "KV-08",
+      "hubName": "Dedalus ORBIS KIS Core",
+      "protocol": "HL7 ADT_A08 / MLLP",
+      "desc": "Automatischer Abgleich von Patientendaten und stationären Aufnahme-Diagnosen mit dem Modul für Arzneimitteltherapiesicherheit (AMTS) zur Vermeidung von Wechselwirkungen.",
+      "sourceSystem": "KV-08",
+      "targetSystem": "KV-09",
+      "steps": [
+        {
+          "connectionId": "KC-09",
+          "from": "KV-08",
+          "to": "KV-09",
+          "desc": "Patienten- und Medikationsdaten an AMTS"
+        }
+      ]
+    },
+    {
+      "id": "KV-INT-21",
+      "name": "B2G E-Invoicing und Peppol E-Rechnungsversand (SAP S/4HANA Finance ➔ Peppol)",
+      "cluster": "FINANCE",
+      "hub": "KV-01",
+      "hubName": "SAP S/4HANA Cloud Finance",
+      "protocol": "AS4 Peppol Profile / TLS",
+      "desc": "Elektronischer Rechnungsversand im XRechnung-Format an öffentliche Auftraggeber und Krankenkassen über das europäische Peppol e-Delivery Netzwerk.",
+      "sourceSystem": "KV-01",
+      "targetSystem": "KV-25",
+      "steps": [
+        {
+          "connectionId": "KC-18",
+          "from": "KV-01",
+          "to": "KV-25",
+          "desc": "XRechnung AS4 Dispatch an Peppol Behördennetz"
+        }
+      ]
     }
   ],
   "connections": [
@@ -21810,6 +21985,167 @@
       "tags": [
         "Klinik",
         "FHIR"
+      ]
+    },
+    {
+      "id": "KC-29",
+      "name": "Microsoft Entra ID ➔ Dedalus ORBIS KIS Enterprise Single Sign-On & MFA",
+      "from": "KV-04",
+      "to": "KV-08",
+      "protocol": "SAML 2.0 / OIDC over TLS",
+      "osiLayer": "L7 App",
+      "transportOverlay": "HTTPS",
+      "messageType": "REST / OData APIs (Services)",
+      "desc": "Zentrale Single-Sign-On Authentifizierung und Multi-Faktor-Validierung (FIDO2/Smartcard) für Ärzte und Pflegekräfte an den ORBIS KIS Stationsclients.",
+      "isCrossBoundary": true,
+      "rawWeight": 140,
+      "trafficPct": "4.8%",
+      "tags": [
+        "Security",
+        "IAM",
+        "SSO",
+        "SAML",
+        "EntraID",
+        "KIS",
+        "MFA"
+      ]
+    },
+    {
+      "id": "KC-30",
+      "name": "Microsoft Entra ID ➔ SAP BTP Cloud Identity & Role Mapping",
+      "from": "KV-04",
+      "to": "KV-02",
+      "protocol": "OIDC / OAuth2 Token Exchange over TLS",
+      "osiLayer": "L7 App",
+      "transportOverlay": "HTTPS",
+      "messageType": "REST / OData APIs (Services)",
+      "desc": "Zentrale Bereitstellung von Identitätstoken und klinischen Rollen-Mappings für Cloud-Services und BTP iFlows.",
+      "isCrossBoundary": false,
+      "rawWeight": 85,
+      "trafficPct": "2.9%",
+      "tags": [
+        "Security",
+        "IAM",
+        "OAuth2",
+        "OIDC",
+        "EntraID",
+        "SAP",
+        "BTP"
+      ]
+    },
+    {
+      "id": "KC-31",
+      "name": "Fortinet Core Firewall ➔ HealthShare Schnittstellen-Inspektion & WAF",
+      "from": "KV-21",
+      "to": "KV-17",
+      "protocol": "TLS Deep Packet Inspection / Layer 7 WAF",
+      "osiLayer": "L3 VPN",
+      "transportOverlay": "TLS",
+      "messageType": "Security & SIEM Audit (KRITIS)",
+      "desc": "L7-Firewall-Inspektion und Anomalieerkennung für alle internen HL7 v2- und FHIR-Kliniknachrichten vor dem Ingress in den HealthShare Integrations-Hub.",
+      "isCrossBoundary": false,
+      "rawWeight": 210,
+      "trafficPct": "7.2%",
+      "tags": [
+        "Security",
+        "Firewall",
+        "KRITIS",
+        "WAF",
+        "Inspection",
+        "HealthShare"
+      ]
+    },
+    {
+      "id": "KC-32",
+      "name": "KoCoBox TI-Cluster ➔ Fortinet KRITIS DMZ & TI-Routing",
+      "from": "KV-19",
+      "to": "KV-21",
+      "protocol": "IPSec VPN / 802.1Q VLAN Trunk over TLS",
+      "osiLayer": "L3 VPN",
+      "transportOverlay": "IPSec",
+      "messageType": "Security & SIEM Audit (KRITIS)",
+      "desc": "Kapselung und Auditierung des Telematik-Infrastruktur Datenverkehrs in einer isolierten KRITIS-DMZ mit IPS/IDS-Regelwerk.",
+      "isCrossBoundary": false,
+      "rawWeight": 165,
+      "trafficPct": "5.6%",
+      "tags": [
+        "Security",
+        "KRITIS",
+        "TI",
+        "Konnektor",
+        "KoCoBox",
+        "Firewall",
+        "VLAN"
+      ]
+    },
+    {
+      "id": "KC-33",
+      "name": "SAP S/4HANA Finance ➔ PKV Clearingstelle Privatabrechnung & GOÄ",
+      "from": "KV-01",
+      "to": "KV-30",
+      "protocol": "FTPS / DTA § 301/302 XML over TLS",
+      "osiLayer": "L7 App",
+      "transportOverlay": "TLS",
+      "messageType": "B2B & EDI (Abrechnung/Kassen)",
+      "desc": "Elektronischer Rechnungsversand für Wahlleistungs- und Privatpatienten nach GOÄ (Gebührenordnung für Ärzte) inklusive automatisierter Zahlungsavise.",
+      "isCrossBoundary": true,
+      "rawWeight": 95,
+      "trafficPct": "3.2%",
+      "tags": [
+        "Finanzen",
+        "Abrechnung",
+        "PKV",
+        "GOÄ",
+        "DTA",
+        "S4HANA",
+        "B2B"
+      ]
+    },
+    {
+      "id": "KC-34",
+      "name": "Swisslab LIMS ➔ DRK Blutspendedienst Transfusionsanforderung & Chargen-Tracking",
+      "from": "KV-11",
+      "to": "KV-31",
+      "protocol": "HL7 v2.5 BPS/BRP over TLS",
+      "osiLayer": "L7 App",
+      "transportOverlay": "TLS",
+      "messageType": "HL7 & FHIR (Klinisch)",
+      "desc": "Elektronische Anforderung von Blutkonserven bei akutem Transfusionsbedarf mit lückenloser Rückmeldung von ISBT-128 Chargennummern und Kreuzproben-Befunden.",
+      "isCrossBoundary": true,
+      "rawWeight": 115,
+      "trafficPct": "3.9%",
+      "tags": [
+        "Labor",
+        "LIMS",
+        "Blutbank",
+        "Transfusion",
+        "DRK",
+        "HL7",
+        "ISBT128"
+      ]
+    },
+    {
+      "id": "KC-35",
+      "name": "Dedalus ORBIS KIS ➔ Landeskrebsregister Gesetzliche Tumormeldung (§ 65c SGB V)",
+      "from": "KV-08",
+      "to": "KV-32",
+      "protocol": "HTTPS / oBDS XML Schema over TLS",
+      "osiLayer": "L7 App",
+      "transportOverlay": "HTTPS",
+      "messageType": "HL7 & FHIR (Klinisch)",
+      "desc": "Automatisierte Übermittlung des Onkologischen Basisdatensatzes (oBDS / ehem. ADT/GEKID) bei Diagnosestellung, Tumorboard-Beschlüssen, Operationen und Systemtherapien.",
+      "isCrossBoundary": true,
+      "rawWeight": 125,
+      "trafficPct": "4.2%",
+      "tags": [
+        "Onkologie",
+        "Krebsregister",
+        "LKR",
+        "oBDS",
+        "SGBV",
+        "KIS",
+        "ORBIS",
+        "Compliance"
       ]
     }
   ],
@@ -22910,6 +23246,251 @@
           "from": "JSD-04",
           "to": "JSD-01",
           "desc": "Kontierung in SAP S/4HANA"
+        }
+      ]
+    },
+    {
+      "id": "JSD-INT-17",
+      "name": "Dienstplan- und Personal-Sync (SAP HCM ➔ Atoss ➔ KIS)",
+      "cluster": "HUMAN_RESOURCES",
+      "hub": "JSD-03",
+      "hubName": "Atoss Medical Staff Cloud",
+      "protocol": "REST / JSON Webhook over TLS",
+      "desc": "Automatisierte Bereitstellung von Personal- und Dienstplandaten aus SAP HCM über Atoss in die Stations- und OP-Planung des KIS.",
+      "sourceSystem": "JSD-01",
+      "targetSystem": "JSD-08",
+      "steps": [
+        {
+          "connectionId": "JSD-C-33",
+          "from": "JSD-01",
+          "to": "JSD-03",
+          "desc": "SAP HCM Personal- und Dienstplan-Sync an Atoss"
+        },
+        {
+          "connectionId": "JSD-C-34",
+          "from": "JSD-03",
+          "to": "JSD-08",
+          "desc": "Atoss Dienstplan- und OP-Verfügbarkeit an KIS"
+        }
+      ]
+    },
+    {
+      "id": "JSD-INT-18",
+      "name": "Konzernweites Realtime Data Lakehouse Streaming (HealthShare & SAP ➔ Lakehouse)",
+      "cluster": "ANALYTICS",
+      "hub": "JSD-10",
+      "hubName": "InterSystems HealthShare Hub",
+      "protocol": "Kafka FHIR Stream & JDBC OData ETL",
+      "desc": "Zentrale Datenkonsolidierung klinischer und kaufmännischer Ereignisse im JSD Cloud Data Lakehouse für Realtime-Analytics und Konzern-Reporting.",
+      "sourceSystem": "JSD-10",
+      "targetSystem": "JSD-06",
+      "steps": [
+        {
+          "connectionId": "JSD-C-35",
+          "from": "JSD-10",
+          "to": "JSD-06",
+          "desc": "HealthShare Realtime FHIR Stream an Lakehouse"
+        },
+        {
+          "connectionId": "JSD-C-36",
+          "from": "JSD-01",
+          "to": "JSD-06",
+          "desc": "SAP Finance Kostenrechnung und Controlling ETL"
+        }
+      ]
+    },
+    {
+      "id": "JSD-INT-19",
+      "name": "Revisionssichere Patientenakte und Langzeitarchivierung (KIS ➔ d.velop)",
+      "cluster": "ARCHIVE",
+      "hub": "JSD-19",
+      "hubName": "d.velop / D3 ECM Digitales Archiv",
+      "protocol": "IHE XDS.b / HL7 MDM",
+      "desc": "Standardisierte Dokumenten-Archivierung aus CGM MEDICO und Martin Luther KIS in das revisionssichere Konzernarchiv (IHE XDS.b konform).",
+      "sourceSystem": "JSD-08",
+      "targetSystem": "JSD-19",
+      "steps": [
+        {
+          "connectionId": "JSD-C-37",
+          "from": "JSD-08",
+          "to": "JSD-19",
+          "desc": "CGM MEDICO Patientenakten-Archivierung (IHE XDS.b)"
+        },
+        {
+          "connectionId": "JSD-C-38",
+          "from": "JSD-09",
+          "to": "JSD-19",
+          "desc": "MLK KIS Dokumenten-Archivierung (IHE XDS.b)"
+        }
+      ]
+    },
+    {
+      "id": "JSD-INT-20",
+      "name": "Zero-Trust KRITIS-Perimeterschutz und Telematik-Inspektion (TI ➔ Fortinet ➔ HealthShare)",
+      "cluster": "SECURITY",
+      "hub": "JSD-20",
+      "hubName": "Fortinet & Cisco KRITIS-Perimeter",
+      "protocol": "IPSec VPN & TLS 1.3 Deep Packet Inspection",
+      "desc": "Kapselung und L7-Sicherheitsüberprüfung des TI- und Schnittstellen-Datenverkehrs durch den KRITIS-Perimeter zur Einhaltung der B3S-Vorgaben.",
+      "sourceSystem": "JSD-21",
+      "targetSystem": "JSD-10",
+      "steps": [
+        {
+          "connectionId": "JSD-C-40",
+          "from": "JSD-21",
+          "to": "JSD-20",
+          "desc": "gematik TI VPN Tunnel an KRITIS Perimeter"
+        },
+        {
+          "connectionId": "JSD-C-39",
+          "from": "JSD-20",
+          "to": "JSD-10",
+          "desc": "Inspizierter HealthShare Ingress (B3S Zero-Trust)"
+        }
+      ]
+    },
+    {
+      "id": "JSD-INT-21",
+      "name": "Notfall-Zuweisung und Rettungsdienst-Routing (Feuerwehr 112 ➔ IVENA ➔ ZNA)",
+      "cluster": "EMERGENCY",
+      "hub": "JSD-23",
+      "hubName": "IVENA eHealth Versorgungsnachweis",
+      "protocol": "B3S REST API over TLS",
+      "desc": "Echtzeit-Routing von Rettungstransporten der Berliner Feuerwehr über das IVENA eHealth Portal direkt in die Notaufnahme (E-Care ZNA).",
+      "sourceSystem": "JSD-29",
+      "targetSystem": "JSD-15",
+      "steps": [
+        {
+          "connectionId": "JSD-C-18",
+          "from": "JSD-29",
+          "to": "JSD-23",
+          "desc": "Berliner Feuerwehr Notfalleinsatz-Routing an IVENA"
+        },
+        {
+          "connectionId": "JSD-C-17",
+          "from": "JSD-15",
+          "to": "JSD-23",
+          "desc": "ZNA E-Care Kapazitätsrückmeldung an IVENA"
+        }
+      ]
+    },
+    {
+      "id": "JSD-INT-22",
+      "name": "Infektionsschutz-Meldung an das RKI (Swisslab LIMS ➔ DEMIS Portal)",
+      "cluster": "PUBLIC_HEALTH",
+      "hub": null,
+      "hubName": "RKI DEMIS Cloud",
+      "protocol": "HL7 FHIR R4 IfSG REST API",
+      "desc": "Gesetzlich vorgeschriebene elektronische Meldung meldepflichtiger Krankheitserreger (§ 6, 7 IfSG) aus dem Swisslab LIMS direkt an das RKI DEMIS Portal.",
+      "sourceSystem": "JSD-11",
+      "targetSystem": "JSD-26",
+      "steps": [
+        {
+          "connectionId": "JSD-C-41",
+          "from": "JSD-11",
+          "to": "JSD-26",
+          "desc": "LIMS Labormeldung an RKI DEMIS Portal"
+        }
+      ]
+    },
+    {
+      "id": "JSD-INT-23",
+      "name": "Privatabrechnung und GOÄ-Clearing (CGM MEDICO ➔ PKV Verband)",
+      "cluster": "FINANCE",
+      "hub": null,
+      "hubName": "PKV Clearingstelle",
+      "protocol": "DTA PKV § 301 EDIFACT / SFTP",
+      "desc": "Elektronischer DTA-Versand privatärztlicher Krankenhausabrechnungen nach GOÄ an den Verband der Privaten Krankenversicherung.",
+      "sourceSystem": "JSD-08",
+      "targetSystem": "JSD-31",
+      "steps": [
+        {
+          "connectionId": "JSD-C-42",
+          "from": "JSD-08",
+          "to": "JSD-31",
+          "desc": "DTA § 301 EDIFACT Abrechnungsversand an PKV Verband"
+        }
+      ]
+    },
+    {
+      "id": "JSD-INT-24",
+      "name": "Notfall-Bluttransfusion und Depot-Bestellung (LIMS ➔ DRK Blutspendedienst)",
+      "cluster": "LABORATORY",
+      "hub": null,
+      "hubName": "DRK Blutspendedienst Nord-Ost",
+      "protocol": "HL7 v2.5 OML / REST JSON",
+      "desc": "Elektronische Anforderung von Blutkonserven bei akutem Bedarf und automatisierte Chargen-Rückmeldung für Kreuzproben.",
+      "sourceSystem": "JSD-11",
+      "targetSystem": "JSD-32",
+      "steps": [
+        {
+          "connectionId": "JSD-C-43",
+          "from": "JSD-11",
+          "to": "JSD-32",
+          "desc": "LIMS Konserven-Bestellung an DRK Blutspendedienst"
+        }
+      ]
+    },
+    {
+      "id": "JSD-INT-25",
+      "name": "Strukturierte Ersteinschätzung und KV-Zuweisung (116117 SmED ➔ ZNA)",
+      "cluster": "EMERGENCY",
+      "hub": null,
+      "hubName": "KV Berlin 116117",
+      "protocol": "HL7 FHIR SmED REST API",
+      "desc": "Übernahme strukturierter Ersteinschätzungsdaten (SmED) aus dem Patientennavigationssystem 116117 in die Notaufnahme E-Care ZNA.",
+      "sourceSystem": "JSD-33",
+      "targetSystem": "JSD-15",
+      "steps": [
+        {
+          "connectionId": "JSD-C-44",
+          "from": "JSD-33",
+          "to": "JSD-15",
+          "desc": "KV Berlin 116117 Notfallzuweisung (SmED) an ZNA"
+        }
+      ]
+    },
+    {
+      "id": "JSD-INT-26",
+      "name": "Gesetzliche Krebsregistermeldung Berlin-Brandenburg (CGM MEDICO ➔ GKR)",
+      "cluster": "REGULATORY",
+      "hub": null,
+      "hubName": "Gemeinsames Krebsregister Berlin-BB",
+      "protocol": "oBDS § 65c SGB V REST / XML",
+      "desc": "Übermittlung onkologischer Basisdatensätze (oBDS) bei stationären Diagnosen, Tumorboards und Therapien an das Gemeinsame Krebsregister.",
+      "sourceSystem": "JSD-08",
+      "targetSystem": "JSD-34",
+      "steps": [
+        {
+          "connectionId": "JSD-C-45",
+          "from": "JSD-08",
+          "to": "JSD-34",
+          "desc": "oBDS Tumordaten-Meldung an GKR Berlin-BB"
+        }
+      ]
+    },
+    {
+      "id": "JSD-INT-27",
+      "name": "Intensivüberwachung und Vitaldaten-Streaming (PDMS ➔ HealthShare Hub)",
+      "cluster": "INTENSIVE_CARE",
+      "hub": "JSD-10",
+      "hubName": "InterSystems HealthShare Hub",
+      "protocol": "HL7 v2.6 PCD-01 / MLLP",
+      "desc": "Streaming kontinuierlicher Vitalparameter und Beatmungsdaten aus dem Philips/GE Intensiv-PDMS in den HealthShare Hub zur klinikweiten Verfügbarkeit.",
+      "sourceSystem": "JSD-14",
+      "targetSystem": "JSD-10",
+      "steps": [
+        {
+          "connectionId": "JSD-C-11",
+          "from": "JSD-08",
+          "to": "JSD-14",
+          "desc": "MEDICO Patientenübernahme an Intensiv-PDMS"
+        },
+        {
+          "connectionId": "JSD-C-12",
+          "from": "JSD-14",
+          "to": "JSD-10",
+          "desc": "PCD-01 Vitaldaten-Streaming an HealthShare Hub"
         }
       ]
     }
@@ -24620,6 +25201,46 @@
         "BRK-INT-28"
       ],
       "desc": "Zentraler Zugang für weltweite Bruker-Mitarbeiter über das auf SAP BTP gehostete Fiori Launchpad mit Single Sign-On (Entra ID), mobiler Freigabe von Bestellungen und Direktzugriff auf S/4HANA Core Transaktionen."
+    },
+    {
+      "id": "BRK-P-14",
+      "name": "Globales HR-, Organisations- & Spesen-Management",
+      "leadDomain": "D1",
+      "involvedDomains": [
+        "D1"
+      ],
+      "cleanIntegIds": [
+        "BRK-INT-29",
+        "BRK-INT-30"
+      ],
+      "desc": "Durchgängige Personal- und Ausgabenverwaltung von der Workday-Personalorganisation über Reisebuchungen in Concur bis zur Verbuchung im S/4HANA ERP."
+    },
+    {
+      "id": "BRK-P-15",
+      "name": "R&D Digital Engineering & Mechatronische Produktentwicklung",
+      "leadDomain": "D2",
+      "involvedDomains": [
+        "D2",
+        "D1"
+      ],
+      "cleanIntegIds": [
+        "BRK-INT-31"
+      ],
+      "desc": "Kollaborativer Entwicklungsprozess von CAD-Konstruktion und Jira-Softwareentwicklung über Teamcenter PLM bis zur Freigabe mechatronischer Baugruppen in S/4HANA."
+    },
+    {
+      "id": "BRK-P-16",
+      "name": "Zero Trust Security & Fabrik-OT Perimeter Governance",
+      "leadDomain": "D6",
+      "involvedDomains": [
+        "D6",
+        "D1",
+        "D2"
+      ],
+      "cleanIntegIds": [
+        "BRK-INT-32"
+      ],
+      "desc": "Ganzheitliche IT/OT-Sicherheitsarchitektur: Kapselung kritischer Reinraum- und Fertigungssysteme (Opcenter MES) und rollenbasierter ZTNA-Zugriff auf den ERP-Core."
     }
   ],
   "integrations": [
@@ -25326,6 +25947,100 @@
           "from": "BRK-49",
           "to": "BRK-01",
           "desc": "OData v4 Transaktionsaufruf an S/4HANA Core"
+        }
+      ]
+    },
+    {
+      "id": "BRK-INT-29",
+      "name": "Globale HR-Stammdaten- & Organisations-Synchronisation (Workday ➔ S/4HANA)",
+      "cluster": "HUMAN_RESOURCES",
+      "hub": "BRK-01",
+      "hubName": "SAP S/4HANA Global ERP Core",
+      "protocol": "REST / JSON OAuth2 ➔ S/4HANA HCM/CO Interface",
+      "desc": "Tägliche Synchronisation globaler Mitarbeiter- und Organisationsstrukturen aus Workday HCM in das S/4HANA ERP für Kostenstellen-Zuordnung und Genehmigungs-Workflows.",
+      "sourceSystem": "BRK-04",
+      "targetSystem": "BRK-01",
+      "steps": [
+        {
+          "connectionId": "BRK-C-03",
+          "from": "BRK-04",
+          "to": "BRK-01",
+          "desc": "Workday REST API Ingestion in S/4HANA Personalwesen"
+        }
+      ]
+    },
+    {
+      "id": "BRK-INT-30",
+      "name": "Reisekosten- & Spesenmanagement (SAP Concur ➔ S/4HANA Finance)",
+      "cluster": "FINANCE",
+      "hub": "BRK-01",
+      "hubName": "SAP S/4HANA Global ERP Core",
+      "protocol": "REST / OData Financial Integration over TLS",
+      "desc": "Automatisierter Export genehmigter Reisekosten- und Kreditkartenabrechnungen aus SAP Concur in das S/4HANA Haupt- und Kreditorenbuch (FI/AP).",
+      "sourceSystem": "BRK-06",
+      "targetSystem": "BRK-01",
+      "steps": [
+        {
+          "connectionId": "BRK-C-04",
+          "from": "BRK-06",
+          "to": "BRK-01",
+          "desc": "Concur Reisekosten-Buchungsbelege an S/4HANA FI"
+        }
+      ]
+    },
+    {
+      "id": "BRK-INT-31",
+      "name": "R&D Mechatronik-Freigabe & Change-Management (CAD + Jira ➔ Teamcenter ➔ S/4HANA)",
+      "cluster": "RESEARCH_AND_DEVELOPMENT",
+      "hub": "BRK-07",
+      "hubName": "Siemens Teamcenter Enterprise PLM",
+      "protocol": "REST / JT Direct Integration ➔ OData BTP",
+      "desc": "Ende-zu-Ende Konstruktions- und Änderungskette: 3D-CAD-Konstruktionsdaten (SolidWorks/Creo) und R&D-Änderungstickets (Jira) werden in Teamcenter PLM zusammengeführt und als freigegebene Fertigungsstückliste (mBOM) an S/4HANA übergeben.",
+      "sourceSystem": "BRK-08",
+      "targetSystem": "BRK-01",
+      "steps": [
+        {
+          "connectionId": "BRK-C-06",
+          "from": "BRK-08",
+          "to": "BRK-07",
+          "desc": "3D-CAD Konstruktionsdaten an Teamcenter PLM"
+        },
+        {
+          "connectionId": "BRK-C-08",
+          "from": "BRK-09",
+          "to": "BRK-07",
+          "desc": "Jira R&D Release-Freigabeticket an PLM"
+        },
+        {
+          "connectionId": "BRK-C-07",
+          "from": "BRK-07",
+          "to": "BRK-01",
+          "desc": "mBOM & Materialstamm-Übergabe an S/4HANA"
+        }
+      ]
+    },
+    {
+      "id": "BRK-INT-32",
+      "name": "Zero-Trust Secure Access & Fabrik-Mikrosegmentierung (Zscaler + Palo Alto ➔ Core)",
+      "cluster": "SECURITY",
+      "hub": "BRK-30",
+      "hubName": "Zscaler Zero Trust Private Access",
+      "protocol": "ZTNA App-Connector TLS / Palo Alto NGFW App-ID",
+      "desc": "Lückenloser Identitäts- und Perimeterschutz für weltweite Bruker-Standorte: Zscaler ZPA vermittelt sicheren Remote-Zugriff auf S/4HANA, während Palo Alto Networks Factory NGFW die OT-Fertigungslinien und Opcenter MES gegen unautorisierte Zugriffe kapselt.",
+      "sourceSystem": "BRK-30",
+      "targetSystem": "BRK-10",
+      "steps": [
+        {
+          "connectionId": "BRK-C-41",
+          "from": "BRK-30",
+          "to": "BRK-01",
+          "desc": "Zscaler ZPA Zero-Trust Zugriff auf S/4HANA ERP"
+        },
+        {
+          "connectionId": "BRK-C-45",
+          "from": "BRK-31",
+          "to": "BRK-10",
+          "desc": "Palo Alto OT-Inspektion an Opcenter MES"
         }
       ]
     }
@@ -28100,9 +28815,9 @@
           organization: 'Städtischer Klinikverbund & Maximalversorger Nord',
           shortName: 'KLINIKVERBUND NORD',
           title: 'Klinikverbund Nord EA (Klinischer Schwerpunkt)',
-          desc: 'Schwerpunkt-Kliniklandschaft mit 32 Systemen, 28 Kanten, 14 E2E-Integrationen, ZNA-Triage, TI-Konnektoren, Sectra PACS, Dedalus KIS & SAP Finance.',
+          desc: 'Schwerpunkt-Kliniklandschaft mit 32 Systemen, 35 Kanten (0 verwaiste Systeme), 21 E2E-Integrationen, ZNA-Triage, TI-Konnektoren, Sectra PACS, Dedalus KIS & SAP Finance.',
           url: 'https://orcai-54321.web.app/api/orcai/v1/docs/ORCAI-MODEL-KLINIKVERBUND-EA',
-          stats: { systems: 32, connections: 28, integrations: 14, processes: 8, domains: 6 },
+          stats: { systems: 32, connections: 35, integrations: 21, processes: 8, domains: 6 },
           data: cachedKlinikModel
         },
         {
@@ -28112,7 +28827,7 @@
           title: 'Johannesstift Diakonie Enterprise Architecture (Conciliamus IT, Kliniken & Services)',
           desc: 'Konzernweite IT-Landschaft der Johannesstift Diakonie gAG, betrieben durch den internen IT-Vollversorger Conciliamus GmbH (10 Kliniken, 20 Pflegeeinrichtungen, JSD Services AEMP & Logistik, CGM MEDICO/ORBIS KIS, HealthShare Hub, SAP BTP/S4 & TI-Cluster).',
           url: 'https://orcai-54321.web.app/api/orcai/v1/docs/ORCAI-MODEL-JOHANNESSTIFT-DIAKONIE-EA?v=1.0.0',
-          stats: { systems: 34, connections: 45, integrations: 16, processes: 8, domains: 6 },
+          stats: { systems: 34, connections: 45, integrations: 27, processes: 8, domains: 6 },
           data: cachedJohannesstiftModel
         },
         {
@@ -28122,7 +28837,7 @@
           title: 'Bruker Corporation Enterprise Architecture (Global High-Tech Instruments, CALID & BioSpin)',
           desc: 'Konzernweite Enterprise- und Produkt-Architektur der Bruker Corporation (NASDAQ: BRKR, ~$3.4 Mrd. Umsatz, ~11.400 Mitarbeiter, Billerica HQ, Bremen Mass Spectrometry, Ettlingen BioSpin NMR). Umfasst globale ERP-Systeme (SAP S/4HANA Core mit LOIPRO Fertigungsauftrags-Initiierung, Bloomberg FX Direktfeed, SAP BTP mit Integration Suite iFlows & Fiori Launchpad, SAP Cloud Connector On-Prem-Uplink, Bruker Supplier Portal, Ariba CIG, Onventis Procurement), B2B- & E-Invoicing-Plattformen (SAP Trading Partner Management (=TRM) für ELITech, SAP DRC LATAM, Bruker Enterprise API-Portal, SEEBURGER BIS Cloud Peppol E-Invoicing Gate, AEB & ASSIST4 Zoll), QMS & Fertigung (MasterControl QMS via LOIPRO iFlow, VKS Werkerführung via LOIPRO iFlow, Siemens Teamcenter, Opcenter MES), Life-Science- und Diagnostik-Schnittstellen (MALDI Biotyper MBT Compass, timsTOF PaSER, Mass Dynamics Cloud), globale Service-Steuerung (Salesforce FSL) und LabScape Remote IoT.',
           url: 'https://orcai-54321.web.app/api/orcai/v1/docs/ORCAI-MODEL-BRUKER-EA?v=1.0.0',
-          stats: { systems: 49, connections: 87, integrations: 28, processes: 16, domains: 6 },
+          stats: { systems: 49, connections: 87, integrations: 32, processes: 19, domains: 6 },
           data: cachedBrukerModel
         }
       ];
