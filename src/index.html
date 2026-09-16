@@ -18154,7 +18154,14 @@
           if (!c) return "start";
           return Math.cos(c.angle) >= 0 ? "start" : "end";
         })
-        .text(d => d.id + " " + d.name.slice(0, 16) + (d.name.length > 16 ? "…" : ""));
+        .text(d => {
+          const cleanName = (d.name || '').replace(/\s*\([^)]*\)$/, '').trim();
+          const shortTitle = cleanName.length > 20 ? cleanName.slice(0, 18) + '…' : cleanName;
+          return d.id + ' · ' + shortTitle;
+        });
+
+      nodeElements.append("title")
+        .text(d => `${d.id}: ${d.name}\nDomäne: ${d.domain}\nHosting: ${d.hosting || d.scope}\n${d.desc || ''}`);
 
       // Reset All Action
       document.getElementById("btnResetAll").onclick = () => {
@@ -21782,11 +21789,11 @@
   "meta": {
     "id": "ORCAI-MODEL-JOHANNESSTIFT-DIAKONIE-EA",
     "orcaiKey": "ORCAI-MODEL-JOHANNESSTIFT-DIAKONIE-EA",
-    "orcaiUrl": "https://orcai-54321.web.app/api/orcai/v1/docs/ORCAI-MODEL-JOHANNESSTIFT-DIAKONIE-EA",
-    "organization": "Johannesstift Diakonie gAG & JSD Services",
+    "orcaiUrl": "https://orcai-54321.web.app/api/orcai/v1/docs/ORCAI-MODEL-JOHANNESSTIFT-DIAKONIE-EA?v=1.0.0",
+    "organization": "Johannesstift Diakonie gAG & Conciliamus IT",
     "shortName": "JOHANNESSTIFT DIAKONIE",
-    "modelTitle": "Johannesstift Diakonie Enterprise Architecture (Krankenhäuser, Pflege & Services)",
-    "description": "Multi-Site Klinikverbund (Berlin, Wittenberg, Coswig) mit JSD Services (AEMP, Logistik, Einkauf), CGM MEDICO/ORBIS KIS, HealthShare Hub, SAP BTP/S4, TI-Cluster & Notfallversorgung.",
+    "modelTitle": "Johannesstift Diakonie Enterprise Architecture (Conciliamus IT, Kliniken & Services)",
+    "description": "Konzernweite IT-Landschaft der Johannesstift Diakonie gAG, betrieben durch den internen IT-Vollversorger Conciliamus GmbH (10 Kliniken, 20 Pflegeeinrichtungen, JSD Services AEMP & Logistik, CGM MEDICO/ORBIS KIS, HealthShare Hub, SAP BTP/S4 & TI-Cluster).",
     "version": "1.0.0",
     "updatedAt": "2026-09-16T12:00:00.000Z",
     "author": "Johannesstift Diakonie EA Team & ORCAI",
@@ -23413,11 +23420,11 @@
         },
         {
           id: 'ORCAI-MODEL-JOHANNESSTIFT-DIAKONIE-EA',
-          organization: 'Johannesstift Diakonie gAG & JSD Services',
+          organization: 'Johannesstift Diakonie gAG & Conciliamus IT',
           shortName: 'JOHANNESSTIFT DIAKONIE',
-          title: 'Johannesstift Diakonie Enterprise Architecture (Krankenhäuser, Pflege & Services)',
-          desc: 'Multi-Site Klinikverbund (Berlin, Wittenberg, Coswig) mit JSD Services (AEMP, Logistik, Einkauf), CGM MEDICO/ORBIS KIS, HealthShare Hub, SAP BTP/S4, TI-Cluster & Notfallversorgung.',
-          url: 'https://orcai-54321.web.app/api/orcai/v1/docs/ORCAI-MODEL-JOHANNESSTIFT-DIAKONIE-EA',
+          title: 'Johannesstift Diakonie Enterprise Architecture (Conciliamus IT, Kliniken & Services)',
+          desc: 'Konzernweite IT-Landschaft der Johannesstift Diakonie gAG, betrieben durch den internen IT-Vollversorger Conciliamus GmbH (10 Kliniken, 20 Pflegeeinrichtungen, JSD Services AEMP & Logistik, CGM MEDICO/ORBIS KIS, HealthShare Hub, SAP BTP/S4 & TI-Cluster).',
+          url: 'https://orcai-54321.web.app/api/orcai/v1/docs/ORCAI-MODEL-JOHANNESSTIFT-DIAKONIE-EA?v=1.0.0',
           stats: { systems: 34, connections: 32, integrations: 16, processes: 8, domains: 6 },
           data: cachedJohannesstiftModel
         }
@@ -24531,17 +24538,24 @@
           .attr('stroke-width', d => (d.isBoundaryEntity ? 2 : 1.5));
 
         nGroups.append('text')
-          .attr('class', 'sys-node-label')
+          .attr('class', 'sys-node-text')
           .attr('dx', d => {
             const c = nodeCoords.get(d.id);
-            return c && Math.cos(c.angle) > 0 ? 8 : -8;
+            return c && Math.cos(c.angle) > 0 ? 10 : -10;
           })
-          .attr('dy', 3)
+          .attr('dy', '0.32em')
           .attr('text-anchor', d => {
             const c = nodeCoords.get(d.id);
             return c && Math.cos(c.angle) > 0 ? 'start' : 'end';
           })
-          .text(d => d.id);
+          .text(d => {
+            const cleanName = (d.name || '').replace(/\s*\([^)]*\)$/, '').trim();
+            const shortTitle = cleanName.length > 20 ? cleanName.slice(0, 18) + '…' : cleanName;
+            return d.id + ' · ' + shortTitle;
+          });
+
+        nGroups.append('title')
+          .text(d => `${d.id}: ${d.name}\nDomäne: ${d.domain}\nHosting: ${d.hosting || d.scope}\n${d.desc || ''}`);
 
         // Re-bind D3 selection variables so updateUI() operates on the current elements!
         linkElements = gLinks.selectAll('.edge-link');
