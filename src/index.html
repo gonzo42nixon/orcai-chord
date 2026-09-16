@@ -2428,6 +2428,141 @@
       border-color: #0284c7;
     }
 
+    
+    /* =====================================================================
+       HIGH CONTRAST DAY-MODE BADGES, PILLS & CONTROLS (ACCESSIBILITY FIX)
+       ===================================================================== */
+    body.theme-day .section-badge.active {
+      background: #0284c7 !important;
+      color: #ffffff !important;
+      border: 1px solid #0369a1 !important;
+      font-weight: 750 !important;
+      box-shadow: 0 1px 4px rgba(2, 132, 199, 0.35) !important;
+    }
+    body.theme-day .integ-tab-pill.active {
+      background: #0284c7 !important;
+      color: #ffffff !important;
+      border-color: #0369a1 !important;
+      box-shadow: 0 1px 3px rgba(2, 132, 199, 0.3) !important;
+    }
+    body.theme-day .radar-pill.active {
+      background: #0284c7 !important;
+      color: #ffffff !important;
+      border-color: #0369a1 !important;
+      box-shadow: 0 1px 4px rgba(2, 132, 199, 0.35) !important;
+    }
+    body.theme-day .title-step-badge {
+      color: #ffffff !important;
+    }
+    body.theme-day .edge-popout-card .popout-badge-id,
+    body.theme-day .sys-popout-card .popout-badge-id {
+      color: #ffffff !important;
+    }
+    body.theme-day .toggle-active-label {
+      color: #334155 !important;
+      font-weight: 600;
+    }
+    body.theme-day .section-popout-btn {
+      background: #e2e8f0;
+      color: #1e293b;
+      border-color: #cbd5e1;
+    }
+    body.theme-day .section-popout-btn:hover {
+      background: #0284c7;
+      color: #ffffff;
+      border-color: #0284c7;
+    }
+
+    
+    /* =====================================================================
+       HIGH CONTRAST DAY-MODE BADGES, PILLS & CONTROLS (ACCESSIBILITY FIX)
+       ===================================================================== */
+    body.theme-day .section-badge.active {
+      background: #0284c7 !important;
+      color: #ffffff !important;
+      border: 1px solid #0369a1 !important;
+      font-weight: 750 !important;
+      box-shadow: 0 1px 4px rgba(2, 132, 199, 0.35) !important;
+    }
+    body.theme-day .integ-tab-pill.active {
+      background: #0284c7 !important;
+      color: #ffffff !important;
+      border-color: #0369a1 !important;
+      box-shadow: 0 1px 3px rgba(2, 132, 199, 0.3) !important;
+    }
+    body.theme-day .radar-pill.active {
+      background: #0284c7 !important;
+      color: #ffffff !important;
+      border-color: #0369a1 !important;
+      box-shadow: 0 1px 4px rgba(2, 132, 199, 0.35) !important;
+    }
+    body.theme-day .title-step-badge {
+      color: #ffffff !important;
+    }
+    body.theme-day .edge-popout-card .popout-badge-id,
+    body.theme-day .sys-popout-card .popout-badge-id {
+      color: #ffffff !important;
+    }
+    body.theme-day .toggle-active-label {
+      color: #334155 !important;
+      font-weight: 600;
+    }
+    body.theme-day .section-popout-btn {
+      background: #e2e8f0;
+      color: #1e293b;
+      border-color: #cbd5e1;
+    }
+    body.theme-day .section-popout-btn:hover {
+      background: #0284c7;
+      color: #ffffff;
+      border-color: #0284c7;
+    }
+
+    
+    /* =====================================================================
+       HIGH CONTRAST DAY-MODE BADGES, PILLS & CONTROLS (ACCESSIBILITY FIX)
+       ===================================================================== */
+    body.theme-day .section-badge.active {
+      background: #0284c7 !important;
+      color: #ffffff !important;
+      border: 1px solid #0369a1 !important;
+      font-weight: 750 !important;
+      box-shadow: 0 1px 4px rgba(2, 132, 199, 0.35) !important;
+    }
+    body.theme-day .integ-tab-pill.active {
+      background: #0284c7 !important;
+      color: #ffffff !important;
+      border-color: #0369a1 !important;
+      box-shadow: 0 1px 3px rgba(2, 132, 199, 0.3) !important;
+    }
+    body.theme-day .radar-pill.active {
+      background: #0284c7 !important;
+      color: #ffffff !important;
+      border-color: #0369a1 !important;
+      box-shadow: 0 1px 4px rgba(2, 132, 199, 0.35) !important;
+    }
+    body.theme-day .title-step-badge {
+      color: #ffffff !important;
+    }
+    body.theme-day .edge-popout-card .popout-badge-id,
+    body.theme-day .sys-popout-card .popout-badge-id {
+      color: #ffffff !important;
+    }
+    body.theme-day .toggle-active-label {
+      color: #334155 !important;
+      font-weight: 600;
+    }
+    body.theme-day .section-popout-btn {
+      background: #e2e8f0;
+      color: #1e293b;
+      border-color: #cbd5e1;
+    }
+    body.theme-day .section-popout-btn:hover {
+      background: #0284c7;
+      color: #ffffff;
+      border-color: #0284c7;
+    }
+
     /* Dynamic Multi-Popout Container & Locator Button */
     .edge-popout-card {
       position: absolute;
@@ -17510,6 +17645,9 @@
       let selectedIntegration = null;
       let selectedLink = null;
       let selectedNodeId = null;
+      let selectedNode = null;
+      window.selectedNodeId = null;
+      window.selectedNode = null;
       let selectedMessageType = null;
       let activeTags = new Set();
       let animTimer = null;
@@ -17677,6 +17815,9 @@
       function selectNode(node, mouseX, mouseY) {
         if (!node) return;
         selectedNodeId = node.id;
+        selectedNode = node;
+        window.selectedNodeId = node.id;
+        window.selectedNode = node;
 
         // 1. Open or bring-to-front the floating System-Spickzettel Pop-Out!
         showNodePopout(node, mouseX, mouseY);
@@ -17943,6 +18084,12 @@
       window.INTEGRATIONS_DATA = INTEGRATIONS_DATA;
       window.CONNECTIONS_DATA = CONNECTIONS_DATA;
       window.SYSTEMS_DATA = SYSTEMS_DATA;
+      window.getSelectedDomainId = () => selectedDomainId;
+      window.getSelectedProcess = () => selectedProcess;
+      window.getSelectedIntegration = () => selectedIntegration;
+      window.getSelectedLink = () => selectedLink;
+      window.getSelectedNodeId = () => selectedNodeId;
+      window.getSelectedNode = () => selectedNode;
 
       // Scope Chips in Left Drawer
       document.querySelectorAll(".scope-chip").forEach(chip => {
@@ -17955,6 +18102,13 @@
       });
 
       function updateUI() {
+        window.selectedDomainId = selectedDomainId;
+        window.selectedProcess = selectedProcess;
+        window.selectedIntegration = selectedIntegration;
+        window.selectedLink = selectedLink;
+        window.selectedNodeId = selectedNodeId;
+        window.selectedNode = selectedNode;
+
         linkElements.attr("marker-start", null).attr("marker-end", null);
 
         let activeLinkIds = new Set();
@@ -19195,7 +19349,10 @@
           // Visual feedback on Canvas
           if (hubId === 'ALL') {
             d3.selectAll('.superhub-halo').remove();
+            selectedNodeId = null;
             selectedNode = null;
+            window.selectedNodeId = null;
+            window.selectedNode = null;
             selectedLink = null;
             updateUI();
           } else {
@@ -19405,33 +19562,31 @@
       
       
       
+      
+      
+      
       // =====================================================================
       // MULTI-IT-LANDSCHAFT & MODELL-KATALOG SYSTEM (ORCAI PERSISTIERT)
       // =====================================================================
-      let cachedJohanniterModel = null;
-      function getJohanniterModelSnapshot() {
-        if (!cachedJohanniterModel) {
-          cachedJohanniterModel = {
-            $schema: "https://orcai-54321.web.app/schemas/ea-landscape-v1.json",
-            meta: {
-              id: "ORCAI-MODEL-JOHANNITER-EA",
-              orcaiKey: "ORCAI-MODEL-JOHANNITER-EA",
-              orcaiUrl: "https://orcai-54321.web.app/api/orcai/v1/docs/ORCAI-MODEL-JOHANNITER-EA",
-              organization: "Johanniter-Unfall-Hilfe e.V.",
-              shortName: "JOHANNITER",
-              modelTitle: "Johanniter Enterprise Architecture: Quad-Chord",
-              description: "Bundesweite IT-Landschaft der Johanniter-Unfall-Hilfe e.V. mit 82 Systemen, 229 Schnittstellen, 243 Integrationen über 8 Domänen."
-            },
-            domains: DOMAINS_DATA.slice(),
-            domainDetails: Object.assign({}, DOMAIN_DETAILS_DATA),
-            processes: PROCESSES_DATA.slice(),
-            integrations: INTEGRATIONS_DATA.slice(),
-            connections: CONNECTIONS_DATA.slice(),
-            systems: SYSTEMS_DATA.slice()
-          };
-        }
-        return cachedJohanniterModel;
-      }
+      // Snapshot of Johanniter model at startup before any dynamic switch
+      const cachedJohanniterModel = {
+        $schema: "https://orcai-54321.web.app/schemas/ea-landscape-v1.json",
+        meta: {
+          id: "ORCAI-MODEL-JOHANNITER-EA",
+          orcaiKey: "ORCAI-MODEL-JOHANNITER-EA",
+          orcaiUrl: "https://orcai-54321.web.app/api/orcai/v1/docs/ORCAI-MODEL-JOHANNITER-EA",
+          organization: "Johanniter-Unfall-Hilfe e.V.",
+          shortName: "JOHANNITER",
+          modelTitle: "Johanniter Enterprise Architecture: Quad-Chord",
+          description: "Bundesweite IT-Landschaft der Johanniter-Unfall-Hilfe e.V. mit 82 Systemen, 229 Schnittstellen, 243 Integrationen über 8 Domänen."
+        },
+        domains: JSON.parse(JSON.stringify(DOMAINS_DATA)),
+        domainDetails: JSON.parse(JSON.stringify(DOMAIN_DETAILS_DATA)),
+        processes: JSON.parse(JSON.stringify(PROCESSES_DATA)),
+        integrations: JSON.parse(JSON.stringify(INTEGRATIONS_DATA)),
+        connections: JSON.parse(JSON.stringify(CONNECTIONS_DATA)),
+        systems: JSON.parse(JSON.stringify(SYSTEMS_DATA))
+      };
 
       const cachedKlinikModel = {
   "$schema": "https://orcai-54321.web.app/schemas/ea-landscape-v1.json",
@@ -20875,7 +21030,7 @@
           desc: 'Bundesweite IT-Landschaft mit 82 Systemen, 229 Kanten, 243 Integrationen, 13 Prozessen, 8 Domänen (Klinik, Pflege, Rettung, TI, HR, ERP, Middleware).',
           url: 'https://orcai-54321.web.app/api/orcai/v1/docs/ORCAI-MODEL-JOHANNITER-EA',
           stats: { systems: 82, connections: 229, integrations: 243, processes: 13, domains: 8 },
-          get data() { return getJohanniterModelSnapshot(); }
+          data: cachedJohanniterModel
         },
         {
           id: 'ORCAI-MODEL-KLINIKVERBUND-EA',
@@ -21170,7 +21325,10 @@
         if (subEl) subEl.textContent = model.meta?.modelTitle ? (model.meta.modelTitle.length > 25 ? model.meta.modelTitle.substring(0, 23) + '…' : model.meta.modelTitle) : 'Quad-Chord EA';
 
         // Reset Selections
+        selectedNodeId = null;
         selectedNode = null;
+        window.selectedNodeId = null;
+        window.selectedNode = null;
         selectedLink = null;
         selectedDomainId = null;
         selectedProcess = null;
@@ -21223,16 +21381,25 @@
       function applyOnlyActiveFilters() {
         // 1. Domain Filter
         const domItems = document.querySelectorAll('#domainList .domain-item, #popoutList_domain .domain-item');
+        const activeNode = (typeof selectedNodeId !== 'undefined' && selectedNodeId)
+          ? (typeof SYSTEMS_DATA !== 'undefined' ? SYSTEMS_DATA.find(s => s.id === selectedNodeId) : null)
+          : ((typeof selectedNode !== 'undefined' && selectedNode) ? selectedNode : null);
+
         domItems.forEach(item => {
           if (!filterOnlyActive.domain) {
             item.classList.remove('item-hidden-inactive');
           } else {
             // Active if it has active systems or is selected
             const dId = item.id.replace('domain-item-', '');
-            const isMatch = (!selectedDomainId && !selectedProcess && !selectedLink && !selectedNode) 
+            const hasProcDomain = Boolean(selectedProcess && (
+              selectedProcess.leadDomain === dId ||
+              (Array.isArray(selectedProcess.participatingDomains) && selectedProcess.participatingDomains.includes(dId)) ||
+              (Array.isArray(selectedProcess.involvedDomains) && selectedProcess.involvedDomains.includes(dId))
+            ));
+            const isMatch = (!selectedDomainId && !selectedProcess && !selectedLink && !activeNode)
               || (selectedDomainId === dId)
-              || (selectedProcess && selectedProcess.involvedDomains?.includes(dId))
-              || (selectedNode && selectedNode.domain === dId);
+              || hasProcDomain
+              || (activeNode && activeNode.domain === dId);
             item.classList.toggle('item-hidden-inactive', !isMatch);
           }
         });
