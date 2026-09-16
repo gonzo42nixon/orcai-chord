@@ -24277,6 +24277,2185 @@
   ]
 };
 
+      const cachedBrukerModel = {
+  "$schema": "https://orcai-54321.web.app/schemas/ea-landscape-v1.json",
+  "meta": {
+    "id": "ORCAI-MODEL-BRUKER-EA",
+    "orcaiKey": "ORCAI-MODEL-BRUKER-EA",
+    "orcaiUrl": "https://orcai-54321.web.app/api/orcai/v1/docs/ORCAI-MODEL-BRUKER-EA?v=1.0.0",
+    "organization": "Bruker Corporation (Scientific Instruments & Diagnostics)",
+    "shortName": "BRUKER CORP",
+    "modelTitle": "Bruker Corporation Enterprise Architecture (Global High-Tech Instruments, CALID & BioSpin)",
+    "description": "Konzernweite Enterprise- und Produkt-Architektur der Bruker Corporation (NASDAQ: BRKR, ~$3.4 Mrd. Umsatz, ~11.400 Mitarbeiter, Billerica HQ, Bremen Mass Spectrometry, Ettlingen BioSpin NMR). Umfasst globale ERP-Systeme (SAP S/4HANA, Ariba), R&D- und PLM-Plattformen (Siemens Teamcenter, SolidWorks, Jira), Life-Science- und Diagnostik-Schnittstellen (MALDI Biotyper MBT Compass, timsTOF PaSER GPU Proteomics, Mass Dynamics Cloud), globale Service-Steuerung (Salesforce Service Cloud / FSL) und LabScape Remote IoT Magnet-Telemetrie.",
+    "version": "1.0.0",
+    "updatedAt": "2026-09-16T16:27:36.322Z",
+    "author": "Bruker Corporation Enterprise Architecture Team & ORCAI",
+    "stats": {
+      "systemsCount": 34,
+      "connectionsCount": 48,
+      "integrationsCount": 16,
+      "processesCount": 8,
+      "domainsCount": 6,
+      "systems": 34,
+      "connections": 48,
+      "integrations": 16,
+      "processes": 8,
+      "domains": 6
+    }
+  },
+  "domains": [
+    {
+      "id": "D1",
+      "name": "Globale Unternehmenssteuerung & ERP",
+      "color": "#0284c7"
+    },
+    {
+      "id": "D2",
+      "name": "R&D, Instrumenten-Engineering & PLM",
+      "color": "#6366f1"
+    },
+    {
+      "id": "D3",
+      "name": "Klinische Mikrobiologie & Diagnostik",
+      "color": "#10b981"
+    },
+    {
+      "id": "D4",
+      "name": "Life Science Proteomics & Scientific Cloud",
+      "color": "#f59e0b"
+    },
+    {
+      "id": "D5",
+      "name": "Globaler Field Service & Kundenportale",
+      "color": "#ec4899"
+    },
+    {
+      "id": "D6",
+      "name": "Enterprise Security, Identity & Data Lakehouse",
+      "color": "#06b6d4"
+    }
+  ],
+  "domainDetails": {
+    "D1": {
+      "name": "Globale Unternehmenssteuerung & ERP",
+      "shortName": "ERP / FIN",
+      "focus": "SAP S/4HANA Core, BTP/CPI Integrationsschicht, Ariba B2B-Einkauf, Workday HCM und globale Finanzkonsolidierung.",
+      "sysCount": 6,
+      "leadSystem": "BRK-01"
+    },
+    "D2": {
+      "name": "R&D, Instrumenten-Engineering & PLM",
+      "shortName": "R&D / PLM",
+      "focus": "Siemens Teamcenter eBOM/mBOM, 3D-CAD SolidWorks/Creo, Atlassian Softwareentwicklung, Opcenter MES Fertigungssteuerung und Werkskalibrierung.",
+      "sysCount": 5,
+      "leadSystem": "BRK-07"
+    },
+    "D3": {
+      "name": "Klinische Mikrobiologie & Diagnostik",
+      "shortName": "IVD / CALID",
+      "focus": "MALDI Biotyper MBT Compass Referenzserver, MBT Pathfinder Resistenzmarker, LIMS-Gateways (HL7/ASTM) und ELITech Multiplex-PCR.",
+      "sysCount": 6,
+      "leadSystem": "BRK-12"
+    },
+    "D4": {
+      "name": "Life Science Proteomics & Scientific Cloud",
+      "shortName": "SCI-CLOUD",
+      "focus": "timsTOF dia-PASEF 4D-Proteomics, PaSER GPU Real-time Search Engine, Mass Dynamics Cloud und BioSpin TopSpin NMR Cloud.",
+      "sysCount": 5,
+      "leadSystem": "BRK-18"
+    },
+    "D5": {
+      "name": "Globaler Field Service & Kundenportale",
+      "shortName": "SERVICE / CRM",
+      "focus": "Salesforce CPQ & Field Service Lightning (FSL), LabScape IoT Kryo-Telemetrie, MyBruker WebStore und FlexNet/CodeMeter Lizenzierung.",
+      "sysCount": 6,
+      "leadSystem": "BRK-24"
+    },
+    "D6": {
+      "name": "Enterprise Security, Identity & Data Lakehouse",
+      "shortName": "SEC & DATA",
+      "focus": "Microsoft Entra ID Global SSO, Zscaler Zero-Trust Private Access, Palo Alto Factory OT-Perimeter, Snowflake Data Lakehouse und Power BI.",
+      "sysCount": 6,
+      "leadSystem": "BRK-32"
+    }
+  },
+  "processes": [
+    {
+      "id": "BRK-P-01",
+      "name": "Klinische Erregeridentifikation (MALDI Biotyper ➔ MBT Compass ➔ LIMS)",
+      "leadDomain": "D3",
+      "involvedDomains": [
+        "D3",
+        "D1"
+      ],
+      "cleanIntegIds": [
+        "BRK-INT-01",
+        "BRK-INT-02"
+      ],
+      "desc": "Vollautomatisierter Identifikationsprozess mikrobiologischer Isolate vom Labor-Arbeitsplatz über MALDI-TOF Massenspektrometrie und Resistenzmarker-Erkennung bis zur Befundübertragung ins Krankenhaus-LIMS."
+    },
+    {
+      "id": "BRK-P-02",
+      "name": "4D-Proteomics High-Throughput Analyse (timsTOF ➔ PaSER GPU ➔ Mass Dynamics)",
+      "leadDomain": "D4",
+      "involvedDomains": [
+        "D4",
+        "D5"
+      ],
+      "cleanIntegIds": [
+        "BRK-INT-03",
+        "BRK-INT-04"
+      ],
+      "desc": "Echtzeit-Analyse hochkomplexer Proteinproben: Ionenmobilitäts-Trennung im timsTOF, parallele GPU-Datenbank-Suche in Echtzeit (Run & Done) und interaktive Visualisierung in Mass Dynamics."
+    },
+    {
+      "id": "BRK-P-03",
+      "name": "Präzisions-Gerätefertigung & Werkskalibrierung (SolidWorks ➔ Teamcenter ➔ Opcenter MES ➔ S/4HANA)",
+      "leadDomain": "D2",
+      "involvedDomains": [
+        "D2",
+        "D1",
+        "D6"
+      ],
+      "cleanIntegIds": [
+        "BRK-INT-05",
+        "BRK-INT-06"
+      ],
+      "desc": "Lückenloser Fertigungsprozess vom 3D-CAD-Modell über PLM-Freigaben und Reinraum-Montagesteuerung im MES bis zur abschließenden Werkskalibrierung und SAP-Auftragsrückmeldung."
+    },
+    {
+      "id": "BRK-P-04",
+      "name": "Globaler Field-Service-Einsatz & Kryo-Wartung (LabScape IoT ➔ Salesforce FSL ➔ Mobile App)",
+      "leadDomain": "D5",
+      "involvedDomains": [
+        "D5",
+        "D1"
+      ],
+      "cleanIntegIds": [
+        "BRK-INT-07",
+        "BRK-INT-08"
+      ],
+      "desc": "Prädiktive Wartung supraleitender NMR- und MRT-Magnete: Automatische Ticketerstellung bei Heliumdruck-Veränderungen, Zuweisung an den nächsten Servicetechniker und mobile Protokollierung."
+    },
+    {
+      "id": "BRK-P-05",
+      "name": "Lead-to-Order & Configure-Price-Quote (Salesforce CPQ ➔ SAP S/4HANA ➔ Ariba)",
+      "leadDomain": "D1",
+      "involvedDomains": [
+        "D1",
+        "D5"
+      ],
+      "cleanIntegIds": [
+        "BRK-INT-09",
+        "BRK-INT-10"
+      ],
+      "desc": "Vertrieblicher Angebotsprozess für hochspezialisierte analytische Gerätesysteme mit technischer Plausibilitätsprüfung, SAP-Auftragsanlage und automatisierter Lieferanten-Bestellauslösung in Ariba."
+    },
+    {
+      "id": "BRK-P-06",
+      "name": "Consumable- & Reagenzien-Bestellung (MyBruker WebStore ➔ SAP BTP ➔ S/4HANA MM)",
+      "leadDomain": "D5",
+      "involvedDomains": [
+        "D5",
+        "D1"
+      ],
+      "cleanIntegIds": [
+        "BRK-INT-11",
+        "BRK-INT-12"
+      ],
+      "desc": "Selbstbedienungs-Bestellung von MALDI-Targetplatten, Matrix-Substanzen, NMR-Probenröhrchen und Softwarelizenzen mit automatischer Lagerdisposition und Lizenzerstellung."
+    },
+    {
+      "id": "BRK-P-07",
+      "name": "Ultra-High-Field NMR Spektrenverarbeitung (TopSpin ➔ Azure Cloud ➔ HPC Cluster)",
+      "leadDomain": "D4",
+      "involvedDomains": [
+        "D4",
+        "D2"
+      ],
+      "cleanIntegIds": [
+        "BRK-INT-13",
+        "BRK-INT-14"
+      ],
+      "desc": "Skalierbare Verarbeitung hochauflösender 1.2 GHz NMR-Spektren zur Bestimmung dreidimensionaler Proteinstrukturen in biologischen Membranen und Metabolom-Profilen."
+    },
+    {
+      "id": "BRK-P-08",
+      "name": "GxP-Gerätedokumentation & Revisionssichere DHR-Archivierung (Teamcenter ➔ Opcenter ➔ OpenText)",
+      "leadDomain": "D2",
+      "involvedDomains": [
+        "D2",
+        "D1"
+      ],
+      "cleanIntegIds": [
+        "BRK-INT-15",
+        "BRK-INT-16"
+      ],
+      "desc": "Rechtssichere und FDA-konforme Archivierung aller Fertigungs- und Kalibrierprotokolle (Device History Record - DHR) für die Einhaltung von IVD-R und 21 CFR Part 11."
+    }
+  ],
+  "integrations": [
+    {
+      "id": "BRK-INT-01",
+      "name": "Klinische Keimidentifikation MALDI Biotyper ➔ MBT Compass ➔ LIMS",
+      "cluster": "DIAGNOSTIK",
+      "hub": "BRK-14",
+      "hubName": "Bruker LIMS Integration Middleware",
+      "protocol": "HL7 v2.5 / ASTM",
+      "desc": "Kompletter diagnostischer Meldeweg vom Spektrometer sirius One über den MBT Compass Referenzabgleich bis zur automatischen Befundung im Krankenhaus-LIMS.",
+      "sourceSystem": "BRK-17",
+      "targetSystem": "BRK-16",
+      "steps": [
+        {
+          "connectionId": "BRK-C-13",
+          "from": "BRK-17",
+          "to": "BRK-12",
+          "desc": "Spektrenaufnahme am Arbeitsplatz"
+        },
+        {
+          "connectionId": "BRK-C-15",
+          "from": "BRK-12",
+          "to": "BRK-14",
+          "desc": "Identifikationsbefund an LIMS Gateway"
+        },
+        {
+          "connectionId": "BRK-C-17",
+          "from": "BRK-14",
+          "to": "BRK-16",
+          "desc": "Elektronischer Befund an Klinik-LIMS"
+        }
+      ]
+    },
+    {
+      "id": "BRK-INT-02",
+      "name": "Schnelle Resistenzmarker-Erkennung MBT Pathfinder Cloud",
+      "cluster": "DIAGNOSTIK",
+      "hub": "BRK-13",
+      "hubName": "MBT Pathfinder Cloud Engine",
+      "protocol": "HTTPS / REST mTLS",
+      "desc": "KI-gestützte Subtypisierung zur schnellen Erkennung von Carbapenem-Resistenzen bei gramnegativen Problemkeimen.",
+      "sourceSystem": "BRK-12",
+      "targetSystem": "BRK-14",
+      "steps": [
+        {
+          "connectionId": "BRK-C-14",
+          "from": "BRK-12",
+          "to": "BRK-13",
+          "desc": "Rohspektrum an Pathfinder Cloud"
+        },
+        {
+          "connectionId": "BRK-C-15",
+          "from": "BRK-12",
+          "to": "BRK-14",
+          "desc": "Resistenzbefund an LIMS Gateway"
+        }
+      ]
+    },
+    {
+      "id": "BRK-INT-03",
+      "name": "Realtime 4D-Proteomics Streaming timsTOF ➔ PaSER GPU",
+      "cluster": "PROTEOMICS",
+      "hub": "BRK-18",
+      "hubName": "Bruker PaSER GPU Engine",
+      "protocol": "gRPC / ZeroMQ High-Speed",
+      "desc": "Echtzeit-Peptididentifikation parallel zur Ionenmobilitäts-Trennung (Run & Done TIMScore).",
+      "sourceSystem": "BRK-20",
+      "targetSystem": "BRK-18",
+      "steps": [
+        {
+          "connectionId": "BRK-C-20",
+          "from": "BRK-20",
+          "to": "BRK-18",
+          "desc": "Massenspektren-Streaming an GPU Cluster"
+        },
+        {
+          "connectionId": "BRK-C-24",
+          "from": "BRK-18",
+          "to": "BRK-27",
+          "desc": "Lizenzvalidierung für PaSER Pro"
+        }
+      ]
+    },
+    {
+      "id": "BRK-INT-04",
+      "name": "Multi-Omics Kohorten-Analyse PaSER ➔ Mass Dynamics Cloud",
+      "cluster": "PROTEOMICS",
+      "hub": "BRK-19",
+      "hubName": "Mass Dynamics Analytics Cloud",
+      "protocol": "REST / JSON Bulk Export",
+      "desc": "Automatisierte Übergabe identifizierter Peptid- und Proteinlisten in die interaktive Statistik-Cloud.",
+      "sourceSystem": "BRK-18",
+      "targetSystem": "BRK-19",
+      "steps": [
+        {
+          "connectionId": "BRK-C-21",
+          "from": "BRK-18",
+          "to": "BRK-19",
+          "desc": "dia-PASEF Datensatz-Upload an Mass Dynamics"
+        }
+      ]
+    },
+    {
+      "id": "BRK-INT-05",
+      "name": "PLM-to-ERP Engineering Freigabe Teamcenter ➔ SAP S/4HANA",
+      "cluster": "ENGINEERING",
+      "hub": "BRK-02",
+      "hubName": "SAP BTP/CPI Integration Suite",
+      "protocol": "OData v4 / RFC",
+      "desc": "Automatisierte Synchronisation freigegebener Fertigungsstücklisten (mBOM) und Revisionsdaten von Teamcenter in SAP S/4HANA.",
+      "sourceSystem": "BRK-07",
+      "targetSystem": "BRK-01",
+      "steps": [
+        {
+          "connectionId": "BRK-C-07",
+          "from": "BRK-07",
+          "to": "BRK-01",
+          "desc": "mBOM-Freigabe an S/4HANA MM"
+        }
+      ]
+    },
+    {
+      "id": "BRK-INT-06",
+      "name": "Fertigungssteuerung & Kalibrierung Opcenter MES ➔ S/4HANA",
+      "cluster": "FERTIGUNG",
+      "hub": "BRK-10",
+      "hubName": "Siemens Opcenter MES Hub",
+      "protocol": "REST / OPC UA",
+      "desc": "Lückenlose Rückmeldung von Montage- und Prüffeldergebnissen aus der Fertigung an das globale ERP-System.",
+      "sourceSystem": "BRK-11",
+      "targetSystem": "BRK-01",
+      "steps": [
+        {
+          "connectionId": "BRK-C-12",
+          "from": "BRK-11",
+          "to": "BRK-10",
+          "desc": "Endprüfprotokoll an MES"
+        },
+        {
+          "connectionId": "BRK-C-09",
+          "from": "BRK-10",
+          "to": "BRK-01",
+          "desc": "Fertigmeldung an S/4HANA PP"
+        }
+      ]
+    },
+    {
+      "id": "BRK-INT-07",
+      "name": "Kryomagnet-Alarmierung LabScape IoT ➔ Salesforce FSL",
+      "cluster": "SERVICE",
+      "hub": "BRK-25",
+      "hubName": "Bruker LabScape IoT Telemetry Hub",
+      "protocol": "MQTT / Webhook",
+      "desc": "Automatisches Erzeugen hochpriorer Service-Tickets bei drohendem Heliumverlust in NMR- und MRT-Magneten.",
+      "sourceSystem": "BRK-25",
+      "targetSystem": "BRK-24",
+      "steps": [
+        {
+          "connectionId": "BRK-C-26",
+          "from": "BRK-25",
+          "to": "BRK-24",
+          "desc": "IoT-Telemetrie Alarm an Salesforce"
+        },
+        {
+          "connectionId": "BRK-C-27",
+          "from": "BRK-24",
+          "to": "BRK-28",
+          "desc": "Dispatching an Techniker Mobile App"
+        }
+      ]
+    },
+    {
+      "id": "BRK-INT-08",
+      "name": "Field-Service Rückmeldung Mobile App ➔ SAP S/4HANA",
+      "cluster": "SERVICE",
+      "hub": "BRK-24",
+      "hubName": "Salesforce Service Cloud",
+      "protocol": "REST / OData API",
+      "desc": "Rückmeldung verbuchter Arbeitsstunden, getauschter Kryoventile und Reisekosten aus der Techniker-App an SAP.",
+      "sourceSystem": "BRK-28",
+      "targetSystem": "BRK-01",
+      "steps": [
+        {
+          "connectionId": "BRK-C-28",
+          "from": "BRK-28",
+          "to": "BRK-24",
+          "desc": "Einsatzbericht an Salesforce FSL"
+        },
+        {
+          "connectionId": "BRK-C-29",
+          "from": "BRK-24",
+          "to": "BRK-01",
+          "desc": "Teile- und Servicebuchung in S/4HANA"
+        }
+      ]
+    },
+    {
+      "id": "BRK-INT-09",
+      "name": "Quote-to-Order Salesforce CPQ ➔ SAP S/4HANA",
+      "cluster": "VERTRIEB",
+      "hub": "BRK-02",
+      "hubName": "SAP BTP/CPI Integration Suite",
+      "protocol": "OData v4 / REST",
+      "desc": "Übernahme gewonnener Spektrometer-Konfigurationen aus Salesforce CPQ als valider Fertigungsauftrag in SAP S/4HANA.",
+      "sourceSystem": "BRK-23",
+      "targetSystem": "BRK-01",
+      "steps": [
+        {
+          "connectionId": "BRK-C-30",
+          "from": "BRK-23",
+          "to": "BRK-01",
+          "desc": "Kundenauftrag-Erstellung in SAP S/4HANA"
+        }
+      ]
+    },
+    {
+      "id": "BRK-INT-10",
+      "name": "B2B-Lieferantenbestellung S/4HANA ➔ SAP Ariba",
+      "cluster": "BESCHAFFUNG",
+      "hub": "BRK-02",
+      "hubName": "SAP BTP/CPI Integration Suite",
+      "protocol": "cXML / EDIFACT",
+      "desc": "Automatischer Versand von Bestellaufträgen für Speziallegierungen und Elektronik an zertifizierte Hochtechnologie-Lieferanten.",
+      "sourceSystem": "BRK-01",
+      "targetSystem": "BRK-03",
+      "steps": [
+        {
+          "connectionId": "BRK-C-01",
+          "from": "BRK-01",
+          "to": "BRK-02",
+          "desc": "Bestellanforderung an BTP/CPI"
+        },
+        {
+          "connectionId": "BRK-C-02",
+          "from": "BRK-02",
+          "to": "BRK-03",
+          "desc": "cXML-Bestellübermittlung an Ariba"
+        }
+      ]
+    },
+    {
+      "id": "BRK-INT-11",
+      "name": "WebStore Online-Bestellung MyBruker ➔ SAP S/4HANA",
+      "cluster": "ECOMMERCE",
+      "hub": "BRK-02",
+      "hubName": "SAP BTP/CPI Integration Suite",
+      "protocol": "REST / JSON Webhook",
+      "desc": "Direkte Verbuchung von Online-Bestellungen für Reagenzien, Target-Platten und Zubehör im zentralen ERP.",
+      "sourceSystem": "BRK-26",
+      "targetSystem": "BRK-01",
+      "steps": [
+        {
+          "connectionId": "BRK-C-31",
+          "from": "BRK-26",
+          "to": "BRK-02",
+          "desc": "Warenkorb-Payload an BTP/CPI"
+        },
+        {
+          "connectionId": "BRK-C-01",
+          "from": "BRK-01",
+          "to": "BRK-02",
+          "desc": "Verkaufsauftrag in SAP S/4HANA MM"
+        }
+      ]
+    },
+    {
+      "id": "BRK-INT-12",
+      "name": "Online-Lizenzausstellung MyBruker ➔ CodeMeter Cloud",
+      "cluster": "LIZENZIERUNG",
+      "hub": "BRK-27",
+      "hubName": "Bruker CodeMeter License Server",
+      "protocol": "HTTPS / REST OAuth2",
+      "desc": "Echtzeit-Ausstellung und Download kryptografisch signierter Lizenzcontainer nach Softwarekauf im MyBruker Portal.",
+      "sourceSystem": "BRK-26",
+      "targetSystem": "BRK-27",
+      "steps": [
+        {
+          "connectionId": "BRK-C-32",
+          "from": "BRK-26",
+          "to": "BRK-27",
+          "desc": "Lizenzgenerierungs-Request an CodeMeter"
+        }
+      ]
+    },
+    {
+      "id": "BRK-INT-13",
+      "name": "High-Field NMR Spektrenverarbeitung TopSpin ➔ HPC Cluster",
+      "cluster": "SPEKTROSKOPIE",
+      "hub": "BRK-21",
+      "hubName": "BioSpin TopSpin NMR Cloud",
+      "protocol": "SSH / SLURM API / REST",
+      "desc": "Auslagerung rechenintensiver 3D/4D NMR-Fourier-Transformationen und Peak-Picking-Algorithmen an High-Performance Computing Cluster.",
+      "sourceSystem": "BRK-21",
+      "targetSystem": "BRK-22",
+      "steps": [
+        {
+          "connectionId": "BRK-C-23",
+          "from": "BRK-21",
+          "to": "BRK-22",
+          "desc": "Berechnungs-Job an Academic HPC"
+        },
+        {
+          "connectionId": "BRK-C-25",
+          "from": "BRK-21",
+          "to": "BRK-27",
+          "desc": "TopSpin Modullizenz-Validierung"
+        }
+      ]
+    },
+    {
+      "id": "BRK-INT-14",
+      "name": "Enterprise Data Pipeline S/4HANA & IoT ➔ Snowflake Lakehouse",
+      "cluster": "ANALYTICS",
+      "hub": "BRK-34",
+      "hubName": "Azure Data Factory & Event Hub",
+      "protocol": "Kafka / OData / Snowpipe SQL",
+      "desc": "Harmonisierung globaler Geschäftsdaten und Telemetrieströme zur Speicherung im unternehmensweiten Data Lakehouse.",
+      "sourceSystem": "BRK-01",
+      "targetSystem": "BRK-32",
+      "steps": [
+        {
+          "connectionId": "BRK-C-42",
+          "from": "BRK-01",
+          "to": "BRK-34",
+          "desc": "ERP-Transaktions-Extraktion"
+        },
+        {
+          "connectionId": "BRK-C-44",
+          "from": "BRK-34",
+          "to": "BRK-32",
+          "desc": "Snowpipe Bulk Load in Snowflake"
+        }
+      ]
+    },
+    {
+      "id": "BRK-INT-15",
+      "name": "Management Reporting Snowflake ➔ Power BI Dashboards",
+      "cluster": "ANALYTICS",
+      "hub": "BRK-32",
+      "hubName": "Snowflake Global Lakehouse",
+      "protocol": "DirectQuery / TDS",
+      "desc": "Echtzeit-Bereitstellung von Kennzahlen zu Auftragseingang, Book-to-Bill, Margen und Instrumenten-Installationsbasis für das Executive Board.",
+      "sourceSystem": "BRK-32",
+      "targetSystem": "BRK-33",
+      "steps": [
+        {
+          "connectionId": "BRK-C-46",
+          "from": "BRK-32",
+          "to": "BRK-33",
+          "desc": "Executive KPI Streaming an Power BI"
+        }
+      ]
+    },
+    {
+      "id": "BRK-INT-16",
+      "name": "Device History Record (DHR) Archivierung Opcenter ➔ OpenText",
+      "cluster": "COMPLIANCE",
+      "hub": "BRK-05",
+      "hubName": "OpenText GxP & FDA 21 CFR Part 11 Archive",
+      "protocol": "HTTPS / CMIS REST",
+      "desc": "Revisionssichere Archivierung der vollständigen Fertigungs- und Prüfhistorie jedes ausgelieferten Spektrometers für FDA- und IVD-R-Audits.",
+      "sourceSystem": "BRK-11",
+      "targetSystem": "BRK-05",
+      "steps": [
+        {
+          "connectionId": "BRK-C-11",
+          "from": "BRK-11",
+          "to": "BRK-05",
+          "desc": "DHR-Qualifizierungsprotokoll an OpenText"
+        }
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "BRK-C-01",
+      "from": "BRK-01",
+      "to": "BRK-02",
+      "name": "SAP S/4HANA ➔ SAP BTP/CPI Enterprise Gateway",
+      "protocol": "OData v4 / RFC over TLS",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "INTRA_CLOUD",
+      "transportOverlay": "SAP_BTP_MESH",
+      "overlay": "SAP_BTP_MESH",
+      "isCrossBoundary": false,
+      "rawWeight": 420,
+      "trafficPct": 4.2,
+      "tags": [
+        "SAP",
+        "BTP",
+        "OData",
+        "REST"
+      ]
+    },
+    {
+      "id": "BRK-C-02",
+      "from": "BRK-02",
+      "to": "BRK-03",
+      "name": "SAP BTP/CPI ➔ SAP Ariba Supplier Sync",
+      "protocol": "HTTPS / cXML EDI",
+      "messageType": "EDIFACT",
+      "msgType": "EDIFACT",
+      "flowType": "INTRA_CLOUD",
+      "transportOverlay": "CLOUD_VPC",
+      "overlay": "CLOUD_VPC",
+      "isCrossBoundary": true,
+      "rawWeight": 160,
+      "trafficPct": 1.6,
+      "tags": [
+        "Ariba",
+        "B2B",
+        "Beschaffung",
+        "EDI"
+      ]
+    },
+    {
+      "id": "BRK-C-03",
+      "from": "BRK-04",
+      "to": "BRK-01",
+      "name": "Workday HCM ➔ SAP S/4HANA Personal- & Kostenstellen-Sync",
+      "protocol": "REST / JSON OAuth2",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "INTRA_CLOUD",
+      "transportOverlay": "CLOUD_VPC",
+      "overlay": "CLOUD_VPC",
+      "isCrossBoundary": false,
+      "rawWeight": 95,
+      "trafficPct": 1,
+      "tags": [
+        "HR",
+        "Workday",
+        "SAP",
+        "REST"
+      ]
+    },
+    {
+      "id": "BRK-C-04",
+      "from": "BRK-06",
+      "to": "BRK-01",
+      "name": "SAP Concur ➔ SAP S/4HANA Reisekosten-Buchung",
+      "protocol": "REST / OData API",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "CLOUD_TO_CLOUD",
+      "transportOverlay": "HTTPS_MTLS",
+      "overlay": "HTTPS_MTLS",
+      "isCrossBoundary": true,
+      "rawWeight": 80,
+      "trafficPct": 0.8,
+      "tags": [
+        "Finanzen",
+        "Concur",
+        "SAP",
+        "REST"
+      ]
+    },
+    {
+      "id": "BRK-C-05",
+      "from": "BRK-01",
+      "to": "BRK-05",
+      "name": "SAP S/4HANA ➔ OpenText GxP Geräteakte-Archivierung",
+      "protocol": "HTTPS / CMIS Archive API",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "CLOUD_TO_PREM",
+      "transportOverlay": "ZSCALER_ZPA",
+      "overlay": "ZSCALER_ZPA",
+      "isCrossBoundary": true,
+      "rawWeight": 140,
+      "trafficPct": 1.4,
+      "tags": [
+        "Archiv",
+        "GxP",
+        "Compliance",
+        "REST"
+      ]
+    },
+    {
+      "id": "BRK-C-06",
+      "from": "BRK-08",
+      "to": "BRK-07",
+      "name": "SolidWorks/Creo ➔ Siemens Teamcenter CAD-Sync & eBOM",
+      "protocol": "Teamcenter SOA / JT Direct",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "INTRA_ON_PREM",
+      "transportOverlay": "ON_PREM_LAN",
+      "overlay": "ON_PREM_LAN",
+      "isCrossBoundary": false,
+      "rawWeight": 310,
+      "trafficPct": 3.1,
+      "tags": [
+        "CAD",
+        "PLM",
+        "Engineering",
+        "Teamcenter"
+      ]
+    },
+    {
+      "id": "BRK-C-07",
+      "from": "BRK-07",
+      "to": "BRK-01",
+      "name": "Teamcenter PLM ➔ SAP S/4HANA mBOM & Materialstamm-Freigabe",
+      "protocol": "SAP BTP / OData Interface",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "PREM_TO_CLOUD",
+      "transportOverlay": "ZSCALER_ZPA",
+      "overlay": "ZSCALER_ZPA",
+      "isCrossBoundary": true,
+      "rawWeight": 220,
+      "trafficPct": 2.2,
+      "tags": [
+        "PLM",
+        "SAP",
+        "BOM",
+        "REST"
+      ]
+    },
+    {
+      "id": "BRK-C-08",
+      "from": "BRK-07",
+      "to": "BRK-10",
+      "name": "Teamcenter PLM ➔ Siemens Opcenter MES Fertigungspläne",
+      "protocol": "OPC UA / REST JSON",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "INTRA_ON_PREM",
+      "transportOverlay": "ON_PREM_LAN",
+      "overlay": "ON_PREM_LAN",
+      "isCrossBoundary": false,
+      "rawWeight": 190,
+      "trafficPct": 1.9,
+      "tags": [
+        "PLM",
+        "MES",
+        "Fertigung",
+        "OPCUA"
+      ]
+    },
+    {
+      "id": "BRK-C-09",
+      "from": "BRK-10",
+      "to": "BRK-01",
+      "name": "Opcenter MES ➔ SAP S/4HANA Fertigmeldung & Materialrückmeldung",
+      "protocol": "HTTPS / RFC OData",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "PREM_TO_CLOUD",
+      "transportOverlay": "ZSCALER_ZPA",
+      "overlay": "ZSCALER_ZPA",
+      "isCrossBoundary": true,
+      "rawWeight": 270,
+      "trafficPct": 2.7,
+      "tags": [
+        "MES",
+        "SAP",
+        "Fertigung",
+        "REST"
+      ]
+    },
+    {
+      "id": "BRK-C-10",
+      "from": "BRK-09",
+      "to": "BRK-07",
+      "name": "Atlassian Jira ➔ Teamcenter Requirements & Change Tracking",
+      "protocol": "REST / Webhook",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "CLOUD_TO_PREM",
+      "transportOverlay": "ZSCALER_ZPA",
+      "overlay": "ZSCALER_ZPA",
+      "isCrossBoundary": true,
+      "rawWeight": 130,
+      "trafficPct": 1.3,
+      "tags": [
+        "Jira",
+        "PLM",
+        "Requirements",
+        "REST"
+      ]
+    },
+    {
+      "id": "BRK-C-11",
+      "from": "BRK-11",
+      "to": "BRK-05",
+      "name": "Prüffeld Calibration Hub ➔ OpenText IQ/OQ/PQ Werkszertifikate",
+      "protocol": "HTTPS / PDF/A REST",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "INTRA_ON_PREM",
+      "transportOverlay": "ON_PREM_LAN",
+      "overlay": "ON_PREM_LAN",
+      "isCrossBoundary": false,
+      "rawWeight": 110,
+      "trafficPct": 1.1,
+      "tags": [
+        "Kalibrierung",
+        "Archiv",
+        "Compliance",
+        "REST"
+      ]
+    },
+    {
+      "id": "BRK-C-12",
+      "from": "BRK-11",
+      "to": "BRK-10",
+      "name": "Prüffeld Calibration Hub ➔ Opcenter MES Endprüfprotokoll",
+      "protocol": "REST / JSON API",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "INTRA_ON_PREM",
+      "transportOverlay": "ON_PREM_LAN",
+      "overlay": "ON_PREM_LAN",
+      "isCrossBoundary": false,
+      "rawWeight": 145,
+      "trafficPct": 1.5,
+      "tags": [
+        "Kalibrierung",
+        "MES",
+        "Testing",
+        "REST"
+      ]
+    },
+    {
+      "id": "BRK-C-13",
+      "from": "BRK-17",
+      "to": "BRK-12",
+      "name": "Klinik-Laborarbeitsplatz ➔ MALDI Biotyper Spektren-Erfassung",
+      "protocol": "TCP / Proprietary MLLP MassSpec",
+      "messageType": "HL7",
+      "msgType": "HL7",
+      "flowType": "INTRA_ON_PREM",
+      "transportOverlay": "ON_PREM_LAN",
+      "overlay": "ON_PREM_LAN",
+      "isCrossBoundary": false,
+      "rawWeight": 380,
+      "trafficPct": 3.8,
+      "tags": [
+        "MALDI-TOF",
+        "Biotyper",
+        "Mikrobiologie",
+        "HL7"
+      ]
+    },
+    {
+      "id": "BRK-C-14",
+      "from": "BRK-12",
+      "to": "BRK-13",
+      "name": "MALDI Biotyper ➔ MBT Pathfinder Resistenzmarker & Subtyping",
+      "protocol": "HTTPS / REST mTLS",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "PREM_TO_CLOUD",
+      "transportOverlay": "HTTPS_MTLS",
+      "overlay": "HTTPS_MTLS",
+      "isCrossBoundary": true,
+      "rawWeight": 260,
+      "trafficPct": 2.6,
+      "tags": [
+        "Biotyper",
+        "Pathfinder",
+        "KI",
+        "Cloud",
+        "REST"
+      ]
+    },
+    {
+      "id": "BRK-C-15",
+      "from": "BRK-12",
+      "to": "BRK-14",
+      "name": "MALDI Biotyper ➔ Bruker LIMS Middleware Keimbefund",
+      "protocol": "HL7 v2.5 ORU^R01 / MLLP",
+      "messageType": "HL7",
+      "msgType": "HL7",
+      "flowType": "INTRA_ON_PREM",
+      "transportOverlay": "ON_PREM_LAN",
+      "overlay": "ON_PREM_LAN",
+      "isCrossBoundary": false,
+      "rawWeight": 340,
+      "trafficPct": 3.4,
+      "tags": [
+        "HL7",
+        "Biotyper",
+        "LIMS",
+        "Befund"
+      ]
+    },
+    {
+      "id": "BRK-C-16",
+      "from": "BRK-16",
+      "to": "BRK-14",
+      "name": "Krankenhaus-LIMS ➔ Bruker LIMS Middleware Analyseauftrag",
+      "protocol": "HL7 v2.5 OML^O21 / ASTM",
+      "messageType": "HL7",
+      "msgType": "HL7",
+      "flowType": "EXT_TO_PREM",
+      "transportOverlay": "ON_PREM_LAN",
+      "overlay": "ON_PREM_LAN",
+      "isCrossBoundary": true,
+      "rawWeight": 310,
+      "trafficPct": 3.1,
+      "tags": [
+        "LIMS",
+        "Klinik",
+        "HL7",
+        "Auftrag"
+      ]
+    },
+    {
+      "id": "BRK-C-17",
+      "from": "BRK-14",
+      "to": "BRK-16",
+      "name": "Bruker LIMS Middleware ➔ Krankenhaus-LIMS Befundübermittlung",
+      "protocol": "HL7 v2.5 ORU^R01 / FHIR DiagnosticReport",
+      "messageType": "FHIR",
+      "msgType": "FHIR",
+      "flowType": "PREM_TO_EXT",
+      "transportOverlay": "ON_PREM_LAN",
+      "overlay": "ON_PREM_LAN",
+      "isCrossBoundary": true,
+      "rawWeight": 330,
+      "trafficPct": 3.3,
+      "tags": [
+        "FHIR",
+        "HL7",
+        "LIMS",
+        "Klinik",
+        "Befund"
+      ]
+    },
+    {
+      "id": "BRK-C-18",
+      "from": "BRK-15",
+      "to": "BRK-14",
+      "name": "ELITech InGenius PCR ➔ LIMS Middleware Multiplex-Ergebnisse",
+      "protocol": "HL7 v2.5 / ASTM Interface",
+      "messageType": "HL7",
+      "msgType": "HL7",
+      "flowType": "INTRA_ON_PREM",
+      "transportOverlay": "ON_PREM_LAN",
+      "overlay": "ON_PREM_LAN",
+      "isCrossBoundary": false,
+      "rawWeight": 170,
+      "trafficPct": 1.7,
+      "tags": [
+        "PCR",
+        "ELITech",
+        "HL7",
+        "Diagnostik"
+      ]
+    },
+    {
+      "id": "BRK-C-19",
+      "from": "BRK-12",
+      "to": "BRK-05",
+      "name": "MALDI Biotyper ➔ OpenText GxP IVD-Validierungsdaten",
+      "protocol": "HTTPS / REST Audit-Trail",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "INTRA_ON_PREM",
+      "transportOverlay": "ON_PREM_LAN",
+      "overlay": "ON_PREM_LAN",
+      "isCrossBoundary": false,
+      "rawWeight": 90,
+      "trafficPct": 0.9,
+      "tags": [
+        "IVD",
+        "Archiv",
+        "GxP",
+        "REST"
+      ]
+    },
+    {
+      "id": "BRK-C-20",
+      "from": "BRK-20",
+      "to": "BRK-18",
+      "name": "timsTOF Acquisition ➔ PaSER Real-time GPU Search Stream",
+      "protocol": "gRPC / ZeroMQ High-Speed Binary Stream",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "PREM_TO_CLOUD",
+      "transportOverlay": "CLOUD_VPC",
+      "overlay": "CLOUD_VPC",
+      "isCrossBoundary": true,
+      "rawWeight": 480,
+      "trafficPct": 4.8,
+      "tags": [
+        "timsTOF",
+        "PaSER",
+        "Proteomics",
+        "gRPC",
+        "Streaming"
+      ]
+    },
+    {
+      "id": "BRK-C-21",
+      "from": "BRK-18",
+      "to": "BRK-19",
+      "name": "PaSER GPU Engine ➔ Mass Dynamics Multi-Omics Analytics",
+      "protocol": "REST / JSON ndjson Bulk Export",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "CLOUD_TO_CLOUD",
+      "transportOverlay": "CLOUD_VPC",
+      "overlay": "CLOUD_VPC",
+      "isCrossBoundary": false,
+      "rawWeight": 360,
+      "trafficPct": 3.6,
+      "tags": [
+        "PaSER",
+        "MultiOmics",
+        "Analytics",
+        "REST"
+      ]
+    },
+    {
+      "id": "BRK-C-22",
+      "from": "BRK-20",
+      "to": "BRK-22",
+      "name": "timsTOF Workstation ➔ Core Facility HPC Cluster Rohdaten-Export",
+      "protocol": "NFS / 40GbE Fiber Channel",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "INTRA_ON_PREM",
+      "transportOverlay": "ON_PREM_LAN",
+      "overlay": "ON_PREM_LAN",
+      "isCrossBoundary": true,
+      "rawWeight": 450,
+      "trafficPct": 4.5,
+      "tags": [
+        "HPC",
+        "timsTOF",
+        "Fiber",
+        "Rohdaten"
+      ]
+    },
+    {
+      "id": "BRK-C-23",
+      "from": "BRK-21",
+      "to": "BRK-22",
+      "name": "TopSpin NMR Cloud ➔ Core Facility HPC Strukturberechnung",
+      "protocol": "SSH / SLURM API / REST",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "CLOUD_TO_PREM",
+      "transportOverlay": "HTTPS_MTLS",
+      "overlay": "HTTPS_MTLS",
+      "isCrossBoundary": true,
+      "rawWeight": 180,
+      "trafficPct": 1.8,
+      "tags": [
+        "NMR",
+        "TopSpin",
+        "HPC",
+        "REST"
+      ]
+    },
+    {
+      "id": "BRK-C-24",
+      "from": "BRK-18",
+      "to": "BRK-27",
+      "name": "PaSER GPU Engine ➔ FlexNet/CodeMeter Lizenzprüfung",
+      "protocol": "HTTPS / Wibu CodeMeter Cloud API",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "INTRA_CLOUD",
+      "transportOverlay": "CLOUD_VPC",
+      "overlay": "CLOUD_VPC",
+      "isCrossBoundary": false,
+      "rawWeight": 120,
+      "trafficPct": 1.2,
+      "tags": [
+        "Lizenz",
+        "Security",
+        "PaSER",
+        "REST"
+      ]
+    },
+    {
+      "id": "BRK-C-25",
+      "from": "BRK-21",
+      "to": "BRK-27",
+      "name": "TopSpin NMR Cloud ➔ FlexNet/CodeMeter Lizenzprüfung",
+      "protocol": "HTTPS / CodeMeter REST",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "INTRA_CLOUD",
+      "transportOverlay": "CLOUD_VPC",
+      "overlay": "CLOUD_VPC",
+      "isCrossBoundary": false,
+      "rawWeight": 110,
+      "trafficPct": 1.1,
+      "tags": [
+        "Lizenz",
+        "TopSpin",
+        "NMR",
+        "REST"
+      ]
+    },
+    {
+      "id": "BRK-C-26",
+      "from": "BRK-25",
+      "to": "BRK-24",
+      "name": "LabScape IoT Magnet Telemetrie ➔ Salesforce FSL Alarm-Ticket",
+      "protocol": "MQTT / REST Webhook (AWS ➔ Salesforce)",
+      "messageType": "MQTT",
+      "msgType": "MQTT",
+      "flowType": "CLOUD_TO_CLOUD",
+      "transportOverlay": "HTTPS_MTLS",
+      "overlay": "HTTPS_MTLS",
+      "isCrossBoundary": true,
+      "rawWeight": 290,
+      "trafficPct": 2.9,
+      "tags": [
+        "IoT",
+        "Kryotechnik",
+        "Service",
+        "MQTT",
+        "FSL"
+      ]
+    },
+    {
+      "id": "BRK-C-27",
+      "from": "BRK-24",
+      "to": "BRK-28",
+      "name": "Salesforce FSL ➔ Techniker Mobile App Einsatz-Dispatching",
+      "protocol": "HTTPS / WSS Push WebSocket",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "INTRA_CLOUD",
+      "transportOverlay": "CLOUD_VPC",
+      "overlay": "CLOUD_VPC",
+      "isCrossBoundary": false,
+      "rawWeight": 260,
+      "trafficPct": 2.6,
+      "tags": [
+        "FieldService",
+        "Mobile",
+        "App",
+        "FSL"
+      ]
+    },
+    {
+      "id": "BRK-C-28",
+      "from": "BRK-28",
+      "to": "BRK-24",
+      "name": "Techniker Mobile App ➔ Salesforce FSL Einsatzbericht & Messwerte",
+      "protocol": "REST / JSON Offline-Sync",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "INTRA_CLOUD",
+      "transportOverlay": "CLOUD_VPC",
+      "overlay": "CLOUD_VPC",
+      "isCrossBoundary": false,
+      "rawWeight": 240,
+      "trafficPct": 2.4,
+      "tags": [
+        "Mobile",
+        "FSL",
+        "Bericht",
+        "REST"
+      ]
+    },
+    {
+      "id": "BRK-C-29",
+      "from": "BRK-24",
+      "to": "BRK-01",
+      "name": "Salesforce FSL ➔ SAP S/4HANA Ersatzteilbuchung & Servicerechnung",
+      "protocol": "SAP BTP / OData API",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "INTRA_CLOUD",
+      "transportOverlay": "SAP_BTP_MESH",
+      "overlay": "SAP_BTP_MESH",
+      "isCrossBoundary": false,
+      "rawWeight": 210,
+      "trafficPct": 2.1,
+      "tags": [
+        "SAP",
+        "FSL",
+        "Ersatzteile",
+        "Finanzen",
+        "REST"
+      ]
+    },
+    {
+      "id": "BRK-C-30",
+      "from": "BRK-23",
+      "to": "BRK-01",
+      "name": "Salesforce CPQ ➔ SAP S/4HANA Kundenauftrag-Erstellung",
+      "protocol": "REST / OData v4 Integration",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "INTRA_CLOUD",
+      "transportOverlay": "SAP_BTP_MESH",
+      "overlay": "SAP_BTP_MESH",
+      "isCrossBoundary": false,
+      "rawWeight": 230,
+      "trafficPct": 2.3,
+      "tags": [
+        "Salesforce",
+        "CPQ",
+        "SAP",
+        "Auftrag",
+        "REST"
+      ]
+    },
+    {
+      "id": "BRK-C-31",
+      "from": "BRK-26",
+      "to": "BRK-02",
+      "name": "MyBruker WebStore ➔ SAP BTP/CPI Online-Order Ingestion",
+      "protocol": "HTTPS / REST JSON Webhook",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "INTRA_CLOUD",
+      "transportOverlay": "CLOUD_VPC",
+      "overlay": "CLOUD_VPC",
+      "isCrossBoundary": false,
+      "rawWeight": 175,
+      "trafficPct": 1.8,
+      "tags": [
+        "WebStore",
+        "BTP",
+        "eCommerce",
+        "REST"
+      ]
+    },
+    {
+      "id": "BRK-C-32",
+      "from": "BRK-26",
+      "to": "BRK-27",
+      "name": "MyBruker Portal ➔ FlexNet/CodeMeter Lizenzdownload",
+      "protocol": "HTTPS / REST OAuth2",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "INTRA_CLOUD",
+      "transportOverlay": "CLOUD_VPC",
+      "overlay": "CLOUD_VPC",
+      "isCrossBoundary": false,
+      "rawWeight": 130,
+      "trafficPct": 1.3,
+      "tags": [
+        "Kundenportal",
+        "Lizenz",
+        "CodeMeter",
+        "REST"
+      ]
+    },
+    {
+      "id": "BRK-C-33",
+      "from": "BRK-25",
+      "to": "BRK-20",
+      "name": "LabScape Telemetry ➔ timsTOF Remote Instrument Diagnostics",
+      "protocol": "MQTT / TLS 1.3 Bidirektional",
+      "messageType": "MQTT",
+      "msgType": "MQTT",
+      "flowType": "CLOUD_TO_PREM",
+      "transportOverlay": "AWS_IOT_TLS",
+      "overlay": "AWS_IOT_TLS",
+      "isCrossBoundary": true,
+      "rawWeight": 200,
+      "trafficPct": 2,
+      "tags": [
+        "IoT",
+        "timsTOF",
+        "Diagnostik",
+        "MQTT"
+      ]
+    },
+    {
+      "id": "BRK-C-34",
+      "from": "BRK-26",
+      "to": "BRK-05",
+      "name": "MyBruker Portal ➔ OpenText Qualifizierungsdokument-Abruf",
+      "protocol": "HTTPS / CMIS REST",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "CLOUD_TO_PREM",
+      "transportOverlay": "ZSCALER_ZPA",
+      "overlay": "ZSCALER_ZPA",
+      "isCrossBoundary": true,
+      "rawWeight": 95,
+      "trafficPct": 1,
+      "tags": [
+        "Kundenportal",
+        "Archiv",
+        "Zertifikat",
+        "REST"
+      ]
+    },
+    {
+      "id": "BRK-C-35",
+      "from": "BRK-29",
+      "to": "BRK-01",
+      "name": "Entra ID (Azure AD) ➔ SAP S/4HANA SAML 2.0 / SSO",
+      "protocol": "SAML 2.0 / OIDC Token",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "INTRA_CLOUD",
+      "transportOverlay": "CLOUD_VPC",
+      "overlay": "CLOUD_VPC",
+      "isCrossBoundary": false,
+      "rawWeight": 310,
+      "trafficPct": 3.1,
+      "tags": [
+        "Identity",
+        "SSO",
+        "SAML",
+        "SAP",
+        "Security"
+      ]
+    },
+    {
+      "id": "BRK-C-36",
+      "from": "BRK-29",
+      "to": "BRK-23",
+      "name": "Entra ID ➔ Salesforce Sales & Service SSO / MFA",
+      "protocol": "SAML 2.0 / SCIM User Provisioning",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "INTRA_CLOUD",
+      "transportOverlay": "CLOUD_VPC",
+      "overlay": "CLOUD_VPC",
+      "isCrossBoundary": false,
+      "rawWeight": 280,
+      "trafficPct": 2.8,
+      "tags": [
+        "Identity",
+        "SSO",
+        "Salesforce",
+        "Security"
+      ]
+    },
+    {
+      "id": "BRK-C-37",
+      "from": "BRK-29",
+      "to": "BRK-04",
+      "name": "Entra ID ➔ Workday HCM SCIM Account Lifecycle",
+      "protocol": "SCIM 2.0 / REST API",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "INTRA_CLOUD",
+      "transportOverlay": "CLOUD_VPC",
+      "overlay": "CLOUD_VPC",
+      "isCrossBoundary": false,
+      "rawWeight": 160,
+      "trafficPct": 1.6,
+      "tags": [
+        "Identity",
+        "Workday",
+        "SCIM",
+        "HR"
+      ]
+    },
+    {
+      "id": "BRK-C-38",
+      "from": "BRK-30",
+      "to": "BRK-07",
+      "name": "Zscaler ZPA ➔ Teamcenter PLM Zero-Trust Entwicklerzugriff",
+      "protocol": "TLS 1.3 Microtunnel (No Inbound Ports)",
+      "messageType": "VPN",
+      "msgType": "VPN",
+      "flowType": "CLOUD_TO_PREM",
+      "transportOverlay": "ZSCALER_ZPA",
+      "overlay": "ZSCALER_ZPA",
+      "isCrossBoundary": true,
+      "rawWeight": 250,
+      "trafficPct": 2.5,
+      "tags": [
+        "Security",
+        "ZeroTrust",
+        "Zscaler",
+        "PLM",
+        "VPN"
+      ]
+    },
+    {
+      "id": "BRK-C-39",
+      "from": "BRK-30",
+      "to": "BRK-10",
+      "name": "Zscaler ZPA ➔ Opcenter MES Sicherer Fertigungsfernzugriff",
+      "protocol": "TLS 1.3 Microtunnel",
+      "messageType": "VPN",
+      "msgType": "VPN",
+      "flowType": "CLOUD_TO_PREM",
+      "transportOverlay": "ZSCALER_ZPA",
+      "overlay": "ZSCALER_ZPA",
+      "isCrossBoundary": true,
+      "rawWeight": 190,
+      "trafficPct": 1.9,
+      "tags": [
+        "Security",
+        "ZeroTrust",
+        "MES",
+        "VPN"
+      ]
+    },
+    {
+      "id": "BRK-C-40",
+      "from": "BRK-31",
+      "to": "BRK-10",
+      "name": "Palo Alto Factory Perimeter ➔ Opcenter MES OT-Netztrennung",
+      "protocol": "TCP / IP Inspection & OT-Firewall",
+      "messageType": "VPN",
+      "msgType": "VPN",
+      "flowType": "INTRA_ON_PREM",
+      "transportOverlay": "DMZ_PERIMETER",
+      "overlay": "DMZ_PERIMETER",
+      "isCrossBoundary": true,
+      "rawWeight": 320,
+      "trafficPct": 3.2,
+      "tags": [
+        "Firewall",
+        "Perimeter",
+        "OT",
+        "Security"
+      ]
+    },
+    {
+      "id": "BRK-C-41",
+      "from": "BRK-31",
+      "to": "BRK-11",
+      "name": "Palo Alto Perimeter ➔ Prüffeld Calibration Hub Isolation",
+      "protocol": "TCP / BSI TR-Compliant Stateful Firewall",
+      "messageType": "VPN",
+      "msgType": "VPN",
+      "flowType": "INTRA_ON_PREM",
+      "transportOverlay": "DMZ_PERIMETER",
+      "overlay": "DMZ_PERIMETER",
+      "isCrossBoundary": true,
+      "rawWeight": 180,
+      "trafficPct": 1.8,
+      "tags": [
+        "Firewall",
+        "Perimeter",
+        "Testing",
+        "Security"
+      ]
+    },
+    {
+      "id": "BRK-C-42",
+      "from": "BRK-01",
+      "to": "BRK-34",
+      "name": "SAP S/4HANA ➔ Azure Data Factory Finanz- & Auftrags-ETL",
+      "protocol": "OData / JDBC Cloud Pipeline",
+      "messageType": "SQL",
+      "msgType": "SQL",
+      "flowType": "INTRA_CLOUD",
+      "transportOverlay": "CLOUD_VPC",
+      "overlay": "CLOUD_VPC",
+      "isCrossBoundary": false,
+      "rawWeight": 310,
+      "trafficPct": 3.1,
+      "tags": [
+        "ETL",
+        "SAP",
+        "SQL",
+        "DataPipeline"
+      ]
+    },
+    {
+      "id": "BRK-C-43",
+      "from": "BRK-25",
+      "to": "BRK-34",
+      "name": "LabScape IoT ➔ Azure Event Hub Kryostaten-Telemetrie Stream",
+      "protocol": "Kafka / EventHub AMQP Streaming",
+      "messageType": "Kafka",
+      "msgType": "Kafka",
+      "flowType": "CLOUD_TO_CLOUD",
+      "transportOverlay": "CLOUD_VPC",
+      "overlay": "CLOUD_VPC",
+      "isCrossBoundary": false,
+      "rawWeight": 390,
+      "trafficPct": 3.9,
+      "tags": [
+        "IoT",
+        "Kafka",
+        "Streaming",
+        "Telemetrie"
+      ]
+    },
+    {
+      "id": "BRK-C-44",
+      "from": "BRK-34",
+      "to": "BRK-32",
+      "name": "Azure Data Factory ➔ Snowflake Lakehouse Data Load",
+      "protocol": "Snowpipe / SQL Bulk Insert",
+      "messageType": "SQL",
+      "msgType": "SQL",
+      "flowType": "INTRA_CLOUD",
+      "transportOverlay": "CLOUD_VPC",
+      "overlay": "CLOUD_VPC",
+      "isCrossBoundary": false,
+      "rawWeight": 440,
+      "trafficPct": 4.4,
+      "tags": [
+        "Snowflake",
+        "DataLake",
+        "SQL",
+        "Analytics"
+      ]
+    },
+    {
+      "id": "BRK-C-45",
+      "from": "BRK-24",
+      "to": "BRK-32",
+      "name": "Salesforce FSL ➔ Snowflake Service-Analytics Sync",
+      "protocol": "Salesforce Bulk API 2.0 / REST",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "CLOUD_TO_CLOUD",
+      "transportOverlay": "CLOUD_VPC",
+      "overlay": "CLOUD_VPC",
+      "isCrossBoundary": false,
+      "rawWeight": 220,
+      "trafficPct": 2.2,
+      "tags": [
+        "Salesforce",
+        "FSL",
+        "Snowflake",
+        "Analytics"
+      ]
+    },
+    {
+      "id": "BRK-C-46",
+      "from": "BRK-32",
+      "to": "BRK-33",
+      "name": "Snowflake Lakehouse ➔ Power BI Executive Dashboards",
+      "protocol": "DirectQuery / TDS over TLS",
+      "messageType": "SQL",
+      "msgType": "SQL",
+      "flowType": "INTRA_CLOUD",
+      "transportOverlay": "CLOUD_VPC",
+      "overlay": "CLOUD_VPC",
+      "isCrossBoundary": false,
+      "rawWeight": 380,
+      "trafficPct": 3.8,
+      "tags": [
+        "PowerBI",
+        "Snowflake",
+        "BI",
+        "Reporting",
+        "SQL"
+      ]
+    },
+    {
+      "id": "BRK-C-47",
+      "from": "BRK-09",
+      "to": "BRK-29",
+      "name": "Atlassian Jira ➔ Entra ID Developer SSO & SCIM",
+      "protocol": "SAML 2.0 / SCIM 2.0",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "INTRA_CLOUD",
+      "transportOverlay": "CLOUD_VPC",
+      "overlay": "CLOUD_VPC",
+      "isCrossBoundary": false,
+      "rawWeight": 190,
+      "trafficPct": 1.9,
+      "tags": [
+        "Identity",
+        "Jira",
+        "SSO",
+        "Security"
+      ]
+    },
+    {
+      "id": "BRK-C-48",
+      "from": "BRK-26",
+      "to": "BRK-29",
+      "name": "MyBruker Portal ➔ Entra ID B2B/B2C Customer Identity",
+      "protocol": "OpenID Connect (OIDC) / OAuth2",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "INTRA_CLOUD",
+      "transportOverlay": "CLOUD_VPC",
+      "overlay": "CLOUD_VPC",
+      "isCrossBoundary": false,
+      "rawWeight": 210,
+      "trafficPct": 2.1,
+      "tags": [
+        "Identity",
+        "OIDC",
+        "Kundenportal",
+        "Security"
+      ]
+    }
+  ],
+  "systems": [
+    {
+      "id": "BRK-01",
+      "name": "SAP S/4HANA Global ERP Core",
+      "domain": "D1",
+      "scope": "INTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "SAP Private Cloud (Frankfurt)",
+      "vendor": "SAP SE",
+      "desc": "Zentrales ERP für Finanzwesen (FI/CO), Materialwirtschaft (MM), Auftragsabwicklung (SD) und Fertigungsplanung für 90+ Ländergesellschaften.",
+      "tags": [
+        "ERP",
+        "Finanzen",
+        "SAP",
+        "Cloud",
+        "S/4HANA"
+      ]
+    },
+    {
+      "id": "BRK-02",
+      "name": "SAP BTP / CPI Integration Suite",
+      "domain": "D1",
+      "scope": "INTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "SAP BTP EU-Central (Frankfurt)",
+      "vendor": "SAP SE",
+      "desc": "Unternehmensweite Middleware für API-Management, OData-Services, EDI-Mapping und Event-Mesh zwischen Cloud- und On-Premises-Systemen.",
+      "tags": [
+        "Middleware",
+        "Integration",
+        "SAP",
+        "BTP",
+        "API"
+      ]
+    },
+    {
+      "id": "BRK-03",
+      "name": "SAP Ariba B2B Supplier Network",
+      "domain": "D1",
+      "scope": "EXTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "Ariba Global Cloud",
+      "vendor": "SAP Ariba",
+      "desc": "Globale B2B-Beschaffungsplattform zur digitalen Bestellung hochpräziser Komponenten (Magnete, Detektoren, Ionenoptiken) und e-Invoicing.",
+      "tags": [
+        "Beschaffung",
+        "B2B",
+        "Ariba",
+        "Cloud",
+        "EDI"
+      ]
+    },
+    {
+      "id": "BRK-04",
+      "name": "Workday Global Human Capital Management",
+      "domain": "D1",
+      "scope": "INTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "Workday Cloud (Dublin/Frankfurt)",
+      "vendor": "Workday Inc.",
+      "desc": "Zentrales Personalmanagementsystem für weltweit ~11.400 Mitarbeiter, Organisationsstrukturen, Talentmanagement und Payroll-Anbindung.",
+      "tags": [
+        "HR",
+        "Workday",
+        "Cloud",
+        "Mitarbeiter"
+      ]
+    },
+    {
+      "id": "BRK-05",
+      "name": "OpenText GxP & FDA 21 CFR Part 11 Archive",
+      "domain": "D1",
+      "scope": "INTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "Bruker Datacenter (Ettlingen)",
+      "vendor": "OpenText",
+      "desc": "Revisionssicheres Archiv für Gerätehistorien (Device History Records - DHR), IQ/OQ/PQ-Qualifizierungsprotokolle und Audit-Trails für IVD-Zulassungen.",
+      "tags": [
+        "Archiv",
+        "GxP",
+        "Compliance",
+        "FDA",
+        "On-Prem"
+      ]
+    },
+    {
+      "id": "BRK-06",
+      "name": "SAP Concur Global Travel & Expense",
+      "domain": "D1",
+      "scope": "EXTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "SAP Concur Cloud",
+      "vendor": "SAP Concur",
+      "desc": "Reisekosten- und Spesenmanagement für das weltweite Vertriebs- und Servicetechniker-Netzwerk.",
+      "tags": [
+        "Finanzen",
+        "Reisekosten",
+        "Concur",
+        "Cloud"
+      ]
+    },
+    {
+      "id": "BRK-07",
+      "name": "Siemens Teamcenter Enterprise PLM",
+      "domain": "D2",
+      "scope": "INTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "R&D Datacenter (Bremen & Ettlingen)",
+      "vendor": "Siemens Digital Industries",
+      "desc": "Globales Product Lifecycle Management für Spektrometer-Bauteile, eBOM/mBOM-Verwaltung, Änderungswesen (ECO) und Freigabe-Workflows.",
+      "tags": [
+        "PLM",
+        "Engineering",
+        "Teamcenter",
+        "CAD",
+        "R&D"
+      ]
+    },
+    {
+      "id": "BRK-08",
+      "name": "Dassault SolidWorks & PTC Creo CAD Hub",
+      "domain": "D2",
+      "scope": "INTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "R&D Workstation Cluster (Bremen)",
+      "vendor": "Dassault / PTC",
+      "desc": "Mechanische 3D-CAD-Konstruktion für Flugzeit-Massenfilter, Hochvakuumkammern, Quadrupole und supraleitende NMR-Kryostaten.",
+      "tags": [
+        "CAD",
+        "Konstruktion",
+        "R&D",
+        "Engineering"
+      ]
+    },
+    {
+      "id": "BRK-09",
+      "name": "Atlassian Jira & Confluence R&D Platform",
+      "domain": "D2",
+      "scope": "INTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "Atlassian Cloud (AWS Frankfurt)",
+      "vendor": "Atlassian",
+      "desc": "Agile Softwareentwicklung und Dokumentation für Spektrometer-Firmware, timsControl, TopSpin und MBT Compass Applikationen.",
+      "tags": [
+        "Software",
+        "R&D",
+        "Atlassian",
+        "Jira",
+        "Cloud"
+      ]
+    },
+    {
+      "id": "BRK-10",
+      "name": "Siemens Opcenter MES Precision Manufacturing",
+      "domain": "D2",
+      "scope": "INTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "High-Tech Factory (Bremen & Ettlingen)",
+      "vendor": "Siemens Digital Industries",
+      "desc": "Manufacturing Execution System zur lückenlosen Verfolgung von Reinraum-Montageschritten, Laser-Schweißen und Spulenwicklungen.",
+      "tags": [
+        "MES",
+        "Fertigung",
+        "Produktion",
+        "Siemens",
+        "OT"
+      ]
+    },
+    {
+      "id": "BRK-11",
+      "name": "Bruker Firmware & Instrument Calibration Hub",
+      "domain": "D2",
+      "scope": "INTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "Prüffeld Ettlingen & Bremen",
+      "vendor": "Bruker Corporation",
+      "desc": "Automatisiertes Endprüffeld für Spektrometer-Kalibrierung, Massenauflösungstests, HF-Spulenabgleich und Firmware-Flash vor Auslieferung.",
+      "tags": [
+        "Kalibrierung",
+        "Testing",
+        "Firmware",
+        "Prüffeld"
+      ]
+    },
+    {
+      "id": "BRK-12",
+      "name": "MALDI Biotyper MBT Compass Server",
+      "domain": "D3",
+      "scope": "INTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "Clinical Diagnostic Server (Bremen)",
+      "vendor": "Bruker Daltonics",
+      "desc": "Zentraler Spektren-Referenzserver mit über 10.000 validierten mikrobiologischen Spektren für die Identifikation von Bakterien, Hefen und Pilzen.",
+      "tags": [
+        "Biotyper",
+        "Mikrobiologie",
+        "MALDI-TOF",
+        "Diagnostik",
+        "IVD"
+      ]
+    },
+    {
+      "id": "BRK-13",
+      "name": "MBT Pathfinder & Subtyping Workflow Engine",
+      "domain": "D3",
+      "scope": "INTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "AWS Cloud (Frankfurt)",
+      "vendor": "Bruker Daltonics",
+      "desc": "KI-gestützte Subtypisierungs-Engine zur Erkennung von Carbapenemase-Resistenzen (KPC, NDM, VIM) und Mycobakterien-Differenzierung.",
+      "tags": [
+        "Resistenzmarker",
+        "KI",
+        "Diagnostik",
+        "Cloud",
+        "Pathfinder"
+      ]
+    },
+    {
+      "id": "BRK-14",
+      "name": "Bruker LIMS Integration Middleware (HL7/ASTM)",
+      "domain": "D3",
+      "scope": "INTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "Hospital Gateway Cluster",
+      "vendor": "Bruker Corporation",
+      "desc": "Standardisierte Schnittstelle für bidirektionalen Datenaustausch mit Krankenhaus-Laborinformationssystemen (Auftragsübernahme & Befundrückmeldung).",
+      "tags": [
+        "LIMS",
+        "HL7",
+        "ASTM",
+        "Middleware",
+        "Krankenhaus"
+      ]
+    },
+    {
+      "id": "BRK-15",
+      "name": "ELITech InGenius MDx Molecular Automation",
+      "domain": "D3",
+      "scope": "INTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "Molecular Diagnostics Lab",
+      "vendor": "ELITech Group / Bruker",
+      "desc": "Vollautomatisierte Sample-to-Result Real-Time PCR Plattform für Infektionskrankheiten, Meningitis und respiratorische Multiplex-Panels.",
+      "tags": [
+        "PCR",
+        "Molekulardiagnostik",
+        "Automation",
+        "ELITech"
+      ]
+    },
+    {
+      "id": "BRK-16",
+      "name": "Krankenhaus-LIMS (Swisslab, Epic, Cerner, SoftLab)",
+      "domain": "D3",
+      "scope": "EXTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "Klinik-Rechenzentren weltweit",
+      "vendor": "Diverse (Dedalus, Epic, Oracle)",
+      "desc": "Kundenseitige klinische Laborinformationssysteme zur Anforderung von Erregeranalysen und Einbindung in die elektronische Patientenakte.",
+      "tags": [
+        "Klinik",
+        "LIMS",
+        "Epic",
+        "Swisslab",
+        "Extern"
+      ]
+    },
+    {
+      "id": "BRK-17",
+      "name": "Universitätsklinikum Mikrobiologie Laborstation",
+      "domain": "D3",
+      "scope": "EXTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "Klinik-Laborarbeitsplatz",
+      "vendor": "Hospital Laboratory",
+      "desc": "Klinischer Point-of-Care Arbeitsplatz mit MALDI Biotyper sirius One, Target-Plate-Spotting und automatischer Spektrenaufnahme.",
+      "tags": [
+        "Labor",
+        "Klinik",
+        "PointOfCare",
+        "Extern"
+      ]
+    },
+    {
+      "id": "BRK-18",
+      "name": "Bruker PaSER Real-time GPU Proteomics Engine",
+      "domain": "D4",
+      "scope": "INTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "AWS High-Performance GPU Cluster",
+      "vendor": "Bruker Daltonics",
+      "desc": "Parallel Search Engine in Real-time für 4D-Proteomics (dia-PASEF), TIMScore und TIMS DIA-NN für die vollständige Peptididentifikation während des Laufs.",
+      "tags": [
+        "Proteomics",
+        "PaSER",
+        "GPU",
+        "MachineLearning",
+        "Cloud"
+      ]
+    },
+    {
+      "id": "BRK-19",
+      "name": "Mass Dynamics Multi-Omics Analytics Cloud",
+      "domain": "D4",
+      "scope": "EXTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "AWS Global Multi-Tenant Cloud",
+      "vendor": "Mass Dynamics / Bruker",
+      "desc": "Cloud-native Visualisierungs- und Statistikplattform für Proteomik-Kohortenstudien, Biomarker-Discovery und Pathway-Analysen.",
+      "tags": [
+        "MultiOmics",
+        "Analytics",
+        "Cloud",
+        "Biomarker"
+      ]
+    },
+    {
+      "id": "BRK-20",
+      "name": "timsTOF Ultra / Pro 2 Acquisition Workstation",
+      "domain": "D4",
+      "scope": "EXTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "Forschungslabore weltweit",
+      "vendor": "Bruker Daltonics",
+      "desc": "Ultra-hochauflösendes Ionenmobilitäts-Massenspektrometer mit timsControl zur Messung von Kollisionsquerschnitten (CCS) und Protein-Isoformen.",
+      "tags": [
+        "timsTOF",
+        "Massenspektrometrie",
+        "Hardware",
+        "Akquisition"
+      ]
+    },
+    {
+      "id": "BRK-21",
+      "name": "Bruker BioSpin TopSpin NMR Processing Cloud",
+      "domain": "D4",
+      "scope": "INTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "Microsoft Azure HPC (Frankfurt)",
+      "vendor": "Bruker BioSpin",
+      "desc": "Cloud-Spektrenverarbeitung für 1D/2D/3D NMR-Experimente, automatisierte Strukturverifikation, Metabolomics-Fingerprinting und Liganden-Screening.",
+      "tags": [
+        "NMR",
+        "BioSpin",
+        "TopSpin",
+        "Spektroskopie",
+        "Cloud"
+      ]
+    },
+    {
+      "id": "BRK-22",
+      "name": "Akademisches Core Facility HPC Compute Cluster",
+      "domain": "D4",
+      "scope": "EXTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "Universität / MPI / EMBL Cluster",
+      "vendor": "Academic HPC Center",
+      "desc": "Externe Supercomputer-Infrastruktur für Struktur-Biophysik, AlphaFold-Abgleich und Deep-Proteome-Rekonstruktionen.",
+      "tags": [
+        "HPC",
+        "Forschung",
+        "Cluster",
+        "Supercomputing",
+        "Extern"
+      ]
+    },
+    {
+      "id": "BRK-23",
+      "name": "Salesforce Sales & CPQ Cloud",
+      "domain": "D5",
+      "scope": "INTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "Salesforce Global Cloud",
+      "vendor": "Salesforce Inc.",
+      "desc": "Weltweite Vertriebssteuerung, Lead-to-Order-Workflows und Configure-Price-Quote (CPQ) für hochgradig konfigurierbare Spektrometer-Systeme.",
+      "tags": [
+        "CRM",
+        "Salesforce",
+        "CPQ",
+        "Vertrieb",
+        "Cloud"
+      ]
+    },
+    {
+      "id": "BRK-24",
+      "name": "Salesforce Service Cloud & Field Service Lightning",
+      "domain": "D5",
+      "scope": "INTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "Salesforce Global Cloud",
+      "vendor": "Salesforce Inc.",
+      "desc": "Einsatzplanung und Dispatching von weltweit 2.500 Bruker Service-Ingenieuren für Vor-Ort-Installation, Kalibrierung und Notfall-Kryoservice.",
+      "tags": [
+        "FieldService",
+        "FSL",
+        "Service",
+        "Salesforce",
+        "Cloud"
+      ]
+    },
+    {
+      "id": "BRK-25",
+      "name": "Bruker LabScape IoT Magnet Telemetry Hub",
+      "domain": "D5",
+      "scope": "INTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "AWS IoT Core (Frankfurt)",
+      "vendor": "Bruker BioSpin",
+      "desc": "24/7 Live-Überwachung von Kryostaten-Füllständen (flüssiges Helium/Stickstoff), Vakuum, Kompressordrücken und Magnetfeldstabilität weltweit.",
+      "tags": [
+        "IoT",
+        "LabScape",
+        "Kryotechnik",
+        "Telemetrie",
+        "Cloud"
+      ]
+    },
+    {
+      "id": "BRK-26",
+      "name": "MyBruker Customer Portal & WebStore",
+      "domain": "D5",
+      "scope": "INTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "Azure B2C Cloud (Frankfurt)",
+      "vendor": "Bruker Corporation",
+      "desc": "Kundenportal für Lizenzdownloads, Handbücher, Kalibrierzertifikate, Online-Bestellung von Matrix-Reagenzien, Target-Plates und Zubehör.",
+      "tags": [
+        "Kundenportal",
+        "eCommerce",
+        "WebStore",
+        "Cloud"
+      ]
+    },
+    {
+      "id": "BRK-27",
+      "name": "Bruker FlexNet & CodeMeter License Server",
+      "domain": "D5",
+      "scope": "INTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "AWS Cloud (Frankfurt)",
+      "vendor": "Wibu-Systems / Revenera",
+      "desc": "Zentraler Lizenzierungsdienst für Softwareschlüssel, zeitlich begrenzte Testlizenzen, Dongle-Updates und Cloud-Abonnements (TopSpin, PaSER).",
+      "tags": [
+        "Lizenzierung",
+        "Security",
+        "CodeMeter",
+        "Cloud"
+      ]
+    },
+    {
+      "id": "BRK-28",
+      "name": "Feld-Servicetechniker Mobile FSL App",
+      "domain": "D5",
+      "scope": "INTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "iOS / Android Enterprise Mobile",
+      "vendor": "Salesforce FSL",
+      "desc": "Mobile Applikation für Servicetechniker mit Offline-Fähigkeit für Wartungsprotokolle, Heliumbefüllungsmesswerte und Kundenabnahmen.",
+      "tags": [
+        "Mobile",
+        "FieldService",
+        "App",
+        "Techniker"
+      ]
+    },
+    {
+      "id": "BRK-29",
+      "name": "Microsoft Entra ID (Azure AD) Global SSO",
+      "domain": "D6",
+      "scope": "INTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "Microsoft Global Cloud",
+      "vendor": "Microsoft",
+      "desc": "Globaler Identity- & Access-Management-Dienst für Single Sign-On (SSO), Multi-Faktor-Authentifizierung (MFA) und Zero-Trust Conditional Access.",
+      "tags": [
+        "Identity",
+        "SSO",
+        "EntraID",
+        "Security",
+        "Cloud"
+      ]
+    },
+    {
+      "id": "BRK-30",
+      "name": "Zscaler Zero Trust Private Access (ZPA/ZIA)",
+      "domain": "D6",
+      "scope": "INTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "Zscaler Global Cloud Mesh",
+      "vendor": "Zscaler Inc.",
+      "desc": "Zero-Trust-Netzwerkzugriff für Entwickler und Ingenieure auf On-Premises R&D- und MES-Ressourcen in Bremen und Ettlingen ohne offene Ports.",
+      "tags": [
+        "Security",
+        "ZeroTrust",
+        "Zscaler",
+        "VPN",
+        "Cloud"
+      ]
+    },
+    {
+      "id": "BRK-31",
+      "name": "Palo Alto Networks NextGen Factory Perimeter",
+      "domain": "D6",
+      "scope": "INTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "DMZ Bremen & Ettlingen",
+      "vendor": "Palo Alto Networks",
+      "desc": "Hochverfügbare Next-Gen Firewall mit Deep Packet Inspection zur Isolation von Produktions-OT, Prüffeldern und R&D-Labornetzwerken.",
+      "tags": [
+        "Perimeter",
+        "Firewall",
+        "OT",
+        "Security",
+        "On-Prem"
+      ]
+    },
+    {
+      "id": "BRK-32",
+      "name": "Snowflake Global Enterprise Data Lakehouse",
+      "domain": "D6",
+      "scope": "INTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "Snowflake AWS Frankfurt",
+      "vendor": "Snowflake Inc.",
+      "desc": "Zentrales Data Warehouse für weltweite ERP-Finanzdaten, Salesforce CRM-Historien, Spektrometer-Sensordaten und Ersatzteilbedarfe.",
+      "tags": [
+        "DataLake",
+        "Snowflake",
+        "Analytics",
+        "Cloud",
+        "SQL"
+      ]
+    },
+    {
+      "id": "BRK-33",
+      "name": "Microsoft Power BI Enterprise Analytics Hub",
+      "domain": "D6",
+      "scope": "INTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "Microsoft Cloud EU",
+      "vendor": "Microsoft",
+      "desc": "Vorstands- und Management-Dashboards für Auftragseingänge (Book-to-Bill), Margen, Service-Reaktionszeiten und Lieferketten-KPIs.",
+      "tags": [
+        "BI",
+        "Reporting",
+        "PowerBI",
+        "Analytics",
+        "Cloud"
+      ]
+    },
+    {
+      "id": "BRK-34",
+      "name": "Azure Data Factory & Event Hub Ingestion",
+      "domain": "D6",
+      "scope": "INTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "Microsoft Azure (Frankfurt)",
+      "vendor": "Microsoft",
+      "desc": "Verteilte ETL- und Datenintegrations-Pipelines für Real-Time Event-Streaming aus Spektrometern und Batch-Synchronisation aus SAP.",
+      "tags": [
+        "ETL",
+        "Azure",
+        "Streaming",
+        "DataPipeline",
+        "Cloud"
+      ]
+    }
+  ]
+};
+
       let registeredLandscapeModels = [
         {
           id: 'ORCAI-MODEL-JOHANNITER-EA',
@@ -24307,6 +26486,16 @@
           url: 'https://orcai-54321.web.app/api/orcai/v1/docs/ORCAI-MODEL-JOHANNESSTIFT-DIAKONIE-EA?v=1.0.0',
           stats: { systems: 34, connections: 45, integrations: 16, processes: 8, domains: 6 },
           data: cachedJohannesstiftModel
+        },
+        {
+          id: 'ORCAI-MODEL-BRUKER-EA',
+          organization: 'Bruker Corporation (Scientific Instruments & Diagnostics)',
+          shortName: 'BRUKER CORP',
+          title: 'Bruker Corporation Enterprise Architecture (Global High-Tech Instruments, CALID & BioSpin)',
+          desc: 'Konzernweite Enterprise- und Produkt-Architektur der Bruker Corporation (NASDAQ: BRKR, ~.4 Mrd. Umsatz, ~11.400 Mitarbeiter, Billerica HQ, Bremen Mass Spectrometry, Ettlingen BioSpin NMR). Umfasst globale ERP-Systeme (SAP S/4HANA, Ariba), R&D- und PLM-Plattformen (Siemens Teamcenter, SolidWorks, Jira), Life-Science- und Diagnostik-Schnittstellen (MALDI Biotyper MBT Compass, timsTOF PaSER GPU Proteomics, Mass Dynamics Cloud), globale Service-Steuerung (Salesforce Service Cloud / FSL) und LabScape Remote IoT Magnet-Telemetrie.',
+          url: 'https://orcai-54321.web.app/api/orcai/v1/docs/ORCAI-MODEL-BRUKER-EA?v=1.0.0',
+          stats: { systems: 34, connections: 48, integrations: 16, processes: 8, domains: 6 },
+          data: cachedBrukerModel
         }
       ];
 
