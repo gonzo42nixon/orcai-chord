@@ -3051,6 +3051,347 @@
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--card-border); border-radius: 3px; }
     ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+    /* =========================================================================
+       DRAWER HEADER CONTROLS, COMPACT TOGGLE SWITCH & POP-OUTS
+       ========================================================================= */
+    .section-header {
+      display: flex !important;
+      flex-direction: row !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      flex-wrap: nowrap !important;
+      overflow: hidden !important;
+      gap: 4px !important;
+      padding: 5px 8px !important;
+      min-height: 32px !important;
+      box-sizing: border-box !important;
+    }
+    .section-header-title-box {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 4px !important;
+      flex-shrink: 0 !important;
+      white-space: nowrap !important;
+      font-weight: 700 !important;
+      font-size: 0.78rem !important;
+    }
+    .section-header-controls {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 4px !important;
+      margin-left: auto !important;
+      margin-right: 4px !important;
+      flex-shrink: 0 !important;
+      white-space: nowrap !important;
+    }
+
+    /* MODERN COMPACT TOGGLE SWITCH */
+    .toggle-active-wrap {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 4px !important;
+      cursor: pointer !important;
+      user-select: none !important;
+      background: rgba(255, 255, 255, 0.05) !important;
+      padding: 2px 5px !important;
+      border-radius: 12px !important;
+      border: 1px solid var(--card-border) !important;
+      transition: all 0.2s ease !important;
+      height: 18px !important;
+      box-sizing: border-box !important;
+      flex-shrink: 0 !important;
+    }
+    body.theme-day .toggle-active-wrap {
+      background: #f1f5f9 !important;
+      border-color: #cbd5e1 !important;
+    }
+    .toggle-active-wrap:hover {
+      border-color: var(--accent) !important;
+    }
+    .toggle-active-wrap.active {
+      border-color: var(--accent) !important;
+      background: rgba(56, 189, 248, 0.16) !important;
+    }
+    body.theme-day .toggle-active-wrap.active {
+      border-color: #0284c7 !important;
+      background: rgba(2, 132, 199, 0.14) !important;
+    }
+    .toggle-active-label {
+      font-size: 0.60rem !important;
+      font-weight: 600 !important;
+      color: var(--text-muted) !important;
+      letter-spacing: 0.1px !important;
+      line-height: 1 !important;
+      white-space: nowrap !important;
+    }
+    .toggle-active-wrap.active .toggle-active-label {
+      color: var(--accent) !important;
+      font-weight: 750 !important;
+    }
+    body.theme-day .toggle-active-wrap.active .toggle-active-label {
+      color: #0284c7 !important;
+      font-weight: 750 !important;
+    }
+
+    /* THE PILL SWITCH SLIDER (COMPLETELY HIDES NATIVE CHECKBOX) */
+    .switch-pill {
+      position: relative !important;
+      display: inline-block !important;
+      width: 22px !important;
+      height: 12px !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      flex-shrink: 0 !important;
+      vertical-align: middle !important;
+      cursor: pointer !important;
+    }
+    .switch-pill input {
+      display: none !important;
+      opacity: 0 !important;
+      width: 0 !important;
+      height: 0 !important;
+      position: absolute !important;
+      pointer-events: none !important;
+    }
+    .switch-pill-slider {
+      position: absolute !important;
+      cursor: pointer !important;
+      inset: 0 !important;
+      background-color: #64748b !important;
+      transition: 0.2s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+      border-radius: 12px !important;
+      display: block !important;
+    }
+    .switch-pill-slider:before {
+      position: absolute !important;
+      content: "" !important;
+      height: 8px !important;
+      width: 8px !important;
+      left: 2px !important;
+      bottom: 2px !important;
+      background-color: #ffffff !important;
+      transition: 0.2s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+      border-radius: 50% !important;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4) !important;
+    }
+    .switch-pill input:checked + .switch-pill-slider {
+      background-color: var(--accent) !important;
+    }
+    body.theme-day .switch-pill input:checked + .switch-pill-slider {
+      background-color: #0284c7 !important;
+    }
+    .switch-pill input:checked + .switch-pill-slider:before {
+      transform: translateX(10px) !important;
+      background-color: #ffffff !important;
+    }
+
+    /* DEDICATED SECTION POPOUT LAUNCH BUTTON */
+    .section-popout-btn {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      background: rgba(255, 255, 255, 0.05) !important;
+      border: 1px solid var(--card-border) !important;
+      border-radius: 3px !important;
+      color: var(--text-muted) !important;
+      width: 18px !important;
+      height: 18px !important;
+      font-size: 0.72rem !important;
+      cursor: pointer !important;
+      transition: all 0.2s !important;
+      line-height: 1 !important;
+      padding: 0 !important;
+      flex-shrink: 0 !important;
+    }
+    body.theme-day .section-popout-btn {
+      background: #f1f5f9 !important;
+      border-color: #cbd5e1 !important;
+      color: #334155 !important;
+    }
+    .section-popout-btn:hover {
+      color: var(--accent) !important;
+      border-color: var(--accent) !important;
+      box-shadow: 0 0 8px var(--accent-glow) !important;
+      transform: scale(1.08) !important;
+    }
+    body.theme-day .section-popout-btn:hover {
+      background: #0284c7 !important;
+      color: #ffffff !important;
+      border-color: #0284c7 !important;
+    }
+
+    /* SECTION BADGE IN HEADER */
+    .section-header .section-badge {
+      flex-shrink: 0 !important;
+      white-space: nowrap !important;
+      font-size: 0.65rem !important;
+      padding: 2px 7px !important;
+    }
+
+    /* HIDDEN INACTIVE ITEMS (CRITICAL FOR ACTIVE FILTERING) */
+    .item-hidden-inactive {
+      display: none !important;
+    }
+
+    /* DRAWER SECTION RESIZERS (SPLITTERS) */
+    .drawer-section-resizer {
+      height: 6px !important;
+      background: transparent !important;
+      cursor: row-resize !important;
+      position: relative !important;
+      margin: 2px 0 !important;
+      border-radius: 3px !important;
+      transition: background 0.15s ease, box-shadow 0.15s ease !important;
+      z-index: 10 !important;
+    }
+    .drawer-section-resizer:hover, .drawer-section-resizer.resizing {
+      background: var(--accent) !important;
+      box-shadow: 0 0 8px var(--accent-glow) !important;
+    }
+    body.theme-day .drawer-section-resizer:hover, body.theme-day .drawer-section-resizer.resizing {
+      background: #0284c7 !important;
+    }
+
+    /* FLOATING VIEW POPOUT WINDOWS (DRAGGABLE & RESIZABLE) */
+    .view-floating-popout {
+      position: fixed !important;
+      background: var(--popout-bg, rgba(15, 23, 42, 0.96)) !important;
+      backdrop-filter: blur(24px) !important;
+      -webkit-backdrop-filter: blur(24px) !important;
+      border: 1px solid var(--card-border) !important;
+      border-radius: 12px !important;
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.08) !important;
+      display: flex !important;
+      flex-direction: column !important;
+      z-index: 600 !important;
+      resize: both !important;
+      overflow: hidden !important;
+      min-width: 360px !important;
+      min-height: 380px !important;
+      pointer-events: auto !important;
+      user-select: text !important;
+    }
+    body.theme-day .view-floating-popout {
+      background: rgba(255, 255, 255, 0.98) !important;
+      border-color: #0284c7 !important;
+      box-shadow: 0 24px 50px rgba(0, 0, 0, 0.25), 0 0 16px rgba(2, 132, 199, 0.2) !important;
+    }
+    .view-floating-popout .popout-header {
+      padding: 8px 12px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      background: rgba(255, 255, 255, 0.05) !important;
+      border-bottom: 1px solid var(--card-border) !important;
+      cursor: grab !important;
+      user-select: none !important;
+    }
+    body.theme-day .view-floating-popout .popout-header {
+      background: #f8fafc !important;
+      border-color: #e2e8f0 !important;
+    }
+    .view-floating-popout .popout-header:active {
+      cursor: grabbing !important;
+    }
+    .view-floating-popout .popout-title {
+      display: flex !important;
+      align-items: center !important;
+      gap: 7px !important;
+      font-size: 0.82rem !important;
+      font-weight: 750 !important;
+      color: var(--text-bright) !important;
+    }
+    body.theme-day .view-floating-popout .popout-title {
+      color: #0f172a !important;
+    }
+    .view-floating-popout .popout-actions {
+      display: flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+    }
+    .view-floating-popout .popout-body {
+      flex: 1 !important;
+      overflow-y: auto !important;
+      padding: 10px !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 6px !important;
+    }
+
+    /* MODEL CATALOGUE CARDS */
+    .model-catalog-card {
+      background: var(--item-bg) !important;
+      border: 1px solid var(--card-border) !important;
+      border-radius: 8px !important;
+      padding: 10px 12px !important;
+      margin-bottom: 8px !important;
+      transition: all 0.2s ease !important;
+    }
+    .model-catalog-card:hover {
+      border-color: var(--accent) !important;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.25) !important;
+    }
+    .model-catalog-card.active-model {
+      border-color: var(--accent) !important;
+      background: rgba(56, 189, 248, 0.1) !important;
+      box-shadow: 0 0 12px var(--accent-glow) !important;
+    }
+    body.theme-day .model-catalog-card.active-model {
+      background: rgba(2, 132, 199, 0.08) !important;
+      border-color: #0284c7 !important;
+    }
+
+    /* =========================================================================
+       HIGH CONTRAST DAY-MODE FIXES (NO DARK TEXT ON DARK BLUE BACKGROUNDS)
+       ========================================================================= */
+    .badge-relevant {
+      font-size: 0.58rem !important;
+      padding: 1px 6px !important;
+      border-radius: 4px !important;
+      background: var(--accent) !important;
+      color: #0b0f17 !important;
+      font-weight: 800 !important;
+      margin-left: 4px !important;
+      display: inline-block !important;
+      vertical-align: middle !important;
+      letter-spacing: 0.2px !important;
+    }
+    body.theme-day .badge-relevant {
+      background: #0284c7 !important;
+      color: #ffffff !important;
+      border: 1px solid #0369a1 !important;
+      box-shadow: 0 1px 3px rgba(2, 132, 199, 0.35) !important;
+    }
+    body.theme-day .section-badge.active,
+    body.theme-day .section-badge {
+      background: #0284c7 !important;
+      color: #ffffff !important;
+      border: 1px solid #0369a1 !important;
+      font-weight: 750 !important;
+      box-shadow: 0 1px 4px rgba(2, 132, 199, 0.35) !important;
+    }
+    body.theme-day .integ-tab-pill.active {
+      background: #0284c7 !important;
+      color: #ffffff !important;
+      border-color: #0369a1 !important;
+      box-shadow: 0 1px 3px rgba(2, 132, 199, 0.3) !important;
+    }
+    body.theme-day .radar-pill.active {
+      background: #0284c7 !important;
+      color: #ffffff !important;
+      border-color: #0369a1 !important;
+      box-shadow: 0 1px 4px rgba(2, 132, 199, 0.35) !important;
+    }
+    body.theme-day .subtitle-stage-pill {
+      background: #0284c7 !important;
+      color: #ffffff !important;
+      font-weight: 750 !important;
+    }
+    body.theme-day .edge-popout-card .popout-badge-id,
+    body.theme-day .sys-popout-card .popout-badge-id {
+      color: #ffffff !important;
+    }
   </style>
 </head>
 <body class="theme-night">
@@ -18466,7 +18807,7 @@
                 '<span class="title-step-text" style="color:var(--accent);">' + matchedConCount + ' Kanten</span>' +
               '</span>';
             subEl.innerHTML = 
-              '<span class="subtitle-stage-pill" style="background:var(--accent); color:#0b0f17; font-weight:700;">🏷️ Tag-Filter (' + activeTags.size + ' aktiv)</span>' +
+              '<span class="subtitle-stage-pill">🏷️ Tag-Filter (' + activeTags.size + ' aktiv)</span>' +
               '<span>Hervorgehoben: <strong>' + matchedSysCount + ' Systeme</strong> &amp; <strong>' + matchedConCount + ' Schnittstellen</strong> mit Tags: <strong>' + tagListStr + '</strong> · Restliche Objekte gedimmt</span>';
             return;
           }
@@ -19509,7 +19850,7 @@
             : '<span style="font-size:0.60rem; color:var(--text-muted);">' + i.steps.length + ' Schritte</span>';
 
           const relBadge = (hasContextFilter && isRelevant)
-            ? '<span style="font-size:0.58rem; padding:1px 5px; border-radius:3px; background:var(--accent); color:#0b0f17; font-weight:800; margin-left:4px;">● Relevant</span>'
+            ? '<span class="badge-relevant">● Relevant</span>'
             : '';
 
           row.innerHTML = 
@@ -19537,6 +19878,10 @@
           info.style.padding = '6px 0';
           info.textContent = '+ ' + (filtered.length - 80) + ' weitere Integrationen (Suchfeld nutzen)';
           listEl.appendChild(info);
+        }
+
+        if (typeof applyOnlyActiveFilters === 'function') {
+          applyOnlyActiveFilters();
         }
       }
 
@@ -21099,8 +21444,7 @@
             '</div>' +
           '</div>';
 
-        const canvasEl = document.getElementById('canvasContainer') || document.body;
-        canvasEl.appendChild(pop);
+        document.body.appendChild(pop);
 
         // Header Drag Handler
         const header = pop.querySelector('.popout-header');
@@ -21418,11 +21762,14 @@
 
         // 3. Integration Filter
         const integItems = document.querySelectorAll('#integrationList .list-item, #popoutList_integration .list-item');
+        const hasIntegContextFilter = Boolean(selectedDomainId || selectedProcess || selectedLink || selectedIntegration);
         integItems.forEach(item => {
           if (!filterOnlyActive.integration) {
             item.classList.remove('item-hidden-inactive');
+          } else if (!hasIntegContextFilter) {
+            item.classList.remove('item-hidden-inactive');
           } else {
-            // Active if relevant (has edge-match / not edge-dimmed)
+            // Active if relevant (has edge-match and not edge-dimmed)
             const isDimmed = item.classList.contains('edge-dimmed') || !item.classList.contains('edge-match');
             item.classList.toggle('item-hidden-inactive', isDimmed);
           }
@@ -21480,8 +21827,7 @@
           '<div class="popout-body" id="popoutList_' + section + '">' +
           '</div>';
 
-        const canvasEl = document.getElementById('canvasContainer') || document.body;
-        canvasEl.appendChild(pop);
+        document.body.appendChild(pop);
         openSectionPopouts.set(section, pop);
 
         // Header Drag Handler
