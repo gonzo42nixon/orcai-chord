@@ -24288,18 +24288,18 @@
     "modelTitle": "Bruker Corporation Enterprise Architecture (Global High-Tech Instruments, CALID & BioSpin)",
     "description": "Konzernweite Enterprise- und Produkt-Architektur der Bruker Corporation (NASDAQ: BRKR, ~$3.4 Mrd. Umsatz, ~11.400 Mitarbeiter, Billerica HQ, Bremen Mass Spectrometry, Ettlingen BioSpin NMR). Umfasst globale ERP-Systeme (SAP S/4HANA, Ariba), R&D- und PLM-Plattformen (Siemens Teamcenter, SolidWorks, Jira), Life-Science- und Diagnostik-Schnittstellen (MALDI Biotyper MBT Compass, timsTOF PaSER GPU Proteomics, Mass Dynamics Cloud), globale Service-Steuerung (Salesforce Service Cloud / FSL) und LabScape Remote IoT Magnet-Telemetrie.",
     "version": "1.0.0",
-    "updatedAt": "2026-09-16T16:27:36.322Z",
+    "updatedAt": "2026-09-16T17:40:30.215Z",
     "author": "Bruker Corporation Enterprise Architecture Team & ORCAI",
     "stats": {
-      "systemsCount": 34,
-      "connectionsCount": 48,
-      "integrationsCount": 16,
-      "processesCount": 8,
+      "systemsCount": 40,
+      "connectionsCount": 59,
+      "integrationsCount": 20,
+      "processesCount": 10,
       "domainsCount": 6,
-      "systems": 34,
-      "connections": 48,
-      "integrations": 16,
-      "processes": 8,
+      "systems": 40,
+      "connections": 59,
+      "integrations": 20,
+      "processes": 10,
       "domains": 6
     }
   },
@@ -24339,8 +24339,8 @@
     "D1": {
       "name": "Globale Unternehmenssteuerung & ERP",
       "shortName": "ERP / FIN",
-      "focus": "SAP S/4HANA Core, BTP/CPI Integrationsschicht, Ariba B2B-Einkauf, Workday HCM und globale Finanzkonsolidierung.",
-      "sysCount": 6,
+      "focus": "SAP S/4HANA Core, BTP/CPI Integrationsschicht, SAP Trading Partner Management (=TRM) für ELITech, SAP Document and Reporting Compliance (DRC) für Lateinamerika, Bruker Enterprise API-Portal, SEEBURGER BIS Peppol Gate, Ariba B2B und Workday HCM.",
+      "sysCount": 12,
       "leadSystem": "BRK-01"
     },
     "D2": {
@@ -24492,6 +24492,32 @@
         "BRK-INT-16"
       ],
       "desc": "Rechtssichere und FDA-konforme Archivierung aller Fertigungs- und Kalibrierprotokolle (Device History Record - DHR) für die Einhaltung von IVD-R und 21 CFR Part 11."
+    },
+    {
+      "id": "BRK-P-09",
+      "name": "Gesetzliche E-Rechnungsstellung & Fiskal-Compliance (SAP DRC LATAM & SEEBURGER Peppol Gate)",
+      "leadDomain": "D1",
+      "involvedDomains": [
+        "D1"
+      ],
+      "cleanIntegIds": [
+        "BRK-INT-18",
+        "BRK-INT-19"
+      ],
+      "desc": "Weltweiter rechtskonformer Rechnungsversand: Vorab-Clearance für Lateinamerika (Brasilien NF-e, Mexiko CFDI) über SAP DRC sowie AS4-konformer Peppol-B2G-Versand über das SEEBURGER Peppol Gate."
+    },
+    {
+      "id": "BRK-P-10",
+      "name": "B2B-Partner-Integration ELITech Molekulardiagnostik (SAP TRM)",
+      "leadDomain": "D1",
+      "involvedDomains": [
+        "D1",
+        "D3"
+      ],
+      "cleanIntegIds": [
+        "BRK-INT-17"
+      ],
+      "desc": "Elektronische Anbindung weltweiter Vertriebspartner und Diagnostik-Labore für ELITech Real-Time PCR Systeme über SAP Trading Partner Management (=TRM) mit EDIFACT/AS2 und SAP S/4HANA Integration."
     }
   ],
   "integrations": [
@@ -24862,6 +24888,118 @@
           "from": "BRK-11",
           "to": "BRK-05",
           "desc": "DHR-Qualifizierungsprotokoll an OpenText"
+        }
+      ]
+    },
+    {
+      "id": "BRK-INT-17",
+      "name": "B2B-Lieferkettenintegration ELITech Diagnostik via SAP TRM",
+      "cluster": "B2B_INTEGRATION",
+      "hub": "BRK-35",
+      "hubName": "SAP Trading Partner Management (=TRM) ELITech",
+      "protocol": "AS2 / OData / EDIFACT",
+      "desc": "Elektronische Anbindung weltweiter Vertriebspartner und Diagnostik-Labore für ELITech Real-Time PCR Reagenzien und Testkits über SAP Trading Partner Management (=TRM).",
+      "sourceSystem": "BRK-03",
+      "targetSystem": "BRK-15",
+      "steps": [
+        {
+          "connectionId": "BRK-C-51",
+          "from": "BRK-03",
+          "to": "BRK-35",
+          "desc": "Partner-Stammdaten & Auftragsabgleich"
+        },
+        {
+          "connectionId": "BRK-C-49",
+          "from": "BRK-01",
+          "to": "BRK-35",
+          "desc": "Kundenauftrag & Kontingentprüfung in S/4HANA"
+        },
+        {
+          "connectionId": "BRK-C-50",
+          "from": "BRK-35",
+          "to": "BRK-15",
+          "desc": "Fertigungs- und Lieferdisposition an ELITech InGenius"
+        }
+      ]
+    },
+    {
+      "id": "BRK-INT-18",
+      "name": "Gesetzliches E-Invoicing Lateinamerika via SAP DRC (Clearance-Modell)",
+      "cluster": "FISCAL_COMPLIANCE",
+      "hub": "BRK-36",
+      "hubName": "SAP Document and Reporting Compliance (DRC) LATAM",
+      "protocol": "HTTPS WebService / RFC / XML-Signatur",
+      "desc": "Vollautomatisierter Clearance-Prozess für Ausgangsrechnungen in Lateinamerika (Brasilien SEFAZ NF-e, Mexiko SAT CFDI 4.0) mit staatlicher Echtzeit-Validierung vor Warenausgang.",
+      "sourceSystem": "BRK-01",
+      "targetSystem": "BRK-37",
+      "steps": [
+        {
+          "connectionId": "BRK-C-52",
+          "from": "BRK-01",
+          "to": "BRK-36",
+          "desc": "Faktura-Generierung & eDocument XML-Erzeugung"
+        },
+        {
+          "connectionId": "BRK-C-53",
+          "from": "BRK-36",
+          "to": "BRK-37",
+          "desc": "Echtzeit-Clearance & digitale Behördensignatur"
+        }
+      ]
+    },
+    {
+      "id": "BRK-INT-19",
+      "name": "Europäisches B2G E-Invoicing via SEEBURGER Peppol Access Point",
+      "cluster": "E_INVOICING",
+      "hub": "BRK-39",
+      "hubName": "SEEBURGER BIS B2B & Peppol Access Point Gate",
+      "protocol": "AS4 / Peppol BIS Billing 3.0 / SAP RFC",
+      "desc": "Konforme elektronische Rechnungsstellung an öffentliche Auftraggeber in Europa (Universitätskliniken, Forschungsinstitute) über das 4-Corner Peppol-Netzwerk.",
+      "sourceSystem": "BRK-01",
+      "targetSystem": "BRK-40",
+      "steps": [
+        {
+          "connectionId": "BRK-C-57",
+          "from": "BRK-01",
+          "to": "BRK-39",
+          "desc": "Faktura-Export an SEEBURGER BIS"
+        },
+        {
+          "connectionId": "BRK-C-58",
+          "from": "BRK-39",
+          "to": "BRK-40",
+          "desc": "AS4 Peppol eDelivery Versand an Behördenportal"
+        }
+      ]
+    },
+    {
+      "id": "BRK-INT-20",
+      "name": "Partner API Lifecycle & Governance via Bruker API-Portal",
+      "cluster": "API_MANAGEMENT",
+      "hub": "BRK-38",
+      "hubName": "Bruker Enterprise API-Portal & Developer Hub",
+      "protocol": "REST / OpenAPI v3 / OAuth2 JWT",
+      "desc": "Zentrale Bereitstellung, Absicherung und Verbrauchsüberwachung von Integrations-APIs für Kunden und Softwarepartner (z.B. LIMS-Kopplungen, Spektrendaten-Export).",
+      "sourceSystem": "BRK-26",
+      "targetSystem": "BRK-02",
+      "steps": [
+        {
+          "connectionId": "BRK-C-55",
+          "from": "BRK-26",
+          "to": "BRK-38",
+          "desc": "Entwickler-Onboarding & API-Key Beantragung"
+        },
+        {
+          "connectionId": "BRK-C-56",
+          "from": "BRK-38",
+          "to": "BRK-29",
+          "desc": "Entra ID OAuth2 Token-Validierung"
+        },
+        {
+          "connectionId": "BRK-C-54",
+          "from": "BRK-38",
+          "to": "BRK-02",
+          "desc": "Proxy-Weiterleitung an SAP BTP CPI Gateway"
         }
       ]
     }
@@ -25883,6 +26021,249 @@
         "Kundenportal",
         "Security"
       ]
+    },
+    {
+      "id": "BRK-C-49",
+      "from": "BRK-01",
+      "to": "BRK-35",
+      "name": "SAP S/4HANA ➔ SAP TRM ELITech B2B-Auftragsübergabe",
+      "protocol": "OData v4 / IDoc over TLS",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "INTRA_CLOUD",
+      "transportOverlay": "SAP_BTP_MESH",
+      "overlay": "SAP_BTP_MESH",
+      "isCrossBoundary": false,
+      "rawWeight": 260,
+      "trafficPct": 2.6,
+      "tags": [
+        "SAP",
+        "TRM",
+        "B2B",
+        "Elitech",
+        "REST"
+      ]
+    },
+    {
+      "id": "BRK-C-50",
+      "from": "BRK-35",
+      "to": "BRK-15",
+      "name": "SAP TRM ➔ ELITech InGenius Reagenzien- & Kit-Disposition",
+      "protocol": "AS2 / HTTPS REST mTLS",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "CLOUD_TO_PREM",
+      "transportOverlay": "ZSCALER_ZPA",
+      "overlay": "ZSCALER_ZPA",
+      "isCrossBoundary": true,
+      "rawWeight": 210,
+      "trafficPct": 2.1,
+      "tags": [
+        "Elitech",
+        "TRM",
+        "Diagnostics",
+        "EDI",
+        "REST"
+      ]
+    },
+    {
+      "id": "BRK-C-51",
+      "from": "BRK-03",
+      "to": "BRK-35",
+      "name": "SAP Ariba ➔ SAP TRM Partner-Stammdatenabgleich",
+      "protocol": "cXML / REST API",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "INTRA_CLOUD",
+      "transportOverlay": "CLOUD_VPC",
+      "overlay": "CLOUD_VPC",
+      "isCrossBoundary": false,
+      "rawWeight": 175,
+      "trafficPct": 1.8,
+      "tags": [
+        "Ariba",
+        "TRM",
+        "B2B",
+        "EDI",
+        "REST"
+      ]
+    },
+    {
+      "id": "BRK-C-52",
+      "from": "BRK-01",
+      "to": "BRK-36",
+      "name": "SAP S/4HANA ➔ SAP DRC LATAM Faktura- & eDocument-Trigger",
+      "protocol": "RFC / eDocument Framework over TLS",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "INTRA_CLOUD",
+      "transportOverlay": "SAP_BTP_MESH",
+      "overlay": "SAP_BTP_MESH",
+      "isCrossBoundary": false,
+      "rawWeight": 290,
+      "trafficPct": 2.9,
+      "tags": [
+        "SAP",
+        "DRC",
+        "eInvoicing",
+        "LATAM",
+        "REST"
+      ]
+    },
+    {
+      "id": "BRK-C-53",
+      "from": "BRK-36",
+      "to": "BRK-37",
+      "name": "SAP DRC ➔ LATAM Behörden Staatliche Clearance & XML-Signatur",
+      "protocol": "HTTPS SOAP / REST WebService mTLS",
+      "messageType": "SOAP",
+      "msgType": "SOAP",
+      "flowType": "CLOUD_TO_CLOUD",
+      "transportOverlay": "PUBLIC_INTERNET",
+      "overlay": "PUBLIC_INTERNET",
+      "isCrossBoundary": true,
+      "rawWeight": 310,
+      "trafficPct": 3.1,
+      "tags": [
+        "DRC",
+        "SEFAZ",
+        "SAT",
+        "LATAM",
+        "Clearance",
+        "SOAP"
+      ]
+    },
+    {
+      "id": "BRK-C-54",
+      "from": "BRK-38",
+      "to": "BRK-02",
+      "name": "Bruker API-Portal ➔ SAP BTP API-Management Proxy & Routing",
+      "protocol": "REST / OpenAPI v3 over mTLS",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "INTRA_CLOUD",
+      "transportOverlay": "SAP_BTP_MESH",
+      "overlay": "SAP_BTP_MESH",
+      "isCrossBoundary": false,
+      "rawWeight": 340,
+      "trafficPct": 3.4,
+      "tags": [
+        "API",
+        "BTP",
+        "Gateway",
+        "Routing",
+        "REST"
+      ]
+    },
+    {
+      "id": "BRK-C-55",
+      "from": "BRK-26",
+      "to": "BRK-38",
+      "name": "MyBruker Portal ➔ API-Portal B2B Partner API Self-Service",
+      "protocol": "REST / OAuth2 Client Credentials",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "INTRA_CLOUD",
+      "transportOverlay": "CLOUD_VPC",
+      "overlay": "CLOUD_VPC",
+      "isCrossBoundary": false,
+      "rawWeight": 230,
+      "trafficPct": 2.3,
+      "tags": [
+        "API",
+        "MyBruker",
+        "SelfService",
+        "Portal",
+        "REST"
+      ]
+    },
+    {
+      "id": "BRK-C-56",
+      "from": "BRK-38",
+      "to": "BRK-29",
+      "name": "Bruker API-Portal ➔ Entra ID Security & JWT Token Verification",
+      "protocol": "OpenID Connect / JWKS OAuth2",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "INTRA_CLOUD",
+      "transportOverlay": "CLOUD_VPC",
+      "overlay": "CLOUD_VPC",
+      "isCrossBoundary": false,
+      "rawWeight": 280,
+      "trafficPct": 2.8,
+      "tags": [
+        "API",
+        "Security",
+        "EntraID",
+        "SSO",
+        "REST"
+      ]
+    },
+    {
+      "id": "BRK-C-57",
+      "from": "BRK-01",
+      "to": "BRK-39",
+      "name": "SAP S/4HANA ➔ SEEBURGER BIS Faktura- & EDI-Export",
+      "protocol": "SAP RFC / tRFC over TLS",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "CLOUD_TO_PREM",
+      "transportOverlay": "ZSCALER_ZPA",
+      "overlay": "ZSCALER_ZPA",
+      "isCrossBoundary": true,
+      "rawWeight": 270,
+      "trafficPct": 2.7,
+      "tags": [
+        "SAP",
+        "SEEBURGER",
+        "EDI",
+        "Faktura",
+        "REST"
+      ]
+    },
+    {
+      "id": "BRK-C-58",
+      "from": "BRK-39",
+      "to": "BRK-40",
+      "name": "SEEBURGER BIS ➔ Peppol Network AS4 e-Delivery Versand",
+      "protocol": "AS4 / Peppol BIS Billing 3.0",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "PREM_TO_CLOUD",
+      "transportOverlay": "PUBLIC_INTERNET",
+      "overlay": "PUBLIC_INTERNET",
+      "isCrossBoundary": true,
+      "rawWeight": 320,
+      "trafficPct": 3.2,
+      "tags": [
+        "SEEBURGER",
+        "Peppol",
+        "AS4",
+        "eInvoicing",
+        "REST"
+      ]
+    },
+    {
+      "id": "BRK-C-59",
+      "from": "BRK-39",
+      "to": "BRK-02",
+      "name": "SEEBURGER BIS ➔ SAP BTP B2B Protocol Bridge",
+      "protocol": "HTTPS / EDIFACT Mapping over TLS",
+      "messageType": "REST",
+      "msgType": "REST",
+      "flowType": "PREM_TO_CLOUD",
+      "transportOverlay": "SAP_BTP_MESH",
+      "overlay": "SAP_BTP_MESH",
+      "isCrossBoundary": true,
+      "rawWeight": 200,
+      "trafficPct": 2,
+      "tags": [
+        "SEEBURGER",
+        "BTP",
+        "EDI",
+        "Integration",
+        "REST"
+      ]
     }
   ],
   "systems": [
@@ -26452,6 +26833,120 @@
         "DataPipeline",
         "Cloud"
       ]
+    },
+    {
+      "id": "BRK-35",
+      "name": "SAP Trading Partner Management (=TRM) - ELITech B2B",
+      "domain": "D1",
+      "scope": "INTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "SAP BTP EU-Central (Frankfurt)",
+      "vendor": "SAP SE",
+      "desc": "SAP Trading Partner Management (=TRM) auf SAP BTP zur Verwaltung von B2B-Handelspartnern, EDI-Vereinbarungen (EDIFACT/X12), automatisierten Nachrichten-Envelopes und Reagenzien-Lieferketten für ELITech Molekulardiagnostik.",
+      "tags": [
+        "TRM",
+        "TPM",
+        "B2B",
+        "EDI",
+        "Elitech",
+        "SAP",
+        "Integration",
+        "Cloud"
+      ]
+    },
+    {
+      "id": "BRK-36",
+      "name": "SAP Document and Reporting Compliance (DRC) LATAM",
+      "domain": "D1",
+      "scope": "INTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "SAP BTP / S/4HANA Cloud Engine",
+      "vendor": "SAP SE",
+      "desc": "Zentrale e-Invoicing- und gesetzliche Berichterstattungsplattform (DRC) für Lateinamerika (u.a. Brasilien SEFAZ NF-e/NFS-e, Mexiko SAT CFDI 4.0, Kolumbien DIAN, Chile DTE) mit automatisierter XML-Signatur und Freigabesteuerung.",
+      "tags": [
+        "DRC",
+        "Compliance",
+        "eInvoicing",
+        "LATAM",
+        "SAP",
+        "Steuern",
+        "Cloud"
+      ]
+    },
+    {
+      "id": "BRK-37",
+      "name": "Lateinamerikanische Steuer- & E-Invoicing-Behörden (SEFAZ, SAT, DIAN)",
+      "domain": "D1",
+      "scope": "EXTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "Staatliche Rechenzentren (BR, MX, CO, CL)",
+      "vendor": "Regierungsbehörden (SEFAZ BR, SAT MX, DIAN CO)",
+      "desc": "Staatliche Steuer- und Rechnungsbehörden in Lateinamerika zur behördlichen Vorab-Validierung, Signaturprüfung und digitalen Freigabe von elektronischen Ausgangs- und Eingangsrechnungen (Clearance-Modell).",
+      "tags": [
+        "LATAM",
+        "Steuerbehörden",
+        "SEFAZ",
+        "SAT",
+        "eInvoicing",
+        "Compliance",
+        "Extern"
+      ]
+    },
+    {
+      "id": "BRK-38",
+      "name": "Bruker Enterprise API-Portal & Developer Hub",
+      "domain": "D1",
+      "scope": "INTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "SAP BTP / Azure Cloud (Frankfurt)",
+      "vendor": "SAP SE / Bruker",
+      "desc": "Zentrales unternehmensweites API-Portal zur Katalogisierung, Dokumentation (OpenAPI/Swagger), Absicherung, Lizenzierung und Governance aller internen und externen B2B-Programmierschnittstellen.",
+      "tags": [
+        "APIPortal",
+        "API",
+        "DeveloperHub",
+        "Integration",
+        "Gateway",
+        "Cloud"
+      ]
+    },
+    {
+      "id": "BRK-39",
+      "name": "SEEBURGER BIS B2B & Peppol Access Point Gate",
+      "domain": "D1",
+      "scope": "INTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "Bruker Datacenter (Ettlingen & Bremen)",
+      "vendor": "SEEBURGER AG",
+      "desc": "SEEBURGER Business Integration Suite (BIS) als zentrales B2B/EDI-Gateway und zertifiziertes Peppol Access Point Gate (4-Corner-Modell) für standardisierte elektronische Beschaffungs- und Rechnungsprozesse (EN 16931, XRechnung, Factur-X, ZUGFeRD).",
+      "tags": [
+        "SEEBURGER",
+        "Peppol",
+        "EDI",
+        "eInvoicing",
+        "B2B",
+        "B2G",
+        "On-Prem"
+      ]
+    },
+    {
+      "id": "BRK-40",
+      "name": "Peppol e-Delivery Network & Behördenportale",
+      "domain": "D1",
+      "scope": "EXTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "OpenPEPPOL Cloud & Europäische Rechenzentren",
+      "vendor": "OpenPEPPOL AISBL / EU E-Procurement",
+      "desc": "Internationales 4-Corner Peppol-Netzwerk und europäische E-Procurement-/E-Invoicing-Plattformen (u.a. Bund ZRE, OZG-RE, Chorus Pro Frankreich) für öffentliche Ausschreibungen und B2G-Abrechnungen.",
+      "tags": [
+        "Peppol",
+        "B2G",
+        "eInvoicing",
+        "Europa",
+        "Netzwerk",
+        "Extern",
+        "Cloud"
+      ]
     }
   ]
 };
@@ -26492,9 +26987,9 @@
           organization: 'Bruker Corporation (Scientific Instruments & Diagnostics)',
           shortName: 'BRUKER CORP',
           title: 'Bruker Corporation Enterprise Architecture (Global High-Tech Instruments, CALID & BioSpin)',
-          desc: 'Konzernweite Enterprise- und Produkt-Architektur der Bruker Corporation (NASDAQ: BRKR, ~.4 Mrd. Umsatz, ~11.400 Mitarbeiter, Billerica HQ, Bremen Mass Spectrometry, Ettlingen BioSpin NMR). Umfasst globale ERP-Systeme (SAP S/4HANA, Ariba), R&D- und PLM-Plattformen (Siemens Teamcenter, SolidWorks, Jira), Life-Science- und Diagnostik-Schnittstellen (MALDI Biotyper MBT Compass, timsTOF PaSER GPU Proteomics, Mass Dynamics Cloud), globale Service-Steuerung (Salesforce Service Cloud / FSL) und LabScape Remote IoT Magnet-Telemetrie.',
+          desc: 'Konzernweite Enterprise- und Produkt-Architektur der Bruker Corporation (NASDAQ: BRKR, ~$3.4 Mrd. Umsatz, ~11.400 Mitarbeiter, Billerica HQ, Bremen Mass Spectrometry, Ettlingen BioSpin NMR). Umfasst globale ERP-Systeme (SAP S/4HANA, Ariba), B2B- & E-Invoicing-Plattformen (SAP Trading Partner Management (=TRM) für ELITech, SAP Document and Reporting Compliance (DRC) LATAM, Bruker Enterprise API-Portal, SEEBURGER BIS Peppol Gate), R&D- und PLM-Plattformen (Siemens Teamcenter, SolidWorks, Jira), Life-Science- und Diagnostik-Schnittstellen (MALDI Biotyper MBT Compass, timsTOF PaSER GPU Proteomics, Mass Dynamics Cloud), globale Service-Steuerung (Salesforce FSL) und LabScape Remote IoT.',
           url: 'https://orcai-54321.web.app/api/orcai/v1/docs/ORCAI-MODEL-BRUKER-EA?v=1.0.0',
-          stats: { systems: 34, connections: 48, integrations: 16, processes: 8, domains: 6 },
+          stats: { systems: 40, connections: 59, integrations: 20, processes: 10, domains: 6 },
           data: cachedBrukerModel
         }
       ];
