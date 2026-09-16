@@ -23742,7 +23742,10 @@
         }
       ];
 
-      let currentModelId = 'ORCAI-MODEL-JOHANNITER-EA';
+      let startupModelId = localStorage.getItem('ORCAI_STARTUP_MODEL_ID') || 'ORCAI-MODEL-JOHANNESSTIFT-DIAKONIE-EA';
+      let currentModelId = startupModelId;
+      window.startupModelId = startupModelId;
+      window.currentModelId = currentModelId;
 
       // Open Landscape Catalog Popout Window
       window.closeLandscapeCatalogPopout = function() {
@@ -23788,6 +23791,23 @@
           '<div class="popout-body" id="landscapeCatalogBody">' +
             '<div style="font-size:0.72rem; color:var(--text-muted); margin-bottom:8px; line-height:1.4;">' +
               'Verwalten und wechseln Sie zwischen autarken <strong>reinen JSON-Modellen</strong>. Jedes Modell deckt alle Bereiche ab (Meta-Info, Domänen, Prozesse, Integrationen, Verbindungen, Systeme) und ist in ORCAI persistiert.' +
+            '</div>' +
+            '<div class="catalog-settings-panel" style="margin-bottom:12px; padding:10px 14px; background:rgba(56,189,248,0.08); border:1px solid rgba(56,189,248,0.28); border-radius:8px; display:flex; justify-content:space-between; align-items:center; gap:10px;">' +
+              '<div style="display:flex; align-items:center; gap:9px;">' +
+                '<span style="font-size:1.2rem;">⚙️</span>' +
+                '<div>' +
+                  '<div style="font-size:0.75rem; font-weight:750; color:var(--text-bright); display:flex; align-items:center; gap:6px;">' +
+                    '<span>Start-Landschaft:</span>' +
+                    '<span id="lblCurrentStartModel" style="color:var(--accent); font-weight:800;">' + (registeredLandscapeModels.find(m => m.id === startupModelId)?.organization || 'Johannesstift Diakonie gAG & Conciliamus IT') + '</span>' +
+                  '</div>' +
+                  '<div style="font-size:0.63rem; color:var(--text-muted); margin-top:2px;">' +
+                    'Persistiert in ORCAI Cloud · Dokument: <code style="color:var(--text-bright); font-size:0.63rem; background:rgba(255,255,255,0.06); padding:1px 4px; border-radius:3px;">ORCAI-CONFIG-STARTUP-LANDSCAPE</code>' +
+                  '</div>' +
+                '</div>' +
+              '</div>' +
+              '<a href="https://orcai-54321.web.app/api/orcai/v1/docs/ORCAI-CONFIG-STARTUP-LANDSCAPE" target="_blank" rel="noopener noreferrer" style="font-size:0.67rem; color:var(--accent); text-decoration:none; display:inline-flex; align-items:center; gap:4px; padding:4px 9px; background:rgba(56,189,248,0.15); border:1px solid var(--accent); border-radius:5px; font-weight:700; white-space:nowrap;" title="ORCAI Start-Settings JSON im neuen Tab öffnen">' +
+                '<span>ORCAI Settings JSON</span> ↗' +
+              '</a>' +
             '</div>' +
             '<div id="modelCardsContainer"></div>' +
             '<div style="margin-top:10px; padding:10px; background:var(--item-bg); border-radius:8px; border:1px solid var(--card-border);">' +
@@ -23838,17 +23858,24 @@
 
         registeredLandscapeModels.forEach(m => {
           const isActive = (m.id === currentModelId);
+          const isStartModel = (m.id === startupModelId);
           const card = document.createElement('div');
           card.className = 'model-catalog-card' + (isActive ? ' active-model' : '');
           card.innerHTML = 
             '<div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:4px;">' +
-              '<div>' +
+              '<div style="flex:1; padding-right:8px;">' +
                 '<div style="font-size:0.84rem; font-weight:750; color:var(--text-bright);">' + m.organization + '</div>' +
                 '<div style="font-size:0.72rem; color:var(--accent); font-weight:600;">' + m.title + '</div>' +
               '</div>' +
-              (isActive 
-                ? '<span style="font-size:0.62rem; padding:2px 6px; border-radius:4px; background:rgba(16,185,129,0.2); color:#10b981; font-weight:750;">● Aktiv</span>'
-                : '<button onclick="window.activateLandscapeModel(\'' + m.id + '\')" style="font-size:0.68rem; padding:3px 8px; border-radius:4px; background:var(--accent); color:#0b0f17; font-weight:750; border:none; cursor:pointer;">▶ Modell laden</button>') +
+              '<div style="display:flex; flex-direction:column; align-items:flex-end; gap:5px; flex-shrink:0;">' +
+                (isActive 
+                  ? '<span style="font-size:0.62rem; padding:2px 7px; border-radius:4px; background:rgba(16,185,129,0.2); color:#10b981; font-weight:750;">● Aktiv</span>'
+                  : '<button onclick="window.activateLandscapeModel(\'' + m.id + '\')" style="font-size:0.68rem; padding:3px 9px; border-radius:4px; background:var(--accent); color:#0b0f17; font-weight:750; border:none; cursor:pointer;">▶ Modell laden</button>') +
+                '<label style="display:inline-flex; align-items:center; gap:5px; font-size:0.68rem; cursor:pointer; color:' + (isStartModel ? 'var(--accent)' : 'var(--text-muted)') + '; font-weight:' + (isStartModel ? '750' : 'normal') + '; background:' + (isStartModel ? 'rgba(56,189,248,0.14)' : 'rgba(255,255,255,0.04)') + '; border:1px solid ' + (isStartModel ? 'var(--accent)' : 'var(--card-border)') + '; padding:2px 7px; border-radius:4px; transition:all 0.2s;" title="Als Start-Modell festlegen">' +
+                  '<input type="radio" name="startLandscapeModelRadio" value="' + m.id + '" ' + (isStartModel ? 'checked' : '') + ' onchange="window.setStartupModel(\'' + m.id + '\')" style="margin:0; cursor:pointer; accent-color:var(--accent);" />' +
+                  '<span>Show on Start</span>' +
+                '</label>' +
+              '</div>' +
             '</div>' +
             '<div style="font-size:0.68rem; color:var(--text-muted); line-height:1.35; margin-bottom:6px;">' + m.desc + '</div>' +
             '<div style="display:flex; justify-content:space-between; align-items:center; font-size:0.65rem; color:var(--text-muted); border-top:1px solid rgba(255,255,255,0.06); padding-top:4px;">' +
@@ -23860,6 +23887,56 @@
           container.appendChild(card);
         });
       }
+
+      
+      // Set Startup Landscape Model & Persist to ORCAI Cloud
+      window.setStartupModel = async function(modelId) {
+        startupModelId = modelId;
+        localStorage.setItem('ORCAI_STARTUP_MODEL_ID', modelId);
+
+        const targetModel = registeredLandscapeModels.find(m => m.id === modelId);
+        const orgName = targetModel?.organization || modelId;
+
+        const lbl = document.getElementById('lblCurrentStartModel');
+        if (lbl) lbl.textContent = orgName;
+
+        renderModelCatalogueCards();
+
+        window.showCrudToast('⏳ Speichere Start-Modell in ORCAI Cloud...');
+
+        try {
+          const res = await fetch('https://orcai-54321.web.app/api/critic/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              action: 'save_doc',
+              key: 'ORCAI-CONFIG-STARTUP-LANDSCAPE',
+              label: 'ORCAI EA-Landschaft Start-Konfiguration (Default Startup Landscape)',
+              tags: ['config', 'startup-landscape', 'settings', targetModel?.shortName || 'EA'],
+              contentType: 'application/json; charset=utf-8',
+              value: JSON.stringify({
+                schema: 'https://orcai-54321.web.app/schemas/ea-landscape-config-v1.json',
+                startupModelId: modelId,
+                organization: orgName,
+                modelTitle: targetModel?.title || '',
+                docUrl: targetModel?.url || '',
+                settingsUrl: 'https://orcai-54321.web.app/api/orcai/v1/docs/ORCAI-CONFIG-STARTUP-LANDSCAPE',
+                updatedAt: new Date().toISOString(),
+                updatedBy: 'Interactive User Settings'
+              }, null, 2)
+            })
+          });
+          const data = await res.json();
+          if (res.ok && data.ok) {
+            window.showCrudToast('☁ Start-Modell "' + (targetModel?.shortName || modelId) + '" in ORCAI Cloud persistiert!');
+          } else {
+            window.showCrudToast('⚙️ Start-Modell lokal gespeichert');
+          }
+        } catch (err) {
+          console.warn('Save startup model to ORCAI error:', err);
+          window.showCrudToast('⚙️ Start-Modell lokal gespeichert');
+        }
+      };
 
       window.activateLandscapeModel = async function(modelId) {
         const found = registeredLandscapeModels.find(m => m.id === modelId);
@@ -23879,7 +23956,7 @@
         }
 
         if (modelJson) {
-          currentModelId = modelId;
+          currentModelId = modelId; window.currentModelId = modelId;
           window.loadLandscapeModel(modelJson);
           renderModelCatalogueCards();
         } else {
@@ -25561,13 +25638,31 @@
       // Restore State from Deep-Link Query Parameters if present
       restoreStateFromUrl();
 
-      // Initial Drawer Lists & Radar Rendering
-      renderConnections();
-      renderSystems();
-      renderDynamicRadarBar();
+      // If startup model is Johannesstift Diakonie or other registered model, activate it!
+      const initialStartupModel = registeredLandscapeModels.find(m => m.id === startupModelId);
+      if (initialStartupModel && initialStartupModel.data && startupModelId !== 'ORCAI-MODEL-JOHANNITER-EA') {
+        currentModelId = startupModelId;
+        window.loadLandscapeModel(initialStartupModel.data);
+      } else {
+        renderConnections();
+        renderSystems();
+        renderDynamicRadarBar();
+        updateUI();
+      }
 
-      // Initial UI and Header Drilldown Title Rendering
-      updateUI();
+      // Background sync of startup model setting from ORCAI Cloud
+      fetch('https://orcai-54321.web.app/api/orcai/v1/docs/ORCAI-CONFIG-STARTUP-LANDSCAPE?v=' + Date.now())
+        .then(r => r.ok ? r.json() : null)
+        .then(cfg => {
+          if (cfg && cfg.startupModelId && cfg.startupModelId !== startupModelId) {
+            startupModelId = cfg.startupModelId;
+            localStorage.setItem('ORCAI_STARTUP_MODEL_ID', startupModelId);
+            const lbl = document.getElementById('lblCurrentStartModel');
+            const tm = registeredLandscapeModels.find(m => m.id === startupModelId);
+            if (lbl && tm) lbl.textContent = tm.organization;
+          }
+        })
+        .catch(err => console.warn('Cloud startup settings check skipped:', err));
   
       // =====================================================================
       // INTERACTIVE CRUD ENGINE: PERSISTENCE, MUTATIONS, EDITORS & MODALS
