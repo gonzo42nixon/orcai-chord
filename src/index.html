@@ -3429,6 +3429,288 @@
     body.theme-day .sys-popout-card .popout-badge-id {
       color: #ffffff !important;
     }
+  
+    /* =====================================================================
+       INTERACTIVE CRUD, INSPECTOR EDIT, MODAL & TOAST STYLES
+       ===================================================================== */
+    .section-add-btn {
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: var(--accent);
+      font-size: 0.64rem;
+      font-weight: 750;
+      padding: 2px 7px;
+      border-radius: 4px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      transition: all 0.2s;
+    }
+    .section-add-btn:hover {
+      background: var(--accent);
+      color: #0b0f17;
+      border-color: var(--accent);
+    }
+    body.theme-day .section-add-btn {
+      background: #e0f2fe;
+      border-color: #38bdf8;
+      color: #0284c7;
+    }
+    body.theme-day .section-add-btn:hover {
+      background: #0284c7;
+      color: #ffffff;
+    }
+
+    /* Row quick action buttons */
+    .list-item, .domain-item {
+      position: relative;
+    }
+    .row-hover-actions {
+      display: none;
+      position: absolute;
+      right: 6px;
+      top: 5px;
+      gap: 3px;
+      background: var(--item-bg);
+      padding: 2px 4px;
+      border-radius: 4px;
+      border: 1px solid var(--card-border);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      z-index: 10;
+    }
+    .list-item:hover .row-hover-actions,
+    .domain-item:hover .row-hover-actions {
+      display: flex;
+    }
+    .row-act-btn {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      border-radius: 3px;
+      padding: 1px 5px;
+      font-size: 0.64rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .row-act-btn:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+      background: rgba(56,189,248,0.15);
+    }
+    .row-act-btn.delete:hover {
+      color: #ef4444;
+      border-color: #ef4444;
+      background: rgba(239,68,68,0.15);
+    }
+
+    /* Inspector Action Bar */
+    .insp-action-bar {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      margin: 8px 0 12px 0;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .insp-action-btn {
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid var(--card-border);
+      color: var(--text-bright);
+      font-size: 0.70rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s;
+    }
+    .insp-action-btn:hover {
+      background: var(--accent);
+      color: #0b0f17;
+      border-color: var(--accent);
+    }
+    .insp-action-btn.delete {
+      color: #f87171;
+    }
+    .insp-action-btn.delete:hover {
+      background: #ef4444;
+      color: #ffffff;
+      border-color: #ef4444;
+    }
+
+    /* Inspector Edit Form */
+    .insp-edit-form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: var(--item-bg);
+      border: 1px solid var(--accent);
+      border-radius: 8px;
+      padding: 12px;
+      animation: fadeIn 0.2s ease-out;
+    }
+    .insp-form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .insp-form-label {
+      font-size: 0.65rem;
+      font-weight: 750;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .insp-form-input, .insp-form-select, .insp-form-textarea {
+      background: var(--input-bg, rgba(0,0,0,0.3));
+      border: 1px solid var(--card-border);
+      border-radius: 5px;
+      color: var(--text-bright);
+      font-family: inherit;
+      font-size: 0.75rem;
+      padding: 5px 8px;
+      box-sizing: border-box;
+      width: 100%;
+      transition: border-color 0.2s;
+    }
+    .insp-form-input:focus, .insp-form-select:focus, .insp-form-textarea:focus {
+      border-color: var(--accent);
+      outline: none;
+    }
+    .insp-form-row {
+      display: flex;
+      gap: 8px;
+    }
+    .insp-form-row > div {
+      flex: 1;
+    }
+    .insp-form-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .insp-btn-save {
+      flex: 1;
+      background: var(--accent);
+      color: #0b0f17;
+      border: none;
+      border-radius: 5px;
+      padding: 7px 12px;
+      font-size: 0.74rem;
+      font-weight: 750;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+    .insp-btn-save:hover {
+      filter: brightness(1.1);
+    }
+    .insp-btn-cancel {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-muted);
+      border: 1px solid var(--card-border);
+      border-radius: 5px;
+      padding: 7px 12px;
+      font-size: 0.74rem;
+      cursor: pointer;
+    }
+    .insp-btn-cancel:hover {
+      color: var(--text-bright);
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    /* CRUD Modal Dialog */
+    .crud-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.68);
+      backdrop-filter: blur(4px);
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .crud-modal-window {
+      background: var(--card-bg, #111827);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      width: 100%;
+      max-width: 580px;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+      overflow: hidden;
+      animation: popIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .crud-modal-header {
+      padding: 12px 18px;
+      background: var(--item-bg);
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .crud-modal-title {
+      font-size: 0.92rem;
+      font-weight: 750;
+      color: var(--text-bright);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .crud-modal-body {
+      padding: 18px;
+      overflow-y: auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .crud-modal-footer {
+      padding: 12px 18px;
+      background: var(--item-bg);
+      border-top: 1px solid var(--card-border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    /* Toast Notification */
+    #crudToast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--card-bg, #111827);
+      border: 1px solid var(--accent, #38bdf8);
+      color: var(--text-bright, #f8fafc);
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 650;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      z-index: 100000;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: opacity 0.25s, transform 0.25s;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    #crudToast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
   </style>
 </head>
 <body class="theme-night">
@@ -3584,6 +3866,7 @@
                   <span class="switch-pill-slider"></span>
                 </label>
               </div>
+              <button class="section-add-btn" id="btnAddDomain" onclick="event.stopPropagation(); window.openNewEntityModal('domain')" title="Neue Domäne anlegen">+ Neu</button>
               <button class="section-popout-btn" id="btnPopoutDomain" onclick="window.openSectionPopout('domain')" title="Domänen-Tabelle als vergrößerbares Pop-Out öffnen">⧉</button>
             </div>
             <span class="section-badge active" id="badgeDomain">8 Domänen</span>
@@ -3606,6 +3889,7 @@
                   <span class="switch-pill-slider"></span>
                 </label>
               </div>
+              <button class="section-add-btn" id="btnAddProcess" onclick="event.stopPropagation(); window.openNewEntityModal('process')" title="Neuen Prozess anlegen">+ Neu</button>
               <button class="section-popout-btn" id="btnPopoutProcess" onclick="window.openSectionPopout('process')" title="Prozess-Tabelle als vergrößerbares Pop-Out öffnen">⧉</button>
             </div>
             <span class="section-badge" id="badgeProcess">13 Prozesse</span>
@@ -3628,6 +3912,7 @@
                   <span class="switch-pill-slider"></span>
                 </label>
               </div>
+              <button class="section-add-btn" id="btnAddIntegration" onclick="event.stopPropagation(); window.openNewEntityModal('integration')" title="Neue Integration anlegen">+ Neu</button>
               <button class="section-popout-btn" id="btnPopoutIntegration" onclick="window.openSectionPopout('integration')" title="Integrations-Tabelle als vergrößerbares Pop-Out öffnen">⧉</button>
             </div>
             <span class="section-badge" id="badgeIntegration">243 Integrationen</span>
@@ -3661,6 +3946,7 @@
                   <span class="switch-pill-slider"></span>
                 </label>
               </div>
+              <button class="section-add-btn" id="btnAddConnection" onclick="event.stopPropagation(); window.openNewEntityModal('connection')" title="Neue Verbindung anlegen">+ Neu</button>
               <button class="section-popout-btn" id="btnPopoutConnection" onclick="window.openSectionPopout('connection')" title="Verbindungs-Tabelle als vergrößerbares Pop-Out öffnen">⧉</button>
             </div>
             <span class="section-badge" id="badgeConnection">229 Verbindungen</span>
@@ -3684,6 +3970,7 @@
                   <span class="switch-pill-slider"></span>
                 </label>
               </div>
+              <button class="section-add-btn" id="btnAddSystem" onclick="event.stopPropagation(); window.openNewEntityModal('system')" title="Neues System anlegen">+ Neu</button>
               <button class="section-popout-btn" id="btnPopoutSystem" onclick="window.openSectionPopout('system')" title="System-Tabelle als vergrößerbares Pop-Out öffnen">⧉</button>
             </div>
             <span class="section-badge" id="badgeSystem">82 Systeme</span>
@@ -17724,6 +18011,7 @@
       };
 
       const nodeCoords = new Map();
+      window.nodeCoords = nodeCoords;
 
       // TL: Johanniter Cloud - grouped by Hyperscaler: SAP_BTP, AZURE, AWS, GCP
       const hyperscalerOrder = { 'SAP_BTP': 1, 'AZURE': 2, 'AWS': 3, 'GCP': 4 };
@@ -19214,6 +19502,10 @@
               '</div>' +
               '<span class="insp-id">' + sys.id + '</span>' +
             '</div>' +
+            '<div class="insp-action-bar">' +
+              '<button class="insp-action-btn" onclick="window.startInspectorEdit(\'system\', \'' + sys.id + '\')">✏ Bearbeiten</button>' +
+              '<button class="insp-action-btn delete" onclick="window.confirmDeleteEntity(\'system\', \'' + sys.id + '\')">🗑 Löschen</button>' +
+            '</div>' +
             '<div class="insp-badges">' +
               '<span class="insp-badge ' + (sys.scope === 'INTERNAL' ? 'scope-intern' : 'scope-extern') + '">' + (sys.scope === 'INTERNAL' ? ('🏢 ' + orgShort) : '🌐 EXTERN') + '</span>' +
               '<span class="insp-badge ' + (sys.deployment === 'ON_PREM' ? 'deploy-onprem' : 'deploy-cloud') + '">' + (sys.deployment === 'ON_PREM' ? 'On-Premises' : 'Cloud') + '</span>' +
@@ -19312,6 +19604,10 @@
                 '<div class="insp-sub">' + edge.protocol + '</div>' +
               '</div>' +
               '<span class="insp-id">' + edge.id + '</span>' +
+            '</div>' +
+            '<div class="insp-action-bar">' +
+              '<button class="insp-action-btn" onclick="window.startInspectorEdit(\'connection\', \'' + edge.id + '\')">✏ Bearbeiten</button>' +
+              '<button class="insp-action-btn delete" onclick="window.confirmDeleteEntity(\'connection\', \'' + edge.id + '\')">🗑 Löschen</button>' +
             '</div>' +
             '<div class="insp-badges">' +
               '<span class="insp-badge" style="background:var(--accent-glow); color:var(--accent); font-weight:700;">' + edge.messageType + '</span>' +
@@ -19435,6 +19731,10 @@
               '</div>' +
               '<span class="insp-id" style="background:' + dom.color + '22; color:' + dom.color + '; border:1px solid ' + dom.color + '55; font-weight:800;">' + dom.id + '</span>' +
             '</div>' +
+            '<div class="insp-action-bar">' +
+              '<button class="insp-action-btn" onclick="window.startInspectorEdit(\'domain\', \'' + dom.id + '\')">✏ Bearbeiten</button>' +
+              '<button class="insp-action-btn delete" onclick="window.confirmDeleteEntity(\'domain\', \'' + dom.id + '\')">🗑 Löschen</button>' +
+            '</div>' +
             '<div class="insp-badges">' +
               '<span class="insp-badge" style="background:' + dom.color + '22; color:' + dom.color + ';">🏛️ ' + domSystems.length + ' Fachsysteme</span>' +
               '<span class="insp-badge" style="background:rgba(56,189,248,0.15); color:var(--accent);">📂 ' + domProcs.length + ' Prozesse</span>' +
@@ -19486,6 +19786,10 @@
                 '<div class="insp-sub">APQC: ' + (proc.apqc || '') + '</div>' +
               '</div>' +
               '<span class="insp-id" style="background:rgba(56,189,248,0.2); color:var(--accent);">' + proc.id + '</span>' +
+            '</div>' +
+            '<div class="insp-action-bar">' +
+              '<button class="insp-action-btn" onclick="window.startInspectorEdit(\'process\', \'' + proc.id + '\')">✏ Bearbeiten</button>' +
+              '<button class="insp-action-btn delete" onclick="window.confirmDeleteEntity(\'process\', \'' + proc.id + '\')">🗑 Löschen</button>' +
             '</div>' +
             '<div class="insp-badges">' +
               '<span class="insp-badge" style="background:' + (leadDom ? leadDom.color : '#38bdf8') + '25; color:' + (leadDom ? leadDom.color : 'var(--accent)') + '; border:1px solid ' + (leadDom ? leadDom.color : 'var(--accent)') + '55; font-weight:700;">Haupt-Domäne ' + proc.leadDomain + '</span>' +
@@ -19542,6 +19846,10 @@
                 (parentProc ? '<div class="insp-sub" style="color:var(--accent); cursor:pointer; margin-top:2px;" data-action="select-proc" data-id="' + parentProc.id + '">📂 Geschäftsprozess: <strong>' + parentProc.id + ' · ' + parentProc.name + '</strong></div>' : '') +
               '</div>' +
               '<span class="insp-id" style="background:var(--accent-glow); color:var(--accent); font-weight:800;">' + integ.id + '</span>' +
+            '</div>' +
+            '<div class="insp-action-bar">' +
+              '<button class="insp-action-btn" onclick="window.startInspectorEdit(\'integration\', \'' + integ.id + '\')">✏ Bearbeiten</button>' +
+              '<button class="insp-action-btn delete" onclick="window.confirmDeleteEntity(\'integration\', \'' + integ.id + '\')">🗑 Löschen</button>' +
             '</div>' +
 
             // Badges
@@ -20271,6 +20579,10 @@
             : '';
 
           row.innerHTML = 
+            '<div class="row-hover-actions">' +
+              '<button class="row-act-btn" onclick="event.stopPropagation(); window.startInspectorEdit(\'integration\', \'' + i.id + '\')" title="Integration bearbeiten">✏</button>' +
+              '<button class="row-act-btn delete" onclick="event.stopPropagation(); window.confirmDeleteEntity(\'integration\', \'' + i.id + '\')" title="Integration löschen">🗑</button>' +
+            '</div>' +
             '<div style="display:flex; align-items:center; justify-content:space-between;">' +
               '<div style="display:flex; align-items:center; gap:4px;">' +
                 '<span class="integ-id" style="font-size:0.65rem; font-weight:700; color:var(--accent);">' + i.id + '</span>' +
@@ -24240,6 +24552,10 @@
           item.className = 'domain-item';
           item.id = 'domain-item-' + dom.id;
           item.innerHTML =
+            '<div class="row-hover-actions">' +
+              '<button class="row-act-btn" onclick="event.stopPropagation(); window.startInspectorEdit(\'domain\', \'' + dom.id + '\')" title="Domäne bearbeiten">✏</button>' +
+              '<button class="row-act-btn delete" onclick="event.stopPropagation(); window.confirmDeleteEntity(\'domain\', \'' + dom.id + '\')" title="Domäne löschen">🗑</button>' +
+            '</div>' +
             '<div class="domain-item-left">' +
               '<div class="domain-color-bar" style="background:' + dom.color + ';"></div>' +
               '<div>' +
@@ -24269,6 +24585,10 @@
           item.className = 'list-item';
           item.id = 'proc-item-' + proc.id;
           item.innerHTML =
+            '<div class="row-hover-actions">' +
+              '<button class="row-act-btn" onclick="event.stopPropagation(); window.startInspectorEdit(\'process\', \'' + proc.id + '\')" title="Prozess bearbeiten">✏</button>' +
+              '<button class="row-act-btn delete" onclick="event.stopPropagation(); window.confirmDeleteEntity(\'process\', \'' + proc.id + '\')" title="Prozess löschen">🗑</button>' +
+            '</div>' +
             '<div style="flex:1; min-width:0;">' +
               '<div style="display:flex; align-items:center; gap:5px; margin-bottom:2px;">' +
                 '<span style="font-weight:700;">' + proc.id + '</span>' +
@@ -24321,6 +24641,10 @@
           const toColor = toDom?.color || '#38bdf8';
 
           row.innerHTML =
+            '<div class="row-hover-actions">' +
+              '<button class="row-act-btn" onclick="event.stopPropagation(); window.startInspectorEdit(\'connection\', \'' + c.id + '\')" title="Verbindung bearbeiten">✏</button>' +
+              '<button class="row-act-btn delete" onclick="event.stopPropagation(); window.confirmDeleteEntity(\'connection\', \'' + c.id + '\')" title="Verbindung löschen">🗑</button>' +
+            '</div>' +
             '<div style="display:flex; align-items:center; justify-content:space-between;">' +
               '<div style="display:flex; align-items:center; gap:5px;">' +
                 '<span style="font-size:0.68rem; font-weight:750; color:var(--accent);">' + c.id + '</span>' +
@@ -24400,6 +24724,10 @@
             : '<span style="font-size:0.58rem; padding:1px 4px; border-radius:3px; background:rgba(245,158,11,0.15); color:#f59e0b; font-weight:600;">Drittanbieter</span>';
 
           row.innerHTML =
+            '<div class="row-hover-actions">' +
+              '<button class="row-act-btn" onclick="event.stopPropagation(); window.startInspectorEdit(\'system\', \'' + s.id + '\')" title="System bearbeiten">✏</button>' +
+              '<button class="row-act-btn delete" onclick="event.stopPropagation(); window.confirmDeleteEntity(\'system\', \'' + s.id + '\')" title="System löschen">🗑</button>' +
+            '</div>' +
             '<div style="display:flex; align-items:center; justify-content:space-between;">' +
               '<div style="display:flex; align-items:center; gap:5px;">' +
                 '<span style="font-size:0.68rem; font-weight:750; color:var(--accent);">' + s.id + '</span>' +
@@ -25240,7 +25568,1056 @@
 
       // Initial UI and Header Drilldown Title Rendering
       updateUI();
+  
+      // =====================================================================
+      // INTERACTIVE CRUD ENGINE: PERSISTENCE, MUTATIONS, EDITORS & MODALS
+      // =====================================================================
+
+      // Toast feedback helper
+      window.showCrudToast = function(message) {
+        let toast = document.getElementById('crudToast');
+        if (!toast) {
+          toast = document.createElement('div');
+          toast.id = 'crudToast';
+          document.body.appendChild(toast);
+        }
+        toast.innerHTML = '<span>⚡</span> ' + message;
+        toast.classList.add('show');
+        clearTimeout(window._crudToastTimer);
+        window._crudToastTimer = setTimeout(() => {
+          toast.classList.remove('show');
+        }, 3200);
+      };
+
+      // Export model data
+      window.exportCurrentModelData = function() {
+        const activeModel = registeredLandscapeModels.find(m => m.id === currentModelId);
+        return {
+          $schema: "https://orcai-54321.web.app/schemas/ea-landscape-v1.json",
+          meta: {
+            id: currentModelId,
+            organization: activeModel?.organization || "Enterprise Architecture",
+            shortName: activeModel?.shortName || "EA",
+            modelTitle: activeModel?.title || "Exported Model",
+            exportedAt: new Date().toISOString()
+          },
+          domains: DOMAINS_DATA,
+          domainDetails: DOMAIN_DETAILS_DATA,
+          processes: PROCESSES_DATA,
+          integrations: INTEGRATIONS_DATA,
+          connections: CONNECTIONS_DATA,
+          systems: SYSTEMS_DATA
+        };
+      };
+
+      // LocalStorage draft auto-save
+      window.saveDraftToLocalStorage = function() {
+        try {
+          const data = window.exportCurrentModelData();
+          localStorage.setItem('ORCAI_MODEL_DRAFT_' + currentModelId, JSON.stringify(data));
+        } catch (e) {
+          console.warn('LocalStorage save warning:', e);
+        }
+      };
+
+      // Reactive state mutator
+      window.onModelDataMutated = function(actionMsg) {
+        // 1. Sync Map
+        sysById.clear();
+        SYSTEMS_DATA.forEach(s => sysById.set(s.id, s));
+
+        // 2. Re-calculate Quadrants & Rebuild D3 Diagram
+        if (typeof rebuildQuadChordDiagram === 'function') {
+          rebuildQuadChordDiagram();
+        }
+
+        // 3. Re-render drawer lists
+        if (typeof renderDomains === 'function') renderDomains();
+        if (typeof renderProcesses === 'function') renderProcesses();
+        if (typeof renderClusterIntegrations === 'function') renderClusterIntegrations();
+        if (typeof renderConnections === 'function') renderConnections();
+        if (typeof renderSystems === 'function') renderSystems();
+
+        // 4. Update UI filters & Dynamic Radar
+        if (typeof renderDynamicRadarBar === 'function') renderDynamicRadarBar();
+        if (typeof updateUI === 'function') updateUI();
+
+        // 5. Persist draft
+        window.saveDraftToLocalStorage();
+
+        // 6. Toast
+        window.showCrudToast(actionMsg || 'Änderungen erfolgreich übernommen');
+      };
+
+      // Save to ORCAI Cloud
+      window.saveCurrentModelToOrcai = async function() {
+        const activeModel = registeredLandscapeModels.find(m => m.id === currentModelId);
+        const data = window.exportCurrentModelData();
+        const label = (activeModel?.title || currentModelId) + ' (Interaktiv bearbeitet)';
+        const key = currentModelId;
+        const tags = ['ea-landscape', 'interactive-edit', activeModel?.shortName || 'EA'];
+
+        window.showCrudToast('⏳ Speichere in ORCAI Cloud...');
+        try {
+          const res = await fetch('https://orcai-54321.web.app/api/critic/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              action: 'save_doc',
+              key: key,
+              label: label,
+              tags: tags,
+              contentType: 'application/json; charset=utf-8',
+              value: JSON.stringify(data, null, 2)
+            })
+          });
+          const resJson = await res.json();
+          if (res.ok && resJson.status === 'ok') {
+            window.showCrudToast('☁ Erfolgreich in ORCAI Cloud gespeichert!');
+          } else {
+            window.showCrudToast('⚠️ Cloud-Antwort: ' + (resJson.message || 'Gespeichert'));
+          }
+        } catch (err) {
+          console.error('Save to Orcai error:', err);
+          window.showCrudToast('❌ Netzwerkfehler beim Cloud-Speichern');
+        }
+      };
+
+      // =====================================================================
+      // IN-PLACE INSPECTOR EDITORS
+      // =====================================================================
+      window.startInspectorEdit = function(type, id) {
+        if (!inspectorBody) return;
+        
+        if (type === 'system') {
+          const sys = SYSTEMS_DATA.find(s => s.id === id);
+          if (!sys) return;
+          const domOptions = DOMAINS_DATA.map(d => '<option value="' + d.id + '" ' + (d.id === sys.domain ? 'selected' : '') + '>' + d.id + ' · ' + d.name + '</option>').join('');
+          
+          inspectorBody.innerHTML =
+            '<div class="insp-edit-form">' +
+              '<div style="font-weight:750; font-size:0.85rem; color:var(--accent); display:flex; justify-content:space-between;">' +
+                '<span>✏ System bearbeiten</span><span style="font-family:monospace;">' + sys.id + '</span>' +
+              '</div>' +
+              '<div class="insp-form-group">' +
+                '<label class="insp-form-label">Systemname</label>' +
+                '<input class="insp-form-input" id="editSysName" value="' + (sys.name || '').replace(/"/g, '&quot;') + '" />' +
+              '</div>' +
+              '<div class="insp-form-group">' +
+                '<label class="insp-form-label">Architektur-Domäne</label>' +
+                '<select class="insp-form-select" id="editSysDomain">' + domOptions + '</select>' +
+              '</div>' +
+              '<div class="insp-form-row">' +
+                '<div class="insp-form-group">' +
+                  '<label class="insp-form-label">Scope (Verbund)</label>' +
+                  '<select class="insp-form-select" id="editSysScope">' +
+                    '<option value="INTERNAL" ' + (sys.scope === 'INTERNAL' ? 'selected' : '') + '>INTERNAL (Eigener Verbund)</option>' +
+                    '<option value="EXTERNAL" ' + (sys.scope === 'EXTERNAL' ? 'selected' : '') + '>EXTERNAL (Externer Partner)</option>' +
+                  '</select>' +
+                '</div>' +
+                '<div class="insp-form-group">' +
+                  '<label class="insp-form-label">Deployment</label>' +
+                  '<select class="insp-form-select" id="editSysDeploy">' +
+                    '<option value="ON_PREM" ' + (sys.deployment === 'ON_PREM' ? 'selected' : '') + '>ON_PREM (Rechenzentrum)</option>' +
+                    '<option value="CLOUD" ' + (sys.deployment === 'CLOUD' ? 'selected' : '') + '>CLOUD (Cloud Native / SaaS)</option>' +
+                  '</select>' +
+                '</div>' +
+              '</div>' +
+              '<div class="insp-form-row">' +
+                '<div class="insp-form-group">' +
+                  '<label class="insp-form-label">Hosting-Standort</label>' +
+                  '<input class="insp-form-input" id="editSysHosting" value="' + (sys.hosting || '').replace(/"/g, '&quot;') + '" />' +
+                '</div>' +
+                '<div class="insp-form-group">' +
+                  '<label class="insp-form-label">Betreiber / Vendor</label>' +
+                  '<input class="insp-form-input" id="editSysVendor" value="' + (sys.vendor || sys.responsible || '').replace(/"/g, '&quot;') + '" />' +
+                '</div>' +
+              '</div>' +
+              '<div class="insp-form-group">' +
+                '<label style="display:flex; align-items:center; gap:6px; font-size:0.75rem; color:var(--text-bright); cursor:pointer;">' +
+                  '<input type="checkbox" id="editSysBoundary" ' + (sys.isBoundaryEntity ? 'checked' : '') + ' />' +
+                  '🛡️ Perimeter / DMZ Gateway (Grenzsystem)' +
+                '</label>' +
+              '</div>' +
+              '<div class="insp-form-group">' +
+                '<label class="insp-form-label">Beschreibung & Funktion</label>' +
+                '<textarea class="insp-form-textarea" id="editSysDesc" rows="3">' + (sys.desc || '') + '</textarea>' +
+              '</div>' +
+              '<div class="insp-form-group">' +
+                '<label class="insp-form-label">Tags (Komma-getrennt)</label>' +
+                '<input class="insp-form-input" id="editSysTags" value="' + ((sys.tags || []).join(', ')).replace(/"/g, '&quot;') + '" />' +
+              '</div>' +
+              '<div class="insp-form-actions">' +
+                '<button class="insp-btn-cancel" onclick="window.cancelInspectorEdit(\'system\', \'' + sys.id + '\')">Abbrechen</button>' +
+                '<button class="insp-btn-save" onclick="window.saveInspectorEdit(\'system\', \'' + sys.id + '\')">💾 Speichern</button>' +
+              '</div>' +
+            '</div>';
+        }
+        else if (type === 'connection') {
+          const edge = CONNECTIONS_DATA.find(c => c.id === id);
+          if (!edge) return;
+          inspectorBody.innerHTML =
+            '<div class="insp-edit-form">' +
+              '<div style="font-weight:750; font-size:0.85rem; color:var(--accent); display:flex; justify-content:space-between;">' +
+                '<span>✏ Verbindung bearbeiten</span><span style="font-family:monospace;">' + edge.id + '</span>' +
+              '</div>' +
+              '<div style="font-size:0.7rem; color:var(--text-muted);">' + edge.from + ' ➔ ' + edge.to + '</div>' +
+              '<div class="insp-form-group">' +
+                '<label class="insp-form-label">Name / Schnittstellen-Zweck</label>' +
+                '<input class="insp-form-input" id="editConnName" value="' + (edge.name || '').replace(/"/g, '&quot;') + '" />' +
+              '</div>' +
+              '<div class="insp-form-row">' +
+                '<div class="insp-form-group">' +
+                  '<label class="insp-form-label">Protokoll</label>' +
+                  '<input class="insp-form-input" id="editConnProt" value="' + (edge.protocol || '').replace(/"/g, '&quot;') + '" />' +
+                '</div>' +
+                '<div class="insp-form-group">' +
+                  '<label class="insp-form-label">Format / Nachrichten-Typ</label>' +
+                  '<input class="insp-form-input" id="editConnMsg" value="' + (edge.messageType || '').replace(/"/g, '&quot;') + '" />' +
+                '</div>' +
+              '</div>' +
+              '<div class="insp-form-row">' +
+                '<div class="insp-form-group">' +
+                  '<label class="insp-form-label">Fluss-Typ</label>' +
+                  '<select class="insp-form-select" id="editConnFlow">' +
+                    '<option value="SYNC" ' + (edge.flowType === 'SYNC' ? 'selected' : '') + '>SYNC (Request/Response)</option>' +
+                    '<option value="ASYNC" ' + (edge.flowType === 'ASYNC' ? 'selected' : '') + '>ASYNC (Queue / Message)</option>' +
+                    '<option value="EVENT" ' + (edge.flowType === 'EVENT' ? 'selected' : '') + '>EVENT (Event Stream / PubSub)</option>' +
+                    '<option value="BATCH" ' + (edge.flowType === 'BATCH' ? 'selected' : '') + '>BATCH (Stapelverarbeitung / File)</option>' +
+                  '</select>' +
+                '</div>' +
+                '<div class="insp-form-group">' +
+                  '<label class="insp-form-label">Transport Overlay</label>' +
+                  '<input class="insp-form-input" id="editConnTransport" value="' + (edge.transportOverlay || '').replace(/"/g, '&quot;') + '" placeholder="z. B. mTLS, IPsec VPN, TLS 1.3" />' +
+                '</div>' +
+              '</div>' +
+              '<div class="insp-form-group">' +
+                '<label class="insp-form-label">Beschreibung</label>' +
+                '<textarea class="insp-form-textarea" id="editConnDesc" rows="3">' + (edge.desc || '') + '</textarea>' +
+              '</div>' +
+              '<div class="insp-form-actions">' +
+                '<button class="insp-btn-cancel" onclick="window.cancelInspectorEdit(\'connection\', \'' + edge.id + '\')">Abbrechen</button>' +
+                '<button class="insp-btn-save" onclick="window.saveInspectorEdit(\'connection\', \'' + edge.id + '\')">💾 Speichern</button>' +
+              '</div>' +
+            '</div>';
+        }
+        else if (type === 'process') {
+          const proc = PROCESSES_DATA.find(p => p.id === id);
+          if (!proc) return;
+          const domOptions = DOMAINS_DATA.map(d => '<option value="' + d.id + '" ' + (d.id === proc.leadDomain ? 'selected' : '') + '>' + d.id + ' · ' + d.name + '</option>').join('');
+          inspectorBody.innerHTML =
+            '<div class="insp-edit-form">' +
+              '<div style="font-weight:750; font-size:0.85rem; color:var(--accent); display:flex; justify-content:space-between;">' +
+                '<span>✏ Geschäftsprozess bearbeiten</span><span style="font-family:monospace;">' + proc.id + '</span>' +
+              '</div>' +
+              '<div class="insp-form-group">' +
+                '<label class="insp-form-label">Prozessbezeichnung</label>' +
+                '<input class="insp-form-input" id="editProcName" value="' + (proc.name || '').replace(/"/g, '&quot;') + '" />' +
+              '</div>' +
+              '<div class="insp-form-row">' +
+                '<div class="insp-form-group">' +
+                  '<label class="insp-form-label">Haupt-Domäne</label>' +
+                  '<select class="insp-form-select" id="editProcDomain">' + domOptions + '</select>' +
+                '</div>' +
+                '<div class="insp-form-group">' +
+                  '<label class="insp-form-label">APQC / Referenz</label>' +
+                  '<input class="insp-form-input" id="editProcApqc" value="' + (proc.apqc || '').replace(/"/g, '&quot;') + '" />' +
+                '</div>' +
+              '</div>' +
+              '<div class="insp-form-group">' +
+                '<label class="insp-form-label">Strategischer Impact</label>' +
+                '<input class="insp-form-input" id="editProcImpact" value="' + (proc.impact || '').replace(/"/g, '&quot;') + '" />' +
+              '</div>' +
+              '<div class="insp-form-group">' +
+                '<label class="insp-form-label">Beschreibung</label>' +
+                '<textarea class="insp-form-textarea" id="editProcDesc" rows="3">' + (proc.desc || proc.description || '') + '</textarea>' +
+              '</div>' +
+              '<div class="insp-form-actions">' +
+                '<button class="insp-btn-cancel" onclick="window.cancelInspectorEdit(\'process\', \'' + proc.id + '\')">Abbrechen</button>' +
+                '<button class="insp-btn-save" onclick="window.saveInspectorEdit(\'process\', \'' + proc.id + '\')">💾 Speichern</button>' +
+              '</div>' +
+            '</div>';
+        }
+        else if (type === 'integration') {
+          const integ = INTEGRATIONS_DATA.find(i => i.id === id);
+          if (!integ) return;
+          inspectorBody.innerHTML =
+            '<div class="insp-edit-form">' +
+              '<div style="font-weight:750; font-size:0.85rem; color:var(--accent); display:flex; justify-content:space-between;">' +
+                '<span>✏ E2E-Integration bearbeiten</span><span style="font-family:monospace;">' + integ.id + '</span>' +
+              '</div>' +
+              '<div class="insp-form-group">' +
+                '<label class="insp-form-label">Integrationsname</label>' +
+                '<input class="insp-form-input" id="editIntegName" value="' + (integ.name || '').replace(/"/g, '&quot;') + '" />' +
+              '</div>' +
+              '<div class="insp-form-group">' +
+                '<label class="insp-form-label">Auslastung / Trigger</label>' +
+                '<input class="insp-form-input" id="editIntegTraffic" value="' + (integ.trafficSum || '').replace(/"/g, '&quot;') + '" />' +
+              '</div>' +
+              '<div class="insp-form-group">' +
+                '<label class="insp-form-label">Beschreibung</label>' +
+                '<textarea class="insp-form-textarea" id="editIntegDesc" rows="3">' + (integ.description || '') + '</textarea>' +
+              '</div>' +
+              '<div class="insp-form-actions">' +
+                '<button class="insp-btn-cancel" onclick="window.cancelInspectorEdit(\'integration\', \'' + integ.id + '\')">Abbrechen</button>' +
+                '<button class="insp-btn-save" onclick="window.saveInspectorEdit(\'integration\', \'' + integ.id + '\')">💾 Speichern</button>' +
+              '</div>' +
+            '</div>';
+        }
+        else if (type === 'domain') {
+          const dom = DOMAINS_DATA.find(d => d.id === id);
+          if (!dom) return;
+          const details = DOMAIN_DETAILS_DATA[id] || {};
+          inspectorBody.innerHTML =
+            '<div class="insp-edit-form">' +
+              '<div style="font-weight:750; font-size:0.85rem; color:var(--accent); display:flex; justify-content:space-between;">' +
+                '<span>✏ Domäne bearbeiten</span><span style="font-family:monospace;">' + dom.id + '</span>' +
+              '</div>' +
+              '<div class="insp-form-group">' +
+                '<label class="insp-form-label">Domänenname</label>' +
+                '<input class="insp-form-input" id="editDomName" value="' + (dom.name || '').replace(/"/g, '&quot;') + '" />' +
+              '</div>' +
+              '<div class="insp-form-row">' +
+                '<div class="insp-form-group">' +
+                  '<label class="insp-form-label">Kurzbezeichnung</label>' +
+                  '<input class="insp-form-input" id="editDomShort" value="' + (details.shortName || '').replace(/"/g, '&quot;') + '" />' +
+                '</div>' +
+                '<div class="insp-form-group">' +
+                  '<label class="insp-form-label">Farbe</label>' +
+                  '<input type="color" class="insp-form-input" id="editDomColor" style="height:32px; padding:1px 3px;" value="' + (dom.color || '#38bdf8') + '" />' +
+                '</div>' +
+              '</div>' +
+              '<div class="insp-form-group">' +
+                '<label class="insp-form-label">Fokus & Leitbild</label>' +
+                '<textarea class="insp-form-textarea" id="editDomFocus" rows="3">' + (details.focus || '') + '</textarea>' +
+              '</div>' +
+              '<div class="insp-form-actions">' +
+                '<button class="insp-btn-cancel" onclick="window.cancelInspectorEdit(\'domain\', \'' + dom.id + '\')">Abbrechen</button>' +
+                '<button class="insp-btn-save" onclick="window.saveInspectorEdit(\'domain\', \'' + dom.id + '\')">💾 Speichern</button>' +
+              '</div>' +
+            '</div>';
+        }
+      };
+
+      window.cancelInspectorEdit = function(type, id) {
+        if (type === 'system') {
+          const s = SYSTEMS_DATA.find(x => x.id === id);
+          if (s && typeof renderInspectorNode === 'function') renderInspectorNode(s);
+        } else if (type === 'connection') {
+          const c = CONNECTIONS_DATA.find(x => x.id === id);
+          if (c && typeof renderInspectorEdge === 'function') renderInspectorEdge(c);
+        } else if (type === 'process') {
+          const p = PROCESSES_DATA.find(x => x.id === id);
+          if (p && typeof renderInspectorProcess === 'function') renderInspectorProcess(p);
+        } else if (type === 'integration') {
+          const i = INTEGRATIONS_DATA.find(x => x.id === id);
+          if (i && typeof renderInspectorIntegration === 'function') renderInspectorIntegration(i);
+        } else if (type === 'domain') {
+          const d = DOMAINS_DATA.find(x => x.id === id);
+          if (d && typeof renderInspectorDomain === 'function') renderInspectorDomain(d);
+        }
+      };
+
+      window.saveInspectorEdit = function(type, id) {
+        if (type === 'system') {
+          const s = SYSTEMS_DATA.find(x => x.id === id);
+          if (!s) return;
+          s.name = document.getElementById('editSysName')?.value.trim() || s.name;
+          s.domain = document.getElementById('editSysDomain')?.value || s.domain;
+          s.scope = document.getElementById('editSysScope')?.value || s.scope;
+          s.deployment = document.getElementById('editSysDeploy')?.value || s.deployment;
+          s.hosting = document.getElementById('editSysHosting')?.value.trim() || s.hosting;
+          s.vendor = document.getElementById('editSysVendor')?.value.trim() || s.vendor;
+          s.isBoundaryEntity = Boolean(document.getElementById('editSysBoundary')?.checked);
+          s.desc = document.getElementById('editSysDesc')?.value.trim() || s.desc;
+          const tagsVal = document.getElementById('editSysTags')?.value.trim();
+          if (tagsVal) s.tags = tagsVal.split(',').map(t => t.trim()).filter(Boolean);
+          
+          window.onModelDataMutated('System ' + s.id + ' aktualisiert');
+          renderInspectorNode(s);
+        }
+        else if (type === 'connection') {
+          const c = CONNECTIONS_DATA.find(x => x.id === id);
+          if (!c) return;
+          c.name = document.getElementById('editConnName')?.value.trim() || c.name;
+          c.protocol = document.getElementById('editConnProt')?.value.trim() || c.protocol;
+          c.messageType = document.getElementById('editConnMsg')?.value.trim() || c.messageType;
+          c.flowType = document.getElementById('editConnFlow')?.value || c.flowType;
+          c.transportOverlay = document.getElementById('editConnTransport')?.value.trim() || c.transportOverlay;
+          c.desc = document.getElementById('editConnDesc')?.value.trim() || c.desc;
+
+          window.onModelDataMutated('Verbindung ' + c.id + ' aktualisiert');
+          renderInspectorEdge(c);
+        }
+        else if (type === 'process') {
+          const p = PROCESSES_DATA.find(x => x.id === id);
+          if (!p) return;
+          p.name = document.getElementById('editProcName')?.value.trim() || p.name;
+          p.leadDomain = document.getElementById('editProcDomain')?.value || p.leadDomain;
+          p.apqc = document.getElementById('editProcApqc')?.value.trim() || p.apqc;
+          p.impact = document.getElementById('editProcImpact')?.value.trim() || p.impact;
+          p.desc = document.getElementById('editProcDesc')?.value.trim() || p.desc;
+
+          window.onModelDataMutated('Prozess ' + p.id + ' aktualisiert');
+          renderInspectorProcess(p);
+        }
+        else if (type === 'integration') {
+          const i = INTEGRATIONS_DATA.find(x => x.id === id);
+          if (!i) return;
+          i.name = document.getElementById('editIntegName')?.value.trim() || i.name;
+          i.trafficSum = document.getElementById('editIntegTraffic')?.value.trim() || i.trafficSum;
+          i.description = document.getElementById('editIntegDesc')?.value.trim() || i.description;
+
+          window.onModelDataMutated('Integration ' + i.id + ' aktualisiert');
+          renderInspectorIntegration(i);
+        }
+        else if (type === 'domain') {
+          const d = DOMAINS_DATA.find(x => x.id === id);
+          if (!d) return;
+          d.name = document.getElementById('editDomName')?.value.trim() || d.name;
+          d.color = document.getElementById('editDomColor')?.value || d.color;
+          if (!DOMAIN_DETAILS_DATA[d.id]) DOMAIN_DETAILS_DATA[d.id] = {};
+          DOMAIN_DETAILS_DATA[d.id].shortName = document.getElementById('editDomShort')?.value.trim() || DOMAIN_DETAILS_DATA[d.id].shortName;
+          DOMAIN_DETAILS_DATA[d.id].focus = document.getElementById('editDomFocus')?.value.trim() || DOMAIN_DETAILS_DATA[d.id].focus;
+
+          window.onModelDataMutated('Domäne ' + d.id + ' aktualisiert');
+          renderInspectorDomain(d);
+        }
+      };
+
+      // =====================================================================
+      // CASCADING INTEGRITY DELETION
+      // =====================================================================
+      window.confirmDeleteEntity = function(type, id) {
+        if (type === 'system') {
+          const sys = SYSTEMS_DATA.find(s => s.id === id);
+          if (!sys) return;
+          const affConns = CONNECTIONS_DATA.filter(c => c.from === id || c.to === id);
+          const affIntegs = INTEGRATIONS_DATA.filter(i => (i.steps || []).some(st => st.from === id || st.to === id));
+          
+          let warnMsg = 'Möchten Sie das System "' + sys.name + '" (' + id + ') wirklich löschen?';
+          if (affConns.length > 0 || affIntegs.length > 0) {
+            warnMsg += '\n\nHinweis: Es werden ' + affConns.length + ' Verbindungen mitgelöscht und ' + affIntegs.length + ' Integrationsschritte bereinigt.';
+          }
+          if (!confirm(warnMsg)) return;
+
+          // Cascade removal
+          const connIdsToRemove = new Set(affConns.map(c => c.id));
+          const remConns = CONNECTIONS_DATA.filter(c => !connIdsToRemove.has(c.id));
+          CONNECTIONS_DATA.length = 0;
+          remConns.forEach(c => CONNECTIONS_DATA.push(c));
+
+          // Clean steps in integrations
+          INTEGRATIONS_DATA.forEach(i => {
+            if (i.steps) {
+              i.steps = i.steps.filter(st => st.from !== id && st.to !== id && !connIdsToRemove.has(st.connectionId));
+            }
+          });
+
+          // Clean system references in processes
+          PROCESSES_DATA.forEach(p => {
+            if (p.participatingSystems) {
+              p.participatingSystems = p.participatingSystems.filter(sid => sid !== id);
+            }
+          });
+
+          // Remove system
+          const sIdx = SYSTEMS_DATA.findIndex(s => s.id === id);
+          if (sIdx !== -1) SYSTEMS_DATA.splice(sIdx, 1);
+          sysById.delete(id);
+
+          if (selectedNodeId === id || (selectedNode && selectedNode.id === id)) {
+            selectedNodeId = null;
+            selectedNode = null;
+            if (typeof renderPlaceholder === 'function') renderPlaceholder();
+          }
+
+          window.onModelDataMutated('System ' + id + ' gelöscht');
+        }
+        else if (type === 'connection') {
+          const edge = CONNECTIONS_DATA.find(c => c.id === id);
+          if (!edge) return;
+          const affIntegs = INTEGRATIONS_DATA.filter(i => (i.steps || []).some(st => st.connectionId === id));
+          let warnMsg = 'Möchten Sie die Verbindung "' + (edge.name || id) + '" wirklich löschen?';
+          if (affIntegs.length > 0) {
+            warnMsg += '\n\nHinweis: Diese Verbindung wird aus ' + affIntegs.length + ' E2E-Integrationsabläufen entfernt.';
+          }
+          if (!confirm(warnMsg)) return;
+
+          INTEGRATIONS_DATA.forEach(i => {
+            if (i.steps) {
+              i.steps = i.steps.filter(st => st.connectionId !== id);
+            }
+          });
+
+          const cIdx = CONNECTIONS_DATA.findIndex(c => c.id === id);
+          if (cIdx !== -1) CONNECTIONS_DATA.splice(cIdx, 1);
+
+          if (selectedLink && selectedLink.id === id) {
+            selectedLink = null;
+            if (typeof renderPlaceholder === 'function') renderPlaceholder();
+          }
+
+          window.onModelDataMutated('Verbindung ' + id + ' gelöscht');
+        }
+        else if (type === 'integration') {
+          const integ = INTEGRATIONS_DATA.find(i => i.id === id);
+          if (!integ) return;
+          if (!confirm('Möchten Sie die E2E-Integration "' + integ.name + '" (' + id + ') wirklich löschen?')) return;
+
+          PROCESSES_DATA.forEach(p => {
+            if (p.cleanIntegIds) {
+              p.cleanIntegIds = p.cleanIntegIds.filter(iid => iid !== id);
+            }
+          });
+
+          const iIdx = INTEGRATIONS_DATA.findIndex(i => i.id === id);
+          if (iIdx !== -1) INTEGRATIONS_DATA.splice(iIdx, 1);
+
+          if (selectedIntegration && selectedIntegration.id === id) {
+            selectedIntegration = null;
+            if (typeof renderPlaceholder === 'function') renderPlaceholder();
+          }
+
+          window.onModelDataMutated('Integration ' + id + ' gelöscht');
+        }
+        else if (type === 'process') {
+          const proc = PROCESSES_DATA.find(p => p.id === id);
+          if (!proc) return;
+          if (!confirm('Möchten Sie den Geschäftsprozess "' + proc.name + '" (' + id + ') wirklich löschen?')) return;
+
+          const pIdx = PROCESSES_DATA.findIndex(p => p.id === id);
+          if (pIdx !== -1) PROCESSES_DATA.splice(pIdx, 1);
+
+          if (selectedProcess && selectedProcess.id === id) {
+            selectedProcess = null;
+            if (typeof renderPlaceholder === 'function') renderPlaceholder();
+          }
+
+          window.onModelDataMutated('Prozess ' + id + ' gelöscht');
+        }
+        else if (type === 'domain') {
+          const dom = DOMAINS_DATA.find(d => d.id === id);
+          if (!dom) return;
+          const domSys = SYSTEMS_DATA.filter(s => s.domain === id);
+          if (domSys.length > 0) {
+            alert('Domäne kann nicht gelöscht werden: Es sind noch ' + domSys.length + ' Systeme zugewiesen. Bitte weisen Sie diese zuerst einer anderen Domäne zu.');
+            return;
+          }
+          if (!confirm('Möchten Sie die Domäne "' + dom.name + '" (' + id + ') wirklich löschen?')) return;
+
+          const dIdx = DOMAINS_DATA.findIndex(d => d.id === id);
+          if (dIdx !== -1) DOMAINS_DATA.splice(dIdx, 1);
+          delete DOMAIN_DETAILS_DATA[id];
+
+          if (selectedDomainId === id) {
+            selectedDomainId = null;
+            if (typeof renderPlaceholder === 'function') renderPlaceholder();
+          }
+
+          window.onModelDataMutated('Domäne ' + id + ' gelöscht');
+        }
+      };
+
+      // =====================================================================
+      // ENTITY CREATION MODAL DIALOG
+      // =====================================================================
+      let _currentModalType = null;
+
+      window.openNewEntityModal = function(type) {
+        _currentModalType = type;
+        const modal = document.getElementById('entityCrudModal');
+        const modalTitle = document.getElementById('crudModalTitle');
+        const modalBody = document.getElementById('crudModalBody');
+        const submitBtn = document.getElementById('btnSubmitCrudModal');
+        if (!modal || !modalBody) return;
+
+        const activeModelObj = registeredLandscapeModels.find(m => m.id === currentModelId);
+        const orgShort = activeModelObj?.shortName || 'SYS';
+
+        if (type === 'system') {
+          modalTitle.textContent = '✨ Neues Fachsystem anlegen';
+          submitBtn.textContent = 'System anlegen';
+
+          // Suggest next ID
+          let nextNum = 1;
+          SYSTEMS_DATA.forEach(s => {
+            const m = s.id.match(/(\d+)$/);
+            if (m) {
+              const val = parseInt(m[1], 10);
+              if (val >= nextNum) nextNum = val + 1;
+            }
+          });
+          const prefix = activeModelObj?.id?.includes('JOHANNESSTIFT') ? 'JSD-' : (orgShort + '-');
+          const suggestedId = prefix + nextNum;
+
+          const domOptions = DOMAINS_DATA.map(d => '<option value="' + d.id + '">' + d.id + ' · ' + d.name + '</option>').join('');
+
+          modalBody.innerHTML =
+            '<div class="insp-form-group">' +
+              '<label class="insp-form-label">System-ID *</label>' +
+              '<input class="insp-form-input" id="newSysId" value="' + suggestedId + '" required />' +
+            '</div>' +
+            '<div class="insp-form-group">' +
+              '<label class="insp-form-label">Name des Systems *</label>' +
+              '<input class="insp-form-input" id="newSysName" placeholder="z. B. Dedalus ORBIS KIS oder Medico" required />' +
+            '</div>' +
+            '<div class="insp-form-group">' +
+              '<label class="insp-form-label">Architektur-Domäne *</label>' +
+              '<select class="insp-form-select" id="newSysDomain">' + domOptions + '</select>' +
+            '</div>' +
+            '<div class="insp-form-row">' +
+              '<div class="insp-form-group">' +
+                '<label class="insp-form-label">Scope (Verbund)</label>' +
+                '<select class="insp-form-select" id="newSysScope">' +
+                  '<option value="INTERNAL" selected>🏢 INTERNAL (Eigener Verbund)</option>' +
+                  '<option value="EXTERNAL">🌐 EXTERNAL (Externer Partner / Dienstleister)</option>' +
+                '</select>' +
+              '</div>' +
+              '<div class="insp-form-group">' +
+                '<label class="insp-form-label">Deployment</label>' +
+                '<select class="insp-form-select" id="newSysDeploy">' +
+                  '<option value="ON_PREM" selected>On-Premises (ON_PREM)</option>' +
+                  '<option value="CLOUD">Cloud Native / SaaS (CLOUD)</option>' +
+                '</select>' +
+              '</div>' +
+            '</div>' +
+            '<div class="insp-form-row">' +
+              '<div class="insp-form-group">' +
+                '<label class="insp-form-label">Hosting-Standort</label>' +
+                '<input class="insp-form-input" id="newSysHosting" placeholder="z. B. RZ Standort Spandau" />' +
+              '</div>' +
+              '<div class="insp-form-group">' +
+                '<label class="insp-form-label">Betreiber / Vendor</label>' +
+                '<input class="insp-form-input" id="newSysVendor" placeholder="z. B. Conciliamus / JSD IT" />' +
+              '</div>' +
+            '</div>' +
+            '<div class="insp-form-group">' +
+              '<label style="display:flex; align-items:center; gap:6px; font-size:0.75rem; color:var(--text-bright); cursor:pointer;">' +
+                '<input type="checkbox" id="newSysBoundary" />' +
+                '🛡️ Perimeter / DMZ Gateway (Grenzsystem mit Firewall-Status)' +
+              '</label>' +
+            '</div>' +
+            '<div class="insp-form-group">' +
+              '<label class="insp-form-label">Beschreibung & Funktion</label>' +
+              '<textarea class="insp-form-textarea" id="newSysDesc" rows="3" placeholder="Funktionsumfang und Zweck im Krankenhausverbund"></textarea>' +
+            '</div>' +
+            '<div class="insp-form-group">' +
+              '<label class="insp-form-label">Tags (Komma-getrennt)</label>' +
+              '<input class="insp-form-input" id="newSysTags" placeholder="z. B. KIS, Klinisch, HL7, KHZG" />' +
+            '</div>';
+        }
+        else if (type === 'connection') {
+          modalTitle.textContent = '✨ Neue Schnittstelle / Verbindung anlegen';
+          submitBtn.textContent = 'Verbindung anlegen';
+
+          const suggestedId = 'C-' + (CONNECTIONS_DATA.length + 1);
+          const sysOptions = SYSTEMS_DATA.map(s => '<option value="' + s.id + '">' + s.id + ' · ' + s.name + '</option>').join('');
+
+          modalBody.innerHTML =
+            '<div class="insp-form-group">' +
+              '<label class="insp-form-label">Verbindungs-ID *</label>' +
+              '<input class="insp-form-input" id="newConnId" value="' + suggestedId + '" required />' +
+            '</div>' +
+            '<div class="insp-form-group">' +
+              '<label class="insp-form-label">Bezeichnung der Schnittstelle *</label>' +
+              '<input class="insp-form-input" id="newConnName" placeholder="z. B. KIS ➔ PACS Befund- und Bilddatenübertragung" required />' +
+            '</div>' +
+            '<div class="insp-form-row">' +
+              '<div class="insp-form-group">' +
+                '<label class="insp-form-label">Quell-System *</label>' +
+                '<select class="insp-form-select" id="newConnFrom">' + sysOptions + '</select>' +
+              '</div>' +
+              '<div class="insp-form-group">' +
+                '<label class="insp-form-label">Ziel-System *</label>' +
+                '<select class="insp-form-select" id="newConnTo">' + sysOptions + '</select>' +
+              '</div>' +
+            '</div>' +
+            '<div class="insp-form-row">' +
+              '<div class="insp-form-group">' +
+                '<label class="insp-form-label">Protokoll</label>' +
+                '<input class="insp-form-input" id="newConnProt" placeholder="z. B. HL7 FHIR R4, REST, MLLP" value="HL7 FHIR R4" />' +
+              '</div>' +
+              '<div class="insp-form-group">' +
+                '<label class="insp-form-label">Format / Nachrichten-Typ</label>' +
+                '<input class="insp-form-input" id="newConnMsg" placeholder="z. B. JSON / REST, HL7 v2 ADT" value="JSON" />' +
+              '</div>' +
+            '</div>' +
+            '<div class="insp-form-row">' +
+              '<div class="insp-form-group">' +
+                '<label class="insp-form-label">Fluss-Typ</label>' +
+                '<select class="insp-form-select" id="newConnFlow">' +
+                  '<option value="SYNC">SYNC (Request/Response)</option>' +
+                  '<option value="ASYNC">ASYNC (Queue / Event)</option>' +
+                  '<option value="EVENT">EVENT (PubSub Streaming)</option>' +
+                  '<option value="BATCH">BATCH (Stapelverarbeitung)</option>' +
+                '</select>' +
+              '</div>' +
+              '<div class="insp-form-group">' +
+                '<label class="insp-form-label">Transport-Sicherheit</label>' +
+                '<input class="insp-form-input" id="newConnTransport" placeholder="z. B. mTLS, IPsec VPN" value="mTLS" />' +
+              '</div>' +
+            '</div>' +
+            '<div class="insp-form-group">' +
+              '<label class="insp-form-label">Beschreibung</label>' +
+              '<textarea class="insp-form-textarea" id="newConnDesc" rows="3" placeholder="Datenfluss, Frequenz und Sicherheitsanforderungen"></textarea>' +
+            '</div>';
+        }
+        else if (type === 'process') {
+          modalTitle.textContent = '✨ Neuen Geschäftsprozess anlegen';
+          submitBtn.textContent = 'Prozess anlegen';
+
+          const suggestedId = 'PROC-' + (PROCESSES_DATA.length + 1);
+          const domOptions = DOMAINS_DATA.map(d => '<option value="' + d.id + '">' + d.id + ' · ' + d.name + '</option>').join('');
+
+          modalBody.innerHTML =
+            '<div class="insp-form-group">' +
+              '<label class="insp-form-label">Prozess-ID *</label>' +
+              '<input class="insp-form-input" id="newProcId" value="' + suggestedId + '" required />' +
+            '</div>' +
+            '<div class="insp-form-group">' +
+              '<label class="insp-form-label">Prozessbezeichnung *</label>' +
+              '<input class="insp-form-input" id="newProcName" placeholder="z. B. Digitale Medikamentenverordnung (CPOE)" required />' +
+            '</div>' +
+            '<div class="insp-form-row">' +
+              '<div class="insp-form-group">' +
+                '<label class="insp-form-label">Haupt-Domäne *</label>' +
+                '<select class="insp-form-select" id="newProcDomain">' + domOptions + '</select>' +
+              '</div>' +
+              '<div class="insp-form-group">' +
+                '<label class="insp-form-label">APQC / Referenz</label>' +
+                '<input class="insp-form-input" id="newProcApqc" placeholder="z. B. APQC 5.4.1" />' +
+              '</div>' +
+            '</div>' +
+            '<div class="insp-form-group">' +
+              '<label class="insp-form-label">Strategischer Impact</label>' +
+              '<input class="insp-form-input" id="newProcImpact" placeholder="z. B. Patientensicherheit, KHZG Fördertatbestand 4" />' +
+            '</div>' +
+            '<div class="insp-form-group">' +
+              '<label class="insp-form-label">Beschreibung</label>' +
+              '<textarea class="insp-form-textarea" id="newProcDesc" rows="3" placeholder="Prozessziel und beteiligte Akteure"></textarea>' +
+            '</div>';
+        }
+        else if (type === 'integration') {
+          modalTitle.textContent = '✨ Neue E2E-Integration anlegen';
+          submitBtn.textContent = 'Integration anlegen';
+
+          const suggestedId = 'INT-' + (INTEGRATIONS_DATA.length + 1);
+          const sysOptions = SYSTEMS_DATA.map(s => '<option value="' + s.id + '">' + s.id + ' · ' + s.name + '</option>').join('');
+          const procOptions = PROCESSES_DATA.map(p => '<option value="' + p.id + '">' + p.id + ' · ' + p.name + '</option>').join('');
+
+          modalBody.innerHTML =
+            '<div class="insp-form-group">' +
+              '<label class="insp-form-label">Integrations-ID *</label>' +
+              '<input class="insp-form-input" id="newIntegId" value="' + suggestedId + '" required />' +
+            '</div>' +
+            '<div class="insp-form-group">' +
+              '<label class="insp-form-label">Integrationsname *</label>' +
+              '<input class="insp-form-input" id="newIntegName" placeholder="z. B. E2E Laborbefund-Übermittlung" required />' +
+            '</div>' +
+            '<div class="insp-form-row">' +
+              '<div class="insp-form-group">' +
+                '<label class="insp-form-label">Quell-System *</label>' +
+                '<select class="insp-form-select" id="newIntegFrom">' + sysOptions + '</select>' +
+              '</div>' +
+              '<div class="insp-form-group">' +
+                '<label class="insp-form-label">Ziel-System *</label>' +
+                '<select class="insp-form-select" id="newIntegTo">' + sysOptions + '</select>' +
+              '</div>' +
+            '</div>' +
+            '<div class="insp-form-group">' +
+              '<label class="insp-form-label">Zugeordneter Geschäftsprozess</label>' +
+              '<select class="insp-form-select" id="newIntegProc">' + procOptions + '</select>' +
+            '</div>' +
+            '<div class="insp-form-group">' +
+              '<label class="insp-form-label">Auslastung / Trigger</label>' +
+              '<input class="insp-form-input" id="newIntegTraffic" placeholder="z. B. Real-time / 500 Events/Tag" value="Real-time / Event" />' +
+            '</div>' +
+            '<div class="insp-form-group">' +
+              '<label class="insp-form-label">Beschreibung</label>' +
+              '<textarea class="insp-form-textarea" id="newIntegDesc" rows="3" placeholder="End-to-End Ablauf und Geschäftsnutzen"></textarea>' +
+            '</div>';
+        }
+        else if (type === 'domain') {
+          modalTitle.textContent = '✨ Neue Architektur-Domäne anlegen';
+          submitBtn.textContent = 'Domäne anlegen';
+
+          const suggestedId = 'D' + (DOMAINS_DATA.length + 1);
+
+          modalBody.innerHTML =
+            '<div class="insp-form-group">' +
+              '<label class="insp-form-label">Domänen-ID *</label>' +
+              '<input class="insp-form-input" id="newDomId" value="' + suggestedId + '" required />' +
+            '</div>' +
+            '<div class="insp-form-group">' +
+              '<label class="insp-form-label">Domänenname *</label>' +
+              '<input class="insp-form-input" id="newDomName" placeholder="z. B. Digitale Patienten-Services" required />' +
+            '</div>' +
+            '<div class="insp-form-row">' +
+              '<div class="insp-form-group">' +
+                '<label class="insp-form-label">Kurzbezeichnung</label>' +
+                '<input class="insp-form-input" id="newDomShort" placeholder="z. B. PAT-SRV" />' +
+              '</div>' +
+              '<div class="insp-form-group">' +
+                '<label class="insp-form-label">Kennfarbe</label>' +
+                '<input type="color" class="insp-form-input" id="newDomColor" style="height:32px; padding:1px 3px;" value="#06b6d4" />' +
+              '</div>' +
+            '</div>' +
+            '<div class="insp-form-group">' +
+              '<label class="insp-form-label">Fokus & Leitbild</label>' +
+              '<textarea class="insp-form-textarea" id="newDomFocus" rows="3" placeholder="Zweck, architektonische Leitplanken und Verantwortlichkeit"></textarea>' +
+            '</div>';
+        }
+
+        modal.style.display = 'flex';
+      };
+
+      window.closeNewEntityModal = function() {
+        const modal = document.getElementById('entityCrudModal');
+        if (modal) modal.style.display = 'none';
+        _currentModalType = null;
+      };
+
+      window.submitNewEntityModal = function() {
+        if (!_currentModalType) return;
+        const type = _currentModalType;
+
+        if (type === 'system') {
+          const id = document.getElementById('newSysId')?.value.trim();
+          const name = document.getElementById('newSysName')?.value.trim();
+          const domain = document.getElementById('newSysDomain')?.value;
+          const scope = document.getElementById('newSysScope')?.value || 'INTERNAL';
+          const deployment = document.getElementById('newSysDeploy')?.value || 'ON_PREM';
+          const hosting = document.getElementById('newSysHosting')?.value.trim() || 'RZ Berlin';
+          const vendor = document.getElementById('newSysVendor')?.value.trim() || '';
+          const isBoundary = Boolean(document.getElementById('newSysBoundary')?.checked);
+          const desc = document.getElementById('newSysDesc')?.value.trim() || '';
+          const tagsStr = document.getElementById('newSysTags')?.value.trim() || '';
+          const tags = tagsStr ? tagsStr.split(',').map(t => t.trim()).filter(Boolean) : [];
+
+          if (!id || !name) {
+            alert('Bitte System-ID und Name eingeben.');
+            return;
+          }
+          if (SYSTEMS_DATA.some(s => s.id === id)) {
+            alert('Fehler: Ein System mit der ID "' + id + '" existiert bereits!');
+            return;
+          }
+
+          const newSys = {
+            id,
+            name,
+            domain,
+            scope,
+            deployment,
+            hosting,
+            vendor,
+            isBoundaryEntity: isBoundary,
+            boundaryType: isBoundary ? 'Perimeter Gateway' : undefined,
+            desc,
+            tags
+          };
+
+          SYSTEMS_DATA.push(newSys);
+          window.closeNewEntityModal();
+          window.onModelDataMutated('Neues System ' + id + ' erfolgreich angelegt');
+
+          if (typeof selectNode === 'function') {
+            selectNode(newSys, window.innerWidth / 2, window.innerHeight / 2);
+          }
+        }
+        else if (type === 'connection') {
+          const id = document.getElementById('newConnId')?.value.trim();
+          const name = document.getElementById('newConnName')?.value.trim();
+          const from = document.getElementById('newConnFrom')?.value;
+          const to = document.getElementById('newConnTo')?.value;
+          const protocol = document.getElementById('newConnProt')?.value.trim() || 'REST';
+          const messageType = document.getElementById('newConnMsg')?.value.trim() || 'JSON';
+          const flowType = document.getElementById('newConnFlow')?.value || 'SYNC';
+          const transportOverlay = document.getElementById('newConnTransport')?.value.trim() || 'mTLS';
+          const desc = document.getElementById('newConnDesc')?.value.trim() || '';
+
+          if (!id || !name) {
+            alert('Bitte Verbindungs-ID und Bezeichnung eingeben.');
+            return;
+          }
+          if (from === to) {
+            alert('Quell- und Zielsystem dürfen nicht identisch sein.');
+            return;
+          }
+          if (CONNECTIONS_DATA.some(c => c.id === id)) {
+            alert('Fehler: Eine Verbindung mit der ID "' + id + '" existiert bereits!');
+            return;
+          }
+
+          const sFrom = sysById.get(from);
+          const sTo = sysById.get(to);
+          const isCrossBoundary = (sFrom?.scope !== sTo?.scope) || Boolean(sFrom?.isBoundaryEntity || sTo?.isBoundaryEntity);
+
+          const newConn = {
+            id,
+            from,
+            to,
+            name,
+            protocol,
+            messageType,
+            flowType,
+            transportOverlay,
+            isCrossBoundary,
+            desc
+          };
+
+          CONNECTIONS_DATA.push(newConn);
+          window.closeNewEntityModal();
+          window.onModelDataMutated('Neue Verbindung ' + id + ' angelegt');
+
+          if (typeof selectEdge === 'function') {
+            selectEdge(newConn, window.innerWidth / 2, window.innerHeight / 2);
+          }
+        }
+        else if (type === 'process') {
+          const id = document.getElementById('newProcId')?.value.trim();
+          const name = document.getElementById('newProcName')?.value.trim();
+          const leadDomain = document.getElementById('newProcDomain')?.value;
+          const apqc = document.getElementById('newProcApqc')?.value.trim() || '';
+          const impact = document.getElementById('newProcImpact')?.value.trim() || '';
+          const desc = document.getElementById('newProcDesc')?.value.trim() || '';
+
+          if (!id || !name) {
+            alert('Bitte Prozess-ID und Bezeichnung eingeben.');
+            return;
+          }
+          if (PROCESSES_DATA.some(p => p.id === id)) {
+            alert('Fehler: Ein Prozess mit der ID "' + id + '" existiert bereits!');
+            return;
+          }
+
+          const newProc = {
+            id,
+            name,
+            leadDomain,
+            apqc,
+            impact,
+            desc,
+            description: desc,
+            participatingDomains: [leadDomain],
+            involvedDomains: [leadDomain],
+            cleanIntegIds: [],
+            integrations: [],
+            participatingSystems: []
+          };
+
+          PROCESSES_DATA.push(newProc);
+          window.closeNewEntityModal();
+          window.onModelDataMutated('Neuer Geschäftsprozess ' + id + ' angelegt');
+
+          if (typeof setDrilldownProcess === 'function') {
+            setDrilldownProcess(newProc);
+          }
+        }
+        else if (type === 'integration') {
+          const id = document.getElementById('newIntegId')?.value.trim();
+          const name = document.getElementById('newIntegName')?.value.trim();
+          const sourceSystem = document.getElementById('newIntegFrom')?.value;
+          const targetSystem = document.getElementById('newIntegTo')?.value;
+          const procId = document.getElementById('newIntegProc')?.value;
+          const trafficSum = document.getElementById('newIntegTraffic')?.value.trim() || 'Aktiv';
+          const description = document.getElementById('newIntegDesc')?.value.trim() || '';
+
+          if (!id || !name) {
+            alert('Bitte Integrations-ID und Name eingeben.');
+            return;
+          }
+          if (INTEGRATIONS_DATA.some(i => i.id === id)) {
+            alert('Fehler: Eine Integration mit der ID "' + id + '" existiert bereits!');
+            return;
+          }
+
+          // Check if there is an existing connection between source and target
+          let matchingConn = CONNECTIONS_DATA.find(c => c.from === sourceSystem && c.to === targetSystem);
+          const steps = [];
+          if (matchingConn) {
+            steps.push({ stepOrder: 1, from: sourceSystem, to: targetSystem, connectionId: matchingConn.id });
+          }
+
+          const newInteg = {
+            id,
+            name,
+            sourceSystem,
+            targetSystem,
+            trafficSum,
+            description,
+            steps
+          };
+
+          INTEGRATIONS_DATA.push(newInteg);
+
+          if (procId) {
+            const proc = PROCESSES_DATA.find(p => p.id === procId);
+            if (proc) {
+              if (!proc.cleanIntegIds) proc.cleanIntegIds = [];
+              proc.cleanIntegIds.push(id);
+            }
+          }
+
+          window.closeNewEntityModal();
+          window.onModelDataMutated('Neue E2E-Integration ' + id + ' angelegt');
+
+          if (typeof setDrilldownIntegration === 'function') {
+            setDrilldownIntegration(newInteg);
+          }
+        }
+        else if (type === 'domain') {
+          const id = document.getElementById('newDomId')?.value.trim();
+          const name = document.getElementById('newDomName')?.value.trim();
+          const shortName = document.getElementById('newDomShort')?.value.trim() || id;
+          const color = document.getElementById('newDomColor')?.value || '#38bdf8';
+          const focus = document.getElementById('newDomFocus')?.value.trim() || '';
+
+          if (!id || !name) {
+            alert('Bitte Domänen-ID und Name eingeben.');
+            return;
+          }
+          if (DOMAINS_DATA.some(d => d.id === id)) {
+            alert('Fehler: Eine Domäne mit der ID "' + id + '" existiert bereits!');
+            return;
+          }
+
+          const newDom = { id, name, color };
+          DOMAINS_DATA.push(newDom);
+          DOMAIN_DETAILS_DATA[id] = { shortName, focus };
+
+          window.closeNewEntityModal();
+          window.onModelDataMutated('Neue Architektur-Domäne ' + id + ' angelegt');
+
+          if (typeof setDrilldownDomain === 'function') {
+            setDrilldownDomain(id);
+          }
+        }
+      };
     });
   </script>
+
+  <!-- =====================================================================
+       CRUD MODAL DIALOG & TOAST NOTIFICATION
+       ===================================================================== -->
+  <div id="crudToast"></div>
+
+  <div id="entityCrudModal" class="crud-modal-backdrop" style="display:none;" onclick="if (event.target === this) window.closeNewEntityModal();">
+    <div class="crud-modal-window">
+      <div class="crud-modal-header">
+        <div class="crud-modal-title" id="crudModalTitle">✨ Neues Element anlegen</div>
+        <button onclick="window.closeNewEntityModal()" style="background:none; border:none; color:var(--text-muted); font-size:1.2rem; cursor:pointer; padding:0 4px;" title="Schließen">&times;</button>
+      </div>
+      <div class="crud-modal-body" id="crudModalBody">
+        <!-- Dynamically rendered fields -->
+      </div>
+      <div class="crud-modal-footer">
+        <button class="insp-btn-cancel" onclick="window.closeNewEntityModal()">Abbrechen</button>
+        <button class="insp-btn-save" id="btnSubmitCrudModal" onclick="window.submitNewEntityModal()">Element anlegen</button>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>
