@@ -18636,6 +18636,16 @@
       }
       window.locateNodeInChord = locateNodeInChord;
 
+      window.selectSystem = function(sysId) {
+        if (!sysId) return;
+        if (typeof window.locateNodeInChord === 'function') {
+          window.locateNodeInChord(sysId);
+        }
+        if (typeof window.selectNodeById === 'function') {
+          window.selectNodeById(sysId);
+        }
+      };
+
       function locateClientOnCanvas(clientId) {
         if (!clientId) return;
 
@@ -39032,7 +39042,7 @@
             modal.style.right = 'auto';
             modal.style.bottom = 'auto';
           }
-          if (btn) btn.innerHTML = '⛶ Vollbild';
+          if (btn) { btn.innerHTML = '⛶'; btn.title = 'Vollbild aktivieren (oder Klick auf Kopfzeile)'; }
         } else {
           entry.savedBounds = {
             top: modal.style.top || (modal.offsetTop + 'px'),
@@ -39041,7 +39051,7 @@
             height: modal.style.height || (modal.offsetHeight + 'px')
           };
           modal.classList.add('is-fullscreen');
-          if (btn) btn.innerHTML = '🗗 Wiederherstellen';
+          if (btn) { btn.innerHTML = '🗗'; btn.title = 'Vollbild verlassen / Wiederherstellen'; }
         }
 
         setTimeout(() => {
@@ -39137,18 +39147,18 @@
                 '<span class="traffic-tag" style="background:rgba(56,189,248,0.2); color:var(--accent); font-weight:700;">UML 2.5</span>' +
                 (proc.apqc ? '<button type="button" class="apqc-code-badge" onclick="event.stopPropagation(); window.openApqcExplorer(\'' + esc(proc.apqc) + '\')" title="APQC PCF Klassifikation ' + esc(proc.apqc) + ' im Explorer öffnen" style="cursor:pointer;">📋 APQC ' + esc(proc.apqc) + '</button>' : '') +
               '</div>' +
-              '<div style="display:flex; align-items:center; gap:6px;">' +
-                '<button class="insp-action-btn" onclick="window.zoomPuml(\'' + esc(proc.id) + '\', 0.2)" title="Vergrößern (+)">🔍 +</button>' +
-                '<button class="insp-action-btn" onclick="window.zoomPuml(\'' + esc(proc.id) + '\', -0.2)" title="Verkleinern (-)">🔍 -</button>' +
+              '<div style="display:flex; align-items:center; gap:5px;">' +
+                '<button class="insp-action-btn" onclick="window.zoomPuml(\'' + esc(proc.id) + '\', 0.2)" title="Vergrößern (+)">➕</button>' +
+                '<button class="insp-action-btn" onclick="window.zoomPuml(\'' + esc(proc.id) + '\', -0.2)" title="Verkleinern (-)">➖</button>' +
                 '<span class="puml-zoom-badge" title="Aktueller Zoomfaktor">100%</span>' +
-                '<button class="insp-action-btn" onclick="window.resetPumlZoom(\'' + esc(proc.id) + '\')" title="Standardgröße (100%)">1:1</button>' +
-                '<button class="insp-action-btn" onclick="window.fitPlantUml(\'' + esc(proc.id) + '\')" title="Gesamtes Diagramm in Fenster einpassen">⊡ Einpassen</button>' +
-                '<button class="insp-action-btn" onclick="window.jumpToPumlStart(\'' + esc(proc.id) + '\')" title="Direkt an den Diagrammanfang (Initiator links) springen">⏮ Start</button>' +
-                '<button class="insp-action-btn btn-puml-fullscreen" onclick="window.togglePlantUmlFullscreen(\'' + esc(proc.id) + '\')" title="Vollbild umschalten">⛶ Vollbild</button>' +
-                '<button class="insp-action-btn" onclick="window.downloadPumlSvg(\'' + esc(proc.id) + '\')" title="SVG Vektorgrafik herunterladen">💾 SVG Download</button>' +
-                '<button class="insp-action-btn" onclick="window.copyPlantUml(\'' + esc(proc.id) + '\')" title="PlantUML-Code kopieren">📋 Kopieren</button>' +
-                '<button class="insp-action-btn" onclick="window.openPlantUmlEditor(\'' + esc(proc.id) + '\')" title="In externem Editor (PlantText) bearbeiten">↗ PlantText</button>' +
-                '<button class="insp-action-btn" onclick="window.openOfficialPlantUmlEditor(\'' + esc(proc.id) + '\')" title="Auf offiziellem PlantUML-Server öffnen">↗ PlantUML.com</button>' +
+                '<button class="insp-action-btn" onclick="window.resetPumlZoom(\'' + esc(proc.id) + '\')" title="Standardgröße (1:1 / 100%)">1:1</button>' +
+                '<button class="insp-action-btn" onclick="window.fitPlantUml(\'' + esc(proc.id) + '\')" title="Gesamtes Diagramm in Fenster einpassen">⊡</button>' +
+                '<button class="insp-action-btn" onclick="window.jumpToPumlStart(\'' + esc(proc.id) + '\')" title="Direkt an den Diagrammanfang (Initiator links) springen">⏮</button>' +
+                '<button class="insp-action-btn btn-puml-fullscreen" onclick="window.togglePlantUmlFullscreen(\'' + esc(proc.id) + '\')" title="Vollbild umschalten (oder Klick auf Kopfzeile)">⛶</button>' +
+                '<button class="insp-action-btn" onclick="window.downloadPumlSvg(\'' + esc(proc.id) + '\')" title="SVG Vektorgrafik herunterladen">💾</button>' +
+                '<button class="insp-action-btn" onclick="window.copyPlantUml(\'' + esc(proc.id) + '\')" title="PlantUML-Code in die Zwischenablage kopieren">📋</button>' +
+                '<button class="insp-action-btn" onclick="window.openPlantUmlEditor(\'' + esc(proc.id) + '\')" title="In externem Editor (PlantText) bearbeiten">↗</button>' +
+                '<button class="insp-action-btn" onclick="window.openOfficialPlantUmlEditor(\'' + esc(proc.id) + '\')" title="Auf offiziellem PlantUML-Server öffnen">🌐</button>' +
                 '<button class="plantuml-close-btn" onclick="window.closePlantUmlModal(\'' + esc(proc.id) + '\')" style="background:none; border:none; font-size:1.4rem; cursor:pointer; padding:0 6px; line-height:1;" title="Schließen">&times;</button>' +
               '</div>' +
             '</div>' +
@@ -39180,13 +39190,15 @@
           // Header drag logic
           const header = modal.querySelector('.plantuml-popout-header');
           let isHeaderDragging = false;
+          let pumlHeaderMoved = false;
           let dragStartX, dragStartY, initLeft, initTop;
 
           header.addEventListener('mousedown', (e) => {
-            if (e.target.closest('button')) return;
+            if (e.target.closest('button') || e.target.closest('a') || e.target.closest('input')) return;
             if (modal.classList.contains('is-fullscreen')) return;
 
             isHeaderDragging = true;
+            pumlHeaderMoved = false;
             dragStartX = e.clientX;
             dragStartY = e.clientY;
             initLeft = modal.offsetLeft;
@@ -39200,8 +39212,17 @@
             }
           });
 
+          header.addEventListener('click', (e) => {
+            if (e.target.closest('button') || e.target.closest('a') || e.target.closest('input')) return;
+            if (pumlHeaderMoved) return;
+            window.togglePlantUmlFullscreen(proc.id);
+          });
+
           const onHeaderMouseMove = (e) => {
             if (!isHeaderDragging) return;
+            if (Math.hypot(e.clientX - dragStartX, e.clientY - dragStartY) > 4) {
+              pumlHeaderMoved = true;
+            }
             const dx = e.clientX - dragStartX;
             const dy = e.clientY - dragStartY;
             const newLeft = Math.max(10, Math.min(window.innerWidth - 120, initLeft + dx));
@@ -39332,7 +39353,11 @@
               const sysId = href.replace(/^#sys-/, '');
               const sys = SYSTEMS_DATA.find(s => s.id === sysId);
               if (sys) {
-                if (typeof selectNode === 'function') selectNode(sys, clickX, clickY);
+                if (typeof window.selectSystem === 'function') {
+                  window.selectSystem(sys.id);
+                } else if (typeof selectNode === 'function') {
+                  selectNode(sys, clickX, clickY);
+                }
                 if (typeof window.showCrudToast === 'function') {
                   window.showCrudToast('🎯 System ' + sys.id + ' (' + (sys.name || '') + ') im Modell ausgewählt');
                 }
@@ -39807,78 +39832,47 @@
       }
 
             function formatLaneNameForBpmn(name) {
-        if (!name) return '';
-        name = String(name).trim();
-        if (name.includes('\n') || name.includes('&#10;')) return name;
-        if (name.length <= 14) return name;
+        if (!name) return ' \n ';
+        name = String(name).replace(/&#10;/g, '\n').replace(/&amp;/g, '&').trim();
+        
+        let parts = name.split('\n').map(s => s.trim()).filter(Boolean);
+        if (parts.length === 2) {
+          return parts[0] + '&#10;' + parts[1];
+        }
+        if (parts.length > 2) {
+          const l1 = parts[0];
+          const l2 = parts.slice(1).join(' ');
+          return l1 + '&#10;' + l2;
+        }
 
-        const parenMatch = name.match(/^(.+?)\s+(\([A-Z0-9_ -]+\))$/i);
+        const single = parts[0] || '';
+        const parenMatch = single.match(/^(.+?)\s+(\([^\)]+\))$/);
         if (parenMatch) {
           return parenMatch[1].trim() + '&#10;' + parenMatch[2].trim();
         }
 
-        const colonMatch = name.match(/^([A-Z0-9_ -]+:)\s*(.+)$/i);
+        const colonMatch = single.match(/^([A-Z0-9_ -]+:)\s*(.+)$/i);
         if (colonMatch) {
-          const prefix = colonMatch[1];
-          const rest = colonMatch[2];
-          if (rest.length > 15) {
-            const words = rest.split(/\s+/);
-            if (words.length >= 2) {
-              let l1 = '', l2 = '';
-              words.forEach(w => {
-                if (!l1 || (l1.length + w.length + 1 <= 15 && !l2)) {
-                  l1 = l1 ? (l1 + ' ' + w) : w;
-                } else {
-                  l2 = l2 ? (l2 + ' ' + w) : w;
-                }
-              });
-              if (l2) return prefix + '&#10;' + l1 + '&#10;' + l2;
-            }
-          }
-          return prefix + '&#10;' + rest;
+          return colonMatch[1].trim() + '&#10;' + colonMatch[2].trim();
         }
 
-        const words = name.split(/\s+/);
-        if (words.length <= 1) return name;
-        const lines = [];
-        let cur = '';
-        words.forEach(w => {
-          if (!cur) {
-            cur = w;
-          } else if ((cur.length + w.length + 1) <= 15) {
-            cur += ' ' + w;
-          } else {
-            lines.push(cur);
-            cur = w;
-          }
-        });
-        if (cur) lines.push(cur);
-        return lines.slice(0, 3).join('&#10;');
+        const words = single.split(/\s+/);
+        if (words.length >= 2) {
+          const mid = Math.ceil(words.length / 2);
+          return words.slice(0, mid).join(' ') + '&#10;' + words.slice(mid).join(' ');
+        }
+
+        if (single.length > 10) {
+          const half = Math.floor(single.length / 2);
+          return single.slice(0, half) + '-&#10;' + single.slice(half);
+        }
+
+        return single + '&#10; ';
       }
 
       function formatBpmnSvg(svgText) {
-        if (!svgText) return svgText;
-        return svgText.replace(
-          /(<text[^>]*transform="matrix\(-1\.83697e-16 -1 1 -1\.83697e-16 0 120\)"[^>]*>)([\s\S]*?)(<\/text>)/gi,
-          (match, open, inner, close) => {
-            const tspans = inner.match(/<tspan[^>]*>[\s\S]*?<\/tspan>/gi) || [];
-            if (tspans.length === 3) {
-              const modifiedOpen = open.replace(/font-size:\s*12px/i, 'font-size: 10.5px');
-              const baselines = ['7.5', '17.5', '27.5'];
-              let idx = 0;
-              const newInner = inner.replace(/<tspan([^>]*)>([\s\S]*?)<\/tspan>/gi, (tm, attrs, text) => {
-                let newAttrs = attrs.replace(/x="[^"]+"/g, 'x="14"');
-                const by = baselines[idx++] || '18.6';
-                newAttrs = newAttrs.replace(/y="[^"]+"/g, 'y="' + by + '"');
-                return '<tspan' + newAttrs + '>' + text + '</tspan>';
-              });
-              return modifiedOpen + newInner + close;
-            } else {
-              const newInner = inner.replace(/x="[^"]+"/g, 'x="14"');
-              return open + newInner + close;
-            }
-          }
-        );
+        // Natural bpmn-js centering is preserved; no forced x="14"
+        return svgText;
       }
 
       window.generateBpmnXmlFromProcess = function(proc) {
@@ -39901,7 +39895,7 @@
         if (proc.id === 'JSD-P-01') {
           // Register interactive metadata for canvas integration
           procMetaMap.set('StartEvent_RTW', { type: 'actor', actorId: 'JSD-ACT-03', clientId: 'JSD-CL-03', desc: 'Notfallversorgung initiiert' });
-          procMetaMap.set('Task_RTW_Capture', { type: 'client', actorId: 'JSD-ACT-03', clientId: 'JSD-CL-03', desc: 'Notfalldaten & Vitalparameter erfassen' });
+          procMetaMap.set('Task_RTW_Capture', { type: 'human', actorId: 'JSD-ACT-03', clientId: 'JSD-CL-03', desc: 'Notfalldaten & Vitalparameter erfassen (RTW)' });
           procMetaMap.set('Lane_RTW_Human', { type: 'actor', actorId: 'JSD-ACT-03', clientId: 'JSD-CL-03' });
           procMetaMap.set('Task_IoT_Send', { type: 'sys', sysId: 'JSD-28', desc: 'JSD-28: Medical IoT Gateway' });
           procMetaMap.set('Lane_JSD_28', { type: 'sys', sysId: 'JSD-28' });
@@ -39919,7 +39913,7 @@
           procMetaMap.set('Lane_JSD_10', { type: 'sys', sysId: 'JSD-10' });
 
           procMetaMap.set('Task_ZNA_Receive', { type: 'sys', sysId: 'JSD-15', desc: 'JSD-15: ZNA E-Care & Triage' });
-          procMetaMap.set('Task_ZNA_Triage', { type: 'sys', sysId: 'JSD-15', desc: 'JSD-15: Manchester-Triage & Bettenzuweisung' });
+          procMetaMap.set('Task_ZNA_Triage', { type: 'human', actorId: 'JSD-ACT-04', clientId: 'JSD-CL-04', desc: 'Manchester-Triage durchführen (ZNA)' });
           procMetaMap.set('Task_ZNA_SendADT', { type: 'sys', sysId: 'JSD-15', desc: 'JSD-15: Notfall-Aufnahmedaten an HealthShare' });
           procMetaMap.set('Task_ZNA_Finalize', { type: 'sys', sysId: 'JSD-15', desc: 'JSD-15: Fallübernahme abschließen' });
           procMetaMap.set('EndEvent_Akutklinik', { type: 'end', procId: 'JSD-P-01', desc: 'Patient in Notaufnahme übernommen' });
@@ -40786,7 +40780,7 @@
             modal.style.right = 'auto';
             modal.style.bottom = 'auto';
           }
-          if (btn) btn.innerHTML = '⛶ Vollbild';
+          if (btn) { btn.innerHTML = '⛶'; btn.title = 'Vollbild aktivieren (oder Klick auf Kopfzeile)'; }
         } else {
           entry.savedBounds = {
             top: modal.style.top || (modal.offsetTop + 'px'),
@@ -40795,7 +40789,7 @@
             height: modal.style.height || (modal.offsetHeight + 'px')
           };
           modal.classList.add('is-fullscreen');
-          if (btn) btn.innerHTML = '🗗 Wiederherstellen';
+          if (btn) { btn.innerHTML = '🗗'; btn.title = 'Vollbild verlassen / Wiederherstellen'; }
         }
 
         setTimeout(() => {
@@ -40889,18 +40883,18 @@
                 '<span class="traffic-tag" style="background:rgba(16,185,129,0.2); color:#34d399; font-weight:700;">BPMN 2.0</span>' +
                 (proc.apqc ? '<button type="button" class="apqc-code-badge" onclick="event.stopPropagation(); window.openApqcExplorer(\'' + esc(proc.apqc) + '\')" title="APQC PCF Klassifikation ' + esc(proc.apqc) + ' im Explorer öffnen" style="cursor:pointer;">📋 APQC ' + esc(proc.apqc) + '</button>' : '') +
               '</div>' +
-              '<div style="display:flex; align-items:center; gap:6px;">' +
-                '<button class="insp-action-btn" onclick="window.zoomBpmn(\'' + esc(proc.id) + '\', 0.2)" title="Vergrößern (+)">🔍 +</button>' +
-                '<button class="insp-action-btn" onclick="window.zoomBpmn(\'' + esc(proc.id) + '\', -0.2)" title="Verkleinern (-)">🔍 -</button>' +
+              '<div style="display:flex; align-items:center; gap:5px;">' +
+                '<button class="insp-action-btn" onclick="window.zoomBpmn(\'' + esc(proc.id) + '\', 0.2)" title="Vergrößern (+)">➕</button>' +
+                '<button class="insp-action-btn" onclick="window.zoomBpmn(\'' + esc(proc.id) + '\', -0.2)" title="Verkleinern (-)">➖</button>' +
                 '<span class="bpmn-zoom-badge" title="Aktueller Zoomfaktor">100%</span>' +
-                '<button class="insp-action-btn" onclick="window.resetBpmnZoom(\'' + esc(proc.id) + '\')" title="Standardgröße (100%)">1:1</button>' +
-                '<button class="insp-action-btn" onclick="window.fitBpmn(\'' + esc(proc.id) + '\')" title="Gesamtes Diagramm in Fenster einpassen">⊡ Einpassen</button>' +
-                '<button class="insp-action-btn" onclick="window.jumpToBpmnStart(\'' + esc(proc.id) + '\')" title="Direkt an den Diagrammanfang springen">⏮ Start</button>' +
-                '<button class="insp-action-btn btn-bpmn-fullscreen" onclick="window.toggleBpmnFullscreen(\'' + esc(proc.id) + '\')" title="Vollbild umschalten">⛶ Vollbild</button>' +
-                '<button class="insp-action-btn" onclick="window.downloadBpmnFile(\'' + esc(proc.id) + '\')" title="BPMN 2.0 XML Datei herunterladen">💾 .bpmn Download</button>' +
-                '<button class="insp-action-btn" onclick="window.downloadBpmnSvg(\'' + esc(proc.id) + '\')" title="SVG Vektorgrafik herunterladen">🖼️ SVG</button>' +
-                '<button class="insp-action-btn" onclick="window.copyBpmnXml(\'' + esc(proc.id) + '\')" title="BPMN 2.0 XML in Zwischenablage kopieren">📋 Kopieren</button>' +
-                '<button class="insp-action-btn" onclick="window.openBpmnIoEditor(\'' + esc(proc.id) + '\')" title="In externem Modeler (bpmn.io) öffnen">↗ bpmn.io</button>' +
+                '<button class="insp-action-btn" onclick="window.resetBpmnZoom(\'' + esc(proc.id) + '\')" title="Standardgröße (1:1 / 100%)">1:1</button>' +
+                '<button class="insp-action-btn" onclick="window.fitBpmn(\'' + esc(proc.id) + '\')" title="Gesamtes Diagramm in Fenster einpassen">⊡</button>' +
+                '<button class="insp-action-btn" onclick="window.jumpToBpmnStart(\'' + esc(proc.id) + '\')" title="Direkt an den Diagrammanfang springen">⏮</button>' +
+                '<button class="insp-action-btn btn-bpmn-fullscreen" onclick="window.toggleBpmnFullscreen(\'' + esc(proc.id) + '\')" title="Vollbild umschalten (oder Klick auf Kopfzeile)">⛶</button>' +
+                '<button class="insp-action-btn" onclick="window.downloadBpmnFile(\'' + esc(proc.id) + '\')" title="BPMN 2.0 XML Datei herunterladen (.bpmn)">💾</button>' +
+                '<button class="insp-action-btn" onclick="window.downloadBpmnSvg(\'' + esc(proc.id) + '\')" title="SVG Vektorgrafik herunterladen">🖼️</button>' +
+                '<button class="insp-action-btn" onclick="window.copyBpmnXml(\'' + esc(proc.id) + '\')" title="BPMN 2.0 XML in die Zwischenablage kopieren">📋</button>' +
+                '<button class="insp-action-btn" onclick="window.openBpmnIoEditor(\'' + esc(proc.id) + '\')" title="In externem Modeler (bpmn.io) öffnen">↗</button>' +
                 '<button class="bpmn-close-btn" onclick="window.closeBpmnModal(\'' + esc(proc.id) + '\')" style="background:none; border:none; font-size:1.4rem; cursor:pointer; padding:0 6px; line-height:1;" title="Schließen">&times;</button>' +
               '</div>' +
             '</div>' +
@@ -40931,13 +40925,15 @@
           // Header Drag
           const header = modal.querySelector('.bpmn-popout-header');
           let isHeaderDragging = false;
+          let bpmnHeaderMoved = false;
           let dragStartX, dragStartY, initLeft, initTop;
 
           header.addEventListener('mousedown', (e) => {
-            if (e.target.closest('button')) return;
+            if (e.target.closest('button') || e.target.closest('a') || e.target.closest('input')) return;
             if (modal.classList.contains('is-fullscreen')) return;
 
             isHeaderDragging = true;
+            bpmnHeaderMoved = false;
             dragStartX = e.clientX;
             dragStartY = e.clientY;
             initLeft = modal.offsetLeft;
@@ -40951,8 +40947,17 @@
             }
           });
 
+          header.addEventListener('click', (e) => {
+            if (e.target.closest('button') || e.target.closest('a') || e.target.closest('input')) return;
+            if (bpmnHeaderMoved) return;
+            window.toggleBpmnFullscreen(proc.id);
+          });
+
           const onHeaderMouseMove = (e) => {
             if (!isHeaderDragging) return;
+            if (Math.hypot(e.clientX - dragStartX, e.clientY - dragStartY) > 4) {
+              bpmnHeaderMoved = true;
+            }
             const dx = e.clientX - dragStartX;
             const dy = e.clientY - dragStartY;
             const newLeft = Math.max(10, Math.min(window.innerWidth - 120, initLeft + dx));
@@ -41060,37 +41065,52 @@
 
             const hitShape = e.target.closest('[data-element-id]');
             if (!hitShape) return;
-            const elemId = hitShape.getAttribute('data-element-id');
+            let elemId = hitShape.getAttribute('data-element-id');
+            if (elemId && elemId.endsWith('_label')) {
+              elemId = elemId.replace(/_label$/, '');
+            }
+
             const metaMap = bpmnElementMetaMap.get(proc.id);
-            const meta = metaMap ? metaMap.get(elemId) : null;
+            let meta = metaMap ? metaMap.get(elemId) : null;
+
+            // Fallback: If not registered in metaMap, check if element ID or Lane contains a system ID
+            if (!meta) {
+              const sysMatch = elemId.match(/\b([A-Z]{2,4}-[A-Z0-9_-]+)\b/);
+              if (sysMatch && Array.isArray(SYSTEMS_DATA) && SYSTEMS_DATA.some(s => s.id === sysMatch[1])) {
+                meta = { type: 'sys', sysId: sysMatch[1] };
+              }
+            }
 
             e.preventDefault();
             e.stopPropagation();
 
             if (meta) {
               if (meta.type === 'sys' && meta.sysId) {
+                // 1. Highlight system on Chord canvas and show locator beacon
                 if (typeof window.selectSystem === 'function') {
                   window.selectSystem(meta.sysId);
                 }
                 if (typeof window.showCrudToast === 'function') {
-                  window.showCrudToast('🏥 BPMN Task: System ' + meta.sysId + ' fokussiert');
+                  const sysObj = (typeof SYSTEMS_DATA !== 'undefined' ? SYSTEMS_DATA : []).find(s => s.id === meta.sysId);
+                  const sysLabel = sysObj ? (meta.sysId + ' (' + sysObj.name + ')') : meta.sysId;
+                  window.showCrudToast('🏥 BPMN: System ' + sysLabel + ' auf Zeichenfläche hervorgehoben');
                 }
-              }
-              if (meta.type === 'client') {
+              } else if (meta.type === 'human' || meta.type === 'client' || meta.type === 'actor') {
+                // 2. Switch human role and client on canvas
+                if (meta.actorId) {
+                  if (typeof window.locateRoleOnCanvas === 'function') {
+                    window.locateRoleOnCanvas(meta.actorId);
+                  } else if (typeof window.selectHitlRole === 'function') {
+                    window.selectHitlRole(meta.actorId);
+                  }
+                }
                 if (meta.clientId && typeof window.locateClientOnCanvas === 'function') {
                   window.locateClientOnCanvas(meta.clientId);
                 }
-                if (meta.actorId && typeof window.locateRoleOnCanvas === 'function') {
-                  window.locateRoleOnCanvas(meta.actorId);
-                } else if (meta.actorId && typeof window.selectHitlRole === 'function') {
-                  window.selectHitlRole(meta.actorId);
-                }
-              } else if (meta.type === 'actor') {
-                if (meta.clientId && typeof window.locateClientOnCanvas === 'function') {
-                  window.locateClientOnCanvas(meta.clientId);
-                }
-                if (meta.actorId && typeof window.selectHitlRole === 'function') {
-                  window.selectHitlRole(meta.actorId);
+                if (typeof window.showCrudToast === 'function') {
+                  const actObj = (typeof ACTORS_DATA !== 'undefined' ? ACTORS_DATA : []).find(a => a.id === meta.actorId);
+                  const actName = actObj ? actObj.name : (meta.desc || 'Menschliche Rolle');
+                  window.showCrudToast('👤 Human Task: ' + actName + ' auf Zeichenfläche aktiviert');
                 }
               } else if (meta.type === 'step') {
                 if (meta.connId) {
@@ -41107,7 +41127,7 @@
                   }
                 }
                 if (typeof window.showCrudToast === 'function') {
-                  window.showCrudToast('⚡ BPMN Task: ' + (meta.desc || elemId) + ' fokussiert');
+                  window.showCrudToast('⚡ BPMN Flow: ' + (meta.desc || elemId) + ' fokussiert');
                 }
               } else if (meta.type === 'end') {
                 if (typeof window.restartProcessTokenFlow === 'function') {
@@ -41115,7 +41135,7 @@
                 }
               }
             } else {
-              if (elemId.includes('Lane_Actor')) {
+              if (elemId.includes('Lane_Actor') || elemId.includes('Human')) {
                 if (mappedActors.length > 0 && typeof window.selectHitlRole === 'function') {
                   window.selectHitlRole(mappedActors[0].id);
                 }
