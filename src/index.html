@@ -3619,6 +3619,39 @@
       align-self: flex-start;
     }
 
+    /* Interactive Client UI Canvas Locator & Pulse Animation */
+    @keyframes clientActivePulse {
+      0% {
+        filter: drop-shadow(0 0 4px rgba(56, 189, 248, 0.4));
+      }
+      50% {
+        filter: drop-shadow(0 0 28px rgba(56, 189, 248, 1)) drop-shadow(0 0 45px #06b6d4);
+      }
+      100% {
+        filter: drop-shadow(0 8px 24px rgba(0,0,0,0.65));
+      }
+    }
+    .hitl-client-active-pulse rect:first-child {
+      animation: clientActivePulse 0.8s ease-in-out 3 !important;
+      stroke: #67e8f9 !important;
+      stroke-width: 3.5px !important;
+    }
+    @keyframes podHighlightFlash {
+      0% {
+        box-shadow: 0 0 0 rgba(56, 189, 248, 0);
+      }
+      50% {
+        box-shadow: 0 0 35px rgba(56, 189, 248, 0.95), inset 0 0 20px rgba(56, 189, 248, 0.4);
+      }
+      100% {
+        box-shadow: 0 0 0 rgba(56, 189, 248, 0);
+      }
+    }
+    .hitl-pod-flash .hitl-pod-header {
+      animation: podHighlightFlash 0.7s ease-in-out 3 !important;
+      border-color: #38bdf8 !important;
+    }
+
     /* Client Touchpoint Beacon on Arc Nodes */
     .client-touchpoint-beacon {
       animation: hitlBeaconPulse 1.8s infinite ease-in-out;
@@ -18280,6 +18313,137 @@
       }
       window.locateNodeInChord = locateNodeInChord;
 
+      function locateClientOnCanvas(clientId) {
+        if (!clientId) return;
+
+        // 1. Find client and owning HITL role
+        let foundRole = null;
+        let foundClient = null;
+        const actors = (typeof ACTORS_DATA !== 'undefined' ? ACTORS_DATA : []);
+        for (const act of actors) {
+          const cl = (act.clients || []).find(c => c.id === clientId);
+          if (cl) {
+            foundRole = act;
+            foundClient = cl;
+            break;
+          }
+        }
+
+        // If not matched by exact ID, try matching in messagesEmitted or name
+        if (!foundClient) {
+          for (const act of actors) {
+            const cl = (act.clients || []).find(c => (c.messagesEmitted || []).includes(clientId) || c.name.includes(clientId));
+            if (cl) {
+              foundRole = act;
+              foundClient = cl;
+              break;
+            }
+          }
+        }
+
+        if (!foundClient && !foundRole) {
+          console.warn('Client ' + clientId + ' nicht in ACTORS_DATA gefunden.');
+          if (typeof window.showCrudToast === 'function') {
+            window.showCrudToast('Client ' + clientId + ' im aktuellen Modell nicht zugeordnet');
+          }
+          return;
+        }
+
+        // 2. Activate the HITL Role if not already active
+        if (typeof window.selectHitlRole === 'function') {
+          if (window.selectedHitlRoleId !== foundRole.id) {
+            window.selectHitlRole(foundRole.id);
+          }
+        }
+
+        // 3. Highlight Corner Pod with high-visibility flash
+        const pod = document.getElementById('pod' + (foundRole.quadrant || 'LT'));
+        if (pod) {
+          pod.classList.add('hitl-pod-flash');
+          setTimeout(() => pod.classList.remove('hitl-pod-flash'), 2400);
+        }
+
+        // 4. Animate the Client Node Group on SVG Canvas (#gHitlOverlay)
+        const safeId = (foundClient ? foundClient.id : clientId);
+        let clientNode = d3.select('#hitl-client-' + safeId);
+        if (clientNode.empty()) {
+          clientNode = d3.select('.hitl-node-client');
+        }
+
+        if (!clientNode.empty()) {
+          // Bring client node to front
+          const domClient = clientNode.node();
+          if (domClient && domClient.parentNode) domClient.parentNode.appendChild(domClient);
+
+          // Add active pulse class
+          clientNode.classed('hitl-client-active-pulse', true);
+          setTimeout(() => clientNode.classed('hitl-client-active-pulse', false), 2600);
+
+          // Remove any previous beacons
+          d3.selectAll('.hitl-client-beacon').remove();
+
+          // Fire 3 radiating beacon ripple waves
+          [0, 250, 500].forEach(delayMs => {
+            setTimeout(() => {
+              if (clientNode.empty()) return;
+              clientNode.append('rect')
+                .attr('class', 'locator-beacon-ring hitl-client-beacon')
+                .attr('x', -8)
+                .attr('y', -8)
+                .attr('width', 176)
+                .attr('height', 66)
+                .attr('rx', 14)
+                .style('fill', 'none')
+                .style('stroke', '#38bdf8')
+                .style('stroke-width', '3.5px')
+                .style('pointer-events', 'none')
+                .style('filter', 'drop-shadow(0 0 14px #38bdf8)')
+                .transition()
+                .duration(1500)
+                .ease(d3.easeQuadOut)
+                .attr('x', -32)
+                .attr('y', -32)
+                .attr('width', 224)
+                .attr('height', 114)
+                .attr('rx', 22)
+                .style('stroke-opacity', 0)
+                .style('stroke-width', '1px')
+                .remove();
+            }, delayMs);
+          });
+        }
+
+        // 5. Also highlight the backend target system touchpoint
+        if (foundClient && foundClient.targetSystemId && typeof locateNodeInChord === 'function') {
+          setTimeout(() => {
+            locateNodeInChord(foundClient.targetSystemId);
+          }, 350);
+        }
+
+        // 6. Highlight client card in Inspector if open
+        const insp = document.getElementById('inspectorBody');
+        if (insp) {
+          const clientCards = insp.querySelectorAll('div');
+          clientCards.forEach(card => {
+            if (card.textContent && card.textContent.includes(foundClient.name)) {
+              card.style.transition = 'all 0.3s ease';
+              card.style.outline = '2px solid #38bdf8';
+              card.style.boxShadow = '0 0 16px rgba(56,189,248,0.5)';
+              setTimeout(() => {
+                card.style.outline = '';
+                card.style.boxShadow = '';
+              }, 2500);
+            }
+          });
+        }
+
+        // 7. Toast feedback
+        if (typeof window.showCrudToast === 'function') {
+          window.showCrudToast('💻 Client ' + (foundClient ? foundClient.name : clientId) + ' (' + safeId + ') auf der Zeichenfläche lokalisiert & animiert');
+        }
+      }
+      window.locateClientOnCanvas = locateClientOnCanvas;
+
       function closePopout(popoutId) {
         const card = openPopouts.get(popoutId);
         if (card) {
@@ -32913,7 +33077,7 @@
       ],
       "apqc": "8.0 Fakturierung & Gesetzliche E-Rechnung",
       "desc": "Vollautomatisierter Rechnungsversand aus ERP-Mandanten über die BIS Core Engine, Peppol Access Point und Routing an Bundes- und Landesbehörden (ZRE/OZG).",
-      "plantUml": "@startuml\ntitle SEE-P-01: Gesetzliche E-Rechnung B2G & Bund/Länder-Clearance (Peppol BIS 3.0 / XRechnung)\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"SEEBURGER BIS Platform Core (iPaaS)\" #fef3c7\nactor \"SEEBURGER Solution Architect & Core Engineer\" as Architect\nparticipant \"[[#client-SEE-CL-01 🌐 SEEBURGER BIS FrontEnd & Cloud Console (UI)]]\" as Console\nparticipant \"[[#sys-SEE-01 SEE-01: BIS Core Engine]]\" as BIS\nparticipant \"[[#sys-SEE-03 SEE-03: Mapping Studio]]\" as Conv\nparticipant \"[[#sys-SEE-05 SEE-05: AS4 Crypto Vault]]\" as Vault\nend box\n\nbox \"Enterprise Mandant (JSD / Bruker)\" #e0f2fe\nactor \"Enterprise Mandanten-Administrator & ERP-Anwender\" as TenantUser\nparticipant \"[[#client-SEE-CL-02 🌐 SAP S/4HANA EDI Monitoring & Fiori Launchpad (UI)]]\" as ClientUI\nparticipant \"[[#sys-SEE-TENANT-JSD SEE-TENANT-JSD: JSD Mandant (S/4HANA & CPI)]]\" as TenantERP\nend box\n\nbox \"Global B2G Peppol Network\" #dcfce7\nparticipant \"[[#sys-SEE-PEPPOL SEE-PEPPOL: Peppol Access Point]]\" as PeppolAP\nend box\n\nbox \"Regulated Gov Entities\" #fce7f3\nparticipant \"[[#sys-SEE-GOV-ZRE SEE-GOV-ZRE: Bund & Laender ZRE/OZG]]\" as GovZRE\nend box\n\nTenantUser -> ClientUI: Faktura freigeben & E-Rechnung initiieren\nactivate ClientUI\nClientUI -> TenantERP: [[#msg-SEE-CL-02 Belegfreigabe OData]]\nactivate TenantERP\ndeactivate ClientUI\n\nTenantERP -> BIS: [[#conn-SEE-C-01 Faktura-Payload an BIS Core (OData / REST)]]\nactivate BIS\ndeactivate TenantERP\n\nArchitect -> Console: [[#msg-SEE-CL-01 Pipeline Configuration REST]]\nactivate Console\nConsole -> BIS: Peppol Routing- & Validierungsregeln synchronisieren\ndeactivate Console\n\n== Formatkonvertierung & Validierung ==\nBIS -> Conv: [[#conn-SEE-C-07 Transformation in XRechnung 3.0.2 UBL]]\nactivate Conv\nConv --> BIS: Validiertes XRechnung XML\ndeactivate Conv\n\nBIS -> Vault: [[#conn-SEE-C-10 Peppol PKI AS4 Signatur anfordern]]\nactivate Vault\nVault --> BIS: Signiertes AS4 S/MIME Enveloping\ndeactivate Vault\n\n== e-Delivery & Behörden-Routing ==\nBIS -> PeppolAP: [[#conn-SEE-C-13 Peppol AS4 Versand via zertifizierten AP]]\nactivate PeppolAP\nPeppolAP -> GovZRE: [[#conn-SEE-C-37 Routing via Leitweg-ID an ZRE]]\nactivate GovZRE\nGovZRE --> PeppolAP: Message Disposition Notification (MDN OK)\ndeactivate GovZRE\nPeppolAP --> BIS: AS4 Delivery Receipt (NRR quittiert)\ndeactivate PeppolAP\n\nBIS -> TenantERP: [[#conn-SEE-C-34 Status-Rückmeldung & Rechnungsarchivierung]]\nactivate TenantERP\ndeactivate TenantERP\ndeactivate BIS\n@enduml"
+      "plantUml": "@startuml\ntitle SEE-P-01: Gesetzliche E-Rechnung B2G & Bund/Länder-Clearance (Peppol BIS 3.0 / XRechnung)\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"SEEBURGER BIS Platform Core (iPaaS)\" #fef3c7\nactor \"SEEBURGER Solution Architect & Core Engineer\" as Architect\nparticipant \"[[#client-SEE-CL-01 🌐 SEEBURGER BIS FrontEnd & Cloud Console (UI)]]\" as Console\nparticipant \"[[#sys-SEE-01 SEE-01: BIS Core Engine]]\" as BIS\nparticipant \"[[#sys-SEE-03 SEE-03: Mapping Studio]]\" as Conv\nparticipant \"[[#sys-SEE-05 SEE-05: AS4 Crypto Vault]]\" as Vault\nend box\n\nbox \"Enterprise Mandant (JSD / Bruker)\" #e0f2fe\nactor \"Enterprise Mandanten-Administrator & ERP-Anwender\" as TenantUser\nparticipant \"[[#client-SEE-CL-02 🌐 SAP S/4HANA EDI Monitoring & Fiori Launchpad (UI)]]\" as ClientUI\nparticipant \"[[#sys-SEE-TENANT-JSD SEE-TENANT-JSD: JSD Mandant (S/4HANA & CPI)]]\" as TenantERP\nend box\n\nbox \"Global B2G Peppol Network\" #dcfce7\nparticipant \"[[#sys-SEE-PEPPOL SEE-PEPPOL: Peppol Access Point]]\" as PeppolAP\nend box\n\nbox \"Regulated Gov Entities\" #fce7f3\nparticipant \"[[#sys-SEE-GOV-ZRE SEE-GOV-ZRE: Bund & Laender ZRE/OZG]]\" as GovZRE\nend box\n\n== [[#integ-SEE-INT-01 SEE-INT-01: B2G E-Rechnung ZRE & OZG (Peppol BIS 3.0 / XRechnung)]] ==\nTenantUser -> ClientUI: Faktura freigeben & E-Rechnung initiieren\nactivate ClientUI\nClientUI -> TenantERP: [[#msg-SEE-CL-02 Belegfreigabe OData]]\nactivate TenantERP\ndeactivate ClientUI\n\nTenantERP -> BIS: [[#conn-SEE-C-01 Faktura-Payload an BIS Core (OData / REST)]]\nactivate BIS\ndeactivate TenantERP\n\nArchitect -> Console: [[#msg-SEE-CL-01 Pipeline Configuration REST]]\nactivate Console\nConsole -> BIS: Peppol Routing- & Validierungsregeln synchronisieren\ndeactivate Console\n\nBIS -> Conv: [[#conn-SEE-C-07 Transformation in XRechnung 3.0.2 UBL]]\nactivate Conv\nConv --> BIS: Validiertes XRechnung XML\ndeactivate Conv\n\nBIS -> Vault: [[#conn-SEE-C-10 Peppol PKI AS4 Signatur anfordern]]\nactivate Vault\nVault --> BIS: Signiertes AS4 S/MIME Enveloping\ndeactivate Vault\n\nBIS -> PeppolAP: [[#conn-SEE-C-13 Peppol AS4 Versand via zertifizierten AP]]\nactivate PeppolAP\nPeppolAP -> GovZRE: [[#conn-SEE-C-37 Routing via Leitweg-ID an ZRE]]\nactivate GovZRE\nGovZRE --> PeppolAP: Message Disposition Notification (MDN OK)\ndeactivate GovZRE\nPeppolAP --> BIS: AS4 Delivery Receipt (NRR quittiert)\ndeactivate PeppolAP\n\n== [[#integ-SEE-INT-16 SEE-INT-16: TPM Stammdaten-Sync mit Peppol Directory (SMP / SML)]] ==\nBIS -> PeppolAP: [[#conn-SEE-C-48 SMP / SML Directory Sync & Teilnehmer-Registrierung]]\nactivate PeppolAP\nPeppolAP --> BIS: SMP Validierungsquittung (Participant Registered)\ndeactivate PeppolAP\n\nBIS -> TenantERP: [[#conn-SEE-C-34 Status-Rückmeldung & Rechnungsarchivierung]]\nactivate TenantERP\ndeactivate TenantERP\ndeactivate BIS\n@enduml"
     },
     {
       "id": "SEE-P-02",
@@ -32939,7 +33103,7 @@
       ],
       "apqc": "8.0 Krankenhausabrechnung & Krankenkassen-Clearing",
       "desc": "Elektronischer DTA-Abrechnungslauf klinischer Fälle der Johannesstift Diakonie an 95 gesetzliche Krankenkassen und automatischer Zahlungsavis-Rücklauf.",
-      "plantUml": "@startuml\ntitle SEE-P-02: Klinisches DRG- & Pflege-Clearing § 301 / § 105 SGB V/XI (DTA EDIFACT an GKV)\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"SEEBURGER BIS Cloud Platform\" #fef3c7\nactor \"SEEBURGER Solution Architect & Core Engineer\" as Architect\nparticipant \"[[#client-SEE-CL-01 🌐 SEEBURGER BIS FrontEnd & Cloud Console (UI)]]\" as Console\nparticipant \"[[#sys-SEE-01 SEE-01: BIS Core Engine]]\" as BIS\nparticipant \"[[#sys-SEE-03 SEE-03: Mapping Studio]]\" as Conv\nparticipant \"[[#sys-SEE-06 SEE-06: Message Tracking]]\" as Track\nend box\n\nbox \"Klinik-Mandant (JSD)\" #e0f2fe\nactor \"Enterprise Mandanten-Administrator & ERP-Anwender\" as TenantUser\nparticipant \"[[#client-SEE-CL-02 🌐 SAP S/4HANA EDI Monitoring & Fiori Launchpad (UI)]]\" as BillerClient\nparticipant \"[[#sys-SEE-TENANT-JSD SEE-TENANT-JSD: JSD Mandant]]\" as JSD\nend box\n\nbox \"Gesetzliche Krankenkassen (GKV)\" #dcfce7\nparticipant \"[[#sys-SEE-GKV-301 SEE-GKV-301: GKV § 301 Clearingstelle]]\" as GKV\nparticipant \"[[#client-SEE-CL-04B 🌐 GKV DTA § 301 Kassenprüfstelle & Abrechnungsportal (UI)]]\" as AuditorClient\nactor \"Behördlicher Clearing-Auditor & Zollprüfer\" as PayerAuditor\nend box\n\nTenantUser -> BillerClient: DTA § 301 Abrechnungslauf freigeben\nactivate BillerClient\nBillerClient -> JSD: [[#msg-SEE-CL-02 Belegfreigabe OData]]\nactivate JSD\ndeactivate BillerClient\nJSD -> BIS: [[#conn-SEE-C-01 Falldaten an BIS Core (HTTPS REST)]]\nactivate BIS\ndeactivate JSD\n\nArchitect -> Console: [[#msg-SEE-CL-01 Pipeline Configuration REST]]\nactivate Console\nConsole -> BIS: DTA § 301 Prüfregeln & Syntax-Validierung scharfschalten\ndeactivate Console\n\nBIS -> Conv: [[#conn-SEE-C-07 Konvertierung in DTA § 301 EDIFACT]]\nactivate Conv\nConv --> BIS: Validierte EDIFACT DTA-Payload\ndeactivate Conv\n\nBIS -> GKV: [[#conn-SEE-C-23 DTA-Versand an GKV-Clearingstelle (FTAM / AS2)]]\nactivate GKV\nGKV -> AuditorClient: DTA § 301 Prüfauftrag bereitstellen\nactivate AuditorClient\nAuditorClient -> PayerAuditor: Abrechnungsprüfung & Freigabeaufforderung\nPayerAuditor -> AuditorClient: Prüfbescheid bestätigen\nAuditorClient -> GKV: [[#msg-SEE-CL-04B DTA § 301 Prüfbescheid EDIFACT]]\ndeactivate AuditorClient\n\nGKV --> BIS: [[#conn-SEE-C-24 Elektronischer Zahlungsavis & Prüfprotokoll]]\ndeactivate GKV\n\nBIS -> Track: [[#conn-SEE-C-11 GoBD-konforme Archivierung]]\nactivate Track\ndeactivate Track\n\nBIS -> JSD: [[#conn-SEE-C-34 Buchungsbeleg & Zahlungsavis in SAP S/4HANA verbuchen]]\nactivate JSD\ndeactivate JSD\ndeactivate BIS\n@enduml"
+      "plantUml": "@startuml\ntitle SEE-P-02: Klinisches DRG- & Pflege-Clearing § 301 / § 105 SGB V/XI (DTA EDIFACT an GKV)\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"SEEBURGER BIS Cloud Platform\" #fef3c7\nactor \"SEEBURGER Solution Architect & Core Engineer\" as Architect\nparticipant \"[[#client-SEE-CL-01 🌐 SEEBURGER BIS FrontEnd & Cloud Console (UI)]]\" as Console\nparticipant \"[[#sys-SEE-01 SEE-01: BIS Core Engine]]\" as BIS\nparticipant \"[[#sys-SEE-03 SEE-03: Mapping Studio]]\" as Conv\nparticipant \"[[#sys-SEE-06 SEE-06: Message Tracking]]\" as Track\nend box\n\nbox \"Klinik-Mandant (JSD)\" #e0f2fe\nactor \"Enterprise Mandanten-Administrator & ERP-Anwender\" as TenantUser\nparticipant \"[[#client-SEE-CL-02 🌐 SAP S/4HANA EDI Monitoring & Fiori Launchpad (UI)]]\" as BillerClient\nparticipant \"[[#sys-SEE-TENANT-JSD SEE-TENANT-JSD: JSD Mandant]]\" as JSD\nend box\n\nbox \"Gesetzliche Krankenkassen (GKV)\" #dcfce7\nparticipant \"[[#sys-SEE-GKV-301 SEE-GKV-301: GKV § 301 Clearingstelle]]\" as GKV\nparticipant \"[[#client-SEE-CL-04B 🌐 GKV DTA § 301 Kassenprüfstelle & Abrechnungsportal (UI)]]\" as AuditorClient\nactor \"Behördlicher Clearing-Auditor & Zollprüfer\" as PayerAuditor\nend box\n\n== [[#integ-SEE-INT-02 SEE-INT-02: Stationäre DRG-Schlussrechnung § 301 SGB V an Krankenkassen]] ==\nTenantUser -> BillerClient: DTA § 301 Abrechnungslauf freigeben\nactivate BillerClient\nBillerClient -> JSD: [[#msg-SEE-CL-02 Belegfreigabe OData]]\nactivate JSD\ndeactivate BillerClient\nJSD -> BIS: [[#conn-SEE-C-01 Falldaten an BIS Core (HTTPS REST)]]\nactivate BIS\ndeactivate JSD\n\nArchitect -> Console: [[#msg-SEE-CL-01 Pipeline Configuration REST]]\nactivate Console\nConsole -> BIS: DTA § 301 Prüfregeln & Syntax-Validierung scharfschalten\ndeactivate Console\n\n== [[#integ-SEE-INT-03 SEE-INT-03: Zahlungsavis-Rücklauf GKV § 301 ➔ SAP S/4HANA Finance]] ==\nBIS -> Conv: [[#conn-SEE-C-07 Konvertierung in DTA § 301 EDIFACT]]\nactivate Conv\nConv --> BIS: Validierte EDIFACT DTA-Payload\ndeactivate Conv\n\nBIS -> GKV: [[#conn-SEE-C-23 DTA-Versand an GKV-Clearingstelle (FTAM / AS2)]]\nactivate GKV\nGKV -> AuditorClient: DTA § 301 Prüfauftrag bereitstellen\nactivate AuditorClient\nAuditorClient -> PayerAuditor: Abrechnungsprüfung & Freigabeaufforderung\nPayerAuditor -> AuditorClient: Prüfbescheid bestätigen\nAuditorClient -> GKV: [[#msg-SEE-CL-04B DTA § 301 Prüfbescheid EDIFACT]]\ndeactivate AuditorClient\n\n== [[#integ-SEE-INT-10 SEE-INT-10: Johanniter Krankentransport-DTA § 60 SGB V ➔ Kostenträger]] ==\nGKV --> BIS: [[#conn-SEE-C-24 Elektronischer Zahlungsavis & Prüfprotokoll]]\ndeactivate GKV\n\nBIS -> Track: [[#conn-SEE-C-11 GoBD-konforme Archivierung]]\nactivate Track\ndeactivate Track\n\nBIS -> JSD: [[#conn-SEE-C-34 Buchungsbeleg & Zahlungsavis in SAP S/4HANA verbuchen]]\nactivate JSD\ndeactivate JSD\ndeactivate BIS\n@enduml"
     },
     {
       "id": "SEE-P-03",
@@ -32964,7 +33128,7 @@
       ],
       "apqc": "10.0 Einkauf & Supply Chain Kollaboration",
       "desc": "Automatisierte Beschaffungskette von der Bestellanforderung im Krankenhaus-ERP über den GHX B2B Exchange zu MedTech-Lieferanten (B. Braun, Roche).",
-      "plantUml": "@startuml\ntitle SEE-P-03: Healthcare & MedTech Beschaffung via GHX (cXML / ORDERS / DESADV)\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"SEEBURGER BIS Platform\" #fef3c7\nactor \"SEEBURGER Solution Architect & Core Engineer\" as Architect\nparticipant \"[[#client-SEE-CL-01 🌐 SEEBURGER BIS FrontEnd & Cloud Console (UI)]]\" as Console\nparticipant \"[[#sys-SEE-01 SEE-01: BIS Core Engine]]\" as BIS\nparticipant \"[[#sys-SEE-03 SEE-03: Mapping Studio]]\" as Conv\nend box\n\nbox \"Healthcare Einkäufer (JSD / Johanniter)\" #e0f2fe\nactor \"Enterprise Mandanten-Administrator & ERP-Anwender\" as TenantUser\nparticipant \"[[#client-SEE-CL-02 🌐 SAP S/4HANA EDI Monitoring & Fiori Launchpad (UI)]]\" as BuyerClient\nparticipant \"[[#sys-SEE-TENANT-JSD SEE-TENANT-JSD: JSD Mandant]]\" as TenantERP\nend box\n\nbox \"GHX Healthcare Exchange & Supplier\" #dcfce7\nparticipant \"[[#sys-SEE-GHX SEE-GHX: GHX Healthcare Hub]]\" as GHX\nparticipant \"[[#sys-SEE-WEBEDI SEE-WEBEDI: SEEBURGER WebEDI Supplier Portal]]\" as WebEDI\nparticipant \"[[#client-SEE-CL-03 🌐 SEEBURGER Supplier WebEDI & Onboarding Portal (UI)]]\" as SupplierClient\nactor \"B2B Partner Onboarding Manager & Lieferant\" as Supplier\nend box\n\nTenantUser -> BuyerClient: OP-Bedarfsanforderung freigeben\nactivate BuyerClient\nBuyerClient -> TenantERP: [[#msg-SEE-CL-02 Belegfreigabe OData]]\nactivate TenantERP\ndeactivate BuyerClient\nTenantERP -> BIS: [[#conn-SEE-C-01 Bestellbeleg an BIS Core]]\nactivate BIS\ndeactivate TenantERP\n\nArchitect -> Console: [[#msg-SEE-CL-01 Pipeline Configuration REST]]\nactivate Console\nConsole -> BIS: GHX-Routingprofil & Partner-Mapping prüfen\ndeactivate Console\n\nBIS -> Conv: [[#conn-SEE-C-07 Konvertierung in cXML / EDIFACT ORDERS]]\nactivate Conv\nConv --> BIS: cXML Purchase Order Payload\ndeactivate Conv\n\nBIS -> GHX: [[#conn-SEE-C-15 Routing an GHX Exchange (AS2 / cXML)]]\nactivate GHX\nGHX -> WebEDI: [[#conn-SEE-C-38 Übertrag an WebEDI Lieferantenpool]]\nactivate WebEDI\nWebEDI -> SupplierClient: Neue Bestellung avisieren\nactivate SupplierClient\nSupplierClient -> Supplier: Auftragsbenachrichtigung\nSupplier -> SupplierClient: Auftragsbestätigung & Lieferschein erstellen\nSupplierClient -> WebEDI: [[#msg-SEE-CL-03 cXML OrderResponse]]\ndeactivate SupplierClient\nWebEDI --> GHX: DESADV Lieferavis generiert\ndeactivate WebEDI\nGHX --> BIS: [[#conn-SEE-C-16 Lieferavis (DESADV) an BIS Core]]\ndeactivate GHX\n\nBIS -> TenantERP: [[#conn-SEE-C-34 Avisierung & Wareneingangsvorbereitung in SAP]]\nactivate TenantERP\ndeactivate TenantERP\ndeactivate BIS\n@enduml"
+      "plantUml": "@startuml\ntitle SEE-P-03: Healthcare & MedTech Beschaffung via GHX (cXML / ORDERS / DESADV)\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"SEEBURGER BIS Platform\" #fef3c7\nactor \"SEEBURGER Solution Architect & Core Engineer\" as Architect\nparticipant \"[[#client-SEE-CL-01 🌐 SEEBURGER BIS FrontEnd & Cloud Console (UI)]]\" as Console\nparticipant \"[[#sys-SEE-01 SEE-01: BIS Core Engine]]\" as BIS\nparticipant \"[[#sys-SEE-03 SEE-03: Mapping Studio]]\" as Conv\nend box\n\nbox \"Healthcare Einkäufer (JSD / Johanniter)\" #e0f2fe\nactor \"Enterprise Mandanten-Administrator & ERP-Anwender\" as TenantUser\nparticipant \"[[#client-SEE-CL-02 🌐 SAP S/4HANA EDI Monitoring & Fiori Launchpad (UI)]]\" as BuyerClient\nparticipant \"[[#sys-SEE-TENANT-JSD SEE-TENANT-JSD: JSD Mandant]]\" as TenantERP\nend box\n\nbox \"GHX Healthcare Exchange & Supplier\" #dcfce7\nparticipant \"[[#sys-SEE-GHX SEE-GHX: GHX Healthcare Hub]]\" as GHX\nparticipant \"[[#sys-SEE-WEBEDI SEE-WEBEDI: SEEBURGER WebEDI Supplier Portal]]\" as WebEDI\nparticipant \"[[#client-SEE-CL-03 🌐 SEEBURGER Supplier WebEDI & Onboarding Portal (UI)]]\" as SupplierClient\nactor \"B2B Partner Onboarding Manager & Lieferant\" as Supplier\nend box\n\n== [[#integ-SEE-INT-04 SEE-INT-04: MedTech Beschaffung: JSD & Johanniter Einkauf ➔ GHX Medical]] ==\nTenantUser -> BuyerClient: OP-Bedarfsanforderung freigeben\nactivate BuyerClient\nBuyerClient -> TenantERP: [[#msg-SEE-CL-02 Belegfreigabe OData]]\nactivate TenantERP\ndeactivate BuyerClient\nTenantERP -> BIS: [[#conn-SEE-C-01 Bestellbeleg an BIS Core]]\nactivate BIS\ndeactivate TenantERP\n\nArchitect -> Console: [[#msg-SEE-CL-01 Pipeline Configuration REST]]\nactivate Console\nConsole -> BIS: GHX-Routingprofil & Partner-Mapping prüfen\ndeactivate Console\n\nBIS -> Conv: [[#conn-SEE-C-07 Konvertierung in cXML / EDIFACT ORDERS]]\nactivate Conv\nConv --> BIS: cXML Purchase Order Payload\ndeactivate Conv\n\nBIS -> GHX: [[#conn-SEE-C-15 Routing an GHX Exchange (AS2 / cXML)]]\nactivate GHX\n\n== [[#integ-SEE-INT-14 SEE-INT-14: WebEDI Lieferanten-Onboarding & Katalog-Sync]] ==\nGHX -> WebEDI: [[#conn-SEE-C-38 Übertrag an WebEDI Lieferantenpool]]\nactivate WebEDI\nWebEDI -> SupplierClient: Neue Bestellung avisieren\nactivate SupplierClient\nSupplierClient -> Supplier: Auftragsbenachrichtigung\nSupplier -> SupplierClient: Auftragsbestätigung & Lieferschein erstellen\nSupplierClient -> WebEDI: [[#msg-SEE-CL-03 cXML OrderResponse]]\ndeactivate SupplierClient\n\n== [[#integ-SEE-INT-05 SEE-INT-05: GHX Lieferavis (DESADV) & Auftragsbestätigung ➔ ERP]] ==\nWebEDI --> GHX: DESADV Lieferavis generiert\ndeactivate WebEDI\nGHX --> BIS: [[#conn-SEE-C-16 Lieferavis (DESADV) an BIS Core]]\ndeactivate GHX\n\nBIS -> TenantERP: [[#conn-SEE-C-34 Avisierung & Wareneingangsvorbereitung in SAP]]\nactivate TenantERP\ndeactivate TenantERP\ndeactivate BIS\n@enduml"
     },
     {
       "id": "SEE-P-04",
@@ -32990,7 +33154,7 @@
       ],
       "apqc": "10.0 Logistik, Außenhandel & Zollabwicklung",
       "desc": "Weltweiter Versand hochempfindlicher Spektrometer der Bruker Corp: Ausfuhranmeldung an ATLAS Zollverwaltung, Freigabedokument (ABD) und Speditionsavisierung.",
-      "plantUml": "@startuml\ntitle SEE-P-04: Globales High-Tech Export- & Zollclearing (Bruker ATLAS / AES / ABD)\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"SEEBURGER BIS Platform\" #fef3c7\nactor \"SEEBURGER Solution Architect & Core Engineer\" as Architect\nparticipant \"[[#client-SEE-CL-01 🌐 SEEBURGER BIS FrontEnd & Cloud Console (UI)]]\" as Console\nparticipant \"[[#sys-SEE-01 SEE-01: BIS Core Engine]]\" as BIS\nparticipant \"[[#sys-SEE-03 SEE-03: Mapping Studio]]\" as Conv\nend box\n\nbox \"Bruker Global Shipping\" #e0f2fe\nactor \"Enterprise Mandanten-Administrator & ERP-Anwender\" as TenantUser\nparticipant \"[[#client-SEE-CL-02 🌐 SAP S/4HANA EDI Monitoring & Fiori Launchpad (UI)]]\" as ShipperClient\nparticipant \"[[#sys-SEE-TENANT-BRK SEE-TENANT-BRK: Bruker Mandant]]\" as BrukerERP\nend box\n\nbox \"Bundeszollverwaltung & Logistik\" #dcfce7\nparticipant \"[[#sys-SEE-CUSTOMS SEE-CUSTOMS: ATLAS Zollverwaltung]]\" as Customs\nparticipant \"[[#client-SEE-CL-04 💻 Bundeszollverwaltung ATLAS Audit-Client & Prüfportal (UI)]]\" as CustomsClient\nactor \"Behördlicher Clearing-Auditor & Zollprüfer\" as ZollPrüfer\nparticipant \"[[#sys-SEE-AUTO-VDA SEE-AUTO-VDA: Spedition OFTP2 Hub]]\" as Spedition\nend box\n\nTenantUser -> ShipperClient: Ausfuhrauftrag für Spektrometer freigeben\nactivate ShipperClient\nShipperClient -> BrukerERP: [[#msg-SEE-CL-02 Belegfreigabe OData]]\nactivate BrukerERP\ndeactivate ShipperClient\nBrukerERP -> BIS: [[#conn-SEE-C-02 Zolldaten an BIS Core]]\nactivate BIS\ndeactivate BrukerERP\n\nArchitect -> Console: [[#msg-SEE-CL-01 Pipeline Configuration REST]]\nactivate Console\nConsole -> BIS: Zoll-Zertifikate & OFTP2-Parameter auditieren\ndeactivate Console\n\nBIS -> Conv: [[#conn-SEE-C-07 Konvertierung in ATLAS AES XML]]\nactivate Conv\nConv --> BIS: ATLAS Ausfuhranmeldung\ndeactivate Conv\n\nBIS -> Customs: [[#conn-SEE-C-31 Elektronische Ausfuhranmeldung (FTAM / AS2)]]\nactivate Customs\nCustoms -> CustomsClient: Zollanmeldung zur Freigabe vorlegen\nactivate CustomsClient\nCustomsClient -> ZollPrüfer: Risikobewertung & Prüfung\nZollPrüfer -> CustomsClient: Freigabe bestätigen\nCustomsClient -> Customs: [[#msg-SEE-CL-04 ATLAS Ausfuhr-Zollbefund]]\ndeactivate CustomsClient\n\nCustoms --> BIS: [[#conn-SEE-C-32 Ausfuhrbegleitdokument (ABD mit MRN-Barcode)]]\ndeactivate Customs\n\nBIS -> Spedition: [[#conn-SEE-C-22 Transportavis (OFTP2 / VDA 4913) an Spedition]]\nactivate Spedition\ndeactivate Spedition\n\nBIS -> BrukerERP: [[#conn-SEE-C-35 ABD & Zollfreigabe in SAP S/4HANA archivieren]]\nactivate BrukerERP\ndeactivate BrukerERP\ndeactivate BIS\n@enduml"
+      "plantUml": "@startuml\ntitle SEE-P-04: Globales High-Tech Export- & Zollclearing (Bruker ATLAS / AES / ABD)\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"SEEBURGER BIS Platform\" #fef3c7\nactor \"SEEBURGER Solution Architect & Core Engineer\" as Architect\nparticipant \"[[#client-SEE-CL-01 🌐 SEEBURGER BIS FrontEnd & Cloud Console (UI)]]\" as Console\nparticipant \"[[#sys-SEE-01 SEE-01: BIS Core Engine]]\" as BIS\nparticipant \"[[#sys-SEE-03 SEE-03: Mapping Studio]]\" as Conv\nend box\n\nbox \"Bruker Global Shipping\" #e0f2fe\nactor \"Enterprise Mandanten-Administrator & ERP-Anwender\" as TenantUser\nparticipant \"[[#client-SEE-CL-02 🌐 SAP S/4HANA EDI Monitoring & Fiori Launchpad (UI)]]\" as ShipperClient\nparticipant \"[[#sys-SEE-TENANT-BRK SEE-TENANT-BRK: Bruker Mandant]]\" as BrukerERP\nend box\n\nbox \"Bundeszollverwaltung & Logistik\" #dcfce7\nparticipant \"[[#sys-SEE-CUSTOMS SEE-CUSTOMS: ATLAS Zollverwaltung]]\" as Customs\nparticipant \"[[#client-SEE-CL-04 💻 Bundeszollverwaltung ATLAS Audit-Client & Prüfportal (UI)]]\" as CustomsClient\nactor \"Behördlicher Clearing-Auditor & Zollprüfer\" as ZollPrüfer\nparticipant \"[[#sys-SEE-AUTO-VDA SEE-AUTO-VDA: Spedition OFTP2 Hub]]\" as Spedition\nend box\n\n== [[#integ-SEE-INT-07 SEE-INT-07: Bruker High-Tech OEM Auftragsabwicklung & RosettaNet]] ==\nTenantUser -> ShipperClient: Ausfuhrauftrag für Spektrometer freigeben\nactivate ShipperClient\nShipperClient -> BrukerERP: [[#msg-SEE-CL-02 Belegfreigabe OData]]\nactivate BrukerERP\ndeactivate ShipperClient\nBrukerERP -> BIS: [[#conn-SEE-C-02 Zolldaten an BIS Core]]\nactivate BIS\ndeactivate BrukerERP\n\nArchitect -> Console: [[#msg-SEE-CL-01 Pipeline Configuration REST]]\nactivate Console\nConsole -> BIS: Zoll-Zertifikate & OFTP2-Parameter auditieren\ndeactivate Console\n\nBIS -> Conv: [[#conn-SEE-C-07 Konvertierung in ATLAS AES XML]]\nactivate Conv\nConv --> BIS: ATLAS Ausfuhranmeldung\ndeactivate Conv\n\n== [[#integ-SEE-INT-08 SEE-INT-08: Bruker Exportkontrolle & Zollanmeldung (ATLAS / AES)]] ==\nBIS -> Customs: [[#conn-SEE-C-31 Elektronische Ausfuhranmeldung (FTAM / AS2)]]\nactivate Customs\nCustoms -> CustomsClient: Zollanmeldung zur Freigabe vorlegen\nactivate CustomsClient\nCustomsClient -> ZollPrüfer: Risikobewertung & Prüfung\nZollPrüfer -> CustomsClient: Freigabe bestätigen\nCustomsClient -> Customs: [[#msg-SEE-CL-04 ATLAS Ausfuhr-Zollbefund]]\ndeactivate CustomsClient\n\nCustoms --> BIS: [[#conn-SEE-C-32 Ausfuhrbegleitdokument (ABD mit MRN-Barcode)]]\ndeactivate Customs\n\n== [[#integ-SEE-INT-15 SEE-INT-15: Automotive & Logistik OFTP2 Speditionsavisierung]] ==\nBIS -> Spedition: [[#conn-SEE-C-22 Transportavis (OFTP2 / VDA 4913) an Spedition]]\nactivate Spedition\ndeactivate Spedition\n\nBIS -> BrukerERP: [[#conn-SEE-C-35 ABD & Zollfreigabe in SAP S/4HANA archivieren]]\nactivate BrukerERP\ndeactivate BrukerERP\ndeactivate BIS\n@enduml"
     },
     {
       "id": "SEE-P-05",
@@ -33014,7 +33178,7 @@
       ],
       "apqc": "8.0 Treasury & Zahlungsverkehr",
       "desc": "Automatisierter Zahlungsverkehr: Erzeugung von EBICS-Signaturen im KMS-Vault, Übertragung an die Deutsche Bundesbank und täglicher camt.053 Kontoauszugsabruf.",
-      "plantUml": "@startuml\ntitle SEE-P-05: Sicherer Massenzahlungsverkehr & Treasury-Disponierung (EBICS / SEPA)\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"SEEBURGER BIS Platform\" #fef3c7\nactor \"SEEBURGER Solution Architect & Core Engineer\" as Architect\nparticipant \"[[#client-SEE-CL-01 🌐 SEEBURGER BIS FrontEnd & Cloud Console (UI)]]\" as Console\nparticipant \"[[#sys-SEE-01 SEE-01: BIS Core Engine]]\" as BIS\nparticipant \"[[#sys-SEE-05 SEE-05: AS4 Crypto Vault]]\" as Vault\nend box\n\nbox \"Unternehmens-Treasury (Johanniter)\" #e0f2fe\nactor \"Enterprise Mandanten-Administrator & ERP-Anwender\" as TenantUser\nparticipant \"[[#client-SEE-CL-02 🌐 SAP S/4HANA EDI Monitoring & Fiori Launchpad (UI)]]\" as TreasurerClient\nparticipant \"[[#sys-SEE-TENANT-JOH SEE-TENANT-JOH: Johanniter Mandant]]\" as ERP\nend box\n\nbox \"Europäisches Bankennetzwerk\" #dcfce7\nparticipant \"[[#sys-SEE-BANK-EBICS SEE-BANK-EBICS: Banken EBICS Server]]\" as Bank\nend box\n\nTenantUser -> TreasurerClient: SEPA Zahllauf für 15.000 Gehälter freigeben\nactivate TreasurerClient\nTreasurerClient -> ERP: [[#msg-SEE-CL-02 Belegfreigabe OData]]\nactivate ERP\ndeactivate TreasurerClient\nERP -> BIS: [[#conn-SEE-C-03 SEPA pain.001 XML an BIS Core]]\nactivate BIS\ndeactivate ERP\n\nArchitect -> Console: [[#msg-SEE-CL-01 Pipeline Configuration REST]]\nactivate Console\nConsole -> BIS: EBICS Schlüsselrotation & NRR-Archivierung auditieren\ndeactivate Console\n\nBIS -> Vault: [[#conn-SEE-C-10 Elektronische EBICS Signatur (A005) erzeugen]]\nactivate Vault\nVault --> BIS: Signierte EBICS Payload\ndeactivate Vault\n\nBIS -> Bank: [[#conn-SEE-C-29 EBICS 3.0 Übertragung an Bundesbank / Hausbanken]]\nactivate Bank\nBank --> BIS: Elektronische Empfangsbestätigung (pain.002 OK)\n\n== Täglicher Kontoauszugsabruf (camt.053) ==\nBIS -> Bank: [[#conn-SEE-C-30 camt.053 Tageskontoauszüge via EBICS abrufen]]\nBank --> BIS: camt.053 XML Kontoauszug\ndeactivate Bank\n\nBIS -> ERP: [[#conn-SEE-C-36 Automatischer Bankausgleich & Verbuchung in SAP FI]]\nactivate ERP\ndeactivate ERP\ndeactivate BIS\n@enduml"
+      "plantUml": "@startuml\ntitle SEE-P-05: Sicherer Massenzahlungsverkehr & Treasury-Disponierung (EBICS / SEPA)\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"SEEBURGER BIS Platform\" #fef3c7\nactor \"SEEBURGER Solution Architect & Core Engineer\" as Architect\nparticipant \"[[#client-SEE-CL-01 🌐 SEEBURGER BIS FrontEnd & Cloud Console (UI)]]\" as Console\nparticipant \"[[#sys-SEE-01 SEE-01: BIS Core Engine]]\" as BIS\nparticipant \"[[#sys-SEE-05 SEE-05: AS4 Crypto Vault]]\" as Vault\nend box\n\nbox \"Unternehmens-Treasury (Johanniter)\" #e0f2fe\nactor \"Enterprise Mandanten-Administrator & ERP-Anwender\" as TenantUser\nparticipant \"[[#client-SEE-CL-02 🌐 SAP S/4HANA EDI Monitoring & Fiori Launchpad (UI)]]\" as TreasurerClient\nparticipant \"[[#sys-SEE-TENANT-JOH SEE-TENANT-JOH: Johanniter Mandant]]\" as ERP\nend box\n\nbox \"Europäisches Bankennetzwerk\" #dcfce7\nparticipant \"[[#sys-SEE-BANK-EBICS SEE-BANK-EBICS: Banken EBICS Server]]\" as Bank\nend box\n\n== [[#integ-SEE-INT-11 SEE-INT-11: SEPA Massenzahlungsverkehr (EBICS pain.001) ➔ Bundesbank]] ==\nTenantUser -> TreasurerClient: SEPA Zahllauf für 15.000 Gehälter freigeben\nactivate TreasurerClient\nTreasurerClient -> ERP: [[#msg-SEE-CL-02 Belegfreigabe OData]]\nactivate ERP\ndeactivate TreasurerClient\nERP -> BIS: [[#conn-SEE-C-03 SEPA pain.001 XML an BIS Core]]\nactivate BIS\ndeactivate ERP\n\nArchitect -> Console: [[#msg-SEE-CL-01 Pipeline Configuration REST]]\nactivate Console\nConsole -> BIS: EBICS Schlüsselrotation & NRR-Archivierung auditieren\ndeactivate Console\n\nBIS -> Vault: [[#conn-SEE-C-10 Elektronische EBICS Signatur (A005) erzeugen]]\nactivate Vault\nVault --> BIS: Signierte EBICS Payload\ndeactivate Vault\n\nBIS -> Bank: [[#conn-SEE-C-29 EBICS 3.0 Übertragung an Bundesbank / Hausbanken]]\nactivate Bank\nBank --> BIS: Elektronische Empfangsbestätigung (pain.002 OK)\n\n== [[#integ-SEE-INT-12 SEE-INT-12: Elektronischer Kontoauszug (camt.053) ➔ ERP Disposition]] ==\nBIS -> Bank: [[#conn-SEE-C-30 camt.053 Tageskontoauszüge via EBICS abrufen]]\nBank --> BIS: camt.053 XML Kontoauszug\ndeactivate Bank\n\nBIS -> ERP: [[#conn-SEE-C-36 Automatischer Bankausgleich & Verbuchung in SAP FI]]\nactivate ERP\ndeactivate ERP\ndeactivate BIS\n@enduml"
     },
     {
       "id": "SEE-P-06",
@@ -33038,7 +33202,7 @@
       ],
       "apqc": "7.0 Personalabrechnung & Entgeltmeldung",
       "desc": "Monatliche gesetzeskonforme Übermittlung von DEÜV-Meldungen und Beitragsnachweisen aus SAP HCM über die BIS Security Engine an den ITSG DBU Server.",
-      "plantUml": "@startuml\ntitle SEE-P-06: Gesetzliche Entgelt-Meldungen zur Sozialversicherung (DEÜV / DBU Server)\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"SEEBURGER BIS Platform\" #fef3c7\nactor \"SEEBURGER Solution Architect & Core Engineer\" as Architect\nparticipant \"[[#client-SEE-CL-01 🌐 SEEBURGER BIS FrontEnd & Cloud Console (UI)]]\" as Console\nparticipant \"[[#sys-SEE-01 SEE-01: BIS Core Engine]]\" as BIS\nparticipant \"[[#sys-SEE-05 SEE-05: AS4 Crypto Vault]]\" as Vault\nend box\n\nbox \"Personalabteilung (Johanniter / JSD)\" #e0f2fe\nactor \"Enterprise Mandanten-Administrator & ERP-Anwender\" as TenantUser\nparticipant \"[[#client-SEE-CL-02 🌐 SAP S/4HANA EDI Monitoring & Fiori Launchpad (UI)]]\" as HRClient\nparticipant \"[[#sys-SEE-TENANT-JOH SEE-TENANT-JOH: Johanniter Mandant]]\" as HRErp\nend box\n\nbox \"Sozialversicherungsträger\" #dcfce7\nparticipant \"[[#sys-SEE-DEUEV SEE-DEUEV: ITSG DEÜV Server]]\" as ITSG\nend box\n\nTenantUser -> HRClient: DEÜV Monatslauf generieren\nactivate HRClient\nHRClient -> HRErp: [[#msg-SEE-CL-02 Belegfreigabe OData]]\nactivate HRErp\ndeactivate HRClient\n\nHRErp -> BIS: [[#conn-SEE-C-03 DEÜV DBU Datei an BIS Core]]\nactivate BIS\ndeactivate HRErp\n\nArchitect -> Console: [[#msg-SEE-CL-01 Pipeline Configuration REST]]\nactivate Console\nConsole -> BIS: ITSG-Zertifikatsstatus & Annahmestellen-Verzeichnis prüfen\ndeactivate Console\n\nBIS -> Vault: [[#conn-SEE-C-10 Verschlüsselung mit offiziellem ITSG-Zertifikat]]\nactivate Vault\nVault --> BIS: Verschlüsselter DEÜV Datenstrom\ndeactivate Vault\n\nBIS -> ITSG: [[#conn-SEE-C-33 Übermittlung an Annahmestelle (FTAM / AS2)]]\nactivate ITSG\nITSG --> BIS: Elektronische Annahmequittung\ndeactivate ITSG\n\nBIS -> HRErp: [[#conn-SEE-C-36 Quittungsrückmeldung im SAP HCM verbucht]]\nactivate HRErp\ndeactivate HRErp\ndeactivate BIS\n@enduml"
+      "plantUml": "@startuml\ntitle SEE-P-06: Gesetzliche Entgelt-Meldungen zur Sozialversicherung (DEÜV / DBU Server)\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"SEEBURGER BIS Platform\" #fef3c7\nactor \"SEEBURGER Solution Architect & Core Engineer\" as Architect\nparticipant \"[[#client-SEE-CL-01 🌐 SEEBURGER BIS FrontEnd & Cloud Console (UI)]]\" as Console\nparticipant \"[[#sys-SEE-01 SEE-01: BIS Core Engine]]\" as BIS\nparticipant \"[[#sys-SEE-05 SEE-05: AS4 Crypto Vault]]\" as Vault\nend box\n\nbox \"Personalabteilung (Johanniter / JSD)\" #e0f2fe\nactor \"Enterprise Mandanten-Administrator & ERP-Anwender\" as TenantUser\nparticipant \"[[#client-SEE-CL-02 🌐 SAP S/4HANA EDI Monitoring & Fiori Launchpad (UI)]]\" as HRClient\nparticipant \"[[#sys-SEE-TENANT-JOH SEE-TENANT-JOH: Johanniter Mandant]]\" as HRErp\nend box\n\nbox \"Sozialversicherungsträger\" #dcfce7\nparticipant \"[[#sys-SEE-DEUEV SEE-DEUEV: ITSG DEÜV Server]]\" as ITSG\nend box\n\n== [[#integ-SEE-INT-13 SEE-INT-13: Gesetzliche DEÜV-Meldungen (SAP HCM ➔ ITSG Server)]] ==\nTenantUser -> HRClient: DEÜV Monatslauf generieren\nactivate HRClient\nHRClient -> HRErp: [[#msg-SEE-CL-02 Belegfreigabe OData]]\nactivate HRErp\ndeactivate HRClient\n\nHRErp -> BIS: [[#conn-SEE-C-03 DEÜV DBU Datei an BIS Core]]\nactivate BIS\ndeactivate HRErp\n\nArchitect -> Console: [[#msg-SEE-CL-01 Pipeline Configuration REST]]\nactivate Console\nConsole -> BIS: ITSG-Zertifikatsstatus & Annahmestellen-Verzeichnis prüfen\ndeactivate Console\n\nBIS -> Vault: [[#conn-SEE-C-10 Verschlüsselung mit offiziellem ITSG-Zertifikat]]\nactivate Vault\nVault --> BIS: Verschlüsselter DEÜV Datenstrom\ndeactivate Vault\n\n== [[#integ-SEE-INT-20 SEE-INT-20: MFT Massen-Dateiübertragung & Labor-Batch Import]] ==\nBIS -> ITSG: [[#conn-SEE-C-33 Übermittlung an Annahmestelle (FTAM / AS2)]]\nactivate ITSG\nITSG --> BIS: Elektronische Annahmequittung\ndeactivate ITSG\n\nBIS -> HRErp: [[#conn-SEE-C-36 Quittungsrückmeldung im SAP HCM verbucht]]\nactivate HRErp\ndeactivate HRErp\ndeactivate BIS\n@enduml"
     },
     {
       "id": "SEE-P-07",
@@ -33064,7 +33228,7 @@
       ],
       "apqc": "1.0 Enterprise Architecture & Integration Platform Operations",
       "desc": "Zentrale Konfiguration von B2B-Routing-Pipelines, AS4-Zertifikatsrotation im HSM-Vault, Pflege des Trading Partner Managements (TPM) und Peppol Directory Synchronisation.",
-      "plantUml": "@startuml\ntitle SEE-P-07: SEEBURGER BIS Plattform-Orchestrierung & Security Governance\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"SEEBURGER Cloud Platform Engineering\" #e0f2fe\nactor \"SEEBURGER Solution Architect & Core Engineer\" as Architect\nparticipant \"[[#client-SEE-CL-01 🌐 SEEBURGER BIS FrontEnd & Cloud Console (UI)]]\" as Console\nend box\n\nbox \"SEEBURGER BIS Core Platform (iPaaS)\" #fef3c7\nparticipant \"[[#sys-SEE-01 SEE-01: BIS Core Engine]]\" as BIS\nparticipant \"[[#sys-SEE-02 SEE-02: API Gateway]]\" as APIGW\nparticipant \"[[#sys-SEE-03 SEE-03: Mapping Studio]]\" as Conv\nparticipant \"[[#sys-SEE-04 SEE-04: Trading Partner Management (TPM)]]\" as TPM\nparticipant \"[[#sys-SEE-05 SEE-05: AS4 Crypto Vault]]\" as Vault\nparticipant \"[[#sys-SEE-06 SEE-06: Message Tracking]]\" as Track\nend box\n\nbox \"OpenPeppol Network\" #dcfce7\nparticipant \"[[#sys-SEE-PEPPOL SEE-PEPPOL: Peppol Access Point]]\" as PeppolAP\nend box\n\nArchitect -> Console: Plattform-Konfiguration & Partner-Onboarding öffnen\nactivate Console\nConsole -> BIS: [[#msg-SEE-CL-01 Pipeline Configuration REST]]\nactivate BIS\ndeactivate Console\n\nBIS -> APIGW: [[#conn-SEE-C-12 API Endpunkte & Rate-Limits provisionieren]]\nactivate APIGW\ndeactivate APIGW\n\nBIS -> Conv: [[#conn-SEE-C-07 Mapping-Regeln & Syntax-Validatoren publizieren]]\nactivate Conv\ndeactivate Conv\n\nBIS -> TPM: [[#conn-SEE-C-09 Partner-Routingprofile & Zertifikate registrieren]]\nactivate TPM\nTPM -> PeppolAP: [[#conn-SEE-C-48 SMP / SML Directory Sync & Teilnehmer-Registrierung]]\nactivate PeppolAP\nPeppolAP --> TPM: SMP Registrierungsbestätigung\ndeactivate PeppolAP\ndeactivate TPM\n\nBIS -> Vault: [[#conn-SEE-C-10 AS4 PKI Schlüsselpaar im HSM KMS erzeugen & rotieren]]\nactivate Vault\nVault --> BIS: Zertifikat signiert & im Vault verankert\ndeactivate Vault\n\nBIS -> Track: [[#conn-SEE-C-11 Revisionssicheres Audit-Log für Konfigurationsänderung]]\nactivate Track\ndeactivate Track\n\nBIS --> Console: Plattform bereit & SLA Monitoring aktiv (99,99%)\ndeactivate BIS\n@enduml"
+      "plantUml": "@startuml\ntitle SEE-P-07: SEEBURGER BIS Plattform-Orchestrierung & Security Governance\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"SEEBURGER Cloud Platform Engineering\" #e0f2fe\nactor \"SEEBURGER Solution Architect & Core Engineer\" as Architect\nparticipant \"[[#client-SEE-CL-01 🌐 SEEBURGER BIS FrontEnd & Cloud Console (UI)]]\" as Console\nend box\n\nbox \"SEEBURGER BIS Core Platform (iPaaS)\" #fef3c7\nparticipant \"[[#sys-SEE-01 SEE-01: BIS Core Engine]]\" as BIS\nparticipant \"[[#sys-SEE-02 SEE-02: API Gateway]]\" as APIGW\nparticipant \"[[#sys-SEE-03 SEE-03: Mapping Studio]]\" as Conv\nparticipant \"[[#sys-SEE-04 SEE-04: Trading Partner Management (TPM)]]\" as TPM\nparticipant \"[[#sys-SEE-05 SEE-05: AS4 Crypto Vault]]\" as Vault\nparticipant \"[[#sys-SEE-06 SEE-06: Message Tracking]]\" as Track\nend box\n\nbox \"OpenPeppol Network\" #dcfce7\nparticipant \"[[#sys-SEE-PEPPOL SEE-PEPPOL: Peppol Access Point]]\" as PeppolAP\nend box\n\n== [[#integ-SEE-INT-17 SEE-INT-17: Audit Logging & Revisionssichere Langzeitarchivierung]] ==\nArchitect -> Console: Plattform-Konfiguration & Partner-Onboarding öffnen\nactivate Console\nConsole -> BIS: [[#msg-SEE-CL-01 Pipeline Configuration REST]]\nactivate BIS\ndeactivate Console\n\nBIS -> APIGW: [[#conn-SEE-C-12 API Endpunkte & Rate-Limits provisionieren]]\nactivate APIGW\ndeactivate APIGW\n\nBIS -> Conv: [[#conn-SEE-C-07 Mapping-Regeln & Syntax-Validatoren publizieren]]\nactivate Conv\ndeactivate Conv\n\n== [[#integ-SEE-INT-16 SEE-INT-16: TPM Stammdaten-Sync mit Peppol Directory (SMP / SML)]] ==\nBIS -> TPM: [[#conn-SEE-C-09 Partner-Routingprofile & Zertifikate registrieren]]\nactivate TPM\nTPM -> PeppolAP: [[#conn-SEE-C-48 SMP / SML Directory Sync & Teilnehmer-Registrierung]]\nactivate PeppolAP\nPeppolAP --> TPM: SMP Registrierungsbestätigung\ndeactivate PeppolAP\ndeactivate TPM\n\n== [[#integ-SEE-INT-19 SEE-INT-19: On-Premises Agent Tunnel für geschützte Klinikstandorte]] ==\nBIS -> Vault: [[#conn-SEE-C-10 AS4 PKI Schlüsselpaar im HSM KMS erzeugen & rotieren]]\nactivate Vault\nVault --> BIS: Zertifikat signiert & im Vault verankert\ndeactivate Vault\n\nBIS -> Track: [[#conn-SEE-C-11 Revisionssicheres Audit-Log für Konfigurationsänderung]]\nactivate Track\ndeactivate Track\n\nBIS --> Console: Plattform bereit & SLA Monitoring aktiv (99,99%)\ndeactivate BIS\n@enduml"
     },
     {
       "id": "SEE-P-08",
@@ -33090,7 +33254,7 @@
       ],
       "apqc": "11.0 Enterprise Data Management & Hybrid Integration",
       "desc": "Anbindung externer ERP-Systeme (Infor, Dynamics, Epic) via Managed File Transfer (SFTP) und Echtzeit-Streaming von B2B-Supply-Chain-Events in Hyperscaler Cloud Data Lakes.",
-      "plantUml": "@startuml\ntitle SEE-P-08: Multi-Enterprise ERP Ingestion & Cloud Data Lake Streaming\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"SEEBURGER BIS Cloud & MFT\" #fef3c7\nactor \"SEEBURGER Solution Architect & Core Engineer\" as Architect\nparticipant \"[[#client-SEE-CL-01 🌐 SEEBURGER BIS FrontEnd & Cloud Console (UI)]]\" as Console\nparticipant \"[[#sys-SEE-SFTP-HUB SEE-SFTP-HUB: Managed File Transfer]]\" as MFT\nparticipant \"[[#sys-SEE-01 SEE-01: BIS Core Engine]]\" as BIS\nparticipant \"[[#sys-SEE-02 SEE-02: API Gateway]]\" as APIGW\nparticipant \"[[#sys-SEE-CONN-AGNT SEE-CONN-AGNT: Hybrid Agent Mesh]]\" as EdgeAgent\nend box\n\nbox \"Multi-Enterprise Partner & Logistik\" #e0f2fe\nactor \"B2B Partner Onboarding Manager & Lieferant\" as PartnerMgr\nparticipant \"[[#client-SEE-CL-03 🌐 SEEBURGER Supplier WebEDI & Onboarding Portal (UI)]]\" as PartnerClient\nparticipant \"[[#sys-SEE-TENANT-EXT SEE-TENANT-EXT: Infor / Dynamics ERP]]\" as ExtERP\nparticipant \"[[#sys-SEE-AUTO-VDA SEE-AUTO-VDA: Spedition & Logistik]]\" as Logistics\nend box\n\nbox \"Hyperscaler Cloud Lake\" #dcfce7\nparticipant \"[[#sys-SEE-CLOUD-B2B SEE-CLOUD-B2B: AWS / Azure Lake]]\" as CloudLake\nend box\n\nPartnerMgr -> PartnerClient: ERP Batch-Transfer & MFT Freigabe anstoßen\nactivate PartnerClient\nPartnerClient -> ExtERP: [[#msg-SEE-CL-03 WebEDI DESADV Lieferschein]]\nactivate ExtERP\ndeactivate PartnerClient\n\nExtERP -> BIS: [[#conn-SEE-C-05 Infor/Dynamics Belegtransfer an BIS Core (OData)]]\nactivate BIS\ndeactivate ExtERP\n\nArchitect -> Console: [[#msg-SEE-CL-01 Pipeline Configuration REST]]\nactivate Console\nConsole -> BIS: Event Streaming & Kafka Adapter überwachen\ndeactivate Console\n\nLogistics -> MFT: [[#conn-SEE-C-41 Labor- & Fracht-Batchdateien via SFTP]]\nactivate MFT\nMFT -> BIS: [[#conn-SEE-C-06 MFT Event Notification an BIS Event Pipeline]]\ndeactivate MFT\n\nBIS -> EdgeAgent: [[#conn-SEE-C-43 Hybrid Agent Sync mit On-Prem DMZ]]\nactivate EdgeAgent\ndeactivate EdgeAgent\n\nBIS -> APIGW: [[#conn-SEE-C-12 Event Payload an API Gateway]]\nactivate APIGW\nAPIGW -> CloudLake: [[#conn-SEE-C-47 Echtzeit-Streaming an Azure / AWS Lake (Kafka Connect)]]\nactivate CloudLake\nCloudLake --> APIGW: 202 Accepted & Stream Acknowledgement\ndeactivate CloudLake\ndeactivate APIGW\ndeactivate BIS\n@enduml"
+      "plantUml": "@startuml\ntitle SEE-P-08: Multi-Enterprise ERP Ingestion & Cloud Data Lake Streaming\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"SEEBURGER BIS Cloud & MFT\" #fef3c7\nactor \"SEEBURGER Solution Architect & Core Engineer\" as Architect\nparticipant \"[[#client-SEE-CL-01 🌐 SEEBURGER BIS FrontEnd & Cloud Console (UI)]]\" as Console\nparticipant \"[[#sys-SEE-SFTP-HUB SEE-SFTP-HUB: Managed File Transfer]]\" as MFT\nparticipant \"[[#sys-SEE-01 SEE-01: BIS Core Engine]]\" as BIS\nparticipant \"[[#sys-SEE-02 SEE-02: API Gateway]]\" as APIGW\nparticipant \"[[#sys-SEE-CONN-AGNT SEE-CONN-AGNT: Hybrid Agent Mesh]]\" as EdgeAgent\nend box\n\nbox \"Multi-Enterprise Partner & Logistik\" #e0f2fe\nactor \"B2B Partner Onboarding Manager & Lieferant\" as PartnerMgr\nparticipant \"[[#client-SEE-CL-03 🌐 SEEBURGER Supplier WebEDI & Onboarding Portal (UI)]]\" as PartnerClient\nparticipant \"[[#sys-SEE-TENANT-EXT SEE-TENANT-EXT: Infor / Dynamics ERP]]\" as ExtERP\nparticipant \"[[#sys-SEE-AUTO-VDA SEE-AUTO-VDA: Spedition & Logistik]]\" as Logistics\nend box\n\nbox \"Hyperscaler Cloud Lake\" #dcfce7\nparticipant \"[[#sys-SEE-CLOUD-B2B SEE-CLOUD-B2B: AWS / Azure Lake]]\" as CloudLake\nend box\n\n== [[#integ-SEE-INT-21 SEE-INT-21: Multi-Enterprise ERP Ingestion (Infor / Microsoft Dynamics / Epic)]] ==\nPartnerMgr -> PartnerClient: ERP Batch-Transfer & MFT Freigabe anstoßen\nactivate PartnerClient\nPartnerClient -> ExtERP: [[#msg-SEE-CL-03 WebEDI DESADV Lieferschein]]\nactivate ExtERP\ndeactivate PartnerClient\n\nExtERP -> BIS: [[#conn-SEE-C-05 Infor/Dynamics Belegtransfer an BIS Core (OData)]]\nactivate BIS\ndeactivate ExtERP\n\n== [[#integ-SEE-INT-20 SEE-INT-20: MFT Massen-Dateiübertragung & Labor-Batch Import]] ==\nArchitect -> Console: [[#msg-SEE-CL-01 Pipeline Configuration REST]]\nactivate Console\nConsole -> BIS: Event Streaming & Kafka Adapter überwachen\ndeactivate Console\n\nLogistics -> MFT: [[#conn-SEE-C-41 Labor- & Fracht-Batchdateien via SFTP]]\nactivate MFT\nMFT -> BIS: [[#conn-SEE-C-06 MFT Event Notification an BIS Event Pipeline]]\ndeactivate MFT\n\nBIS -> EdgeAgent: [[#conn-SEE-C-43 Hybrid Agent Sync mit On-Prem DMZ]]\nactivate EdgeAgent\ndeactivate EdgeAgent\n\n== [[#integ-SEE-INT-18 SEE-INT-18: API Management & Cloud Realtime Event Proxy]] ==\nBIS -> APIGW: [[#conn-SEE-C-12 Event Payload an API Gateway]]\nactivate APIGW\nAPIGW -> CloudLake: [[#conn-SEE-C-47 Echtzeit-Streaming an Azure / AWS Lake (Kafka Connect)]]\nactivate CloudLake\nCloudLake --> APIGW: 202 Accepted & Stream Acknowledgement\ndeactivate CloudLake\ndeactivate APIGW\ndeactivate BIS\n@enduml"
     }
   ],
   "actors": [
@@ -38273,6 +38437,21 @@
                 if (typeof window.showCrudToast === 'function') {
                   window.showCrudToast('⚡ Integrationsfluss ' + integ.id + ' (' + (integ.name || '') + ') aktiviert');
                 }
+              }
+            } else if (href.startsWith('#client-')) {
+              const clientId = href.replace(/^#client-/, '');
+              if (typeof window.locateClientOnCanvas === 'function') {
+                window.locateClientOnCanvas(clientId);
+              }
+            } else if (href.startsWith('#hitl-') || href.startsWith('#act-') || href.startsWith('#actor-')) {
+              const roleId = href.replace(/^#(hitl|act|actor)-/, '');
+              if (typeof window.selectHitlRole === 'function') {
+                window.selectHitlRole(roleId);
+              }
+            } else if (href.startsWith('#msg-')) {
+              const msgId = href.replace(/^#msg-/, '');
+              if (typeof window.locateClientOnCanvas === 'function') {
+                window.locateClientOnCanvas(msgId);
               }
             }
           });
