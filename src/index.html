@@ -2181,15 +2181,23 @@
     }
     #hebSvg:active { cursor: grabbing; }
 
-    /* Canvas Controls (Top Right of canvas) */
+    /* Canvas Controls (Middle Right of canvas - vertically centered to avoid any corner pod or dropdown collision) */
     .canvas-controls {
       position: absolute;
-      top: 16px;
+      top: 50%;
       right: 16px;
+      transform: translateY(-50%);
       display: flex;
       flex-direction: column;
       gap: 6px;
       z-index: 30;
+      background: var(--card-bg, rgba(15, 23, 42, 0.75));
+      padding: 6px;
+      border-radius: 10px;
+      border: 1px solid var(--card-border, rgba(255, 255, 255, 0.12));
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
     }
     .control-btn {
       width: 32px;
@@ -18623,10 +18631,28 @@
       // =========================================================================
       // QUAD-CHORD (4 KREIS-SEGMENTE) MATHEMATICAL LAYOUT ENGINE
       // =========================================================================
-      const qTL = SYSTEMS_DATA.filter(s => s.scope === 'INTERNAL' && s.deployment === 'CLOUD');
-      const qBL = SYSTEMS_DATA.filter(s => s.scope === 'INTERNAL' && s.deployment === 'ON_PREM');
-      const qTR = SYSTEMS_DATA.filter(s => s.scope === 'EXTERNAL' && s.deployment === 'CLOUD');
-      const qBR = SYSTEMS_DATA.filter(s => s.scope === 'EXTERNAL' && s.deployment === 'ON_PREM');
+      function resolveSystemQuadrant(s) {
+        if (s.quadrant) {
+          const q = String(s.quadrant).toUpperCase();
+          if (q === 'LT' || q === 'TL') return 'TL';
+          if (q === 'LB' || q === 'BL') return 'BL';
+          if (q === 'RT' || q === 'TR') return 'TR';
+          if (q === 'RB' || q === 'BR') return 'BR';
+        }
+        const isInternal = (s.scope === 'INTERNAL');
+        const isOnPrem = (s.deployment === 'ON_PREM');
+        if (isInternal) {
+          return isOnPrem ? 'BL' : 'TL';
+        } else {
+          return isOnPrem ? 'BR' : 'TR';
+        }
+      }
+      window.resolveSystemQuadrant = resolveSystemQuadrant;
+
+      const qTL = SYSTEMS_DATA.filter(s => resolveSystemQuadrant(s) === 'TL');
+      const qBL = SYSTEMS_DATA.filter(s => resolveSystemQuadrant(s) === 'BL');
+      const qTR = SYSTEMS_DATA.filter(s => resolveSystemQuadrant(s) === 'TR');
+      const qBR = SYSTEMS_DATA.filter(s => resolveSystemQuadrant(s) === 'BR');
 
       function computeQuadKpi(quadSystems) {
         const sysIds = new Set(quadSystems.map(s => s.id));
@@ -30692,7 +30718,8 @@
       "name": "JSD Mandant: Johannesstift Diakonie (S/4HANA & CPI)",
       "domain": "D2",
       "scope": "INTERNAL",
-      "deployment": "HYBRID",
+      "deployment": "ON_PREM",
+      "quadrant": "LB",
       "hosting": "Conciliamus IT / SAP BTP",
       "vendor": "Johannesstift Diakonie gAG",
       "desc": "Mandanten-Gateway der Johannesstift Diakonie für ERP-Export (SAP S/4HANA MM/FI), Fallabrechnung und GHX-Clearing.",
@@ -30738,7 +30765,8 @@
       "name": "Johanniter Mandant: Johanniter-Unfall-Hilfe (S/4HANA & Connext)",
       "domain": "D2",
       "scope": "INTERNAL",
-      "deployment": "HYBRID",
+      "deployment": "ON_PREM",
+      "quadrant": "LB",
       "hosting": "Johanniter RZ Köln / Azure",
       "vendor": "Johanniter-Unfall-Hilfe e.V.",
       "desc": "Mandanten-Gateway der Johanniter für Pflegeabrechnung § 105 SGB XI, Krankentransport § 60 SGB V, DEÜV und Lieferanten-EDI.",
@@ -31073,7 +31101,8 @@
       "name": "High-Tech Logistik & Speditionsnetzwerk (OFTP2 / VDA)",
       "domain": "D3",
       "scope": "EXTERNAL",
-      "deployment": "HYBRID",
+      "deployment": "ON_PREM",
+      "quadrant": "RB",
       "hosting": "Odette Network / Global Logistik",
       "vendor": "Odette International / Speditionen",
       "desc": "OFTP2-Gateway für geschützte Transport- und Speditionsavise, Luftfracht-Tracking und internationale Gefahrgutpapiere.",
@@ -32658,30 +32687,42 @@
       "avatar": "🏛️",
       "industryContext": "Gesetzliche Kassen & Bundesbehörden",
       "hitlType": "GOVERNMENT_AUDITOR",
-      "hitlSummary": "Überwacht DTA § 301 Fallprüfungen der Krankenkassen, genehmigt Ausfuhranmeldungen im Zoll-Portal ATLAS und prüft E-Rechnungen im ZRE.",
+      "hitlSummary": "Überwacht DTA § 301 Fallprüfungen der Krankenkassen, genehmigt Ausfuhranmeldungen im Zoll-Portal ATLAS und auditiert GKV-Abrechnungsdatensätze.",
       "clients": [
         {
           "id": "SEE-CL-04",
-          "name": "ZRE / ATLAS Behörden-Clearing Terminal",
+          "name": "Bundeszollverwaltung ATLAS Audit-Client & Prüfportal",
           "deviceType": "DESKTOP_GUI",
           "os": "Behörden-Workstation (Linux / Windows)",
-          "authMethod": "Behörden-Smartcard & PKI Zertifikat",
-          "targetSystemId": "SEE-GOV-ZRE",
+          "authMethod": "Zoll-Smartcard & PKI Zertifikat (ELSTER)",
+          "targetSystemId": "SEE-CUSTOMS",
           "messagesEmitted": [
-            "DTA Prüfbescheid EDIFACT",
-            "ATLAS Freigabedokument ABD"
+            "ATLAS Ausfuhr-Zollbefund",
+            "Ausfuhrgenehmigung ABD"
+          ]
+        },
+        {
+          "id": "SEE-CL-04B",
+          "name": "GKV DTA § 301 Kassenprüfstelle & Abrechnungsportal",
+          "deviceType": "WEB_PORTAL",
+          "os": "Web Browser (HTTPS / DTA)",
+          "authMethod": "Krankenkassen IK-Zertifikat",
+          "targetSystemId": "SEE-GKV-301",
+          "messagesEmitted": [
+            "DTA § 301 Prüfbescheid EDIFACT",
+            "Kassenavis Rückmeldung"
           ]
         }
       ],
       "connections": [
-        "SEE-C-27",
-        "SEE-C-28",
+        "SEE-C-23",
+        "SEE-C-24",
         "SEE-C-31",
         "SEE-C-32"
       ],
       "integrations": [
-        "SEE-INT-01",
         "SEE-INT-02",
+        "SEE-INT-03",
         "SEE-INT-08"
       ],
       "processes": [
@@ -34061,7 +34102,7 @@
           // KANTE 1: SENKRECHTER DOPPELPFEIL (↕) Mensch (Pod) <───► Client (UI)
           // ===================================================================
           const edge1YStart = baseHumanY;
-          const edge1YEnd = isTop ? rectTop : rectBottom;
+          const edge1YEnd = (clientY < baseHumanY) ? rectBottom : rectTop;
           const edge1Path = 'M ' + clientX + ' ' + edge1YStart + ' L ' + clientX + ' ' + edge1YEnd;
 
           gHitlEdges.append('path')
@@ -35216,10 +35257,10 @@
       // Rebuild Quad-Chord D3 Diagram from scratch
       function rebuildQuadChordDiagram() {
         // Re-calculate Quadrants
-        const nqTL = SYSTEMS_DATA.filter(s => s.scope === 'INTERNAL' && s.deployment === 'CLOUD');
-        const nqBL = SYSTEMS_DATA.filter(s => s.scope === 'INTERNAL' && s.deployment === 'ON_PREM');
-        const nqTR = SYSTEMS_DATA.filter(s => s.scope === 'EXTERNAL' && s.deployment === 'CLOUD');
-        const nqBR = SYSTEMS_DATA.filter(s => s.scope === 'EXTERNAL' && s.deployment === 'ON_PREM');
+        const nqTL = SYSTEMS_DATA.filter(s => (window.resolveSystemQuadrant ? window.resolveSystemQuadrant(s) : resolveSystemQuadrant(s)) === 'TL');
+        const nqBL = SYSTEMS_DATA.filter(s => (window.resolveSystemQuadrant ? window.resolveSystemQuadrant(s) : resolveSystemQuadrant(s)) === 'BL');
+        const nqTR = SYSTEMS_DATA.filter(s => (window.resolveSystemQuadrant ? window.resolveSystemQuadrant(s) : resolveSystemQuadrant(s)) === 'TR');
+        const nqBR = SYSTEMS_DATA.filter(s => (window.resolveSystemQuadrant ? window.resolveSystemQuadrant(s) : resolveSystemQuadrant(s)) === 'BR');
 
         nodeCoords.clear();
 
