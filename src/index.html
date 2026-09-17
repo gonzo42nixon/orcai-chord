@@ -33526,7 +33526,7 @@
       ],
       "apqc": "8.0 Krankenhausabrechnung & Krankenkassen-Clearing",
       "desc": "Elektronischer DTA-Abrechnungslauf klinischer Fälle der Johannesstift Diakonie an 95 gesetzliche Krankenkassen und automatischer Zahlungsavis-Rücklauf.",
-      "plantUml": "@startuml\ntitle SEE-P-02: Klinisches DRG- & Pflege-Clearing § 301 / § 105 SGB V/XI (DTA EDIFACT an GKV)\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"SEEBURGER BIS Cloud Platform\" #fef3c7\nactor \"[[#hitl-SEE-ACT-01 ⚙️ SEEBURGER Solution Architect & Core Engineer]]\" as Architect\nparticipant \"[[#client-SEE-CL-01 🌐 SEEBURGER BIS FrontEnd & Cloud Console (UI)]]\" as Console\nparticipant \"[[#sys-SEE-01 SEE-01: BIS Core Engine]]\" as BIS\nparticipant \"[[#sys-SEE-03 SEE-03: Mapping Studio]]\" as Conv\nparticipant \"[[#sys-SEE-06 SEE-06: Message Tracking]]\" as Track\nend box\n\nbox \"Klinik-Mandant (JSD)\" #e0f2fe\nactor \"[[#hitl-SEE-ACT-02 💼 Enterprise Mandanten-Administrator & ERP-Anwender]]\" as TenantUser\nparticipant \"[[#client-SEE-CL-02 🌐 SAP S/4HANA EDI Monitoring & Fiori Launchpad (UI)]]\" as BillerClient\nparticipant \"[[#sys-SEE-TENANT-JSD SEE-TENANT-JSD: JSD Mandant]]\" as JSD\nend box\n\nbox \"Gesetzliche Krankenkassen (GKV)\" #dcfce7\nparticipant \"[[#sys-SEE-GKV-301 SEE-GKV-301: GKV § 301 Clearingstelle]]\" as GKV\nparticipant \"[[#client-SEE-CL-04B 🌐 GKV DTA § 301 Kassenprüfstelle & Abrechnungsportal (UI)]]\" as AuditorClient\nactor \"[[#hitl-SEE-ACT-04 🏛️ Behördlicher Clearing-Auditor & Zollprüfer]]\" as PayerAuditor\nend box\n\n== [[#integ-SEE-INT-02 SEE-INT-02: Stationäre DRG-Schlussrechnung § 301 SGB V an Krankenkassen]] ==\nTenantUser -> BillerClient: DTA § 301 Abrechnungslauf freigeben\nactivate BillerClient\nBillerClient -> JSD: [[#msg-SEE-CL-02 Belegfreigabe OData]]\nactivate JSD\ndeactivate BillerClient\nJSD -> BIS: [[#conn-SEE-C-01 Falldaten an BIS Core (HTTPS REST)]]\nactivate BIS\ndeactivate JSD\n\nArchitect -> Console: [[#msg-SEE-CL-01 Pipeline Configuration REST]]\nactivate Console\nConsole -> BIS: DTA § 301 Prüfregeln & Syntax-Validierung scharfschalten\ndeactivate Console\n\n== [[#integ-SEE-INT-03 SEE-INT-03: Zahlungsavis-Rücklauf GKV § 301 ➔ SAP S/4HANA Finance]] ==\nBIS -> Conv: [[#conn-SEE-C-07 Konvertierung in DTA § 301 EDIFACT]]\nactivate Conv\nConv --> BIS: Validierte EDIFACT DTA-Payload\ndeactivate Conv\n\nBIS -> GKV: [[#conn-SEE-C-23 DTA-Versand an GKV-Clearingstelle (FTAM / AS2)]]\nactivate GKV\nGKV -> AuditorClient: DTA § 301 Prüfauftrag bereitstellen\nactivate AuditorClient\nAuditorClient -> PayerAuditor: Abrechnungsprüfung & Freigabeaufforderung\nPayerAuditor -> AuditorClient: Prüfbescheid bestätigen\nAuditorClient -> GKV: [[#msg-SEE-CL-04B DTA § 301 Prüfbescheid EDIFACT]]\ndeactivate AuditorClient\n\n== [[#integ-SEE-INT-10 SEE-INT-10: Johanniter Krankentransport-DTA § 60 SGB V ➔ Kostenträger]] ==\nGKV --> BIS: [[#conn-SEE-C-24 Elektronischer Zahlungsavis & Prüfprotokoll]]\ndeactivate GKV\n\nBIS -> Track: [[#conn-SEE-C-11 GoBD-konforme Archivierung]]\nactivate Track\ndeactivate Track\n\nBIS -> JSD: [[#conn-SEE-C-34 Buchungsbeleg & Zahlungsavis in SAP S/4HANA verbuchen]]\nactivate JSD\ndeactivate JSD\ndeactivate BIS\n@enduml"
+      "plantUml": "@startuml\ntitle SEE-P-02: Klinisches DRG- & Pflege-Clearing § 301 / § 105 SGB V/XI (DTA EDIFACT an GKV)\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"SEEBURGER BIS Cloud Platform\" #fef3c7\nactor \"[[#hitl-SEE-ACT-01 ⚙️ SEEBURGER Solution Architect & Core Engineer]]\" as Architect\nparticipant \"[[#client-SEE-CL-01 🌐 SEEBURGER BIS FrontEnd & Cloud Console (UI)]]\" as Console\nparticipant \"[[#sys-SEE-01 SEE-01: BIS Core Engine]]\" as BIS\nparticipant \"[[#sys-SEE-03 SEE-03: Mapping Studio]]\" as Conv\nparticipant \"[[#sys-SEE-06 SEE-06: Message Tracking]]\" as Track\nend box\n\nbox \"Klinik-Mandant (JSD)\" #e0f2fe\nactor \"[[#hitl-SEE-ACT-02 💼 Enterprise Mandanten-Administrator & ERP-Anwender]]\" as TenantUser\nparticipant \"[[#client-SEE-CL-02 🌐 SAP S/4HANA EDI Monitoring & Fiori Launchpad (UI)]]\" as BillerClient\nparticipant \"[[#sys-SEE-TENANT-JSD SEE-TENANT-JSD: JSD Mandant]]\" as JSD\nend box\n\nbox \"Gesetzliche Krankenkassen (GKV)\" #dcfce7\nparticipant \"[[#sys-SEE-GKV-301 SEE-GKV-301: GKV § 301 Clearingstelle]]\" as GKV\nparticipant \"[[#client-SEE-CL-04B 🌐 GKV DTA § 301 Kassenprüfstelle & Abrechnungsportal (UI)]]\" as AuditorClient\nactor \"[[#hitl-SEE-ACT-05 🏥 GKV-Kassenprüfer & § 301 Clearing-Auditor (DTA)]]\" as PayerAuditor\nend box\n\n== [[#integ-SEE-INT-02 SEE-INT-02: Stationäre DRG-Schlussrechnung § 301 SGB V an Krankenkassen]] ==\nTenantUser -> BillerClient: DTA § 301 Abrechnungslauf freigeben\nactivate BillerClient\nBillerClient -> JSD: [[#msg-SEE-CL-02 Belegfreigabe OData]]\nactivate JSD\ndeactivate BillerClient\nJSD -> BIS: [[#conn-SEE-C-01 Falldaten an BIS Core (HTTPS REST)]]\nactivate BIS\ndeactivate JSD\n\nArchitect -> Console: [[#msg-SEE-CL-01 Pipeline Configuration REST]]\nactivate Console\nConsole -> BIS: DTA § 301 Prüfregeln & Syntax-Validierung scharfschalten\ndeactivate Console\n\n== [[#integ-SEE-INT-03 SEE-INT-03: Zahlungsavis-Rücklauf GKV § 301 ➔ SAP S/4HANA Finance]] ==\nBIS -> Conv: [[#conn-SEE-C-07 Konvertierung in DTA § 301 EDIFACT]]\nactivate Conv\nConv --> BIS: Validierte EDIFACT DTA-Payload\ndeactivate Conv\n\nBIS -> GKV: [[#conn-SEE-C-23 DTA-Versand an GKV-Clearingstelle (FTAM / AS2)]]\nactivate GKV\nGKV -> AuditorClient: DTA § 301 Prüfauftrag bereitstellen\nactivate AuditorClient\nAuditorClient -> PayerAuditor: Abrechnungsprüfung & Freigabeaufforderung\nPayerAuditor -> AuditorClient: Prüfbescheid bestätigen\nAuditorClient -> GKV: [[#msg-SEE-CL-04B DTA § 301 Prüfbescheid EDIFACT]]\ndeactivate AuditorClient\n\n== [[#integ-SEE-INT-10 SEE-INT-10: Johanniter Krankentransport-DTA § 60 SGB V ➔ Kostenträger]] ==\nGKV --> BIS: [[#conn-SEE-C-24 Elektronischer Zahlungsavis & Prüfprotokoll]]\ndeactivate GKV\n\nBIS -> Track: [[#conn-SEE-C-11 GoBD-konforme Archivierung]]\nactivate Track\ndeactivate Track\n\nBIS -> JSD: [[#conn-SEE-C-34 Buchungsbeleg & Zahlungsavis in SAP S/4HANA verbuchen]]\nactivate JSD\ndeactivate JSD\ndeactivate BIS\n@enduml"
     },
     {
       "id": "SEE-P-03",
@@ -33577,7 +33577,7 @@
       ],
       "apqc": "10.0 Logistik, Außenhandel & Zollabwicklung",
       "desc": "Weltweiter Versand hochempfindlicher Spektrometer der Bruker Corp: Ausfuhranmeldung an ATLAS Zollverwaltung, Freigabedokument (ABD) und Speditionsavisierung.",
-      "plantUml": "@startuml\ntitle SEE-P-04: Globales High-Tech Export- & Zollclearing (Bruker ATLAS / AES / ABD)\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"SEEBURGER BIS Platform\" #fef3c7\nactor \"[[#hitl-SEE-ACT-01 ⚙️ SEEBURGER Solution Architect & Core Engineer]]\" as Architect\nparticipant \"[[#client-SEE-CL-01 🌐 SEEBURGER BIS FrontEnd & Cloud Console (UI)]]\" as Console\nparticipant \"[[#sys-SEE-01 SEE-01: BIS Core Engine]]\" as BIS\nparticipant \"[[#sys-SEE-03 SEE-03: Mapping Studio]]\" as Conv\nend box\n\nbox \"Bruker Global Shipping\" #e0f2fe\nactor \"[[#hitl-SEE-ACT-02 💼 Enterprise Mandanten-Administrator & ERP-Anwender]]\" as TenantUser\nparticipant \"[[#client-SEE-CL-02 🌐 SAP S/4HANA EDI Monitoring & Fiori Launchpad (UI)]]\" as ShipperClient\nparticipant \"[[#sys-SEE-TENANT-BRK SEE-TENANT-BRK: Bruker Mandant]]\" as BrukerERP\nend box\n\nbox \"Bundeszollverwaltung & Logistik\" #dcfce7\nparticipant \"[[#sys-SEE-CUSTOMS SEE-CUSTOMS: ATLAS Zollverwaltung]]\" as Customs\nparticipant \"[[#client-SEE-CL-04 💻 Bundeszollverwaltung ATLAS Audit-Client & Prüfportal (UI)]]\" as CustomsClient\nactor \"[[#hitl-SEE-ACT-04 🏛️ Behördlicher Clearing-Auditor & Zollprüfer]]\" as ZollPrüfer\nparticipant \"[[#sys-SEE-AUTO-VDA SEE-AUTO-VDA: Spedition OFTP2 Hub]]\" as Spedition\nend box\n\n== [[#integ-SEE-INT-07 SEE-INT-07: Bruker High-Tech OEM Auftragsabwicklung & RosettaNet]] ==\nTenantUser -> ShipperClient: Ausfuhrauftrag für Spektrometer freigeben\nactivate ShipperClient\nShipperClient -> BrukerERP: [[#msg-SEE-CL-02 Belegfreigabe OData]]\nactivate BrukerERP\ndeactivate ShipperClient\nBrukerERP -> BIS: [[#conn-SEE-C-02 Zolldaten an BIS Core]]\nactivate BIS\ndeactivate BrukerERP\n\nArchitect -> Console: [[#msg-SEE-CL-01 Pipeline Configuration REST]]\nactivate Console\nConsole -> BIS: Zoll-Zertifikate & OFTP2-Parameter auditieren\ndeactivate Console\n\nBIS -> Conv: [[#conn-SEE-C-07 Konvertierung in ATLAS AES XML]]\nactivate Conv\nConv --> BIS: ATLAS Ausfuhranmeldung\ndeactivate Conv\n\n== [[#integ-SEE-INT-08 SEE-INT-08: Bruker Exportkontrolle & Zollanmeldung (ATLAS / AES)]] ==\nBIS -> Customs: [[#conn-SEE-C-31 Elektronische Ausfuhranmeldung (FTAM / AS2)]]\nactivate Customs\nCustoms -> CustomsClient: Zollanmeldung zur Freigabe vorlegen\nactivate CustomsClient\nCustomsClient -> ZollPrüfer: Risikobewertung & Prüfung\nZollPrüfer -> CustomsClient: Freigabe bestätigen\nCustomsClient -> Customs: [[#msg-SEE-CL-04 ATLAS Ausfuhr-Zollbefund]]\ndeactivate CustomsClient\n\nCustoms --> BIS: [[#conn-SEE-C-32 Ausfuhrbegleitdokument (ABD mit MRN-Barcode)]]\ndeactivate Customs\n\n== [[#integ-SEE-INT-15 SEE-INT-15: Automotive & Logistik OFTP2 Speditionsavisierung]] ==\nBIS -> Spedition: [[#conn-SEE-C-22 Transportavis (OFTP2 / VDA 4913) an Spedition]]\nactivate Spedition\ndeactivate Spedition\n\nBIS -> BrukerERP: [[#conn-SEE-C-35 ABD & Zollfreigabe in SAP S/4HANA archivieren]]\nactivate BrukerERP\ndeactivate BrukerERP\ndeactivate BIS\n@enduml"
+      "plantUml": "@startuml\ntitle SEE-P-04: Globales High-Tech Export- & Zollclearing (Bruker ATLAS / AES / ABD)\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"SEEBURGER BIS Platform\" #fef3c7\nactor \"[[#hitl-SEE-ACT-01 ⚙️ SEEBURGER Solution Architect & Core Engineer]]\" as Architect\nparticipant \"[[#client-SEE-CL-01 🌐 SEEBURGER BIS FrontEnd & Cloud Console (UI)]]\" as Console\nparticipant \"[[#sys-SEE-01 SEE-01: BIS Core Engine]]\" as BIS\nparticipant \"[[#sys-SEE-03 SEE-03: Mapping Studio]]\" as Conv\nend box\n\nbox \"Bruker Global Shipping\" #e0f2fe\nactor \"[[#hitl-SEE-ACT-02 💼 Enterprise Mandanten-Administrator & ERP-Anwender]]\" as TenantUser\nparticipant \"[[#client-SEE-CL-02 🌐 SAP S/4HANA EDI Monitoring & Fiori Launchpad (UI)]]\" as ShipperClient\nparticipant \"[[#sys-SEE-TENANT-BRK SEE-TENANT-BRK: Bruker Mandant]]\" as BrukerERP\nend box\n\nbox \"Bundeszollverwaltung & Logistik\" #dcfce7\nparticipant \"[[#sys-SEE-CUSTOMS SEE-CUSTOMS: ATLAS Zollverwaltung]]\" as Customs\nparticipant \"[[#client-SEE-CL-04 💻 Bundeszollverwaltung ATLAS Audit-Client & Prüfportal (UI)]]\" as CustomsClient\nactor \"[[#hitl-SEE-ACT-04 🏛️ Behördlicher Zollprüfer & Außenhandels-Auditor (ATLAS)]]\" as ZollPrüfer\nparticipant \"[[#sys-SEE-AUTO-VDA SEE-AUTO-VDA: Spedition OFTP2 Hub]]\" as Spedition\nend box\n\n== [[#integ-SEE-INT-07 SEE-INT-07: Bruker High-Tech OEM Auftragsabwicklung & RosettaNet]] ==\nTenantUser -> ShipperClient: Ausfuhrauftrag für Spektrometer freigeben\nactivate ShipperClient\nShipperClient -> BrukerERP: [[#msg-SEE-CL-02 Belegfreigabe OData]]\nactivate BrukerERP\ndeactivate ShipperClient\nBrukerERP -> BIS: [[#conn-SEE-C-02 Zolldaten an BIS Core]]\nactivate BIS\ndeactivate BrukerERP\n\nArchitect -> Console: [[#msg-SEE-CL-01 Pipeline Configuration REST]]\nactivate Console\nConsole -> BIS: Zoll-Zertifikate & OFTP2-Parameter auditieren\ndeactivate Console\n\nBIS -> Conv: [[#conn-SEE-C-07 Konvertierung in ATLAS AES XML]]\nactivate Conv\nConv --> BIS: ATLAS Ausfuhranmeldung\ndeactivate Conv\n\n== [[#integ-SEE-INT-08 SEE-INT-08: Bruker Exportkontrolle & Zollanmeldung (ATLAS / AES)]] ==\nBIS -> Customs: [[#conn-SEE-C-31 Elektronische Ausfuhranmeldung (FTAM / AS2)]]\nactivate Customs\nCustoms -> CustomsClient: Zollanmeldung zur Freigabe vorlegen\nactivate CustomsClient\nCustomsClient -> ZollPrüfer: Risikobewertung & Prüfung\nZollPrüfer -> CustomsClient: Freigabe bestätigen\nCustomsClient -> Customs: [[#msg-SEE-CL-04 ATLAS Ausfuhr-Zollbefund]]\ndeactivate CustomsClient\n\nCustoms --> BIS: [[#conn-SEE-C-32 Ausfuhrbegleitdokument (ABD mit MRN-Barcode)]]\ndeactivate Customs\n\n== [[#integ-SEE-INT-15 SEE-INT-15: Automotive & Logistik OFTP2 Speditionsavisierung]] ==\nBIS -> Spedition: [[#conn-SEE-C-22 Transportavis (OFTP2 / VDA 4913) an Spedition]]\nactivate Spedition\ndeactivate Spedition\n\nBIS -> BrukerERP: [[#conn-SEE-C-35 ABD & Zollfreigabe in SAP S/4HANA archivieren]]\nactivate BrukerERP\ndeactivate BrukerERP\ndeactivate BIS\n@enduml"
     },
     {
       "id": "SEE-P-05",
@@ -33836,12 +33836,12 @@
       "id": "SEE-ACT-04",
       "quadrant": "RB",
       "scope": "EXTERNAL",
-      "name": "Behördlicher Clearing-Auditor & Zollprüfer",
-      "archetype": "Abrechnungs-Auditor & Compliance",
+      "name": "Behördlicher Zollprüfer & Außenhandels-Auditor (ATLAS)",
+      "archetype": "Zoll- & Außenwirtschaftsprüfer",
       "avatar": "🏛️",
-      "industryContext": "Gesetzliche Kassen & Bundesbehörden",
-      "hitlType": "GOVERNMENT_AUDITOR",
-      "hitlSummary": "Überwacht DTA § 301 Fallprüfungen der Krankenkassen, genehmigt Ausfuhranmeldungen im Zoll-Portal ATLAS und auditiert GKV-Abrechnungsdatensätze.",
+      "industryContext": "Bundeszollverwaltung & Außenwirtschaft",
+      "hitlType": "CUSTOMS_OFFICER",
+      "hitlSummary": "Genehmigt elektronische Ausfuhranmeldungen im behördlichen Zoll-Portal ATLAS, überwacht Exportkontrollen und auditiert Ausfuhrbegleitdokumente (ABD).",
       "clients": [
         {
           "id": "SEE-CL-04",
@@ -33854,7 +33854,30 @@
             "ATLAS Ausfuhr-Zollbefund",
             "Ausfuhrgenehmigung ABD"
           ]
-        },
+        }
+      ],
+      "connections": [
+        "SEE-C-31",
+        "SEE-C-32"
+      ],
+      "integrations": [
+        "SEE-INT-08"
+      ],
+      "processes": [
+        "SEE-P-04"
+      ]
+    },
+    {
+      "id": "SEE-ACT-05",
+      "quadrant": "RB",
+      "scope": "EXTERNAL",
+      "name": "GKV-Kassenprüfer & § 301 Clearing-Auditor (DTA)",
+      "archetype": "Krankenkassen-Auditor & Abrechnungsprüfung",
+      "avatar": "🏥",
+      "industryContext": "Gesetzliche Krankenkassen & Abrechnungsstellen",
+      "hitlType": "HEALTHCARE_PAYER_AUDITOR",
+      "hitlSummary": "Überwacht DTA § 301 DRG-Fallprüfungen der gesetzlichen Krankenkassen, genehmigt Abrechnungsdatensätze und übermittelt Prüfbescheide via EDIFACT.",
+      "clients": [
         {
           "id": "SEE-CL-04B",
           "name": "GKV DTA § 301 Kassenprüfstelle & Abrechnungsportal",
@@ -33870,18 +33893,14 @@
       ],
       "connections": [
         "SEE-C-23",
-        "SEE-C-24",
-        "SEE-C-31",
-        "SEE-C-32"
+        "SEE-C-24"
       ],
       "integrations": [
         "SEE-INT-02",
-        "SEE-INT-03",
-        "SEE-INT-08"
+        "SEE-INT-03"
       ],
       "processes": [
-        "SEE-P-02",
-        "SEE-P-04"
+        "SEE-P-02"
       ]
     }
   ]
@@ -35224,24 +35243,54 @@
 
         // Clients
         const clientSysIds = (role.clients || []).map(c => c.targetSystemId).filter(Boolean);
-        const clients = (role.clients && role.clients.length > 0) ? role.clients : [
+        const rawClients = (role.clients && role.clients.length > 0) ? role.clients : [
           { id: role.id + '_CL', name: 'Web-Client / UI', deviceType: 'WEB_PORTAL', os: 'Web Browser (HTTPS)', authMethod: 'SSO', targetSystemId: clientSysIds[0] || 'SYS-01' }
         ];
 
-        clients.forEach((cl, clIdx) => {
+        const clientW = 160;
+        const clientH = 50;
+        const sysNodeRadius = 15;
+        const minVerticalPitch = 84; // Minimum vertical distance between client card centers
+
+        // 1. Initial preferred coordinates from target systems
+        const clientLayouts = rawClients.map((cl, clIdx) => {
           const tgtCoords = (window.nodeCoords && window.nodeCoords.get) ? window.nodeCoords.get(cl.targetSystemId) : null;
           const tgtX = tgtCoords ? tgtCoords.x : (isLeft ? -440 : 440);
           const tgtY = tgtCoords ? tgtCoords.y : (isTop ? -260 : 260);
+          return {
+            cl,
+            clIdx,
+            tgtX,
+            tgtY,
+            desiredY: tgtY,
+            clientY: tgtY
+          };
+        });
 
-          // ORTHOGONAL COORDINATE INTERSECTION:
-          // X: Aligned vertically with Human Iconogram (baseHumanX)
-          // Y: Aligned horizontally with Target System Backend (tgtY)
+        // 2. Anti-Collision: If multiple clients exist, push them apart to guarantee clearance
+        if (clientLayouts.length > 1) {
+          clientLayouts.sort((a, b) => (a.desiredY - b.desiredY) || (a.clIdx - b.clIdx));
+          for (let pass = 0; pass < 4; pass++) {
+            for (let i = 0; i < clientLayouts.length - 1; i++) {
+              const cur = clientLayouts[i];
+              const next = clientLayouts[i + 1];
+              const dist = next.clientY - cur.clientY;
+              if (dist < minVerticalPitch) {
+                const shift = (minVerticalPitch - dist) / 2;
+                cur.clientY -= shift;
+                next.clientY += shift;
+              }
+            }
+          }
+        }
+
+        clientLayouts.forEach((layoutItem, layoutIdx) => {
+          const cl = layoutItem.cl;
+          const clIdx = layoutItem.clIdx;
+          const tgtX = layoutItem.tgtX;
+          const tgtY = layoutItem.tgtY;
           const clientX = baseHumanX;
-          const clientY = tgtY;
-
-          const clientW = 160;
-          const clientH = 50;
-          const sysNodeRadius = 15;
+          const clientY = layoutItem.clientY;
 
           // Align the Client UI rectangle so it NEVER clips off the canvas edge:
           // For Left pods (LT/LB): The left edge sits at baseHumanX - 22, so baseHumanX enters at x = 22 inside the card
@@ -35269,41 +35318,51 @@
             .attr('marker-start', 'url(#hitl-marker-human-client-start)')
             .attr('marker-end', 'url(#hitl-marker-human-client-end)');
 
-          // Badge on Vertical Edge 1
-          const mid1Y = (edge1YStart + edge1YEnd) / 2;
-          const gBadge1 = gHitlEdges.append('g')
-            .attr('class', 'hitl-edge-badge')
-            .attr('transform', 'translate(' + (clientX + (isLeft ? 10 : -10)) + ', ' + mid1Y + ')');
+          // Badge on Vertical Edge 1 (Only show on first client to avoid badge stacking)
+          if (clientLayouts.length === 1 || layoutIdx === 0) {
+            const mid1Y = (edge1YStart + edge1YEnd) / 2;
+            const gBadge1 = gHitlEdges.append('g')
+              .attr('class', 'hitl-edge-badge')
+              .attr('transform', 'translate(' + (clientX + (isLeft ? 10 : -10)) + ', ' + mid1Y + ')');
 
-          const badge1Text = 'UI ↕ Mensch (Interaktion)';
-          const b1W = 136;
-          gBadge1.append('rect')
-            .attr('x', isLeft ? 0 : -b1W)
-            .attr('y', -10)
-            .attr('width', b1W)
-            .attr('height', 20)
-            .attr('rx', 10)
-            .style('fill', 'rgba(15, 23, 42, 0.94)')
-            .style('stroke', '#06b6d4')
-            .style('stroke-width', '1.2px')
-            .style('filter', 'drop-shadow(0 2px 8px rgba(0,0,0,0.5))');
+            const badge1Text = 'UI ↕ Mensch (Interaktion)';
+            const b1W = 136;
+            gBadge1.append('rect')
+              .attr('x', isLeft ? 0 : -b1W)
+              .attr('y', -10)
+              .attr('width', b1W)
+              .attr('height', 20)
+              .attr('rx', 10)
+              .style('fill', 'rgba(15, 23, 42, 0.94)')
+              .style('stroke', '#06b6d4')
+              .style('stroke-width', '1.2px')
+              .style('filter', 'drop-shadow(0 2px 8px rgba(0,0,0,0.5))');
 
-          gBadge1.append('text')
-            .attr('x', isLeft ? (b1W / 2) : (-b1W / 2))
-            .attr('y', 0)
-            .attr('text-anchor', 'middle')
-            .attr('dominant-baseline', 'middle')
-            .style('font-size', '8.5px')
-            .style('font-weight', '750')
-            .style('fill', '#67e8f9')
-            .text(badge1Text);
+            gBadge1.append('text')
+              .attr('x', isLeft ? (b1W / 2) : (-b1W / 2))
+              .attr('y', 0)
+              .attr('text-anchor', 'middle')
+              .attr('dominant-baseline', 'middle')
+              .style('font-size', '8.5px')
+              .style('font-weight', '750')
+              .style('fill', '#67e8f9')
+              .text(badge1Text);
+          }
 
           // ===================================================================
-          // KANTE 2: WAAGERECHTER DOPPELPFEIL (↔) Client (UI) <───► Target-System
+          // KANTE 2: HORIZONTAL / SMOOTH BEZIER (↔) Client (UI) <───► Target-System
           // ===================================================================
           const edge2XStart = isLeft ? rectRight : rectLeft;
           const edge2XEnd = isLeft ? (tgtX - sysNodeRadius) : (tgtX + sysNodeRadius);
-          const edge2Path = 'M ' + edge2XStart + ' ' + clientY + ' L ' + edge2XEnd + ' ' + clientY;
+          
+          let edge2Path = '';
+          if (Math.abs(clientY - tgtY) < 4) {
+            edge2Path = 'M ' + edge2XStart + ' ' + clientY + ' L ' + edge2XEnd + ' ' + clientY;
+          } else {
+            const ctrlX1 = edge2XStart + (isLeft ? 40 : -40);
+            const ctrlX2 = edge2XEnd + (isLeft ? -40 : 40);
+            edge2Path = 'M ' + edge2XStart + ' ' + clientY + ' C ' + ctrlX1 + ' ' + clientY + ', ' + ctrlX2 + ' ' + tgtY + ', ' + edge2XEnd + ' ' + tgtY;
+          }
 
           gHitlEdges.append('path')
             .attr('class', 'hitl-edge hitl-edge-client-backend')
@@ -35315,7 +35374,7 @@
             .attr('marker-start', 'url(#hitl-marker-client-backend-start)')
             .attr('marker-end', 'url(#hitl-marker-client-backend-end)');
 
-          // Animated Flow Token along Horizontal Edge 2
+          // Animated Flow Token along Edge 2
           const token = gHitlEdges.append('circle')
             .attr('class', 'hitl-flow-token')
             .attr('r', 4.5)
@@ -35330,15 +35389,16 @@
           animMotion.setAttribute('repeatCount', 'indefinite');
           token.node().appendChild(animMotion);
 
-          // Badge on Horizontal Edge 2 (Protocol & Message)
+          // Badge on Edge 2 (Protocol & Message)
           const mid2X = (edge2XStart + edge2XEnd) / 2;
+          const mid2Y = (clientY + tgtY) / 2;
           const msgLabel = (cl.messagesEmitted && cl.messagesEmitted[0]) ? cl.messagesEmitted[0] : (cl.os?.includes('HTTPS') ? 'HTTPS REST' : 'API / Datenfluss');
           const cleanMsg = msgLabel.length > 22 ? (msgLabel.slice(0, 21) + '…') : msgLabel;
           const b2W = Math.max(96, cleanMsg.length * 7 + 22);
 
           const gBadge2 = gHitlEdges.append('g')
             .attr('class', 'hitl-edge-badge')
-            .attr('transform', 'translate(' + mid2X + ', ' + (clientY - 16) + ')');
+            .attr('transform', 'translate(' + mid2X + ', ' + (mid2Y - 16) + ')');
 
           gBadge2.append('rect')
             .attr('x', -b2W / 2)
