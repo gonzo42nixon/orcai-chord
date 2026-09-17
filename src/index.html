@@ -39830,19 +39830,29 @@
           procMetaMap.set('Lane_RTW_Human', { type: 'actor', actorId: 'JSD-ACT-03', clientId: 'JSD-CL-03' });
           procMetaMap.set('Task_IoT_Send', { type: 'sys', sysId: 'JSD-28', desc: 'JSD-28: Medical IoT Gateway' });
           procMetaMap.set('Lane_JSD_28', { type: 'sys', sysId: 'JSD-28' });
+          procMetaMap.set('EndEvent_RTW', { type: 'end', procId: 'JSD-P-01', desc: 'Voranmeldung drahtlos übertragen' });
+
+          procMetaMap.set('StartEvent_TM', { type: 'sys', sysId: 'JSD-05', desc: 'Telemetrie-Paket eingegangen' });
           procMetaMap.set('Task_TM_Receive', { type: 'sys', sysId: 'JSD-05', desc: 'JSD-05: Telemedizin Hub' });
           procMetaMap.set('Task_TM_Forward', { type: 'sys', sysId: 'JSD-05', desc: 'JSD-05: Telemedizin Hub' });
+          procMetaMap.set('EndEvent_TM', { type: 'sys', sysId: 'JSD-05', desc: 'Voranmeldung weitergeleitet' });
           procMetaMap.set('Lane_JSD_05', { type: 'sys', sysId: 'JSD-05' });
+
           procMetaMap.set('Task_HS_Route', { type: 'sys', sysId: 'JSD-10', desc: 'JSD-10: HealthShare Hub' });
           procMetaMap.set('Task_HS_Ack', { type: 'sys', sysId: 'JSD-10', desc: 'JSD-10: HealthShare Hub' });
+          procMetaMap.set('EndEvent_HS', { type: 'sys', sysId: 'JSD-10', desc: 'Routing & Quittierung abgeschlossen' });
           procMetaMap.set('Lane_JSD_10', { type: 'sys', sysId: 'JSD-10' });
+
           procMetaMap.set('Task_ZNA_Receive', { type: 'sys', sysId: 'JSD-15', desc: 'JSD-15: ZNA E-Care & Triage' });
           procMetaMap.set('Task_ZNA_Triage', { type: 'sys', sysId: 'JSD-15', desc: 'JSD-15: Manchester-Triage & Bettenzuweisung' });
           procMetaMap.set('Task_ZNA_SendADT', { type: 'sys', sysId: 'JSD-15', desc: 'JSD-15: Notfall-Aufnahmedaten an HealthShare' });
           procMetaMap.set('Task_ZNA_Finalize', { type: 'sys', sysId: 'JSD-15', desc: 'JSD-15: Fallübernahme abschließen' });
+          procMetaMap.set('EndEvent_Akutklinik', { type: 'end', procId: 'JSD-P-01', desc: 'Patient in Notaufnahme übernommen' });
           procMetaMap.set('Lane_JSD_15', { type: 'sys', sysId: 'JSD-15' });
+
           procMetaMap.set('Task_KIS_Create', { type: 'sys', sysId: 'JSD-08', actorId: 'JSD-ACT-04', clientId: 'JSD-CL-04', desc: 'JSD-08: CGM MEDICO KIS' });
           procMetaMap.set('Lane_JSD_08', { type: 'sys', sysId: 'JSD-08' });
+
           procMetaMap.set('MsgFlow_1', { type: 'step', connId: 'JSD-C-15', integId: 'JSD-INT-01', desc: 'RTW-Daten an Telemedizin Hub (MQTT)' });
           procMetaMap.set('MsgFlow_2', { type: 'step', connId: 'JSD-C-16', integId: 'JSD-INT-01', desc: 'Voranmeldung an ZNA E-Care (FHIR)' });
           procMetaMap.set('MsgFlow_3', { type: 'step', connId: 'JSD-C-14', integId: 'JSD-INT-02', desc: 'Notfall-ADT an HealthShare (HL7)' });
@@ -39858,16 +39868,17 @@
 '                  id="Definitions_JSD_P_01"\n' +
 '                  targetNamespace="http://bpmn.io/schema/bpmn">\n\n' +
 '  <bpmn:collaboration id="Collaboration_JSD_P_01">\n' +
-'    <bpmn:participant id="Pool_Praehospital" name="Praehospital &amp; Rettung" processRef="Process_Praehospital" />\n' +
-'    <bpmn:participant id="Pool_Telemedizin" name="Telemedizin &amp; Hub" processRef="Process_Telemedizin" />\n' +
+'    <bpmn:participant id="Pool_Praehospital" name="Praehospital &amp; Rettungsdienst" processRef="Process_Praehospital" />\n' +
+'    <bpmn:participant id="Pool_Telemedizin" name="Telemedizin &amp; Hubs" processRef="Process_Telemedizin" />\n' +
 '    <bpmn:participant id="Pool_Akutklinik" name="Akutklinik &amp; Notaufnahme" processRef="Process_Akutklinik" />\n\n' +
 '    <bpmn:messageFlow id="MsgFlow_1" name="Notfalldaten &amp; EKG (MQTT/TLS)" sourceRef="Task_IoT_Send" targetRef="Task_TM_Receive" />\n' +
 '    <bpmn:messageFlow id="MsgFlow_2" name="Voranmeldung (REST FHIR R4)" sourceRef="Task_TM_Forward" targetRef="Task_ZNA_Receive" />\n' +
 '    <bpmn:messageFlow id="MsgFlow_3" name="Notfall-ADT (HL7 v2.5 ADT_A04)" sourceRef="Task_ZNA_SendADT" targetRef="Task_HS_Route" />\n' +
-'    <bpmn:messageFlow id="MsgFlow_4" name="KIS-Fallanlage (HL7 v2.5 MLLP)" sourceRef="Task_HS_Route" targetRef="Task_KIS_Create" />\n' +
-'    <bpmn:messageFlow id="MsgFlow_5" name="Fallnummer-Bestätigung (HL7 ACK)" sourceRef="Task_KIS_Create" targetRef="Task_HS_Ack" />\n' +
+'    <bpmn:messageFlow id="MsgFlow_4" name="KIS-Fallanlage (HL7 MLLP)" sourceRef="Task_HS_Route" targetRef="Task_KIS_Create" />\n' +
+'    <bpmn:messageFlow id="MsgFlow_5" name="Fallnummer-Bestätigung (ACK)" sourceRef="Task_KIS_Create" targetRef="Task_HS_Ack" />\n' +
 '    <bpmn:messageFlow id="MsgFlow_6" name="Fallverknüpfung quittiert" sourceRef="Task_HS_Ack" targetRef="Task_ZNA_Finalize" />\n' +
 '  </bpmn:collaboration>\n\n' +
+'  <!-- ==================== PROCESS 1: PRAEHOSPITAL ==================== -->\n' +
 '  <bpmn:process id="Process_Praehospital" isExecutable="false">\n' +
 '    <bpmn:laneSet id="LaneSet_Praehospital">\n' +
 '      <bpmn:lane id="Lane_RTW_Human" name="Rettungsdienst (RTW)">\n' +
@@ -39897,6 +39908,7 @@
 '    <bpmn:sequenceFlow id="Flow_P1_2" sourceRef="Task_RTW_Capture" targetRef="Task_IoT_Send" />\n' +
 '    <bpmn:sequenceFlow id="Flow_P1_3" sourceRef="Task_IoT_Send" targetRef="EndEvent_RTW" />\n' +
 '  </bpmn:process>\n\n' +
+'  <!-- ==================== PROCESS 2: TELEMEDIZIN ==================== -->\n' +
 '  <bpmn:process id="Process_Telemedizin" isExecutable="false">\n' +
 '    <bpmn:laneSet id="LaneSet_Telemedizin">\n' +
 '      <bpmn:lane id="Lane_JSD_05" name="JSD-05: Telemedizin Hub">\n' +
@@ -39908,6 +39920,7 @@
 '      <bpmn:lane id="Lane_JSD_10" name="JSD-10: HealthShare Hub">\n' +
 '        <bpmn:flowNodeRef>Task_HS_Route</bpmn:flowNodeRef>\n' +
 '        <bpmn:flowNodeRef>Task_HS_Ack</bpmn:flowNodeRef>\n' +
+'        <bpmn:flowNodeRef>EndEvent_HS</bpmn:flowNodeRef>\n' +
 '      </bpmn:lane>\n' +
 '    </bpmn:laneSet>\n' +
 '    <bpmn:startEvent id="StartEvent_TM" name="Telemetrie-Paket eingegangen">\n' +
@@ -39921,6 +39934,9 @@
 '      <bpmn:incoming>Flow_P2_2</bpmn:incoming>\n' +
 '      <bpmn:outgoing>Flow_P2_3</bpmn:outgoing>\n' +
 '    </bpmn:sendTask>\n' +
+'    <bpmn:endEvent id="EndEvent_TM" name="Voranmeldung weitergeleitet">\n' +
+'      <bpmn:incoming>Flow_P2_3</bpmn:incoming>\n' +
+'    </bpmn:endEvent>\n' +
 '    <bpmn:serviceTask id="Task_HS_Route" name="HL7-Fallanlage an KIS weiterleiten">\n' +
 '      <bpmn:outgoing>Flow_P2_4</bpmn:outgoing>\n' +
 '    </bpmn:serviceTask>\n' +
@@ -39928,16 +39944,16 @@
 '      <bpmn:incoming>Flow_P2_4</bpmn:incoming>\n' +
 '      <bpmn:outgoing>Flow_P2_5</bpmn:outgoing>\n' +
 '    </bpmn:serviceTask>\n' +
-'    <bpmn:endEvent id="EndEvent_TM" name="Routing &amp; Vermittlung ausgeführt">\n' +
-'      <bpmn:incoming>Flow_P2_3</bpmn:incoming>\n' +
+'    <bpmn:endEvent id="EndEvent_HS" name="Routing &amp; Quittierung abgeschlossen">\n' +
 '      <bpmn:incoming>Flow_P2_5</bpmn:incoming>\n' +
 '    </bpmn:endEvent>\n' +
 '    <bpmn:sequenceFlow id="Flow_P2_1" sourceRef="StartEvent_TM" targetRef="Task_TM_Receive" />\n' +
 '    <bpmn:sequenceFlow id="Flow_P2_2" sourceRef="Task_TM_Receive" targetRef="Task_TM_Forward" />\n' +
 '    <bpmn:sequenceFlow id="Flow_P2_3" sourceRef="Task_TM_Forward" targetRef="EndEvent_TM" />\n' +
 '    <bpmn:sequenceFlow id="Flow_P2_4" sourceRef="Task_HS_Route" targetRef="Task_HS_Ack" />\n' +
-'    <bpmn:sequenceFlow id="Flow_P2_5" sourceRef="Task_HS_Ack" targetRef="EndEvent_TM" />\n' +
+'    <bpmn:sequenceFlow id="Flow_P2_5" sourceRef="Task_HS_Ack" targetRef="EndEvent_HS" />\n' +
 '  </bpmn:process>\n\n' +
+'  <!-- ==================== PROCESS 3: AKUTKLINIK ==================== -->\n' +
 '  <bpmn:process id="Process_Akutklinik" isExecutable="false">\n' +
 '    <bpmn:laneSet id="LaneSet_Akutklinik">\n' +
 '      <bpmn:lane id="Lane_JSD_15" name="JSD-15: ZNA E-Care &amp; Triage">\n' +
@@ -39977,194 +39993,230 @@
 '    <bpmn:sequenceFlow id="Flow_P3_3" sourceRef="Task_ZNA_SendADT" targetRef="Task_ZNA_Finalize" />\n' +
 '    <bpmn:sequenceFlow id="Flow_P3_5" sourceRef="Task_ZNA_Finalize" targetRef="EndEvent_Akutklinik" />\n' +
 '  </bpmn:process>\n\n' +
+'  <!-- ==================== BPMNDIAGRAM ==================== -->\n' +
 '  <bpmndi:BPMNDiagram id="BPMNDiagram_JSD_P_01">\n' +
 '    <bpmndi:BPMNPlane id="BPMNPlane_JSD_P_01" bpmnElement="Collaboration_JSD_P_01">\n\n' +
-'      <!-- POOL 1: PRAEHOSPITAL -->\n' +
+'      <!-- ==================== POOL 1 ==================== -->\n' +
 '      <bpmndi:BPMNShape id="Pool_Praehospital_di" bpmnElement="Pool_Praehospital" isHorizontal="true">\n' +
-'        <dc:Bounds x="100" y="50" width="1380" height="240" />\n' +
+'        <dc:Bounds x="100" y="50" width="1800" height="240" />\n' +
 '      </bpmndi:BPMNShape>\n' +
 '      <bpmndi:BPMNShape id="Lane_RTW_Human_di" bpmnElement="Lane_RTW_Human" isHorizontal="true">\n' +
-'        <dc:Bounds x="130" y="50" width="1350" height="120" />\n' +
+'        <dc:Bounds x="130" y="50" width="1770" height="120" />\n' +
 '      </bpmndi:BPMNShape>\n' +
 '      <bpmndi:BPMNShape id="Lane_JSD_28_di" bpmnElement="Lane_JSD_28" isHorizontal="true">\n' +
-'        <dc:Bounds x="130" y="170" width="1350" height="120" />\n' +
-'      </bpmndi:BPMNShape>\n' +
+'        <dc:Bounds x="130" y="170" width="1770" height="120" />\n' +
+'      </bpmndi:BPMNShape>\n\n' +
+'      <!-- Nodes Pool 1 -->\n' +
 '      <bpmndi:BPMNShape id="StartEvent_RTW_di" bpmnElement="StartEvent_RTW">\n' +
-'        <dc:Bounds x="170" y="92" width="36" height="36" />\n' +
+'        <dc:Bounds x="180" y="92" width="36" height="36" />\n' +
 '        <bpmndi:BPMNLabel>\n' +
-'          <dc:Bounds x="145" y="135" width="86" height="27" />\n' +
+'          <dc:Bounds x="138" y="135" width="120" height="27" />\n' +
 '        </bpmndi:BPMNLabel>\n' +
 '      </bpmndi:BPMNShape>\n' +
 '      <bpmndi:BPMNShape id="Task_RTW_Capture_di" bpmnElement="Task_RTW_Capture">\n' +
-'        <dc:Bounds x="250" y="70" width="130" height="80" />\n' +
+'        <dc:Bounds x="270" y="70" width="140" height="80" />\n' +
 '      </bpmndi:BPMNShape>\n' +
 '      <bpmndi:BPMNShape id="Task_IoT_Send_di" bpmnElement="Task_IoT_Send">\n' +
-'        <dc:Bounds x="420" y="190" width="130" height="80" />\n' +
+'        <dc:Bounds x="460" y="190" width="140" height="80" />\n' +
 '      </bpmndi:BPMNShape>\n' +
 '      <bpmndi:BPMNShape id="EndEvent_RTW_di" bpmnElement="EndEvent_RTW">\n' +
-'        <dc:Bounds x="590" y="212" width="36" height="36" />\n' +
+'        <dc:Bounds x="660" y="212" width="36" height="36" />\n' +
 '        <bpmndi:BPMNLabel>\n' +
-'          <dc:Bounds x="565" y="255" width="86" height="27" />\n' +
+'          <dc:Bounds x="635" y="255" width="100" height="27" />\n' +
 '        </bpmndi:BPMNLabel>\n' +
-'      </bpmndi:BPMNShape>\n' +
+'      </bpmndi:BPMNShape>\n\n' +
+'      <!-- Sequence Flows Pool 1 (Horizontal line at cy=110 and cy=230) -->\n' +
 '      <bpmndi:BPMNEdge id="Flow_P1_1_di" bpmnElement="Flow_P1_1">\n' +
-'        <di:waypoint x="206" y="110" />\n' +
-'        <di:waypoint x="250" y="110" />\n' +
+'        <di:waypoint x="216" y="110" />\n' +
+'        <di:waypoint x="270" y="110" />\n' +
 '      </bpmndi:BPMNEdge>\n' +
 '      <bpmndi:BPMNEdge id="Flow_P1_2_di" bpmnElement="Flow_P1_2">\n' +
-'        <di:waypoint x="380" y="110" />\n' +
-'        <di:waypoint x="400" y="110" />\n' +
-'        <di:waypoint x="400" y="230" />\n' +
-'        <di:waypoint x="420" y="230" />\n' +
+'        <di:waypoint x="410" y="110" />\n' +
+'        <di:waypoint x="435" y="110" />\n' +
+'        <di:waypoint x="435" y="230" />\n' +
+'        <di:waypoint x="460" y="230" />\n' +
 '      </bpmndi:BPMNEdge>\n' +
 '      <bpmndi:BPMNEdge id="Flow_P1_3_di" bpmnElement="Flow_P1_3">\n' +
-'        <di:waypoint x="550" y="230" />\n' +
-'        <di:waypoint x="590" y="230" />\n' +
+'        <di:waypoint x="600" y="230" />\n' +
+'        <di:waypoint x="660" y="230" />\n' +
 '      </bpmndi:BPMNEdge>\n\n' +
-'      <!-- POOL 2: TELEMEDIZIN -->\n' +
+'      <!-- ==================== POOL 2 ==================== -->\n' +
 '      <bpmndi:BPMNShape id="Pool_Telemedizin_di" bpmnElement="Pool_Telemedizin" isHorizontal="true">\n' +
-'        <dc:Bounds x="100" y="340" width="1380" height="240" />\n' +
+'        <dc:Bounds x="100" y="350" width="1800" height="240" />\n' +
 '      </bpmndi:BPMNShape>\n' +
 '      <bpmndi:BPMNShape id="Lane_JSD_05_di" bpmnElement="Lane_JSD_05" isHorizontal="true">\n' +
-'        <dc:Bounds x="130" y="340" width="1350" height="120" />\n' +
+'        <dc:Bounds x="130" y="350" width="1770" height="120" />\n' +
 '      </bpmndi:BPMNShape>\n' +
 '      <bpmndi:BPMNShape id="Lane_JSD_10_di" bpmnElement="Lane_JSD_10" isHorizontal="true">\n' +
-'        <dc:Bounds x="130" y="460" width="1350" height="120" />\n' +
-'      </bpmndi:BPMNShape>\n' +
+'        <dc:Bounds x="130" y="470" width="1770" height="120" />\n' +
+'      </bpmndi:BPMNShape>\n\n' +
+'      <!-- Nodes Pool 2 -->\n' +
 '      <bpmndi:BPMNShape id="StartEvent_TM_di" bpmnElement="StartEvent_TM">\n' +
-'        <dc:Bounds x="350" y="382" width="36" height="36" />\n' +
+'        <dc:Bounds x="360" y="392" width="36" height="36" />\n' +
 '        <bpmndi:BPMNLabel>\n' +
-'          <dc:Bounds x="325" y="425" width="86" height="27" />\n' +
+'          <dc:Bounds x="318" y="435" width="120" height="27" />\n' +
 '        </bpmndi:BPMNLabel>\n' +
 '      </bpmndi:BPMNShape>\n' +
+'      <!-- Task_TM_Receive: centered at cx=530 (matching Task_IoT_Send) -->\n' +
 '      <bpmndi:BPMNShape id="Task_TM_Receive_di" bpmnElement="Task_TM_Receive">\n' +
-'        <dc:Bounds x="420" y="360" width="130" height="80" />\n' +
+'        <dc:Bounds x="460" y="370" width="140" height="80" />\n' +
 '      </bpmndi:BPMNShape>\n' +
+'      <!-- Task_TM_Forward: centered at cx=750 (matching Task_ZNA_Receive) -->\n' +
 '      <bpmndi:BPMNShape id="Task_TM_Forward_di" bpmnElement="Task_TM_Forward">\n' +
-'        <dc:Bounds x="590" y="360" width="130" height="80" />\n' +
-'      </bpmndi:BPMNShape>\n' +
-'      <bpmndi:BPMNShape id="Task_HS_Route_di" bpmnElement="Task_HS_Route">\n' +
-'        <dc:Bounds x="1000" y="480" width="130" height="80" />\n' +
-'      </bpmndi:BPMNShape>\n' +
-'      <bpmndi:BPMNShape id="Task_HS_Ack_di" bpmnElement="Task_HS_Ack">\n' +
-'        <dc:Bounds x="1230" y="480" width="130" height="80" />\n' +
+'        <dc:Bounds x="680" y="370" width="140" height="80" />\n' +
 '      </bpmndi:BPMNShape>\n' +
 '      <bpmndi:BPMNShape id="EndEvent_TM_di" bpmnElement="EndEvent_TM">\n' +
-'        <dc:Bounds x="1400" y="382" width="36" height="36" />\n' +
+'        <dc:Bounds x="870" y="392" width="36" height="36" />\n' +
 '        <bpmndi:BPMNLabel>\n' +
-'          <dc:Bounds x="1375" y="425" width="86" height="27" />\n' +
+'          <dc:Bounds x="840" y="435" width="100" height="27" />\n' +
 '        </bpmndi:BPMNLabel>\n' +
+'      </bpmndi:BPMNShape>\n\n' +
+'      <!-- Task_HS_Route: x=1080..1220, incoming at cx=1115, outgoing at cx=1185 -->\n' +
+'      <bpmndi:BPMNShape id="Task_HS_Route_di" bpmnElement="Task_HS_Route">\n' +
+'        <dc:Bounds x="1080" y="490" width="140" height="80" />\n' +
 '      </bpmndi:BPMNShape>\n' +
+'      <!-- Task_HS_Ack: x=1460..1600, incoming at cx=1495, outgoing at cx=1565 -->\n' +
+'      <bpmndi:BPMNShape id="Task_HS_Ack_di" bpmnElement="Task_HS_Ack">\n' +
+'        <dc:Bounds x="1460" y="490" width="140" height="80" />\n' +
+'      </bpmndi:BPMNShape>\n' +
+'      <bpmndi:BPMNShape id="EndEvent_HS_di" bpmnElement="EndEvent_HS">\n' +
+'        <dc:Bounds x="1660" y="512" width="36" height="36" />\n' +
+'        <bpmndi:BPMNLabel>\n' +
+'          <dc:Bounds x="1630" y="555" width="100" height="27" />\n' +
+'        </bpmndi:BPMNLabel>\n' +
+'      </bpmndi:BPMNShape>\n\n' +
+'      <!-- Sequence Flows Pool 2 (Horizontal lines at cy=410 and cy=530) -->\n' +
 '      <bpmndi:BPMNEdge id="Flow_P2_1_di" bpmnElement="Flow_P2_1">\n' +
-'        <di:waypoint x="386" y="400" />\n' +
-'        <di:waypoint x="420" y="400" />\n' +
+'        <di:waypoint x="396" y="410" />\n' +
+'        <di:waypoint x="460" y="410" />\n' +
 '      </bpmndi:BPMNEdge>\n' +
 '      <bpmndi:BPMNEdge id="Flow_P2_2_di" bpmnElement="Flow_P2_2">\n' +
-'        <di:waypoint x="550" y="400" />\n' +
-'        <di:waypoint x="590" y="400" />\n' +
+'        <di:waypoint x="600" y="410" />\n' +
+'        <di:waypoint x="680" y="410" />\n' +
 '      </bpmndi:BPMNEdge>\n' +
 '      <bpmndi:BPMNEdge id="Flow_P2_3_di" bpmnElement="Flow_P2_3">\n' +
-'        <di:waypoint x="720" y="400" />\n' +
-'        <di:waypoint x="1400" y="400" />\n' +
+'        <di:waypoint x="820" y="410" />\n' +
+'        <di:waypoint x="870" y="410" />\n' +
 '      </bpmndi:BPMNEdge>\n' +
 '      <bpmndi:BPMNEdge id="Flow_P2_4_di" bpmnElement="Flow_P2_4">\n' +
-'        <di:waypoint x="1130" y="520" />\n' +
-'        <di:waypoint x="1230" y="520" />\n' +
+'        <di:waypoint x="1220" y="530" />\n' +
+'        <di:waypoint x="1460" y="530" />\n' +
 '      </bpmndi:BPMNEdge>\n' +
 '      <bpmndi:BPMNEdge id="Flow_P2_5_di" bpmnElement="Flow_P2_5">\n' +
-'        <di:waypoint x="1360" y="520" />\n' +
-'        <di:waypoint x="1380" y="520" />\n' +
-'        <di:waypoint x="1380" y="400" />\n' +
-'        <di:waypoint x="1400" y="400" />\n' +
+'        <di:waypoint x="1600" y="530" />\n' +
+'        <di:waypoint x="1660" y="530" />\n' +
 '      </bpmndi:BPMNEdge>\n\n' +
-'      <!-- POOL 3: AKUTKLINIK -->\n' +
+'      <!-- ==================== POOL 3 ==================== -->\n' +
 '      <bpmndi:BPMNShape id="Pool_Akutklinik_di" bpmnElement="Pool_Akutklinik" isHorizontal="true">\n' +
-'        <dc:Bounds x="100" y="630" width="1380" height="240" />\n' +
+'        <dc:Bounds x="100" y="650" width="1800" height="240" />\n' +
 '      </bpmndi:BPMNShape>\n' +
 '      <bpmndi:BPMNShape id="Lane_JSD_15_di" bpmnElement="Lane_JSD_15" isHorizontal="true">\n' +
-'        <dc:Bounds x="130" y="630" width="1350" height="120" />\n' +
+'        <dc:Bounds x="130" y="650" width="1770" height="120" />\n' +
 '      </bpmndi:BPMNShape>\n' +
 '      <bpmndi:BPMNShape id="Lane_JSD_08_di" bpmnElement="Lane_JSD_08" isHorizontal="true">\n' +
-'        <dc:Bounds x="130" y="750" width="1350" height="120" />\n' +
-'      </bpmndi:BPMNShape>\n' +
+'        <dc:Bounds x="130" y="770" width="1770" height="120" />\n' +
+'      </bpmndi:BPMNShape>\n\n' +
+'      <!-- Nodes Pool 3 -->\n' +
+'      <!-- Task_ZNA_Receive: centered at cx=750 (matching Task_TM_Forward) -->\n' +
 '      <bpmndi:BPMNShape id="Task_ZNA_Receive_di" bpmnElement="Task_ZNA_Receive">\n' +
-'        <dc:Bounds x="650" y="650" width="130" height="80" />\n' +
+'        <dc:Bounds x="680" y="670" width="140" height="80" />\n' +
 '      </bpmndi:BPMNShape>\n' +
+'      <!-- Task_ZNA_Triage: centered at cx=950 -->\n' +
 '      <bpmndi:BPMNShape id="Task_ZNA_Triage_di" bpmnElement="Task_ZNA_Triage">\n' +
-'        <dc:Bounds x="810" y="650" width="130" height="80" />\n' +
+'        <dc:Bounds x="880" y="670" width="140" height="80" />\n' +
 '      </bpmndi:BPMNShape>\n' +
+'      <!-- Task_ZNA_SendADT: centered at cx=1115 (aligned with left side of Task_HS_Route) -->\n' +
 '      <bpmndi:BPMNShape id="Task_ZNA_SendADT_di" bpmnElement="Task_ZNA_SendADT">\n' +
-'        <dc:Bounds x="970" y="650" width="130" height="80" />\n' +
+'        <dc:Bounds x="1045" y="670" width="140" height="80" />\n' +
 '      </bpmndi:BPMNShape>\n' +
+'      <!-- Task_KIS_Create: x=1245..1385. Incoming from HS_Route at cx=1280. Outgoing to HS_Ack at cx=1350 -->\n' +
 '      <bpmndi:BPMNShape id="Task_KIS_Create_di" bpmnElement="Task_KIS_Create">\n' +
-'        <dc:Bounds x="1120" y="770" width="130" height="80" />\n' +
+'        <dc:Bounds x="1245" y="790" width="140" height="80" />\n' +
 '      </bpmndi:BPMNShape>\n' +
+'      <!-- Task_ZNA_Finalize: centered at cx=1565 (aligned with right side of Task_HS_Ack) -->\n' +
 '      <bpmndi:BPMNShape id="Task_ZNA_Finalize_di" bpmnElement="Task_ZNA_Finalize">\n' +
-'        <dc:Bounds x="1270" y="650" width="130" height="80" />\n' +
+'        <dc:Bounds x="1495" y="670" width="140" height="80" />\n' +
 '      </bpmndi:BPMNShape>\n' +
 '      <bpmndi:BPMNShape id="EndEvent_Akutklinik_di" bpmnElement="EndEvent_Akutklinik">\n' +
-'        <dc:Bounds x="1430" y="672" width="36" height="36" />\n' +
+'        <dc:Bounds x="1740" y="692" width="36" height="36" />\n' +
 '        <bpmndi:BPMNLabel>\n' +
-'          <dc:Bounds x="1405" y="715" width="86" height="27" />\n' +
+'          <dc:Bounds x="1715" y="735" width="86" height="27" />\n' +
 '        </bpmndi:BPMNLabel>\n' +
-'      </bpmndi:BPMNShape>\n' +
+'      </bpmndi:BPMNShape>\n\n' +
+'      <!-- Sequence Flows Pool 3 (Centered vertically at cy=710) -->\n' +
 '      <bpmndi:BPMNEdge id="Flow_P3_1_di" bpmnElement="Flow_P3_1">\n' +
-'        <di:waypoint x="780" y="690" />\n' +
-'        <di:waypoint x="810" y="690" />\n' +
+'        <di:waypoint x="820" y="710" />\n' +
+'        <di:waypoint x="880" y="710" />\n' +
 '      </bpmndi:BPMNEdge>\n' +
 '      <bpmndi:BPMNEdge id="Flow_P3_2_di" bpmnElement="Flow_P3_2">\n' +
-'        <di:waypoint x="940" y="690" />\n' +
-'        <di:waypoint x="970" y="690" />\n' +
+'        <di:waypoint x="1020" y="710" />\n' +
+'        <di:waypoint x="1045" y="710" />\n' +
 '      </bpmndi:BPMNEdge>\n' +
 '      <bpmndi:BPMNEdge id="Flow_P3_3_di" bpmnElement="Flow_P3_3">\n' +
-'        <di:waypoint x="1100" y="690" />\n' +
-'        <di:waypoint x="1270" y="690" />\n' +
+'        <di:waypoint x="1185" y="710" />\n' +
+'        <di:waypoint x="1495" y="710" />\n' +
 '      </bpmndi:BPMNEdge>\n' +
 '      <bpmndi:BPMNEdge id="Flow_P3_5_di" bpmnElement="Flow_P3_5">\n' +
-'        <di:waypoint x="1400" y="690" />\n' +
-'        <di:waypoint x="1430" y="690" />\n' +
+'        <di:waypoint x="1635" y="710" />\n' +
+'        <di:waypoint x="1740" y="710" />\n' +
 '      </bpmndi:BPMNEdge>\n\n' +
-'      <!-- MESSAGE FLOWS (INTER-POOL) -->\n' +
+'      <!-- ==================== MESSAGE FLOWS (INTER-POOL) ==================== -->\n' +
+'      <!-- MsgFlow 1: Task_IoT_Send (cx=530) -> Task_TM_Receive (cx=530) -->\n' +
+'      <!-- Circle offset: y=274 (+4px). Arrow tip: y=370 (outer top border). Straight vertical! -->\n' +
 '      <bpmndi:BPMNEdge id="MsgFlow_1_di" bpmnElement="MsgFlow_1">\n' +
-'        <di:waypoint x="485" y="270" />\n' +
-'        <di:waypoint x="485" y="360" />\n' +
+'        <di:waypoint x="530" y="274" />\n' +
+'        <di:waypoint x="530" y="370" />\n' +
 '        <bpmndi:BPMNLabel>\n' +
-'          <dc:Bounds x="495" y="295" width="120" height="27" />\n' +
+'          <dc:Bounds x="540" y="305" width="140" height="27" />\n' +
 '        </bpmndi:BPMNLabel>\n' +
-'      </bpmndi:BPMNEdge>\n' +
+'      </bpmndi:BPMNEdge>\n\n' +
+'      <!-- MsgFlow 2: Task_TM_Forward (cx=750) -> Task_ZNA_Receive (cx=750) -->\n' +
+'      <!-- Circle offset: y=454 (+4px). Arrow tip: y=670 (outer top border). Straight vertical! -->\n' +
 '      <bpmndi:BPMNEdge id="MsgFlow_2_di" bpmnElement="MsgFlow_2">\n' +
-'        <di:waypoint x="680" y="440" />\n' +
-'        <di:waypoint x="680" y="650" />\n' +
+'        <di:waypoint x="750" y="454" />\n' +
+'        <di:waypoint x="750" y="670" />\n' +
 '        <bpmndi:BPMNLabel>\n' +
-'          <dc:Bounds x="690" y="530" width="120" height="27" />\n' +
+'          <dc:Bounds x="760" y="540" width="140" height="27" />\n' +
 '        </bpmndi:BPMNLabel>\n' +
-'      </bpmndi:BPMNEdge>\n' +
+'      </bpmndi:BPMNEdge>\n\n' +
+'      <!-- MsgFlow 3: Task_ZNA_SendADT (cx=1115) -> Task_HS_Route (left side cx=1115) -->\n' +
+'      <!-- Going UP: Circle offset: y=666 (-4px). Arrow tip: y=570 (outer bottom border). Straight vertical! -->\n' +
 '      <bpmndi:BPMNEdge id="MsgFlow_3_di" bpmnElement="MsgFlow_3">\n' +
-'        <di:waypoint x="1035" y="650" />\n' +
-'        <di:waypoint x="1035" y="560" />\n' +
+'        <di:waypoint x="1115" y="666" />\n' +
+'        <di:waypoint x="1115" y="570" />\n' +
 '        <bpmndi:BPMNLabel>\n' +
-'          <dc:Bounds x="1045" y="590" width="120" height="27" />\n' +
+'          <dc:Bounds x="965" y="605" width="140" height="27" />\n' +
 '        </bpmndi:BPMNLabel>\n' +
-'      </bpmndi:BPMNEdge>\n' +
+'      </bpmndi:BPMNEdge>\n\n' +
+'      <!-- MsgFlow 4: Task_HS_Route (right side cx=1185) -> Task_KIS_Create (left side cx=1280) -->\n' +
+'      <!-- Circle offset: y=574 (+4px). Arrow tip: y=790 (outer top border). Clean orthogonal! -->\n' +
 '      <bpmndi:BPMNEdge id="MsgFlow_4_di" bpmnElement="MsgFlow_4">\n' +
-'        <di:waypoint x="1100" y="560" />\n' +
-'        <di:waypoint x="1100" y="770" />\n' +
+'        <di:waypoint x="1185" y="574" />\n' +
+'        <di:waypoint x="1185" y="625" />\n' +
+'        <di:waypoint x="1280" y="625" />\n' +
+'        <di:waypoint x="1280" y="790" />\n' +
 '        <bpmndi:BPMNLabel>\n' +
-'          <dc:Bounds x="1110" y="650" width="120" height="27" />\n' +
+'          <dc:Bounds x="1195" y="585" width="130" height="27" />\n' +
 '        </bpmndi:BPMNLabel>\n' +
-'      </bpmndi:BPMNEdge>\n' +
+'      </bpmndi:BPMNEdge>\n\n' +
+'      <!-- MsgFlow 5: Task_KIS_Create (right side cx=1350) -> Task_HS_Ack (left side cx=1495) -->\n' +
+'      <!-- Going UP: Circle offset: y=786 (-4px). Arrow tip: y=570 (outer bottom border). Clean orthogonal! -->\n' +
 '      <bpmndi:BPMNEdge id="MsgFlow_5_di" bpmnElement="MsgFlow_5">\n' +
-'        <di:waypoint x="1200" y="770" />\n' +
-'        <di:waypoint x="1200" y="560" />\n' +
+'        <di:waypoint x="1350" y="786" />\n' +
+'        <di:waypoint x="1350" y="645" />\n' +
+'        <di:waypoint x="1495" y="645" />\n' +
+'        <di:waypoint x="1495" y="570" />\n' +
 '        <bpmndi:BPMNLabel>\n' +
-'          <dc:Bounds x="1210" y="650" width="120" height="27" />\n' +
+'          <dc:Bounds x="1360" y="650" width="130" height="27" />\n' +
 '        </bpmndi:BPMNLabel>\n' +
-'      </bpmndi:BPMNEdge>\n' +
+'      </bpmndi:BPMNEdge>\n\n' +
+'      <!-- MsgFlow 6: Task_HS_Ack (right side cx=1565) -> Task_ZNA_Finalize (cx=1565) -->\n' +
+'      <!-- Circle offset: y=574 (+4px). Arrow tip: y=670 (outer top border). Straight vertical! -->\n' +
 '      <bpmndi:BPMNEdge id="MsgFlow_6_di" bpmnElement="MsgFlow_6">\n' +
-'        <di:waypoint x="1310" y="560" />\n' +
-'        <di:waypoint x="1310" y="650" />\n' +
+'        <di:waypoint x="1565" y="574" />\n' +
+'        <di:waypoint x="1565" y="670" />\n' +
 '        <bpmndi:BPMNLabel>\n' +
-'          <dc:Bounds x="1320" y="590" width="120" height="27" />\n' +
+'          <dc:Bounds x="1575" y="605" width="130" height="27" />\n' +
 '        </bpmndi:BPMNLabel>\n' +
 '      </bpmndi:BPMNEdge>\n\n' +
 '    </bpmndi:BPMNPlane>\n' +
@@ -40554,10 +40606,20 @@
         sequenceFlows.forEach(sf => {
           const s = sf.source;
           const t = sf.target;
-          xml += '      <bpmndi:BPMNEdge id="' + sf.id + '_di" bpmnElement="' + sf.id + '">\n' +
-'        <di:waypoint x="' + (s.x + s.width) + '" y="' + Math.round(s.y + s.height / 2) + '" />\n' +
-'        <di:waypoint x="' + t.x + '" y="' + Math.round(t.y + t.height / 2) + '" />\n' +
-'      </bpmndi:BPMNEdge>\n';
+          const sCY = Math.round(s.y + s.height / 2);
+          const tCY = Math.round(t.y + t.height / 2);
+          xml += '      <bpmndi:BPMNEdge id="' + sf.id + '_di" bpmnElement="' + sf.id + '">\n';
+          if (sCY === tCY) {
+            xml += '        <di:waypoint x="' + (s.x + s.width) + '" y="' + sCY + '" />\n' +
+                   '        <di:waypoint x="' + t.x + '" y="' + tCY + '" />\n';
+          } else {
+            const midX = Math.round((s.x + s.width + t.x) / 2);
+            xml += '        <di:waypoint x="' + (s.x + s.width) + '" y="' + sCY + '" />\n' +
+                   '        <di:waypoint x="' + midX + '" y="' + sCY + '" />\n' +
+                   '        <di:waypoint x="' + midX + '" y="' + tCY + '" />\n' +
+                   '        <di:waypoint x="' + t.x + '" y="' + tCY + '" />\n';
+          }
+          xml += '      </bpmndi:BPMNEdge>\n';
         });
 
         messageFlows.forEach(mf => {
@@ -40565,12 +40627,31 @@
           const t = mf.target;
           const sX = Math.round(s.x + s.width / 2);
           const tX = Math.round(t.x + t.width / 2);
-          const sY = s.y > t.y ? s.y : (s.y + s.height);
-          const tY = s.y > t.y ? (t.y + t.height) : t.y;
-          xml += '      <bpmndi:BPMNEdge id="' + mf.id + '_di" bpmnElement="' + mf.id + '">\n' +
-'        <di:waypoint x="' + sX + '" y="' + sY + '" />\n' +
-'        <di:waypoint x="' + tX + '" y="' + tY + '" />\n' +
-'      </bpmndi:BPMNEdge>\n';
+          const isDown = s.y < t.y;
+          // Quell-Kringel berührt den Rand des BPMN-Symbols von außen (±4px Offset)
+          const sY = isDown ? (s.y + s.height + 4) : (s.y - 4);
+          // Pfeilspitze landet exakt am äußeren Rand des Zielsymbols
+          const tY = isDown ? t.y : (t.y + t.height);
+
+          xml += '      <bpmndi:BPMNEdge id="' + mf.id + '_di" bpmnElement="' + mf.id + '">\n';
+          if (sX === tX) {
+            xml += '        <di:waypoint x="' + sX + '" y="' + sY + '" />\n' +
+                   '        <di:waypoint x="' + tX + '" y="' + tY + '" />\n';
+          } else {
+            const midY = Math.round((sY + tY) / 2);
+            xml += '        <di:waypoint x="' + sX + '" y="' + sY + '" />\n' +
+                   '        <di:waypoint x="' + sX + '" y="' + midY + '" />\n' +
+                   '        <di:waypoint x="' + tX + '" y="' + midY + '" />\n' +
+                   '        <di:waypoint x="' + tX + '" y="' + tY + '" />\n';
+          }
+          if (mf.name) {
+            const labelX = Math.round((sX + tX) / 2 + 10);
+            const labelY = Math.round((sY + tY) / 2 - 15);
+            xml += '        <bpmndi:BPMNLabel>\n' +
+                   '          <dc:Bounds x="' + labelX + '" y="' + labelY + '" width="130" height="27" />\n' +
+                   '        </bpmndi:BPMNLabel>\n';
+          }
+          xml += '      </bpmndi:BPMNEdge>\n';
         });
 
         xml += '    </bpmndi:BPMNPlane>\n' +
