@@ -489,11 +489,16 @@ Um sicherzustellen, dass die Platzierung menschlicher Akteure für **jegliche In
 ### Interaktive Corner Pods (`#podLT`, `#podLB`, `#podRT`, `#podRB`)
 - **4 interaktive Eck-Pods auf der Zeichenfläche:** In allen vier Ecken des Diagramms befindet sich je ein kompakter Pod mit Archetyp-Kennzeichnung, Icon und Rollenselektor.
 - **Kontextsensitive Rollen-Dropdowns:** Ein Klick auf einen Pod öffnet die Liste aller verfügbaren Rollen des aktuellen Modells in diesem Quadranten samt Kurzbeschreibung und Client-Anzahl.
+- **Visualisierung der 2-stufigen Kommunikationskette (Mensch ➔ Client-UI ➔ Backend):** Bei Auswahl einer Rolle wird die vollständige Architekturkette direkt auf der Zeichenfläche gerendert:
+  - **Der Mensch (= Rolle):** Als eigenständiger Akteurs-Knoten im jeweiligen 2x2-Quadranten.
+  - **Der Kommunikations-Client (= UI der Anwendung):** Als Client-UI-Knoten (mit Gerätesymbol, Betriebssystem, Authentifizierungsverfahren und Anwendungsname).
+  - **Kante 1 (Mensch ➔ Client):** Gerichtete Interaktionskante (`UI-Interaktion / Eingabe`) vom Menschen zur UI.
+  - **Kante 2 (Client ➔ Zielsystem):** Gerichtete Netzwerkkante (`Protokoll & Fachnachricht`) mit animiertem Datenfluss-Partikel von der Client-UI zum Anwendungs-Back-End auf dem Sehnenring.
 - **Visuelle Spurensuche & Touchpoint-Beacons:** Bei Auswahl einer Rolle:
   - Pulsiert ein Leuchtfeuer (`.client-touchpoint-beacon`) auf allen Zielsystemen, mit denen die Rolle über ihre Endgeräte interagiert.
   - Werden nicht-involvierte Systemknoten und Kanten elegant abgedunkelt (`dimmed`), während aktive Integrationspfade hervorgehoben werden.
-  - Öffnet sich der **HITL Rollen-Inspektor** mit vollständigen Angaben zu Endgeräten, Betriebssystemen, Authentifizierungsmethoden, emittierten Nachrichtenformaten und verknüpften Geschäftsprozessen.
-- **Nahtlose Sequenzdiagramm-Integration:** Bei Generierung von PlantUML-Sequenzdiagrammen werden zugeordnete HITL-Akteure automatisch als `@startuml actor` mit ihren initialen Client-Interaktionen vorangestellt.
+  - Zeigt der **HITL Rollen-Inspektor** den vollständigen 2-Hop-Architekturnachweis sowie Angaben zu Endgeräten, Betriebssystemen, Authentifizierungsmethoden und Prozessen.
+- **Nahtlose Sequenzdiagramm-Integration:** Bei Generierung von PlantUML-Sequenzdiagrammen werden zugeordnete HITL-Akteure und deren Clients automatisch mit beiden Interaktionsstufen (`Mensch -> Client` und `Client -> Backend`) vorangestellt.
 - **Omni-Search (`Strg+K`) Integration:** Alle Rollen sind im Schnellfilter über den Chip `[👤 Rollen]` oder Direkteingabe sofort auffindbar.
 
 ---

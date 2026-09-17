@@ -3630,6 +3630,43 @@
       border-color: #0284c7;
     }
 
+    /* HITL Dual-Stage Communication Chain (Human -> Client UI -> Backend) */
+    .hitl-canvas-overlay {
+      pointer-events: auto;
+    }
+    .hitl-node-human, .hitl-node-client {
+      cursor: pointer;
+      transition: transform 0.2s ease, filter 0.2s ease;
+    }
+    .hitl-node-human:hover, .hitl-node-client:hover {
+      filter: drop-shadow(0 0 14px rgba(56, 189, 248, 0.75));
+    }
+    .hitl-edge-human-client {
+      stroke: #06b6d4;
+      stroke-width: 3px;
+      stroke-dasharray: 6 3;
+      fill: none;
+      transition: stroke-width 0.2s ease, filter 0.2s ease;
+    }
+    .hitl-edge-client-backend {
+      stroke: #38bdf8;
+      stroke-width: 3px;
+      fill: none;
+      transition: stroke-width 0.2s ease, filter 0.2s ease;
+    }
+    .hitl-edge-human-client:hover, .hitl-edge-client-backend:hover {
+      stroke-width: 5px !important;
+      filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.9));
+    }
+    .hitl-edge-badge {
+      pointer-events: none;
+      user-select: none;
+    }
+    .hitl-flow-token {
+      pointer-events: none;
+      filter: drop-shadow(0 0 6px #38bdf8);
+    }
+
     /* MODEL CATALOGUE CARDS */
     .model-catalog-card {
       background: var(--item-bg) !important;
@@ -18678,6 +18715,35 @@
         .attr("stroke", "#0b0f17")
         .attr("stroke-width", 1.0);
 
+      // Dedicated HITL Dual-Stage Markers
+      defs.append("marker")
+        .attr("id", "hitl-marker-human-client")
+        .attr("viewBox", "0 0 10 10")
+        .attr("refX", 8)
+        .attr("refY", 5)
+        .attr("markerWidth", 8)
+        .attr("markerHeight", 8)
+        .attr("orient", "auto")
+        .append("polygon")
+        .attr("points", "0 1.5, 9 5, 0 8.5")
+        .attr("fill", "#06b6d4")
+        .attr("stroke", "#0891b2")
+        .attr("stroke-width", 0.5);
+
+      defs.append("marker")
+        .attr("id", "hitl-marker-client-backend")
+        .attr("viewBox", "0 0 10 10")
+        .attr("refX", 8)
+        .attr("refY", 5)
+        .attr("markerWidth", 8)
+        .attr("markerHeight", 8)
+        .attr("orient", "auto")
+        .append("polygon")
+        .attr("points", "0 1.5, 9 5, 0 8.5")
+        .attr("fill", "#38bdf8")
+        .attr("stroke", "#0284c7")
+        .attr("stroke-width", 0.5);
+
       // Draw 4 Quadrant Background Circles, Labels & Corridor Dividers
       const gBack = gMain.append("g").attr("class", "quadrant-backgrounds");
 
@@ -18895,6 +18961,8 @@
       const gOverlays = gMain.append("g").attr("class", "overlays-group").style("pointer-events", "none");
       const gTokens = gMain.append("g").attr("class", "tokens-group");
       const gNodes = gMain.append("g").attr("class", "nodes-group");
+      const gHitlOverlay = gMain.append("g").attr("id", "gHitlOverlay").attr("class", "hitl-canvas-overlay");
+      window.gHitlOverlay = gHitlOverlay;
 
       // Landmark Overlays (Perimeter Gateways & Hybrid Cloud Bridge rendered above chords)
       // Perimeter & DMZ Header Pill Badge at Top
@@ -31384,7 +31452,27 @@
             '<span class="insp-tag" style="background:rgba(56,189,248,0.12); color:var(--accent); border:1px solid rgba(56,189,248,0.3); font-size:0.65rem; padding:2px 6px; border-radius:4px;">✉️ ' + m + '</span>'
           ).join('');
 
+          const chainHtml = 
+            '<div style="margin-bottom:8px; padding:8px 10px; background:rgba(6,182,212,0.08); border:1px solid rgba(6,182,212,0.3); border-radius:6px;">' +
+              '<div style="font-size:0.68rem; font-weight:750; color:#38bdf8; margin-bottom:6px; display:flex; align-items:center; gap:5px;">' +
+                '<span>⛓️ 2-Stufige Kommunikationskette (Architektur-Nachweis):</span>' +
+              '</div>' +
+              '<div style="display:flex; flex-direction:column; gap:4px; font-size:0.65rem;">' +
+                '<div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">' +
+                  '<span style="padding:2px 6px; background:rgba(255,255,255,0.08); border-radius:4px; font-weight:700; color:#fff;">👤 Mensch: ' + role.name + '</span>' +
+                  '<span style="color:#06b6d4; font-weight:800;">── Kante 1 (UI-Eingabe) ──►</span>' +
+                  '<span style="padding:2px 6px; background:rgba(56,189,248,0.18); border-radius:4px; font-weight:700; color:#38bdf8;">💻 Client: ' + cl.name + '</span>' +
+                '</div>' +
+                '<div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">' +
+                  '<span style="padding:2px 6px; background:rgba(56,189,248,0.18); border-radius:4px; font-weight:700; color:#38bdf8;">💻 Client: ' + cl.name + '</span>' +
+                  '<span style="color:#38bdf8; font-weight:800;">── Kante 2 (' + (cl.os ? cl.os.split(' ')[0] : 'API') + ') ──►</span>' +
+                  '<span style="padding:2px 6px; background:rgba(16,185,129,0.18); border-radius:4px; font-weight:700; color:#10b981;">🏢 Zielsystem: ' + (targetSys ? (targetSys.id + ' · ' + targetSys.name) : cl.targetSystemId) + '</span>' +
+                '</div>' +
+              '</div>' +
+            '</div>';
+
           return '<div style="margin-top:8px; padding:8px 10px; background:var(--item-bg); border:1px solid var(--card-border); border-radius:6px;">' +
+            chainHtml +
             '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">' +
               '<div style="font-weight:700; font-size:0.75rem; color:var(--text-bright); display:flex; align-items:center; gap:6px;">' +
                 '<span>💻 ' + cl.name + '</span>' +
@@ -31463,6 +31551,268 @@
       }
       window.renderInspectorRole = renderInspectorRole;
 
+      // =====================================================================
+      // HITL DUAL-STAGE COMMUNICATION CHAIN RENDERER (SVG CANVAS)
+      // Mensch (= Rolle) ──Kante 1──► Client (= UI) ──Kante 2──► Zielsystem (= Backend)
+      // =====================================================================
+      function renderHitlCommunicationChain(role) {
+        if (!role || typeof d3 === 'undefined') return;
+        let gHitl = d3.select('#gHitlOverlay');
+        if (gHitl.empty()) {
+          const gMainEl = d3.select('.g-main');
+          if (gMainEl.empty()) return;
+          gHitl = gMainEl.append('g').attr('id', 'gHitlOverlay').attr('class', 'hitl-canvas-overlay');
+        }
+        gHitl.selectAll('*').remove();
+
+        const gHitlEdges = gHitl.append('g').attr('class', 'hitl-edges');
+        const gHitlNodes = gHitl.append('g').attr('class', 'hitl-nodes');
+
+        // Determine Human Anchor position based on 2x2 coordinate matrix
+        const quad = role.quadrant || 'LB';
+        const isLeft = quad.startsWith('L');
+        const isTop = quad.endsWith('T');
+        const baseHumanX = isLeft ? -730 : 730;
+        const baseHumanY = isTop ? -380 : 380;
+
+        // 1. KNOTEN: Der Mensch (= Rolle)
+        const gHuman = gHitlNodes.append('g')
+          .attr('class', 'hitl-node hitl-node-human')
+          .attr('id', 'hitl-human-' + role.id)
+          .attr('transform', 'translate(' + baseHumanX + ', ' + baseHumanY + ')')
+          .style('cursor', 'pointer')
+          .on('click', () => {
+            renderInspectorRole(role);
+            if (typeof toggleRightDrawer === 'function') toggleRightDrawer(true);
+          });
+
+        gHuman.append('rect')
+          .attr('x', -95)
+          .attr('y', -32)
+          .attr('width', 190)
+          .attr('height', 64)
+          .attr('rx', 10)
+          .style('fill', 'rgba(15, 23, 42, 0.94)')
+          .style('stroke', isLeft ? '#06b6d4' : '#a855f7')
+          .style('stroke-width', '2.2px')
+          .style('filter', 'drop-shadow(0 8px 20px rgba(0,0,0,0.65))');
+
+        gHuman.append('circle')
+          .attr('cx', -62)
+          .attr('cy', 0)
+          .attr('r', 20)
+          .style('fill', isLeft ? 'rgba(6,182,212,0.2)' : 'rgba(168,85,247,0.2)')
+          .style('stroke', isLeft ? '#06b6d4' : '#a855f7')
+          .style('stroke-width', '1.5px');
+
+        gHuman.append('text')
+          .attr('x', -62)
+          .attr('y', 6)
+          .attr('text-anchor', 'middle')
+          .style('font-size', '18px')
+          .text(role.avatar || '👤');
+
+        gHuman.append('text')
+          .attr('x', -34)
+          .attr('y', -12)
+          .style('font-size', '8.5px')
+          .style('font-weight', '800')
+          .style('letter-spacing', '0.5px')
+          .style('fill', isLeft ? '#38bdf8' : '#c084fc')
+          .text(isLeft ? 'MENSCH · INTERN (ROLLE)' : 'MENSCH · EXTERN (ROLLE)');
+
+        const cleanRoleName = (role.name || role.id);
+        gHuman.append('text')
+          .attr('x', -34)
+          .attr('y', 4)
+          .style('font-size', '10.5px')
+          .style('font-weight', '750')
+          .style('fill', '#ffffff')
+          .text(cleanRoleName.length > 20 ? (cleanRoleName.slice(0, 19) + '…') : cleanRoleName);
+
+        gHuman.append('text')
+          .attr('x', -34)
+          .attr('y', 19)
+          .style('font-size', '8px')
+          .style('fill', '#94a3b8')
+          .text(quad + ' · ' + (isTop ? 'Cloud & Web' : 'On-Prem / Local'));
+
+        // 2. KNOTEN & KANTEN: Kommunikations-Clients (= UI) & Zielsysteme (= Backend)
+        const clientSysIds = (role.clients || []).map(c => c.targetSystemId).filter(Boolean);
+        const clients = (role.clients && role.clients.length > 0) ? role.clients : [
+          { id: role.id + '_CL', name: 'Web-Client / UI', deviceType: 'WEB_PORTAL', os: 'Web Browser (HTTPS)', authMethod: 'SSO', targetSystemId: clientSysIds[0] || 'SYS-01' }
+        ];
+
+        clients.forEach((cl, clIdx) => {
+          const tgtCoords = (window.nodeCoords && window.nodeCoords.get) ? window.nodeCoords.get(cl.targetSystemId) : null;
+          const tgtX = tgtCoords ? tgtCoords.x : (isLeft ? -440 : 440);
+          const tgtY = tgtCoords ? tgtCoords.y : (isTop ? -240 : 240);
+
+          // Compute Client UI position between Human and Target Backend System
+          const offsetMultiplier = (clIdx - (clients.length - 1) / 2) * 55;
+          const clientX = baseHumanX * 0.44 + tgtX * 0.56;
+          const clientY = baseHumanY * 0.44 + tgtY * 0.56 + offsetMultiplier;
+
+          // --- KANTE 1: Mensch (= Rolle) -> Kommunikations-Client (= UI) ---
+          const edge1Path = 'M ' + baseHumanX + ' ' + baseHumanY + ' Q ' + ((baseHumanX + clientX) / 2) + ' ' + ((baseHumanY + clientY) / 2 - 15) + ' ' + clientX + ' ' + clientY;
+          gHitlEdges.append('path')
+            .attr('class', 'hitl-edge hitl-edge-human-client')
+            .attr('id', 'hitl-edge-human-client-' + clIdx)
+            .attr('d', edge1Path)
+            .style('fill', 'none')
+            .style('stroke', '#06b6d4')
+            .style('stroke-width', '3px')
+            .style('stroke-dasharray', '6 3')
+            .attr('marker-end', 'url(#hitl-marker-human-client)');
+
+          // Kante 1 Badge
+          const mid1X = (baseHumanX + clientX) / 2;
+          const mid1Y = (baseHumanY + clientY) / 2 - 20;
+          const gBadge1 = gHitlEdges.append('g')
+            .attr('class', 'hitl-edge-badge')
+            .attr('transform', 'translate(' + mid1X + ', ' + mid1Y + ')');
+
+          gBadge1.append('rect')
+            .attr('x', -62)
+            .attr('y', -9)
+            .attr('width', 124)
+            .attr('height', 18)
+            .attr('rx', 9)
+            .style('fill', 'rgba(15, 23, 42, 0.92)')
+            .style('stroke', '#06b6d4')
+            .style('stroke-width', '1px');
+
+          gBadge1.append('text')
+            .attr('text-anchor', 'middle')
+            .attr('dominant-baseline', 'middle')
+            .style('font-size', '8px')
+            .style('font-weight', '750')
+            .style('fill', '#67e8f9')
+            .text('UI-Interaktion (Eingabe)');
+
+          // --- KANTE 2: Kommunikations-Client (= UI) -> Zielsystem (= Backend) ---
+          const edge2Path = 'M ' + clientX + ' ' + clientY + ' Q ' + ((clientX + tgtX) / 2) + ' ' + ((clientY + tgtY) / 2 + 15) + ' ' + tgtX + ' ' + tgtY;
+          gHitlEdges.append('path')
+            .attr('class', 'hitl-edge hitl-edge-client-backend')
+            .attr('id', 'hitl-edge-client-backend-' + clIdx)
+            .attr('d', edge2Path)
+            .style('fill', 'none')
+            .style('stroke', '#38bdf8')
+            .style('stroke-width', '3px')
+            .attr('marker-end', 'url(#hitl-marker-client-backend)');
+
+          // Animated Token along Edge 2 (Datenfluss)
+          const token = gHitlEdges.append('circle')
+            .attr('class', 'hitl-flow-token')
+            .attr('r', 4.5)
+            .style('fill', '#38bdf8')
+            .style('stroke', '#ffffff')
+            .style('stroke-width', '1.5px');
+
+          const animMotion = document.createElementNS('http://www.w3.org/2000/svg', 'animateMotion');
+          animMotion.setAttribute('path', edge2Path);
+          animMotion.setAttribute('dur', '2.2s');
+          animMotion.setAttribute('repeatCount', 'indefinite');
+          token.node().appendChild(animMotion);
+
+          // Kante 2 Badge (Protokoll & Nachricht)
+          const mid2X = (clientX + tgtX) / 2;
+          const mid2Y = (clientY + tgtY) / 2 + 18;
+          const msgLabel = (cl.messagesEmitted && cl.messagesEmitted[0]) ? cl.messagesEmitted[0] : (cl.os?.includes('HTTPS') ? 'HTTPS REST' : 'API / Datenfluss');
+          const cleanMsg = msgLabel.length > 22 ? (msgLabel.slice(0, 21) + '…') : msgLabel;
+          const badgeW = Math.max(90, cleanMsg.length * 6.8 + 18);
+
+          const gBadge2 = gHitlEdges.append('g')
+            .attr('class', 'hitl-edge-badge')
+            .attr('transform', 'translate(' + mid2X + ', ' + mid2Y + ')');
+
+          gBadge2.append('rect')
+            .attr('x', -badgeW / 2)
+            .attr('y', -9)
+            .attr('width', badgeW)
+            .attr('height', 18)
+            .attr('rx', 9)
+            .style('fill', 'rgba(15, 23, 42, 0.92)')
+            .style('stroke', '#38bdf8')
+            .style('stroke-width', '1px');
+
+          gBadge2.append('text')
+            .attr('text-anchor', 'middle')
+            .attr('dominant-baseline', 'middle')
+            .style('font-size', '8px')
+            .style('font-weight', '750')
+            .style('fill', '#bae6fd')
+            .text(cleanMsg);
+
+          // --- KNOTEN 2: Kommunikations-Client (= UI der Anwendung) ---
+          const gClient = gHitlNodes.append('g')
+            .attr('class', 'hitl-node hitl-node-client')
+            .attr('id', 'hitl-client-' + (cl.id || clIdx))
+            .attr('transform', 'translate(' + clientX + ', ' + clientY + ')')
+            .style('cursor', 'pointer')
+            .on('click', () => {
+              renderInspectorRole(role);
+              if (typeof toggleRightDrawer === 'function') toggleRightDrawer(true);
+              if (typeof window.showCrudToast === 'function') {
+                window.showCrudToast('Client UI: ' + cl.name + ' (' + (cl.deviceType || 'UI') + ')');
+              }
+            });
+
+          gClient.append('rect')
+            .attr('x', -95)
+            .attr('y', -30)
+            .attr('width', 190)
+            .attr('height', 60)
+            .attr('rx', 10)
+            .style('fill', 'rgba(30, 41, 59, 0.95)')
+            .style('stroke', '#38bdf8')
+            .style('stroke-width', '2px')
+            .style('filter', 'drop-shadow(0 6px 16px rgba(0,0,0,0.55))');
+
+          const devIcon = cl.deviceType === 'WEB_PORTAL' ? '🌐' : (cl.deviceType === 'TABLET_MOBILE' ? '📱' : (cl.deviceType === 'TERMINAL' ? '🖥️' : '💻'));
+          gClient.append('circle')
+            .attr('cx', -65)
+            .attr('cy', 0)
+            .attr('r', 18)
+            .style('fill', 'rgba(56, 189, 248, 0.16)')
+            .style('stroke', '#38bdf8')
+            .style('stroke-width', '1.2px');
+
+          gClient.append('text')
+            .attr('x', -65)
+            .attr('y', 5)
+            .attr('text-anchor', 'middle')
+            .style('font-size', '15px')
+            .text(devIcon);
+
+          gClient.append('text')
+            .attr('x', -38)
+            .attr('y', -11)
+            .style('font-size', '8px')
+            .style('font-weight', '800')
+            .style('fill', '#38bdf8')
+            .text('KOMMUNIKATIONS-CLIENT (' + (cl.deviceType || 'UI') + ')');
+
+          const cleanClName = (cl.name || cl.id);
+          gClient.append('text')
+            .attr('x', -38)
+            .attr('y', 4)
+            .style('font-size', '10px')
+            .style('font-weight', '750')
+            .style('fill', '#ffffff')
+            .text(cleanClName.length > 22 ? (cleanClName.slice(0, 21) + '…') : cleanClName);
+
+          const subInfo = (cl.os ? cl.os.split(' ')[0] : 'UI') + ' · ' + (cl.authMethod ? cl.authMethod.slice(0, 15) : 'Auth');
+          gClient.append('text')
+            .attr('x', -38)
+            .attr('y', 17)
+            .style('font-size', '7.5px')
+            .style('fill', '#94a3b8')
+            .text(subInfo);
+        });
+      }
+      window.renderHitlCommunicationChain = renderHitlCommunicationChain;
+
       window.selectHitlRole = function(roleId) {
         window.closeAllHitlDropdowns();
 
@@ -31507,7 +31857,7 @@
           }
         });
 
-        // 3. Highlight D3 nodes & edges
+        // 3. Highlight D3 nodes & edges & Render 2-Stage Communication Chain
         if (typeof d3 !== 'undefined') {
           d3.selectAll('.edge-link')
             .classed('dimmed', d => roleConns.size > 0 && !roleConns.has(d.id))
@@ -31539,6 +31889,9 @@
                 .remove();
             }
           });
+
+          // Render Dual-Stage Communication Chain on SVG Canvas (Mensch -> Client UI -> Backend)
+          renderHitlCommunicationChain(role);
         }
 
         // 4. Render role inspector & open drawer
@@ -31567,6 +31920,7 @@
           d3.selectAll('.sys-node-group').classed('dimmed', false).classed('active', false);
           d3.selectAll('.client-touchpoint-beacon').remove();
           d3.selectAll('.locator-beacon-ring').remove();
+          d3.select('#gHitlOverlay').selectAll('*').remove();
         }
 
         renderPlaceholder();
@@ -34343,6 +34697,15 @@
           ? ACTORS_DATA.filter(a => Array.isArray(a.processes) && a.processes.includes(proc.id))
           : [];
 
+        // Ensure actor client target systems are included in sysMap
+        mappedActors.forEach(act => {
+          (act.clients || []).forEach(cl => {
+            if (cl.targetSystemId && !sysMap.has(cl.targetSystemId)) {
+              sysMap.set(cl.targetSystemId, getSys(cl.targetSystemId));
+            }
+          });
+        });
+
         let puml = '@startuml\n';
         puml += 'title ' + proc.id + ': ' + proc.name + '\n';
         puml += 'autonumber\n';
@@ -34355,6 +34718,22 @@
           puml += 'actor "' + cleanName + '" as ' + actAlias + '\n';
         });
 
+        // Add Communication Clients (UI) as participants
+        const clientAliasSet = new Set();
+        mappedActors.forEach(act => {
+          (act.clients || []).forEach(cl => {
+            if (cl.targetSystemId && sysMap.has(cl.targetSystemId)) {
+              const clAlias = (cl.id || (act.id + '_CL')).replace(/[^a-zA-Z0-9]/g, '_');
+              if (!clientAliasSet.has(clAlias)) {
+                clientAliasSet.add(clAlias);
+                const cleanClientName = (cl.name || cl.id).replace(/"/g, "'").slice(0, 32);
+                const clientIcon = (cl.deviceType === 'WEB_PORTAL' ? '🌐 ' : (cl.deviceType === 'TABLET_MOBILE' ? '📱 ' : '💻 '));
+                puml += 'participant "[[' + '#client-' + (cl.id || clAlias) + ' ' + clientIcon + cleanClientName + ' (UI)]]" as ' + clAlias + '\n';
+              }
+            }
+          });
+        });
+
         sysMap.forEach((sys, sysId) => {
           const cleanName = sys ? (sys.name || '').replace(/"/g, "'").slice(0, 30) : sysId;
           const safeAlias = sysId.replace(/[^a-zA-Z0-9]/g, '_');
@@ -34362,15 +34741,20 @@
         });
         puml += '\n';
 
-        // Prepend actor touchpoint interaction if mapped
+        // Prepend dual-step actor & client interactions if mapped:
+        // Kante 1: Mensch -> Kommunikations-Client (UI-Interaktion)
+        // Kante 2: Kommunikations-Client -> Zielsystem (Back-End)
         if (mappedActors.length > 0) {
           mappedActors.forEach(act => {
             const actAlias = act.id.replace(/[^a-zA-Z0-9]/g, '_');
             (act.clients || []).forEach(cl => {
               if (cl.targetSystemId && sysMap.has(cl.targetSystemId)) {
+                const clAlias = (cl.id || (act.id + '_CL')).replace(/[^a-zA-Z0-9]/g, '_');
                 const targetAlias = cl.targetSystemId.replace(/[^a-zA-Z0-9]/g, '_');
-                const msg = (cl.messagesEmitted && cl.messagesEmitted[0]) ? cl.messagesEmitted[0] : ('Aktion (' + cl.name + ')');
-                puml += actAlias + ' -> ' + targetAlias + ': ' + msg.replace(/"/g, "'") + '\n';
+                const msg = (cl.messagesEmitted && cl.messagesEmitted[0]) ? cl.messagesEmitted[0] : 'Fachdatenübermittlung';
+                
+                puml += actAlias + ' -> ' + clAlias + ': [[#hitl-' + act.id + ' UI-Interaktion & Eingabe]]\n';
+                puml += clAlias + ' -> ' + targetAlias + ': [[#msg-' + cl.id + ' ' + msg.replace(/"/g, "'") + ' (' + (cl.os ? cl.os.split(' ')[0] : 'API') + ')]]\n';
               }
             });
           });

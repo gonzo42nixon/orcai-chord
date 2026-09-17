@@ -145,8 +145,9 @@ Die Johanniter Quad-Chord EA wurde nach Google-Enterprise-Standards (Material De
       - **RT (Right-Top):** Extern · Cloud & Portal (z. B. Patientenportal, MyBruker WebStore, Kundenportal).
       - **RB (Right-Bottom):** Extern · On-Prem / B2B (z. B. B2B-Clearing, DTA-Schnittstelle, ATLAS-Zollgateway).
     - **4 interaktive Corner Pods (`#podLT`, `#podLB`, `#podRT`, `#podRB`):** Direkt auf der Zeichenfläche platzierte Eck-Pods mit Quadranten-Kennzeichnung, Icon und Rollenselektor.
-    - **Visuelle Spurensuche & Touchpoint-Beacons:** Bei Auswahl einer Rolle pulsiert ein Leuchtfeuer (`.client-touchpoint-beacon`) auf den Zielsystemen ihrer Clients, nicht-involvierte Knoten/Kanten werden elegant abgedunkelt (`dimmed`) und der **HITL Rollen-Inspektor** öffnet sich mit Details zu Geräten, OS, Auth-Methoden (SSO, MFA, eHBA) und emittierten Nachrichten.
-    - **PlantUML-Akteurssynthese:** Automatische Voranstellung von `@startuml actor` und Initial-Nachrichten in generierten Sequenzdiagrammen.
+    - **Visualisierung der 2-stufigen Kommunikationskette:** Darstellung des menschlichen Akteurs (`.hitl-node-human`), des Kommunikations-Clients (`.hitl-node-client`), von Kante 1 (`UI-Interaktion / Eingabe`) und Kante 2 (`Protokoll / Nachricht`) zum Anwendungs-Back-End mit animiertem Token.
+    - **Visuelle Spurensuche & Touchpoint-Beacons:** Bei Auswahl einer Rolle pulsiert ein Leuchtfeuer (`.client-touchpoint-beacon`) auf den Zielsystemen ihrer Clients, nicht-involvierte Knoten/Kanten werden elegant abgedunkelt (`dimmed`) und der **HITL Rollen-Inspektor** zeigt den 2-Hop-Architekturnachweis.
+    - **PlantUML-Akteurs- & Client-Synthese:** Automatische Voranstellung von `@startuml actor`, Kommunikations-Clients und beiden Interaktionsstufen in generierten Sequenzdiagrammen.
     - **Omni-Search (`Strg+K`) Rollenfilter:** Schnelles Suchen und Filtern von Rollen über das neue `[👤 Rollen]`-Chip.
 
 ## Regulatorische Grundlagen & Legalitätsnachweis
