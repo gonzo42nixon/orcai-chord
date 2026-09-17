@@ -4378,6 +4378,123 @@
       font-family: monospace;
     }
 
+    /* =====================================================================
+       BPMN 2.0 FLOATING DRAGGABLE & RESIZABLE POPOUT WINDOW (EMERALD / CYAN)
+       ===================================================================== */
+    .bpmn-floating-popout {
+      position: fixed;
+      top: 55px;
+      left: calc(50vw - 460px);
+      width: 950px;
+      height: 680px;
+      min-width: 460px;
+      min-height: 340px;
+      background: #090d16;
+      border: 1px solid rgba(16, 185, 129, 0.45);
+      border-radius: 12px;
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.9), 0 0 28px rgba(16, 185, 129, 0.22);
+      z-index: 10002;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      resize: both;
+      animation: popIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .bpmn-floating-popout.is-fullscreen {
+      top: 8px !important;
+      left: 8px !important;
+      width: calc(100vw - 16px) !important;
+      height: calc(100vh - 16px) !important;
+      resize: none !important;
+      border-radius: 8px;
+    }
+    .bpmn-floating-popout.popout-focus-flash {
+      border-color: #34d399 !important;
+      box-shadow: 0 0 36px rgba(52, 211, 153, 0.6), 0 24px 60px rgba(0, 0, 0, 0.95) !important;
+      transform: scale(1.012);
+    }
+    
+    .plantuml-title-text, .bpmn-title-text {
+      max-width: 240px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .plantuml-popout-header .apqc-code-badge,
+    .bpmn-popout-header .apqc-code-badge {
+      max-width: 120px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    .bpmn-popout-header {
+      padding: 10px 14px;
+      background: #111a28;
+      border-bottom: 1px solid rgba(16, 185, 129, 0.25);
+      cursor: grab;
+      user-select: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .bpmn-popout-header:active {
+      cursor: grabbing;
+    }
+    .bpmn-selfref-btn {
+      background: rgba(16, 185, 129, 0.18);
+      border: 1px solid rgba(16, 185, 129, 0.45);
+      border-radius: 4px;
+      cursor: pointer;
+      padding: 2px 6px;
+      font-size: 0.8rem;
+      color: #34d399;
+      transform: scale(1.1);
+      transition: all 0.15s ease;
+    }
+    .bpmn-selfref-btn:hover {
+      background: rgba(16, 185, 129, 0.35);
+      box-shadow: 0 0 10px rgba(52, 211, 153, 0.5);
+    }
+    .bpmn-popout-footer {
+      padding: 6px 14px;
+      background: rgba(9, 13, 22, 0.95);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 0.72rem;
+      color: #94a3b8;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+    }
+    .bpmn-zoom-badge {
+      font-size: 0.72rem;
+      font-family: monospace;
+      color: #34d399;
+      background: rgba(16, 185, 129, 0.14);
+      padding: 3px 7px;
+      border-radius: 4px;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    .bpmn-svg-container {
+      position: relative;
+      overflow: hidden;
+      background: #090d16;
+    }
+    .bpmn-svg-container [data-element-id] {
+      cursor: pointer;
+      transition: filter 0.15s ease;
+    }
+    .bpmn-svg-container [data-element-id]:hover {
+      filter: drop-shadow(0 0 8px rgba(52, 211, 153, 0.8)) !important;
+    }
+
+
     /* PlantUML SVG Interactive Links (Supports both static and dynamic multi-popout containers) */
     .puml-svg-container {
       position: relative;
@@ -21421,6 +21538,28 @@
                 '<summary style="cursor:pointer; color:var(--text-muted); font-weight:600; user-select:none;">PlantUML Quellcode anzeigen</summary>' +
                 '<pre style="margin-top:6px; margin-bottom:0; max-height:160px; overflow-y:auto; font-family:\'JetBrains Mono\', monospace; color:var(--accent); white-space:pre-wrap; line-height:1.35; user-select:text;">' +
                   String(proc.plantUml || window.generatePlantUmlFromProcess(proc)).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') +
+                '</pre>' +
+              '</details>' +
+            '</div>' +
+            // BPMN 2.0 Workflow & Collaboration Section
+            '<div style="margin:10px 0; padding:10px; background:rgba(16,185,129,0.06); border:1px solid rgba(16,185,129,0.25); border-radius:8px;">' +
+              '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">' +
+                '<span style="font-size:0.75rem; font-weight:750; color:var(--text-bright); display:flex; align-items:center; gap:5px;">' +
+                  '<span>⚙️</span> BPMN 2.0 Workflow &amp; Kollaboration' +
+                '</span>' +
+                '<span class="traffic-tag" style="background:rgba(16,185,129,0.18); color:#34d399; font-weight:700;">BPMN 2.0 XML</span>' +
+              '</div>' +
+              '<div style="display:flex; flex-wrap:wrap; gap:5px; margin-bottom:8px;">' +
+                '<button type="button" class="insp-action-btn" style="background:rgba(16,185,129,0.2); border-color:#34d399; color:#34d399; font-weight:750;" onclick="window.openBpmnModal(\'' + proc.id + '\')">🗗 Diagramm-Vorschau</button>' +
+                '<button type="button" class="insp-action-btn" onclick="window.downloadBpmnFile(\'' + proc.id + '\')">💾 .bpmn Download</button>' +
+                '<button type="button" class="insp-action-btn" onclick="window.copyBpmnXml(\'' + proc.id + '\')">📋 XML Kopieren</button>' +
+                '<button type="button" class="insp-action-btn" onclick="window.openBpmnIoEditor(\'' + proc.id + '\')">↗ In bpmn.io</button>' +
+                '<button type="button" class="insp-action-btn" onclick="window.regenerateBpmnForProcess(\'' + proc.id + '\')" title="Aus Integrationsschritten neu generieren">🔄 Auto-Gen</button>' +
+              '</div>' +
+              '<details style="background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.06); border-radius:6px; padding:6px 8px; font-size:0.65rem;">' +
+                '<summary style="cursor:pointer; color:var(--text-muted); font-weight:600; user-select:none;">BPMN 2.0 XML Quellcode anzeigen</summary>' +
+                '<pre style="margin-top:6px; margin-bottom:0; max-height:160px; overflow-y:auto; font-family:\'JetBrains Mono\', monospace; color:#34d399; white-space:pre-wrap; line-height:1.35; user-select:text;">' +
+                  String(proc.bpmnXml || window.generateBpmnXmlFromProcess(proc)).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') +
                 '</pre>' +
               '</details>' +
             '</div>' +
@@ -39469,6 +39608,1012 @@
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
       };
+
+
+      // =====================================================================
+      // BPMN 2.0 XML GENERATOR & MULTI-POPOUT CONTROLLER (INTERACTIVE VIEWER)
+      // =====================================================================
+      function escXml(s) {
+        return String(s == null ? '' : s)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&apos;');
+      }
+
+      function safeXmlId(s) {
+        return String(s || '').replace(/[^a-zA-Z0-9_-]/g, '_');
+      }
+
+      // Metadata mapping store for interactive clicks inside BPMN SVG
+      const bpmnElementMetaMap = new Map(); // procId -> Map(elementId -> metadata)
+      window.bpmnElementMetaMap = bpmnElementMetaMap;
+
+      window.generateBpmnXmlFromProcess = function(proc) {
+        if (!proc) return '';
+        const safeProcId = safeXmlId(proc.id);
+        const cleanIds = proc.cleanIntegIds || proc.integrations || [];
+        const allIntegs = (typeof INTEGRATIONS_DATA !== 'undefined') ? INTEGRATIONS_DATA : [];
+        const allSystems = (typeof SYSTEMS_DATA !== 'undefined') ? SYSTEMS_DATA : [];
+        const allConns = (typeof CONNECTIONS_DATA !== 'undefined') ? CONNECTIONS_DATA : [];
+        const allActors = (typeof ACTORS_DATA !== 'undefined' && Array.isArray(ACTORS_DATA)) ? ACTORS_DATA : [];
+
+        const integs = cleanIds.map(id => allIntegs.find(i => i.id === id)).filter(Boolean);
+        const getSys = (id) => (typeof sysById !== 'undefined' && sysById.get ? sysById.get(id) : allSystems.find(s => s.id === id));
+
+        // Mapped Actors & Clients
+        const mappedActors = allActors.filter(a => Array.isArray(a.processes) && a.processes.includes(proc.id));
+
+        // Participating systems
+        const sysMap = new Map();
+        integs.forEach(integ => {
+          if (integ.sourceSystem) sysMap.set(integ.sourceSystem, getSys(integ.sourceSystem));
+          if (integ.targetSystem) sysMap.set(integ.targetSystem, getSys(integ.targetSystem));
+          (integ.steps || []).forEach(st => {
+            if (st.from) sysMap.set(st.from, getSys(st.from));
+            if (st.to) sysMap.set(st.to, getSys(st.to));
+          });
+        });
+
+        // Ensure actor client target systems are included
+        mappedActors.forEach(act => {
+          (act.clients || []).forEach(cl => {
+            if (cl.targetSystemId && !sysMap.has(cl.targetSystemId)) {
+              sysMap.set(cl.targetSystemId, getSys(cl.targetSystemId));
+            }
+          });
+        });
+
+        // Lanes setup
+        const lanes = [];
+        const laneActor = {
+          id: 'Lane_Actor_' + safeProcId,
+          name: mappedActors.length > 0 
+            ? (mappedActors[0].name + ' (' + ((mappedActors[0].clients && mappedActors[0].clients[0]) ? mappedActors[0].clients[0].name : 'UI Client') + ')')
+            : 'Prozess-Initiator (Fachbereich / Client)',
+          category: 'ACTOR',
+          nodes: []
+        };
+        lanes.push(laneActor);
+
+        const hasBisCore = Array.from(sysMap.keys()).some(id => id.includes('SEE-01') || id.includes('SEE-02') || id.includes('BIS') || id.includes('JSD-01'));
+        let laneBis = null;
+        if (hasBisCore || sysMap.size > 2) {
+          const isSeeburger = (typeof currentModelId !== 'undefined' && currentModelId === 'ORCAI-MODEL-SEEBURGER-EA');
+          laneBis = {
+            id: 'Lane_Middleware_' + safeProcId,
+            name: isSeeburger ? 'SEEBURGER BIS Platform (iPaaS Hub & Converter)' : 'Enterprise Integration Hub (EAI / Middleware)',
+            category: 'MIDDLEWARE',
+            nodes: []
+          };
+          lanes.push(laneBis);
+        }
+
+        const laneBackend = {
+          id: 'Lane_Backend_' + safeProcId,
+          name: 'Zielsysteme & Verbundpartner (Backends)',
+          category: 'BACKEND',
+          nodes: []
+        };
+        lanes.push(laneBackend);
+
+        // Metadata registry for this process
+        const procMetaMap = new Map();
+        bpmnElementMetaMap.set(proc.id, procMetaMap);
+
+        const flowNodes = [];
+
+        // 1. Start Event
+        const startEventId = 'StartEvent_' + safeProcId;
+        const startNode = {
+          id: startEventId,
+          name: 'Start: ' + (proc.name || proc.id),
+          type: 'startEvent',
+          lane: laneActor,
+          width: 36,
+          height: 36
+        };
+        laneActor.nodes.push(startEventId);
+        flowNodes.push(startNode);
+        if (mappedActors.length > 0) {
+          procMetaMap.set(startEventId, { type: 'actor', actorId: mappedActors[0].id, clientId: mappedActors[0].clients && mappedActors[0].clients[0] ? mappedActors[0].clients[0].id : null });
+        }
+
+        // 2. HITL Actor & Client tasks
+        if (mappedActors.length > 0) {
+          const act = mappedActors[0];
+          const cl = (act.clients && act.clients[0]) ? act.clients[0] : null;
+          const clientName = cl ? (cl.name || 'Web Client') : 'Benutzeroberfläche';
+
+          const userTaskId = 'Task_HITL_Input_' + safeProcId;
+          const userTask = {
+            id: userTaskId,
+            name: (act.name || 'Anwender') + ': Interaktion & Freigabe in ' + clientName,
+            type: 'userTask',
+            lane: laneActor,
+            width: 130,
+            height: 80
+          };
+          laneActor.nodes.push(userTaskId);
+          flowNodes.push(userTask);
+          procMetaMap.set(userTaskId, { type: 'client', actorId: act.id, clientId: cl ? cl.id : null });
+
+          if (cl && cl.targetSystemId) {
+            const sendTaskId = 'Task_HITL_Send_' + safeProcId;
+            const sendTask = {
+              id: sendTaskId,
+              name: clientName + ' -> ' + cl.targetSystemId + ': ' + (cl.messagesEmitted && cl.messagesEmitted[0] ? cl.messagesEmitted[0] : 'Payload senden'),
+              type: 'sendTask',
+              lane: laneBis || laneActor,
+              width: 130,
+              height: 80
+            };
+            (laneBis || laneActor).nodes.push(sendTaskId);
+            flowNodes.push(sendTask);
+            procMetaMap.set(sendTaskId, { type: 'client', actorId: act.id, clientId: cl.id, targetSysId: cl.targetSystemId });
+          }
+        }
+
+        // 3. Integration Step Tasks
+        let stepIndex = 0;
+        integs.forEach(integ => {
+          const steps = (integ.steps && integ.steps.length > 0) ? integ.steps : [{
+            from: integ.sourceSystem,
+            to: integ.targetSystem,
+            connectionId: null,
+            desc: integ.name
+          }];
+
+          steps.forEach((st, idx) => {
+            stepIndex++;
+            const conn = allConns.find(c => c.id === st.connectionId);
+            const proto = conn ? conn.protocol : (integ.protocol || 'REST');
+            const stepDesc = (st.desc || conn?.name || integ.name || 'Datentransfer');
+            const stepTaskId = 'Task_Step_' + safeProcId + '_' + stepIndex;
+
+            let assignedLane = laneBackend;
+            const isMw = (st.from && (st.from.includes('SEE-01') || st.from.includes('SEE-02') || st.from.includes('JSD-01'))) ||
+                         (st.to && (st.to.includes('SEE-01') || st.to.includes('SEE-02') || st.to.includes('JSD-01')));
+            if (isMw && laneBis) {
+              assignedLane = laneBis;
+            } else if (idx === 0 && !mappedActors.length) {
+              assignedLane = laneActor;
+            }
+
+            const task = {
+              id: stepTaskId,
+              name: stepDesc + ' (' + proto + ')',
+              type: 'serviceTask',
+              lane: assignedLane,
+              width: 130,
+              height: 80
+            };
+            assignedLane.nodes.push(stepTaskId);
+            flowNodes.push(task);
+
+            procMetaMap.set(stepTaskId, {
+              type: 'step',
+              integId: integ.id,
+              connId: st.connectionId,
+              fromSys: st.from,
+              toSys: st.to,
+              desc: stepDesc
+            });
+          });
+        });
+
+        // 4. End Event
+        const endEventId = 'EndEvent_' + safeProcId;
+        const endNode = {
+          id: endEventId,
+          name: 'Ende: ' + (proc.name || proc.id) + ' erfolgreich abgeschlossen',
+          type: 'endEvent',
+          lane: laneBackend,
+          width: 36,
+          height: 36
+        };
+        laneBackend.nodes.push(endEventId);
+        flowNodes.push(endNode);
+        procMetaMap.set(endEventId, { type: 'end', procId: proc.id });
+
+        // 5. Sequence Flows
+        const sequenceFlows = [];
+        for (let i = 0; i < flowNodes.length - 1; i++) {
+          const src = flowNodes[i];
+          const tgt = flowNodes[i + 1];
+          const flowId = 'Flow_' + safeProcId + '_' + (i + 1);
+          sequenceFlows.push({
+            id: flowId,
+            sourceRef: src.id,
+            targetRef: tgt.id,
+            sourceNode: src,
+            targetNode: tgt
+          });
+        }
+
+        // 6. BPMNDI Geometry Calculation
+        const laneHeight = 140;
+        const poolX = 120;
+        const laneX = 150;
+        const startX = 200;
+        const nodeGapX = 50;
+
+        let currentX = startX;
+        flowNodes.forEach(node => {
+          node.x = currentX;
+          const laneIdx = lanes.indexOf(node.lane);
+          const laneY = 60 + (laneIdx * laneHeight);
+          node.y = Math.round(laneY + (laneHeight - node.height) / 2);
+          currentX += node.width + nodeGapX;
+        });
+
+        const totalWidth = Math.max(920, currentX - startX + 320);
+        const laneWidth = totalWidth - laneX + poolX;
+        const poolWidth = totalWidth;
+        const poolHeight = lanes.length * laneHeight;
+
+        // Assembly
+        let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
+        xml += '<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"\n';
+        xml += '                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"\n';
+        xml += '                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"\n';
+        xml += '                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"\n';
+        xml += '                  id="Definitions_' + safeProcId + '"\n';
+        xml += '                  targetNamespace="http://bpmn.io/schema/bpmn">\n';
+
+        xml += '  <bpmn:collaboration id="Collaboration_' + safeProcId + '">\n';
+        xml += '    <bpmn:participant id="Participant_' + safeProcId + '" name="' + escXml(proc.id + ': ' + (proc.name || 'Prozess')) + '" processRef="Process_' + safeProcId + '" />\n';
+        xml += '  </bpmn:collaboration>\n';
+
+        xml += '  <bpmn:process id="Process_' + safeProcId + '" isExecutable="false">\n';
+        xml += '    <bpmn:laneSet id="LaneSet_' + safeProcId + '">\n';
+        lanes.forEach(lane => {
+          xml += '      <bpmn:lane id="' + lane.id + '" name="' + escXml(lane.name) + '">\n';
+          lane.nodes.forEach(nodeId => {
+            xml += '        <bpmn:flowNodeRef>' + nodeId + '</bpmn:flowNodeRef>\n';
+          });
+          xml += '      </bpmn:lane>\n';
+        });
+        xml += '    </bpmn:laneSet>\n\n';
+
+        flowNodes.forEach(node => {
+          const incFlows = sequenceFlows.filter(f => f.targetRef === node.id).map(f => f.id);
+          const outFlows = sequenceFlows.filter(f => f.sourceRef === node.id).map(f => f.id);
+
+          xml += '    <bpmn:' + node.type + ' id="' + node.id + '" name="' + escXml(node.name) + '">\n';
+          incFlows.forEach(fId => { xml += '      <bpmn:incoming>' + fId + '</bpmn:incoming>\n'; });
+          outFlows.forEach(fId => { xml += '      <bpmn:outgoing>' + fId + '</bpmn:outgoing>\n'; });
+          xml += '    </bpmn:' + node.type + '>\n';
+        });
+
+        xml += '\n';
+        sequenceFlows.forEach(flow => {
+          xml += '    <bpmn:sequenceFlow id="' + flow.id + '" sourceRef="' + flow.sourceRef + '" targetRef="' + flow.targetRef + '" />\n';
+        });
+
+        xml += '  </bpmn:process>\n\n';
+
+        // Diagram Interchange
+        xml += '  <bpmndi:BPMNDiagram id="BPMNDiagram_' + safeProcId + '">\n';
+        xml += '    <bpmndi:BPMNPlane id="BPMNPlane_' + safeProcId + '" bpmnElement="Collaboration_' + safeProcId + '">\n';
+
+        xml += '      <bpmndi:BPMNShape id="Participant_' + safeProcId + '_di" bpmnElement="Participant_' + safeProcId + '" isHorizontal="true">\n';
+        xml += '        <dc:Bounds x="' + poolX + '" y="60" width="' + poolWidth + '" height="' + poolHeight + '" />\n';
+        xml += '      </bpmndi:BPMNShape>\n';
+
+        lanes.forEach((lane, idx) => {
+          const laneY = 60 + (idx * laneHeight);
+          xml += '      <bpmndi:BPMNShape id="' + lane.id + '_di" bpmnElement="' + lane.id + '" isHorizontal="true">\n';
+          xml += '        <dc:Bounds x="' + laneX + '" y="' + laneY + '" width="' + laneWidth + '" height="' + laneHeight + '" />\n';
+          xml += '      </bpmndi:BPMNShape>\n';
+        });
+
+        flowNodes.forEach(node => {
+          xml += '      <bpmndi:BPMNShape id="' + node.id + '_di" bpmnElement="' + node.id + '">\n';
+          xml += '        <dc:Bounds x="' + node.x + '" y="' + node.y + '" width="' + node.width + '" height="' + node.height + '" />\n';
+          if (node.type === 'startEvent' || node.type === 'endEvent') {
+            xml += '        <bpmndi:BPMNLabel>\n';
+            xml += '          <dc:Bounds x="' + Math.round(node.x - 25) + '" y="' + Math.round(node.y + node.height + 6) + '" width="86" height="27" />\n';
+            xml += '        </bpmndi:BPMNLabel>\n';
+          }
+          xml += '      </bpmndi:BPMNShape>\n';
+        });
+
+        sequenceFlows.forEach(flow => {
+          const src = flow.sourceNode;
+          const tgt = flow.targetNode;
+          const sX = src.x + src.width;
+          const sY = Math.round(src.y + src.height / 2);
+          const tX = tgt.x;
+          const tY = Math.round(tgt.y + tgt.height / 2);
+
+          xml += '      <bpmndi:BPMNEdge id="' + flow.id + '_di" bpmnElement="' + flow.id + '">\n';
+          if (sY === tY) {
+            xml += '        <di:waypoint x="' + sX + '" y="' + sY + '" />\n';
+            xml += '        <di:waypoint x="' + tX + '" y="' + tY + '" />\n';
+          } else {
+            const mX = Math.round(sX + (tX - sX) / 2);
+            xml += '        <di:waypoint x="' + sX + '" y="' + sY + '" />\n';
+            xml += '        <di:waypoint x="' + mX + '" y="' + sY + '" />\n';
+            xml += '        <di:waypoint x="' + mX + '" y="' + tY + '" />\n';
+            xml += '        <di:waypoint x="' + tX + '" y="' + tY + '" />\n';
+          }
+          xml += '      </bpmndi:BPMNEdge>\n';
+        });
+
+        xml += '    </bpmndi:BPMNPlane>\n';
+        xml += '  </bpmndi:BPMNDiagram>\n';
+        xml += '</bpmn:definitions>';
+
+        proc.bpmnXml = xml;
+        return xml;
+      };
+
+      // =====================================================================
+      // BPMN MULTI-POPOUT REGISTRY & CONTROLLER
+      // =====================================================================
+      const openBpmnPopouts = new Map(); // procId -> record
+      window.openBpmnPopouts = openBpmnPopouts;
+      let activeBpmnProcId = null;
+
+      window.updateBpmnTransform = function(entry, animate = false) {
+        if (!entry || !entry.modal) return;
+        const wrapper = entry.modal.querySelector('.bpmn-svg-wrapper');
+        const badge = entry.modal.querySelector('.bpmn-zoom-badge');
+        if (!wrapper) return;
+
+        if (animate) {
+          wrapper.style.transition = 'transform 0.18s cubic-bezier(0.2, 0, 0, 1)';
+        } else {
+          wrapper.style.transition = 'none';
+        }
+
+        wrapper.style.transform = 'translate3d(' + Math.round(entry.panX) + 'px, ' + Math.round(entry.panY) + 'px, 0) scale(' + entry.zoom + ')';
+
+        if (badge) {
+          badge.textContent = Math.round(entry.zoom * 100) + '%';
+        }
+      };
+
+      window.toggleBpmnFullscreen = function(procId) {
+        const pid = procId || activeBpmnProcId || Array.from(openBpmnPopouts.keys()).pop();
+        const entry = openBpmnPopouts.get(pid);
+        if (!entry || !entry.modal) return;
+        const modal = entry.modal;
+        const btn = modal.querySelector('.btn-bpmn-fullscreen');
+
+        if (modal.classList.contains('is-fullscreen')) {
+          modal.classList.remove('is-fullscreen');
+          if (entry.savedBounds) {
+            modal.style.top = entry.savedBounds.top;
+            modal.style.left = entry.savedBounds.left;
+            modal.style.width = entry.savedBounds.width;
+            modal.style.height = entry.savedBounds.height;
+            modal.style.right = 'auto';
+            modal.style.bottom = 'auto';
+          }
+          if (btn) btn.innerHTML = '⛶ Vollbild';
+        } else {
+          entry.savedBounds = {
+            top: modal.style.top || (modal.offsetTop + 'px'),
+            left: modal.style.left || (modal.offsetLeft + 'px'),
+            width: modal.style.width || (modal.offsetWidth + 'px'),
+            height: modal.style.height || (modal.offsetHeight + 'px')
+          };
+          modal.classList.add('is-fullscreen');
+          if (btn) btn.innerHTML = '🗗 Wiederherstellen';
+        }
+
+        setTimeout(() => {
+          if (typeof window.fitBpmn === 'function') {
+            window.fitBpmn(pid);
+          }
+        }, 120);
+      };
+
+      window.openBpmnModal = async function(procId, forceRefresh = false) {
+        if (!procId) return null;
+        const proc = (typeof PROCESSES_DATA !== 'undefined' ? PROCESSES_DATA : []).find(p => p.id === procId);
+        if (!proc) return null;
+
+        activeBpmnProcId = proc.id;
+
+        let popoutsContainer = document.getElementById('bpmnPopoutsContainer');
+        if (!popoutsContainer) {
+          popoutsContainer = document.createElement('div');
+          popoutsContainer.id = 'bpmnPopoutsContainer';
+          document.body.appendChild(popoutsContainer);
+        }
+
+        if (openBpmnPopouts.has(procId) && !forceRefresh) {
+          const entry = openBpmnPopouts.get(procId);
+          if (entry && entry.modal && document.body.contains(entry.modal)) {
+            entry.modal.style.display = 'flex';
+            if (typeof popoutZIndexCounter === 'number') {
+              popoutZIndexCounter++;
+              entry.modal.style.zIndex = popoutZIndexCounter;
+            }
+            entry.modal.classList.add('popout-focus-flash');
+            setTimeout(() => {
+              if (entry.modal) entry.modal.classList.remove('popout-focus-flash');
+            }, 600);
+            return entry.modal;
+          } else {
+            openBpmnPopouts.delete(procId);
+          }
+        }
+
+        let modal;
+        let record;
+        if (forceRefresh && openBpmnPopouts.has(procId)) {
+          record = openBpmnPopouts.get(procId);
+          modal = record.modal;
+        } else {
+          const existingCount = openBpmnPopouts.size;
+          const w = Math.min(960, window.innerWidth - 40);
+          const h = Math.min(680, window.innerHeight - 60);
+          const baseLeft = Math.max(20, Math.floor((window.innerWidth - w) / 2) + 30);
+          const baseTop = Math.max(30, Math.floor((window.innerHeight - h) / 2) + 20);
+          const cascadeStep = 34;
+          const offsetX = (existingCount % 8) * cascadeStep;
+          const offsetY = (existingCount % 8) * cascadeStep;
+          const finalLeft = Math.max(10, Math.min(window.innerWidth - 120, baseLeft + offsetX));
+          const finalTop = Math.max(10, Math.min(window.innerHeight - 80, baseTop + offsetY));
+
+          if (typeof popoutZIndexCounter === 'number') {
+            popoutZIndexCounter++;
+          } else {
+            window.popoutZIndexCounter = 10001;
+          }
+
+          const safeProcId = proc.id.replace(/[^a-zA-Z0-9_-]/g, '_');
+          modal = document.createElement('div');
+          modal.id = 'bpmnViewerModal_' + safeProcId;
+          modal.className = 'bpmn-floating-popout';
+          modal.dataset.procId = proc.id;
+          modal.style.width = w + 'px';
+          modal.style.height = h + 'px';
+          modal.style.left = finalLeft + 'px';
+          modal.style.top = finalTop + 'px';
+          modal.style.right = 'auto';
+          modal.style.bottom = 'auto';
+          modal.style.display = 'flex';
+          modal.style.zIndex = popoutZIndexCounter;
+
+          const esc = (str) => String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+          const titleLabel = esc(proc.id + ' · ' + (proc.name || 'Prozess'));
+
+          modal.innerHTML = 
+            '<div class="bpmn-popout-header">' +
+              '<div style="display:flex; align-items:center; gap:8px;">' +
+                '<span style="font-size:1.15rem;">⚙️</span>' +
+                '<div class="crud-modal-title" style="font-size:0.92rem; font-weight:750; color:var(--text-bright); display:flex; align-items:center; gap:6px;">' +
+                  '<span class="bpmn-title-text" title="' + titleLabel + '">' + titleLabel + '</span>' +
+                  '<button type="button" class="bpmn-selfref-btn btn-bpmn-selfref" onclick="window.restoreBpmnCallingContext(\'' + esc(proc.id) + '\')" title="Aufrufumgebung im EAM-Modell wiederherstellen (' + titleLabel + ')">🔗</button>' +
+                '</div>' +
+                '<span class="traffic-tag" style="background:rgba(16,185,129,0.2); color:#34d399; font-weight:700;">BPMN 2.0</span>' +
+                (proc.apqc ? '<button type="button" class="apqc-code-badge" onclick="event.stopPropagation(); window.openApqcExplorer(\'' + esc(proc.apqc) + '\')" title="APQC PCF Klassifikation ' + esc(proc.apqc) + ' im Explorer öffnen" style="cursor:pointer;">📋 APQC ' + esc(proc.apqc) + '</button>' : '') +
+              '</div>' +
+              '<div style="display:flex; align-items:center; gap:6px;">' +
+                '<button class="insp-action-btn" onclick="window.zoomBpmn(\'' + esc(proc.id) + '\', 0.2)" title="Vergrößern (+)">🔍 +</button>' +
+                '<button class="insp-action-btn" onclick="window.zoomBpmn(\'' + esc(proc.id) + '\', -0.2)" title="Verkleinern (-)">🔍 -</button>' +
+                '<span class="bpmn-zoom-badge" title="Aktueller Zoomfaktor">100%</span>' +
+                '<button class="insp-action-btn" onclick="window.resetBpmnZoom(\'' + esc(proc.id) + '\')" title="Standardgröße (100%)">1:1</button>' +
+                '<button class="insp-action-btn" onclick="window.fitBpmn(\'' + esc(proc.id) + '\')" title="Gesamtes Diagramm in Fenster einpassen">⊡ Einpassen</button>' +
+                '<button class="insp-action-btn" onclick="window.jumpToBpmnStart(\'' + esc(proc.id) + '\')" title="Direkt an den Diagrammanfang springen">⏮ Start</button>' +
+                '<button class="insp-action-btn btn-bpmn-fullscreen" onclick="window.toggleBpmnFullscreen(\'' + esc(proc.id) + '\')" title="Vollbild umschalten">⛶ Vollbild</button>' +
+                '<button class="insp-action-btn" onclick="window.downloadBpmnFile(\'' + esc(proc.id) + '\')" title="BPMN 2.0 XML Datei herunterladen">💾 .bpmn Download</button>' +
+                '<button class="insp-action-btn" onclick="window.downloadBpmnSvg(\'' + esc(proc.id) + '\')" title="SVG Vektorgrafik herunterladen">🖼️ SVG</button>' +
+                '<button class="insp-action-btn" onclick="window.copyBpmnXml(\'' + esc(proc.id) + '\')" title="BPMN 2.0 XML in Zwischenablage kopieren">📋 Kopieren</button>' +
+                '<button class="insp-action-btn" onclick="window.openBpmnIoEditor(\'' + esc(proc.id) + '\')" title="In externem Modeler (bpmn.io) öffnen">↗ bpmn.io</button>' +
+                '<button onclick="window.closeBpmnModal(\'' + esc(proc.id) + '\')" style="background:none; border:none; color:var(--text-muted); font-size:1.4rem; cursor:pointer; padding:0 6px; line-height:1;" title="Schließen">&times;</button>' +
+              '</div>' +
+            '</div>' +
+            '<div class="bpmn-popout-body" style="flex:1; display:flex; flex-direction:column; padding:0; overflow:hidden; position:relative; background:#090d16;">' +
+              '<div class="bpmn-loading-spinner" style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; background:rgba(9,13,22,0.85); z-index:10; color:#34d399;">' +
+                '<div style="font-size:1.8rem; margin-bottom:8px;">⏳</div>' +
+                '<div style="font-size:0.85rem; font-weight:600;">Generiere interaktives BPMN 2.0 Kollaborationsdiagramm für ' + esc(proc.id) + '...</div>' +
+              '</div>' +
+              '<div class="bpmn-svg-container" style="flex:1; width:100%; height:100%; position:relative; overflow:hidden; background:#090d16; cursor:grab; user-select:none;"></div>' +
+              '<div class="bpmn-error-fallback" style="display:none; padding:24px; text-align:center; color:var(--text-bright); overflow:auto;"></div>' +
+            '</div>' +
+            '<div class="bpmn-popout-footer">' +
+              '<div style="display:flex; align-items:center; gap:8px;">' +
+                '<span style="color:#34d399;">💡</span>' +
+                '<span><strong>Ziehen</strong> zum Verschieben · <strong>Mausrad</strong> Scrollen / <strong>Ctrl+Rad</strong> Zoomen · <strong>Klick auf Tasks &amp; Lanes</strong> fokussiert Systeme &amp; animiert HITL-Clients</span>' +
+              '</div>' +
+              '<div class="plantuml-resize-indicator" style="color:#34d399;" title="Größe anpassen (unten rechts ziehen)">⤡ Resize</div>' +
+            '</div>';
+
+          modal.addEventListener('mousedown', () => {
+            activeBpmnProcId = proc.id;
+            if (typeof popoutZIndexCounter === 'number') {
+              popoutZIndexCounter++;
+              modal.style.zIndex = popoutZIndexCounter;
+            }
+          });
+
+          // Header Drag
+          const header = modal.querySelector('.bpmn-popout-header');
+          let isHeaderDragging = false;
+          let dragStartX, dragStartY, initLeft, initTop;
+
+          header.addEventListener('mousedown', (e) => {
+            if (e.target.closest('button')) return;
+            if (modal.classList.contains('is-fullscreen')) return;
+
+            isHeaderDragging = true;
+            dragStartX = e.clientX;
+            dragStartY = e.clientY;
+            initLeft = modal.offsetLeft;
+            initTop = modal.offsetTop;
+            document.body.style.userSelect = 'none';
+
+            activeBpmnProcId = proc.id;
+            if (typeof popoutZIndexCounter === 'number') {
+              popoutZIndexCounter++;
+              modal.style.zIndex = popoutZIndexCounter;
+            }
+          });
+
+          const onHeaderMouseMove = (e) => {
+            if (!isHeaderDragging) return;
+            const dx = e.clientX - dragStartX;
+            const dy = e.clientY - dragStartY;
+            const newLeft = Math.max(10, Math.min(window.innerWidth - 120, initLeft + dx));
+            const newTop = Math.max(10, Math.min(window.innerHeight - 60, initTop + dy));
+            modal.style.left = newLeft + 'px';
+            modal.style.top = newTop + 'px';
+            modal.style.right = 'auto';
+            modal.style.bottom = 'auto';
+          };
+
+          const onHeaderMouseUp = () => {
+            if (isHeaderDragging) {
+              isHeaderDragging = false;
+              document.body.style.userSelect = 'auto';
+            }
+          };
+
+          window.addEventListener('mousemove', onHeaderMouseMove);
+          window.addEventListener('mouseup', onHeaderMouseUp);
+
+          // SVG Pan & Zoom
+          const svgContainer = modal.querySelector('.bpmn-svg-container');
+          let isCanvasPanning = false;
+          let panStartX = 0, panStartY = 0;
+          let origPanX = 0, origPanY = 0;
+
+          const onContainerMouseDown = (e) => {
+            if (e.button !== 0) return;
+            if (e.target.closest('button') || e.target.closest('input') || e.target.closest('pre')) return;
+
+            isCanvasPanning = true;
+            record.justDragged = false;
+            panStartX = e.clientX;
+            panStartY = e.clientY;
+            origPanX = record.panX || 0;
+            origPanY = record.panY || 0;
+            svgContainer.style.cursor = 'grabbing';
+            e.preventDefault();
+          };
+
+          const onWindowCanvasMouseMove = (e) => {
+            if (!isCanvasPanning) return;
+            const dx = e.clientX - panStartX;
+            const dy = e.clientY - panStartY;
+            if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
+              record.justDragged = true;
+            }
+            record.panX = origPanX + dx;
+            record.panY = origPanY + dy;
+            window.updateBpmnTransform(record, false);
+          };
+
+          const onWindowCanvasMouseUp = () => {
+            if (isCanvasPanning) {
+              isCanvasPanning = false;
+              svgContainer.style.cursor = 'grab';
+              setTimeout(() => {
+                if (record) record.justDragged = false;
+              }, 60);
+            }
+          };
+
+          const onContainerWheel = (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const rect = svgContainer.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+
+            if (e.ctrlKey || e.metaKey) {
+              const zoomDelta = e.deltaY < 0 ? 0.15 : -0.15;
+              const oldZoom = record.zoom || 1.0;
+              const newZoom = Math.max(0.2, Math.min(4.0, Math.round((oldZoom + zoomDelta) * 100) / 100));
+              if (newZoom !== oldZoom) {
+                const ratio = newZoom / oldZoom;
+                record.panX = Math.round(mouseX - (mouseX - (record.panX || 0)) * ratio);
+                record.panY = Math.round(mouseY - (mouseY - (record.panY || 0)) * ratio);
+                record.zoom = newZoom;
+                window.updateBpmnTransform(record, false);
+              }
+            } else if (e.shiftKey || Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+              const delta = e.deltaX !== 0 ? e.deltaX : e.deltaY;
+              record.panX -= delta;
+              window.updateBpmnTransform(record, false);
+            } else {
+              record.panY -= e.deltaY;
+              window.updateBpmnTransform(record, false);
+            }
+          };
+
+          svgContainer.addEventListener('mousedown', onContainerMouseDown);
+          window.addEventListener('mousemove', onWindowCanvasMouseMove);
+          window.addEventListener('mouseup', onWindowCanvasMouseUp);
+          svgContainer.addEventListener('wheel', onContainerWheel, { passive: false });
+
+          // Interactive click delegation on BPMN SVG elements
+          svgContainer.addEventListener('click', (e) => {
+            if (record && record.justDragged) {
+              record.justDragged = false;
+              e.preventDefault();
+              e.stopPropagation();
+              return;
+            }
+
+            const hitShape = e.target.closest('[data-element-id]');
+            if (!hitShape) return;
+            const elemId = hitShape.getAttribute('data-element-id');
+            const metaMap = bpmnElementMetaMap.get(proc.id);
+            const meta = metaMap ? metaMap.get(elemId) : null;
+
+            e.preventDefault();
+            e.stopPropagation();
+
+            if (meta) {
+              if (meta.type === 'client') {
+                if (meta.clientId && typeof window.locateClientOnCanvas === 'function') {
+                  window.locateClientOnCanvas(meta.clientId);
+                }
+                if (meta.actorId && typeof window.locateRoleOnCanvas === 'function') {
+                  window.locateRoleOnCanvas(meta.actorId);
+                } else if (meta.actorId && typeof window.selectHitlRole === 'function') {
+                  window.selectHitlRole(meta.actorId);
+                }
+              } else if (meta.type === 'actor') {
+                if (meta.clientId && typeof window.locateClientOnCanvas === 'function') {
+                  window.locateClientOnCanvas(meta.clientId);
+                }
+                if (meta.actorId && typeof window.selectHitlRole === 'function') {
+                  window.selectHitlRole(meta.actorId);
+                }
+              } else if (meta.type === 'step') {
+                if (meta.connId) {
+                  const conn = (typeof CONNECTIONS_DATA !== 'undefined' ? CONNECTIONS_DATA : []).find(c => c.id === meta.connId);
+                  if (conn && typeof selectEdge === 'function') {
+                    const rect = hitShape.getBoundingClientRect();
+                    selectEdge(conn, rect.left + rect.width / 2, rect.top + rect.height / 2);
+                  }
+                }
+                if (meta.integId) {
+                  const integ = (typeof INTEGRATIONS_DATA !== 'undefined' ? INTEGRATIONS_DATA : []).find(i => i.id === meta.integId);
+                  if (integ && typeof setDrilldownIntegration === 'function') {
+                    setDrilldownIntegration(integ);
+                  }
+                }
+                if (typeof window.showCrudToast === 'function') {
+                  window.showCrudToast('⚡ BPMN Task: ' + (meta.desc || elemId) + ' fokussiert');
+                }
+              } else if (meta.type === 'end') {
+                if (typeof window.restartProcessTokenFlow === 'function') {
+                  window.restartProcessTokenFlow();
+                }
+              }
+            } else {
+              if (elemId.includes('Lane_Actor')) {
+                if (mappedActors.length > 0 && typeof window.selectHitlRole === 'function') {
+                  window.selectHitlRole(mappedActors[0].id);
+                }
+              }
+            }
+          });
+
+          record = {
+            procId: proc.id,
+            modal: modal,
+            zoom: 1.0,
+            panX: 0,
+            panY: 0,
+            justDragged: false,
+            svgText: '',
+            savedBounds: null,
+            cleanup: () => {
+              window.removeEventListener('mousemove', onHeaderMouseMove);
+              window.removeEventListener('mouseup', onHeaderMouseUp);
+              window.removeEventListener('mousemove', onWindowCanvasMouseMove);
+              window.removeEventListener('mouseup', onWindowCanvasMouseUp);
+              svgContainer.removeEventListener('mousedown', onContainerMouseDown);
+              svgContainer.removeEventListener('wheel', onContainerWheel);
+            }
+          };
+
+          openBpmnPopouts.set(proc.id, record);
+          popoutsContainer.appendChild(modal);
+        }
+
+        // Fetch & render BPMN SVG via Kroki
+        const spinner = modal.querySelector('.bpmn-loading-spinner');
+        const container = modal.querySelector('.bpmn-svg-container');
+        const fallback = modal.querySelector('.bpmn-error-fallback');
+
+        if (spinner) spinner.style.display = 'flex';
+        if (fallback) fallback.style.display = 'none';
+
+        const bpmnXml = proc.bpmnXml || window.generateBpmnXmlFromProcess(proc);
+
+        try {
+          const encoded = await window.encodeKroki(bpmnXml);
+          if (!encoded) throw new Error('BPMN Encoding fehlgeschlagen');
+
+          const krokiUrl = 'https://kroki.io/bpmn/svg/' + encoded;
+          const res = await fetch(krokiUrl);
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+
+          const svgText = await res.text();
+          record.svgText = svgText;
+
+          if (spinner) spinner.style.display = 'none';
+          if (container) {
+            container.innerHTML = 
+              '<div class="bpmn-svg-wrapper" style="position:absolute; left:0; top:0; transform-origin:0 0; will-change:transform; background:#ffffff; border-radius:8px; padding:24px; box-shadow:0 12px 40px rgba(0,0,0,0.6); display:inline-block; width:max-content; max-width:none;">' + 
+                svgText + 
+              '</div>';
+
+            const svgEl = container.querySelector('svg');
+            if (svgEl) {
+              svgEl.style.display = 'block';
+              svgEl.style.maxWidth = 'none';
+              svgEl.style.maxHeight = 'none';
+            }
+
+            record.panX = 32;
+            record.panY = 28;
+            record.zoom = 1.0;
+            window.updateBpmnTransform(record, false);
+          }
+        } catch (err) {
+          console.error('Failed to load BPMN SVG from Kroki:', err);
+          if (spinner) spinner.style.display = 'none';
+          if (container) container.innerHTML = '';
+          if (fallback) {
+            fallback.style.display = 'block';
+            fallback.innerHTML = 
+              '<div style="margin-bottom:12px; font-size:1.1rem; color:#f87171;">⚠️ BPMN-Diagramm konnte nicht gerendert werden</div>' +
+              '<div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:14px;">' + esc(err.message || 'Kroki-Service nicht erreichbar.') + '</div>' +
+              '<div style="display:flex; justify-content:flex-end; gap:6px; margin-bottom:8px;">' +
+                '<button class="insp-action-btn" onclick="window.copyBpmnXml(\'' + proc.id + '\')">📋 XML kopieren</button>' +
+                '<button class="insp-action-btn" onclick="window.downloadBpmnFile(\'' + proc.id + '\')">💾 .bpmn Download</button>' +
+              '</div>' +
+              '<pre style="text-align:left; background:rgba(0,0,0,0.5); padding:14px; border-radius:6px; font-family:\'JetBrains Mono\', monospace; color:#34d399; font-size:0.75rem; max-height:420px; overflow-y:auto; white-space:pre-wrap; border:1px solid rgba(255,255,255,0.08);">' +
+                bpmnXml.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') +
+              '</pre>';
+          }
+        }
+
+        return modal;
+      };
+
+      window.closeBpmnModal = function(procId) {
+        if (procId && openBpmnPopouts.has(procId)) {
+          const entry = openBpmnPopouts.get(procId);
+          if (entry.cleanup) entry.cleanup();
+          if (entry.modal && entry.modal.parentNode) entry.modal.remove();
+          openBpmnPopouts.delete(procId);
+          return;
+        }
+
+        let topEntry = null;
+        let maxZ = -1;
+        openBpmnPopouts.forEach(entry => {
+          const z = parseInt(entry.modal.style.zIndex || '0', 10);
+          if (z > maxZ) {
+            maxZ = z;
+            topEntry = entry;
+          }
+        });
+        if (topEntry) {
+          if (topEntry.cleanup) topEntry.cleanup();
+          if (topEntry.modal && topEntry.modal.parentNode) topEntry.modal.remove();
+          openBpmnPopouts.delete(topEntry.procId);
+        }
+      };
+
+      window.closeAllBpmnModals = function() {
+        openBpmnPopouts.forEach(entry => {
+          if (entry.cleanup) entry.cleanup();
+          if (entry.modal && entry.modal.parentNode) entry.modal.remove();
+        });
+        openBpmnPopouts.clear();
+      };
+
+      window.restoreBpmnCallingContext = function(procId) {
+        const pid = procId || activeBpmnProcId || Array.from(openBpmnPopouts.keys()).pop();
+        if (!pid) return;
+        const proc = (typeof PROCESSES_DATA !== 'undefined' ? PROCESSES_DATA : []).find(p => p.id === pid);
+        if (!proc) return;
+
+        if (typeof window.restoreCallingProcessContext === 'function') {
+          window.restoreCallingProcessContext(pid);
+        }
+
+        if (typeof window.showCrudToast === 'function') {
+          window.showCrudToast('📍 Aufrufumgebung für ' + proc.id + ' (' + proc.name + ') wiederhergestellt!');
+        }
+      };
+
+      window.copyBpmnXml = function(procId) {
+        const proc = (typeof PROCESSES_DATA !== 'undefined' ? PROCESSES_DATA : []).find(p => p.id === procId);
+        if (!proc) return;
+        const xml = proc.bpmnXml || window.generateBpmnXmlFromProcess(proc);
+        navigator.clipboard.writeText(xml).then(() => {
+          if (typeof window.showCrudToast === 'function') {
+            window.showCrudToast('📋 BPMN 2.0 XML für ' + procId + ' in die Zwischenablage kopiert!');
+          }
+        }).catch(() => {
+          prompt('BPMN 2.0 XML:', xml);
+        });
+      };
+
+      window.downloadBpmnFile = function(procId) {
+        const proc = (typeof PROCESSES_DATA !== 'undefined' ? PROCESSES_DATA : []).find(p => p.id === procId);
+        if (!proc) return;
+        const xml = proc.bpmnXml || window.generateBpmnXmlFromProcess(proc);
+        const blob = new Blob([xml], { type: 'application/xml;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = proc.id + '_workflow.bpmn';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        if (typeof window.showCrudToast === 'function') {
+          window.showCrudToast('💾 ' + proc.id + '_workflow.bpmn heruntergeladen!');
+        }
+      };
+
+      window.downloadBpmnSvg = function(procId) {
+        const pid = procId || activeBpmnProcId || Array.from(openBpmnPopouts.keys()).pop();
+        const entry = openBpmnPopouts.get(pid);
+        if (!entry || !entry.svgText) {
+          alert('Keine SVG-Grafik zum Herunterladen verfügbar.');
+          return;
+        }
+        const blob = new Blob([entry.svgText], { type: 'image/svg+xml;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = (pid || 'bpmn_diagram') + '_bpmn2.svg';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      };
+
+      window.openBpmnIoEditor = function(procId) {
+        const proc = (typeof PROCESSES_DATA !== 'undefined' ? PROCESSES_DATA : []).find(p => p.id === procId);
+        if (!proc) return;
+        const xml = proc.bpmnXml || window.generateBpmnXmlFromProcess(proc);
+        navigator.clipboard.writeText(xml).then(() => {
+          if (typeof window.showCrudToast === 'function') {
+            window.showCrudToast('📋 BPMN XML kopiert! In bpmn.io Strg+V drücken zum Einfügen.');
+          }
+        });
+        window.open('https://demo.bpmn.io/', '_blank');
+      };
+
+      window.regenerateBpmnForProcess = function(procId) {
+        const proc = (typeof PROCESSES_DATA !== 'undefined' ? PROCESSES_DATA : []).find(p => p.id === procId);
+        if (!proc) return;
+        const generated = window.generateBpmnXmlFromProcess(proc);
+        proc.bpmnXml = generated;
+        if (typeof window.showCrudToast === 'function') {
+          window.showCrudToast('🔄 BPMN 2.0 für ' + procId + ' neu generiert!');
+        }
+        if (typeof renderInspectorProcess === 'function') {
+          renderInspectorProcess(proc);
+        }
+        if (openBpmnPopouts.has(procId)) {
+          window.openBpmnModal(procId, true);
+        }
+      };
+
+      window.zoomBpmn = function(procId, delta) {
+        let pid = procId;
+        let d = delta;
+        if (typeof procId === 'number') {
+          d = procId;
+          pid = activeBpmnProcId || Array.from(openBpmnPopouts.keys()).pop();
+        }
+        const entry = openBpmnPopouts.get(pid);
+        if (!entry || !entry.modal) return;
+        const container = entry.modal.querySelector('.bpmn-svg-container');
+        const oldZoom = entry.zoom || 1.0;
+        const newZoom = Math.max(0.2, Math.min(4.0, Math.round((oldZoom + d) * 100) / 100));
+
+        if (container) {
+          const rect = container.getBoundingClientRect();
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+          const ratio = newZoom / oldZoom;
+          entry.panX = Math.round(centerX - (centerX - (entry.panX || 0)) * ratio);
+          entry.panY = Math.round(centerY - (centerY - (entry.panY || 0)) * ratio);
+        }
+
+        entry.zoom = newZoom;
+        window.updateBpmnTransform(entry, true);
+      };
+
+      window.resetBpmnZoom = function(procId) {
+        const pid = procId || activeBpmnProcId || Array.from(openBpmnPopouts.keys()).pop();
+        const entry = openBpmnPopouts.get(pid);
+        if (!entry || !entry.modal) return;
+        const container = entry.modal.querySelector('.bpmn-svg-container');
+        const wrapper = entry.modal.querySelector('.bpmn-svg-wrapper');
+        const oldZoom = entry.zoom || 1.0;
+        const newZoom = 1.0;
+
+        if (container && wrapper) {
+          const rect = container.getBoundingClientRect();
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+          const ratio = newZoom / oldZoom;
+          entry.panX = Math.round(centerX - (centerX - (entry.panX || 0)) * ratio);
+          entry.panY = Math.round(centerY - (centerY - (entry.panY || 0)) * ratio);
+        } else {
+          entry.panX = 32;
+          entry.panY = 28;
+        }
+
+        entry.zoom = newZoom;
+        window.updateBpmnTransform(entry, true);
+      };
+
+      window.fitBpmn = function(procId) {
+        const pid = procId || activeBpmnProcId || Array.from(openBpmnPopouts.keys()).pop();
+        const entry = openBpmnPopouts.get(pid);
+        if (!entry || !entry.modal) return;
+        const container = entry.modal.querySelector('.bpmn-svg-container');
+        const wrapper = entry.modal.querySelector('.bpmn-svg-wrapper');
+        if (!container || !wrapper) return;
+
+        const contW = container.clientWidth - 48;
+        const contH = container.clientHeight - 48;
+        const wrapW = wrapper.scrollWidth || wrapper.offsetWidth;
+        const wrapH = wrapper.scrollHeight || wrapper.offsetHeight;
+
+        if (wrapW > 0 && wrapH > 0) {
+          const scaleW = contW / wrapW;
+          const scaleH = contH / wrapH;
+          const fitZoom = Math.max(0.2, Math.min(2.0, Math.min(scaleW, scaleH)));
+          entry.zoom = Math.round(fitZoom * 100) / 100;
+          entry.panX = Math.max(24, Math.round((container.clientWidth - wrapW * entry.zoom) / 2));
+          entry.panY = Math.max(24, Math.round((container.clientHeight - wrapH * entry.zoom) / 2));
+          window.updateBpmnTransform(entry, true);
+        }
+      };
+
+      window.jumpToBpmnStart = function(procId) {
+        const pid = procId || activeBpmnProcId || Array.from(openBpmnPopouts.keys()).pop();
+        const entry = openBpmnPopouts.get(pid);
+        if (!entry || !entry.modal) return;
+        entry.panX = 32;
+        window.updateBpmnTransform(entry, true);
+      };
+
 </script>
 
   <!-- =====================================================================
@@ -39497,6 +40642,7 @@
        PLANTUML SEQUENCE DIAGRAM FLOATING POPOUTS (DYNAMIC MULTI-WINDOW CONTAINER)
        ===================================================================== -->
   <div id="plantUmlPopoutsContainer"></div>
+    <div id="bpmnPopoutsContainer"></div>
   <div id="hitlClientFloatingTooltip"></div>
 </body>
 </html>
