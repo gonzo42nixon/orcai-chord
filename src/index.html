@@ -23924,7 +23924,7 @@
       ],
       "apqc": "8.0 Krankenhausabrechnung & GKV-Clearing § 301",
       "desc": "Klinische Leistungserfassung in MEDICO, Übernahme in SAP S/4HANA Finance und DTA § 301 EDIFACT-Abrechnung an Krankenkassen.",
-      "plantUml": "@startuml\ntitle JSD-P-07: Stationaere DRG-Abrechnung & GKV-Clearing § 301\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"Medizincontrolling & KIS\" #e0f2fe\nactor \"Medizincontroller\" as Controller\nparticipant \"[[#sys-JSD-08 JSD-08: CGM MEDICO KIS]]\" as KIS\nend box\n\nbox \"Enterprise Integration & Finance\" #fef3c7\nparticipant \"[[#sys-JSD-04 JSD-04: SAP CPI]]\" as CPI\nparticipant \"[[#sys-JSD-01 JSD-01: SAP S/4HANA]]\" as S4H\nend box\n\nbox \"Kostentraeger & Clearing\" #dcfce7\nparticipant \"[[#sys-JSD-30 JSD-30: GKV Clearing DTA]]\" as GKV\nactor \"Gesetzliche Krankenkasse\" as Payer\nend box\n\nController -> KIS: DRG-Kodierung & Fallabschluss\nactivate KIS\n== [[#integ-JSD-INT-13 JSD-INT-13: KIS Falldaten ➔ SAP S/4HANA]] ==\nKIS -> CPI: [[#conn-JSD-C-26 Falldaten an SAP CPI (HTTPS REST)]]\nactivate CPI\nCPI -> S4H: [[#conn-JSD-C-22 Buchungsbeleg in SAP S/4HANA (OData / RFC)]]\nactivate S4H\ndeactivate KIS\nS4H -> S4H: Debitorenbuchung & § 301 EDIFACT Generierung\n\n== [[#integ-JSD-INT-14 JSD-INT-14: DTA § 301 DRG-Schlussrechnung]] ==\nS4H -> GKV: [[#conn-JSD-C-27 DTA § 301 Daten an GKV Clearing (FTAM / AS2)]]\nactivate GKV\ndeactivate S4H\nGKV -> Payer: Rechnungsweiterleitung & Kostengutsprache\nPayer --> GKV: Zahlungsavis\nGKV --> S4H: Elektronischer Zahlungsavis (EDIFACT)\ndeactivate GKV\ndeactivate CPI\n@enduml"
+      "plantUml": "@startuml\ntitle JSD-P-07: Stationaere DRG-Abrechnung & GKV-Clearing § 301\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"Medizincontrolling & KIS\" #e0f2fe\nactor \"Krankenhaus-Abrechner & Controller\" as Controller\nparticipant \"[[#sys-JSD-08 JSD-08: CGM MEDICO KIS]]\" as KIS\nend box\n\nbox \"Enterprise Integration & Finance\" #fef3c7\nparticipant \"[[#sys-JSD-04 JSD-04: SAP CPI]]\" as CPI\nparticipant \"[[#sys-JSD-01 JSD-01: SAP S/4HANA]]\" as S4H\nend box\n\nbox \"Kostentraeger & Clearing\" #dcfce7\nparticipant \"[[#sys-JSD-30 JSD-30: GKV Clearing DTA]]\" as GKV\nactor \"Gesetzliche Krankenkasse\" as Payer\nend box\n\nController -> KIS: DRG-Kodierung & Fallabschluss\nactivate KIS\n== [[#integ-JSD-INT-13 JSD-INT-13: KIS Falldaten ➔ SAP S/4HANA]] ==\nKIS -> CPI: [[#conn-JSD-C-26 Falldaten an SAP CPI (HTTPS REST)]]\nactivate CPI\nCPI -> S4H: [[#conn-JSD-C-22 Buchungsbeleg in SAP S/4HANA (OData / RFC)]]\nactivate S4H\ndeactivate KIS\nS4H -> S4H: Debitorenbuchung & § 301 EDIFACT Generierung\n\n== [[#integ-JSD-INT-14 JSD-INT-14: DTA § 301 DRG-Schlussrechnung]] ==\nS4H -> GKV: [[#conn-JSD-C-27 DTA § 301 Daten an GKV Clearing (FTAM / AS2)]]\nactivate GKV\ndeactivate S4H\nGKV -> Payer: Rechnungsweiterleitung & Kostengutsprache\nPayer --> GKV: Zahlungsavis\nGKV --> S4H: Elektronischer Zahlungsavis (EDIFACT)\ndeactivate GKV\ndeactivate CPI\n@enduml"
     },
     {
       "id": "JSD-P-08",
@@ -23940,7 +23940,7 @@
       ],
       "apqc": "10.0 Einkauf, Materialwirtschaft & GHX B2B-Clearing",
       "desc": "Zentralisierter Einkauf durch JSD Services GmbH, elektronische Bestellungen via GHX Exchange und Peppol XRechnung.",
-      "plantUml": "@startuml\ntitle JSD-P-08: JSD Einkauf, Materialwirtschaft & GHX B2B-Clearing\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"JSD Zentraleinkauf\" #e0f2fe\nactor \"Einkaeufer / Logistik\" as Buyer\nparticipant \"[[#sys-JSD-01 JSD-01: SAP S/4HANA]]\" as S4H\nend box\n\nbox \"B2B Medical Exchange & EDI\" #fef3c7\nparticipant \"[[#sys-JSD-24 JSD-24: GHX Medical Exchange]]\" as GHX\nparticipant \"[[#sys-JSD-25 JSD-25: OpenPeppol Access Point]]\" as Peppol\nend box\n\nbox \"Hybrid Integration Hub\" #dcfce7\nparticipant \"[[#sys-JSD-04 JSD-04: SAP CPI]]\" as CPI\nactor \"Medizintechnik-Lieferant\" as Vendor\nend box\n\nBuyer -> S4H: Bestellbanf generieren & freigeben\nactivate S4H\n== [[#integ-JSD-INT-15 JSD-INT-15: JSD Einkauf ➔ GHX Exchange]] ==\nS4H -> GHX: [[#conn-JSD-C-23 Bestellung an GHX Exchange (cXML / EDIFACT)]]\nactivate GHX\nGHX -> Vendor: Purchase Order Routing\nVendor --> GHX: Order Confirmation & Lieferavis\nGHX --> S4H: Auftragsbestaetigung verbucht\ndeactivate GHX\ndeactivate S4H\n\n== [[#integ-JSD-INT-16 JSD-INT-16: Rechnungen OpenPeppol ➔ SAP]] ==\nVendor -> Peppol: XRechnung elektronisch einreichen\nactivate Peppol\nPeppol -> CPI: [[#conn-JSD-C-24 XRechnung an SAP CPI (AS4 Peppol)]]\nactivate CPI\nCPI -> S4H: [[#conn-JSD-C-25 Kontierung in SAP S/4HANA (OData / IDoc)]]\nactivate S4H\nS4H --> CPI: Buchungsbeleg & Rechnungsfreigabe\ndeactivate S4H\ndeactivate CPI\ndeactivate Peppol\n@enduml"
+      "plantUml": "@startuml\ntitle JSD-P-08: JSD Einkauf, Materialwirtschaft & GHX B2B-Clearing\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"JSD Zentraleinkauf\" #e0f2fe\nactor \"Einkäufer & Logistik\" as Buyer\nparticipant \"[[#sys-JSD-01 JSD-01: SAP S/4HANA]]\" as S4H\nend box\n\nbox \"B2B Medical Exchange & EDI\" #fef3c7\nparticipant \"[[#sys-JSD-24 JSD-24: GHX Medical Exchange]]\" as GHX\nparticipant \"[[#sys-JSD-25 JSD-25: OpenPeppol Access Point]]\" as Peppol\nend box\n\nbox \"Hybrid Integration Hub\" #dcfce7\nparticipant \"[[#sys-JSD-04 JSD-04: SAP CPI]]\" as CPI\nactor \"Medizinprodukt- & Logistik-Lieferant\" as Vendor\nend box\n\nBuyer -> S4H: Bestellbanf generieren & freigeben\nactivate S4H\n== [[#integ-JSD-INT-15 JSD-INT-15: JSD Einkauf ➔ GHX Exchange]] ==\nS4H -> GHX: [[#conn-JSD-C-23 Bestellung an GHX Exchange (cXML / EDIFACT)]]\nactivate GHX\nGHX -> Vendor: Purchase Order Routing\nVendor --> GHX: Order Confirmation & Lieferavis\nGHX --> S4H: Auftragsbestaetigung verbucht\ndeactivate GHX\ndeactivate S4H\n\n== [[#integ-JSD-INT-16 JSD-INT-16: Rechnungen OpenPeppol ➔ SAP]] ==\nVendor -> Peppol: XRechnung elektronisch einreichen\nactivate Peppol\nPeppol -> CPI: [[#conn-JSD-C-24 XRechnung an SAP CPI (AS4 Peppol)]]\nactivate CPI\nCPI -> S4H: [[#conn-JSD-C-25 Kontierung in SAP S/4HANA (OData / IDoc)]]\nactivate S4H\nS4H --> CPI: Buchungsbeleg & Rechnungsfreigabe\ndeactivate S4H\ndeactivate CPI\ndeactivate Peppol\n@enduml"
     }
   ],
   "integrations": [
@@ -26071,7 +26071,7 @@
       ],
       "connections": ["JSD-C-19"],
       "integrations": ["JSD-INT-08"],
-      "processes": ["JSD-P-05"]
+      "processes": ["JSD-P-04"]
     },
     {
       "id": "JSD-ACT-03",
@@ -26144,9 +26144,9 @@
           "messagesEmitted": ["DTA § 301 Rechnungsdaten", "ID DIACOS DRG-Kodierung OData"]
         }
       ],
-      "connections": ["JSD-C-21", "JSD-C-22"],
-      "integrations": ["JSD-INT-09"],
-      "processes": ["JSD-P-06"]
+      "connections": ["JSD-C-22", "JSD-C-27"],
+      "integrations": ["JSD-INT-13", "JSD-INT-14"],
+      "processes": ["JSD-P-07"]
     },
     {
       "id": "JSD-ACT-06",
@@ -26169,9 +26169,9 @@
           "messagesEmitted": ["FHIR QuestionnaireResponse", "eTermin Buchungsbestätigung"]
         }
       ],
-      "connections": ["JSD-C-17", "JSD-C-18"],
-      "integrations": ["JSD-INT-07"],
-      "processes": ["JSD-P-04"]
+      "connections": ["JSD-C-28", "JSD-C-29"],
+      "integrations": ["JSD-INT-09", "JSD-INT-10"],
+      "processes": ["JSD-P-05"]
     },
     {
       "id": "JSD-ACT-07",
@@ -26194,9 +26194,9 @@
           "messagesEmitted": ["Peppol BIS OrderResponse", "EDIFACT DESADV Lieferschein"]
         }
       ],
-      "connections": ["JSD-C-25"],
-      "integrations": ["JSD-INT-11"],
-      "processes": ["JSD-P-07"]
+      "connections": ["JSD-C-23", "JSD-C-24"],
+      "integrations": ["JSD-INT-15", "JSD-INT-16"],
+      "processes": ["JSD-P-08"]
     },
     {
       "id": "JSD-ACT-08",
@@ -26215,13 +26215,38 @@
           "deviceType": "GATEWAY_CLIENT",
           "os": "B2B Gateway / Hardware Konnektor",
           "authMethod": "KV-Zertifikat & VPN IPSec",
-          "targetSystemId": "JSD-04",
+          "targetSystemId": "JSD-30",
           "messagesEmitted": ["KVDT Prüfprotokoll", "DTA § 301 Abrechnungsbestätigung"]
         }
       ],
-      "connections": ["JSD-C-22"],
-      "integrations": ["JSD-INT-09"],
-      "processes": ["JSD-P-06"]
+      "connections": ["JSD-C-27"],
+      "integrations": ["JSD-INT-14"],
+      "processes": ["JSD-P-07"]
+    },
+    {
+      "id": "JSD-ACT-09",
+      "quadrant": "LT",
+      "scope": "INTERNAL",
+      "name": "Einkäufer & Logistik",
+      "archetype": "Beschaffung, Einkauf & Materialwirtschaft",
+      "avatar": "🛒",
+      "industryContext": "Zentraler Einkauf & Logistiksteuerung",
+      "hitlType": "BUYER_AND_MATERIAL_MANAGER",
+      "hitlSummary": "Generiert und autorisiert Bestellanforderungen (Banf), überwacht Lieferavise und disponiert Material über das SAP S/4HANA Cloud Sourcing & Procurement Modul.",
+      "clients": [
+        {
+          "id": "JSD-CL-09",
+          "name": "SAP S/4HANA Sourcing & Procurement Client",
+          "deviceType": "WEB_PORTAL",
+          "os": "Web Browser (Chrome/Edge / HTTPS)",
+          "authMethod": "SSO (SAML 2.0 via Entra ID)",
+          "targetSystemId": "JSD-01",
+          "messagesEmitted": ["Banf Freigabe OData", "Bestellbeleg cXML/EDIFACT"]
+        }
+      ],
+      "connections": ["JSD-C-23", "JSD-C-24", "JSD-C-25"],
+      "integrations": ["JSD-INT-15", "JSD-INT-16"],
+      "processes": ["JSD-P-08"]
     }
   ]
 };
@@ -34848,7 +34873,7 @@
         // Add Actors first if mapped
         mappedActors.forEach(act => {
           const actAlias = act.id.replace(/[^a-zA-Z0-9]/g, '_');
-          const cleanName = (act.name || act.id).replace(/"/g, "'").slice(0, 32);
+          const cleanName = (act.name || act.id).replace(/"/g, "'").slice(0, 80);
           puml += 'actor "' + cleanName + '" as ' + actAlias + '\n';
         });
 
@@ -34860,7 +34885,7 @@
               const clAlias = (cl.id || (act.id + '_CL')).replace(/[^a-zA-Z0-9]/g, '_');
               if (!clientAliasSet.has(clAlias)) {
                 clientAliasSet.add(clAlias);
-                const cleanClientName = (cl.name || cl.id).replace(/"/g, "'").slice(0, 32);
+                const cleanClientName = (cl.name || cl.id).replace(/"/g, "'").slice(0, 80);
                 const clientIcon = (cl.deviceType === 'WEB_PORTAL' ? '🌐 ' : (cl.deviceType === 'TABLET_MOBILE' ? '📱 ' : '💻 '));
                 puml += 'participant "[[' + '#client-' + (cl.id || clAlias) + ' ' + clientIcon + cleanClientName + ' (UI)]]" as ' + clAlias + '\n';
               }
@@ -34869,7 +34894,7 @@
         });
 
         sysMap.forEach((sys, sysId) => {
-          const cleanName = sys ? (sys.name || '').replace(/"/g, "'").slice(0, 30) : sysId;
+          const cleanName = sys ? (sys.name || '').replace(/"/g, "'").slice(0, 80) : sysId;
           const safeAlias = sysId.replace(/[^a-zA-Z0-9]/g, '_');
           puml += 'participant "[[' + '#sys-' + sysId + ' ' + sysId + ': ' + cleanName + ']]" as ' + safeAlias + '\n';
         });
