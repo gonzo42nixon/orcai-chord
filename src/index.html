@@ -3357,6 +3357,65 @@
       gap: 6px !important;
     }
 
+    /* APQC PCF EXPLORER STYLES */
+    .apqc-cat-card {
+      background: var(--item-bg) !important;
+      border: 1px solid var(--card-border) !important;
+      border-radius: 8px !important;
+      padding: 10px 12px !important;
+      margin-bottom: 8px !important;
+      transition: all 0.2s ease !important;
+    }
+    .apqc-cat-card:hover {
+      border-color: rgba(56, 189, 248, 0.4) !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+    }
+    .apqc-cat-card.active-apqc-highlight {
+      border-color: var(--accent) !important;
+      background: rgba(56, 189, 248, 0.08) !important;
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.25) !important;
+    }
+    .apqc-code-badge {
+      display: inline-flex !important;
+      align-items: center !important;
+      padding: 2px 7px !important;
+      border-radius: 4px !important;
+      background: rgba(56, 189, 248, 0.2) !important;
+      color: var(--accent) !important;
+      font-weight: 800 !important;
+      font-size: 0.75rem !important;
+      border: 1px solid rgba(56, 189, 248, 0.4) !important;
+    }
+    .apqc-proc-chip {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+      padding: 4px 9px !important;
+      border-radius: 5px !important;
+      background: rgba(255, 255, 255, 0.06) !important;
+      border: 1px solid rgba(255, 255, 255, 0.12) !important;
+      font-size: 0.70rem !important;
+      font-weight: 650 !important;
+      color: var(--text-bright) !important;
+      cursor: pointer !important;
+      transition: all 0.15s ease !important;
+    }
+    .apqc-proc-chip:hover {
+      background: rgba(56, 189, 248, 0.18) !important;
+      border-color: var(--accent) !important;
+      color: var(--text-bright) !important;
+      transform: translateY(-1px) !important;
+    }
+    body.theme-day .apqc-proc-chip {
+      background: #f1f5f9 !important;
+      border-color: #cbd5e1 !important;
+      color: #0f172a !important;
+    }
+    body.theme-day .apqc-proc-chip:hover {
+      background: #e0f2fe !important;
+      border-color: #0284c7 !important;
+    }
+
     /* MODEL CATALOGUE CARDS */
     .model-catalog-card {
       background: var(--item-bg) !important;
@@ -17136,6 +17195,7 @@
   {
     "id": "PROC-09",
     "name": "Sektorübergreifendes Entlassmanagement & KHZG-Patientenreise",
+    "apqc": "4.1 Sektorübergreifendes Entlassmanagement & KHZG",
     "leadDomain": "D2",
     "participatingDomains": [
       "D2",
@@ -17172,6 +17232,7 @@
   {
     "id": "PROC-10",
     "name": "Krankentransport-Disposition & Transportschein-Abrechnung (§ 60 SGB V)",
+    "apqc": "4.4 Krankentransport-Disposition & Transportschein (§ 60)",
     "leadDomain": "D4",
     "participatingDomains": [
       "D4",
@@ -17200,6 +17261,7 @@
   {
     "id": "PROC-11",
     "name": "Hausnotruf-Alarmierung mit Smart Key Box & RTW-Ausrückung",
+    "apqc": "4.3 Notrufdienste & Smart Key Box",
     "leadDomain": "D4",
     "participatingDomains": [
       "D4"
@@ -17235,6 +17297,7 @@
   {
     "id": "PROC-12",
     "name": "Closed-Loop Medikationsprozess (Klinik & Krankenhausapotheke)",
+    "apqc": "4.1 Closed-Loop Medikation & AMTS (Klinik)",
     "leadDomain": "D2",
     "participatingDomains": [
       "D2",
@@ -17266,6 +17329,7 @@
   {
     "id": "PROC-13",
     "name": "Erste-Hilfe-Breitenausbildung & DGUV/BG-Kostenerstattung",
+    "apqc": "3.0 Erste-Hilfe-Breitenausbildung & DGUV/BG",
     "leadDomain": "D6",
     "participatingDomains": [
       "D6",
@@ -20151,7 +20215,15 @@
             '<div class="insp-header">' +
               '<div>' +
                 '<div class="insp-title">' + proc.name + '</div>' +
-                '<div class="insp-sub">APQC: ' + (proc.apqc || '') + '</div>' +
+                '<div class="insp-sub" style="display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-top:4px;">' +
+                  (proc.apqc 
+                    ? '<span class="apqc-code-badge" style="cursor:pointer;" onclick="window.openApqcExplorer(\'' + String(proc.apqc).replace(/'/g, "\\'") + '\')" title="Im APQC PCF Explorer öffnen">📋 APQC ' + proc.apqc + '</span>' +
+                      '<button type="button" class="insp-action-btn" style="padding:2px 6px; font-size:0.65rem;" onclick="window.openApqcExplorer(\'' + String(proc.apqc).replace(/'/g, "\\'") + '\')" title="APQC Prozessklassifikation explorieren">⚡ Explorieren</button>' +
+                      '<a href="https://www.apqc.org/pcf" target="_blank" rel="noopener noreferrer" style="font-size:0.65rem; color:var(--accent); text-decoration:none; display:inline-flex; align-items:center; gap:2px;" title="Offizielle APQC PCF Spezifikation auf apqc.org öffnen">apqc.org ↗</a>'
+                    : '<button type="button" class="insp-action-btn" style="padding:2px 6px; font-size:0.65rem;" onclick="window.openApqcExplorer()">📋 APQC Explorer</button>' +
+                      '<a href="https://www.apqc.org/pcf" target="_blank" rel="noopener noreferrer" style="font-size:0.65rem; color:var(--accent); text-decoration:none; display:inline-flex; align-items:center; gap:2px;">apqc.org ↗</a>'
+                  ) +
+                '</div>' +
               '</div>' +
               '<span class="insp-id" style="background:rgba(56,189,248,0.2); color:var(--accent);">' + proc.id + '</span>' +
             '</div>' +
@@ -21135,6 +21207,7 @@
     {
       "id": "KP-01",
       "name": "Notfallaufnahme & Telenotarzt ZNA",
+      "apqc": "4.1 Notfallaufnahme & Telenotarzt (ZNA)",
       "leadDomain": "D4",
       "involvedDomains": [
         "D4",
@@ -21151,6 +21224,7 @@
     {
       "id": "KP-02",
       "name": "Klinische Diagnostik & Zentrallabor",
+      "apqc": "4.2 Klinische Diagnostik & Zentrallabor (LIMS)",
       "leadDomain": "D2",
       "involvedDomains": [
         "D2",
@@ -21165,6 +21239,7 @@
     {
       "id": "KP-03",
       "name": "Radiologie, PACS & KI-Befundung",
+      "apqc": "4.2 Radiologie, PACS & KI-Befundung",
       "leadDomain": "D3",
       "involvedDomains": [
         "D3",
@@ -21179,6 +21254,7 @@
     {
       "id": "KP-04",
       "name": "Intensivüberwachung & Vitaldaten-Analytics",
+      "apqc": "4.1 Intensivüberwachung & Vitaldaten-Analytics",
       "leadDomain": "D2",
       "involvedDomains": [
         "D2",
@@ -21193,6 +21269,7 @@
     {
       "id": "KP-05",
       "name": "Stationäre Abrechnung & GKV § 301 SGB V",
+      "apqc": "8.0 Stationäre Abrechnung & GKV § 301 SGB V",
       "leadDomain": "D1",
       "involvedDomains": [
         "D1",
@@ -21207,6 +21284,7 @@
     {
       "id": "KP-06",
       "name": "Telematik, eArztbrief & KIM",
+      "apqc": "12.0 Telematik, eArztbrief & KIM",
       "leadDomain": "D5",
       "involvedDomains": [
         "D5",
@@ -21221,6 +21299,7 @@
     {
       "id": "KP-07",
       "name": "Patientenportal & KHZG-Entlassmanagement",
+      "apqc": "5.0 Patientenportal & KHZG-Entlassmanagement",
       "leadDomain": "D2",
       "involvedDomains": [
         "D2",
@@ -21236,6 +21315,7 @@
     {
       "id": "KP-08",
       "name": "Medikamentenversorgung & GHX Pharma Exchange",
+      "apqc": "10.0 Einkauf, Materialwirtschaft & GHX Pharma Exchange",
       "leadDomain": "D1",
       "involvedDomains": [
         "D1",
@@ -22917,6 +22997,7 @@
         "JSD-INT-01",
         "JSD-INT-02"
       ],
+      "apqc": "4.1 Notfallaufnahme & Manchester-Triage",
       "desc": "Echtzeit-Notfallzuweisung aus RTW/Feuerwehr über Telemedizin, IVENA-Kapazitätsabgleich und ZNA-Manchester-Triage.",
       "plantUml": "@startuml\ntitle JSD-P-01: Notfallaufnahme, ZNA Manchester-Triage & Voranmeldung\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"Praehospital & Rettung\" #e0f2fe\nactor \"Rettungsdienst (RTW)\" as RTW\nparticipant \"[[#sys-JSD-28 JSD-28: Medical IoT Gateway]]\" as IoT\nend box\n\nbox \"Telemedizin & Hub\" #fef3c7\nparticipant \"[[#sys-JSD-05 JSD-05: Telemedizin Hub]]\" as TM\nparticipant \"[[#sys-JSD-10 JSD-10: HealthShare Hub]]\" as HS\nend box\n\nbox \"Akutklinik & Notaufnahme\" #dcfce7\nparticipant \"[[#sys-JSD-15 JSD-15: ZNA E-Care & Triage]]\" as ZNA\nparticipant \"[[#sys-JSD-08 JSD-08: CGM MEDICO KIS]]\" as KIS\nend box\n\nRTW -> IoT: Notfalldaten, EKG & GPS\n== [[#integ-JSD-INT-01 JSD-INT-01: Notfall-Voranmeldung RTW ➔ ZNA E-Care]] ==\nIoT -> TM: [[#conn-JSD-C-15 RTW-Daten an Telemedizin Hub (MQTT / TLS)]]\nTM -> ZNA: [[#conn-JSD-C-16 Voranmeldung an ZNA E-Care (REST FHIR R4)]]\nactivate ZNA\nZNA -> ZNA: Manchester-Triage Einstufung & Bettenzuweisung\n\n== [[#integ-JSD-INT-02 JSD-INT-02: ZNA Aufnahme ➔ CGM MEDICO KIS Sync]] ==\nZNA -> HS: [[#conn-JSD-C-14 Notfall-ADT an HealthShare (HL7 v2.5 ADT_A04)]]\nactivate HS\nHS -> KIS: [[#conn-JSD-C-01 KIS Fallanlage & Stammdaten (HL7 v2.5 MLLP)]]\nactivate KIS\nKIS --> HS: KIS-Fallnummer Bestaetigung (HL7 ACK)\ndeactivate KIS\nHS --> ZNA: KIS-Fall verknuepft (HL7 ACK)\ndeactivate HS\ndeactivate ZNA\n@enduml"
     },
@@ -22933,6 +23014,7 @@
         "JSD-INT-03",
         "JSD-INT-04"
       ],
+      "apqc": "4.2 Klinischer Diagnostikpfad & Zentrallabor",
       "desc": "Order Entry für Laboruntersuchungen aus CGM MEDICO / Martin Luther KIS an Swisslab LIMS mit prioritärer Rückmeldung.",
       "plantUml": "@startuml\ntitle JSD-P-02: Klinischer Diagnostikpfad & Zentrallabor-Befundung\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"Station & Ambulanz\" #e0f2fe\nactor \"Klinikarzt / Station\" as Doc\nparticipant \"[[#sys-JSD-08 JSD-08: CGM MEDICO KIS]]\" as KIS\nparticipant \"[[#sys-JSD-07 JSD-07: Meona Kurve]]\" as Meona\nend box\n\nbox \"Klinischer Integrations-Hub\" #fef3c7\nparticipant \"[[#sys-JSD-10 JSD-10: HealthShare Hub]]\" as HS\nend box\n\nbox \"Diagnostik & Zentrallabor\" #dcfce7\nparticipant \"[[#sys-JSD-11 JSD-11: Swisslab LIMS]]\" as LIMS\nactor \"Laboranalytik (Cobas)\" as Analyzer\nend box\n\nDoc -> KIS: Laboranforderung erfassen\nactivate KIS\n== [[#integ-JSD-INT-03 JSD-INT-03: KIS Laboranforderung ➔ Swisslab LIMS]] ==\nKIS -> HS: [[#conn-JSD-C-01 Labor-Order an HealthShare (HL7 v2.5 ORM_O01)]]\nactivate HS\nHS -> LIMS: [[#conn-JSD-C-03 Labor-Auftrag an Swisslab (HL7 v2.5 MLLP)]]\nactivate LIMS\ndeactivate HS\nLIMS -> Analyzer: Proben-Scan & Barcode-Routing\nAnalyzer --> LIMS: Analysenergebnisse & Validierung\n\n== [[#integ-JSD-INT-04 JSD-INT-04: Swisslab Laborbefund-Rueckmeldung]] ==\nLIMS -> HS: [[#conn-JSD-C-04 Laborbefund an HealthShare (HL7 v2.5 ORU_R01)]]\nactivate HS\ndeactivate LIMS\nHS -> KIS: [[#conn-JSD-C-05 Laborbefund-Anzeige im KIS (HL7 ORU)]]\nHS -> Meona: [[#conn-JSD-C-13 Laborwerte an Meona eKurve (HL7 / FHIR)]]\ndeactivate HS\ndeactivate KIS\n@enduml"
     },
@@ -22949,6 +23031,7 @@
         "JSD-INT-05",
         "JSD-INT-06"
       ],
+      "apqc": "4.2 Radiologie DICOM-Workflow & PACS",
       "desc": "Modalitäten-Steuerung über Siemens Syngo RIS, Bildarchivierung im Agfa VNA und KI-Schlaganfall-Triage via Brainomix.",
       "plantUml": "@startuml\ntitle JSD-P-03: Radiologie DICOM-Workflow, PACS & KI-Diagnostik\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"Klinische Anforderung\" #e0f2fe\nparticipant \"[[#sys-JSD-08 JSD-08: CGM MEDICO KIS]]\" as KIS\nparticipant \"[[#sys-JSD-10 JSD-10: HealthShare Hub]]\" as HS\nend box\n\nbox \"Radiologie & Bildarchivierung\" #fef3c7\nparticipant \"[[#sys-JSD-13 JSD-13: Syngo RIS]]\" as RIS\nactor \"CT / MRT Modalitaet\" as Modality\nparticipant \"[[#sys-JSD-12 JSD-12: Agfa Enterprise PACS]]\" as PACS\nend box\n\nbox \"KI-Cloud & Diagnostik-Support\" #fee2e2\nparticipant \"[[#sys-JSD-27 JSD-27: Brainomix KI]]\" as KI\nend box\n\n== [[#integ-JSD-INT-05 JSD-INT-05: Radiologie DICOM-Workflow & PACS]] ==\nKIS -> HS: [[#conn-JSD-C-01 Untersuchungsauftrag an HealthShare (HL7 ORM)]]\nactivate HS\nHS -> RIS: [[#conn-JSD-C-07 Anforderung an Syngo RIS (HL7 ORM_O01)]]\nactivate RIS\ndeactivate HS\nRIS -> Modality: DICOM Modality Worklist (MWL)\nModality -> PACS: DICOM C-STORE Bilddatensatz\nRIS -> PACS: [[#conn-JSD-C-08 Worklist & Untersuchungs-Metadaten (HL7 / DICOM)]]\nactivate PACS\n\n== [[#integ-JSD-INT-06 JSD-INT-06: Agfa PACS ➔ Brainomix Cloud-KI]] ==\nPACS -> KI: [[#conn-JSD-C-09 CT-Bilddaten an Brainomix KI (DICOMweb TLS / AWS)]]\nactivate KI\nKI -> KI: Automatisierte e-ASPECTS Schlaganfall-Analyse\nKI -> RIS: [[#conn-JSD-C-10 KI-Ergebnis an Syngo RIS (REST FHIR / DICOM SR)]]\ndeactivate KI\nRIS --> KIS: Freigegebener Radiologiebefund (HL7 ORU)\ndeactivate RIS\ndeactivate PACS\n@enduml"
     },
@@ -22965,6 +23048,7 @@
         "JSD-INT-07",
         "JSD-INT-08"
       ],
+      "apqc": "4.5 Sterilgutlogistik & AEMP Instacount",
       "desc": "Digitale OP-Siebanforderung, AEMP-Chargenfreigabe nach MPG in Instacount und Translog-Belieferung der OP-Säle.",
       "plantUml": "@startuml\ntitle JSD-P-04: JSD Services AEMP Instrumentenaufbereitung & Sterilgutlogistik\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"OP-Bereich & KIS\" #e0f2fe\nactor \"OP-Leitung / Saal\" as OP\nparticipant \"[[#sys-JSD-08 JSD-08: CGM MEDICO KIS]]\" as KIS\nend box\n\nbox \"AEMP Sterilgutmanagement\" #fef3c7\nparticipant \"[[#sys-JSD-16 JSD-16: Instacount AEMP]]\" as AEMP\nparticipant \"[[#sys-JSD-17 JSD-17: Translog Fuhrpark]]\" as Trans\nend box\n\nbox \"ERP & Integrations-Plattform\" #dcfce7\nparticipant \"[[#sys-JSD-04 JSD-04: SAP CPI]]\" as CPI\nparticipant \"[[#sys-JSD-01 JSD-01: SAP S/4HANA]]\" as S4H\nend box\n\nOP -> KIS: OP-Saalplanung & Sieblisten reservieren\nactivate KIS\n== [[#integ-JSD-INT-07 JSD-INT-07: OP-Planung ➔ AEMP Instacount]] ==\nKIS -> AEMP: [[#conn-JSD-C-19 Siebanforderung an Instacount (REST / TCP)]]\nactivate AEMP\ndeactivate KIS\nAEMP -> AEMP: Pack- & Sterilisationszyklus freigegeben\n\n== [[#integ-JSD-INT-08 JSD-INT-08: AEMP Freigabe ➔ Translog & SAP Buchung]] ==\nAEMP -> Trans: [[#conn-JSD-C-20 Tourenplanung an Translog (REST JSON)]]\nactivate Trans\nTrans --> OP: Physische Sieblieferung an OP-Schleuse\ndeactivate Trans\nAEMP -> CPI: [[#conn-JSD-C-21 Materialmeldung an SAP CPI (HTTPS REST)]]\nactivate CPI\ndeactivate AEMP\nCPI -> S4H: [[#conn-JSD-C-22 Kostenstellenbuchung in S/4HANA (OData / RFC)]]\nactivate S4H\nS4H --> CPI: Belegnummer generiert\ndeactivate S4H\ndeactivate CPI\n@enduml"
     },
@@ -22982,6 +23066,7 @@
         "JSD-INT-09",
         "JSD-INT-10"
       ],
+      "apqc": "5.0 Patientenportal, Termine & Service (KHZG)",
       "desc": "Online-Terminbuchung, digitale Patientenaufnahme und Bereitstellung von Entlassbriefen im m.Doc Portal (FTB 2).",
       "plantUml": "@startuml\ntitle JSD-P-05: KHZG Patientenportal, Termine & Entlassdokumente\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"Patient & Mobile App (FTB 2)\" #e0f2fe\nactor \"Patient (Smartphone / Web)\" as Pat\nparticipant \"[[#sys-JSD-02 JSD-02: m.Doc Portal Cloud]]\" as mDoc\nend box\n\nbox \"Hybrid Integration Platform\" #fef3c7\nparticipant \"[[#sys-JSD-04 JSD-04: SAP CPI]]\" as CPI\nend box\n\nbox \"Klinik & Enterprise Core\" #dcfce7\nparticipant \"[[#sys-JSD-08 JSD-08: CGM MEDICO KIS]]\" as KIS\nend box\n\nPat -> mDoc: Online-Terminbuchung & Frageboegen\nactivate mDoc\n== [[#integ-JSD-INT-09 JSD-INT-09: m.Doc Voraufnahme ➔ KIS Import]] ==\nmDoc -> CPI: [[#conn-JSD-C-28 FHIR Patient Payload an SAP CPI (REST HTTPS / Azure)]]\nactivate CPI\nCPI -> KIS: [[#conn-JSD-C-29 Voraufnahme-Import in KIS (REST FHIR R4)]]\nactivate KIS\nKIS --> CPI: Encounter-ID bestaetigt\ndeactivate KIS\nCPI --> mDoc: Sync Status OK\ndeactivate CPI\ndeactivate mDoc\n\n== [[#integ-JSD-INT-10 JSD-INT-10: Befundfreigabe ➔ m.Doc Portal]] ==\nKIS -> CPI: [[#conn-JSD-C-26 Befund-Export an SAP CPI (REST HTTPS)]]\nactivate CPI\nCPI -> mDoc: [[#conn-JSD-C-28 Bereitstellung in m.Doc Cloud (REST HTTPS)]]\nactivate mDoc\nmDoc --> Pat: Push-Benachrichtigung \"Neuer Befund verfuegbar\"\ndeactivate mDoc\ndeactivate CPI\n@enduml"
     },
@@ -22998,6 +23083,7 @@
         "JSD-INT-11",
         "JSD-INT-12"
       ],
+      "apqc": "12.0 Telematik, KIM-Dienste & Compliance",
       "desc": "Sicherer Versand strukturierter eArztbriefe über KIM 1.5 und Upload von Notfalldatensätzen in die ePA 3.0 via TI-Cluster.",
       "plantUml": "@startuml\ntitle JSD-P-06: Telematik, eArztbrief & KIM-Fachdienste\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"Klinische Dokumentation\" #e0f2fe\nactor \"Chefarzt / Stationsarzt\" as Doc\nparticipant \"[[#sys-JSD-08 JSD-08: CGM MEDICO KIS]]\" as KIS\nparticipant \"[[#sys-JSD-10 JSD-10: HealthShare Hub]]\" as HS\nend box\n\nbox \"Telematikinfrastruktur (TI)\" #fef3c7\nparticipant \"[[#sys-JSD-18 JSD-18: TI Konnektor Cluster]]\" as TI\nend box\n\nbox \"Nationale Fachdienste (gematik)\" #dcfce7\nparticipant \"[[#sys-JSD-22 JSD-22: CGM KIM Fachdienst]]\" as KIM\nparticipant \"[[#sys-JSD-21 JSD-21: gematik ePA 3.0]]\" as ePA\nend box\n\nDoc -> KIS: eArztbrief finalisieren & mit HBA signieren\nactivate KIS\n== [[#integ-JSD-INT-11 JSD-INT-11: eArztbrief-Versand ueber KIM]] ==\nKIS -> HS: [[#conn-JSD-C-01 Brief-Payload an HealthShare (HL7 CDA / FHIR)]]\nactivate HS\nHS -> TI: [[#conn-JSD-C-30 Uebergabe an TI-Konnektor (SOAP / TLS)]]\nactivate TI\ndeactivate HS\nTI -> KIM: [[#conn-JSD-C-31 KIM-Mail an Weiterbehandler (SMTP / S-MIME)]]\nactivate KIM\nKIM --> TI: MDN Empfangsbestaetigung\ndeactivate KIM\ndeactivate TI\n\n== [[#integ-JSD-INT-12 JSD-INT-12: ePA 3.0 Dokumenten-Upload]] ==\nHS -> TI: [[#conn-JSD-C-30 Dokument an TI-Konnektor (SOAP / TLS)]]\nactivate TI\nTI -> ePA: [[#conn-JSD-C-32 ePA-Ablage in gematik Bundestelematic (IHE XDS.b)]]\nactivate ePA\nePA --> TI: Registry Stored Document OK\ndeactivate ePA\ndeactivate TI\ndeactivate KIS\n@enduml"
     },
@@ -23014,6 +23100,7 @@
         "JSD-INT-13",
         "JSD-INT-14"
       ],
+      "apqc": "8.0 Krankenhausabrechnung & GKV-Clearing § 301",
       "desc": "Klinische Leistungserfassung in MEDICO, Übernahme in SAP S/4HANA Finance und DTA § 301 EDIFACT-Abrechnung an Krankenkassen.",
       "plantUml": "@startuml\ntitle JSD-P-07: Stationaere DRG-Abrechnung & GKV-Clearing § 301\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"Medizincontrolling & KIS\" #e0f2fe\nactor \"Medizincontroller\" as Controller\nparticipant \"[[#sys-JSD-08 JSD-08: CGM MEDICO KIS]]\" as KIS\nend box\n\nbox \"Enterprise Integration & Finance\" #fef3c7\nparticipant \"[[#sys-JSD-04 JSD-04: SAP CPI]]\" as CPI\nparticipant \"[[#sys-JSD-01 JSD-01: SAP S/4HANA]]\" as S4H\nend box\n\nbox \"Kostentraeger & Clearing\" #dcfce7\nparticipant \"[[#sys-JSD-30 JSD-30: GKV Clearing DTA]]\" as GKV\nactor \"Gesetzliche Krankenkasse\" as Payer\nend box\n\nController -> KIS: DRG-Kodierung & Fallabschluss\nactivate KIS\n== [[#integ-JSD-INT-13 JSD-INT-13: KIS Falldaten ➔ SAP S/4HANA]] ==\nKIS -> CPI: [[#conn-JSD-C-26 Falldaten an SAP CPI (HTTPS REST)]]\nactivate CPI\nCPI -> S4H: [[#conn-JSD-C-22 Buchungsbeleg in SAP S/4HANA (OData / RFC)]]\nactivate S4H\ndeactivate KIS\nS4H -> S4H: Debitorenbuchung & § 301 EDIFACT Generierung\n\n== [[#integ-JSD-INT-14 JSD-INT-14: DTA § 301 DRG-Schlussrechnung]] ==\nS4H -> GKV: [[#conn-JSD-C-27 DTA § 301 Daten an GKV Clearing (FTAM / AS2)]]\nactivate GKV\ndeactivate S4H\nGKV -> Payer: Rechnungsweiterleitung & Kostengutsprache\nPayer --> GKV: Zahlungsavis\nGKV --> S4H: Elektronischer Zahlungsavis (EDIFACT)\ndeactivate GKV\ndeactivate CPI\n@enduml"
     },
@@ -23029,6 +23116,7 @@
         "JSD-INT-15",
         "JSD-INT-16"
       ],
+      "apqc": "10.0 Einkauf, Materialwirtschaft & GHX B2B-Clearing",
       "desc": "Zentralisierter Einkauf durch JSD Services GmbH, elektronische Bestellungen via GHX Exchange und Peppol XRechnung.",
       "plantUml": "@startuml\ntitle JSD-P-08: JSD Einkauf, Materialwirtschaft & GHX B2B-Clearing\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"JSD Zentraleinkauf\" #e0f2fe\nactor \"Einkaeufer / Logistik\" as Buyer\nparticipant \"[[#sys-JSD-01 JSD-01: SAP S/4HANA]]\" as S4H\nend box\n\nbox \"B2B Medical Exchange & EDI\" #fef3c7\nparticipant \"[[#sys-JSD-24 JSD-24: GHX Medical Exchange]]\" as GHX\nparticipant \"[[#sys-JSD-25 JSD-25: OpenPeppol Access Point]]\" as Peppol\nend box\n\nbox \"Hybrid Integration Hub\" #dcfce7\nparticipant \"[[#sys-JSD-04 JSD-04: SAP CPI]]\" as CPI\nactor \"Medizintechnik-Lieferant\" as Vendor\nend box\n\nBuyer -> S4H: Bestellbanf generieren & freigeben\nactivate S4H\n== [[#integ-JSD-INT-15 JSD-INT-15: JSD Einkauf ➔ GHX Exchange]] ==\nS4H -> GHX: [[#conn-JSD-C-23 Bestellung an GHX Exchange (cXML / EDIFACT)]]\nactivate GHX\nGHX -> Vendor: Purchase Order Routing\nVendor --> GHX: Order Confirmation & Lieferavis\nGHX --> S4H: Auftragsbestaetigung verbucht\ndeactivate GHX\ndeactivate S4H\n\n== [[#integ-JSD-INT-16 JSD-INT-16: Rechnungen OpenPeppol ➔ SAP]] ==\nVendor -> Peppol: XRechnung elektronisch einreichen\nactivate Peppol\nPeppol -> CPI: [[#conn-JSD-C-24 XRechnung an SAP CPI (AS4 Peppol)]]\nactivate CPI\nCPI -> S4H: [[#conn-JSD-C-25 Kontierung in SAP S/4HANA (OData / IDoc)]]\nactivate S4H\nS4H --> CPI: Buchungsbeleg & Rechnungsfreigabe\ndeactivate S4H\ndeactivate CPI\ndeactivate Peppol\n@enduml"
     }
@@ -25220,6 +25308,7 @@
     {
       "id": "BRK-P-01",
       "name": "Klinische Erregeridentifikation (MALDI Biotyper ➔ MBT Compass ➔ LIMS)",
+      "apqc": "4.2 Diagnostik, Mikrobiologie & Erregeridentifikation",
       "leadDomain": "D3",
       "involvedDomains": [
         "D3",
@@ -25234,6 +25323,7 @@
     {
       "id": "BRK-P-02",
       "name": "4D-Proteomics High-Throughput Analyse (timsTOF ➔ PaSER GPU ➔ Mass Dynamics)",
+      "apqc": "2.0 F&E, 4D-Proteomics High-Throughput Analyse",
       "leadDomain": "D4",
       "involvedDomains": [
         "D4",
@@ -25248,6 +25338,7 @@
     {
       "id": "BRK-P-03",
       "name": "Präzisions-Gerätefertigung & Werkskalibrierung (SolidWorks ➔ Teamcenter ➔ Opcenter MES ➔ S/4HANA)",
+      "apqc": "4.0 Präzisions-Gerätefertigung & Werkskalibrierung",
       "leadDomain": "D2",
       "involvedDomains": [
         "D2",
@@ -25263,6 +25354,7 @@
     {
       "id": "BRK-P-04",
       "name": "Globaler Field-Service-Einsatz & Kryo-Wartung (LabScape IoT ➔ Salesforce FSL ➔ Mobile App)",
+      "apqc": "5.0 Globaler Field-Service & IoT Kryo-Wartung",
       "leadDomain": "D5",
       "involvedDomains": [
         "D5",
@@ -25277,6 +25369,7 @@
     {
       "id": "BRK-P-05",
       "name": "Lead-to-Order & Configure-Price-Quote (Salesforce CPQ ➔ SAP S/4HANA ➔ Ariba)",
+      "apqc": "3.0 Lead-to-Order & Configure-Price-Quote (CPQ)",
       "leadDomain": "D1",
       "involvedDomains": [
         "D1",
@@ -25291,6 +25384,7 @@
     {
       "id": "BRK-P-06",
       "name": "Consumable- & Reagenzien-Bestellung (MyBruker WebStore ➔ SAP BTP ➔ S/4HANA MM)",
+      "apqc": "3.0 Consumable- & Reagenzien-WebStore",
       "leadDomain": "D5",
       "involvedDomains": [
         "D5",
@@ -25305,6 +25399,7 @@
     {
       "id": "BRK-P-07",
       "name": "Ultra-High-Field NMR Spektrenverarbeitung (TopSpin ➔ Azure Cloud ➔ HPC Cluster)",
+      "apqc": "2.0 F&E, High-Field NMR Spektrenverarbeitung",
       "leadDomain": "D4",
       "involvedDomains": [
         "D4",
@@ -25319,6 +25414,7 @@
     {
       "id": "BRK-P-08",
       "name": "GxP-Gerätedokumentation & Revisionssichere DHR-Archivierung (Teamcenter ➔ Opcenter ➔ OpenText)",
+      "apqc": "10.0 GxP-Compliance, DHR-Archivierung & IVD-R",
       "leadDomain": "D2",
       "involvedDomains": [
         "D2",
@@ -25333,6 +25429,7 @@
     {
       "id": "BRK-P-09",
       "name": "Gesetzliche E-Rechnungsstellung & Fiskal-Compliance (SAP DRC LATAM & SEEBURGER Peppol Gate)",
+      "apqc": "9.0 E-Rechnungsstellung, Fiskal-Clearance & Peppol",
       "leadDomain": "D1",
       "involvedDomains": [
         "D1"
@@ -25346,6 +25443,7 @@
     {
       "id": "BRK-P-10",
       "name": "B2B-Partner-Integration ELITech Molekulardiagnostik (SAP TRM)",
+      "apqc": "3.0 B2B-Partner-Integration ELITech Diagnostik",
       "leadDomain": "D1",
       "involvedDomains": [
         "D1",
@@ -25359,6 +25457,7 @@
     {
       "id": "BRK-P-11",
       "name": "Global Trade Compliance & Zollabfertigung (AEB, ASSIST4 & SAP S/4HANA)",
+      "apqc": "10.0 Global Trade Compliance & Zollabfertigung",
       "leadDomain": "D1",
       "involvedDomains": [
         "D1"
@@ -25371,6 +25470,7 @@
     {
       "id": "BRK-P-12",
       "name": "Operative Beschaffung & Indirekter Einkauf (Onventis e-Procurement)",
+      "apqc": "4.0 Operative Beschaffung & e-Procurement",
       "leadDomain": "D1",
       "involvedDomains": [
         "D1"
@@ -25383,6 +25483,7 @@
     {
       "id": "BRK-P-13",
       "name": "GxP-Fertigungsqualität & Werkerführung (S/4HANA LOIPRO ➔ BTP iFlow ➔ MasterControl & VKS)",
+      "apqc": "4.0 GxP-Fertigungsqualität & Werkerführung",
       "leadDomain": "D1",
       "involvedDomains": [
         "D1",
@@ -25397,6 +25498,7 @@
     {
       "id": "BRK-P-14",
       "name": "Lieferanten-Kollaboration & Procurement-Abwicklung (Supplier Portal, Ariba & S/4HANA)",
+      "apqc": "4.0 Lieferanten-Kollaboration & Ariba Procurement",
       "leadDomain": "D1",
       "involvedDomains": [
         "D1"
@@ -25410,6 +25512,7 @@
     {
       "id": "BRK-P-15",
       "name": "Hybride On-Premises-zu-Cloud Integration (SAP Cloud Connector, BTP & S/4HANA)",
+      "apqc": "7.0 Hybride On-Premises-zu-Cloud Integration",
       "leadDomain": "D1",
       "involvedDomains": [
         "D1",
@@ -25423,6 +25526,7 @@
     {
       "id": "BRK-P-16",
       "name": "Rollenbasierter SAP Fiori App-Zugriff & Genehmigungs-Workflows (BTP Launchpad & S/4HANA)",
+      "apqc": "7.0 Rollenbasierter SAP Fiori App-Zugriff & SSO",
       "leadDomain": "D1",
       "involvedDomains": [
         "D1",
@@ -25434,8 +25538,9 @@
       "desc": "Zentraler Zugang für weltweite Bruker-Mitarbeiter über das auf SAP BTP gehostete Fiori Launchpad mit Single Sign-On (Entra ID), mobiler Freigabe von Bestellungen und Direktzugriff auf S/4HANA Core Transaktionen."
     },
     {
-      "id": "BRK-P-14",
+      "id": "BRK-P-17",
       "name": "Globales HR-, Organisations- & Spesen-Management",
+      "apqc": "6.0 Globales HR-, Organisations- & Spesen-Management",
       "leadDomain": "D1",
       "involvedDomains": [
         "D1"
@@ -25447,8 +25552,9 @@
       "desc": "Durchgängige Personal- und Ausgabenverwaltung von der Workday-Personalorganisation über Reisebuchungen in Concur bis zur Verbuchung im S/4HANA ERP."
     },
     {
-      "id": "BRK-P-15",
+      "id": "BRK-P-18",
       "name": "R&D Digital Engineering & Mechatronische Produktentwicklung",
+      "apqc": "2.0 R&D Digital Engineering & PLM",
       "leadDomain": "D2",
       "involvedDomains": [
         "D2",
@@ -25460,8 +25566,9 @@
       "desc": "Kollaborativer Entwicklungsprozess von CAD-Konstruktion und Jira-Softwareentwicklung über Teamcenter PLM bis zur Freigabe mechatronischer Baugruppen in S/4HANA."
     },
     {
-      "id": "BRK-P-16",
+      "id": "BRK-P-19",
       "name": "Zero Trust Security & Fabrik-OT Perimeter Governance",
+      "apqc": "7.0 Zero Trust Security & Fabrik-OT Perimeter Governance",
       "leadDomain": "D6",
       "involvedDomains": [
         "D6",
@@ -29078,6 +29185,454 @@
       window.startupModelId = startupModelId;
       window.currentModelId = currentModelId;
 
+      // =====================================================================
+      // APQC PROCESS CLASSIFICATION FRAMEWORK (PCF) EXPLORER
+      // =====================================================================
+      const APQC_PCF_TAXONOMY = [
+        {
+          id: '1.0',
+          category: '1.0',
+          name: 'Vision & Strategie entwickeln',
+          nameEn: 'Develop Vision and Strategy',
+          group: 'operating',
+          groupName: 'Kernprozesse (Operating)',
+          desc: 'Definition von Unternehmensleitbild, strategischen Zielen, Marktpositionierung, Geschäftsmodelltransformation und Portfoliostrategie.',
+          url: 'https://www.apqc.org/pcf'
+        },
+        {
+          id: '2.0',
+          category: '2.0',
+          name: 'F&E, Produkte & Dienstleistungen entwickeln',
+          nameEn: 'Develop and Manage Products and Services',
+          group: 'operating',
+          groupName: 'Kernprozesse (Operating)',
+          desc: 'Forschung & Entwicklung, mechatronisches Digital Engineering, Prototypenbau, klinische Studien, Softwareentwicklung und Service-Design.',
+          url: 'https://www.apqc.org/pcf'
+        },
+        {
+          id: '3.0',
+          category: '3.0',
+          name: 'Marketing, Vertrieb & Partnerkanäle steuern',
+          nameEn: 'Market and Sell Products and Services',
+          group: 'operating',
+          groupName: 'Kernprozesse (Operating)',
+          desc: 'Lead-to-Order, Configure-Price-Quote (CPQ), B2B-Kanalintegration, Bildungs- und Breitenausbildungsangebote sowie Vertriebs- und Marketingkampagnen.',
+          url: 'https://www.apqc.org/pcf'
+        },
+        {
+          id: '4.0',
+          category: '4.0',
+          name: 'Leistungserbringung & Produktion (Cross-Industry)',
+          nameEn: 'Deliver Products and Services',
+          group: 'operating',
+          groupName: 'Kernprozesse (Operating)',
+          desc: 'Industrielle Produktion, Fertigungssteuerung (MES), Werkserprobung, Sourcing, operative Beschaffung und logistische Bereitstellung.',
+          url: 'https://www.apqc.org/pcf'
+        },
+        {
+          id: '4.1',
+          category: '4.1',
+          name: 'Stationäre, Notfall- & Akutversorgung (Healthcare PCF)',
+          nameEn: 'Inpatient & Emergency Health Care Services',
+          group: 'operating',
+          groupName: 'Kernprozesse (Operating)',
+          desc: 'Notaufnahme (ZNA), Manchester-Triage, klinische Behandlungspfade, Closed-Loop Medikation (AMTS), Intensivüberwachung und Entlassmanagement.',
+          url: 'https://www.apqc.org/pcf'
+        },
+        {
+          id: '4.2',
+          category: '4.2',
+          name: 'Diagnostik, Labor & Radiologie (Healthcare PCF)',
+          nameEn: 'Diagnostic & Laboratory Services',
+          group: 'operating',
+          groupName: 'Kernprozesse (Operating)',
+          desc: 'Zentrallabor-Analytik (LIMS), mikrobiologische Keimidentifikation (MALDI-TOF), Radiologie-Workflows (PACS/DICOM) und telemedizinische Befundung.',
+          url: 'https://www.apqc.org/pcf'
+        },
+        {
+          id: '4.3',
+          category: '4.3',
+          name: 'Ambulante Pflege, Notruf & Betreuung (Healthcare PCF)',
+          nameEn: 'Care Management, Outpatient & Telecare',
+          group: 'operating',
+          groupName: 'Kernprozesse (Operating)',
+          desc: 'Hausnotrufzentralen, Smart Key Boxen, ambulante Pflegedokumentation, Bürgerbetreuung und bürgernahe Sozialdienste.',
+          url: 'https://www.apqc.org/pcf'
+        },
+        {
+          id: '4.4',
+          category: '4.4',
+          name: 'Rettungsdienst, Leitstelle & Krankentransport (Healthcare PCF)',
+          nameEn: 'Emergency Medical Services (EMS) & Dispatch',
+          group: 'operating',
+          groupName: 'Kernprozesse (Operating)',
+          desc: 'Integrierte Leitstellen (ILS), Einsatzdisposition, Krankentransport (§ 60 SGB V), Rettungsmittel-Tracking und Notfalltelematik.',
+          url: 'https://www.apqc.org/pcf'
+        },
+        {
+          id: '4.5',
+          category: '4.5',
+          name: 'Sterilgutlogistik & AEMP-Aufbereitung (Healthcare PCF)',
+          nameEn: 'Sterile Processing & Clinical Logistics',
+          group: 'operating',
+          groupName: 'Kernprozesse (Operating)',
+          desc: 'Aufbereitungseinheit für Medizinprodukte (AEMP), Sieb- und Chargenverfolgung (Instacount), GxP-Rückverfolgung und OP-Bereitstellung.',
+          url: 'https://www.apqc.org/pcf'
+        },
+        {
+          id: '5.0',
+          category: '5.0',
+          name: 'Kundenservice, Patientenportal & Betreuung',
+          nameEn: 'Manage Customer / Patient Service',
+          group: 'operating',
+          groupName: 'Kernprozesse (Operating)',
+          desc: 'Patientenportale (KHZG FTB 2), Online-Terminbuchung, Field-Service-Einsatzsteuerung, Kundenbetreuung und technischer Support.',
+          url: 'https://www.apqc.org/pcf'
+        },
+        {
+          id: '6.0',
+          category: '6.0',
+          name: 'Personalwesen & Talentmanagement',
+          nameEn: 'Develop and Manage Human Capital',
+          group: 'management',
+          groupName: 'Management- & Supportprozesse',
+          desc: 'Mitarbeitergewinnung, Dienstplanung, Personalentwicklung, Zeiterfassung, Reisekosten-/Spesenabrechnung und HR-Stammdaten.',
+          url: 'https://www.apqc.org/pcf'
+        },
+        {
+          id: '7.0',
+          category: '7.0',
+          name: 'Informationstechnologie & Telematik',
+          nameEn: 'Manage Information Technology',
+          group: 'management',
+          groupName: 'Management- & Supportprozesse',
+          desc: 'Enterprise Architecture, TI-Konnektoren, Cloud-Plattformen (SAP BTP), Zero Trust Sicherheit und Integrations-Middleware.',
+          url: 'https://www.apqc.org/pcf'
+        },
+        {
+          id: '8.0',
+          category: '8.0',
+          name: 'Finanzwesen & Abrechnung',
+          nameEn: 'Manage Financial Resources',
+          group: 'management',
+          groupName: 'Management- & Supportprozesse',
+          desc: 'Krankenhausabrechnung (§ 301 SGB V), GKV-Clearing, Haupt- & Nebenbuch, Controlling, Treasury und Rechnungsprüfung.',
+          url: 'https://www.apqc.org/pcf'
+        },
+        {
+          id: '9.0',
+          category: '9.0',
+          name: 'Anlagen- & Liegenschaftsmanagement',
+          nameEn: 'Acquire, Construct, and Manage Assets',
+          group: 'management',
+          groupName: 'Management- & Supportprozesse',
+          desc: 'Medizintechnik-Instandhaltung, Facility Management, Fuhrparkverwaltung, Gerätekalibrierung und Anlagenbuchhaltung.',
+          url: 'https://www.apqc.org/pcf'
+        },
+        {
+          id: '10.0',
+          category: '10.0',
+          name: 'Einkauf, Beschaffung & Materialwirtschaft',
+          nameEn: 'Manage Enterprise Risk, Compliance & Sourcing',
+          group: 'management',
+          groupName: 'Management- & Supportprozesse',
+          desc: 'B2B-Clearing (GHX), elektronische Lieferantenkataloge (Onventis), Bestandsführung und Rahmenvertragsmanagement.',
+          url: 'https://www.apqc.org/pcf'
+        },
+        {
+          id: '11.0',
+          category: '11.0',
+          name: 'Beziehungen zu Kostenträgern, Behörden & Partnern',
+          nameEn: 'Manage External Relationships',
+          group: 'management',
+          groupName: 'Management- & Supportprozesse',
+          desc: 'Schnittstellen zu Krankenkassen, Kassenärztlichen Vereinigungen, Behörden, Verbänden und Lieferantennetzwerken.',
+          url: 'https://www.apqc.org/pcf'
+        },
+        {
+          id: '12.0',
+          category: '12.0',
+          name: 'Compliance, Informationssicherheit & Resilienz',
+          nameEn: 'Develop and Manage Business Capabilities & Compliance',
+          group: 'management',
+          groupName: 'Management- & Supportprozesse',
+          desc: 'Telematik-Infrastruktur-Zertifikate, DSGVO, B3S-Sicherheitsanforderungen, Audits, Risikomanagement und Krisenresilienz.',
+          url: 'https://www.apqc.org/pcf'
+        }
+      ];
+      window.APQC_PCF_TAXONOMY = APQC_PCF_TAXONOMY;
+
+      window.closeApqcExplorer = function() {
+        const pop = document.getElementById('apqcExplorerPopout');
+        if (pop) {
+          pop.style.display = 'none';
+          pop.classList.add('popout-closed');
+          pop.hidden = true;
+        }
+      };
+
+      window.selectProcessFromApqc = function(procId) {
+        const p = (PROCESSES_DATA || []).find(x => x.id === procId);
+        if (p) {
+          if (typeof setDrilldownProcess === 'function') setDrilldownProcess(p);
+          if (typeof renderInspectorProcess === 'function') renderInspectorProcess(p);
+          const drawer = document.getElementById('inspectorDrawer');
+          if (drawer && drawer.classList.contains('closed')) {
+            if (typeof toggleRightDrawer === 'function') toggleRightDrawer();
+          }
+          if (typeof window.showCrudToast === 'function') {
+            window.showCrudToast('🎯 Prozess ' + p.id + ' (' + p.name + ') fokussiert');
+          }
+        }
+      };
+
+      let currentApqcGroupFilter = 'all';
+
+      window.openApqcExplorer = function(initialFilter) {
+        let pop = document.getElementById('apqcExplorerPopout');
+        if (!pop) {
+          pop = document.createElement('div');
+          pop.className = 'view-floating-popout';
+          pop.id = 'apqcExplorerPopout';
+          pop.style.width = '640px';
+          pop.style.height = '680px';
+          pop.style.left = '310px';
+          pop.style.top = '75px';
+
+          pop.innerHTML = 
+            '<div class="popout-header" id="apqcExplorerHeader">' +
+              '<div class="popout-title" style="display:flex; align-items:center; gap:8px;">' +
+                '<span>📋 APQC Process Classification Framework (PCF) Explorer</span>' +
+              '</div>' +
+              '<div class="popout-actions" style="display:flex; align-items:center; gap:6px;">' +
+                '<a href="https://www.apqc.org/pcf" target="_blank" rel="noopener noreferrer" class="insp-action-btn" style="text-decoration:none; display:inline-flex; align-items:center; gap:4px; font-size:0.68rem; color:var(--accent); border-color:var(--accent); background:rgba(56,189,248,0.12);" title="Offizielle APQC PCF Spezifikation auf apqc.org aufrufen">' +
+                  '<span>🌐 apqc.org/pcf</span> ↗' +
+                '</a>' +
+                '<button class="popout-btn-icon" onclick="event.stopPropagation(); window.closeApqcExplorer()" title="Schließen (✕)" style="cursor:pointer; font-size:1.1rem; padding:2px 8px;">✕</button>' +
+              '</div>' +
+            '</div>' +
+            '<div class="popout-body" id="apqcExplorerBody" style="padding:14px; overflow-y:auto; display:flex; flex-direction:column; gap:10px;">' +
+              '<div style="font-size:0.72rem; color:var(--text-muted); line-height:1.45;">' +
+                'Das <strong>APQC Process Classification Framework (PCF)</strong> ist der weltweite Standard für branchenübergreifende und gesundheitswirtschaftliche Prozessdefinition. Hier sehen Sie die Zuordnung aller Prozesse der aktuell geladenen IT-Landschaft zur APQC-Taxonomie.' +
+              '</div>' +
+              '<div style="display:flex; gap:8px; align-items:center;">' +
+                '<input type="text" id="inpApqcSearch" placeholder="🔍 Code (z.B. 4.1), Begriff (z.B. Notfall) oder Prozess filtern..." style="flex:1; padding:6px 10px; font-size:0.75rem; border-radius:6px; border:1px solid var(--card-border); background:var(--card-bg); color:var(--text-bright);" />' +
+                '<button type="button" id="btnResetApqcSearch" class="insp-action-btn" style="padding:6px 10px; font-size:0.70rem;" title="Suche leeren">✕ Reset</button>' +
+              '</div>' +
+              '<div style="display:flex; gap:5px; flex-wrap:wrap; align-items:center;" id="apqcFilterPillsContainer">' +
+                '<button type="button" class="insp-action-btn apqc-filter-pill active" data-apqc-filter="all" style="font-size:0.67rem; padding:3px 8px;">Alle Kategorien</button>' +
+                '<button type="button" class="insp-action-btn apqc-filter-pill" data-apqc-filter="operating" style="font-size:0.67rem; padding:3px 8px;">1-5 Kernprozesse</button>' +
+                '<button type="button" class="insp-action-btn apqc-filter-pill" data-apqc-filter="management" style="font-size:0.67rem; padding:3px 8px;">6-12 Management & Support</button>' +
+                '<button type="button" class="insp-action-btn apqc-filter-pill" data-apqc-filter="mapped" style="font-size:0.67rem; padding:3px 8px;">Nur mit Modell-Prozessen</button>' +
+              '</div>' +
+              '<div id="apqcLandscapeStatsBanner" style="padding:8px 12px; background:rgba(56,189,248,0.06); border:1px solid rgba(56,189,248,0.2); border-radius:6px; font-size:0.68rem; color:var(--text-bright); display:flex; justify-content:space-between; align-items:center;">' +
+                '<span id="apqcStatsText">Lade Modell-Zuordnungen...</span>' +
+                '<span style="color:var(--accent); font-weight:700;">APQC v7.3 Cross-Industry & Healthcare</span>' +
+              '</div>' +
+              '<div id="apqcCategoriesList" style="display:flex; flex-direction:column; gap:8px;"></div>' +
+            '</div>';
+
+          document.body.appendChild(pop);
+
+          // Drag handling
+          const header = pop.querySelector('.popout-header');
+          let isDragging = false, startX, startY, initL, initT;
+          header.addEventListener('mousedown', (e) => {
+            if (e.target.closest('button') || e.target.closest('a')) return;
+            isDragging = true;
+            startX = e.clientX; startY = e.clientY;
+            initL = pop.offsetLeft; initT = pop.offsetTop;
+            if (typeof popoutZIndexCounter === 'number') {
+              popoutZIndexCounter++;
+              pop.style.zIndex = popoutZIndexCounter;
+            }
+          });
+
+          document.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            pop.style.left = (initL + (e.clientX - startX)) + 'px';
+            pop.style.top = (initT + (e.clientY - startY)) + 'px';
+          });
+
+          document.addEventListener('mouseup', () => { isDragging = false; });
+
+          pop.addEventListener('mousedown', () => {
+            if (typeof popoutZIndexCounter === 'number') {
+              popoutZIndexCounter++;
+              pop.style.zIndex = popoutZIndexCounter;
+            }
+          });
+
+          // Input events
+          const inp = pop.querySelector('#inpApqcSearch');
+          inp.addEventListener('input', () => {
+            renderApqcCards();
+          });
+
+          const btnReset = pop.querySelector('#btnResetApqcSearch');
+          btnReset.addEventListener('click', () => {
+            inp.value = '';
+            currentApqcGroupFilter = 'all';
+            pop.querySelectorAll('.apqc-filter-pill').forEach(p => p.classList.toggle('active', p.dataset.apqcFilter === 'all'));
+            renderApqcCards();
+            inp.focus();
+          });
+
+          // Pill clicks
+          pop.querySelector('#apqcFilterPillsContainer').addEventListener('click', (e) => {
+            const btn = e.target.closest('.apqc-filter-pill');
+            if (!btn) return;
+            currentApqcGroupFilter = btn.dataset.apqcFilter || 'all';
+            pop.querySelectorAll('.apqc-filter-pill').forEach(p => p.classList.remove('active'));
+            btn.classList.add('active');
+            renderApqcCards();
+          });
+        }
+
+        pop.style.display = 'flex';
+        pop.classList.remove('popout-closed');
+        pop.hidden = false;
+        if (typeof popoutZIndexCounter === 'number') {
+          popoutZIndexCounter++;
+          pop.style.zIndex = popoutZIndexCounter;
+        }
+
+        const inp = pop.querySelector('#inpApqcSearch');
+        if (typeof initialFilter === 'string' && initialFilter.trim()) {
+          const codeMatch = initialFilter.trim().match(/^[0-9]+(\.[0-9]+)?/);
+          if (inp) inp.value = codeMatch ? codeMatch[0] : initialFilter.trim();
+        } else if (initialFilter === '' || initialFilter === null || initialFilter === undefined) {
+          if (inp) inp.value = '';
+        }
+
+        renderApqcCards(typeof initialFilter === 'string' ? initialFilter : null);
+      };
+
+      function renderApqcCards(targetHighlight) {
+        const pop = document.getElementById('apqcExplorerPopout');
+        if (!pop) return;
+
+        const inp = pop.querySelector('#inpApqcSearch');
+        const query = (inp ? inp.value.trim().toLowerCase() : '');
+        const listContainer = pop.querySelector('#apqcCategoriesList');
+        const statsEl = pop.querySelector('#apqcStatsText');
+        if (!listContainer) return;
+
+        listContainer.innerHTML = '';
+
+        const currentProcesses = typeof PROCESSES_DATA !== 'undefined' ? PROCESSES_DATA : [];
+        const activeModel = (typeof registeredLandscapeModels !== 'undefined') 
+          ? registeredLandscapeModels.find(m => m.id === (window.currentModelId || currentModelId)) 
+          : null;
+        const modelName = activeModel?.organization || activeModel?.shortName || 'Aktive IT-Landschaft';
+
+        // Count mapped processes
+        let totalMapped = 0;
+        currentProcesses.forEach(p => {
+          if (p.apqc && p.apqc.trim()) totalMapped++;
+        });
+
+        if (statsEl) {
+          statsEl.innerHTML = '<strong>' + modelName + ':</strong> ' + totalMapped + ' von ' + currentProcesses.length + ' Prozessen klassifiziert';
+        }
+
+        let renderedCount = 0;
+
+        APQC_PCF_TAXONOMY.forEach(cat => {
+          // Check group filter
+          if (currentApqcGroupFilter === 'operating' && cat.group !== 'operating') return;
+          if (currentApqcGroupFilter === 'management' && cat.group !== 'management') return;
+
+          // Find mapped processes for this category
+          const matchingProcs = currentProcesses.filter(p => {
+            if (!p.apqc) return false;
+            const apqcStr = String(p.apqc).toLowerCase();
+            const catCode = cat.category.toLowerCase();
+            const codeMatches = (
+              p.apqc === cat.category ||
+              apqcStr.startsWith(catCode + ' ') ||
+              apqcStr.startsWith(catCode + '.') ||
+              apqcStr.includes(' ' + catCode + ' ') ||
+              apqcStr.includes(' ' + catCode + '.') ||
+              apqcStr.includes(cat.name.toLowerCase())
+            );
+            return codeMatches;
+          });
+
+          if (currentApqcGroupFilter === 'mapped' && matchingProcs.length === 0) return;
+
+          // Search query matching
+          if (query) {
+            const matchesCode = cat.category.toLowerCase().includes(query);
+            const matchesName = cat.name.toLowerCase().includes(query);
+            const matchesEn = cat.nameEn.toLowerCase().includes(query);
+            const matchesDesc = cat.desc.toLowerCase().includes(query);
+            const matchesProc = matchingProcs.some(p => (p.id + ' ' + p.name + ' ' + (p.desc || '')).toLowerCase().includes(query));
+            if (!matchesCode && !matchesName && !matchesEn && !matchesDesc && !matchesProc) {
+              return;
+            }
+          }
+
+          renderedCount++;
+
+          const isTargetHighlight = targetHighlight && (
+            String(targetHighlight).includes(cat.category) ||
+            cat.name.toLowerCase().includes(String(targetHighlight).toLowerCase())
+          );
+
+          const card = document.createElement('div');
+          card.className = 'apqc-cat-card' + (isTargetHighlight ? ' active-apqc-highlight' : '');
+          card.id = 'apqcCard_' + cat.category.replace('.', '_');
+
+          card.innerHTML = 
+            '<div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px; gap:8px;">' +
+              '<div style="display:flex; align-items:center; gap:7px; flex-wrap:wrap;">' +
+                '<span class="apqc-code-badge">' + cat.category + '</span>' +
+                '<span style="font-size:0.82rem; font-weight:750; color:var(--text-bright);">' + cat.name + '</span>' +
+              '</div>' +
+              '<div style="display:flex; align-items:center; gap:6px;">' +
+                '<span class="traffic-tag" style="background:' + (cat.group === 'operating' ? 'rgba(16,185,129,0.18)' : 'rgba(139,92,246,0.18)') + '; color:' + (cat.group === 'operating' ? '#10b981' : '#a78bfa') + '; font-size:0.62rem; font-weight:700;">' + (cat.group === 'operating' ? 'Betrieb' : 'Support') + '</span>' +
+                '<a href="https://www.apqc.org/search?search_api_fulltext=' + encodeURIComponent(cat.category + ' ' + cat.nameEn) + '" target="_blank" rel="noopener noreferrer" style="font-size:0.65rem; color:var(--accent); text-decoration:none; display:inline-flex; align-items:center; gap:2px;" title="Auf apqc.org suchen">' +
+                  '<span>apqc.org</span> ↗' +
+                '</a>' +
+              '</div>' +
+            '</div>' +
+            '<div style="font-size:0.65rem; color:var(--accent); font-style:italic; margin-bottom:4px;">' + cat.nameEn + '</div>' +
+            '<div style="font-size:0.68rem; color:var(--text-muted); line-height:1.4; margin-bottom:8px;">' + cat.desc + '</div>' +
+            '<div style="border-top:1px solid rgba(255,255,255,0.06); padding-top:6px;">' +
+              '<div style="font-size:0.65rem; font-weight:700; color:var(--text-bright); margin-bottom:4px; display:flex; justify-content:space-between; align-items:center;">' +
+                '<span>Zugeordnete Prozesse im Modell (' + matchingProcs.length + ')</span>' +
+                (matchingProcs.length > 0 ? '<span style="color:var(--text-muted); font-size:0.62rem;">Klick öffnet Prozess</span>' : '') +
+              '</div>' +
+              '<div style="display:flex; flex-wrap:wrap; gap:5px;">' +
+                (matchingProcs.length > 0 
+                  ? matchingProcs.map(p => 
+                      '<button type="button" class="apqc-proc-chip" onclick="window.selectProcessFromApqc(\'' + p.id + '\')" title="Prozess ' + p.id + ' (' + p.name + ') im EAM-Modell fokussieren">' +
+                        '<span>⚡ ' + p.id + '</span> · <span>' + p.name + '</span>' +
+                      '</button>'
+                    ).join('')
+                  : '<span style="font-size:0.64rem; color:var(--text-muted); font-style:italic;">Kein Prozess in der aktuellen IT-Landschaft zugeordnet</span>'
+                ) +
+              '</div>' +
+            '</div>';
+
+          listContainer.appendChild(card);
+
+          if (isTargetHighlight) {
+            setTimeout(() => {
+              card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 100);
+          }
+        });
+
+        if (renderedCount === 0) {
+          listContainer.innerHTML = 
+            '<div style="text-align:center; padding:30px 10px; color:var(--text-muted); font-size:0.75rem;">' +
+              'Keine passenden APQC-Kategorien für die aktuelle Filterauswahl gefunden.' +
+            '</div>';
+        }
+      }
+
       // Open Landscape Catalog Popout Window
       window.closeLandscapeCatalogPopout = function() {
         const pop = document.getElementById('landscapeCatalogPopout');
@@ -30819,6 +31374,32 @@
             onSelect: () => {
               window.open("https://orcai-54321.web.app/markdown/?key=ORCAI-260913-23H55-QUAD-CHORD", "_blank", "noopener,noreferrer");
             }
+          },
+          {
+            id: 'act-apqc-explorer',
+            type: 'action',
+            badgeClass: 'omni-badge-action',
+            badgeText: 'APQC PCF',
+            title: 'APQC Process Classification Framework Explorer öffnen',
+            sub: 'Taxonomie explorieren, Prozess-Zuordnungen prüfen und offizielle APQC PCF Spezifikation aufrufen',
+            shortcut: 'APQC',
+            searchText: 'apqc process classification framework pcf prozesse klassifikation healthcare eam',
+            onSelect: () => {
+              window.openApqcExplorer && window.openApqcExplorer();
+            }
+          },
+          {
+            id: 'act-landscape-catalog',
+            type: 'action',
+            badgeClass: 'omni-badge-action',
+            badgeText: 'Katalog',
+            title: 'IT-Landschaften & Modell-Katalog öffnen',
+            sub: 'Wechseln zwischen Johanniter, Johannesstift Diakonie, Klinikverbund Nord und Bruker',
+            shortcut: 'Katalog',
+            searchText: 'katalog landscape model it landschaften wechsel import export json',
+            onSelect: () => {
+              window.openLandscapeCatalogPopout && window.openLandscapeCatalogPopout();
+            }
           }
         ];
         actions.forEach(a => items.push(a));
@@ -32296,6 +32877,7 @@
                   '<button type="button" class="puml-selfref-btn btn-puml-selfref" onclick="window.restorePlantUmlCallingContext(\'' + esc(proc.id) + '\')" title="Aufrufumgebung im EAM-Modell wiederherstellen (' + titleLabel + ')">🔗</button>' +
                 '</div>' +
                 '<span class="traffic-tag" style="background:rgba(56,189,248,0.2); color:var(--accent); font-weight:700;">UML 2.5</span>' +
+                (proc.apqc ? '<button type="button" class="apqc-code-badge" onclick="event.stopPropagation(); window.openApqcExplorer(\'' + esc(proc.apqc) + '\')" title="APQC PCF Klassifikation ' + esc(proc.apqc) + ' im Explorer öffnen" style="cursor:pointer;">📋 APQC ' + esc(proc.apqc) + '</button>' : '') +
               '</div>' +
               '<div style="display:flex; align-items:center; gap:6px;">' +
                 '<button class="insp-action-btn" onclick="window.zoomPuml(\'' + esc(proc.id) + '\', 0.2)" title="Vergrößern (+)">🔍 +</button>' +

@@ -432,7 +432,35 @@ Wenn Anwender bei geöffneten Diagrammen im Hintergrund navigieren (z. B. andere
   - **`[ ] include plantuml` (Standard: deaktiviert):** Exportiert das rein relationale, schlanke EAM-Modell ohne redundanten Diagrammcode.
   - **`[x] include plantuml` (Aktiviert):** Generiert beim Klick auf Download in Sekundenschnelle für jeden Prozess im Modell den vollständigen PlantUML-Code on-the-fly und bettet ihn als schlüsselfertiges `"plantUml"`-Attribut ein. Externe Dokumentations-Pipelines, CI/CD-Tools oder Rendering-Services können diesen Code ohne zusätzliche Parser direkt auswerten.
 
+---
+
+## 14. APQC Process Classification Framework (PCF) & Integrierter Explorer
+
+### Rolle von APQC bei der Definition von Geschäftsprozessen
+Das **APQC Process Classification Framework (PCF)** der American Productivity & Quality Center (APQC) ist der weltweit führende, herstellerunabhängige Standard für die Taxonomie und Strukturierung von Geschäftsprozessen. Es ermöglicht Enterprise-Architekten, Fachbereichen und IT-Organisationen:
+1. **Einheitliche Semantik:** Etablierung eines standardisierten Vokabulars für Prozesse über Unternehmensgrenzen, Konzerngesellschaften und Branchen hinweg.
+2. **Klares Alignment:** Klare Trennung zwischen **Betriebs- und Kernprozessen (Kategorien 1.0 bis 5.0)** und **Management- und Unterstützungsprozessen (Kategorien 6.0 bis 12.0)**.
+3. **Branchenprofile (Healthcare Provider PCF):** Präzise Einordnung klinischer und gesundheitswirtschaftlicher Abläufe in spezifische Unterkategorien (4.1 Notfall- und Akutversorgung, 4.2 Diagnostik und Labor, 4.3 Ambulante Pflege, 4.4 Rettungsdienst und Leitstelle, 4.5 Sterilgut und AEMP).
+
+### Offizielle Spezifikation & Weblinks
+- **Offizielle APQC PCF Spezifikation:** [apqc.org/pcf](https://www.apqc.org/pcf)
+- **APQC Volltextsuche:** Direkte Recherche nach Prozesskategorien über `https://www.apqc.org/search?search_api_fulltext=...`
+
+### Integrierter APQC PCF Explorer (`window.openApqcExplorer()`)
+Die Plattform bietet einen vollständig integrierten, interaktiven Explorer zur Erkundung des Prozessklassifikations-Frameworks:
+- **Autarkes, verschiebbares Pop-Out-Fenster:** Öffnet sich ohne modales Backdrop und lässt sich frei über die Arbeitsfläche bewegen und vergrößern.
+- **Kategorien-Übersicht & Detailkarten:** Bildet alle 12 APQC-Hauptkategorien inklusive spezifischer Healthcare-Klassen ab – jeweils mit deutschem Titel, englischem PCF-Standardbegriff, Gliederungsbereich (`Betrieb` vs. `Support`), Beschreibung und Direktlink zur offiziellen APQC-Spezifikation.
+- **Echtzeit-Zuordnung der Modell-Prozesse:** Jede APQC-Kategorie analysiert dynamisch das aktuell geladene IT-Landschaftsmodell und listet alle zugeordneten Prozesse als interaktive Chips (`⚡ PROC-ID · Prozessname`) auf.
+- **1-Klick-Fokussierung im EAM-Modell:** Durch Klick auf einen Prozesschip im Explorer wird dieser Prozess augenblicklich im Quad-Chord Diagramm fokussiert, die zugehörige Domäne aktiviert und der rechte Inspektor geöffnet.
+- **Live-Filterung & Suchfeld:** Echtzeit-Filterung nach APQC-Codes (z. B. `4.1`, `4.2`, `10.0`), Fachbegriffen (z. B. `Notfall`, `Labor`, `Abrechnung`) oder Kategoriefiltern (`1-5 Kernprozesse`, `6-12 Management & Support`, `Nur mit Modell-Prozessen`).
+
+### Nahtlose Verzahnung in der Benutzeroberfläche
+- **Inspektor (Prozessansicht):** Jeder ausgewählte Prozess zeigt sein APQC-Klassifikationsbadge mit direkter `⚡ Explorieren`-Schaltfläche (fokussiert die Kategorie im Explorer) sowie externem Link `apqc.org ↗`.
+- **PlantUML-Popout-Kopfzeile:** Jedes geöffnete Sequenzdiagramm enthält im Fensterkopf ein interaktives APQC-Pill (`📋 APQC 4.1`), das den Explorer mit passendem Fokus öffnet.
+- **Omni-Search (`Strg+K`):** Über die Tastenkombination `Strg+K` oder die Suchleiste kann der `APQC Process Classification Framework Explorer` per Schnellbefehl direkt aufgerufen werden.
+- **Konsistente Datenbasis:** Alle in der Plattform hinterlegten IT-Landschaften (Johanniter, Johannesstift Diakonie, Städtischer Klinikverbund Nord, Bruker Corporation) sind zu 100 % nach APQC klassifiziert.
 
 ---
 
 > *Enterprise Architecture Management (EAM) · Dokument generiert und persistiert in ORCAI.*
+
