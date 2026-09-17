@@ -870,6 +870,7 @@
     .omni-badge-proc { background: rgba(245, 158, 11, 0.18); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.35); }
     .omni-badge-domain { background: rgba(139, 92, 246, 0.18); color: #a78bfa; border: 1px solid rgba(139, 92, 246, 0.35); }
     .omni-badge-action { background: rgba(236, 72, 153, 0.18); color: #f472b6; border: 1px solid rgba(236, 72, 153, 0.35); }
+    .omni-badge-actor { background: rgba(56, 189, 248, 0.18); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.35); }
     .omni-item-info {
       flex: 1;
       min-width: 0;
@@ -3416,6 +3417,215 @@
       border-color: #0284c7 !important;
     }
 
+    /* ===================================================================== */
+    /* HITL (HUMAN IN THE LOOP) CORNER PODS & ACTOR TOUCHPOINT STYLES        */
+    /* ===================================================================== */
+    .hitl-corner-pod {
+      position: absolute;
+      z-index: 95;
+      min-width: 175px;
+      max-width: 255px;
+      user-select: none;
+      font-family: inherit;
+    }
+    .hitl-pod-lt {
+      top: 56px;
+      left: 18px;
+    }
+    .hitl-pod-lb {
+      bottom: 46px;
+      left: 18px;
+    }
+    .hitl-pod-rt {
+      top: 56px;
+      right: 18px;
+    }
+    .hitl-pod-rb {
+      bottom: 46px;
+      right: 18px;
+    }
+
+    .hitl-pod-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      border-radius: 8px;
+      background: var(--card-bg, rgba(15, 23, 42, 0.85));
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--card-border, rgba(255, 255, 255, 0.12));
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .hitl-pod-header:hover {
+      border-color: var(--accent, #38bdf8);
+      box-shadow: 0 0 14px rgba(56, 189, 248, 0.35);
+      transform: translateY(-1px);
+    }
+    .hitl-corner-pod.active .hitl-pod-header {
+      border-color: var(--accent, #38bdf8);
+      background: rgba(56, 189, 248, 0.16);
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.45);
+    }
+    .hitl-pod-avatar {
+      font-size: 1.35rem;
+      line-height: 1;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+    }
+    .hitl-pod-info {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-width: 0;
+    }
+    .hitl-pod-corner-tag {
+      font-size: 0.58rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted, #94a3b8);
+      font-weight: 750;
+      line-height: 1.2;
+    }
+    .hitl-pod-role-label {
+      font-size: 0.72rem;
+      font-weight: 750;
+      color: var(--text-bright, #f8fafc);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1.2;
+    }
+    .hitl-pod-caret {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      transition: transform 0.2s ease;
+    }
+    .hitl-corner-pod.dropdown-open .hitl-pod-caret {
+      transform: rotate(180deg);
+    }
+    .hitl-dropdown {
+      position: absolute;
+      min-width: 280px;
+      max-width: 340px;
+      background: var(--card-bg, #0f172a);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid var(--card-border, rgba(255, 255, 255, 0.15));
+      border-radius: 8px;
+      padding: 8px;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.55);
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      z-index: 100;
+    }
+    .hitl-pod-lt .hitl-dropdown,
+    .hitl-pod-rt .hitl-dropdown {
+      top: 100%;
+      margin-top: 6px;
+    }
+    .hitl-pod-lb .hitl-dropdown,
+    .hitl-pod-rb .hitl-dropdown {
+      bottom: 100%;
+      margin-bottom: 6px;
+    }
+    .hitl-pod-lt .hitl-dropdown,
+    .hitl-pod-lb .hitl-dropdown {
+      left: 0;
+    }
+    .hitl-pod-rt .hitl-dropdown,
+    .hitl-pod-rb .hitl-dropdown {
+      right: 0;
+    }
+
+    .hitl-role-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      padding: 7px 9px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      border: 1px solid transparent;
+      background: rgba(255, 255, 255, 0.03);
+    }
+    .hitl-role-item:hover {
+      background: rgba(56, 189, 248, 0.12);
+      border-color: rgba(56, 189, 248, 0.35);
+      transform: translateX(2px);
+    }
+    .hitl-role-item.selected {
+      background: rgba(56, 189, 248, 0.22);
+      border-color: var(--accent);
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.25);
+    }
+    .hitl-role-item-avatar {
+      font-size: 1.25rem;
+      line-height: 1.1;
+      flex-shrink: 0;
+    }
+    .hitl-role-item-name {
+      font-size: 0.73rem;
+      font-weight: 750;
+      color: var(--text-bright);
+    }
+    .hitl-role-item-sub {
+      font-size: 0.63rem;
+      color: var(--text-muted);
+      line-height: 1.35;
+      margin-top: 2px;
+    }
+    .hitl-role-item-badge {
+      font-size: 0.58rem;
+      padding: 2px 6px;
+      border-radius: 3px;
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--accent);
+      font-weight: 750;
+      white-space: nowrap;
+      align-self: flex-start;
+    }
+
+    /* Client Touchpoint Beacon on Arc Nodes */
+    .client-touchpoint-beacon {
+      animation: hitlBeaconPulse 1.8s infinite ease-in-out;
+      transform-origin: center center;
+    }
+    @keyframes hitlBeaconPulse {
+      0% { transform: scale(1); opacity: 0.9; stroke-width: 2.5; }
+      50% { transform: scale(1.35); opacity: 0.4; stroke-width: 5; }
+      100% { transform: scale(1); opacity: 0.9; stroke-width: 2.5; }
+    }
+
+    body.theme-day .hitl-pod-header {
+      background: rgba(255, 255, 255, 0.94);
+      border-color: #cbd5e1;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    }
+    body.theme-day .hitl-corner-pod.active .hitl-pod-header {
+      background: #e0f2fe;
+      border-color: #0284c7;
+      box-shadow: 0 0 16px rgba(2, 132, 199, 0.35);
+    }
+    body.theme-day .hitl-dropdown {
+      background: #ffffff;
+      border-color: #cbd5e1;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.16);
+    }
+    body.theme-day .hitl-role-item {
+      background: #f8fafc;
+    }
+    body.theme-day .hitl-role-item:hover {
+      background: #f0f9ff;
+      border-color: #7dd3fc;
+    }
+    body.theme-day .hitl-role-item.selected {
+      background: #e0f2fe;
+      border-color: #0284c7;
+    }
+
     /* MODEL CATALOGUE CARDS */
     .model-catalog-card {
       background: var(--item-bg) !important;
@@ -4093,6 +4303,7 @@
         <button type="button" class="omni-chip" data-filter="conn">Schnittstellen</button>
         <button type="button" class="omni-chip" data-filter="proc">Prozesse</button>
         <button type="button" class="omni-chip" data-filter="domain">Domänen</button>
+        <button type="button" class="omni-chip" data-filter="actor">👤 Rollen</button>
         <button type="button" class="omni-chip" data-filter="action">Aktionen</button>
       </div>
       <div class="omni-results-list" id="omniResultsList" role="listbox">
@@ -4349,6 +4560,55 @@
       
 
       <svg id="hebSvg"></svg>
+
+      <!-- 4 HITL (HUMAN IN THE LOOP) CORNER PODS -->
+      <div class="hitl-corner-pod hitl-pod-lt" id="podLT" data-corner="LT" title="LT: Fachkräfte & Operative Kernleistung">
+        <div class="hitl-pod-header" onclick="window.toggleHitlDropdown('LT')">
+          <span class="hitl-pod-avatar" id="avatarLT">🛠️</span>
+          <div class="hitl-pod-info">
+            <span class="hitl-pod-corner-tag">LT · Kernleistung</span>
+            <span class="hitl-pod-role-label" id="labelLT">Fachkräfte</span>
+          </div>
+          <span class="hitl-pod-caret">▾</span>
+        </div>
+        <div class="hitl-dropdown" id="dropdownLT" hidden></div>
+      </div>
+
+      <div class="hitl-corner-pod hitl-pod-lb" id="podLB" data-corner="LB" title="LB: Frontline, Field Service & Mobilität">
+        <div class="hitl-pod-header" onclick="window.toggleHitlDropdown('LB')">
+          <span class="hitl-pod-avatar" id="avatarLB">🚀</span>
+          <div class="hitl-pod-info">
+            <span class="hitl-pod-corner-tag">LB · Frontline / Field</span>
+            <span class="hitl-pod-role-label" id="labelLB">Mobiles Team</span>
+          </div>
+          <span class="hitl-pod-caret">▾</span>
+        </div>
+        <div class="hitl-dropdown" id="dropdownLB" hidden></div>
+      </div>
+
+      <div class="hitl-corner-pod hitl-pod-rt" id="podRT" data-corner="RT" title="RT: Steuerung, Governance & Verwaltung">
+        <div class="hitl-pod-header" onclick="window.toggleHitlDropdown('RT')">
+          <span class="hitl-pod-avatar" id="avatarRT">⚖️</span>
+          <div class="hitl-pod-info">
+            <span class="hitl-pod-corner-tag">RT · Governance / Admin</span>
+            <span class="hitl-pod-role-label" id="labelRT">Verwaltung</span>
+          </div>
+          <span class="hitl-pod-caret">▾</span>
+        </div>
+        <div class="hitl-dropdown" id="dropdownRT" hidden></div>
+      </div>
+
+      <div class="hitl-corner-pod hitl-pod-rb" id="podRB" data-corner="RB" title="RB: Externe Partner, Kunden & Nutzer">
+        <div class="hitl-pod-header" onclick="window.toggleHitlDropdown('RB')">
+          <span class="hitl-pod-avatar" id="avatarRB">🌐</span>
+          <div class="hitl-pod-info">
+            <span class="hitl-pod-corner-tag">RB · Partner & Kunden</span>
+            <span class="hitl-pod-role-label" id="labelRB">Nutzer & Partner</span>
+          </div>
+          <span class="hitl-pod-caret">▾</span>
+        </div>
+        <div class="hitl-dropdown" id="dropdownRB" hidden></div>
+      </div>
 
       <!-- Top-right Canvas Zoom / Reset controls -->
       <div class="canvas-controls">
@@ -19045,6 +19305,8 @@
         }
       }
       window.activateIntegrationFromEdge = activateIntegrationFromEdge;
+      window.setDrilldownProcess = setDrilldownProcess;
+      window.setDrilldownIntegration = setDrilldownIntegration;
 
       // Drilldown Header Navigation & Clear Actions
       function jumpToStage1() {
@@ -21115,7 +21377,201 @@
         processes: JSON.parse(JSON.stringify(PROCESSES_DATA)),
         integrations: JSON.parse(JSON.stringify(INTEGRATIONS_DATA)),
         connections: JSON.parse(JSON.stringify(CONNECTIONS_DATA)),
-        systems: JSON.parse(JSON.stringify(SYSTEMS_DATA))
+        systems: JSON.parse(JSON.stringify(SYSTEMS_DATA)),
+        actors: [
+          {
+            id: "JOH-ACT-01",
+            quadrant: "LT",
+            name: "Notärztin & Triage-Mediziner",
+            archetype: "Klinisches Fachpersonal / Notfallmedizin",
+            avatar: "👩‍⚕️",
+            industryContext: "Notfallrettung & Akutversorgung",
+            hitlType: "DECISION_MAKER_AND_TRIAGE",
+            hitlSummary: "Stellt Indikation, leitet Reanimations- und Notfallprotokolle und autorisiert Notfalleinsätze.",
+            clients: [
+              {
+                id: "JOH-CL-01",
+                name: "NACA Triage Pad & Notarzt-Tablet",
+                deviceType: "TABLET_MOBILE",
+                os: "Ruggedized Android Enterprise",
+                authMethod: "Mitarbeiter-PIN & mTLS Zertifikat",
+                targetSystemId: "SYS-27",
+                messagesEmitted: ["MTS Triage-Score", "Notfall-Kurzbefund"]
+              }
+            ],
+            connections: ["CON-27-01", "CON-27-02"],
+            integrations: ["INT-001", "INT-002"],
+            processes: ["PROC-01"]
+          },
+          {
+            id: "JOH-ACT-02",
+            quadrant: "LT",
+            name: "Pflegefachkraft Station & Hospiz",
+            archetype: "Operative Pflege & Stationäre Betreuung",
+            avatar: "🩺",
+            industryContext: "Stationäre Pflege & Hospizwesen",
+            hitlType: "DATA_CREATOR_AND_CARER",
+            hitlSummary: "Dokumentiert Pflegeverläufe, Vitalzeichen, Medikationsgaben und Wundverläufe am Bett.",
+            clients: [
+              {
+                id: "JOH-CL-02",
+                name: "Stationäres Pflege-Cockpit (Dedalus ORBIS / Medico)",
+                deviceType: "DESKTOP_GUI",
+                os: "Windows 11 Enterprise (Citrix)",
+                authMethod: "SSO (Entra ID)",
+                targetSystemId: "SYS-11",
+                messagesEmitted: ["Pflegedokumentation HL7 MDM", "AMTS Verabreichungsnachweis"]
+              }
+            ],
+            connections: ["CON-13", "CON-14"],
+            integrations: ["INT-001"],
+            processes: ["PROC-03"]
+          },
+          {
+            id: "JOH-ACT-03",
+            quadrant: "LB",
+            name: "Notfallsanitäter & RTW-Einsatzteam",
+            archetype: "Mobiles Rettungsteam & First Responder",
+            avatar: "🚑",
+            industryContext: "Rettungsdienst & Krankentransport",
+            hitlType: "DATA_CREATOR_AND_DISPATCHER",
+            hitlSummary: "Übermittelt Vitaldaten und Voranmeldung live aus dem RTW an die Leitstelle und Klinik-ZNA.",
+            clients: [
+              {
+                id: "JOH-CL-03",
+                name: "NIDApad RTW Einsatzclient",
+                deviceType: "TABLET_MOBILE",
+                os: "Ruggedized Windows 11 Tablet",
+                authMethod: "Geräte-Token & Leitstellen-Auth",
+                targetSystemId: "SYS-25",
+                messagesEmitted: ["HL7 ADT^A04 Notfallvoranmeldung", "12-Kanal EKG Telemetrie"]
+              }
+            ],
+            connections: ["CON-01"],
+            integrations: ["INT-002"],
+            processes: ["PROC-01"]
+          },
+          {
+            id: "JOH-ACT-04",
+            quadrant: "LB",
+            name: "Hausnotruf-Techniker & Einsatzdienst",
+            archetype: "Mobile Soziale Dienste & Notruftechnik",
+            avatar: "📟",
+            industryContext: "Hausnotruf & Assistenzsysteme",
+            hitlType: "FIELD_OPERATOR_AND_RESPONDER",
+            hitlSummary: "Führt Alarmverifikation bei Funksignal-Auslösung durch und dokumentiert Hilfeleistungen vor Ort.",
+            clients: [
+              {
+                id: "JOH-CL-04",
+                name: "Johanniter Service Mobil-App",
+                deviceType: "SMARTPHONE_APP",
+                os: "Android Enterprise Smartphone",
+                authMethod: "OAuth 2.0 / Entra ID",
+                targetSystemId: "SYS-45",
+                messagesEmitted: ["Notruf-Quittung", "Einsatzbericht REST"]
+              }
+            ],
+            connections: ["CON-02"],
+            integrations: ["INT-003"],
+            processes: ["PROC-05"]
+          },
+          {
+            id: "JOH-ACT-05",
+            quadrant: "RT",
+            name: "Leiter Finanzen & Controlling",
+            archetype: "Konzern-Governance & Finanzen",
+            avatar: "📊",
+            industryContext: "Verband & Konzernverwaltung",
+            hitlType: "APPROVER_AND_AUDITOR",
+            hitlSummary: "Überwacht Budgetallokation der Landesverbände und gibt Quartalsabschlüsse im SAP S/4HANA frei.",
+            clients: [
+              {
+                id: "JOH-CL-05",
+                name: "SAP Fiori Launchpad & Analysis for Office",
+                deviceType: "DESKTOP_GUI",
+                os: "Web Browser (Edge / Chrome)",
+                authMethod: "SSO (SAML 2.0 via Microsoft Entra ID)",
+                targetSystemId: "SYS-01",
+                messagesEmitted: ["Budgetfreigabe", "Finanzkonsolidierung OData"]
+              }
+            ],
+            connections: ["CON-03"],
+            integrations: ["INT-004"],
+            processes: ["PROC-08"]
+          },
+          {
+            id: "JOH-ACT-06",
+            quadrant: "RT",
+            name: "Datenschutz- & Compliance-Beauftragter",
+            archetype: "Governance, Risk & Compliance (GRC)",
+            avatar: "⚖️",
+            industryContext: "Kirchenrecht & DSGVO / GRC",
+            hitlType: "COMPLIANCE_AUDITOR",
+            hitlSummary: "Prüft DSGVO-/KDG-Verfahrensverzeichnisse, Berechtigungskonzepte und Schnittstellen-Sicherheit.",
+            clients: [
+              {
+                id: "JOH-CL-06",
+                name: "OneTrust GRC & Security Portal",
+                deviceType: "WEB_PORTAL",
+                os: "Web Browser",
+                authMethod: "MFA via Entra ID",
+                targetSystemId: "SYS-03",
+                messagesEmitted: ["Auditbericht", "DSGVO-Freigabe REST"]
+              }
+            ],
+            connections: ["CON-04"],
+            integrations: ["INT-005"],
+            processes: ["PROC-07"]
+          },
+          {
+            id: "JOH-ACT-07",
+            quadrant: "RB",
+            name: "Bürger & Hausnotruf-Kunde",
+            archetype: "Endkunde & Betreute Person",
+            avatar: "👵",
+            industryContext: "Soziale Dienste & Bürger",
+            hitlType: "CONSUMER_AND_ALERT_INITIATOR",
+            hitlSummary: "Löst Handsender-Funkruf bei Hilfsbedürftigkeit aus und verwaltet Stammdaten im Kundenportal.",
+            clients: [
+              {
+                id: "JOH-CL-07",
+                name: "Johanniter Kundenportal & Funk-Handsender",
+                deviceType: "WEB_AND_IOT",
+                os: "Web Portal / 869 MHz Funkprotokoll",
+                authMethod: "Kunden-Login / 2FA SMS",
+                targetSystemId: "SYS-60",
+                messagesEmitted: ["Notruf-Alarmierung", "Stammdatenaktualisierung"]
+              }
+            ],
+            connections: ["CON-14"],
+            integrations: ["INT-001"],
+            processes: ["PROC-06"]
+          },
+          {
+            id: "JOH-ACT-08",
+            quadrant: "RB",
+            name: "Kostenträger / Krankenkassen-Referent",
+            archetype: "Kostenträger & Externe Abrechnung",
+            avatar: "🏦",
+            industryContext: "Gesetzliche & Private Krankenversicherung",
+            hitlType: "EXTERNAL_PAYER_AUDITOR",
+            hitlSummary: "Prüft Sammelabrechnungen nach § 302 SGB V und klärt Rechnungsbeanstandungen über EDIFACT.",
+            clients: [
+              {
+                id: "JOH-CL-08",
+                name: "KVDT / DTA-Clearing Portal",
+                deviceType: "WEB_PORTAL",
+                os: "B2B Clearing Gateway",
+                authMethod: "Zertifikatsbasierte B2B-Authentifizierung",
+                targetSystemId: "SYS-04",
+                messagesEmitted: ["EDIFACT Rechnungsquittung", "Beanstandungsprotokoll"]
+              }
+            ],
+            connections: ["CON-05"],
+            integrations: ["INT-004"],
+            processes: ["PROC-04"]
+          }
+        ]
       };
 
       const cachedKlinikModel = {
@@ -22891,6 +23347,176 @@
         "Klinik",
         "REST_API"
       ]
+    }
+  ],
+  "actors": [
+    {
+      "id": "KV-ACT-01",
+      "quadrant": "LT",
+      "name": "Oberarzt ZNA & Intensivmediziner",
+      "archetype": "Klinisches Fachpersonal / Notfall- & Intensivmedizin",
+      "avatar": "👨‍⚕️",
+      "industryContext": "Maximalversorgung & Intensivstation",
+      "hitlType": "DECISION_MAKER_AND_CLINICIAN",
+      "hitlSummary": "Führt Schockraum-Management, ordnet Notfall-CT an und überwacht Beatmungsparameter am PDMS.",
+      "clients": [
+        {
+          "id": "KV-CL-01",
+          "name": "Dedalus ORBIS KIS & Philips IntelliSpace PDMS",
+          "deviceType": "DESKTOP_GUI",
+          "os": "Windows 11 Enterprise (Workstation)",
+          "authMethod": "SSO Entra ID + eHBA",
+          "targetSystemId": "KV-10",
+          "messagesEmitted": ["Vitaldaten-Kurve Quittung", "Notfall-Laboranforderung HL7"]
+        }
+      ],
+      "connections": ["KC-01", "KC-05"],
+      "integrations": ["KINT-01", "KINT-05"],
+      "processes": ["KP-01", "KP-04"]
+    },
+    {
+      "id": "KV-ACT-02",
+      "quadrant": "LT",
+      "name": "Facharzt für Radiologie & Neuroradiologie",
+      "archetype": "Fachdiagnostik & Bildgebung",
+      "avatar": "🩻",
+      "industryContext": "Radiologie & Teleradiologie",
+      "hitlType": "DIAGNOSTICIAN_AND_VALIDATOR",
+      "hitlSummary": "Befundet CT/MRT-Serien am Sectra PACS und validiert KI-Vorbefunde bei akutem Schlaganfall.",
+      "clients": [
+        {
+          "id": "KV-CL-02",
+          "name": "Sectra Diagnostic Imaging Workstation",
+          "deviceType": "DESKTOP_GUI",
+          "os": "Windows 11 Pro Multi-Monitor (DICOM kalibriert)",
+          "authMethod": "Smartcard / Kerberos SSO",
+          "targetSystemId": "KV-12",
+          "messagesEmitted": ["DICOM SR Befund", "Syngo RIS Statuswechsel"]
+        }
+      ],
+      "connections": ["KC-03", "KC-04"],
+      "integrations": ["KINT-03", "KINT-04"],
+      "processes": ["KP-03"]
+    },
+    {
+      "id": "KV-ACT-03",
+      "quadrant": "LB",
+      "name": "Telenotarzt & Rettungsdienst-Team",
+      "archetype": "Mobiles Notfallteam & Tele-Konsil",
+      "avatar": "🚑",
+      "industryContext": "Präklinische Notfallrettung",
+      "hitlType": "TELEMEDICINE_CONSULTANT",
+      "hitlSummary": "Leitet Notfallsanitäter per Audio-/Video-Stream telemedizinisch an und gibt Notfallmedikamente frei.",
+      "clients": [
+        {
+          "id": "KV-CL-03",
+          "name": "P3 Telenotarzt Arbeitsplatz & Rescue Mobile",
+          "deviceType": "DESKTOP_GUI",
+          "os": "Windows 11 mit Live-Video & 12-Kanal EKG",
+          "authMethod": "2FA VPN + eHBA",
+          "targetSystemId": "KV-16",
+          "messagesEmitted": ["Tele-Konsilprotokoll", "Freigabe BTM / Notfallmedikation"]
+        }
+      ],
+      "connections": ["KC-01", "KC-02"],
+      "integrations": ["KINT-01"],
+      "processes": ["KP-01"]
+    },
+    {
+      "id": "KV-ACT-04",
+      "quadrant": "RT",
+      "name": "Medizincontroller & Abrechnungsleiter",
+      "archetype": "Krankenhaus-Controlling & DRG-Management",
+      "avatar": "💼",
+      "industryContext": "Klinikverwaltung & Finanzwesen",
+      "hitlType": "FINANCIAL_VALIDATOR",
+      "hitlSummary": "Prüft DRG-Kodierung auf MDK-Konformität und generiert § 301 DTA-Abrechnungsdatensätze für Krankenkassen.",
+      "clients": [
+        {
+          "id": "KV-CL-04",
+          "name": "SAP S/4HANA Finance & Dedalus ORBIS Controlling",
+          "deviceType": "DESKTOP_GUI",
+          "os": "Web Browser / SAP GUI",
+          "authMethod": "SAML 2.0 SSO",
+          "targetSystemId": "KV-01",
+          "messagesEmitted": ["DTA § 301 Sammelrechnung", "Erlösabgrenzung Buchung"]
+        }
+      ],
+      "connections": ["KC-08", "KC-09"],
+      "integrations": ["KINT-08", "KINT-09"],
+      "processes": ["KP-05"]
+    },
+    {
+      "id": "KV-ACT-05",
+      "quadrant": "RT",
+      "name": "Informationssicherheitsbeauftragter (CISO)",
+      "archetype": "KRITIS-Sicherheit & IT-Governance",
+      "avatar": "🛡️",
+      "industryContext": "KRITIS-Krankenhaus § 8a BSIG",
+      "hitlType": "SECURITY_OFFICER",
+      "hitlSummary": "Überwacht SIEM-Alarme, Zero-Trust-Richtlinien und meldet IT-Sicherheitsvorfälle an das BSI.",
+      "clients": [
+        {
+          "id": "KV-CL-05",
+          "name": "Zscaler Zero Trust & Fortinet Security Console",
+          "deviceType": "WEB_PORTAL",
+          "os": "Hardened Linux / Windows Workstation",
+          "authMethod": "FIDO2 Hardware-Token",
+          "targetSystemId": "KV-17",
+          "messagesEmitted": ["Security Incident Ticket", "Firewall Policy Update"]
+        }
+      ],
+      "connections": ["KC-11"],
+      "integrations": ["KINT-11"],
+      "processes": ["KP-06"]
+    },
+    {
+      "id": "KV-ACT-06",
+      "quadrant": "RB",
+      "name": "Patient & KHZG-Portalnutzer",
+      "archetype": "Patient & Bürger / Endnutzer",
+      "avatar": "📱",
+      "industryContext": "Patientenportal & Digitales Entlassmanagement",
+      "hitlType": "PORTAL_USER_AND_CONSENT_GIVER",
+      "hitlSummary": "Ruft Befunde online ab, unterzeichnet Behandlungsverträge digital und übermittelt Vitalwerte.",
+      "clients": [
+        {
+          "id": "KV-CL-06",
+          "name": "Klinikverbund Nord Patienten-App",
+          "deviceType": "SMARTPHONE_APP",
+          "os": "iOS / Android App",
+          "authMethod": "GesundheitsID (gematik) / Biometrie",
+          "targetSystemId": "KV-20",
+          "messagesEmitted": ["Digitale Einwilligung FHIR Consent", "Termin-Storno"]
+        }
+      ],
+      "connections": ["KC-10"],
+      "integrations": ["KINT-10"],
+      "processes": ["KP-06"]
+    },
+    {
+      "id": "KV-ACT-07",
+      "quadrant": "RB",
+      "name": "Kassenärztliche Vereinigung & Zuweiser",
+      "archetype": "Ambulanter Partner & Zuweisernetzwerk",
+      "avatar": "🏥",
+      "industryContext": "Ambulante Versorgung & KV-Sektor",
+      "hitlType": "REFERRING_PHYSICIAN",
+      "hitlSummary": "Übermittelt ambulante Zuweisungen per KIM und empfängt strukturierte eArztbriefe nach Entlassung.",
+      "clients": [
+        {
+          "id": "KV-CL-07",
+          "name": "Praxis-PVS mit TI-KIM Fachdienst",
+          "deviceType": "DESKTOP_GUI",
+          "os": "Praxis-PC (Windows)",
+          "authMethod": "eHBA Arztausweis + SMC-B",
+          "targetSystemId": "KV-17",
+          "messagesEmitted": ["KIM eArztbrief Empfangsbestätigung", "Elektronische Überweisung eU"]
+        }
+      ],
+      "connections": ["KC-06", "KC-07"],
+      "integrations": ["KINT-06"],
+      "processes": ["KP-06"]
     }
   ]
 };
@@ -25198,6 +25824,176 @@
         "REST_API"
       ],
       "hyperscaler": null
+    }
+  ],
+  "actors": [
+    {
+      "id": "JSD-ACT-01",
+      "quadrant": "LT",
+      "name": "Stationsarzt & Klinischer Operateur",
+      "archetype": "Klinisches Fachpersonal / Core Medical",
+      "avatar": "👨‍⚕️",
+      "industryContext": "Healthcare Provider",
+      "hitlType": "DECISION_MAKER_AND_SIGNER",
+      "hitlSummary": "Stellt Diagnosen, verordnet Medikation mit AMTS-Prüfung und signiert eArztbriefe qualifiziert per eHBA.",
+      "clients": [
+        {
+          "id": "JSD-CL-01",
+          "name": "Dedalus ORBIS KIS Desktop Client",
+          "deviceType": "DESKTOP_GUI",
+          "os": "Windows 11 Enterprise (Citrix/Fat Client)",
+          "authMethod": "SSO (Entra ID) + eHBA (Kartenleser eHealth-BCS)",
+          "targetSystemId": "JSD-01",
+          "messagesEmitted": ["KIM 1.5 eArztbrief (XML-DSig)", "HL7 OMG^O19 Laboranforderung"]
+        }
+      ],
+      "connections": ["JSD-C-01", "JSD-C-03", "JSD-C-19"],
+      "integrations": ["JSD-INT-02", "JSD-INT-06"],
+      "processes": ["JSD-P-02", "JSD-P-06"]
+    },
+    {
+      "id": "JSD-ACT-02",
+      "quadrant": "LT",
+      "name": "AEMP-Sterilgut-Fachkraft",
+      "archetype": "Operative Logistik / Sterile Processing",
+      "avatar": "🧼",
+      "industryContext": "Healthcare Provider & Services",
+      "hitlType": "DATA_CREATOR_AND_OPERATOR",
+      "hitlSummary": "Erfasst und quittiert Sieb- und Chargenprüfungen bei der Instrumentenaufbereitung im Reinraum.",
+      "clients": [
+        {
+          "id": "JSD-CL-02",
+          "name": "Instacount Barcode- & RFID-Handscanner",
+          "deviceType": "BARCODE_SCANNER",
+          "os": "Embedded Android Enterprise",
+          "authMethod": "Mitarbeiter-RFID-Badge",
+          "targetSystemId": "JSD-29",
+          "messagesEmitted": ["Instacount Chargen-Protokoll & Sieb-Scan"]
+        }
+      ],
+      "connections": ["JSD-C-10", "JSD-C-11"],
+      "integrations": ["JSD-INT-07", "JSD-INT-08"],
+      "processes": ["JSD-P-04"]
+    },
+    {
+      "id": "JSD-ACT-03",
+      "quadrant": "LB",
+      "name": "Notfallsanitäter & RTW-Besatzung",
+      "archetype": "Mobiles Einsatzpersonal / First Responder",
+      "avatar": "🚑",
+      "industryContext": "Emergency Medical Services",
+      "hitlType": "DATA_CREATOR_AND_DISPATCHER",
+      "hitlSummary": "Erfasst Vitaldaten, EKG und Verdachtsdiagnose am Notfallort und übermittelt MTS-Triage-Score an ZNA.",
+      "clients": [
+        {
+          "id": "JSD-CL-03",
+          "name": "NIDApad RTW-Einsatztablet & RescueTrack",
+          "deviceType": "TABLET_MOBILE",
+          "os": "Ruggedized Windows 11 Tablet",
+          "authMethod": "Einsatz-PIN & mTLS Geräte-Zertifikat",
+          "targetSystemId": "JSD-07",
+          "messagesEmitted": ["HL7 ADT^A04 Notfallvoranmeldung", "DICOM 12-Kanal EKG Telemetrie"]
+        }
+      ],
+      "connections": ["JSD-C-01", "JSD-C-02"],
+      "integrations": ["JSD-INT-01"],
+      "processes": ["JSD-P-01"]
+    },
+    {
+      "id": "JSD-ACT-04",
+      "quadrant": "RT",
+      "name": "Patientenaufnahme & ZNA-Koordinator",
+      "archetype": "Administration & Patientenmanagement",
+      "avatar": "🧑‍💼",
+      "industryContext": "Hospital Administration",
+      "hitlType": "IDENTIFIER_AND_REGISTRAR",
+      "hitlSummary": "Liest eGK am Kartenterminal ein, prüft VSDM online und eröffnet den administrativen Behandlungsfall.",
+      "clients": [
+        {
+          "id": "JSD-CL-04",
+          "name": "eHealth-Kartenterminal & KIS Aufnahme-Client",
+          "deviceType": "DESKTOP_GUI",
+          "os": "Windows 11 / Dedalus ORBIS",
+          "authMethod": "SSO Entra ID + SMC-B Institutionskarte",
+          "targetSystemId": "JSD-01",
+          "messagesEmitted": ["gematik VSDM Prüfnachweis", "HL7 ADT^A01 Aufnahme"]
+        }
+      ],
+      "connections": ["JSD-C-01", "JSD-C-19"],
+      "integrations": ["JSD-INT-01", "JSD-INT-06"],
+      "processes": ["JSD-P-01", "JSD-P-06"]
+    },
+    {
+      "id": "JSD-ACT-05",
+      "quadrant": "RT",
+      "name": "Krankenhaus-Abrechner & Controller",
+      "archetype": "Finanzen, Controlling & Abrechnung",
+      "avatar": "⚖️",
+      "industryContext": "Hospital Finance & Billing",
+      "hitlType": "APPROVER_AND_AUDITOR",
+      "hitlSummary": "Validiert DRG-Codierung, klärt MDK/MD-Auffälligkeiten und autorisiert § 301 DTA-Abrechnungsläufe.",
+      "clients": [
+        {
+          "id": "JSD-CL-05",
+          "name": "SAP S/4HANA Finance GUI / Fiori Client",
+          "deviceType": "DESKTOP_GUI",
+          "os": "Web Browser / SAP GUI",
+          "authMethod": "SSO (SAML 2.0 via Entra ID)",
+          "targetSystemId": "JSD-03",
+          "messagesEmitted": ["DTA § 301 SGB V EDIFACT Clearing", "GKV-Sammelrechnung"]
+        }
+      ],
+      "connections": ["JSD-C-05", "JSD-C-21", "JSD-C-22"],
+      "integrations": ["JSD-INT-13", "JSD-INT-14"],
+      "processes": ["JSD-P-07"]
+    },
+    {
+      "id": "JSD-ACT-06",
+      "quadrant": "RB",
+      "name": "Patient & Angehörige",
+      "archetype": "Endnutzer & Kunde / Patient",
+      "avatar": "📱",
+      "industryContext": "Digital Health / Citizen",
+      "hitlType": "CONSUMER_AND_APPOINTMENT_REQUESTER",
+      "hitlSummary": "Bucht Termine digital, lädt Vorbefunde hoch und ruft Entlassdokumente via KHZG-Portal ab.",
+      "clients": [
+        {
+          "id": "JSD-CL-06",
+          "name": "m.Doc Patientenportal (Web & Smartphone App)",
+          "deviceType": "WEB_AND_MOBILE_APP",
+          "os": "iOS / Android / Web",
+          "authMethod": "Zwei-Faktor-Authentifizierung (SMS / Authenticator)",
+          "targetSystemId": "JSD-05",
+          "messagesEmitted": ["FHIR Appointment.write", "REST DocumentReference.read (PDF/A-1)"]
+        }
+      ],
+      "connections": ["JSD-C-09", "JSD-C-17"],
+      "integrations": ["JSD-INT-09", "JSD-INT-10"],
+      "processes": ["JSD-P-05"]
+    },
+    {
+      "id": "JSD-ACT-07",
+      "quadrant": "RB",
+      "name": "Medizinprodukt- & Logistik-Lieferant",
+      "archetype": "B2B-Partner & Supply Chain",
+      "avatar": "📦",
+      "industryContext": "B2B Medical Supply Chain",
+      "hitlType": "SUPPLIER_AND_ORDER_FULFILLER",
+      "hitlSummary": "Bestätigt Bestellungen elektronisch über GHX und liefert XRechnungen über OpenPeppol ein.",
+      "clients": [
+        {
+          "id": "JSD-CL-07",
+          "name": "GHX B2B Supplier Portal & Peppol Hub",
+          "deviceType": "WEB_PORTAL",
+          "os": "B2B Web Interface / AS4 EDI Gateway",
+          "authMethod": "Peppol PKI-Zertifikat & API Key",
+          "targetSystemId": "JSD-24",
+          "messagesEmitted": ["GHX cXML PurchaseOrderResponse", "Peppol BIS Billing 3.0 (XRechnung)"]
+        }
+      ],
+      "connections": ["JSD-C-23", "JSD-C-24", "JSD-C-25"],
+      "integrations": ["JSD-INT-15", "JSD-INT-16"],
+      "processes": ["JSD-P-08"]
     }
   ]
 };
@@ -29134,6 +29930,224 @@
         "Cloud"
       ]
     }
+  ],
+  "actors": [
+    {
+      "id": "BRK-ACT-01",
+      "quadrant": "LT",
+      "name": "R&D Digital Engineer & Physiker",
+      "archetype": "Forschung & Mechatronisches Engineering",
+      "avatar": "🔬",
+      "industryContext": "High-Tech Manufacturing & R&D",
+      "hitlType": "DATA_CREATOR_AND_VALIDATOR",
+      "hitlSummary": "Entwickelt 3D-CAD-Modelle hochpräziser NMR- und Massenspektrometer-Baugruppen und gibt PLM-Releases frei.",
+      "clients": [
+        {
+          "id": "BRK-CL-01",
+          "name": "SolidWorks CAD Workstation & Teamcenter Client",
+          "deviceType": "DESKTOP_GUI",
+          "os": "Windows 11 Pro CAD Workstation",
+          "authMethod": "SSO (Microsoft Entra ID Kerberos)",
+          "targetSystemId": "BRK-08",
+          "messagesEmitted": ["JT 3D-Baugruppenfreigabe", "Jira Issue Sync (REST)"]
+        }
+      ],
+      "connections": ["BRK-INT-05", "BRK-INT-31"],
+      "integrations": ["BRK-INT-05", "BRK-INT-31"],
+      "processes": ["BRK-P-03", "BRK-P-18"]
+    },
+    {
+      "id": "BRK-ACT-02",
+      "quadrant": "LT",
+      "name": "Reinraum-Werker & Montagespezialist",
+      "archetype": "Shopfloor & Fertigungssteuerung (MES)",
+      "avatar": "🛠️",
+      "industryContext": "Precision Production & Cleanroom",
+      "hitlType": "OPERATOR_AND_4EYES_CHECKER",
+      "hitlSummary": "Quittiert Montageschritte an der VKS-Werkerführung, erfasst Seriennummern und führt Kalibrierungen durch.",
+      "clients": [
+        {
+          "id": "BRK-CL-02",
+          "name": "VKS Werkerführung Touch-Terminal & Barcode-Scanner",
+          "deviceType": "TERMINAL",
+          "os": "Industrial Touch Panel Windows IoT",
+          "authMethod": "Werker-Badge RFID / PIN",
+          "targetSystemId": "BRK-09",
+          "messagesEmitted": ["VKS SOP Rückmeldung (REST)", "eDHR Chargenprotokoll"]
+        }
+      ],
+      "connections": ["BRK-INT-23", "BRK-INT-24"],
+      "integrations": ["BRK-INT-23", "BRK-INT-24"],
+      "processes": ["BRK-P-13", "BRK-P-03"]
+    },
+    {
+      "id": "BRK-ACT-03",
+      "quadrant": "LT",
+      "name": "Mikrobiologie-Laborant & Diagnostiker",
+      "archetype": "Klinische Diagnostik & Analytik",
+      "avatar": "🧫",
+      "industryContext": "Clinical Diagnostics & Life Science",
+      "hitlType": "ANALYST_AND_DIAGNOSTIC_VERIFIER",
+      "hitlSummary": "Präpariert MALDI-Targets, startet Spektren-Scans am sirius One und verifiziert Erregeridentifikationen.",
+      "clients": [
+        {
+          "id": "BRK-CL-03",
+          "name": "MALDI Biotyper Compass Software",
+          "deviceType": "DESKTOP_GUI",
+          "os": "Windows 10 IoT Instrument Host",
+          "authMethod": "Labor-Benutzeranmeldung (LDAP)",
+          "targetSystemId": "BRK-14",
+          "messagesEmitted": ["HL7 v2.5 Keimidentifikation", "ASTM Spektrenabgleich"]
+        }
+      ],
+      "connections": ["BRK-INT-01", "BRK-INT-02"],
+      "integrations": ["BRK-INT-01", "BRK-INT-02"],
+      "processes": ["BRK-P-01"]
+    },
+    {
+      "id": "BRK-ACT-04",
+      "quadrant": "LB",
+      "name": "Global Field Service Engineer (Kryo & Magnete)",
+      "archetype": "Technischer Außendienst & Field Service",
+      "avatar": "🔧",
+      "industryContext": "High-Tech Field Service & IoT",
+      "hitlType": "DISPATCHED_EXPERT_AND_MAINTAINER",
+      "hitlSummary": "Befüllt flüssiges Helium an Supraleitermagneten vor Ort, kalibriert Sensoren und quittiert Service-Aufträge.",
+      "clients": [
+        {
+          "id": "BRK-CL-04",
+          "name": "Salesforce Field Service (FSL) Mobile App",
+          "deviceType": "TABLET_MOBILE",
+          "os": "Apple iPad Pro / iOS Enterprise",
+          "authMethod": "SSO Entra ID + Microsoft Authenticator MFA",
+          "targetSystemId": "BRK-23",
+          "messagesEmitted": ["FSL Service-Bericht (REST)", "Heliumdruck-Kalibrierprotokoll"]
+        }
+      ],
+      "connections": ["BRK-INT-07", "BRK-INT-08"],
+      "integrations": ["BRK-INT-07", "BRK-INT-08"],
+      "processes": ["BRK-P-04"]
+    },
+    {
+      "id": "BRK-ACT-05",
+      "quadrant": "RT",
+      "name": "Global Procurement Manager & Einkäufer",
+      "archetype": "Strategischer & Operativer Einkauf",
+      "avatar": "💼",
+      "industryContext": "Global Supply Chain & ERP",
+      "hitlType": "DECISION_MAKER_AND_SPEND_APPROVER",
+      "hitlSummary": "Prüft Bestellbedarfe in SAP S/4HANA MM, verhandelt Rahmenverträge und autorisiert Bestellungen > 50.000 €.",
+      "clients": [
+        {
+          "id": "BRK-CL-05",
+          "name": "SAP Fiori Launchpad (SAP BTP Cloud)",
+          "deviceType": "WEB_PORTAL",
+          "os": "Web Browser (Chrome/Edge)",
+          "authMethod": "SSO SAML 2.0 via Microsoft Entra ID",
+          "targetSystemId": "BRK-49",
+          "messagesEmitted": ["Ariba PurchaseOrder cXML", "Onventis Katalog-Freigabe"]
+        }
+      ],
+      "connections": ["BRK-INT-09", "BRK-INT-10", "BRK-INT-22", "BRK-INT-26"],
+      "integrations": ["BRK-INT-09", "BRK-INT-10", "BRK-INT-22", "BRK-INT-26"],
+      "processes": ["BRK-P-05", "BRK-P-12", "BRK-P-14"]
+    },
+    {
+      "id": "BRK-ACT-06",
+      "quadrant": "RT",
+      "name": "Global Trade & Export Compliance Officer",
+      "archetype": "Zoll, Außenhandel & Compliance",
+      "avatar": "⚖️",
+      "industryContext": "Trade Compliance & Governance",
+      "hitlType": "COMPLIANCE_GATEKEEPER",
+      "hitlSummary": "Überwacht Sanktionslistenprüfungen (AEB) und erteilt Ausfuhrgenehmigungen für Hochtechnologie-Instrumente.",
+      "clients": [
+        {
+          "id": "BRK-CL-06",
+          "name": "AEB & ASSIST4 Zoll-Arbeitsplatz",
+          "deviceType": "DESKTOP_GUI",
+          "os": "Windows 11 / AEB Cloud Client",
+          "authMethod": "Zoll-Signaturkarte / Elster-Zertifikat",
+          "targetSystemId": "BRK-01",
+          "messagesEmitted": ["AEB Sanktionslisten-Clearance", "ATLAS Ausfuhranmeldung"]
+        }
+      ],
+      "connections": ["BRK-INT-21"],
+      "integrations": ["BRK-INT-21"],
+      "processes": ["BRK-P-11"]
+    },
+    {
+      "id": "BRK-ACT-07",
+      "quadrant": "RB",
+      "name": "B2B-Laborleiter / Forschungskunde",
+      "archetype": "Kunde, Forscher & Reagenzien-Besteller",
+      "avatar": "🌐",
+      "industryContext": "Life Sciences & Academic Research",
+      "hitlType": "CUSTOMER_ORDER_PLACER",
+      "hitlSummary": "Bestellt MALDI-Targets, NMR-Probenröhrchen und Software-Lizenzen über den MyBruker WebStore.",
+      "clients": [
+        {
+          "id": "BRK-CL-07",
+          "name": "MyBruker WebStore Portal & API",
+          "deviceType": "WEB_PORTAL",
+          "os": "Web Browser / B2B PunchOut",
+          "authMethod": "Kunden-Login / OIDC & OCI PunchOut",
+          "targetSystemId": "BRK-20",
+          "messagesEmitted": ["OData OrderPlacement", "Lizenz-Download (REST)"]
+        }
+      ],
+      "connections": ["BRK-INT-11", "BRK-INT-12"],
+      "integrations": ["BRK-INT-11", "BRK-INT-12"],
+      "processes": ["BRK-P-06"]
+    },
+    {
+      "id": "BRK-ACT-08",
+      "quadrant": "RB",
+      "name": "ELITech B2B-Vertriebspartner & Distributor",
+      "archetype": "Vertriebspartner & B2B-Handel",
+      "avatar": "🤝",
+      "industryContext": "Global Diagnostics Distribution",
+      "hitlType": "DISTRIBUTOR_AND_ORDER_EXCHANGER",
+      "hitlSummary": "Übermittelt Großbestellungen für Real-Time PCR Diagnostiksysteme über das SAP Trading Partner Management.",
+      "clients": [
+        {
+          "id": "BRK-CL-08",
+          "name": "SAP Trading Partner Management (TRM) Portal",
+          "deviceType": "WEB_PORTAL",
+          "os": "EDI AS2 / OFTP2 / Web",
+          "authMethod": "AS2 Zertifikatsverschlüsselung & TRM Token",
+          "targetSystemId": "BRK-28",
+          "messagesEmitted": ["EDIFACT ORDERS", "AS2 / REST PCR Reagenzienabruf"]
+        }
+      ],
+      "connections": ["BRK-INT-17"],
+      "integrations": ["BRK-INT-17"],
+      "processes": ["BRK-P-10"]
+    },
+    {
+      "id": "BRK-ACT-09",
+      "quadrant": "RB",
+      "name": "FDA & IVD-R Regulatory Auditor",
+      "archetype": "Behördlicher Auditor & Prüfer",
+      "avatar": "📋",
+      "industryContext": "Medical Device Regulatory & Compliance",
+      "hitlType": "AUDITOR_AND_RECORD_INSPECTOR",
+      "hitlSummary": "Prüft revisionssichere Device History Records (DHR) und Chargenfreigaben gem. 21 CFR Part 11 und IVD-R.",
+      "clients": [
+        {
+          "id": "BRK-CL-09",
+          "name": "OpenText Documentum DHR Audit Viewer",
+          "deviceType": "WEB_PORTAL",
+          "os": "Secure Web Portal",
+          "authMethod": "Auditor 2FA & Time-Limited Token",
+          "targetSystemId": "BRK-10",
+          "messagesEmitted": ["FDA 21 CFR Part 11 Audit-Log Abruf", "DHR-Zertifikatsabruf"]
+        }
+      ],
+      "connections": ["BRK-INT-15", "BRK-INT-16"],
+      "integrations": ["BRK-INT-15", "BRK-INT-16"],
+      "processes": ["BRK-P-08"]
+    }
   ]
 };
 
@@ -29184,6 +30198,8 @@
       let currentModelId = startupModelId;
       window.startupModelId = startupModelId;
       window.currentModelId = currentModelId;
+      window.registeredLandscapeModels = registeredLandscapeModels;
+      window.cachedBrukerModel = cachedBrukerModel;
 
       // =====================================================================
       // APQC PROCESS CLASSIFICATION FRAMEWORK (PCF) EXPLORER
@@ -29963,7 +30979,8 @@
           processes: exportedProcesses,
           integrations: INTEGRATIONS_DATA,
           connections: CONNECTIONS_DATA,
-          systems: SYSTEMS_DATA
+          systems: SYSTEMS_DATA,
+          actors: (typeof ACTORS_DATA !== 'undefined' ? ACTORS_DATA : [])
         };
 
         const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type: 'application/json' });
@@ -29984,6 +31001,446 @@
       };
 
       // =====================================================================
+      // HUMAN IN THE LOOP (HITL) ARCHITECTURE & CORNER POD CONTROLLER
+      // Generic across all industries (Healthcare, Production, Telco, etc.)
+      // =====================================================================
+      const ACTORS_DATA = [];
+      window.ACTORS_DATA = ACTORS_DATA;
+      let selectedHitlRoleId = null;
+      window.selectedHitlRoleId = selectedHitlRoleId;
+
+      function getOrDeriveActorsForModel(model) {
+        if (model && Array.isArray(model.actors) && model.actors.length > 0) {
+          return model.actors;
+        }
+
+        const systems = (model && Array.isArray(model.systems)) ? model.systems : SYSTEMS_DATA;
+        const orgName = model?.meta?.organization || model?.meta?.shortName || 'Organisation';
+
+        // Candidates for LT, LB, RT, RB
+        const ltSys = systems.find(s => s.scope === 'INTERNAL' && (s.domain === 'D2' || s.domain === 'D1')) || systems[0] || { id: 'SYS-01', name: 'Kernsystem' };
+        const lbSys = systems.find(s => (s.tags || []).some(t => /mobile|field|iot|zna|rettung|logistik/i.test(t)) || s.id !== ltSys.id) || systems[Math.min(1, systems.length - 1)] || ltSys;
+        const rtSys = systems.find(s => (s.tags || []).some(t => /sap|erp|finanz|finance|governance|compliance/i.test(t)) || s.id !== ltSys.id) || systems[0] || ltSys;
+        const rbSys = systems.find(s => s.scope === 'EXTERNAL' || (s.tags || []).some(t => /portal|web|extern|kunde|b2b/i.test(t))) || systems[systems.length - 1] || ltSys;
+
+        return [
+          {
+            id: 'GEN-ACT-LT',
+            quadrant: 'LT',
+            name: 'Operativer Fachexperte',
+            archetype: 'Kernleistung & Operative Fachexpertise',
+            avatar: '🛠️',
+            industryContext: orgName,
+            hitlType: 'DOMAIN_SPECIALIST',
+            hitlSummary: 'Verantwortet fachliche Kernprozesse, steuert Fachdaten und trifft operative Entscheidungen.',
+            clients: [
+              {
+                id: 'GEN-CL-LT',
+                name: 'Fachbereichs-Arbeitsplatz & Rich Client',
+                deviceType: 'DESKTOP_GUI',
+                os: 'Windows 11 / Enterprise Desktop',
+                authMethod: 'Enterprise SSO (Entra ID / Kerberos)',
+                targetSystemId: ltSys.id,
+                messagesEmitted: ['Fachdaten-Transaktion', 'Statusaktualisierung']
+              }
+            ],
+            connections: [],
+            integrations: [],
+            processes: (model?.processes || []).slice(0, 1).map(p => p.id)
+          },
+          {
+            id: 'GEN-ACT-LB',
+            quadrant: 'LB',
+            name: 'Frontline & Mobile Workforce',
+            archetype: 'Mobile Einsatzkräfte & Vor-Ort-Service',
+            avatar: '📱',
+            industryContext: orgName,
+            hitlType: 'FIELD_OPERATOR',
+            hitlSummary: 'Erfasst Daten direkt am Einsatzort, synchronisiert mobile Endgeräte und wickelt Vor-Ort-Aktivitäten ab.',
+            clients: [
+              {
+                id: 'GEN-CL-LB',
+                name: 'Mobiles Handheld & Service-Tablet',
+                deviceType: 'TABLET_MOBILE',
+                os: 'Android Enterprise / iOS Ruggedized',
+                authMethod: 'Geräte-Zertifikat & PIN',
+                targetSystemId: lbSys.id,
+                messagesEmitted: ['Einsatzquittung', 'Messwert-Telemetrie']
+              }
+            ],
+            connections: [],
+            integrations: [],
+            processes: (model?.processes || []).slice(1, 2).map(p => p.id)
+          },
+          {
+            id: 'GEN-ACT-RT',
+            quadrant: 'RT',
+            name: 'Governance & Management Officer',
+            archetype: 'Leitung, Finanzen, Compliance & Controlling',
+            avatar: '📊',
+            industryContext: orgName,
+            hitlType: 'GOVERNANCE_AND_APPROVER',
+            hitlSummary: 'Überwacht Kennzahlen, Compliance-Richtlinien, Quartalsabschlüsse und gibt Budgets frei.',
+            clients: [
+              {
+                id: 'GEN-CL-RT',
+                name: 'Management Cockpit & ERP Launchpad',
+                deviceType: 'DESKTOP_GUI',
+                os: 'Web Browser / Cloud Portal',
+                authMethod: 'SSO mit Multi-Faktor-Authentifizierung (MFA)',
+                targetSystemId: rtSys.id,
+                messagesEmitted: ['Freigabebestätigung', 'Reporting Query']
+              }
+            ],
+            connections: [],
+            integrations: [],
+            processes: (model?.processes || []).slice(2, 3).map(p => p.id)
+          },
+          {
+            id: 'GEN-ACT-RB',
+            quadrant: 'RB',
+            name: 'Kunde, Partner & Externer Prüfer',
+            archetype: 'Externe Endnutzer, Lieferanten & B2B-Partner',
+            avatar: '🌐',
+            industryContext: orgName,
+            hitlType: 'EXTERNAL_ECOSYSTEM_USER',
+            hitlSummary: 'Interagiert über Self-Service-Portale, liefert B2B-Daten ein und greift auf freigegebene Dokumente zu.',
+            clients: [
+              {
+                id: 'GEN-CL-RB',
+                name: 'Kunden- & Partnerportal',
+                deviceType: 'WEB_PORTAL',
+                os: 'Web Browser / Mobile Web',
+                authMethod: 'B2B/B2C Customer Identity & Access (CIAM)',
+                targetSystemId: rbSys.id,
+                messagesEmitted: ['Self-Service Antrag', 'B2B EDI Transaktion']
+              }
+            ],
+            connections: [],
+            integrations: [],
+            processes: (model?.processes || []).slice(3, 4).map(p => p.id)
+          }
+        ];
+      }
+      window.getOrDeriveActorsForModel = getOrDeriveActorsForModel;
+
+      function renderHitlCornerPods() {
+        const podConfigs = {
+          'LT': { tag: 'LT · Kernleistung', defRole: 'Operative Fachkräfte', defAvatar: '🛠️' },
+          'LB': { tag: 'LB · Frontline / Field', defRole: 'Mobiles Team', defAvatar: '🚀' },
+          'RT': { tag: 'RT · Governance / Admin', defRole: 'Verwaltung & Steuerung', defAvatar: '⚖️' },
+          'RB': { tag: 'RB · Partner & Kunden', defRole: 'Kunden & Partner', defAvatar: '🌐' }
+        };
+
+        ['LT', 'LB', 'RT', 'RB'].forEach(corner => {
+          const pod = document.getElementById('pod' + corner);
+          if (!pod) return;
+
+          const avatarEl = document.getElementById('avatar' + corner);
+          const labelEl = document.getElementById('label' + corner);
+          const dropdownEl = document.getElementById('dropdown' + corner);
+
+          const cornerRoles = (typeof ACTORS_DATA !== 'undefined' && Array.isArray(ACTORS_DATA))
+            ? ACTORS_DATA.filter(a => a.quadrant === corner)
+            : [];
+
+          const activeRole = cornerRoles.find(a => a.id === selectedHitlRoleId);
+          const cfg = podConfigs[corner];
+
+          pod.classList.toggle('active', !!activeRole);
+
+          if (avatarEl) {
+            avatarEl.textContent = activeRole ? (activeRole.avatar || cfg.defAvatar) : (cornerRoles[0]?.avatar || cfg.defAvatar);
+          }
+
+          if (labelEl) {
+            labelEl.textContent = activeRole 
+              ? activeRole.name 
+              : (cornerRoles.length > 0 ? (cornerRoles[0].name + (cornerRoles.length > 1 ? (' (+' + (cornerRoles.length - 1) + ')') : '')) : cfg.defRole);
+            labelEl.title = activeRole ? (activeRole.name + ' · ' + activeRole.archetype) : (cfg.tag + ': ' + cornerRoles.length + ' Rollen verfügbar');
+          }
+
+          if (dropdownEl) {
+            if (cornerRoles.length === 0) {
+              dropdownEl.innerHTML = 
+                '<div style="padding:10px; font-size:0.72rem; color:var(--text-muted); text-align:center;">' +
+                  'Keine Rollen für Quadrant ' + corner + ' im aktuellen Modell definiert.' +
+                '</div>';
+            } else {
+              let html = 
+                '<div class="hitl-dropdown-header" style="display:flex; justify-content:space-between; align-items:center; padding:4px 6px; border-bottom:1px solid var(--card-border); margin-bottom:4px;">' +
+                  '<span style="font-size:0.65rem; font-weight:800; color:var(--accent); text-transform:uppercase; letter-spacing:0.5px;">' + cfg.tag + '</span>' +
+                  '<span style="font-size:0.62rem; color:var(--text-muted);">' + cornerRoles.length + ' Rolle' + (cornerRoles.length > 1 ? 'n' : '') + '</span>' +
+                '</div>';
+
+              cornerRoles.forEach(r => {
+                const isSelected = r.id === selectedHitlRoleId;
+                html += 
+                  '<div class="hitl-role-item' + (isSelected ? ' active' : '') + '" onclick="event.stopPropagation(); window.selectHitlRole(\'' + r.id + '\')">' +
+                    '<span class="hitl-role-item-avatar">' + (r.avatar || '👤') + '</span>' +
+                    '<div class="hitl-role-item-details">' +
+                      '<div class="hitl-role-item-title">' + r.name + '</div>' +
+                      '<div class="hitl-role-item-sub">' + (r.archetype || '') + '</div>' +
+                      '<div class="hitl-role-item-meta">' + (r.clients ? (r.clients.length + ' Client' + (r.clients.length > 1 ? 's' : '') + ' · ') : '') + (r.hitlType || 'HITL') + '</div>' +
+                    '</div>' +
+                    (isSelected ? '<span style="color:var(--accent); font-size:0.8rem;">✓</span>' : '') +
+                  '</div>';
+              });
+
+              if (activeRole) {
+                html += 
+                  '<div style="margin-top:6px; padding-top:6px; border-top:1px solid var(--card-border); display:flex; justify-content:flex-end;">' +
+                    '<button type="button" class="insp-action-btn" style="padding:2px 8px; font-size:0.65rem; color:#f43f5e; border-color:rgba(244,63,94,0.4);" onclick="event.stopPropagation(); window.clearHitlRole()">' +
+                      '✕ Auswahl aufheben' +
+                    '</button>' +
+                  '</div>';
+              }
+
+              dropdownEl.innerHTML = html;
+            }
+          }
+        });
+      }
+      window.renderHitlCornerPods = renderHitlCornerPods;
+
+      window.toggleHitlDropdown = function(corner) {
+        ['LT', 'LB', 'RT', 'RB'].forEach(c => {
+          const p = document.getElementById('pod' + c);
+          const d = document.getElementById('dropdown' + c);
+          if (c === corner) {
+            if (d) {
+              const isHidden = d.hidden;
+              d.hidden = !isHidden;
+              if (p) p.classList.toggle('dropdown-open', isHidden);
+            }
+          } else {
+            if (d) d.hidden = true;
+            if (p) p.classList.remove('dropdown-open');
+          }
+        });
+      };
+
+      window.closeAllHitlDropdowns = function() {
+        ['LT', 'LB', 'RT', 'RB'].forEach(c => {
+          const p = document.getElementById('pod' + c);
+          const d = document.getElementById('dropdown' + c);
+          if (d) d.hidden = true;
+          if (p) p.classList.remove('dropdown-open');
+        });
+      };
+
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('.hitl-corner-pod')) {
+          window.closeAllHitlDropdowns();
+        }
+      });
+
+      function renderInspectorRole(role) {
+        if (!role) return;
+        const activeModelObj = registeredLandscapeModels.find(m => m.id === currentModelId);
+        const orgShort = activeModelObj?.shortName || activeModelObj?.organization || 'EA';
+
+        const quadDescriptions = {
+          'LT': 'LT · Fachspezialisten & Kernleistung (Intern)',
+          'LB': 'LB · Frontline, Mobile & Field Services',
+          'RT': 'RT · Steuerung, Governance & Administration',
+          'RB': 'RB · Externe Stakeholder, Kunden & Partner'
+        };
+
+        const clientHtml = (role.clients || []).map(cl => {
+          const targetSys = SYSTEMS_DATA.find(s => s.id === cl.targetSystemId);
+          const msgsHtml = (cl.messagesEmitted || []).map(m =>
+            '<span class="insp-tag" style="background:rgba(56,189,248,0.12); color:var(--accent); border:1px solid rgba(56,189,248,0.3); font-size:0.65rem; padding:2px 6px; border-radius:4px;">✉️ ' + m + '</span>'
+          ).join('');
+
+          return '<div style="margin-top:8px; padding:8px 10px; background:var(--item-bg); border:1px solid var(--card-border); border-radius:6px;">' +
+            '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">' +
+              '<div style="font-weight:700; font-size:0.75rem; color:var(--text-bright); display:flex; align-items:center; gap:6px;">' +
+                '<span>💻 ' + cl.name + '</span>' +
+              '</div>' +
+              '<span class="insp-badge" style="background:rgba(168,85,247,0.15); color:#c084fc; border:1px solid rgba(168,85,247,0.3); font-size:0.62rem;">' + (cl.deviceType || 'CLIENT') + '</span>' +
+            '</div>' +
+            '<div style="font-size:0.67rem; color:var(--text-muted); margin-bottom:6px; line-height:1.4;">' +
+              (cl.os ? ('<strong>Betriebssystem:</strong> ' + cl.os + '<br>') : '') +
+              (cl.authMethod ? ('<strong>Authentifizierung:</strong> ' + cl.authMethod + '<br>') : '') +
+              (targetSys ? ('<strong>Zielsystem:</strong> ' + targetSys.id + ' · ' + targetSys.name) : ('<strong>Ziel:</strong> ' + cl.targetSystemId)) +
+            '</div>' +
+            (targetSys ? 
+              '<button type="button" class="insp-action-btn" style="padding:2px 8px; font-size:0.65rem; margin-bottom:6px;" onclick="window.locateNodeInChord(\'' + targetSys.id + '\')">🎯 Zielsystem fokussieren (' + targetSys.id + ')</button>' 
+              : '') +
+            (msgsHtml ? '<div style="margin-top:4px;"><div style="font-size:0.63rem; color:var(--text-muted); margin-bottom:3px;">Gesendete Nachrichten & Formate:</div><div style="display:flex; flex-wrap:wrap; gap:4px;">' + msgsHtml + '</div></div>' : '') +
+          '</div>';
+        }).join('');
+
+        const procsHtml = (role.processes || []).map(pId => {
+          const proc = PROCESSES_DATA.find(p => p.id === pId);
+          if (!proc) return '<span class="insp-tag">' + pId + '</span>';
+          return '<button type="button" class="apqc-proc-chip" style="margin-bottom:4px;" onclick="window.setDrilldownProcess(PROCESSES_DATA.find(p => p.id === \'' + pId + '\'))" title="Prozess im Chord fokussieren">' +
+            '<span>⚡ ' + proc.id + '</span> · <span>' + proc.name + '</span>' +
+          '</button>';
+        }).join('');
+
+        const integsHtml = (role.integrations || []).map(intId => {
+          const integ = INTEGRATIONS_DATA.find(i => i.id === intId);
+          if (!integ) return '<span class="insp-tag">' + intId + '</span>';
+          return '<button type="button" class="insp-action-btn" style="padding:2px 7px; font-size:0.65rem; margin-bottom:4px;" onclick="window.activateIntegrationFromEdge && window.activateIntegrationFromEdge(\'' + intId + '\', 0)">' +
+            '🔗 ' + integ.id + ' · ' + (integ.name || '') +
+          '</button>';
+        }).join('');
+
+        inspectorBody.innerHTML =
+          '<div class="inspector-card">' +
+            '<div class="insp-header">' +
+              '<div>' +
+                '<div class="insp-title" style="display:flex; align-items:center; gap:8px;">' +
+                  '<span style="font-size:1.4rem;">' + (role.avatar || '👤') + '</span>' +
+                  '<span>' + role.name + '</span>' +
+                '</div>' +
+                '<div class="insp-sub">' + (role.archetype || 'HITL Rolle') + ' · ' + (role.industryContext || orgShort) + '</div>' +
+              '</div>' +
+              '<span class="insp-id" style="background:rgba(56,189,248,0.18); color:var(--accent); border-color:var(--accent);">' + role.id + '</span>' +
+            '</div>' +
+            '<div class="insp-action-bar">' +
+              '<button class="insp-action-btn" onclick="window.clearHitlRole()">✕ Fokus aufheben</button>' +
+            '</div>' +
+            '<div class="insp-badges">' +
+              '<span class="insp-badge" style="background:var(--accent-glow); color:var(--accent); font-weight:700;">' + (quadDescriptions[role.quadrant] || role.quadrant) + '</span>' +
+              '<span class="insp-badge" style="background:rgba(16,185,129,0.15); color:#34d399; border-color:#34d399;">' + (role.hitlType || 'HUMAN_OPERATOR') + '</span>' +
+            '</div>' +
+            '<div class="insp-desc" style="line-height:1.45; font-size:0.75rem;">' +
+              role.hitlSummary +
+            '</div>' +
+            '<div style="margin-top:12px;">' +
+              '<div style="font-size:0.72rem; font-weight:750; color:var(--text-bright); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px;">💻 Genutzte Clients & Touchpoints (' + (role.clients ? role.clients.length : 0) + ')</div>' +
+              (clientHtml || '<div style="font-size:0.7rem; color:var(--text-muted); font-style:italic;">Keine Clients hinterlegt</div>') +
+            '</div>' +
+            (procsHtml ? (
+              '<div style="margin-top:12px;">' +
+                '<div style="font-size:0.72rem; font-weight:750; color:var(--text-bright); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:6px;">⚡ Zugeordnete Prozesse (' + role.processes.length + ')</div>' +
+                '<div style="display:flex; flex-direction:column; gap:4px;">' + procsHtml + '</div>' +
+              '</div>'
+            ) : '') +
+            (integsHtml ? (
+              '<div style="margin-top:12px;">' +
+                '<div style="font-size:0.72rem; font-weight:750; color:var(--text-bright); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:6px;">🔗 Direkte Integrationsstrecken</div>' +
+                '<div style="display:flex; flex-direction:column; gap:4px;">' + integsHtml + '</div>' +
+              '</div>'
+            ) : '') +
+          '</div>';
+      }
+      window.renderInspectorRole = renderInspectorRole;
+
+      window.selectHitlRole = function(roleId) {
+        window.closeAllHitlDropdowns();
+
+        if (selectedHitlRoleId === roleId) {
+          window.clearHitlRole();
+          return;
+        }
+
+        selectedHitlRoleId = roleId;
+        window.selectedHitlRoleId = roleId;
+
+        const role = ACTORS_DATA.find(a => a.id === roleId);
+        if (!role) return;
+
+        renderHitlCornerPods();
+
+        // 1. Clear previous touchpoint beacons
+        d3.selectAll('.client-touchpoint-beacon').remove();
+        d3.selectAll('.locator-beacon-ring').remove();
+
+        // 2. Identify target systems, connections, and processes
+        const clientSysIds = (role.clients || []).map(c => c.targetSystemId).filter(Boolean);
+        const roleSys = new Set(clientSysIds);
+        const roleConns = new Set(role.connections || []);
+
+        (role.processes || []).forEach(pId => {
+          const proc = PROCESSES_DATA.find(p => p.id === pId);
+          if (proc) {
+            (proc.participatingSystems || []).forEach(s => roleSys.add(s));
+            (proc.cleanIntegIds || []).forEach(intId => {
+              const integ = INTEGRATIONS_DATA.find(i => i.id === intId);
+              if (integ) {
+                if (integ.sourceSystem) roleSys.add(integ.sourceSystem);
+                if (integ.targetSystem) roleSys.add(integ.targetSystem);
+                (integ.steps || []).forEach(st => {
+                  if (st.connectionId) roleConns.add(st.connectionId);
+                  if (st.from) roleSys.add(st.from);
+                  if (st.to) roleSys.add(st.to);
+                });
+              }
+            });
+          }
+        });
+
+        // 3. Highlight D3 nodes & edges
+        if (typeof d3 !== 'undefined') {
+          d3.selectAll('.edge-link')
+            .classed('dimmed', d => roleConns.size > 0 && !roleConns.has(d.id))
+            .classed('active', d => roleConns.has(d.id));
+
+          d3.selectAll('.sys-node-group')
+            .classed('dimmed', d => roleSys.size > 0 && !roleSys.has(d.id))
+            .classed('active', d => roleSys.has(d.id));
+
+          // Place beacons on client target systems
+          clientSysIds.forEach(sysId => {
+            const grp = d3.select('#node-group-' + sysId);
+            if (!grp.empty()) {
+              const domNode = grp.node();
+              if (domNode && domNode.parentNode) domNode.parentNode.appendChild(domNode);
+              grp.classed('locating-beacon-node', true);
+              grp.append('circle')
+                .attr('class', 'client-touchpoint-beacon locator-beacon-ring')
+                .attr('r', 12)
+                .style('fill', 'none')
+                .style('stroke', '#38bdf8')
+                .style('stroke-width', '3.5px')
+                .style('pointer-events', 'none')
+                .transition()
+                .duration(2200)
+                .ease(d3.easeCircleOut)
+                .attr('r', 45)
+                .style('stroke-opacity', 0)
+                .remove();
+            }
+          });
+        }
+
+        // 4. Render role inspector & open drawer
+        renderInspectorRole(role);
+        if (typeof openRightDrawer === 'function') {
+          openRightDrawer();
+        }
+
+        // 5. Toast
+        if (typeof window.showCrudToast === 'function') {
+          window.showCrudToast((role.avatar || '👤') + ' HITL: ' + role.name + ' (' + role.archetype + ')');
+        }
+      };
+
+      window.clearHitlRole = function() {
+        selectedHitlRoleId = null;
+        window.selectedHitlRoleId = null;
+        window.closeAllHitlDropdowns();
+        renderHitlCornerPods();
+
+        if (typeof d3 !== 'undefined') {
+          d3.selectAll('.edge-link').classed('dimmed', false).classed('active', false);
+          d3.selectAll('.sys-node-group').classed('dimmed', false).classed('active', false);
+          d3.selectAll('.client-touchpoint-beacon').remove();
+          d3.selectAll('.locator-beacon-ring').remove();
+        }
+
+        renderPlaceholder();
+
+        if (typeof window.showCrudToast === 'function') {
+          window.showCrudToast('👤 HITL Rollen-Fokus aufgehoben');
+        }
+      };
+
+      // =====================================================================
       // DYNAMIC LANDSCAPE MODEL LOADER & RENDERER (NO PAGE RELOAD)
       // =====================================================================
       window.loadLandscapeModel = function(model) {
@@ -29995,6 +31452,14 @@
         // Update In-Memory Data Arrays
         SYSTEMS_DATA.length = 0;
         model.systems.forEach(s => SYSTEMS_DATA.push(s));
+
+        // Update ACTORS_DATA
+        ACTORS_DATA.length = 0;
+        const rawActors = getOrDeriveActorsForModel(model);
+        (rawActors || []).forEach(a => ACTORS_DATA.push(a));
+        selectedHitlRoleId = null;
+        window.selectedHitlRoleId = null;
+        renderHitlCornerPods();
 
         CONNECTIONS_DATA.length = 0;
         model.connections.forEach(c => {
@@ -31200,6 +32665,9 @@
         // Build Master Search Index
         const items = [];
 
+        function rebuildOmniSearchItems() {
+          items.length = 0;
+
         // 1. 77 Systems
         SYSTEMS_DATA.forEach(s => {
           items.push({
@@ -31266,6 +32734,24 @@
             }
           });
         });
+
+        // 4b. HITL Actors & Roles
+        if (typeof ACTORS_DATA !== 'undefined' && Array.isArray(ACTORS_DATA)) {
+          ACTORS_DATA.forEach(a => {
+            items.push({
+              id: a.id,
+              type: 'actor',
+              badgeClass: 'omni-badge-actor',
+              badgeText: 'HITL Rolle',
+              title: (a.avatar || '👤') + ' ' + a.name,
+              sub: (a.quadrant || '') + ' · ' + (a.archetype || '') + ' · ' + (a.industryContext || ''),
+              searchText: (a.id + ' ' + a.name + ' ' + (a.archetype || '') + ' ' + (a.hitlSummary || '') + ' ' + (a.quadrant || '')).toLowerCase(),
+              onSelect: () => {
+                window.selectHitlRole && window.selectHitlRole(a.id);
+              }
+            });
+          });
+        }
 
         // 5. Actions & Commands
         const actions = [
@@ -31402,7 +32888,9 @@
             }
           }
         ];
-        actions.forEach(a => items.push(a));
+          actions.forEach(a => items.push(a));
+        }
+        rebuildOmniSearchItems();
 
         function filterAndRankItems() {
           const rawQuery = input.value.trim().toLowerCase();
@@ -31502,6 +32990,7 @@
         }
 
         function openOmniSearch(filter = 'all') {
+          rebuildOmniSearchItems();
           currentFilter = filter;
           filterChips.querySelectorAll(".omni-chip").forEach(c => {
             c.classList.toggle("active", c.dataset.filter === currentFilter);
@@ -31623,6 +33112,9 @@
         currentModelId = startupModelId;
         window.loadLandscapeModel(initialStartupModel.data);
       } else {
+        ACTORS_DATA.length = 0;
+        (cachedJohanniterModel.actors || []).forEach(a => ACTORS_DATA.push(a));
+        renderHitlCornerPods();
         renderConnections();
         renderSystems();
         renderDynamicRadarBar();
@@ -32710,10 +34202,22 @@
           });
         });
 
+        // Find any mapped actors for this process
+        const mappedActors = (typeof ACTORS_DATA !== 'undefined' && Array.isArray(ACTORS_DATA))
+          ? ACTORS_DATA.filter(a => Array.isArray(a.processes) && a.processes.includes(proc.id))
+          : [];
+
         let puml = '@startuml\n';
         puml += 'title ' + proc.id + ': ' + proc.name + '\n';
         puml += 'autonumber\n';
         puml += 'skinparam responseMessageBelowArrow true\n\n';
+
+        // Add Actors first if mapped
+        mappedActors.forEach(act => {
+          const actAlias = act.id.replace(/[^a-zA-Z0-9]/g, '_');
+          const cleanName = (act.name || act.id).replace(/"/g, "'").slice(0, 32);
+          puml += 'actor "' + cleanName + '" as ' + actAlias + '\n';
+        });
 
         sysMap.forEach((sys, sysId) => {
           const cleanName = sys ? (sys.name || '').replace(/"/g, "'").slice(0, 30) : sysId;
@@ -32721,6 +34225,20 @@
           puml += 'participant "[[' + '#sys-' + sysId + ' ' + sysId + ': ' + cleanName + ']]" as ' + safeAlias + '\n';
         });
         puml += '\n';
+
+        // Prepend actor touchpoint interaction if mapped
+        if (mappedActors.length > 0) {
+          mappedActors.forEach(act => {
+            const actAlias = act.id.replace(/[^a-zA-Z0-9]/g, '_');
+            (act.clients || []).forEach(cl => {
+              if (cl.targetSystemId && sysMap.has(cl.targetSystemId)) {
+                const targetAlias = cl.targetSystemId.replace(/[^a-zA-Z0-9]/g, '_');
+                const msg = (cl.messagesEmitted && cl.messagesEmitted[0]) ? cl.messagesEmitted[0] : ('Aktion (' + cl.name + ')');
+                puml += actAlias + ' -> ' + targetAlias + ': ' + msg.replace(/"/g, "'") + '\n';
+              }
+            });
+          });
+        }
 
         integs.forEach(integ => {
           puml += '== [[' + '#integ-' + integ.id + ' ' + integ.id + ': ' + (integ.name || '').replace(/"/g, "'") + ']] ==\n';

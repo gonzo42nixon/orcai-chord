@@ -462,5 +462,34 @@ Die Plattform bietet einen vollständig integrierten, interaktiven Explorer zur 
 
 ---
 
+## 15. Human in the Loop (HITL) & Generische Rollen-Architektur
+
+### Motivation & Architektur-Erweiterung
+Klassische Enterprise-Architecture-Modelle (EAM) fokussieren sich vorrangig auf rein technische Systemknoten, Hostings und Datenflüsse. In der realen Praxis interagieren jedoch täglich unterschiedlichste menschliche Akteure mit den Systemen – von Fachspezialisten und mobilem Einsatzpersonal über Management- und Governance-Rollen bis hin zu externen Kunden, Patienten und Geschäftspartnern.
+
+Das Quad-Chord EA erweitert die Architekturanalyse um das **Human-in-the-Loop (HITL)**-Paradigma: Es macht menschliche Rollen, deren spezifische Clients (Desktop GUIs, mobile Handhelds, Web-Portale, Terminals), Authentifizierungsverfahren (SSO, MFA, Smartcards, eHBA), emittierte Fachnachrichten und Zielsysteme visuell und analytisch transparent.
+
+### Branchenunabhängige 4-Quadranten-Taxonomie
+Um sicherzustellen, dass die Architektur für **jegliche Industriezweige** (Gesundheitswesen, Hochtechnologie-Fertigung, Logistik, Verteidigung, Telekommunikation, Bildung, Finanzen etc.) allgemeingültig und barrierefrei anwendbar ist, basiert die Platzierung auf einer archetypischen 4-Quadranten-Struktur:
+
+| Quadrant | Position | Archetyp | Typische Rollen nach Branche |
+| :--- | :--- | :--- | :--- |
+| **LT** | Oben-Links (Left-Top) | **Kernleistung & Operative Fachexperten** | Stationsarzt, Operateur, Reinraum-Werker, R&D-Ingenieur, Konstrukteur, Laborant |
+| **LB** | Unten-Links (Left-Bottom) | **Frontline, Mobile & Field Services** | Notfallsanitäter, RTW-Besatzung, Field Service Engineer, Disponent, Fahrer, Servicetechniker |
+| **RT** | Oben-Rechts (Right-Top) | **Steuerung, Governance & Administration** | Controller, Einkaufsleiter, CISO, Datenschutzbeauftragter, Compliance Officer, Geschäftsführung |
+| **RB** | Unten-Rechts (Right-Bottom) | **Partner, Kunden & Externe Stakeholder** | Patient, Bürger, B2B-Kunde, Zulieferer, Distributor, Behördlicher Auditor (FDA/TÜV), Krankenkasse |
+
+### Interaktive Corner Pods (LT, LB, RT, RB)
+- **4 interaktive Eck-Pods auf der Zeichenfläche:** In allen vier Ecken des Diagramms befindet sich je ein kompakter Pod mit Archetyp-Kennzeichnung, Icon und Rollenselektor.
+- **Kontextsensitive Rollen-Dropdowns:** Ein Klick auf einen Pod öffnet die Liste aller verfügbaren Rollen des aktuellen Modells in diesem Quadranten samt Kurzbeschreibung und Client-Anzahl.
+- **Visuelle Spurensuche & Touchpoint-Beacons:** Bei Auswahl einer Rolle:
+  - Pulsiert ein Leuchtfeuer (`.client-touchpoint-beacon`) auf allen Zielsystemen, mit denen die Rolle über ihre Endgeräte interagiert.
+  - Werden nicht-involvierte Systemknoten und Kanten elegant abgedunkelt (`dimmed`), während aktive Integrationspfade hervorgehoben werden.
+  - Öffnet sich der **HITL Rollen-Inspektor** mit vollständigen Angaben zu Endgeräten, Betriebssystemen, Authentifizierungsmethoden, emittierten Nachrichtenformaten und verknüpften Geschäftsprozessen.
+- **Nahtlose Sequenzdiagramm-Integration:** Bei Generierung von PlantUML-Sequenzdiagrammen werden zugeordnete HITL-Akteure automatisch als `@startuml actor` mit ihren initialen Client-Interaktionen vorangestellt.
+- **Omni-Search (`Strg+K`) Integration:** Alle Rollen sind im Schnellfilter über den Chip `[👤 Rollen]` oder Direkteingabe sofort auffindbar.
+
+---
+
 > *Enterprise Architecture Management (EAM) · Dokument generiert und persistiert in ORCAI.*
 
