@@ -381,15 +381,16 @@ Zur intuitiven Steuerung dieser komplexen Landschaft bietet die Anwendung oberha
 
 ---
 
-## 7. Interaktive PlantUML-Sequenzdiagramme & Schwebendes Prozessmodell-Pop-Out
+## 7. Interaktive PlantUML-Sequenzdiagramme & Gleichzeitige Multi-Pop-Outs
 
 Für jeden Geschäftsprozess der IT-Landschaft steht ein synchronisiertes **UML 2.5 Sequenzdiagramm** zur Verfügung. Das Feature überbrückt die Lücke zwischen makroskopischer Enterprise Architecture (EAM) und mikroskopischer Integrations- und Sequenzmodellierung:
 
-### A. Schwebendes Pop-Out-Fenster (Floating Window)
-- **Verschiebbar & Skalierbar (Draggable & Resizable):** Das Pop-Out kann am oberen Header frei auf der Zeichenfläche verschoben und an allen Seiten beliebig vergrößert werden.
-- **Kein Blur / Keine Verdunklung (Zero Background Blur):** Das Pop-Out arbeitet ohne modales Backdrop. Der gesamte Hintergrund – D3-Chord-Diagramm, linker Drilldown und rechter Inspektor – bleibt gestochen scharf sichtbar, lesbar und interaktiv bedienbar.
-- **Vollbild-Umschaltung (`⛶ Vollbild` / `🗗 Wiederherstellen`):** Für komplexe Sequenzen mit vielen Akteuren und asynchronen Rückkanälen.
-- **Zoom & Navigation:** Stufenlose Zoom-Regelung (`🔍 +`, `🔍 -`, `1:1` Reset) mit dynamischer SVG-Skalierung.
+### A. Gleichzeitige Multi-Pop-Outs (Non-Overwriting Registry)
+- **Parallele Diagramme ohne Überschreiben:** Mehrere Prozess-Diagramme können gleichzeitig geöffnet und frei nebeneinander verglichen werden. Das Öffnen eines weiteren Prozesses überschreibt niemals bereits geöffnete Diagramme, sondern öffnet ein eigenständiges Fenster mit ergonomischem Kaskaden-Versatz (+34px).
+- **Intelligente Fokus-Aktivierung:** Wird ein bereits geöffneter Prozess erneut aufgerufen, bringt die Plattform das bestehende Fenster mit einem sanften Leuchteffekt (`.popout-focus-flash`) automatisch ganz nach vorne in den Fokus, anstatt Duplikate anzuhäufen.
+- **Verschiebbar & Skalierbar (Draggable & Resizable):** Jedes Pop-Out kann am oberen Header frei verschoben und an allen Kanten und Ecken vergrößert werden.
+- **Kein Blur / Keine Verdunklung (Zero Background Blur):** Alle Pop-Outs arbeiten ohne modales Backdrop. Das Chord-Diagramm, der linke Navigationsbaum und der rechte Inspektor bleiben im Hintergrund uneingeschränkt sichtbar und bedienbar.
+- **Autarke Bedienelemente je Fenster:** Jedes geöffnete Fenster verfügt über eigene Steuerelemente für Vollbild (`⛶ Vollbild` / `🗗`), stufenlosen Zoom (`🔍 +`, `🔍 -`, `1:1` Reset), SVG-Download und externen Editor-Export.
 
 ### B. Klickbare, bidirektionale Links im Diagramm (SVG Hyperlinks)
 Alle Akteure, Schnittstellen und Abschnitte im gerenderten SVG-Sequenzdiagramm sind aktive Hyperlinks, die direkt mit dem EAM-Modell interagieren:
@@ -397,14 +398,14 @@ Alle Akteure, Schnittstellen und Abschnitte im gerenderten SVG-Sequenzdiagramm s
 - **Nachrichtenpfeil / Kante (`[[#conn-CONN_ID]]`):** Klick auf eine Nachricht fokussiert die physikalische Schnittstelle im EAM-Modell.
 - **Sequenz-Abschnitt (`== [[#integ-INTEG_ID]] ==`):** Klick auf einen Trennbalken aktiviert die gesamte E2E-Integrationskette inkl. Token-Animation auf der Zeichenfläche.
 
-### C. Der Selbstreferenz-Link (`🔗` im Pop-Out Header)
-Wenn Anwender bei geöffnetem Diagramm im Hintergrund navigieren (z. B. andere Systeme oder Kanten explorieren), ändert sich die aktive Auswahl der Plattform. 
-- Ein Klick auf das **🔗-Icon direkt im Titellabel des Pop-Outs** stellt die ursprüngliche Aufrufumgebung des Prozesses sofort wieder her:
+### C. Autarker Selbstreferenz-Link (`🔗` im Pop-Out Header)
+Wenn Anwender bei geöffneten Diagrammen im Hintergrund navigieren (z. B. andere Systeme, Schnittstellen oder Prozesse explorieren), ändert sich die globale Auswahl der Plattform. 
+- Ein Klick auf das **🔗-Icon direkt im Titellabel eines Pop-Outs** stellt die ursprüngliche Aufrufumgebung genau dieses Prozesses verlässlich wieder her:
   - Aktiviert den aufrufenden Prozess im 5-Stufen-Drilldown (Stufe 2).
   - Öffnet die Prozess-Detailansicht im rechten Inspektor.
   - Selektiert die zugehörige Leit-Domäne (Stufe 1).
   - Aktualisiert die zentrierte Breadcrumb-Headerleiste.
-  - Bereinigt isolierte System- oder Kantenfokusse – **ohne** das schwebende Sequenzdiagramm zu schließen.
+  - Bereinigt isolierte System- oder Kantenfokusse – **ohne** geöffnete Sequenzdiagramme zu schließen oder zu stören.
 
 ### D. Native 64-Bit PlantUML Deflate-Kompression & Externe Editoren
 - **1-Klick-Direktübergabe an externe Editoren:**

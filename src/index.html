@@ -3867,6 +3867,11 @@
       resize: none !important;
       border-radius: 8px;
     }
+    .plantuml-floating-popout.popout-focus-flash {
+      border-color: var(--accent, #38bdf8) !important;
+      box-shadow: 0 0 36px var(--accent-glow, rgba(56, 189, 248, 0.6)), 0 24px 60px rgba(0, 0, 0, 0.95) !important;
+      transform: scale(1.012);
+    }
     .plantuml-popout-header {
       padding: 10px 14px;
       background: var(--item-bg, #1e293b);
@@ -3920,26 +3925,32 @@
       font-family: monospace;
     }
 
-    /* PlantUML SVG Interactive Links */
-    #pumlSvgContainer a {
+    /* PlantUML SVG Interactive Links (Supports both static and dynamic multi-popout containers) */
+    #pumlSvgContainer a,
+    .puml-svg-container a {
       cursor: pointer !important;
       transition: all 0.2s ease;
     }
-    #pumlSvgContainer a text {
+    #pumlSvgContainer a text,
+    .puml-svg-container a text {
       transition: fill 0.18s ease, font-weight 0.18s ease;
     }
-    #pumlSvgContainer a:hover text {
+    #pumlSvgContainer a:hover text,
+    .puml-svg-container a:hover text {
       fill: #0284c7 !important;
       font-weight: 750 !important;
       text-decoration: underline !important;
     }
-    #pumlSvgContainer a:hover rect {
+    #pumlSvgContainer a:hover rect,
+    .puml-svg-container a:hover rect {
       stroke: #0284c7 !important;
       stroke-width: 2.5px !important;
       filter: drop-shadow(0 0 6px rgba(2, 132, 199, 0.55)) !important;
     }
     #pumlSvgContainer a:hover polygon,
-    #pumlSvgContainer a:hover path {
+    #pumlSvgContainer a:hover path,
+    .puml-svg-container a:hover polygon,
+    .puml-svg-container a:hover path {
       stroke: #0284c7 !important;
       stroke-width: 2px !important;
       filter: drop-shadow(0 0 5px rgba(2, 132, 199, 0.55)) !important;
@@ -29467,6 +29478,9 @@
 
         // Reset tag filter & OSI filter on model switch
         activeTags.clear();
+        if (typeof window.closeAllPlantUmlModals === 'function') {
+          window.closeAllPlantUmlModals();
+        }
         selectedOsiLayer = 'ALL';
         window.selectedOsiLayer = 'ALL';
         document.querySelectorAll('.osi-pill-btn').forEach(b => b.classList.toggle('active', b.getAttribute('data-osi') === 'ALL'));
@@ -32128,11 +32142,12 @@
         return puml;
       };
 
-      let currentPumlZoom = 1.0;
-      let currentPumlSvgText = '';
-      let currentPumlProcId = '';
-      let savedPumlBounds = null;
-      let pumlPopoutInitialized = false;
+      // =====================================================================
+      // PLANTUML MULTI-POPOUT REGISTRY & CONTROLLER (CONCURRENT FLOATING WINDOWS)
+      // =====================================================================
+      const openPlantUmlPopouts = new Map(); // procId -> { procId, modal, zoom, svgText, savedBounds, cleanup }
+      window.openPlantUmlPopouts = openPlantUmlPopouts;
+      let activePlantUmlProcId = null;
 
       if (typeof SVGAElement !== 'undefined' && !SVGAElement.prototype.click) {
         SVGAElement.prototype.click = function() {
@@ -32141,66 +32156,206 @@
         };
       }
 
-      function initPumlPopoutInteractions() {
-        if (pumlPopoutInitialized) return;
-        pumlPopoutInitialized = true;
+      window.togglePlantUmlFullscreen = function(procId) {
+        const pid = procId || activePlantUmlProcId || Array.from(openPlantUmlPopouts.keys()).pop();
+        const entry = openPlantUmlPopouts.get(pid);
+        if (!entry || !entry.modal) return;
+        const modal = entry.modal;
+        const btn = modal.querySelector('.btn-puml-fullscreen');
 
-        const modal = document.getElementById('plantUmlViewerModal');
-        const header = document.getElementById('plantUmlPopoutHeader');
-        const container = document.getElementById('pumlSvgContainer');
-        if (!modal || !header) return;
+        if (modal.classList.contains('is-fullscreen')) {
+          modal.classList.remove('is-fullscreen');
+          if (entry.savedBounds) {
+            modal.style.top = entry.savedBounds.top;
+            modal.style.left = entry.savedBounds.left;
+            modal.style.width = entry.savedBounds.width;
+            modal.style.height = entry.savedBounds.height;
+            modal.style.right = 'auto';
+            modal.style.bottom = 'auto';
+          }
+          if (btn) btn.innerHTML = '⛶ Vollbild';
+        } else {
+          entry.savedBounds = {
+            top: modal.style.top || (modal.offsetTop + 'px'),
+            left: modal.style.left || (modal.offsetLeft + 'px'),
+            width: modal.style.width || (modal.offsetWidth + 'px'),
+            height: modal.style.height || (modal.offsetHeight + 'px')
+          };
+          modal.classList.add('is-fullscreen');
+          if (btn) btn.innerHTML = '🗗 Wiederherstellen';
+        }
+      };
 
-        // Bring to front on mousedown anywhere on the window
-        modal.addEventListener('mousedown', () => {
+      window.openPlantUmlModal = async function(procId, forceRefresh = false) {
+        if (!procId) return null;
+        const proc = (typeof PROCESSES_DATA !== 'undefined' ? PROCESSES_DATA : []).find(p => p.id === procId);
+        if (!proc) return null;
+
+        activePlantUmlProcId = proc.id;
+
+        let popoutsContainer = document.getElementById('plantUmlPopoutsContainer');
+        if (!popoutsContainer) {
+          popoutsContainer = document.createElement('div');
+          popoutsContainer.id = 'plantUmlPopoutsContainer';
+          document.body.appendChild(popoutsContainer);
+        }
+
+        // 1. If popout for this process already exists and is attached, reuse it
+        if (openPlantUmlPopouts.has(procId) && !forceRefresh) {
+          const entry = openPlantUmlPopouts.get(procId);
+          if (entry && entry.modal && document.body.contains(entry.modal)) {
+            entry.modal.style.display = 'flex';
+            if (typeof popoutZIndexCounter === 'number') {
+              popoutZIndexCounter++;
+              entry.modal.style.zIndex = popoutZIndexCounter;
+            }
+            entry.modal.classList.add('popout-focus-flash');
+            setTimeout(() => {
+              if (entry.modal) entry.modal.classList.remove('popout-focus-flash');
+            }, 600);
+            return entry.modal;
+          } else {
+            openPlantUmlPopouts.delete(procId);
+          }
+        }
+
+        // If force-refreshing an existing popout:
+        let modal;
+        let record;
+        if (forceRefresh && openPlantUmlPopouts.has(procId)) {
+          record = openPlantUmlPopouts.get(procId);
+          modal = record.modal;
+        } else {
+          // 2. Create a brand new cascading floating popout for this process
+          const existingCount = openPlantUmlPopouts.size;
+          const w = Math.min(940, window.innerWidth - 40);
+          const h = Math.min(680, window.innerHeight - 60);
+          const baseLeft = Math.max(20, Math.floor((window.innerWidth - w) / 2));
+          const baseTop = Math.max(30, Math.floor((window.innerHeight - h) / 2));
+          const cascadeStep = 34;
+          const offsetX = (existingCount % 8) * cascadeStep;
+          const offsetY = (existingCount % 8) * cascadeStep;
+          const finalLeft = Math.max(10, Math.min(window.innerWidth - 120, baseLeft + offsetX));
+          const finalTop = Math.max(10, Math.min(window.innerHeight - 80, baseTop + offsetY));
+
           if (typeof popoutZIndexCounter === 'number') {
             popoutZIndexCounter++;
-            modal.style.zIndex = popoutZIndexCounter;
+          } else {
+            window.popoutZIndexCounter = 10001;
           }
-        });
 
-        // Draggable via header
-        let isDragging = false;
-        let dragStartX, dragStartY, initLeft, initTop;
-
-        header.addEventListener('mousedown', (e) => {
-          if (e.target.closest('button')) return;
-          if (modal.classList.contains('is-fullscreen')) return;
-
-          isDragging = true;
-          dragStartX = e.clientX;
-          dragStartY = e.clientY;
-          initLeft = modal.offsetLeft;
-          initTop = modal.offsetTop;
-          document.body.style.userSelect = 'none';
-
-          if (typeof popoutZIndexCounter === 'number') {
-            popoutZIndexCounter++;
-            modal.style.zIndex = popoutZIndexCounter;
-          }
-        });
-
-        window.addEventListener('mousemove', (e) => {
-          if (!isDragging) return;
-          const dx = e.clientX - dragStartX;
-          const dy = e.clientY - dragStartY;
-          const newLeft = Math.max(10, Math.min(window.innerWidth - 120, initLeft + dx));
-          const newTop = Math.max(10, Math.min(window.innerHeight - 60, initTop + dy));
-          modal.style.left = newLeft + 'px';
-          modal.style.top = newTop + 'px';
+          const safeProcId = proc.id.replace(/[^a-zA-Z0-9_-]/g, '_');
+          modal = document.createElement('div');
+          modal.id = 'plantUmlViewerModal_' + safeProcId;
+          modal.className = 'plantuml-floating-popout';
+          modal.dataset.procId = proc.id;
+          modal.style.width = w + 'px';
+          modal.style.height = h + 'px';
+          modal.style.left = finalLeft + 'px';
+          modal.style.top = finalTop + 'px';
           modal.style.right = 'auto';
           modal.style.bottom = 'auto';
-        });
+          modal.style.display = 'flex';
+          modal.style.zIndex = popoutZIndexCounter;
 
-        window.addEventListener('mouseup', () => {
-          if (isDragging) {
-            isDragging = false;
-            document.body.style.userSelect = 'auto';
-          }
-        });
+          const esc = (str) => String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+          const titleLabel = esc(proc.id + ' · ' + (proc.name || 'Prozess'));
 
-        // Event delegation for interactive PlantUML SVG links
-        if (container) {
-          container.addEventListener('click', (e) => {
+          modal.innerHTML = 
+            '<div class="plantuml-popout-header">' +
+              '<div style="display:flex; align-items:center; gap:8px;">' +
+                '<span style="font-size:1.1rem;">📊</span>' +
+                '<div class="crud-modal-title" style="font-size:0.92rem; font-weight:750; color:var(--text-bright); display:flex; align-items:center; gap:6px;">' +
+                  '<span class="plantuml-title-text">' + titleLabel + '</span>' +
+                  '<button type="button" class="puml-selfref-btn btn-puml-selfref" onclick="window.restorePlantUmlCallingContext(\'' + esc(proc.id) + '\')" title="Aufrufumgebung im EAM-Modell wiederherstellen (' + titleLabel + ')">🔗</button>' +
+                '</div>' +
+                '<span class="traffic-tag" style="background:rgba(56,189,248,0.2); color:var(--accent); font-weight:700;">UML 2.5</span>' +
+              '</div>' +
+              '<div style="display:flex; align-items:center; gap:6px;">' +
+                '<button class="insp-action-btn" onclick="window.zoomPuml(\'' + esc(proc.id) + '\', 0.2)" title="Vergrößern (+)">🔍 +</button>' +
+                '<button class="insp-action-btn" onclick="window.zoomPuml(\'' + esc(proc.id) + '\', -0.2)" title="Verkleinern (-)">🔍 -</button>' +
+                '<button class="insp-action-btn" onclick="window.resetPumlZoom(\'' + esc(proc.id) + '\')" title="Standardgröße (100%)">1:1</button>' +
+                '<button class="insp-action-btn btn-puml-fullscreen" onclick="window.togglePlantUmlFullscreen(\'' + esc(proc.id) + '\')" title="Vollbild umschalten">⛶ Vollbild</button>' +
+                '<button class="insp-action-btn" onclick="window.downloadPumlSvg(\'' + esc(proc.id) + '\')" title="SVG Vektorgrafik herunterladen">💾 SVG Download</button>' +
+                '<button class="insp-action-btn" onclick="window.copyPlantUml(\'' + esc(proc.id) + '\')" title="PlantUML-Code kopieren">📋 Kopieren</button>' +
+                '<button class="insp-action-btn" onclick="window.openPlantUmlEditor(\'' + esc(proc.id) + '\')" title="In externem Editor (PlantText) bearbeiten">↗ PlantText</button>' +
+                '<button class="insp-action-btn" onclick="window.openOfficialPlantUmlEditor(\'' + esc(proc.id) + '\')" title="Auf offiziellem PlantUML-Server öffnen">↗ PlantUML.com</button>' +
+                '<button onclick="window.closePlantUmlModal(\'' + esc(proc.id) + '\')" style="background:none; border:none; color:var(--text-muted); font-size:1.4rem; cursor:pointer; padding:0 6px; line-height:1;" title="Schließen">&times;</button>' +
+              '</div>' +
+            '</div>' +
+            '<div class="plantuml-popout-body" style="flex:1; display:flex; flex-direction:column; padding:0; overflow:hidden; position:relative; background:#0b0f17;">' +
+              '<div class="puml-loading-spinner" style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; background:rgba(11,15,23,0.85); z-index:10; color:var(--accent);">' +
+                '<div style="font-size:1.8rem; margin-bottom:8px;">⏳</div>' +
+                '<div style="font-size:0.85rem; font-weight:600;">Generiere interaktives PlantUML Vektordiagramm für ' + esc(proc.id) + '...</div>' +
+              '</div>' +
+              '<div class="puml-svg-container" style="flex:1; width:100%; height:100%; overflow:auto; display:flex; align-items:center; justify-content:center; padding:16px;"></div>' +
+              '<div class="puml-error-fallback" style="display:none; padding:24px; text-align:center; color:var(--text-bright); overflow:auto;"></div>' +
+            '</div>' +
+            '<div class="plantuml-popout-footer">' +
+              '<div style="display:flex; align-items:center; gap:6px;">' +
+                '<span style="color:var(--accent);">💡</span>' +
+                '<span>Klicken Sie auf <strong>Systeme</strong>, <strong>Kanten</strong> oder <strong>Abschnitte</strong> im Diagramm, um sie im EAM-Modell zu fokussieren.</span>' +
+              '</div>' +
+              '<div class="plantuml-resize-indicator" title="Größe anpassen (unten rechts ziehen)">⤡ Resize</div>' +
+            '</div>';
+
+          // Bring to front on mousedown anywhere on modal
+          modal.addEventListener('mousedown', () => {
+            activePlantUmlProcId = proc.id;
+            if (typeof popoutZIndexCounter === 'number') {
+              popoutZIndexCounter++;
+              modal.style.zIndex = popoutZIndexCounter;
+            }
+          });
+
+          // Header drag logic
+          const header = modal.querySelector('.plantuml-popout-header');
+          let isDragging = false;
+          let dragStartX, dragStartY, initLeft, initTop;
+
+          header.addEventListener('mousedown', (e) => {
+            if (e.target.closest('button')) return;
+            if (modal.classList.contains('is-fullscreen')) return;
+
+            isDragging = true;
+            dragStartX = e.clientX;
+            dragStartY = e.clientY;
+            initLeft = modal.offsetLeft;
+            initTop = modal.offsetTop;
+            document.body.style.userSelect = 'none';
+
+            activePlantUmlProcId = proc.id;
+            if (typeof popoutZIndexCounter === 'number') {
+              popoutZIndexCounter++;
+              modal.style.zIndex = popoutZIndexCounter;
+            }
+          });
+
+          const onMouseMove = (e) => {
+            if (!isDragging) return;
+            const dx = e.clientX - dragStartX;
+            const dy = e.clientY - dragStartY;
+            const newLeft = Math.max(10, Math.min(window.innerWidth - 120, initLeft + dx));
+            const newTop = Math.max(10, Math.min(window.innerHeight - 60, initTop + dy));
+            modal.style.left = newLeft + 'px';
+            modal.style.top = newTop + 'px';
+            modal.style.right = 'auto';
+            modal.style.bottom = 'auto';
+          };
+
+          const onMouseUp = () => {
+            if (isDragging) {
+              isDragging = false;
+              document.body.style.userSelect = 'auto';
+            }
+          };
+
+          window.addEventListener('mousemove', onMouseMove);
+          window.addEventListener('mouseup', onMouseUp);
+
+          // Interactive SVG links delegation
+          const svgContainer = modal.querySelector('.puml-svg-container');
+          svgContainer.addEventListener('click', (e) => {
             const a = e.target.closest('a');
             if (!a) return;
             const href = a.getAttribute('href') || a.getAttribute('xlink:href') || '';
@@ -32217,9 +32372,7 @@
               const sysId = href.replace(/^#sys-/, '');
               const sys = SYSTEMS_DATA.find(s => s.id === sysId);
               if (sys) {
-                if (typeof selectNode === 'function') {
-                  selectNode(sys, clickX, clickY);
-                }
+                if (typeof selectNode === 'function') selectNode(sys, clickX, clickY);
                 if (typeof window.showCrudToast === 'function') {
                   window.showCrudToast('🎯 System ' + sys.id + ' (' + (sys.name || '') + ') im Modell ausgewählt');
                 }
@@ -32228,9 +32381,7 @@
               const connId = href.replace(/^#conn-/, '');
               const conn = CONNECTIONS_DATA.find(c => c.id === connId);
               if (conn) {
-                if (typeof selectEdge === 'function') {
-                  selectEdge(conn, clickX, clickY);
-                }
+                if (typeof selectEdge === 'function') selectEdge(conn, clickX, clickY);
                 if (typeof window.showCrudToast === 'function') {
                   window.showCrudToast('🔗 Verbindung ' + conn.id + ' (' + (conn.name || '') + ') im Modell fokussiert');
                 }
@@ -32239,87 +32390,36 @@
               const integId = href.replace(/^#integ-/, '');
               const integ = INTEGRATIONS_DATA.find(i => i.id === integId);
               if (integ) {
-                if (typeof setDrilldownIntegration === 'function') {
-                  setDrilldownIntegration(integ);
-                }
+                if (typeof setDrilldownIntegration === 'function') setDrilldownIntegration(integ);
                 if (typeof window.showCrudToast === 'function') {
                   window.showCrudToast('⚡ Integrationsfluss ' + integ.id + ' (' + (integ.name || '') + ') aktiviert');
                 }
               }
             }
           });
-        }
-      }
 
-      window.togglePlantUmlFullscreen = function() {
-        const modal = document.getElementById('plantUmlViewerModal');
-        const btn = document.getElementById('btnPumlFullscreen');
-        if (!modal) return;
-
-        if (modal.classList.contains('is-fullscreen')) {
-          modal.classList.remove('is-fullscreen');
-          if (savedPumlBounds) {
-            modal.style.top = savedPumlBounds.top;
-            modal.style.left = savedPumlBounds.left;
-            modal.style.width = savedPumlBounds.width;
-            modal.style.height = savedPumlBounds.height;
-            modal.style.right = 'auto';
-            modal.style.bottom = 'auto';
-          }
-          if (btn) btn.innerHTML = '⛶ Vollbild';
-        } else {
-          savedPumlBounds = {
-            top: modal.style.top || (modal.offsetTop + 'px'),
-            left: modal.style.left || (modal.offsetLeft + 'px'),
-            width: modal.style.width || (modal.offsetWidth + 'px'),
-            height: modal.style.height || (modal.offsetHeight + 'px')
+          record = {
+            procId: proc.id,
+            modal: modal,
+            zoom: 1.0,
+            svgText: '',
+            savedBounds: null,
+            cleanup: () => {
+              window.removeEventListener('mousemove', onMouseMove);
+              window.removeEventListener('mouseup', onMouseUp);
+            }
           };
-          modal.classList.add('is-fullscreen');
-          if (btn) btn.innerHTML = '🗗 Wiederherstellen';
-        }
-      };
 
-      window.openPlantUmlModal = async function(procId) {
-        initPumlPopoutInteractions();
-        const proc = PROCESSES_DATA.find(p => p.id === procId);
-        if (!proc) return;
-        currentPumlProcId = procId;
-        currentPumlZoom = 1.0;
-
-        const modal = document.getElementById('plantUmlViewerModal');
-        const titleEl = document.getElementById('plantUmlModalTitle');
-        const spinner = document.getElementById('pumlLoadingSpinner');
-        const container = document.getElementById('pumlSvgContainer');
-        const fallback = document.getElementById('pumlErrorFallback');
-
-        if (!modal) return;
-
-        // Position window nicely on first opening or if offscreen
-        if (!modal.style.left || modal.style.left === 'auto' || parseInt(modal.style.left, 10) < 0) {
-          const w = Math.min(960, window.innerWidth - 40);
-          const h = Math.min(680, window.innerHeight - 60);
-          modal.style.width = w + 'px';
-          modal.style.height = h + 'px';
-          modal.style.left = Math.max(20, Math.floor((window.innerWidth - w) / 2)) + 'px';
-          modal.style.top = Math.max(30, Math.floor((window.innerHeight - h) / 2)) + 'px';
-          modal.style.right = 'auto';
-          modal.style.bottom = 'auto';
+          openPlantUmlPopouts.set(proc.id, record);
+          popoutsContainer.appendChild(modal);
         }
 
-        modal.style.display = 'flex';
-        if (typeof popoutZIndexCounter === 'number') {
-          popoutZIndexCounter++;
-          modal.style.zIndex = popoutZIndexCounter;
-        }
+        // Fetch & render SVG diagram
+        const spinner = modal.querySelector('.puml-loading-spinner');
+        const container = modal.querySelector('.puml-svg-container');
+        const fallback = modal.querySelector('.puml-error-fallback');
 
-        const titleText = document.getElementById('plantUmlModalTitleText') || titleEl;
-        if (titleText) titleText.textContent = proc.id + ' · ' + proc.name;
-        const refBtn = document.getElementById('btnPumlRestoreContext');
-        if (refBtn) {
-          refBtn.title = 'Aufrufumgebung im EAM-Modell wiederherstellen (' + proc.id + ' · ' + proc.name + ')';
-        }
         if (spinner) spinner.style.display = 'flex';
-        if (container) container.innerHTML = '';
         if (fallback) fallback.style.display = 'none';
 
         const puml = proc.plantUml || window.generatePlantUmlFromProcess(proc);
@@ -32333,12 +32433,12 @@
           if (!res.ok) throw new Error('HTTP ' + res.status);
 
           const svgText = await res.text();
-          currentPumlSvgText = svgText;
+          record.svgText = svgText;
 
           if (spinner) spinner.style.display = 'none';
           if (container) {
-            container.innerHTML = '<div id="pumlSvgWrapper" style="transition:transform 0.2s ease; transform-origin:center top; background:#ffffff; border-radius:8px; padding:24px; box-shadow:0 12px 40px rgba(0,0,0,0.6); width:100%; max-width:100%; display:flex; justify-content:center; overflow:auto;">' + svgText + '</div>';
-            const svgEl = container.querySelector('#pumlSvgWrapper svg');
+            container.innerHTML = '<div class="puml-svg-wrapper" style="transition:transform 0.2s ease; transform-origin:center top; background:#ffffff; border-radius:8px; padding:24px; box-shadow:0 12px 40px rgba(0,0,0,0.6); width:100%; max-width:100%; display:flex; justify-content:center; overflow:auto;">' + svgText + '</div>';
+            const svgEl = container.querySelector('svg');
             if (svgEl) {
               svgEl.style.maxWidth = '100%';
               svgEl.style.height = 'auto';
@@ -32346,7 +32446,7 @@
             }
           }
         } catch (err) {
-          console.warn('Online PlantUML render failed, showing fallback:', err);
+          console.warn('Online PlantUML render failed for ' + proc.id + ':', err);
           if (spinner) spinner.style.display = 'none';
           if (fallback) {
             fallback.style.display = 'block';
@@ -32364,26 +32464,59 @@
               '</pre>';
           }
         }
+
+        return modal;
       };
 
-      window.closePlantUmlModal = function() {
-        const modal = document.getElementById('plantUmlViewerModal');
-        if (modal) modal.style.display = 'none';
+      window.closePlantUmlModal = function(procId) {
+        if (procId && openPlantUmlPopouts.has(procId)) {
+          const entry = openPlantUmlPopouts.get(procId);
+          if (entry.cleanup) entry.cleanup();
+          if (entry.modal && entry.modal.parentNode) entry.modal.remove();
+          openPlantUmlPopouts.delete(procId);
+          return;
+        }
+
+        // If no procId, close modal with highest z-index
+        let topEntry = null;
+        let maxZ = -1;
+        openPlantUmlPopouts.forEach(entry => {
+          const z = parseInt(entry.modal.style.zIndex || '0', 10);
+          if (z > maxZ) {
+            maxZ = z;
+            topEntry = entry;
+          }
+        });
+        if (topEntry) {
+          if (topEntry.cleanup) topEntry.cleanup();
+          if (topEntry.modal && topEntry.modal.parentNode) topEntry.modal.remove();
+          openPlantUmlPopouts.delete(topEntry.procId);
+        }
       };
 
-      window.restorePlantUmlCallingContext = function() {
-        if (!currentPumlProcId) return;
-        const proc = PROCESSES_DATA.find(p => p.id === currentPumlProcId);
+      window.closeAllPlantUmlModals = function() {
+        openPlantUmlPopouts.forEach(entry => {
+          if (entry.cleanup) entry.cleanup();
+          if (entry.modal && entry.modal.parentNode) entry.modal.remove();
+        });
+        openPlantUmlPopouts.clear();
+      };
+
+      window.restorePlantUmlCallingContext = function(procId) {
+        const pid = procId || activePlantUmlProcId || Array.from(openPlantUmlPopouts.keys()).pop();
+        if (!pid) return;
+        const proc = PROCESSES_DATA.find(p => p.id === pid);
         if (!proc) return;
 
         if (typeof window.restoreCallingProcessContext === 'function') {
-          window.restoreCallingProcessContext(currentPumlProcId);
+          window.restoreCallingProcessContext(pid);
         }
 
         if (typeof window.showCrudToast === 'function') {
           window.showCrudToast('📍 Aufrufumgebung für ' + proc.id + ' (' + proc.name + ') wiederhergestellt!');
         }
       };
+
 
       window.copyPlantUml = function(procId) {
         const proc = PROCESSES_DATA.find(p => p.id === procId);
@@ -32481,30 +32614,48 @@
         proc.plantUml = generated;
         window.showCrudToast('⚡ PlantUML für ' + procId + ' aus ' + (proc.cleanIntegIds || []).length + ' Integrationen neu generiert!');
         renderInspectorProcess(proc);
+
+        // If popout for this process is currently open, refresh it
+        if (openPlantUmlPopouts.has(procId)) {
+          window.openPlantUmlModal(procId, true);
+        }
       };
 
-      window.zoomPuml = function(delta) {
-        currentPumlZoom = Math.max(0.4, Math.min(3.0, currentPumlZoom + delta));
-        const wrapper = document.getElementById('pumlSvgWrapper');
-        if (wrapper) wrapper.style.transform = 'scale(' + currentPumlZoom + ')';
+      window.zoomPuml = function(procId, delta) {
+        let pid = procId;
+        let d = delta;
+        if (typeof procId === 'number') {
+          d = procId;
+          pid = activePlantUmlProcId || Array.from(openPlantUmlPopouts.keys()).pop();
+        }
+        const entry = openPlantUmlPopouts.get(pid);
+        if (!entry) return;
+        entry.zoom = Math.max(0.4, Math.min(3.0, (entry.zoom || 1.0) + d));
+        const wrapper = entry.modal.querySelector('.puml-svg-wrapper');
+        if (wrapper) wrapper.style.transform = 'scale(' + entry.zoom + ')';
       };
 
-      window.resetPumlZoom = function() {
-        currentPumlZoom = 1.0;
-        const wrapper = document.getElementById('pumlSvgWrapper');
+      window.resetPumlZoom = function(procId) {
+        const pid = procId || activePlantUmlProcId || Array.from(openPlantUmlPopouts.keys()).pop();
+        const entry = openPlantUmlPopouts.get(pid);
+        if (!entry) return;
+        entry.zoom = 1.0;
+        const wrapper = entry.modal.querySelector('.puml-svg-wrapper');
         if (wrapper) wrapper.style.transform = 'scale(1.0)';
       };
 
-      window.downloadPumlSvg = function() {
-        if (!currentPumlSvgText) {
+      window.downloadPumlSvg = function(procId) {
+        const pid = procId || activePlantUmlProcId || Array.from(openPlantUmlPopouts.keys()).pop();
+        const entry = openPlantUmlPopouts.get(pid);
+        if (!entry || !entry.svgText) {
           alert('Keine SVG-Grafik zum Herunterladen verfügbar.');
           return;
         }
-        const blob = new Blob([currentPumlSvgText], { type: 'image/svg+xml;charset=utf-8' });
+        const blob = new Blob([entry.svgText], { type: 'image/svg+xml;charset=utf-8' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = (currentPumlProcId || 'prozess') + '_sequenzdiagramm.svg';
+        a.download = (pid || 'prozess') + '_sequenzdiagramm.svg';
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -32535,49 +32686,8 @@
 
 
   <!-- =====================================================================
-       PLANTUML SEQUENCE DIAGRAM FLOATING POPOUT (DRAGGABLE, RESIZABLE, NO BLUR)
+       PLANTUML SEQUENCE DIAGRAM FLOATING POPOUTS (DYNAMIC MULTI-WINDOW CONTAINER)
        ===================================================================== -->
-  <div id="plantUmlViewerModal" class="plantuml-floating-popout" style="display:none;">
-    <div class="plantuml-popout-header" id="plantUmlPopoutHeader">
-      <div style="display:flex; align-items:center; gap:8px;">
-        <span style="font-size:1.1rem;">📊</span>
-        <div class="crud-modal-title" id="plantUmlModalTitle" style="font-size:0.92rem; font-weight:750; color:var(--text-bright); display:flex; align-items:center; gap:6px;">
-          <span id="plantUmlModalTitleText">Prozess-Sequenzdiagramm</span>
-          <button type="button" class="puml-selfref-btn" id="btnPumlRestoreContext" onclick="window.restorePlantUmlCallingContext()" title="Aufrufumgebung im EAM-Modell wiederherstellen (Inspektor &amp; Prozess fokussieren)">🔗</button>
-        </div>
-        <span class="traffic-tag" id="plantUmlModalBadge" style="background:rgba(56,189,248,0.2); color:var(--accent); font-weight:700;">UML 2.5</span>
-      </div>
-      <div style="display:flex; align-items:center; gap:6px;">
-        <button class="insp-action-btn" onclick="window.zoomPuml(0.2)" title="Vergrößern (+)">🔍 +</button>
-        <button class="insp-action-btn" onclick="window.zoomPuml(-0.2)" title="Verkleinern (-)">🔍 -</button>
-        <button class="insp-action-btn" onclick="window.resetPumlZoom()" title="Standardgröße (100%)">1:1</button>
-        <button class="insp-action-btn" id="btnPumlFullscreen" onclick="window.togglePlantUmlFullscreen()" title="Vollbild umschalten">⛶ Vollbild</button>
-        <button class="insp-action-btn" onclick="window.downloadPumlSvg()" title="SVG Vektorgrafik herunterladen">💾 SVG Download</button>
-        <button class="insp-action-btn" onclick="window.copyPlantUml(currentPumlProcId)" title="PlantUML-Code kopieren">📋 Kopieren</button>
-        <button class="insp-action-btn" onclick="window.openPlantUmlEditor(currentPumlProcId)" title="In externem Editor (PlantText) bearbeiten">↗ PlantText</button>
-        <button class="insp-action-btn" onclick="window.openOfficialPlantUmlEditor(currentPumlProcId)" title="Auf offiziellem PlantUML-Server öffnen">↗ PlantUML.com</button>
-        <button onclick="window.closePlantUmlModal()" style="background:none; border:none; color:var(--text-muted); font-size:1.4rem; cursor:pointer; padding:0 6px; line-height:1;" title="Schließen">&times;</button>
-      </div>
-    </div>
-    <div class="plantuml-popout-body" id="plantUmlModalBody" style="flex:1; display:flex; flex-direction:column; padding:0; overflow:hidden; position:relative; background:#0b0f17;">
-      <div id="pumlLoadingSpinner" style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; background:rgba(11,15,23,0.85); z-index:10; color:var(--accent);">
-        <div style="font-size:1.8rem; margin-bottom:8px;">⏳</div>
-        <div style="font-size:0.85rem; font-weight:600;">Generiere interaktives PlantUML Vektordiagramm...</div>
-      </div>
-      <div id="pumlSvgContainer" style="flex:1; width:100%; height:100%; overflow:auto; display:flex; align-items:center; justify-content:center; padding:16px;">
-        <!-- Inline SVG rendered here -->
-      </div>
-      <div id="pumlErrorFallback" style="display:none; padding:24px; text-align:center; color:var(--text-bright); overflow:auto;">
-        <!-- Offline Fallback -->
-      </div>
-    </div>
-    <div class="plantuml-popout-footer">
-      <div style="display:flex; align-items:center; gap:6px;">
-        <span style="color:var(--accent);">💡</span>
-        <span>Klicken Sie auf <strong>Systeme</strong>, <strong>Kanten</strong> oder <strong>Abschnitte</strong> im Diagramm, um sie im EAM-Modell zu fokussieren.</span>
-      </div>
-      <div class="plantuml-resize-indicator" title="Größe anpassen (unten rechts ziehen)">⤡ Resize</div>
-    </div>
-  </div>
+  <div id="plantUmlPopoutsContainer"></div>
 </body>
 </html>
