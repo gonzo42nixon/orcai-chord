@@ -4263,6 +4263,31 @@
     }
 
     /* PlantUML SVG Interactive Links (Supports both static and dynamic multi-popout containers) */
+    .puml-svg-container {
+      position: relative;
+      overflow: hidden;
+      cursor: grab;
+      user-select: none;
+      background: #0b0f17;
+    }
+    .puml-svg-container:active {
+      cursor: grabbing;
+    }
+    .puml-zoom-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 0.72rem;
+      font-weight: 750;
+      color: var(--accent, #38bdf8);
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      min-width: 44px;
+      text-align: center;
+      user-select: none;
+    }
     #pumlSvgContainer a,
     .puml-svg-container a {
       cursor: pointer !important;
@@ -37871,6 +37896,25 @@
         };
       }
 
+      window.updatePumlTransform = function(entry, animate = false) {
+        if (!entry || !entry.modal) return;
+        const wrapper = entry.modal.querySelector('.puml-svg-wrapper');
+        const badge = entry.modal.querySelector('.puml-zoom-badge');
+        if (!wrapper) return;
+
+        if (animate) {
+          wrapper.style.transition = 'transform 0.18s cubic-bezier(0.2, 0, 0, 1)';
+        } else {
+          wrapper.style.transition = 'none';
+        }
+
+        wrapper.style.transform = 'translate3d(' + Math.round(entry.panX) + 'px, ' + Math.round(entry.panY) + 'px, 0) scale(' + entry.zoom + ')';
+
+        if (badge) {
+          badge.textContent = Math.round(entry.zoom * 100) + '%';
+        }
+      };
+
       window.togglePlantUmlFullscreen = function(procId) {
         const pid = procId || activePlantUmlProcId || Array.from(openPlantUmlPopouts.keys()).pop();
         const entry = openPlantUmlPopouts.get(pid);
@@ -37899,6 +37943,12 @@
           modal.classList.add('is-fullscreen');
           if (btn) btn.innerHTML = '🗗 Wiederherstellen';
         }
+
+        setTimeout(() => {
+          if (typeof window.fitPlantUml === 'function') {
+            window.fitPlantUml(pid);
+          }
+        }, 120);
       };
 
       window.openPlantUmlModal = async function(procId, forceRefresh = false) {
@@ -37990,7 +38040,10 @@
               '<div style="display:flex; align-items:center; gap:6px;">' +
                 '<button class="insp-action-btn" onclick="window.zoomPuml(\'' + esc(proc.id) + '\', 0.2)" title="Vergrößern (+)">🔍 +</button>' +
                 '<button class="insp-action-btn" onclick="window.zoomPuml(\'' + esc(proc.id) + '\', -0.2)" title="Verkleinern (-)">🔍 -</button>' +
+                '<span class="puml-zoom-badge" title="Aktueller Zoomfaktor">100%</span>' +
                 '<button class="insp-action-btn" onclick="window.resetPumlZoom(\'' + esc(proc.id) + '\')" title="Standardgröße (100%)">1:1</button>' +
+                '<button class="insp-action-btn" onclick="window.fitPlantUml(\'' + esc(proc.id) + '\')" title="Gesamtes Diagramm in Fenster einpassen">⊡ Einpassen</button>' +
+                '<button class="insp-action-btn" onclick="window.jumpToPumlStart(\'' + esc(proc.id) + '\')" title="Direkt an den Diagrammanfang (Initiator links) springen">⏮ Start</button>' +
                 '<button class="insp-action-btn btn-puml-fullscreen" onclick="window.togglePlantUmlFullscreen(\'' + esc(proc.id) + '\')" title="Vollbild umschalten">⛶ Vollbild</button>' +
                 '<button class="insp-action-btn" onclick="window.downloadPumlSvg(\'' + esc(proc.id) + '\')" title="SVG Vektorgrafik herunterladen">💾 SVG Download</button>' +
                 '<button class="insp-action-btn" onclick="window.copyPlantUml(\'' + esc(proc.id) + '\')" title="PlantUML-Code kopieren">📋 Kopieren</button>' +
@@ -38004,13 +38057,13 @@
                 '<div style="font-size:1.8rem; margin-bottom:8px;">⏳</div>' +
                 '<div style="font-size:0.85rem; font-weight:600;">Generiere interaktives PlantUML Vektordiagramm für ' + esc(proc.id) + '...</div>' +
               '</div>' +
-              '<div class="puml-svg-container" style="flex:1; width:100%; height:100%; overflow:auto; display:flex; align-items:center; justify-content:center; padding:16px;"></div>' +
+              '<div class="puml-svg-container" style="flex:1; width:100%; height:100%; position:relative; overflow:hidden; background:#0b0f17; cursor:grab; user-select:none;"></div>' +
               '<div class="puml-error-fallback" style="display:none; padding:24px; text-align:center; color:var(--text-bright); overflow:auto;"></div>' +
             '</div>' +
             '<div class="plantuml-popout-footer">' +
-              '<div style="display:flex; align-items:center; gap:6px;">' +
+              '<div style="display:flex; align-items:center; gap:8px;">' +
                 '<span style="color:var(--accent);">💡</span>' +
-                '<span>Klicken Sie auf <strong>Systeme</strong>, <strong>Kanten</strong> oder <strong>Abschnitte</strong> im Diagramm, um sie im EAM-Modell zu fokussieren.</span>' +
+                '<span><strong>Ziehen</strong> zum Verschieben (Pan) · <strong>Mausrad</strong> zum Scrollen / <strong>Ctrl+Rad</strong> zum Zoomen · <strong>⏮ Start</strong> springt zum linken Rand · Klick auf Systeme fokussiert das EAM-Modell</span>' +
               '</div>' +
               '<div class="plantuml-resize-indicator" title="Größe anpassen (unten rechts ziehen)">⤡ Resize</div>' +
             '</div>';
@@ -38026,14 +38079,14 @@
 
           // Header drag logic
           const header = modal.querySelector('.plantuml-popout-header');
-          let isDragging = false;
+          let isHeaderDragging = false;
           let dragStartX, dragStartY, initLeft, initTop;
 
           header.addEventListener('mousedown', (e) => {
             if (e.target.closest('button')) return;
             if (modal.classList.contains('is-fullscreen')) return;
 
-            isDragging = true;
+            isHeaderDragging = true;
             dragStartX = e.clientX;
             dragStartY = e.clientY;
             initLeft = modal.offsetLeft;
@@ -38047,8 +38100,8 @@
             }
           });
 
-          const onMouseMove = (e) => {
-            if (!isDragging) return;
+          const onHeaderMouseMove = (e) => {
+            if (!isHeaderDragging) return;
             const dx = e.clientX - dragStartX;
             const dy = e.clientY - dragStartY;
             const newLeft = Math.max(10, Math.min(window.innerWidth - 120, initLeft + dx));
@@ -38059,19 +38112,104 @@
             modal.style.bottom = 'auto';
           };
 
-          const onMouseUp = () => {
-            if (isDragging) {
-              isDragging = false;
+          const onHeaderMouseUp = () => {
+            if (isHeaderDragging) {
+              isHeaderDragging = false;
               document.body.style.userSelect = 'auto';
             }
           };
 
-          window.addEventListener('mousemove', onMouseMove);
-          window.addEventListener('mouseup', onMouseUp);
+          window.addEventListener('mousemove', onHeaderMouseMove);
+          window.addEventListener('mouseup', onHeaderMouseUp);
+
+          // Canvas pan & drag logic
+          const svgContainer = modal.querySelector('.puml-svg-container');
+          let isCanvasPanning = false;
+          let panStartX = 0, panStartY = 0;
+          let origPanX = 0, origPanY = 0;
+
+          const onContainerMouseDown = (e) => {
+            if (e.button !== 0) return;
+            if (e.target.closest('button') || e.target.closest('input') || e.target.closest('pre')) return;
+
+            isCanvasPanning = true;
+            record.justDragged = false;
+            panStartX = e.clientX;
+            panStartY = e.clientY;
+            origPanX = record.panX || 0;
+            origPanY = record.panY || 0;
+            svgContainer.style.cursor = 'grabbing';
+            e.preventDefault();
+          };
+
+          const onWindowCanvasMouseMove = (e) => {
+            if (!isCanvasPanning) return;
+            const dx = e.clientX - panStartX;
+            const dy = e.clientY - panStartY;
+            if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
+              record.justDragged = true;
+            }
+            record.panX = origPanX + dx;
+            record.panY = origPanY + dy;
+            window.updatePumlTransform(record, false);
+          };
+
+          const onWindowCanvasMouseUp = () => {
+            if (isCanvasPanning) {
+              isCanvasPanning = false;
+              svgContainer.style.cursor = 'grab';
+              setTimeout(() => {
+                if (record) record.justDragged = false;
+              }, 60);
+            }
+          };
+
+          const onContainerWheel = (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const rect = svgContainer.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+
+            if (e.ctrlKey || e.metaKey) {
+              // Ctrl + Wheel: Smooth Zoom centered at mouse pointer
+              const zoomDelta = e.deltaY < 0 ? 0.15 : -0.15;
+              const oldZoom = record.zoom || 1.0;
+              const newZoom = Math.max(0.2, Math.min(4.0, Math.round((oldZoom + zoomDelta) * 100) / 100));
+              if (newZoom !== oldZoom) {
+                const ratio = newZoom / oldZoom;
+                record.panX = Math.round(mouseX - (mouseX - (record.panX || 0)) * ratio);
+                record.panY = Math.round(mouseY - (mouseY - (record.panY || 0)) * ratio);
+                record.zoom = newZoom;
+                window.updatePumlTransform(record, false);
+              }
+            } else if (e.shiftKey || Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+              // Shift + Wheel or horizontal trackpad: Pan horizontally
+              const delta = e.deltaX !== 0 ? e.deltaX : e.deltaY;
+              record.panX -= delta;
+              window.updatePumlTransform(record, false);
+            } else {
+              // Plain Wheel: Pan vertically
+              record.panY -= e.deltaY;
+              window.updatePumlTransform(record, false);
+            }
+          };
+
+          svgContainer.addEventListener('mousedown', onContainerMouseDown);
+          window.addEventListener('mousemove', onWindowCanvasMouseMove);
+          window.addEventListener('mouseup', onWindowCanvasMouseUp);
+          svgContainer.addEventListener('wheel', onContainerWheel, { passive: false });
 
           // Interactive SVG links delegation
-          const svgContainer = modal.querySelector('.puml-svg-container');
           svgContainer.addEventListener('click', (e) => {
+            if (record && record.justDragged) {
+              record.justDragged = false;
+              e.preventDefault();
+              e.stopPropagation();
+              return;
+            }
+
             const a = e.target.closest('a');
             if (!a) return;
             const href = a.getAttribute('href') || a.getAttribute('xlink:href') || '';
@@ -38118,11 +38256,18 @@
             procId: proc.id,
             modal: modal,
             zoom: 1.0,
+            panX: 0,
+            panY: 0,
+            justDragged: false,
             svgText: '',
             savedBounds: null,
             cleanup: () => {
-              window.removeEventListener('mousemove', onMouseMove);
-              window.removeEventListener('mouseup', onMouseUp);
+              window.removeEventListener('mousemove', onHeaderMouseMove);
+              window.removeEventListener('mouseup', onHeaderMouseUp);
+              window.removeEventListener('mousemove', onWindowCanvasMouseMove);
+              window.removeEventListener('mouseup', onWindowCanvasMouseUp);
+              svgContainer.removeEventListener('mousedown', onContainerMouseDown);
+              svgContainer.removeEventListener('wheel', onContainerWheel);
             }
           };
 
@@ -38153,12 +38298,37 @@
 
           if (spinner) spinner.style.display = 'none';
           if (container) {
-            container.innerHTML = '<div class="puml-svg-wrapper" style="transition:transform 0.2s ease; transform-origin:center top; background:#ffffff; border-radius:8px; padding:24px; box-shadow:0 12px 40px rgba(0,0,0,0.6); width:100%; max-width:100%; display:flex; justify-content:center; overflow:auto;">' + svgText + '</div>';
+            container.innerHTML = 
+              '<div class="puml-svg-wrapper" style="position:absolute; left:0; top:0; transform-origin:0 0; will-change:transform; background:#ffffff; border-radius:8px; padding:24px; box-shadow:0 12px 40px rgba(0,0,0,0.6); display:inline-block; width:max-content; max-width:none;">' + 
+                svgText + 
+              '</div>';
             const svgEl = container.querySelector('svg');
             if (svgEl) {
-              svgEl.style.maxWidth = '100%';
+              svgEl.style.maxWidth = 'none';
               svgEl.style.height = 'auto';
               svgEl.style.display = 'block';
+            }
+
+            const wrapper = container.querySelector('.puml-svg-wrapper');
+            if (wrapper) {
+              const cW = container.clientWidth || 800;
+              const cH = container.clientHeight || 500;
+              const w = wrapper.offsetWidth || 800;
+              const h = wrapper.offsetHeight || 500;
+
+              if (w > cW - 48 || h > cH - 48) {
+                const scaleX = (cW - 48) / w;
+                const scaleY = (cH - 48) / h;
+                const fitScale = Math.min(1.0, Math.min(scaleX, scaleY));
+                record.zoom = Math.max(0.25, Math.min(1.0, Math.round(fitScale * 100) / 100));
+                record.panX = Math.max(24, Math.round((cW - w * record.zoom) / 2));
+                record.panY = Math.max(16, Math.round((cH - h * record.zoom) / 2));
+              } else {
+                record.zoom = 1.0;
+                record.panX = Math.round((cW - w) / 2);
+                record.panY = Math.max(20, Math.round((cH - h) / 2));
+              }
+              window.updatePumlTransform(record, false);
             }
           }
         } catch (err) {
@@ -38232,7 +38402,6 @@
           window.showCrudToast('📍 Aufrufumgebung für ' + proc.id + ' (' + proc.name + ') wiederhergestellt!');
         }
       };
-
 
       window.copyPlantUml = function(procId) {
         const proc = PROCESSES_DATA.find(p => p.id === procId);
@@ -38345,19 +38514,81 @@
           pid = activePlantUmlProcId || Array.from(openPlantUmlPopouts.keys()).pop();
         }
         const entry = openPlantUmlPopouts.get(pid);
-        if (!entry) return;
-        entry.zoom = Math.max(0.4, Math.min(3.0, (entry.zoom || 1.0) + d));
-        const wrapper = entry.modal.querySelector('.puml-svg-wrapper');
-        if (wrapper) wrapper.style.transform = 'scale(' + entry.zoom + ')';
+        if (!entry || !entry.modal) return;
+        const container = entry.modal.querySelector('.puml-svg-container');
+        if (!container) return;
+
+        const cW = container.clientWidth || 800;
+        const cH = container.clientHeight || 500;
+        const centerX = cW / 2;
+        const centerY = cH / 2;
+
+        const oldZoom = entry.zoom || 1.0;
+        const newZoom = Math.max(0.2, Math.min(4.0, Math.round((oldZoom + d) * 100) / 100));
+        if (newZoom === oldZoom) return;
+
+        const ratio = newZoom / oldZoom;
+        entry.panX = Math.round(centerX - (centerX - (entry.panX || 0)) * ratio);
+        entry.panY = Math.round(centerY - (centerY - (entry.panY || 0)) * ratio);
+        entry.zoom = newZoom;
+
+        window.updatePumlTransform(entry, true);
       };
 
       window.resetPumlZoom = function(procId) {
         const pid = procId || activePlantUmlProcId || Array.from(openPlantUmlPopouts.keys()).pop();
         const entry = openPlantUmlPopouts.get(pid);
-        if (!entry) return;
-        entry.zoom = 1.0;
+        if (!entry || !entry.modal) return;
+        const container = entry.modal.querySelector('.puml-svg-container');
         const wrapper = entry.modal.querySelector('.puml-svg-wrapper');
-        if (wrapper) wrapper.style.transform = 'scale(1.0)';
+        if (!container || !wrapper) return;
+
+        entry.zoom = 1.0;
+        const w = wrapper.offsetWidth || 800;
+        entry.panX = Math.max(24, Math.round((container.clientWidth - w) / 2));
+        entry.panY = 24;
+        window.updatePumlTransform(entry, true);
+      };
+
+      window.fitPlantUml = function(procId) {
+        const pid = procId || activePlantUmlProcId || Array.from(openPlantUmlPopouts.keys()).pop();
+        const entry = openPlantUmlPopouts.get(pid);
+        if (!entry || !entry.modal) return;
+        const container = entry.modal.querySelector('.puml-svg-container');
+        const wrapper = entry.modal.querySelector('.puml-svg-wrapper');
+        if (!container || !wrapper) return;
+
+        const cW = container.clientWidth || 800;
+        const cH = container.clientHeight || 500;
+        const pad = 48;
+        const w = wrapper.offsetWidth || 800;
+        const h = wrapper.offsetHeight || 500;
+
+        const scaleX = (cW - pad) / w;
+        const scaleY = (cH - pad) / h;
+        const fitScale = Math.min(1.0, Math.min(scaleX, scaleY));
+
+        entry.zoom = Math.max(0.2, Math.round(fitScale * 100) / 100);
+        entry.panX = Math.round((cW - w * entry.zoom) / 2);
+        entry.panY = Math.max(16, Math.round((cH - h * entry.zoom) / 2));
+
+        window.updatePumlTransform(entry, true);
+        if (typeof window.showCrudToast === 'function') {
+          window.showCrudToast('⊡ Diagramm ' + pid + ' vollständig eingepasst (' + Math.round(entry.zoom * 100) + '%)');
+        }
+      };
+
+      window.jumpToPumlStart = function(procId) {
+        const pid = procId || activePlantUmlProcId || Array.from(openPlantUmlPopouts.keys()).pop();
+        const entry = openPlantUmlPopouts.get(pid);
+        if (!entry || !entry.modal) return;
+
+        entry.panX = 32;
+        entry.panY = 24;
+        window.updatePumlTransform(entry, true);
+        if (typeof window.showCrudToast === 'function') {
+          window.showCrudToast('⏮ Zum Diagrammanfang (Initiator / linke Akteure) gesprungen');
+        }
       };
 
       window.downloadPumlSvg = function(procId) {
