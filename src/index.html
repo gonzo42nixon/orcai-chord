@@ -3631,10 +3631,37 @@
         filter: drop-shadow(0 8px 24px rgba(0,0,0,0.65));
       }
     }
-    .hitl-client-active-pulse rect:first-child {
+    .hitl-client-active-pulse rect:first-child,
+    .hitl-client-active-pulse circle:first-child {
       animation: clientActivePulse 0.8s ease-in-out 3 !important;
       stroke: #67e8f9 !important;
       stroke-width: 3.5px !important;
+    }
+    .hitl-node-client {
+      transition: transform 0.2s ease, filter 0.2s ease;
+    }
+    .hitl-node-client:hover {
+      filter: drop-shadow(0 0 16px #38bdf8) !important;
+    }
+    .hitl-node-client:hover .client-icon-base {
+      stroke-width: 3px !important;
+    }
+    #hitlClientFloatingTooltip {
+      position: fixed;
+      z-index: 100050;
+      pointer-events: none;
+      background: rgba(15, 23, 42, 0.96);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(56, 189, 248, 0.5);
+      border-radius: 9px;
+      padding: 10px 14px;
+      color: #e2e8f0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.7), 0 0 18px rgba(56, 189, 248, 0.3);
+      transition: opacity 0.12s ease;
+      display: none;
+      max-width: 360px;
+      line-height: 1.45;
     }
     @keyframes podHighlightFlash {
       0% {
@@ -18438,30 +18465,24 @@
           // Remove any previous beacons
           d3.selectAll('.hitl-client-beacon').remove();
 
-          // Fire 3 radiating beacon ripple waves
+          // Fire 3 radiating beacon ripple waves (Circular Icon)
           [0, 250, 500].forEach(delayMs => {
             setTimeout(() => {
               if (clientNode.empty()) return;
-              clientNode.append('rect')
+              clientNode.append('circle')
                 .attr('class', 'locator-beacon-ring hitl-client-beacon')
-                .attr('x', -8)
-                .attr('y', -8)
-                .attr('width', 176)
-                .attr('height', 66)
-                .attr('rx', 14)
+                .attr('cx', 0)
+                .attr('cy', 0)
+                .attr('r', 24)
                 .style('fill', 'none')
                 .style('stroke', '#38bdf8')
                 .style('stroke-width', '3.5px')
                 .style('pointer-events', 'none')
-                .style('filter', 'drop-shadow(0 0 14px #38bdf8)')
+                .style('filter', 'drop-shadow(0 0 16px #38bdf8)')
                 .transition()
                 .duration(1500)
                 .ease(d3.easeQuadOut)
-                .attr('x', -32)
-                .attr('y', -32)
-                .attr('width', 224)
-                .attr('height', 114)
-                .attr('rx', 22)
+                .attr('r', 85)
                 .style('stroke-opacity', 0)
                 .style('stroke-width', '1px')
                 .remove();
@@ -35052,6 +35073,18 @@
         }
       });
 
+      document.addEventListener('mousedown', (e) => {
+        if (!e.target.closest('.hitl-node-client')) {
+          const tipEl = document.getElementById('hitlClientFloatingTooltip');
+          if (tipEl) tipEl.style.display = 'none';
+        }
+      });
+
+      window.addEventListener('wheel', () => {
+        const tipEl = document.getElementById('hitlClientFloatingTooltip');
+        if (tipEl) tipEl.style.display = 'none';
+      }, { passive: true });
+
       function renderInspectorRole(role) {
         if (!role) return;
         const activeModelObj = registeredLandscapeModels.find(m => m.id === currentModelId);
@@ -35247,10 +35280,9 @@
           { id: role.id + '_CL', name: 'Web-Client / UI', deviceType: 'WEB_PORTAL', os: 'Web Browser (HTTPS)', authMethod: 'SSO', targetSystemId: clientSysIds[0] || 'SYS-01' }
         ];
 
-        const clientW = 160;
-        const clientH = 50;
+        const clientRadius = 22; // Circular web-tech icon (44px diameter)
         const sysNodeRadius = 15;
-        const minVerticalPitch = 84; // Minimum vertical distance between client card centers
+        const minVerticalPitch = 84; // Minimum vertical distance between client centers
 
         // 1. Initial preferred coordinates from target systems
         const clientLayouts = rawClients.map((cl, clIdx) => {
@@ -35292,19 +35324,18 @@
           const clientX = baseHumanX;
           const clientY = layoutItem.clientY;
 
-          // Align the Client UI rectangle so it NEVER clips off the canvas edge:
-          // For Left pods (LT/LB): The left edge sits at baseHumanX - 22, so baseHumanX enters at x = 22 inside the card
-          // For Right pods (RT/RB): The right edge sits at baseHumanX + 22, so baseHumanX enters at x = clientW - 22 inside the card
-          const rectLeft = isLeft ? (baseHumanX - 22) : (baseHumanX + 22 - clientW);
-          const rectTop = clientY - clientH / 2;
-          const rectRight = rectLeft + clientW;
-          const rectBottom = clientY + clientH / 2;
+          // Check if client addresses an SAP S/4HANA system
+          const tgtSys = (typeof SYSTEMS_DATA !== 'undefined' ? SYSTEMS_DATA.find(s => s.id === cl.targetSystemId) : null);
+          const checkStr = ((cl.targetSystemId || '') + ' ' + (cl.name || '') + ' ' + (tgtSys?.name || '') + ' ' + (tgtSys?.desc || '') + ' ' + (tgtSys?.tags || []).join(' ')).toLowerCase();
+          const isS4Hana = Boolean(checkStr.includes('s/4') || checkStr.includes('s4') || checkStr.includes('fiori') || checkStr.includes('sap'));
 
           // ===================================================================
-          // KANTE 1: SENKRECHTER DOPPELPFEIL (↕) Mensch (Pod) <───► Client (UI)
+          // KANTE 1: SENKRECHTER DOPPELPFEIL (↕) Mensch (Pod) <───► Client (UI Icon)
           // ===================================================================
+          // Top-Lage: Pod ist oben, Pfeil geht nach UNTEN zum oberen Pol des Kreises (clientY - clientRadius)
+          // Bottom-Lage: Pod ist unten, Pfeil geht nach OBEN zum unteren Pol des Kreises (clientY + clientRadius)
           const edge1YStart = baseHumanY;
-          const edge1YEnd = (clientY < baseHumanY) ? rectBottom : rectTop;
+          const edge1YEnd = isTop ? (clientY - clientRadius) : (clientY + clientRadius);
           const edge1Path = 'M ' + clientX + ' ' + edge1YStart + ' L ' + clientX + ' ' + edge1YEnd;
 
           gHitlEdges.append('path')
@@ -35350,9 +35381,11 @@
           }
 
           // ===================================================================
-          // KANTE 2: HORIZONTAL / SMOOTH BEZIER (↔) Client (UI) <───► Target-System
+          // KANTE 2: HORIZONTAL / SMOOTH BEZIER (↔) Client (UI Icon) <───► Target-System
           // ===================================================================
-          const edge2XStart = isLeft ? rectRight : rectLeft;
+          // Linke Seite: Pfeil startet am rechten Äquator des Kreises (clientX + clientRadius)
+          // Rechte Seite: Pfeil startet am linken Äquator des Kreises (clientX - clientRadius)
+          const edge2XStart = isLeft ? (clientX + clientRadius) : (clientX - clientRadius);
           const edge2XEnd = isLeft ? (tgtX - sysNodeRadius) : (tgtX + sysNodeRadius);
           
           let edge2Path = '';
@@ -35369,7 +35402,7 @@
             .attr('id', 'hitl-edge-client-backend-' + clIdx)
             .attr('d', edge2Path)
             .style('fill', 'none')
-            .style('stroke', '#38bdf8')
+            .style('stroke', isS4Hana ? '#0070f2' : '#38bdf8')
             .style('stroke-width', '2.8px')
             .attr('marker-start', 'url(#hitl-marker-client-backend-start)')
             .attr('marker-end', 'url(#hitl-marker-client-backend-end)');
@@ -35378,10 +35411,10 @@
           const token = gHitlEdges.append('circle')
             .attr('class', 'hitl-flow-token')
             .attr('r', 4.5)
-            .style('fill', '#38bdf8')
+            .style('fill', isS4Hana ? '#60a5fa' : '#38bdf8')
             .style('stroke', '#ffffff')
             .style('stroke-width', '1.5px')
-            .style('filter', 'drop-shadow(0 0 6px #38bdf8)');
+            .style('filter', 'drop-shadow(0 0 6px ' + (isS4Hana ? '#0070f2' : '#38bdf8') + ')');
 
           const animMotion = document.createElementNS('http://www.w3.org/2000/svg', 'animateMotion');
           animMotion.setAttribute('path', edge2Path);
@@ -35407,7 +35440,7 @@
             .attr('height', 20)
             .attr('rx', 10)
             .style('fill', 'rgba(15, 23, 42, 0.94)')
-            .style('stroke', '#38bdf8')
+            .style('stroke', isS4Hana ? '#0070f2' : '#38bdf8')
             .style('stroke-width', '1.2px')
             .style('filter', 'drop-shadow(0 2px 8px rgba(0,0,0,0.5))');
 
@@ -35416,86 +35449,221 @@
             .attr('dominant-baseline', 'middle')
             .style('font-size', '8.5px')
             .style('font-weight', '750')
-            .style('fill', '#bae6fd')
+            .style('fill', isS4Hana ? '#93c5fd' : '#bae6fd')
             .text(cleanMsg);
 
           // ===================================================================
-          // KNOTEN: USER-INTERFACE / CLIENT (RECHTECK)
+          // KNOTEN: KREISFÖRMIGES CLIENT-ICON (SAP FIORI / CHROME)
           // ===================================================================
           const gClient = gHitlNodes.append('g')
             .attr('class', 'hitl-node hitl-node-client')
             .attr('id', 'hitl-client-' + (cl.id || clIdx))
-            .attr('transform', 'translate(' + rectLeft + ', ' + rectTop + ')')
+            .attr('transform', 'translate(' + clientX + ', ' + clientY + ')')
             .style('cursor', 'pointer')
             .on('click', () => {
               renderInspectorRole(role);
               if (typeof toggleRightDrawer === 'function') toggleRightDrawer(true);
               if (typeof window.showCrudToast === 'function') {
-                window.showCrudToast('Client UI: ' + cl.name + ' (' + (cl.deviceType || 'UI') + ')');
+                window.showCrudToast((isS4Hana ? '🌸 SAP Fiori Client: ' : '🌐 Chrome Web-Client: ') + cl.name + ' (' + (cl.deviceType || 'UI') + ')');
               }
             });
 
-          // Card Background Rectangle
-          gClient.append('rect')
-            .attr('width', clientW)
-            .attr('height', clientH)
-            .attr('rx', 9)
-            .style('fill', 'rgba(15, 23, 42, 0.95)')
-            .style('stroke', '#38bdf8')
-            .style('stroke-width', '2.2px')
-            .style('filter', 'drop-shadow(0 8px 24px rgba(0,0,0,0.65))');
+          // Interactive Hover Tooltip Handlers
+          const tooltipHtml = 
+            '<div style="font-weight:800; font-size:0.82rem; color:' + (isS4Hana ? '#60a5fa' : '#38bdf8') + '; margin-bottom:4px; display:flex; align-items:center; gap:6px;">' +
+              '<span>' + (isS4Hana ? '🌸 SAP Fiori Web-Client' : '🌐 Chrome Web-Client') + '</span>' +
+            '</div>' +
+            '<div style="font-weight:700; font-size:0.75rem; color:#f8fafc; margin-bottom:6px;">' + (cl.name || cl.id) + '</div>' +
+            '<div style="font-size:0.68rem; color:#94a3b8; line-height:1.45; border-top:1px solid rgba(255,255,255,0.1); padding-top:6px;">' +
+              '<div><strong>Zielsystem:</strong> ' + cl.targetSystemId + (tgtSys ? (' · ' + tgtSys.name) : '') + '</div>' +
+              (cl.os ? ('<div><strong>Betriebssystem / Protokoll:</strong> ' + cl.os + '</div>') : '') +
+              (cl.authMethod ? ('<div><strong>Authentifizierung:</strong> ' + cl.authMethod + '</div>') : '') +
+              ((cl.messagesEmitted && cl.messagesEmitted.length > 0) ? ('<div><strong>Datenaustausch:</strong> ' + cl.messagesEmitted.join(', ') + '</div>') : '') +
+              '<div style="margin-top:4px; color:#38bdf8; font-style:italic;">2-Stufige HITL-Kette: Mensch ↕ UI ↔ Backend</div>' +
+            '</div>';
 
-          // Device Icon Badge
-          const devIcon = cl.deviceType === 'WEB_PORTAL' ? '🌐' : (cl.deviceType === 'TABLET_MOBILE' ? '📱' : (cl.deviceType === 'TERMINAL' ? '🖥️' : '💻'));
-          gClient.append('circle')
-            .attr('cx', 20)
-            .attr('cy', 25)
-            .attr('r', 13)
-            .style('fill', 'rgba(56, 189, 248, 0.18)')
-            .style('stroke', '#38bdf8')
-            .style('stroke-width', '1.2px');
+          const tipDiv = document.getElementById('hitlClientFloatingTooltip');
 
-          gClient.append('text')
-            .attr('x', 20)
-            .attr('y', 29.5)
+          gClient.on('mouseenter', (event) => {
+            if (tipDiv) {
+              tipDiv.innerHTML = tooltipHtml;
+              tipDiv.style.display = 'block';
+              tipDiv.style.left = (event.clientX + 16) + 'px';
+              tipDiv.style.top = (event.clientY + 12) + 'px';
+            }
+          })
+          .on('mousemove', (event) => {
+            if (tipDiv) {
+              tipDiv.style.left = (event.clientX + 16) + 'px';
+              tipDiv.style.top = (event.clientY + 12) + 'px';
+            }
+          })
+          .on('mouseleave', () => {
+            if (tipDiv) tipDiv.style.display = 'none';
+          });
+
+          // Native SVG Tooltip fallback
+          const nativeTooltipText = [
+            (isS4Hana ? '🌸 SAP Fiori Web-Client' : '🌐 Chrome Web-Client') + ': ' + (cl.name || cl.id),
+            '────────────────────────────────────────',
+            '• Typ: ' + (cl.deviceType || 'WEB_PORTAL') + (isS4Hana ? ' (SAP Fiori Launchpad)' : ' (Web Browser)'),
+            '• Zielsystem: ' + cl.targetSystemId + (tgtSys ? (' · ' + tgtSys.name) : ''),
+            (cl.os ? ('• Betriebssystem: ' + cl.os) : ''),
+            (cl.authMethod ? ('• Authentifizierung: ' + cl.authMethod) : ''),
+            ((cl.messagesEmitted && cl.messagesEmitted.length > 0) ? ('• Datenaustausch: ' + cl.messagesEmitted.join(', ')) : ''),
+            '• Architektur: 2-Stufige HITL-Kette (Mensch ↕ UI ↔ Backend)',
+            '────────────────────────────────────────',
+            '💡 Klicken für detaillierten Rollen- & Client-Inspektor'
+          ].filter(Boolean).join('\n');
+
+          gClient.append('title').text(nativeTooltipText);
+
+          // Render Icon Graphic based on target system type
+          if (isS4Hana) {
+            // ===============================================================
+            // SAP FIORI LAUNCHPAD ICON (CIRCULAR FLOWER / DIAMOND)
+            // ===============================================================
+            // Base sapphire badge
+            gClient.append('circle')
+              .attr('class', 'client-icon-base client-icon-fiori-base')
+              .attr('r', clientRadius)
+              .attr('fill', '#0b1329')
+              .attr('stroke', '#0070f2')
+              .attr('stroke-width', '2.5')
+              .style('filter', 'drop-shadow(0 4px 14px rgba(0,112,242,0.75))');
+
+            // Fiori aura ring
+            gClient.append('circle')
+              .attr('r', 16)
+              .attr('fill', 'rgba(0,112,242,0.22)');
+
+            // 4 Fiori Petals (Curved flower motif)
+            gClient.append('path')
+              .attr('d', 'M 0,-15 C 5.5,-15 10,-10.5 10,-5 C 10,0 0,4 0,4 C 0,4 -10,0 -10,-5 C -10,-10.5 -5.5,-15 0,-15 Z')
+              .attr('fill', '#00b4d8')
+              .attr('opacity', 0.95);
+
+            gClient.append('path')
+              .attr('d', 'M 15,0 C 15,5.5 10.5,10 5,10 C 0,10 -4,0 -4,0 C -4,0 0,-10 5,-10 C 10.5,-10 15,-5.5 15,0 Z')
+              .attr('fill', '#0a6ed1')
+              .attr('opacity', 0.95);
+
+            gClient.append('path')
+              .attr('d', 'M 0,15 C -5.5,15 -10,10.5 -10,5 C -10,0 0,-4 0,-4 C 0,-4 10,0 10,5 C 10,10.5 5.5,15 0,15 Z')
+              .attr('fill', '#0070f2')
+              .attr('opacity', 0.95);
+
+            gClient.append('path')
+              .attr('d', 'M -15,0 C -15,-5.5 -10.5,-10 -5,-10 C 0,-10 4,0 4,0 C 4,0 0,10 -5,10 C -10.5,10 -15,5.5 -15,0 Z')
+              .attr('fill', '#38bdf8')
+              .attr('opacity', 0.95);
+
+            // Center core
+            gClient.append('circle')
+              .attr('r', 4.5)
+              .attr('fill', '#ffffff');
+
+            gClient.append('circle')
+              .attr('r', 2.8)
+              .attr('fill', '#0a6ed1');
+
+          } else {
+            // ===============================================================
+            // GOOGLE CHROME ICON (CIRCULAR BROWSER SEGMENTS)
+            // ===============================================================
+            // Base white circle
+            gClient.append('circle')
+              .attr('class', 'client-icon-base client-icon-chrome-base')
+              .attr('r', clientRadius)
+              .attr('fill', '#ffffff')
+              .attr('stroke', '#38bdf8')
+              .attr('stroke-width', '2')
+              .style('filter', 'drop-shadow(0 4px 14px rgba(0,0,0,0.6))');
+
+            // Official Chrome segment geometry (scaled to fit radius 22)
+            const gChrome = gClient.append('g').attr('transform', 'translate(-24, -24)');
+
+            gChrome.append('path')
+              .attr('d', 'M24 4C14.5 4 6.6 10.6 4.5 19.5L14 25c.8-4.6 4.8-8 9.7-8h18.8C39.4 9.6 32.3 4 24 4z')
+              .attr('fill', '#EA4335');
+
+            gChrome.append('path')
+              .attr('d', 'M4.5 19.5C4.2 21 4 22.5 4 24c0 9.5 6.6 17.4 15.5 19.5L25 34c-4.6-.8-8-4.8-8-9.7 0-1.8.5-3.4 1.3-4.8L4.5 19.5z')
+              .attr('fill', '#34A853');
+
+            gChrome.append('path')
+              .attr('d', 'M42.5 17H23.7c-.5 0-1 .1-1.5.2l5.7 9.8c.8 1.4 1.3 3 1.3 4.8 0 4.9-3.4 8.9-8 9.7L25 43.5C33.9 41.4 40.5 33.5 40.5 24c0-2.5-.5-4.9-1.4-7.1L42.5 17z')
+              .attr('fill', '#FBBC05');
+
+            gChrome.append('circle')
+              .attr('cx', 24)
+              .attr('cy', 24)
+              .attr('r', 9.2)
+              .attr('fill', '#ffffff');
+
+            gChrome.append('circle')
+              .attr('cx', 24)
+              .attr('cy', 24)
+              .attr('r', 7.4)
+              .attr('fill', '#1A73E8');
+          }
+
+          // ===================================================================
+          // LABELING: KURZ, 1-ZEILIG, UNTERHALB (TOP-LAGE) BZW. OBERHALB (BOTTOM-LAGE)
+          // ===================================================================
+          // Short 1-line label
+          let shortLabel = cl.shortName;
+          if (!shortLabel) {
+            const n = cl.name || cl.id;
+            if (isS4Hana || n.toLowerCase().includes('fiori') || n.toLowerCase().includes('s/4')) shortLabel = 'SAP Fiori Client';
+            else if (n.toLowerCase().includes('console') || n.toLowerCase().includes('frontend')) shortLabel = 'BIS Cloud Console';
+            else if (n.toLowerCase().includes('webedi') || n.toLowerCase().includes('supplier')) shortLabel = 'Supplier WebEDI';
+            else if (n.toLowerCase().includes('atlas') || n.toLowerCase().includes('zoll')) shortLabel = 'ATLAS Zoll-Portal';
+            else if (n.toLowerCase().includes('gkv') || n.includes('301')) shortLabel = 'GKV § 301 Portal';
+            else if (n.toLowerCase().includes('portal') || n.toLowerCase().includes('web')) shortLabel = 'Web Portal (UI)';
+            else {
+              const cleaned = n.split('&')[0].split('(')[0].split('/')[0].trim();
+              shortLabel = cleaned.length > 20 ? (cleaned.slice(0, 19) + '…') : cleaned;
+            }
+          }
+
+          // Position: Top-Lage -> UNTERHALB (+Y); Bottom-Lage -> OBERHALB (-Y)
+          const labelOffsetY = isTop ? (clientRadius + 14) : (-clientRadius - 14);
+          const pillW = Math.max(76, shortLabel.length * 6.5 + 18);
+          const pillH = 18;
+
+          const gLabel = gClient.append('g')
+            .attr('class', 'hitl-client-label')
+            .attr('transform', 'translate(0, ' + labelOffsetY + ')');
+
+          gLabel.append('rect')
+            .attr('x', -pillW / 2)
+            .attr('y', -pillH / 2)
+            .attr('width', pillW)
+            .attr('height', pillH)
+            .attr('rx', pillH / 2)
+            .style('fill', 'rgba(15, 23, 42, 0.94)')
+            .style('stroke', isS4Hana ? '#0070f2' : '#38bdf8')
+            .style('stroke-width', '1.2px')
+            .style('filter', 'drop-shadow(0 2px 8px rgba(0,0,0,0.5))');
+
+          gLabel.append('text')
+            .attr('x', 0)
+            .attr('y', 0)
             .attr('text-anchor', 'middle')
-            .style('font-size', '12px')
-            .text(devIcon);
-
-          // Header Tag
-          gClient.append('text')
-            .attr('x', 39)
-            .attr('y', 15)
-            .style('font-size', '7.5px')
-            .style('font-weight', '800')
-            .style('letter-spacing', '0.5px')
-            .style('fill', '#38bdf8')
-            .text('CLIENT · USER INTERFACE');
-
-          // Client Title
-          const cleanClName = (cl.name || cl.id);
-          gClient.append('text')
-            .attr('x', 39)
-            .attr('y', 28)
-            .style('font-size', '9.5px')
+            .attr('dominant-baseline', 'central')
+            .style('font-size', '8.5px')
             .style('font-weight', '750')
-            .style('fill', '#ffffff')
-            .text(cleanClName.length > 25 ? (cleanClName.slice(0, 24) + '…') : cleanClName);
-
-          // Subtitle / Auth / OS
-          const subInfo = (cl.os ? cl.os.split(' ')[0] : 'UI') + ' · ' + (cl.authMethod ? cl.authMethod.slice(0, 14) : 'SSO');
-          gClient.append('text')
-            .attr('x', 39)
-            .attr('y', 40)
-            .style('font-size', '7.5px')
-            .style('fill', '#94a3b8')
-            .text(subInfo);
-        });
+            .style('fill', isS4Hana ? '#93c5fd' : '#bae6fd')
+            .text(shortLabel);
+                });
       }
       window.renderHitlCommunicationChain = renderHitlCommunicationChain;
 
       window.selectHitlRole = function(roleId) {
         window.closeAllHitlDropdowns();
+        const tipEl = document.getElementById('hitlClientFloatingTooltip');
+        if (tipEl) tipEl.style.display = 'none';
 
         if (selectedHitlRoleId === roleId) {
           window.clearHitlRole();
@@ -35589,6 +35757,8 @@
       };
 
       window.clearHitlRole = function() {
+        const tipEl = document.getElementById('hitlClientFloatingTooltip');
+        if (tipEl) tipEl.style.display = 'none';
         selectedHitlRoleId = null;
         window.selectedHitlRoleId = null;
         window.closeAllHitlDropdowns();
@@ -39332,5 +39502,6 @@
        PLANTUML SEQUENCE DIAGRAM FLOATING POPOUTS (DYNAMIC MULTI-WINDOW CONTAINER)
        ===================================================================== -->
   <div id="plantUmlPopoutsContainer"></div>
+  <div id="hitlClientFloatingTooltip"></div>
 </body>
 </html>
