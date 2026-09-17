@@ -35468,7 +35468,7 @@
               }
             });
 
-          // Interactive Hover Tooltip Handlers
+          // Interactive Hover Tooltip Handlers (Dark glassmorphism only, no duplicate native SVG title)
           const tooltipHtml = 
             '<div style="font-weight:800; font-size:0.82rem; color:' + (isS4Hana ? '#60a5fa' : '#38bdf8') + '; margin-bottom:4px; display:flex; align-items:center; gap:6px;">' +
               '<span>' + (isS4Hana ? '🌸 SAP Fiori Web-Client' : '🌐 Chrome Web-Client') + '</span>' +
@@ -35480,43 +35480,38 @@
               (cl.authMethod ? ('<div><strong>Authentifizierung:</strong> ' + cl.authMethod + '</div>') : '') +
               ((cl.messagesEmitted && cl.messagesEmitted.length > 0) ? ('<div><strong>Datenaustausch:</strong> ' + cl.messagesEmitted.join(', ') + '</div>') : '') +
               '<div style="margin-top:4px; color:#38bdf8; font-style:italic;">2-Stufige HITL-Kette: Mensch ↕ UI ↔ Backend</div>' +
+            '</div>' +
+            '<div style="margin-top:6px; font-size:0.68rem; color:#cbd5e1; border-top:1px dashed rgba(255,255,255,0.15); padding-top:5px; display:flex; align-items:center; gap:5px;">' +
+              '<span>💡</span> <em>Klicken für detaillierten Rollen- &amp; Client-Inspektor</em>' +
             '</div>';
 
           const tipDiv = document.getElementById('hitlClientFloatingTooltip');
+
+          function updateClientTipPosition(evt) {
+            if (!tipDiv) return;
+            let x = evt.clientX + 16;
+            let y = evt.clientY + 12;
+            if (x + 380 > window.innerWidth) x = Math.max(10, evt.clientX - 380);
+            if (y + 240 > window.innerHeight) y = Math.max(10, window.innerHeight - 250);
+            tipDiv.style.left = x + 'px';
+            tipDiv.style.top = y + 'px';
+          }
 
           gClient.on('mouseenter', (event) => {
             if (tipDiv) {
               tipDiv.innerHTML = tooltipHtml;
               tipDiv.style.display = 'block';
-              tipDiv.style.left = (event.clientX + 16) + 'px';
-              tipDiv.style.top = (event.clientY + 12) + 'px';
+              updateClientTipPosition(event);
             }
           })
           .on('mousemove', (event) => {
             if (tipDiv) {
-              tipDiv.style.left = (event.clientX + 16) + 'px';
-              tipDiv.style.top = (event.clientY + 12) + 'px';
+              updateClientTipPosition(event);
             }
           })
           .on('mouseleave', () => {
             if (tipDiv) tipDiv.style.display = 'none';
           });
-
-          // Native SVG Tooltip fallback
-          const nativeTooltipText = [
-            (isS4Hana ? '🌸 SAP Fiori Web-Client' : '🌐 Chrome Web-Client') + ': ' + (cl.name || cl.id),
-            '────────────────────────────────────────',
-            '• Typ: ' + (cl.deviceType || 'WEB_PORTAL') + (isS4Hana ? ' (SAP Fiori Launchpad)' : ' (Web Browser)'),
-            '• Zielsystem: ' + cl.targetSystemId + (tgtSys ? (' · ' + tgtSys.name) : ''),
-            (cl.os ? ('• Betriebssystem: ' + cl.os) : ''),
-            (cl.authMethod ? ('• Authentifizierung: ' + cl.authMethod) : ''),
-            ((cl.messagesEmitted && cl.messagesEmitted.length > 0) ? ('• Datenaustausch: ' + cl.messagesEmitted.join(', ')) : ''),
-            '• Architektur: 2-Stufige HITL-Kette (Mensch ↕ UI ↔ Backend)',
-            '────────────────────────────────────────',
-            '💡 Klicken für detaillierten Rollen- & Client-Inspektor'
-          ].filter(Boolean).join('\n');
-
-          gClient.append('title').text(nativeTooltipText);
 
           // Render Icon Graphic based on target system type
           if (isS4Hana) {
