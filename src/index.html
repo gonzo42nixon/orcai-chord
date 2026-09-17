@@ -31447,7 +31447,15 @@
       "name": "JSD S/4HANA & CPI ➔ BIS Ingestion",
       "protocol": "HTTPS / REST OData",
       "trafficPct": 2.5,
-      "transportOverlay": "EXT_CLOUD"
+      "transportOverlay": "EXT_CLOUD",
+      "tags": [
+        "HTTPS",
+        "REST",
+        "OData",
+        "JSD",
+        "Ingestion",
+        "S4HANA"
+      ]
     },
     {
       "id": "SEE-C-02",
@@ -31456,7 +31464,15 @@
       "name": "Bruker S/4HANA ➔ BIS E-Invoicing Ingestion",
       "protocol": "HTTPS / REST JSON",
       "trafficPct": 3.2,
-      "transportOverlay": "EXT_CLOUD"
+      "transportOverlay": "EXT_CLOUD",
+      "tags": [
+        "HTTPS",
+        "REST",
+        "JSON",
+        "Bruker",
+        "E-Invoicing",
+        "S4HANA"
+      ]
     },
     {
       "id": "SEE-C-03",
@@ -31465,7 +31481,15 @@
       "name": "Johanniter ERP ➔ BIS Clearing Ingestion",
       "protocol": "HTTPS / SOAP mTLS",
       "trafficPct": 2.8,
-      "transportOverlay": "EXT_CLOUD"
+      "transportOverlay": "EXT_CLOUD",
+      "tags": [
+        "HTTPS",
+        "SOAP",
+        "mTLS",
+        "Johanniter",
+        "Clearing",
+        "ERP"
+      ]
     },
     {
       "id": "SEE-C-04",
@@ -31474,7 +31498,15 @@
       "name": "Hybrid On-Prem Agent ➔ BIS Core Tunnel",
       "protocol": "WSS / TLS 1.3",
       "trafficPct": 1.9,
-      "transportOverlay": "HYBRID_BRIDGE"
+      "transportOverlay": "HYBRID_BRIDGE",
+      "tags": [
+        "WSS",
+        "TLS",
+        "Agent",
+        "DMZ",
+        "Tunnel",
+        "On-Prem"
+      ]
     },
     {
       "id": "SEE-C-05",
@@ -31483,7 +31515,16 @@
       "name": "Midmarket ERPs ➔ BIS API Gateway",
       "protocol": "REST / OAuth2",
       "trafficPct": 1.4,
-      "transportOverlay": "EXT_CLOUD"
+      "transportOverlay": "EXT_CLOUD",
+      "tags": [
+        "HTTPS",
+        "OData",
+        "RFC",
+        "Infor",
+        "Dynamics",
+        "Epic",
+        "Bridge"
+      ]
     },
     {
       "id": "SEE-C-06",
@@ -31492,7 +31533,15 @@
       "name": "MFT Server ➔ BIS Event Pipeline",
       "protocol": "Kafka Event / gRPC",
       "trafficPct": 2.1,
-      "transportOverlay": "EXT_CLOUD"
+      "transportOverlay": "EXT_CLOUD",
+      "tags": [
+        "Kafka",
+        "gRPC",
+        "MFT",
+        "SFTP",
+        "Event",
+        "Pipeline"
+      ]
     },
     {
       "id": "SEE-C-07",
@@ -31501,7 +31550,15 @@
       "name": "BIS Core ➔ Mapping Studio Pipeline",
       "protocol": "Internal gRPC / Memory",
       "trafficPct": 4.5,
-      "transportOverlay": "EXT_CLOUD"
+      "transportOverlay": "EXT_CLOUD",
+      "tags": [
+        "gRPC",
+        "Memory",
+        "Internal",
+        "Mapping",
+        "Studio",
+        "Converter"
+      ]
     },
     {
       "id": "SEE-C-08",
@@ -31510,7 +31567,14 @@
       "name": "Konvertierte Payloads ➔ BIS Core",
       "protocol": "Internal gRPC",
       "trafficPct": 4.5,
-      "transportOverlay": "EXT_CLOUD"
+      "transportOverlay": "EXT_CLOUD",
+      "tags": [
+        "gRPC",
+        "Memory",
+        "Internal",
+        "Mapping",
+        "Payload"
+      ]
     },
     {
       "id": "SEE-C-09",
@@ -31519,7 +31583,15 @@
       "name": "Partner Lookups ➔ TPM Database",
       "protocol": "JDBC / Redis Cache",
       "trafficPct": 3.8,
-      "transportOverlay": "EXT_CLOUD"
+      "transportOverlay": "EXT_CLOUD",
+      "tags": [
+        "JDBC",
+        "Redis",
+        "TPM",
+        "Partner",
+        "Lookup",
+        "Directory"
+      ]
     },
     {
       "id": "SEE-C-10",
@@ -31528,7 +31600,16 @@
       "name": "Kryptografische Signatur ➔ AS4 Vault",
       "protocol": "PKCS#11 / HSM",
       "trafficPct": 4.2,
-      "transportOverlay": "EXT_CLOUD"
+      "transportOverlay": "EXT_CLOUD",
+      "tags": [
+        "PKCS11",
+        "HSM",
+        "Signatur",
+        "KMS",
+        "Crypto",
+        "Vault",
+        "AS4"
+      ]
     },
     {
       "id": "SEE-C-11",
@@ -31537,7 +31618,15 @@
       "name": "Audit Logging & NRR Receipts",
       "protocol": "Kafka / TLS",
       "trafficPct": 4.8,
-      "transportOverlay": "EXT_CLOUD"
+      "transportOverlay": "EXT_CLOUD",
+      "tags": [
+        "Kafka",
+        "TLS",
+        "Audit",
+        "Logging",
+        "NRR",
+        "GoBD"
+      ]
     },
     {
       "id": "SEE-C-12",
@@ -31546,7 +31635,15 @@
       "name": "API Request ➔ BIS Workflow Engine",
       "protocol": "gRPC / EventBus",
       "trafficPct": 2.6,
-      "transportOverlay": "EXT_CLOUD"
+      "transportOverlay": "EXT_CLOUD",
+      "tags": [
+        "gRPC",
+        "EventBus",
+        "API",
+        "Gateway",
+        "Workflow",
+        "Engine"
+      ]
     },
     {
       "id": "SEE-C-13",
@@ -31555,7 +31652,15 @@
       "name": "BIS Core ➔ OpenPeppol AS4 Gateway",
       "protocol": "AS4 / TLS 1.3",
       "trafficPct": 4.2,
-      "transportOverlay": "EXT_CLOUD"
+      "transportOverlay": "EXT_CLOUD",
+      "tags": [
+        "AS4",
+        "TLS",
+        "Peppol",
+        "AccessPoint",
+        "eDelivery",
+        "B2G"
+      ]
     },
     {
       "id": "SEE-C-14",
@@ -31564,7 +31669,14 @@
       "name": "Peppol Eingangsbelege ➔ BIS Core",
       "protocol": "AS4 / TLS 1.3",
       "trafficPct": 3.5,
-      "transportOverlay": "EXT_CLOUD"
+      "transportOverlay": "EXT_CLOUD",
+      "tags": [
+        "AS4",
+        "TLS",
+        "Peppol",
+        "Inbound",
+        "E-Rechnung"
+      ]
     },
     {
       "id": "SEE-C-15",
@@ -31573,7 +31685,16 @@
       "name": "BIS Core ➔ GHX Medical Exchange",
       "protocol": "AS2 / cXML / TLS",
       "trafficPct": 3.1,
-      "transportOverlay": "EXT_CLOUD"
+      "transportOverlay": "EXT_CLOUD",
+      "tags": [
+        "AS2",
+        "cXML",
+        "TLS",
+        "GHX",
+        "Healthcare",
+        "Medical",
+        "ORDERS"
+      ]
     },
     {
       "id": "SEE-C-16",
@@ -31582,7 +31703,15 @@
       "name": "GHX Lieferavise & Bestätigung ➔ BIS",
       "protocol": "AS2 / cXML / TLS",
       "trafficPct": 2.9,
-      "transportOverlay": "EXT_CLOUD"
+      "transportOverlay": "EXT_CLOUD",
+      "tags": [
+        "AS2",
+        "cXML",
+        "TLS",
+        "GHX",
+        "DESADV",
+        "Lieferavis"
+      ]
     },
     {
       "id": "SEE-C-17",
@@ -31591,7 +31720,15 @@
       "name": "BIS Core ➔ High-Tech OEM Kunden",
       "protocol": "AS2 / RosettaNet",
       "trafficPct": 3.4,
-      "transportOverlay": "EXT_CLOUD"
+      "transportOverlay": "EXT_CLOUD",
+      "tags": [
+        "AS2",
+        "RosettaNet",
+        "High-Tech",
+        "OEM",
+        "Bruker",
+        "PIP"
+      ]
     },
     {
       "id": "SEE-C-18",
@@ -31600,7 +31737,14 @@
       "name": "OEM Bestellabrufe ➔ BIS Core",
       "protocol": "AS2 / RosettaNet",
       "trafficPct": 3,
-      "transportOverlay": "EXT_CLOUD"
+      "transportOverlay": "EXT_CLOUD",
+      "tags": [
+        "AS2",
+        "RosettaNet",
+        "High-Tech",
+        "OEM",
+        "Bestellabruf"
+      ]
     },
     {
       "id": "SEE-C-19",
@@ -31609,7 +31753,15 @@
       "name": "BIS Core ➔ WebEDI Portal Sync",
       "protocol": "HTTPS / REST API",
       "trafficPct": 1.6,
-      "transportOverlay": "EXT_CLOUD"
+      "transportOverlay": "EXT_CLOUD",
+      "tags": [
+        "HTTPS",
+        "REST",
+        "WebEDI",
+        "Supplier",
+        "Portal",
+        "Sync"
+      ]
     },
     {
       "id": "SEE-C-20",
@@ -31618,7 +31770,14 @@
       "name": "WebEDI Belegfreigaben ➔ BIS Core",
       "protocol": "HTTPS / Webhook",
       "trafficPct": 1.5,
-      "transportOverlay": "EXT_CLOUD"
+      "transportOverlay": "EXT_CLOUD",
+      "tags": [
+        "HTTPS",
+        "Webhook",
+        "WebEDI",
+        "Supplier",
+        "Freigabe"
+      ]
     },
     {
       "id": "SEE-C-21",
@@ -31627,7 +31786,15 @@
       "name": "BIS Core ➔ Hyperscaler Cloud Bridges",
       "protocol": "Kafka Connect / REST",
       "trafficPct": 2.2,
-      "transportOverlay": "EXT_CLOUD"
+      "transportOverlay": "EXT_CLOUD",
+      "tags": [
+        "Kafka",
+        "REST",
+        "Cloud",
+        "Hyperscaler",
+        "AWS",
+        "Azure"
+      ]
     },
     {
       "id": "SEE-C-22",
@@ -31636,7 +31803,15 @@
       "name": "BIS Core ➔ Spedition & OFTP2 Hub",
       "protocol": "OFTP2 / TLS",
       "trafficPct": 1.8,
-      "transportOverlay": "EXT_CLOUD"
+      "transportOverlay": "EXT_CLOUD",
+      "tags": [
+        "OFTP2",
+        "TLS",
+        "VDA",
+        "Spedition",
+        "Logistik",
+        "Transport"
+      ]
     },
     {
       "id": "SEE-C-23",
@@ -31645,7 +31820,16 @@
       "name": "BIS Core ➔ GKV § 301 Clearingstelle",
       "protocol": "FTAM / AS2 DTA",
       "trafficPct": 4.1,
-      "transportOverlay": "EXT_CLEARING"
+      "transportOverlay": "EXT_CLEARING",
+      "tags": [
+        "FTAM",
+        "AS2",
+        "DTA",
+        "GKV",
+        "301",
+        "Clearing",
+        "DRG"
+      ]
     },
     {
       "id": "SEE-C-24",
@@ -31654,7 +31838,14 @@
       "name": "GKV Zahlungsavise ➔ BIS Core",
       "protocol": "FTAM / AS2 DTA",
       "trafficPct": 3.2,
-      "transportOverlay": "EXT_CLEARING"
+      "transportOverlay": "EXT_CLEARING",
+      "tags": [
+        "FTAM",
+        "AS2",
+        "DTA",
+        "GKV",
+        "Zahlungsavis"
+      ]
     },
     {
       "id": "SEE-C-25",
@@ -31663,7 +31854,15 @@
       "name": "BIS Core ➔ Pflegekassen § 105 DTA",
       "protocol": "FTAM / AS2 DTA",
       "trafficPct": 2.7,
-      "transportOverlay": "EXT_CLEARING"
+      "transportOverlay": "EXT_CLEARING",
+      "tags": [
+        "FTAM",
+        "AS2",
+        "DTA",
+        "Pflegekassen",
+        "105",
+        "Clearing"
+      ]
     },
     {
       "id": "SEE-C-26",
@@ -31672,7 +31871,14 @@
       "name": "Pflegekassen Rückmeldungen ➔ BIS",
       "protocol": "FTAM / AS2 DTA",
       "trafficPct": 2.1,
-      "transportOverlay": "EXT_CLEARING"
+      "transportOverlay": "EXT_CLEARING",
+      "tags": [
+        "FTAM",
+        "AS2",
+        "DTA",
+        "Pflegekassen",
+        "Avis"
+      ]
     },
     {
       "id": "SEE-C-27",
@@ -31681,7 +31887,16 @@
       "name": "BIS Core ➔ ZRE Bund / OZG Portale",
       "protocol": "Peppol AS4 / REST",
       "trafficPct": 3.9,
-      "transportOverlay": "EXT_CLEARING"
+      "transportOverlay": "EXT_CLEARING",
+      "tags": [
+        "AS4",
+        "REST",
+        "Peppol",
+        "ZRE",
+        "OZG",
+        "Bund",
+        "Laender"
+      ]
     },
     {
       "id": "SEE-C-28",
@@ -31690,7 +31905,14 @@
       "name": "Behörden Prüfprotokoll ➔ BIS Core",
       "protocol": "Peppol AS4 Status",
       "trafficPct": 2.4,
-      "transportOverlay": "EXT_CLEARING"
+      "transportOverlay": "EXT_CLEARING",
+      "tags": [
+        "AS4",
+        "Status",
+        "ZRE",
+        "OZG",
+        "Pruefprotokoll"
+      ]
     },
     {
       "id": "SEE-C-29",
@@ -31699,7 +31921,15 @@
       "name": "BIS Core ➔ Banken EBICS Server",
       "protocol": "EBICS 3.0 / TLS",
       "trafficPct": 2.5,
-      "transportOverlay": "EXT_CLEARING"
+      "transportOverlay": "EXT_CLEARING",
+      "tags": [
+        "EBICS",
+        "TLS",
+        "Banken",
+        "Treasury",
+        "Bundesbank",
+        "SEPA"
+      ]
     },
     {
       "id": "SEE-C-30",
@@ -31708,7 +31938,14 @@
       "name": "Kontoauszüge camt ➔ BIS Core",
       "protocol": "EBICS 3.0 / TLS",
       "trafficPct": 2.3,
-      "transportOverlay": "EXT_CLEARING"
+      "transportOverlay": "EXT_CLEARING",
+      "tags": [
+        "EBICS",
+        "TLS",
+        "camt053",
+        "Kontoauszug",
+        "Banken"
+      ]
     },
     {
       "id": "SEE-C-31",
@@ -31717,7 +31954,16 @@
       "name": "BIS Core ➔ ATLAS Zollverwaltung",
       "protocol": "FTAM / AS2 / XML",
       "trafficPct": 1.9,
-      "transportOverlay": "EXT_CLEARING"
+      "transportOverlay": "EXT_CLEARING",
+      "tags": [
+        "FTAM",
+        "AS2",
+        "XML",
+        "ATLAS",
+        "Zoll",
+        "Ausfuhr",
+        "AES"
+      ]
     },
     {
       "id": "SEE-C-32",
@@ -31726,7 +31972,15 @@
       "name": "Ausfuhrfreigabe (ABD) ➔ BIS Core",
       "protocol": "FTAM / AS2 / XML",
       "trafficPct": 1.7,
-      "transportOverlay": "EXT_CLEARING"
+      "transportOverlay": "EXT_CLEARING",
+      "tags": [
+        "FTAM",
+        "AS2",
+        "XML",
+        "ATLAS",
+        "ABD",
+        "Ausfuhrfreigabe"
+      ]
     },
     {
       "id": "SEE-C-33",
@@ -31735,7 +31989,15 @@
       "name": "BIS Core ➔ DEÜV Annahmestellen",
       "protocol": "FTAM / AS2 DBU",
       "trafficPct": 2,
-      "transportOverlay": "EXT_CLEARING"
+      "transportOverlay": "EXT_CLEARING",
+      "tags": [
+        "FTAM",
+        "AS2",
+        "DBU",
+        "DEUEV",
+        "ITSG",
+        "Sozialversicherung"
+      ]
     },
     {
       "id": "SEE-C-34",
@@ -31744,7 +32006,15 @@
       "name": "BIS Core ➔ JSD S/4HANA (Buchung & Avis)",
       "protocol": "HTTPS / REST OData",
       "trafficPct": 2.6,
-      "transportOverlay": "EXT_CLOUD"
+      "transportOverlay": "EXT_CLOUD",
+      "tags": [
+        "HTTPS",
+        "REST",
+        "OData",
+        "JSD",
+        "Avis",
+        "S4HANA"
+      ]
     },
     {
       "id": "SEE-C-35",
@@ -31753,7 +32023,15 @@
       "name": "BIS Core ➔ Bruker S/4HANA (Status & Avis)",
       "protocol": "HTTPS / REST JSON",
       "trafficPct": 3.1,
-      "transportOverlay": "EXT_CLOUD"
+      "transportOverlay": "EXT_CLOUD",
+      "tags": [
+        "HTTPS",
+        "REST",
+        "JSON",
+        "Bruker",
+        "Status",
+        "S4HANA"
+      ]
     },
     {
       "id": "SEE-C-36",
@@ -31762,7 +32040,15 @@
       "name": "BIS Core ➔ Johanniter ERP (SEPA & DTA)",
       "protocol": "HTTPS / SOAP mTLS",
       "trafficPct": 2.7,
-      "transportOverlay": "EXT_CLOUD"
+      "transportOverlay": "EXT_CLOUD",
+      "tags": [
+        "HTTPS",
+        "SOAP",
+        "mTLS",
+        "Johanniter",
+        "SEPA",
+        "DTA"
+      ]
     },
     {
       "id": "SEE-C-37",
@@ -31771,7 +32057,15 @@
       "name": "Peppol Access Point ➔ ZRE Behörden-Hub",
       "protocol": "AS4 Peppol e-Delivery",
       "trafficPct": 4.4,
-      "transportOverlay": "EXT_CLEARING"
+      "transportOverlay": "EXT_CLEARING",
+      "tags": [
+        "AS4",
+        "Peppol",
+        "ZRE",
+        "Behoerden",
+        "Hub",
+        "eDelivery"
+      ]
     },
     {
       "id": "SEE-C-38",
@@ -31780,7 +32074,14 @@
       "name": "GHX Exchange ➔ WebEDI Extended Pool",
       "protocol": "HTTPS / cXML",
       "trafficPct": 1.3,
-      "transportOverlay": "EXT_CLOUD"
+      "transportOverlay": "EXT_CLOUD",
+      "tags": [
+        "HTTPS",
+        "cXML",
+        "GHX",
+        "WebEDI",
+        "Pool"
+      ]
     },
     {
       "id": "SEE-C-39",
@@ -31789,7 +32090,15 @@
       "name": "High-Tech Export ➔ Zoll Clearance Relay",
       "protocol": "ATLAS AES Message",
       "trafficPct": 1.7,
-      "transportOverlay": "EXT_CLEARING"
+      "transportOverlay": "EXT_CLEARING",
+      "tags": [
+        "ATLAS",
+        "AES",
+        "High-Tech",
+        "Export",
+        "Zoll",
+        "Relay"
+      ]
     },
     {
       "id": "SEE-C-40",
@@ -31798,7 +32107,14 @@
       "name": "GKV Zahlungsausgleich ➔ Bundesbank SEPA",
       "protocol": "Interbank SEPA RTGS",
       "trafficPct": 3,
-      "transportOverlay": "EXT_CLEARING"
+      "transportOverlay": "EXT_CLEARING",
+      "tags": [
+        "SEPA",
+        "RTGS",
+        "GKV",
+        "Zahlungsausgleich",
+        "Bundesbank"
+      ]
     },
     {
       "id": "SEE-C-41",
@@ -31807,7 +32123,15 @@
       "name": "MFT Batch Archiv ➔ DTA Prüfserver",
       "protocol": "FTPS / TLS",
       "trafficPct": 1.5,
-      "transportOverlay": "EXT_CLEARING"
+      "transportOverlay": "EXT_CLEARING",
+      "tags": [
+        "FTPS",
+        "TLS",
+        "MFT",
+        "Batch",
+        "GKV301",
+        "Archiv"
+      ]
     },
     {
       "id": "SEE-C-42",
@@ -31816,7 +32140,15 @@
       "name": "MFT DEÜV Archiv ➔ Sozialkassen Server",
       "protocol": "FTPS / TLS",
       "trafficPct": 1.4,
-      "transportOverlay": "EXT_CLEARING"
+      "transportOverlay": "EXT_CLEARING",
+      "tags": [
+        "FTPS",
+        "TLS",
+        "MFT",
+        "DEUEV",
+        "Archiv",
+        "Sozialkassen"
+      ]
     },
     {
       "id": "SEE-C-43",
@@ -31825,7 +32157,15 @@
       "name": "JSD On-Prem KIS ➔ Local Agent Link",
       "protocol": "Local TCP / MLLP",
       "trafficPct": 1.6,
-      "transportOverlay": "ON_PREM_LAN"
+      "transportOverlay": "ON_PREM_LAN",
+      "tags": [
+        "TCP",
+        "MLLP",
+        "JSD",
+        "KIS",
+        "Local",
+        "Agent"
+      ]
     },
     {
       "id": "SEE-C-44",
@@ -31834,7 +32174,14 @@
       "name": "Johanniter Standorte ➔ Local Agent Link",
       "protocol": "Local TCP / TLS",
       "trafficPct": 1.5,
-      "transportOverlay": "ON_PREM_LAN"
+      "transportOverlay": "ON_PREM_LAN",
+      "tags": [
+        "TCP",
+        "TLS",
+        "Johanniter",
+        "Standorte",
+        "Agent"
+      ]
     },
     {
       "id": "SEE-C-45",
@@ -31843,7 +32190,15 @@
       "name": "Bruker Werk Bremen/Ettlingen ➔ Agent Link",
       "protocol": "Local TCP / TLS",
       "trafficPct": 1.8,
-      "transportOverlay": "ON_PREM_LAN"
+      "transportOverlay": "ON_PREM_LAN",
+      "tags": [
+        "TCP",
+        "TLS",
+        "Bruker",
+        "Werk",
+        "Bremen",
+        "Agent"
+      ]
     },
     {
       "id": "SEE-C-46",
@@ -31852,7 +32207,14 @@
       "name": "Peppol BIS 3.0 ➔ Europäische High-Tech OEMs",
       "protocol": "AS4 Peppol",
       "trafficPct": 2.2,
-      "transportOverlay": "EXT_CLOUD"
+      "transportOverlay": "EXT_CLOUD",
+      "tags": [
+        "AS4",
+        "Peppol",
+        "OEM",
+        "High-Tech",
+        "PeppolBIS"
+      ]
     },
     {
       "id": "SEE-C-47",
@@ -31861,7 +32223,15 @@
       "name": "BIS API Gateway ➔ Hyperscaler Connect",
       "protocol": "REST / Webhook",
       "trafficPct": 1.7,
-      "transportOverlay": "EXT_CLOUD"
+      "transportOverlay": "EXT_CLOUD",
+      "tags": [
+        "REST",
+        "Webhook",
+        "API",
+        "Gateway",
+        "Hyperscaler",
+        "Connect"
+      ]
     },
     {
       "id": "SEE-C-48",
@@ -31870,7 +32240,16 @@
       "name": "TPM Directory Sync ➔ Peppol SMP/SML",
       "protocol": "SMP REST Query",
       "trafficPct": 2,
-      "transportOverlay": "EXT_CLOUD"
+      "transportOverlay": "EXT_CLOUD",
+      "tags": [
+        "SMP",
+        "REST",
+        "TPM",
+        "Peppol",
+        "SMP",
+        "SML",
+        "Directory"
+      ]
     }
   ],
   "integrations": [
@@ -32397,20 +32776,32 @@
     },
     {
       "id": "SEE-INT-18",
-      "name": "Hyperscaler Cloud Bridge: Realtime Event Streaming",
+      "name": "API Management & Cloud Realtime Event Proxy",
       "cluster": "CLOUD_INTEGRATION",
       "hub": "SEEBURGER BIS",
       "hubName": "SEEBURGER BIS Platform Core Engine",
-      "protocol": "Kafka Connect / REST",
-      "desc": "Streaming von B2B-Lieferkettenereignissen in Azure/AWS Data Lakes für vorausschauende Versorgungsanalysen.",
-      "sourceSystem": "SEE-01",
+      "protocol": "REST / Kafka Connect",
+      "desc": "Zentrale API-Fassade für synchrone Partner-Aufrufe und Streaming von B2B-Lieferkettenereignissen in Azure/AWS Hyperscaler Data Lakes.",
+      "sourceSystem": "SEE-02",
       "targetSystem": "SEE-CLOUD-B2B",
       "steps": [
+        {
+          "connectionId": "SEE-C-12",
+          "from": "SEE-02",
+          "to": "SEE-01",
+          "name": "API Aufruf an BIS Workflow Engine"
+        },
         {
           "connectionId": "SEE-C-21",
           "from": "SEE-01",
           "to": "SEE-CLOUD-B2B",
           "name": "Kafka Event Stream an Cloud Lake"
+        },
+        {
+          "connectionId": "SEE-C-47",
+          "from": "SEE-02",
+          "to": "SEE-CLOUD-B2B",
+          "name": "Direkter API Gateway Proxy an Cloud Services"
         }
       ]
     },
@@ -32451,6 +32842,25 @@
           "name": "Batch-Import an BIS Workflow Engine"
         }
       ]
+    },
+    {
+      "id": "SEE-INT-21",
+      "name": "Multi-Enterprise ERP Ingestion (Infor / Microsoft Dynamics / Epic)",
+      "cluster": "ENTERPRISE_ERP",
+      "hub": "SEEBURGER BIS",
+      "hubName": "SEEBURGER BIS Platform Core Engine",
+      "protocol": "HTTPS OData / RFC",
+      "desc": "Standardisierte Ingestion und Belegübernahme aus heterogenen Drittanbieter-ERPs von Konzernmandanten über den BIS ERP-Adapter.",
+      "sourceSystem": "SEE-TENANT-EXT",
+      "targetSystem": "SEE-01",
+      "steps": [
+        {
+          "connectionId": "SEE-C-05",
+          "from": "SEE-TENANT-EXT",
+          "to": "SEE-01",
+          "name": "Standard ERP Adapter OData / RFC Belegtransfer"
+        }
+      ]
     }
   ],
   "processes": [
@@ -32468,9 +32878,17 @@
         "SEE-INT-01",
         "SEE-INT-16"
       ],
+      "participatingSystems": [
+        "SEE-TENANT-JSD",
+        "SEE-01",
+        "SEE-03",
+        "SEE-05",
+        "SEE-PEPPOL",
+        "SEE-GOV-ZRE"
+      ],
       "apqc": "8.0 Fakturierung & Gesetzliche E-Rechnung",
       "desc": "Vollautomatisierter Rechnungsversand aus ERP-Mandanten über die BIS Core Engine, Peppol Access Point und Routing an Bundes- und Landesbehörden (ZRE/OZG).",
-      "plantUml": "@startuml\ntitle SEE-P-01: Gesetzliche E-Rechnung B2G & Bund/Länder-Clearance (Peppol BIS 3.0 / XRechnung)\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"Enterprise Tenant (JSD / Bruker)\" #e0f2fe\nactor \"Enterprise EDI Coordinator\" as TenantAdmin\nparticipant \"[[#sys-SEE-TENANT-JSD SEE-TENANT-JSD: ERP Mandant]]\" as TenantERP\nend box\n\nbox \"SEEBURGER BIS Platform Core (iPaaS)\" #fef3c7\nparticipant \"[[#sys-SEE-01 SEE-01: BIS Core Engine]]\" as BIS\nparticipant \"[[#sys-SEE-03 SEE-03: Mapping Studio]]\" as Conv\nparticipant \"[[#sys-SEE-05 SEE-05: AS4 Crypto Vault]]\" as Vault\nend box\n\nbox \"Global B2G Peppol Network\" #dcfce7\nparticipant \"[[#sys-SEE-PEPPOL SEE-PEPPOL: Peppol Access Point]]\" as PeppolAP\nend box\n\nbox \"Regulated Gov Entities\" #fce7f3\nparticipant \"[[#sys-SEE-GOV-ZRE SEE-GOV-ZRE: Bund & Laender ZRE/OZG]]\" as GovZRE\nactor \"Behördlicher Clearing-Auditor\" as Auditor\nend box\n\nTenantAdmin -> TenantERP: Faktura freigeben & E-Rechnung initiieren\nactivate TenantERP\nTenantERP -> BIS: [[#conn-SEE-C-01 Faktura-Payload an BIS (OData / REST)]]\nactivate BIS\ndeactivate TenantERP\n\n== Formatkonvertierung & Validierung ==\nBIS -> Conv: [[#conn-SEE-C-07 Transformation in XRechnung 3.0.2 UBL]]\nactivate Conv\nConv --> BIS: Validiertes XRechnung XML\ndeactivate Conv\n\nBIS -> Vault: [[#conn-SEE-C-10 Peppol PKI AS4 Signatur anfordern]]\nactivate Vault\nVault --> BIS: Signiertes AS4 S/MIME Enveloping\ndeactivate Vault\n\n== e-Delivery & Behörden-Routing ==\nBIS -> PeppolAP: [[#conn-SEE-C-13 Peppol AS4 Versand via zertifizierten AP]]\nactivate PeppolAP\nPeppolAP -> GovZRE: [[#conn-SEE-C-37 Routing via Leitweg-ID an ZRE]]\nactivate GovZRE\nGovZRE -> Auditor: Prüfbericht & Freigabeprotokoll\nGovZRE --> PeppolAP: Message Disposition Notification (MDN OK)\ndeactivate GovZRE\nPeppolAP --> BIS: AS4 Delivery Receipt (NRR quittiert)\ndeactivate PeppolAP\n\nBIS -> TenantERP: [[#conn-SEE-C-34 Status-Rückmeldung & Rechnungsarchivierung]]\nactivate TenantERP\ndeactivate TenantERP\ndeactivate BIS\n@enduml"
+      "plantUml": "@startuml\ntitle SEE-P-01: Gesetzliche E-Rechnung B2G & Bund/Länder-Clearance (Peppol BIS 3.0 / XRechnung)\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"Enterprise Mandant (JSD / Bruker)\" #e0f2fe\nactor \"Enterprise EDI Coordinator & Inhouse Consultant\" as TenantAdmin\nparticipant \"[[#client-SEE-CL-02 🌐 SAP S/4HANA EDI Monitoring & Fiori Launchpad (UI)]]\" as ClientUI\nparticipant \"[[#sys-SEE-TENANT-JSD SEE-TENANT-JSD: JSD Mandant (S/4HANA & CPI)]]\" as TenantERP\nend box\n\nbox \"SEEBURGER BIS Platform Core (iPaaS)\" #fef3c7\nparticipant \"[[#sys-SEE-01 SEE-01: BIS Core Engine]]\" as BIS\nparticipant \"[[#sys-SEE-03 SEE-03: Mapping Studio]]\" as Conv\nparticipant \"[[#sys-SEE-05 SEE-05: AS4 Crypto Vault]]\" as Vault\nend box\n\nbox \"Global B2G Peppol Network\" #dcfce7\nparticipant \"[[#sys-SEE-PEPPOL SEE-PEPPOL: Peppol Access Point]]\" as PeppolAP\nend box\n\nbox \"Regulated Gov Entities\" #fce7f3\nparticipant \"[[#sys-SEE-GOV-ZRE SEE-GOV-ZRE: Bund & Laender ZRE/OZG]]\" as GovZRE\nend box\n\nTenantAdmin -> ClientUI: Faktura freigeben & E-Rechnung initiieren\nactivate ClientUI\nClientUI -> TenantERP: [[#msg-SEE-CL-02 Belegfreigabe OData]]\nactivate TenantERP\ndeactivate ClientUI\n\nTenantERP -> BIS: [[#conn-SEE-C-01 Faktura-Payload an BIS Core (OData / REST)]]\nactivate BIS\ndeactivate TenantERP\n\n== Formatkonvertierung & Validierung ==\nBIS -> Conv: [[#conn-SEE-C-07 Transformation in XRechnung 3.0.2 UBL]]\nactivate Conv\nConv --> BIS: Validiertes XRechnung XML\ndeactivate Conv\n\nBIS -> Vault: [[#conn-SEE-C-10 Peppol PKI AS4 Signatur anfordern]]\nactivate Vault\nVault --> BIS: Signiertes AS4 S/MIME Enveloping\ndeactivate Vault\n\n== e-Delivery & Behörden-Routing ==\nBIS -> PeppolAP: [[#conn-SEE-C-13 Peppol AS4 Versand via zertifizierten AP]]\nactivate PeppolAP\nPeppolAP -> GovZRE: [[#conn-SEE-C-37 Routing via Leitweg-ID an ZRE]]\nactivate GovZRE\nGovZRE --> PeppolAP: Message Disposition Notification (MDN OK)\ndeactivate GovZRE\nPeppolAP --> BIS: AS4 Delivery Receipt (NRR quittiert)\ndeactivate PeppolAP\n\nBIS -> TenantERP: [[#conn-SEE-C-34 Status-Rückmeldung & Rechnungsarchivierung]]\nactivate TenantERP\ndeactivate TenantERP\ndeactivate BIS\n@enduml"
     },
     {
       "id": "SEE-P-02",
@@ -32483,11 +32901,20 @@
       ],
       "cleanIntegIds": [
         "SEE-INT-02",
-        "SEE-INT-03"
+        "SEE-INT-03",
+        "SEE-INT-10"
+      ],
+      "participatingSystems": [
+        "SEE-TENANT-JSD",
+        "SEE-01",
+        "SEE-03",
+        "SEE-GKV-301",
+        "SEE-GKV-105",
+        "SEE-06"
       ],
       "apqc": "8.0 Krankenhausabrechnung & Krankenkassen-Clearing",
       "desc": "Elektronischer DTA-Abrechnungslauf klinischer Fälle der Johannesstift Diakonie an 95 gesetzliche Krankenkassen und automatischer Zahlungsavis-Rücklauf.",
-      "plantUml": "@startuml\ntitle SEE-P-02: Klinisches DRG- & Pflege-Clearing § 301 / § 105 SGB V/XI (DTA EDIFACT an GKV)\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"Klinik-Mandant (JSD)\" #e0f2fe\nactor \"Enterprise EDI Coordinator\" as Biller\nparticipant \"[[#sys-SEE-TENANT-JSD SEE-TENANT-JSD: JSD Mandant]]\" as JSD\nend box\n\nbox \"SEEBURGER BIS Cloud\" #fef3c7\nparticipant \"[[#sys-SEE-01 SEE-01: BIS Core Engine]]\" as BIS\nparticipant \"[[#sys-SEE-03 SEE-03: Mapping Studio]]\" as Conv\nparticipant \"[[#sys-SEE-06 SEE-06: Message Tracking]]\" as Track\nend box\n\nbox \"Gesetzliche Krankenkassen (GKV)\" #dcfce7\nparticipant \"[[#sys-SEE-GKV-301 SEE-GKV-301: GKV § 301 Clearingstelle]]\" as GKV\nactor \"Behördlicher Clearing-Auditor\" as PayerAuditor\nend box\n\nBiller -> JSD: DTA § 301 Schlussabrechnungslauf starten\nactivate JSD\nJSD -> BIS: [[#conn-SEE-C-01 Falldaten an BIS Core (HTTPS REST)]]\nactivate BIS\ndeactivate JSD\n\nBIS -> Conv: [[#conn-SEE-C-07 Konvertierung in DTA § 301 EDIFACT]]\nactivate Conv\nConv --> BIS: Validierte EDIFACT DTA-Payload\ndeactivate Conv\n\nBIS -> GKV: [[#conn-SEE-C-23 DTA-Versand an GKV-Clearingstelle (FTAM / AS2)]]\nactivate GKV\nGKV -> PayerAuditor: Prüfung Beanstandung / Kostenübernahme\nGKV --> BIS: [[#conn-SEE-C-24 Elektronischer Zahlungsavis & Prüfprotokoll]]\ndeactivate GKV\n\nBIS -> Track: [[#conn-SEE-C-11 GoBD-konforme Archivierung]]\nactivate Track\ndeactivate Track\n\nBIS -> JSD: [[#conn-SEE-C-34 Buchungsbeleg & Zahlungsavis in SAP S/4HANA verbuchen]]\nactivate JSD\ndeactivate JSD\ndeactivate BIS\n@enduml"
+      "plantUml": "@startuml\ntitle SEE-P-02: Klinisches DRG- & Pflege-Clearing § 301 / § 105 SGB V/XI (DTA EDIFACT an GKV)\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"Klinik-Mandant (JSD)\" #e0f2fe\nactor \"Enterprise EDI Coordinator & Inhouse Consultant\" as Biller\nparticipant \"[[#client-SEE-CL-02 🌐 SAP S/4HANA EDI Monitoring & Fiori Launchpad (UI)]]\" as BillerClient\nparticipant \"[[#sys-SEE-TENANT-JSD SEE-TENANT-JSD: JSD Mandant]]\" as JSD\nend box\n\nbox \"SEEBURGER BIS Cloud\" #fef3c7\nparticipant \"[[#sys-SEE-01 SEE-01: BIS Core Engine]]\" as BIS\nparticipant \"[[#sys-SEE-03 SEE-03: Mapping Studio]]\" as Conv\nparticipant \"[[#sys-SEE-06 SEE-06: Message Tracking]]\" as Track\nend box\n\nbox \"Gesetzliche Krankenkassen (GKV)\" #dcfce7\nparticipant \"[[#sys-SEE-GKV-301 SEE-GKV-301: GKV § 301 Clearingstelle]]\" as GKV\nparticipant \"[[#client-SEE-CL-04B 🌐 GKV DTA § 301 Kassenprüfstelle & Abrechnungsportal (UI)]]\" as AuditorClient\nactor \"Behördlicher Clearing-Auditor & Zollprüfer\" as PayerAuditor\nend box\n\nBiller -> BillerClient: DTA § 301 Abrechnungslauf freigeben\nactivate BillerClient\nBillerClient -> JSD: [[#msg-SEE-CL-02 Belegfreigabe OData]]\nactivate JSD\ndeactivate BillerClient\nJSD -> BIS: [[#conn-SEE-C-01 Falldaten an BIS Core (HTTPS REST)]]\nactivate BIS\ndeactivate JSD\n\nBIS -> Conv: [[#conn-SEE-C-07 Konvertierung in DTA § 301 EDIFACT]]\nactivate Conv\nConv --> BIS: Validierte EDIFACT DTA-Payload\ndeactivate Conv\n\nBIS -> GKV: [[#conn-SEE-C-23 DTA-Versand an GKV-Clearingstelle (FTAM / AS2)]]\nactivate GKV\nGKV -> AuditorClient: DTA § 301 Prüfauftrag bereitstellen\nactivate AuditorClient\nAuditorClient -> PayerAuditor: Abrechnungsprüfung & Freigabeaufforderung\nPayerAuditor -> AuditorClient: Prüfbescheid bestätigen\nAuditorClient -> GKV: [[#msg-SEE-CL-04B DTA § 301 Prüfbescheid EDIFACT]]\ndeactivate AuditorClient\n\nGKV --> BIS: [[#conn-SEE-C-24 Elektronischer Zahlungsavis & Prüfprotokoll]]\ndeactivate GKV\n\nBIS -> Track: [[#conn-SEE-C-11 GoBD-konforme Archivierung]]\nactivate Track\ndeactivate Track\n\nBIS -> JSD: [[#conn-SEE-C-34 Buchungsbeleg & Zahlungsavis in SAP S/4HANA verbuchen]]\nactivate JSD\ndeactivate JSD\ndeactivate BIS\n@enduml"
     },
     {
       "id": "SEE-P-03",
@@ -32500,11 +32927,19 @@
       ],
       "cleanIntegIds": [
         "SEE-INT-04",
-        "SEE-INT-05"
+        "SEE-INT-05",
+        "SEE-INT-14"
+      ],
+      "participatingSystems": [
+        "SEE-TENANT-JSD",
+        "SEE-01",
+        "SEE-03",
+        "SEE-GHX",
+        "SEE-WEBEDI"
       ],
       "apqc": "10.0 Einkauf & Supply Chain Kollaboration",
       "desc": "Automatisierte Beschaffungskette von der Bestellanforderung im Krankenhaus-ERP über den GHX B2B Exchange zu MedTech-Lieferanten (B. Braun, Roche).",
-      "plantUml": "@startuml\ntitle SEE-P-03: Healthcare & MedTech Beschaffung via GHX (cXML / ORDERS / DESADV)\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"Healthcare Einkäufer (JSD / Johanniter)\" #e0f2fe\nactor \"Enterprise EDI Coordinator\" as Buyer\nparticipant \"[[#sys-SEE-TENANT-JSD SEE-TENANT-JSD: JSD Mandant]]\" as TenantERP\nend box\n\nbox \"SEEBURGER BIS Platform\" #fef3c7\nparticipant \"[[#sys-SEE-01 SEE-01: BIS Core Engine]]\" as BIS\nparticipant \"[[#sys-SEE-03 SEE-03: Mapping Studio]]\" as Conv\nend box\n\nbox \"GHX Healthcare Exchange & Supplier\" #dcfce7\nparticipant \"[[#sys-SEE-GHX SEE-GHX: GHX Healthcare Hub]]\" as GHX\nactor \"B2B Partner Onboarding Manager & Lieferant\" as Supplier\nend box\n\nBuyer -> TenantERP: Bestellbanf für OP-Sets freigeben\nactivate TenantERP\nTenantERP -> BIS: [[#conn-SEE-C-01 Bestellbeleg an BIS Core]]\nactivate BIS\ndeactivate TenantERP\n\nBIS -> Conv: [[#conn-SEE-C-07 Konvertierung in cXML / EDIFACT ORDERS]]\nactivate Conv\nConv --> BIS: cXML Purchase Order Payload\ndeactivate Conv\n\nBIS -> GHX: [[#conn-SEE-C-15 Routing an GHX Exchange (AS2 / cXML)]]\nactivate GHX\nGHX -> Supplier: Order Routing an MedTech-Hersteller\nSupplier --> GHX: Auftragsbestätigung & DESADV Lieferavis\nGHX --> BIS: [[#conn-SEE-C-16 Lieferavis (DESADV) an BIS Core]]\ndeactivate GHX\n\nBIS -> TenantERP: [[#conn-SEE-C-34 Avisierung & Wareneingangsvorbereitung in SAP]]\nactivate TenantERP\ndeactivate TenantERP\ndeactivate BIS\n@enduml"
+      "plantUml": "@startuml\ntitle SEE-P-03: Healthcare & MedTech Beschaffung via GHX (cXML / ORDERS / DESADV)\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"Healthcare Einkäufer (JSD / Johanniter)\" #e0f2fe\nactor \"Enterprise EDI Coordinator & Inhouse Consultant\" as Buyer\nparticipant \"[[#client-SEE-CL-02 🌐 SAP S/4HANA EDI Monitoring & Fiori Launchpad (UI)]]\" as BuyerClient\nparticipant \"[[#sys-SEE-TENANT-JSD SEE-TENANT-JSD: JSD Mandant]]\" as TenantERP\nend box\n\nbox \"SEEBURGER BIS Platform\" #fef3c7\nparticipant \"[[#sys-SEE-01 SEE-01: BIS Core Engine]]\" as BIS\nparticipant \"[[#sys-SEE-03 SEE-03: Mapping Studio]]\" as Conv\nend box\n\nbox \"GHX Healthcare Exchange & Supplier\" #dcfce7\nparticipant \"[[#sys-SEE-GHX SEE-GHX: GHX Healthcare Hub]]\" as GHX\nparticipant \"[[#sys-SEE-WEBEDI SEE-WEBEDI: SEEBURGER WebEDI Supplier Portal]]\" as WebEDI\nparticipant \"[[#client-SEE-CL-03 🌐 SEEBURGER Supplier WebEDI & Onboarding Portal (UI)]]\" as SupplierClient\nactor \"B2B Partner Onboarding Manager & Lieferant\" as Supplier\nend box\n\nBuyer -> BuyerClient: OP-Bedarfsanforderung freigeben\nactivate BuyerClient\nBuyerClient -> TenantERP: [[#msg-SEE-CL-02 Belegfreigabe OData]]\nactivate TenantERP\ndeactivate BuyerClient\nTenantERP -> BIS: [[#conn-SEE-C-01 Bestellbeleg an BIS Core]]\nactivate BIS\ndeactivate TenantERP\n\nBIS -> Conv: [[#conn-SEE-C-07 Konvertierung in cXML / EDIFACT ORDERS]]\nactivate Conv\nConv --> BIS: cXML Purchase Order Payload\ndeactivate Conv\n\nBIS -> GHX: [[#conn-SEE-C-15 Routing an GHX Exchange (AS2 / cXML)]]\nactivate GHX\nGHX -> WebEDI: [[#conn-SEE-C-38 Übertrag an WebEDI Lieferantenpool]]\nactivate WebEDI\nWebEDI -> SupplierClient: Neue Bestellung avisieren\nactivate SupplierClient\nSupplierClient -> Supplier: Auftragsbenachrichtigung\nSupplier -> SupplierClient: Auftragsbestätigung & Lieferschein erstellen\nSupplierClient -> WebEDI: [[#msg-SEE-CL-03 cXML OrderResponse]]\ndeactivate SupplierClient\nWebEDI --> GHX: DESADV Lieferavis generiert\ndeactivate WebEDI\nGHX --> BIS: [[#conn-SEE-C-16 Lieferavis (DESADV) an BIS Core]]\ndeactivate GHX\n\nBIS -> TenantERP: [[#conn-SEE-C-34 Avisierung & Wareneingangsvorbereitung in SAP]]\nactivate TenantERP\ndeactivate TenantERP\ndeactivate BIS\n@enduml"
     },
     {
       "id": "SEE-P-04",
@@ -32520,9 +32955,17 @@
         "SEE-INT-08",
         "SEE-INT-15"
       ],
+      "participatingSystems": [
+        "SEE-TENANT-BRK",
+        "SEE-01",
+        "SEE-03",
+        "SEE-OEM",
+        "SEE-CUSTOMS",
+        "SEE-AUTO-VDA"
+      ],
       "apqc": "10.0 Logistik, Außenhandel & Zollabwicklung",
       "desc": "Weltweiter Versand hochempfindlicher Spektrometer der Bruker Corp: Ausfuhranmeldung an ATLAS Zollverwaltung, Freigabedokument (ABD) und Speditionsavisierung.",
-      "plantUml": "@startuml\ntitle SEE-P-04: Globales High-Tech Export- & Zollclearing (Bruker ATLAS / AES / ABD)\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"Bruker Global Shipping\" #e0f2fe\nactor \"Enterprise EDI Coordinator\" as Shipper\nparticipant \"[[#sys-SEE-TENANT-BRK SEE-TENANT-BRK: Bruker Mandant]]\" as BrukerERP\nend box\n\nbox \"SEEBURGER BIS Platform\" #fef3c7\nparticipant \"[[#sys-SEE-01 SEE-01: BIS Core Engine]]\" as BIS\nparticipant \"[[#sys-SEE-03 SEE-03: Mapping Studio]]\" as Conv\nend box\n\nbox \"Bundeszollverwaltung & Logistik\" #dcfce7\nparticipant \"[[#sys-SEE-CUSTOMS SEE-CUSTOMS: ATLAS Zollverwaltung]]\" as Customs\nactor \"Behördlicher Clearing-Auditor\" as ZollPrüfer\nparticipant \"[[#sys-SEE-AUTO-VDA SEE-AUTO-VDA: Spedition OFTP2 Hub]]\" as Spedition\nend box\n\nShipper -> BrukerERP: Ausfuhrauftrag für Spektrometer freigeben\nactivate BrukerERP\nBrukerERP -> BIS: [[#conn-SEE-C-02 Zolldaten an BIS Core]]\nactivate BIS\ndeactivate BrukerERP\n\nBIS -> Conv: [[#conn-SEE-C-07 Konvertierung in ATLAS AES XML]]\nactivate Conv\nConv --> BIS: ATLAS Ausfuhranmeldung\ndeactivate Conv\n\nBIS -> Customs: [[#conn-SEE-C-31 Elektronische Ausfuhranmeldung (FTAM / AS2)]]\nactivate Customs\nCustoms -> ZollPrüfer: Risikobewertung & Zollprüfung\nCustoms --> BIS: [[#conn-SEE-C-32 Ausfuhrbegleitdokument (ABD mit MRN-Barcode)]]\ndeactivate Customs\n\nBIS -> Spedition: [[#conn-SEE-C-22 Transportavis (OFTP2 / VDA 4913) an Spedition]]\nactivate Spedition\ndeactivate Spedition\n\nBIS -> BrukerERP: [[#conn-SEE-C-35 ABD & Zollfreigabe in SAP S/4HANA archivieren]]\nactivate BrukerERP\ndeactivate BrukerERP\ndeactivate BIS\n@enduml"
+      "plantUml": "@startuml\ntitle SEE-P-04: Globales High-Tech Export- & Zollclearing (Bruker ATLAS / AES / ABD)\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"Bruker Global Shipping\" #e0f2fe\nactor \"Enterprise EDI Coordinator & Inhouse Consultant\" as Shipper\nparticipant \"[[#client-SEE-CL-02 🌐 SAP S/4HANA EDI Monitoring & Fiori Launchpad (UI)]]\" as ShipperClient\nparticipant \"[[#sys-SEE-TENANT-BRK SEE-TENANT-BRK: Bruker Mandant]]\" as BrukerERP\nend box\n\nbox \"SEEBURGER BIS Platform\" #fef3c7\nparticipant \"[[#sys-SEE-01 SEE-01: BIS Core Engine]]\" as BIS\nparticipant \"[[#sys-SEE-03 SEE-03: Mapping Studio]]\" as Conv\nend box\n\nbox \"Bundeszollverwaltung & Logistik\" #dcfce7\nparticipant \"[[#sys-SEE-CUSTOMS SEE-CUSTOMS: ATLAS Zollverwaltung]]\" as Customs\nparticipant \"[[#client-SEE-CL-04 💻 Bundeszollverwaltung ATLAS Audit-Client & Prüfportal (UI)]]\" as CustomsClient\nactor \"Behördlicher Clearing-Auditor & Zollprüfer\" as ZollPrüfer\nparticipant \"[[#sys-SEE-AUTO-VDA SEE-AUTO-VDA: Spedition OFTP2 Hub]]\" as Spedition\nend box\n\nShipper -> ShipperClient: Ausfuhrauftrag für Spektrometer freigeben\nactivate ShipperClient\nShipperClient -> BrukerERP: [[#msg-SEE-CL-02 Belegfreigabe OData]]\nactivate BrukerERP\ndeactivate ShipperClient\nBrukerERP -> BIS: [[#conn-SEE-C-02 Zolldaten an BIS Core]]\nactivate BIS\ndeactivate BrukerERP\n\nBIS -> Conv: [[#conn-SEE-C-07 Konvertierung in ATLAS AES XML]]\nactivate Conv\nConv --> BIS: ATLAS Ausfuhranmeldung\ndeactivate Conv\n\nBIS -> Customs: [[#conn-SEE-C-31 Elektronische Ausfuhranmeldung (FTAM / AS2)]]\nactivate Customs\nCustoms -> CustomsClient: Zollanmeldung zur Freigabe vorlegen\nactivate CustomsClient\nCustomsClient -> ZollPrüfer: Risikobewertung & Prüfung\nZollPrüfer -> CustomsClient: Freigabe bestätigen\nCustomsClient -> Customs: [[#msg-SEE-CL-04 ATLAS Ausfuhr-Zollbefund]]\ndeactivate CustomsClient\n\nCustoms --> BIS: [[#conn-SEE-C-32 Ausfuhrbegleitdokument (ABD mit MRN-Barcode)]]\ndeactivate Customs\n\nBIS -> Spedition: [[#conn-SEE-C-22 Transportavis (OFTP2 / VDA 4913) an Spedition]]\nactivate Spedition\ndeactivate Spedition\n\nBIS -> BrukerERP: [[#conn-SEE-C-35 ABD & Zollfreigabe in SAP S/4HANA archivieren]]\nactivate BrukerERP\ndeactivate BrukerERP\ndeactivate BIS\n@enduml"
     },
     {
       "id": "SEE-P-05",
@@ -32537,9 +32980,16 @@
         "SEE-INT-11",
         "SEE-INT-12"
       ],
+      "participatingSystems": [
+        "SEE-TENANT-JOH",
+        "SEE-01",
+        "SEE-05",
+        "SEE-BANK-EBICS",
+        "SEE-03"
+      ],
       "apqc": "8.0 Treasury & Zahlungsverkehr",
       "desc": "Automatisierter Zahlungsverkehr: Erzeugung von EBICS-Signaturen im KMS-Vault, Übertragung an die Deutsche Bundesbank und täglicher camt.053 Kontoauszugsabruf.",
-      "plantUml": "@startuml\ntitle SEE-P-05: Sicherer Massenzahlungsverkehr & Treasury-Disponierung (EBICS / SEPA)\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"Unternehmens-Treasury\" #e0f2fe\nactor \"Enterprise EDI Coordinator\" as Treasurer\nparticipant \"[[#sys-SEE-TENANT-JOH SEE-TENANT-JOH: Johanniter Mandant]]\" as ERP\nend box\n\nbox \"SEEBURGER BIS Platform\" #fef3c7\nparticipant \"[[#sys-SEE-01 SEE-01: BIS Core Engine]]\" as BIS\nparticipant \"[[#sys-SEE-05 SEE-05: AS4 Crypto Vault]]\" as Vault\nend box\n\nbox \"Europäisches Bankennetzwerk\" #dcfce7\nparticipant \"[[#sys-SEE-BANK-EBICS SEE-BANK-EBICS: Banken EBICS Server]]\" as Bank\nactor \"Behördlicher Clearing-Auditor\" as BankAuditor\nend box\n\nTreasurer -> ERP: SEPA Zahllauf für 15.000 Gehälter freigeben\nactivate ERP\nERP -> BIS: [[#conn-SEE-C-03 SEPA pain.001 XML an BIS Core]]\nactivate BIS\ndeactivate ERP\n\nBIS -> Vault: [[#conn-SEE-C-10 Elektronische EBICS Signatur (A005) erzeugen]]\nactivate Vault\nVault --> BIS: Signierte EBICS Payload\ndeactivate Vault\n\nBIS -> Bank: [[#conn-SEE-C-29 EBICS 3.0 Übertragung an Bundesbank / Hausbanken]]\nactivate Bank\nBank -> BankAuditor: Valutierung & SEPA RTGS Clearing\nBank --> BIS: Elektronische Empfangsbestätigung (pain.002 OK)\n\n== Täglicher Kontoauszugsabruf (camt.053) ==\nBIS -> Bank: [[#conn-SEE-C-30 camt.053 Tageskontoauszüge via EBICS abrufen]]\nBank --> BIS: camt.053 XML Kontoauszug\ndeactivate Bank\n\nBIS -> ERP: [[#conn-SEE-C-36 Automatischer Bankausgleich & Verbuchung in SAP FI]]\nactivate ERP\ndeactivate ERP\ndeactivate BIS\n@enduml"
+      "plantUml": "@startuml\ntitle SEE-P-05: Sicherer Massenzahlungsverkehr & Treasury-Disponierung (EBICS / SEPA)\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"Unternehmens-Treasury\" #e0f2fe\nactor \"Enterprise EDI Coordinator & Inhouse Consultant\" as Treasurer\nparticipant \"[[#client-SEE-CL-02 🌐 SAP S/4HANA EDI Monitoring & Fiori Launchpad (UI)]]\" as TreasurerClient\nparticipant \"[[#sys-SEE-TENANT-JOH SEE-TENANT-JOH: Johanniter Mandant]]\" as ERP\nend box\n\nbox \"SEEBURGER BIS Platform\" #fef3c7\nparticipant \"[[#sys-SEE-01 SEE-01: BIS Core Engine]]\" as BIS\nparticipant \"[[#sys-SEE-05 SEE-05: AS4 Crypto Vault]]\" as Vault\nend box\n\nbox \"Europäisches Bankennetzwerk\" #dcfce7\nparticipant \"[[#sys-SEE-BANK-EBICS SEE-BANK-EBICS: Banken EBICS Server]]\" as Bank\nend box\n\nTreasurer -> TreasurerClient: SEPA Zahllauf für 15.000 Gehälter freigeben\nactivate TreasurerClient\nTreasurerClient -> ERP: [[#msg-SEE-CL-02 Belegfreigabe OData]]\nactivate ERP\ndeactivate TreasurerClient\nERP -> BIS: [[#conn-SEE-C-03 SEPA pain.001 XML an BIS Core]]\nactivate BIS\ndeactivate ERP\n\nBIS -> Vault: [[#conn-SEE-C-10 Elektronische EBICS Signatur (A005) erzeugen]]\nactivate Vault\nVault --> BIS: Signierte EBICS Payload\ndeactivate Vault\n\nBIS -> Bank: [[#conn-SEE-C-29 EBICS 3.0 Übertragung an Bundesbank / Hausbanken]]\nactivate Bank\nBank --> BIS: Elektronische Empfangsbestätigung (pain.002 OK)\n\n== Täglicher Kontoauszugsabruf (camt.053) ==\nBIS -> Bank: [[#conn-SEE-C-30 camt.053 Tageskontoauszüge via EBICS abrufen]]\nBank --> BIS: camt.053 XML Kontoauszug\ndeactivate Bank\n\nBIS -> ERP: [[#conn-SEE-C-36 Automatischer Bankausgleich & Verbuchung in SAP FI]]\nactivate ERP\ndeactivate ERP\ndeactivate BIS\n@enduml"
     },
     {
       "id": "SEE-P-06",
@@ -32554,9 +33004,68 @@
         "SEE-INT-13",
         "SEE-INT-20"
       ],
+      "participatingSystems": [
+        "SEE-TENANT-JOH",
+        "SEE-01",
+        "SEE-05",
+        "SEE-DEUEV",
+        "SEE-SFTP-HUB"
+      ],
       "apqc": "7.0 Personalabrechnung & Entgeltmeldung",
       "desc": "Monatliche gesetzeskonforme Übermittlung von DEÜV-Meldungen und Beitragsnachweisen aus SAP HCM über die BIS Security Engine an den ITSG DBU Server.",
-      "plantUml": "@startuml\ntitle SEE-P-06: Gesetzliche Entgelt-Meldungen zur Sozialversicherung (DEÜV / DBU Server)\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"Personalabteilung (Johanniter / JSD)\" #e0f2fe\nactor \"Enterprise EDI Coordinator\" as HRExpert\nparticipant \"[[#sys-SEE-TENANT-JOH SEE-TENANT-JOH: Johanniter Mandant]]\" as HRErp\nend box\n\nbox \"SEEBURGER BIS Platform\" #fef3c7\nparticipant \"[[#sys-SEE-01 SEE-01: BIS Core Engine]]\" as BIS\nparticipant \"[[#sys-SEE-05 SEE-05: AS4 Crypto Vault]]\" as Vault\nend box\n\nbox \"Sozialversicherungsträger\" #dcfce7\nparticipant \"[[#sys-SEE-DEUEV SEE-DEUEV: ITSG DEÜV Server]]\" as ITSG\nactor \"Behördlicher Clearing-Auditor\" as SVPrüfer\nend box\n\nHRExpert -> HRErp: DEÜV Monatslauf generieren\nactivate HRErp\nHRErp -> BIS: [[#conn-SEE-C-03 DEÜV DBU Datei an BIS Core]]\nactivate BIS\ndeactivate HRErp\n\nBIS -> Vault: [[#conn-SEE-C-10 Verschlüsselung mit offiziellem ITSG-Zertifikat]]\nactivate Vault\nVault --> BIS: Verschlüsselter DEÜV Datenstrom\ndeactivate Vault\n\nBIS -> ITSG: [[#conn-SEE-C-33 Übermittlung an Annahmestelle (FTAM / AS2)]]\nactivate ITSG\nITSG -> SVPrüfer: Validierung Beitragsnachweis\nITSG --> BIS: Elektronische Annahmequittung\ndeactivate ITSG\n\nBIS -> HRErp: [[#conn-SEE-C-36 Quittungsrückmeldung im SAP HCM verbucht]]\nactivate HRErp\ndeactivate HRErp\ndeactivate BIS\n@enduml"
+      "plantUml": "@startuml\ntitle SEE-P-06: Gesetzliche Entgelt-Meldungen zur Sozialversicherung (DEÜV / DBU Server)\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"Personalabteilung (Johanniter / JSD)\" #e0f2fe\nactor \"Enterprise EDI Coordinator & Inhouse Consultant\" as HRExpert\nparticipant \"[[#client-SEE-CL-02 🌐 SAP S/4HANA EDI Monitoring & Fiori Launchpad (UI)]]\" as HRClient\nparticipant \"[[#sys-SEE-TENANT-JOH SEE-TENANT-JOH: Johanniter Mandant]]\" as HRErp\nend box\n\nbox \"SEEBURGER BIS Platform\" #fef3c7\nparticipant \"[[#sys-SEE-01 SEE-01: BIS Core Engine]]\" as BIS\nparticipant \"[[#sys-SEE-05 SEE-05: AS4 Crypto Vault]]\" as Vault\nend box\n\nbox \"Sozialversicherungsträger\" #dcfce7\nparticipant \"[[#sys-SEE-DEUEV SEE-DEUEV: ITSG DEÜV Server]]\" as ITSG\nend box\n\nHRExpert -> HRClient: DEÜV Monatslauf generieren\nactivate HRClient\nHRClient -> HRErp: [[#msg-SEE-CL-02 Belegfreigabe OData]]\nactivate HRErp\ndeactivate HRClient\n\nHRErp -> BIS: [[#conn-SEE-C-03 DEÜV DBU Datei an BIS Core]]\nactivate BIS\ndeactivate HRErp\n\nBIS -> Vault: [[#conn-SEE-C-10 Verschlüsselung mit offiziellem ITSG-Zertifikat]]\nactivate Vault\nVault --> BIS: Verschlüsselter DEÜV Datenstrom\ndeactivate Vault\n\nBIS -> ITSG: [[#conn-SEE-C-33 Übermittlung an Annahmestelle (FTAM / AS2)]]\nactivate ITSG\nITSG --> BIS: Elektronische Annahmequittung\ndeactivate ITSG\n\nBIS -> HRErp: [[#conn-SEE-C-36 Quittungsrückmeldung im SAP HCM verbucht]]\nactivate HRErp\ndeactivate HRErp\ndeactivate BIS\n@enduml"
+    },
+    {
+      "id": "SEE-P-07",
+      "name": "SEEBURGER BIS Plattform-Orchestrierung, AS4-Security & TPM Governance",
+      "leadDomain": "D1",
+      "involvedDomains": [
+        "D1",
+        "D3"
+      ],
+      "cleanIntegIds": [
+        "SEE-INT-16",
+        "SEE-INT-17",
+        "SEE-INT-19"
+      ],
+      "participatingSystems": [
+        "SEE-01",
+        "SEE-02",
+        "SEE-03",
+        "SEE-04",
+        "SEE-05",
+        "SEE-06",
+        "SEE-PEPPOL"
+      ],
+      "apqc": "1.0 Enterprise Architecture & Integration Platform Operations",
+      "desc": "Zentrale Konfiguration von B2B-Routing-Pipelines, AS4-Zertifikatsrotation im HSM-Vault, Pflege des Trading Partner Managements (TPM) und Peppol Directory Synchronisation.",
+      "plantUml": "@startuml\ntitle SEE-P-07: SEEBURGER BIS Plattform-Orchestrierung & Security Governance\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"SEEBURGER Cloud Platform Engineering\" #e0f2fe\nactor \"SEEBURGER Solution Architect & Core Engineer\" as Architect\nparticipant \"[[#client-SEE-CL-01 🌐 SEEBURGER BIS FrontEnd & Cloud Console (UI)]]\" as Console\nend box\n\nbox \"SEEBURGER BIS Core Platform (iPaaS)\" #fef3c7\nparticipant \"[[#sys-SEE-01 SEE-01: BIS Core Engine]]\" as BIS\nparticipant \"[[#sys-SEE-02 SEE-02: API Gateway]]\" as APIGW\nparticipant \"[[#sys-SEE-03 SEE-03: Mapping Studio]]\" as Conv\nparticipant \"[[#sys-SEE-04 SEE-04: Trading Partner Management (TPM)]]\" as TPM\nparticipant \"[[#sys-SEE-05 SEE-05: AS4 Crypto Vault]]\" as Vault\nparticipant \"[[#sys-SEE-06 SEE-06: Message Tracking]]\" as Track\nend box\n\nbox \"OpenPeppol Network\" #dcfce7\nparticipant \"[[#sys-SEE-PEPPOL SEE-PEPPOL: Peppol Access Point]]\" as PeppolAP\nend box\n\nArchitect -> Console: Plattform-Konfiguration & Partner-Onboarding öffnen\nactivate Console\nConsole -> BIS: [[#msg-SEE-CL-01 Pipeline Configuration REST]]\nactivate BIS\ndeactivate Console\n\nBIS -> APIGW: [[#conn-SEE-C-12 API Endpunkte & Rate-Limits provisionieren]]\nactivate APIGW\ndeactivate APIGW\n\nBIS -> Conv: [[#conn-SEE-C-07 Mapping-Regeln & Syntax-Validatoren publizieren]]\nactivate Conv\ndeactivate Conv\n\nBIS -> TPM: [[#conn-SEE-C-09 Partner-Routingprofile & Zertifikate registrieren]]\nactivate TPM\nTPM -> PeppolAP: [[#conn-SEE-C-48 SMP / SML Directory Sync & Teilnehmer-Registrierung]]\nactivate PeppolAP\nPeppolAP --> TPM: SMP Registrierungsbestätigung\ndeactivate PeppolAP\ndeactivate TPM\n\nBIS -> Vault: [[#conn-SEE-C-10 AS4 PKI Schlüsselpaar im HSM KMS erzeugen & rotieren]]\nactivate Vault\nVault --> BIS: Zertifikat signiert & im Vault verankert\ndeactivate Vault\n\nBIS -> Track: [[#conn-SEE-C-11 Revisionssicheres Audit-Log für Konfigurationsänderung]]\nactivate Track\ndeactivate Track\n\nBIS --> Console: Plattform bereit & SLA Monitoring aktiv (99,99%)\ndeactivate BIS\n@enduml"
+    },
+    {
+      "id": "SEE-P-08",
+      "name": "Multi-Enterprise ERP Ingestion & Cloud Data Lake Streaming",
+      "leadDomain": "D2",
+      "involvedDomains": [
+        "D2",
+        "D1",
+        "D3"
+      ],
+      "cleanIntegIds": [
+        "SEE-INT-18",
+        "SEE-INT-20",
+        "SEE-INT-21"
+      ],
+      "participatingSystems": [
+        "SEE-TENANT-EXT",
+        "SEE-SFTP-HUB",
+        "SEE-01",
+        "SEE-CLOUD-B2B",
+        "SEE-AUTO-VDA",
+        "SEE-CONN-AGNT"
+      ],
+      "apqc": "11.0 Enterprise Data Management & Hybrid Integration",
+      "desc": "Anbindung externer ERP-Systeme (Infor, Dynamics, Epic) via Managed File Transfer (SFTP) und Echtzeit-Streaming von B2B-Supply-Chain-Events in Hyperscaler Cloud Data Lakes.",
+      "plantUml": "@startuml\ntitle SEE-P-08: Multi-Enterprise ERP Ingestion & Cloud Data Lake Streaming\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"Multi-Enterprise Partner & Logistik\" #e0f2fe\nactor \"B2B Partner Onboarding Manager & Lieferant\" as PartnerMgr\nparticipant \"[[#client-SEE-CL-03 🌐 SEEBURGER Supplier WebEDI & Onboarding Portal (UI)]]\" as PartnerClient\nparticipant \"[[#sys-SEE-TENANT-EXT SEE-TENANT-EXT: Infor / Dynamics ERP]]\" as ExtERP\nparticipant \"[[#sys-SEE-AUTO-VDA SEE-AUTO-VDA: Spedition & Logistik]]\" as Logistics\nend box\n\nbox \"SEEBURGER BIS Cloud & MFT\" #fef3c7\nparticipant \"[[#sys-SEE-SFTP-HUB SEE-SFTP-HUB: Managed File Transfer]]\" as MFT\nparticipant \"[[#sys-SEE-01 SEE-01: BIS Core Engine]]\" as BIS\nparticipant \"[[#sys-SEE-02 SEE-02: API Gateway]]\" as APIGW\nparticipant \"[[#sys-SEE-CONN-AGNT SEE-CONN-AGNT: Hybrid Agent Mesh]]\" as EdgeAgent\nend box\n\nbox \"Hyperscaler Cloud Lake\" #dcfce7\nparticipant \"[[#sys-SEE-CLOUD-B2B SEE-CLOUD-B2B: AWS / Azure Lake]]\" as CloudLake\nend box\n\nPartnerMgr -> PartnerClient: ERP Batch-Transfer & MFT Freigabe anstoßen\nactivate PartnerClient\nPartnerClient -> ExtERP: [[#msg-SEE-CL-03 WebEDI DESADV Lieferschein]]\nactivate ExtERP\ndeactivate PartnerClient\n\nExtERP -> BIS: [[#conn-SEE-C-05 Infor/Dynamics Belegtransfer an BIS Core (OData)]]\nactivate BIS\ndeactivate ExtERP\n\nLogistics -> MFT: [[#conn-SEE-C-41 Labor- & Fracht-Batchdateien via SFTP]]\nactivate MFT\nMFT -> BIS: [[#conn-SEE-C-06 MFT Event Notification an BIS Event Pipeline]]\ndeactivate MFT\n\nBIS -> EdgeAgent: [[#conn-SEE-C-43 Hybrid Agent Sync mit On-Prem DMZ]]\nactivate EdgeAgent\ndeactivate EdgeAgent\n\nBIS -> APIGW: [[#conn-SEE-C-12 Event Payload an API Gateway]]\nactivate APIGW\nAPIGW -> CloudLake: [[#conn-SEE-C-47 Echtzeit-Streaming an Azure / AWS Lake (Kafka Connect)]]\nactivate CloudLake\nCloudLake --> APIGW: 202 Accepted & Stream Acknowledgement\ndeactivate CloudLake\ndeactivate APIGW\ndeactivate BIS\n@enduml"
     }
   ],
   "actors": [
@@ -32587,14 +33096,16 @@
       "connections": [
         "SEE-C-07",
         "SEE-C-08",
-        "SEE-C-10"
+        "SEE-C-10",
+        "SEE-C-12"
       ],
       "integrations": [
         "SEE-INT-16",
-        "SEE-INT-17"
+        "SEE-INT-17",
+        "SEE-INT-18"
       ],
       "processes": [
-        "SEE-P-01"
+        "SEE-P-07"
       ]
     },
     {
@@ -32624,13 +33135,16 @@
       "connections": [
         "SEE-C-01",
         "SEE-C-02",
-        "SEE-C-03"
+        "SEE-C-03",
+        "SEE-C-34"
       ],
       "integrations": [
         "SEE-INT-01",
         "SEE-INT-02",
         "SEE-INT-04",
-        "SEE-INT-06"
+        "SEE-INT-07",
+        "SEE-INT-11",
+        "SEE-INT-13"
       ],
       "processes": [
         "SEE-P-01",
@@ -32638,7 +33152,8 @@
         "SEE-P-03",
         "SEE-P-04",
         "SEE-P-05",
-        "SEE-P-06"
+        "SEE-P-06",
+        "SEE-P-08"
       ]
     },
     {
@@ -32667,7 +33182,8 @@
       ],
       "connections": [
         "SEE-C-19",
-        "SEE-C-20"
+        "SEE-C-20",
+        "SEE-C-38"
       ],
       "integrations": [
         "SEE-INT-04",
@@ -32675,7 +33191,8 @@
         "SEE-INT-14"
       ],
       "processes": [
-        "SEE-P-03"
+        "SEE-P-03",
+        "SEE-P-08"
       ]
     },
     {
@@ -32726,7 +33243,6 @@
         "SEE-INT-08"
       ],
       "processes": [
-        "SEE-P-01",
         "SEE-P-02",
         "SEE-P-04"
       ]
@@ -32772,7 +33288,7 @@
           title: 'SEEBURGER Business Integration Suite (BIS Cloud & Global B2B/B2G Clearing Hub)',
           desc: 'Konzern- und Ökosystem-Architektur der SEEBURGER Business Integration Suite (BIS). Umfasst BIS Platform Core Engine (iPaaS), API Management, Trading Partner Management (TPM), Mapping-Converter, hybride ERP-Mandanten (Johannesstift Diakonie, Bruker Corporation, Johanniter-Unfall-Hilfe), globale B2B/Supply-Chain-Netzwerke (OpenPeppol, GHX Healthcare Exchange, Bruker High-Tech OEMs, WebEDI) sowie regulierte Clearingstellen, Banken & Behörden (GKV DTA § 301/§ 105, Bund/Länder ZRE/OZG E-Rechnung, Zoll ATLAS, EBICS/SEPA).',
           url: 'https://orcai-54321.web.app/api/orcai/v1/docs/ORCAI-MODEL-SEEBURGER-EA?v=1.0.0',
-          stats: { systems: 24, connections: 48, integrations: 20, processes: 6, domains: 4 },
+          stats: { systems: 24, connections: 48, integrations: 21, processes: 8, domains: 4 },
           data: cachedSeeburgerModel
         },
         {
@@ -35664,7 +36180,7 @@
             badgeText: 'System',
             title: s.id + ' · ' + s.name,
             sub: s.domain + ' · ' + (s.scope === 'INTERNAL' ? 'Intern' : 'Drittanbieter') + ' · ' + s.deployment + ' · ' + (s.responsible || ''),
-            searchText: (s.id + ' ' + s.name + ' ' + s.domain + ' ' + s.description + ' ' + s.tags.join(' ') + ' ' + (s.responsible || '')).toLowerCase(),
+            searchText: (s.id + ' ' + (s.name || '') + ' ' + (s.domain || '') + ' ' + (s.description || s.desc || '') + ' ' + (Array.isArray(s.tags) ? s.tags.join(' ') : '') + ' ' + (s.responsible || '')).toLowerCase(),
             onSelect: () => {
               selectNode(s, window.innerWidth / 2, window.innerHeight / 2);
               const nodeEl = document.getElementById("node-group-" + s.id);
@@ -35682,7 +36198,7 @@
             badgeText: 'Kante',
             title: c.id + ' · ' + c.name,
             sub: c.from + ' ➔ ' + c.to + ' (' + (c.protocol || '') + ' · ' + (c.payload || '') + ' · ' + (c.auth || '') + ')',
-            searchText: (c.id + ' ' + c.name + ' ' + c.from + ' ' + c.to + ' ' + (c.protocol || '') + ' ' + (c.payload || '') + ' ' + c.tags.join(' ')).toLowerCase(),
+            searchText: (c.id + ' ' + (c.name || '') + ' ' + (c.from || '') + ' ' + (c.to || '') + ' ' + (c.protocol || '') + ' ' + (c.payload || '') + ' ' + (Array.isArray(c.tags) ? c.tags.join(' ') : '')).toLowerCase(),
             onSelect: () => {
               selectEdge(c, window.innerWidth / 2, window.innerHeight / 2);
               locateEdgeInChord(c.id);
@@ -35698,8 +36214,8 @@
             badgeClass: 'omni-badge-proc',
             badgeText: 'Prozess',
             title: p.id + ' · ' + p.name,
-            sub: p.category + ' · SLA: ' + p.sla + ' · ' + (p.integrations ? p.integrations.length : 0) + ' Integrationen',
-            searchText: (p.id + ' ' + p.name + ' ' + p.category + ' ' + p.description).toLowerCase(),
+            sub: (p.category || p.leadDomain || '') + ' · SLA: ' + (p.sla || 'N/A') + ' · ' + (p.integrations ? p.integrations.length : (p.cleanIntegIds ? p.cleanIntegIds.length : 0)) + ' Integrationen',
+            searchText: (p.id + ' ' + (p.name || '') + ' ' + (p.category || p.leadDomain || '') + ' ' + (p.description || p.desc || '')).toLowerCase(),
             onSelect: () => {
               setDrilldownProcess(p);
             }
