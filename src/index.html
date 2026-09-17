@@ -29147,14 +29147,18 @@
                 '<input type="text" id="inpOrcaiKey" placeholder="ORCAI Key (z.B. ORCAI-MODEL-KLINIKVERBUND-EA)" style="flex:1; padding:4px 8px; font-size:0.7rem; border-radius:4px; border:1px solid var(--card-border); background:var(--card-bg); color:var(--text-bright);">' +
                 '<button onclick="window.loadModelFromOrcaiInput()" class="btn-activate-model" style="padding:4px 12px; font-size:0.7rem;">Laden</button>' +
               '</div>' +
-              '<div style="display:flex; gap:6px; flex-wrap:wrap;">' +
+              '<div style="display:flex; gap:6px; flex-wrap:wrap; align-items:center;">' +
                 '<label style="padding:4px 8px; font-size:0.68rem; background:rgba(255,255,255,0.06); border:1px solid var(--card-border); border-radius:4px; cursor:pointer;">' +
                   '📁 Lokale JSON importieren' +
                   '<input type="file" id="fileModelInput" accept=".json" style="display:none;" onchange="window.handleModelFileUpload(event)">' +
                 '</label>' +
-                '<button onclick="window.downloadCurrentModelJson()" style="padding:4px 8px; font-size:0.68rem; background:rgba(255,255,255,0.06); border:1px solid var(--card-border); border-radius:4px; color:var(--text-bright); cursor:pointer;">' +
+                '<button onclick="window.downloadCurrentModelJson()" id="btnDownloadModelJson" style="padding:4px 8px; font-size:0.68rem; background:rgba(255,255,255,0.06); border:1px solid var(--card-border); border-radius:4px; color:var(--text-bright); cursor:pointer;" title="Exportiert das aktuell geladene Landschaftsmodell als JSON-Datei">' +
                   '💾 Als JSON herunterladen' +
                 '</button>' +
+                '<label style="display:inline-flex; align-items:center; gap:5px; font-size:0.68rem; color:var(--text-bright); cursor:pointer; user-select:none; margin-left:4px; padding:3px 7px; background:rgba(56,189,248,0.08); border:1px solid rgba(56,189,248,0.25); border-radius:4px;" title="Hinweis: PlantUML ist zur Laufzeit nicht im JSON-Objekt gespeichert (On-the-fly Synthese). Bei Aktivierung wird das Feld \'plantUml\' beim Export dynamisch für alle Prozesse generiert und eingebettet.">' +
+                  '<input type="checkbox" id="chkIncludePlantUmlExport" style="cursor:pointer; accent-color:var(--accent);" />' +
+                  '<span>include plantuml</span>' +
+                '</label>' +
               '</div>' +
             '</div>' +
           '</div>';
@@ -29372,20 +29376,36 @@
         reader.readAsText(file);
       };
 
-      window.downloadCurrentModelJson = function() {
+      window.downloadCurrentModelJson = function(overrideIncludePuml) {
         const activeModel = registeredLandscapeModels.find(m => m.id === currentModelId);
+        const chk = document.getElementById('chkIncludePlantUmlExport');
+        const includePuml = (typeof overrideIncludePuml === 'boolean') 
+          ? overrideIncludePuml 
+          : (chk ? chk.checked : false);
+
+        const exportedProcesses = (PROCESSES_DATA || []).map(proc => {
+          const pCopy = Object.assign({}, proc);
+          if (includePuml) {
+            pCopy.plantUml = pCopy.plantUml || (typeof window.generatePlantUmlFromProcess === 'function' ? window.generatePlantUmlFromProcess(proc) : '');
+          } else {
+            delete pCopy.plantUml;
+          }
+          return pCopy;
+        });
+
         const exportObj = {
           $schema: "https://orcai-54321.web.app/schemas/ea-landscape-v1.json",
-          meta: {
+          meta: Object.assign({}, (activeModel && activeModel.data && activeModel.data.meta) || {}, {
             id: currentModelId,
             organization: activeModel?.organization || "Enterprise Architecture",
             shortName: activeModel?.shortName || "EA",
             modelTitle: activeModel?.title || "Exported Model",
-            exportedAt: new Date().toISOString()
-          },
+            exportedAt: new Date().toISOString(),
+            plantUmlIncluded: includePuml
+          }),
           domains: DOMAINS_DATA,
           domainDetails: DOMAIN_DETAILS_DATA,
-          processes: PROCESSES_DATA,
+          processes: exportedProcesses,
           integrations: INTEGRATIONS_DATA,
           connections: CONNECTIONS_DATA,
           systems: SYSTEMS_DATA
@@ -29400,6 +29420,12 @@
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
+
+        if (typeof window.showCrudToast === 'function') {
+          window.showCrudToast(includePuml 
+            ? '💾 Modell mit eingebettetem PlantUML (' + exportedProcesses.length + ' Prozesse) exportiert!' 
+            : '💾 Modell als schlankes EAM-JSON exportiert!');
+        }
       };
 
       // =====================================================================

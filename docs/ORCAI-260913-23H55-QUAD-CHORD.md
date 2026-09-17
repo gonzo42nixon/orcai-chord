@@ -383,6 +383,19 @@ Zur intuitiven Steuerung dieser komplexen Landschaft bietet die Anwendung oberha
 
 ## 7. Interaktive PlantUML-Sequenzdiagramme & Gleichzeitige Multi-Pop-Outs
 
+> [!IMPORTANT]
+> ### ⚠️ Wichtiges Architektur-Prinzip: PlantUML ist KEIN Bestandteil des Runtime-JSON-Objekts!
+>
+> 1. **Kein statischer Diagramm-Code im Speichermodell:**  
+>    Weder die primären JSON-Modelldateien in der ORCAI-Cloud noch das zur Laufzeit im Browser gehaltene Datenmodell (`PROCESSES_DATA`) enthalten statisch eingebetteten PlantUML-Code.
+> 2. **Deterministische On-the-Fly-Synthese:**  
+>    Sämtliche UML-2.5-Sequenzdiagramme werden zur Laufzeit **on-the-fly und bedarfsgerecht** über die integrierte Generator-Engine `window.generatePlantUmlFromProcess(proc)` synthetisiert. Die Engine aggregiert hierzu dynamisch die relationalen Stammdaten: Akteure (Systeme), E2E-Phasen (Integrationen), physikalische Kanten (Connections) und Kommunikationsprotokolle.
+> 3. **Single Source of Truth & Zero Drift:**  
+>    Dieses Paradigma garantiert absolute Konsistenz: Werden Systeme umbenannt, neue Schnittstellenschritte ergänzt oder Protokolle angepasst, sind alle Sequenzdiagramme im selben Sekundenbruchteil **automatisch aktuell** – ohne dass redundanter Diagrammcode manuell gepflegt, versioniert oder synchronisiert werden muss.
+> 4. **Flexibler JSON-Export mit Checkbox `[x] include plantuml`:**  
+>    Beim Standard-Export einer IT-Landschaft über den Modellkatalog (`[🏛️ IT-Landschaften] ➔ [💾 Als JSON herunterladen]`) wird das schlanke, schema-reine EAM-JSON ohne redundanten Ballast exportiert.  
+>    Über die Checkbox **`[x] include plantuml`** direkt neben dem Export-Button kann der Anwender jedoch **spontan und situativ entscheiden**, ob beim Download für sämtliche Prozesse der PlantUML-Code on-the-fly generiert und als schlüsselfertiges `"plantUml"`-Attribut in jedes Prozess-Objekt des exportierten JSONs eingebettet werden soll.
+
 Für jeden Geschäftsprozess der IT-Landschaft steht ein synchronisiertes **UML 2.5 Sequenzdiagramm** zur Verfügung. Das Feature überbrückt die Lücke zwischen makroskopischer Enterprise Architecture (EAM) und mikroskopischer Integrations- und Sequenzmodellierung:
 
 ### A. Gleichzeitige Multi-Pop-Outs (Non-Overwriting Registry)
@@ -413,6 +426,12 @@ Wenn Anwender bei geöffneten Diagrammen im Hintergrund navigieren (z. B. andere
   - **Offizieller PlantUML Server (`↗ PlantUML.com`):** Öffnet das Modell direkt auf dem offiziellen Server für Syntaxvalidierung und PDF/PNG-Generierung.
 - **SVG-Vektorgrafik-Download (`💾 SVG Download`):** Exportiert das Diagramm als gestochen scharfe Vektorgrafik für Präsentationen oder Fachkonzepte.
 - **Code in Zwischenablage (`📋 Kopieren`):** Kopiert den vollständigen PlantUML-Quelltext mit einem Klick.
+
+### E. Modell-Export & Spontane Wahlmöglichkeit („include plantuml“)
+- Im Modell-Katalog (`🏛️ IT-Landschaften & Modell-Katalog (ORCAI)`) befindet sich neben der Schaltfläche `💾 Als JSON herunterladen` die neue Option:
+  - **`[ ] include plantuml` (Standard: deaktiviert):** Exportiert das rein relationale, schlanke EAM-Modell ohne redundanten Diagrammcode.
+  - **`[x] include plantuml` (Aktiviert):** Generiert beim Klick auf Download in Sekundenschnelle für jeden Prozess im Modell den vollständigen PlantUML-Code on-the-fly und bettet ihn als schlüsselfertiges `"plantUml"`-Attribut ein. Externe Dokumentations-Pipelines, CI/CD-Tools oder Rendering-Services können diesen Code ohne zusätzliche Parser direkt auswerten.
+
 
 ---
 
