@@ -469,17 +469,24 @@ Klassische Enterprise-Architecture-Modelle (EAM) fokussieren sich vorrangig auf 
 
 Das Quad-Chord EA erweitert die Architekturanalyse um das **Human-in-the-Loop (HITL)**-Paradigma: Es macht menschliche Rollen, deren spezifische Clients (Desktop GUIs, mobile Handhelds, Web-Portale, Terminals), Authentifizierungsverfahren (SSO, MFA, Smartcards, eHBA), emittierte Fachnachrichten und Zielsysteme visuell und analytisch transparent.
 
-### Branchenunabhängige 4-Quadranten-Taxonomie
-Um sicherzustellen, dass die Architektur für **jegliche Industriezweige** (Gesundheitswesen, Hochtechnologie-Fertigung, Logistik, Verteidigung, Telekommunikation, Bildung, Finanzen etc.) allgemeingültig und barrierefrei anwendbar ist, basiert die Platzierung auf einer archetypischen 4-Quadranten-Struktur:
+### Streng architektonische 2x2-Quadranten-Matrix (Intern/Extern × Cloud/On-Prem)
+Um sicherzustellen, dass die Platzierung menschlicher Akteure für **jegliche Industriezweige** (Gesundheitswesen, Hochtechnologie-Fertigung, Logistik, Verteidigung, Telekommunikation, Finanzen etc.) eineindeutig und objektiv nachvollziehbar ist, folgt das Quad-Chord Diagramm einer strengen 2x2-Koordinatenachse:
 
-| Quadrant | Position | Archetyp | Typische Rollen nach Branche |
+- **X-Achse (Horizontal): Organisatorische Zugehörigkeit**
+  - **Links (`LT`, `LB`): Intern** – Rollen im direkten organisatorischen Innenverhältnis (Mitarbeiter, Fachkräfte, Administration, operatives Personal).
+  - **Rechts (`RT`, `RB`): Extern** – Rollen außerhalb der Organisation (Kunden, Patienten, Partner, Zuweiser, Behörden, Spediteure).
+- **Y-Achse (Vertikal): Client- & Verbindungstyp**
+  - **Oben (`LT`, `RT`): Cloud & Web** – Clients, die Web-Browser oder HTTPS nutzen und ihre Kommunikation über Cloud-basierte Dienste realisieren (SaaS, Portale, Cloud ERP/CRM).
+  - **Unten (`LB`, `RB`): On-Premises & Fat Client** – Lokale Arbeitsplätze, Workstations, Fat Clients, Hardware-Terminals, Handhelds im LAN oder lokale B2B-/Clearing-Gateways.
+
+| Quadrant | Position | Ausrichtung | Typische Rollen & Interaktionsmuster |
 | :--- | :--- | :--- | :--- |
-| **LT** | Oben-Links (Left-Top) | **Kernleistung & Operative Fachexperten** | Stationsarzt, Operateur, Reinraum-Werker, R&D-Ingenieur, Konstrukteur, Laborant |
-| **LB** | Unten-Links (Left-Bottom) | **Frontline, Mobile & Field Services** | Notfallsanitäter, RTW-Besatzung, Field Service Engineer, Disponent, Fahrer, Servicetechniker |
-| **RT** | Oben-Rechts (Right-Top) | **Steuerung, Governance & Administration** | Controller, Einkaufsleiter, CISO, Datenschutzbeauftragter, Compliance Officer, Geschäftsführung |
-| **RB** | Unten-Rechts (Right-Bottom) | **Partner, Kunden & Externe Stakeholder** | Patient, Bürger, B2B-Kunde, Zulieferer, Distributor, Behördlicher Auditor (FDA/TÜV), Krankenkasse |
+| **LT** | Oben-Links (`LT`) | **Intern · Cloud & Web** | Mitarbeiter via Web-Browser/HTTPS (SAP Fiori Cloud, Salesforce, BTP, OneTrust, SuccessFactors) |
+| **LB** | Unten-Links (`LB`) | **Intern · On-Prem / Fat Client** | Interne Fachanwender via Workstation, Citrix, KIS/ERP Fat-Client, CAD, MES-Terminal, RTW-Tablet |
+| **RT** | Oben-Rechts (`RT`) | **Extern · Cloud & Portal** | Externe Akteure via Web-Browser/HTTPS (Patientenportal, MyBruker WebStore, Kundenportal, Bürger-App) |
+| **RB** | Unten-Rechts (`RB`) | **Extern · On-Prem / B2B** | Externe Partner via dedizierte Konnektoren, B2B-Clearing, DTA-Schnittstelle, ATLAS-Zollgateway |
 
-### Interaktive Corner Pods (LT, LB, RT, RB)
+### Interaktive Corner Pods (`#podLT`, `#podLB`, `#podRT`, `#podRB`)
 - **4 interaktive Eck-Pods auf der Zeichenfläche:** In allen vier Ecken des Diagramms befindet sich je ein kompakter Pod mit Archetyp-Kennzeichnung, Icon und Rollenselektor.
 - **Kontextsensitive Rollen-Dropdowns:** Ein Klick auf einen Pod öffnet die Liste aller verfügbaren Rollen des aktuellen Modells in diesem Quadranten samt Kurzbeschreibung und Client-Anzahl.
 - **Visuelle Spurensuche & Touchpoint-Beacons:** Bei Auswahl einer Rolle:

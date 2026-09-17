@@ -136,13 +136,15 @@ Die Johanniter Quad-Chord EA wurde nach Google-Enterprise-Standards (Material De
     - **Offizielle Spezifikation & Weblinks:** Direkte Verlinkung auf die offizielle APQC PCF Spezifikation (`https://www.apqc.org/pcf`) sowie Volltext-Recherche auf `apqc.org`.
     - **UI-Verzahnung:** APQC-Badges und `⚡ Explorieren`-Schaltflächen im Inspector (Prozessansicht), `📋 APQC`-Pills im Kopf jedes PlantUML-Sequenzdiagramms und Schnellaufruf im Omni-Search Suchmenü (`Strg+K`).
     - **100 % Klassifikationsabdeckung:** Vollständige APQC-Kennzeichnung in allen vier integrierten Landschaftsmodellen (Johanniter, Johannesstift Diakonie, Klinikverbund Nord, Bruker Corporation).
-12. **Human in the Loop (HITL) & Generische 4-Quadranten-Rollenarchitektur:**
-    - **Branchenunabhängige Archetypen:** Universelle 4-Quadranten-Taxonomie für alle Industrien (Healthcare, Hightech-Produktion, Logistik, Telco, Defense, Finanzen):
-      - **LT (Left-Top):** Kernleistung & Operative Fachexperten (z. B. Stationsarzt, R&D Engineer, Reinraum-Werker).
-      - **LB (Left-Bottom):** Frontline, Mobile & Field Services (z. B. Notfallsanitäter, Field Service Engineer, Servicetechniker).
-      - **RT (Right-Top):** Steuerung, Governance & Administration (z. B. Controller, Einkaufsleiter, CISO, Trade Compliance).
-      - **RB (Right-Bottom):** Externe Stakeholder, Kunden & Partner (z. B. Patient, B2B-Kunde, Distributor, FDA-Auditor).
-    - **4 interaktive Corner Pods (`#podLT`, `#podLB`, `#podRT`, `#podRB`):** Direkt auf der Zeichenfläche platzierte Eck-Pods mit Archetyp-Kennzeichnung, Icon und Rollenselektor.
+12. **Human in the Loop (HITL) & 2x2-Architekturmatrix (Intern/Extern × Cloud/On-Prem):**
+    - **Streng architektonische 2x2-Taxonomie:** Universelle Platzierung für alle Industrien basierend auf zwei orthogonalen Achsen:
+      - **X-Achse (Horizontal):** Intern (`LT`, `LB`) vs. Extern (`RT`, `RB`).
+      - **Y-Achse (Vertikal):** Cloud & Web / HTTPS (`LT`, `RT`) vs. On-Premises / Fat Client / LAN (`LB`, `RB`).
+      - **LT (Left-Top):** Intern · Cloud & Web (z. B. SAP Fiori Cloud, Salesforce, BTP, OneTrust).
+      - **LB (Left-Bottom):** Intern · On-Prem / Fat Client (z. B. KIS/ERP-Client, CAD, MES-Terminal, RTW-Tablet).
+      - **RT (Right-Top):** Extern · Cloud & Portal (z. B. Patientenportal, MyBruker WebStore, Kundenportal).
+      - **RB (Right-Bottom):** Extern · On-Prem / B2B (z. B. B2B-Clearing, DTA-Schnittstelle, ATLAS-Zollgateway).
+    - **4 interaktive Corner Pods (`#podLT`, `#podLB`, `#podRT`, `#podRB`):** Direkt auf der Zeichenfläche platzierte Eck-Pods mit Quadranten-Kennzeichnung, Icon und Rollenselektor.
     - **Visuelle Spurensuche & Touchpoint-Beacons:** Bei Auswahl einer Rolle pulsiert ein Leuchtfeuer (`.client-touchpoint-beacon`) auf den Zielsystemen ihrer Clients, nicht-involvierte Knoten/Kanten werden elegant abgedunkelt (`dimmed`) und der **HITL Rollen-Inspektor** öffnet sich mit Details zu Geräten, OS, Auth-Methoden (SSO, MFA, eHBA) und emittierten Nachrichten.
     - **PlantUML-Akteurssynthese:** Automatische Voranstellung von `@startuml actor` und Initial-Nachrichten in generierten Sequenzdiagrammen.
     - **Omni-Search (`Strg+K`) Rollenfilter:** Schnelles Suchen und Filtern von Rollen über das neue `[👤 Rollen]`-Chip.

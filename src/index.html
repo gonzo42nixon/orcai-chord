@@ -1847,6 +1847,7 @@
       border-top: 1px solid var(--card-border);
       background: var(--card-inner-bg);
       flex-shrink: 0;
+      max-height: 220px;
       display: flex;
       flex-direction: column;
       gap: 8px;
@@ -1855,8 +1856,8 @@
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
-      max-height: none;
-      overflow: visible;
+      max-height: 160px;
+      overflow-y: auto;
     }
     .tag-chip {
       font-size: 0.70rem;
@@ -3521,6 +3522,9 @@
       gap: 5px;
       z-index: 100;
     }
+    .hitl-dropdown[hidden] {
+      display: none !important;
+    }
     .hitl-pod-lt .hitl-dropdown,
     .hitl-pod-rt .hitl-dropdown {
       top: 100%;
@@ -4562,48 +4566,48 @@
       <svg id="hebSvg"></svg>
 
       <!-- 4 HITL (HUMAN IN THE LOOP) CORNER PODS -->
-      <div class="hitl-corner-pod hitl-pod-lt" id="podLT" data-corner="LT" title="LT: Fachkräfte & Operative Kernleistung">
+      <div class="hitl-corner-pod hitl-pod-lt" id="podLT" data-corner="LT" title="LT: Intern · Cloud & Web-Dienste (Browser / HTTPS)">
         <div class="hitl-pod-header" onclick="window.toggleHitlDropdown('LT')">
-          <span class="hitl-pod-avatar" id="avatarLT">🛠️</span>
+          <span class="hitl-pod-avatar" id="avatarLT">☁️</span>
           <div class="hitl-pod-info">
-            <span class="hitl-pod-corner-tag">LT · Kernleistung</span>
-            <span class="hitl-pod-role-label" id="labelLT">Fachkräfte</span>
+            <span class="hitl-pod-corner-tag">LT · Intern Cloud</span>
+            <span class="hitl-pod-role-label" id="labelLT">Cloud & Web</span>
           </div>
           <span class="hitl-pod-caret">▾</span>
         </div>
         <div class="hitl-dropdown" id="dropdownLT" hidden></div>
       </div>
 
-      <div class="hitl-corner-pod hitl-pod-lb" id="podLB" data-corner="LB" title="LB: Frontline, Field Service & Mobilität">
+      <div class="hitl-corner-pod hitl-pod-lb" id="podLB" data-corner="LB" title="LB: Intern · On-Premises & Fat Clients (Workstation / Terminal)">
         <div class="hitl-pod-header" onclick="window.toggleHitlDropdown('LB')">
-          <span class="hitl-pod-avatar" id="avatarLB">🚀</span>
+          <span class="hitl-pod-avatar" id="avatarLB">🖥️</span>
           <div class="hitl-pod-info">
-            <span class="hitl-pod-corner-tag">LB · Frontline / Field</span>
-            <span class="hitl-pod-role-label" id="labelLB">Mobiles Team</span>
+            <span class="hitl-pod-corner-tag">LB · Intern On-Prem</span>
+            <span class="hitl-pod-role-label" id="labelLB">On-Prem / Fat Client</span>
           </div>
           <span class="hitl-pod-caret">▾</span>
         </div>
         <div class="hitl-dropdown" id="dropdownLB" hidden></div>
       </div>
 
-      <div class="hitl-corner-pod hitl-pod-rt" id="podRT" data-corner="RT" title="RT: Steuerung, Governance & Verwaltung">
+      <div class="hitl-corner-pod hitl-pod-rt" id="podRT" data-corner="RT" title="RT: Extern · Cloud & Web-Portale (Kunden / Partner / HTTPS)">
         <div class="hitl-pod-header" onclick="window.toggleHitlDropdown('RT')">
-          <span class="hitl-pod-avatar" id="avatarRT">⚖️</span>
+          <span class="hitl-pod-avatar" id="avatarRT">🌐</span>
           <div class="hitl-pod-info">
-            <span class="hitl-pod-corner-tag">RT · Governance / Admin</span>
-            <span class="hitl-pod-role-label" id="labelRT">Verwaltung</span>
+            <span class="hitl-pod-corner-tag">RT · Extern Cloud</span>
+            <span class="hitl-pod-role-label" id="labelRT">Cloud & Portal</span>
           </div>
           <span class="hitl-pod-caret">▾</span>
         </div>
         <div class="hitl-dropdown" id="dropdownRT" hidden></div>
       </div>
 
-      <div class="hitl-corner-pod hitl-pod-rb" id="podRB" data-corner="RB" title="RB: Externe Partner, Kunden & Nutzer">
+      <div class="hitl-corner-pod hitl-pod-rb" id="podRB" data-corner="RB" title="RB: Extern · On-Premises & B2B-Schnittstellen (Gateways / DTA)">
         <div class="hitl-pod-header" onclick="window.toggleHitlDropdown('RB')">
-          <span class="hitl-pod-avatar" id="avatarRB">🌐</span>
+          <span class="hitl-pod-avatar" id="avatarRB">🔌</span>
           <div class="hitl-pod-info">
-            <span class="hitl-pod-corner-tag">RB · Partner & Kunden</span>
-            <span class="hitl-pod-role-label" id="labelRB">Nutzer & Partner</span>
+            <span class="hitl-pod-corner-tag">RB · Extern On-Prem</span>
+            <span class="hitl-pod-role-label" id="labelRB">On-Prem / B2B</span>
           </div>
           <span class="hitl-pod-caret">▾</span>
         </div>
@@ -21381,7 +21385,8 @@
         actors: [
           {
             id: "JOH-ACT-01",
-            quadrant: "LT",
+            quadrant: "LB",
+            scope: "INTERNAL",
             name: "Notärztin & Triage-Mediziner",
             archetype: "Klinisches Fachpersonal / Notfallmedizin",
             avatar: "👩‍⚕️",
@@ -21405,7 +21410,8 @@
           },
           {
             id: "JOH-ACT-02",
-            quadrant: "LT",
+            quadrant: "LB",
+            scope: "INTERNAL",
             name: "Pflegefachkraft Station & Hospiz",
             archetype: "Operative Pflege & Stationäre Betreuung",
             avatar: "🩺",
@@ -21430,6 +21436,7 @@
           {
             id: "JOH-ACT-03",
             quadrant: "LB",
+            scope: "INTERNAL",
             name: "Notfallsanitäter & RTW-Einsatzteam",
             archetype: "Mobiles Rettungsteam & First Responder",
             avatar: "🚑",
@@ -21454,6 +21461,7 @@
           {
             id: "JOH-ACT-04",
             quadrant: "LB",
+            scope: "INTERNAL",
             name: "Hausnotruf-Techniker & Einsatzdienst",
             archetype: "Mobile Soziale Dienste & Notruftechnik",
             avatar: "📟",
@@ -21463,7 +21471,7 @@
             clients: [
               {
                 id: "JOH-CL-04",
-                name: "Johanniter Service Mobil-App",
+                name: "Johanniter Service Mobil-App (Vor-Ort)",
                 deviceType: "SMARTPHONE_APP",
                 os: "Android Enterprise Smartphone",
                 authMethod: "OAuth 2.0 / Entra ID",
@@ -21477,18 +21485,19 @@
           },
           {
             id: "JOH-ACT-05",
-            quadrant: "RT",
+            quadrant: "LT",
+            scope: "INTERNAL",
             name: "Leiter Finanzen & Controlling",
             archetype: "Konzern-Governance & Finanzen",
             avatar: "📊",
             industryContext: "Verband & Konzernverwaltung",
             hitlType: "APPROVER_AND_AUDITOR",
-            hitlSummary: "Überwacht Budgetallokation der Landesverbände und gibt Quartalsabschlüsse im SAP S/4HANA frei.",
+            hitlSummary: "Überwacht Budgetallokation der Landesverbände und gibt Quartalsabschlüsse im SAP S/4HANA Cloud frei.",
             clients: [
               {
                 id: "JOH-CL-05",
-                name: "SAP Fiori Launchpad & Analysis for Office",
-                deviceType: "DESKTOP_GUI",
+                name: "SAP Fiori Launchpad (Web Browser / Cloud)",
+                deviceType: "WEB_PORTAL",
                 os: "Web Browser (Edge / Chrome)",
                 authMethod: "SSO (SAML 2.0 via Microsoft Entra ID)",
                 targetSystemId: "SYS-01",
@@ -21501,19 +21510,20 @@
           },
           {
             id: "JOH-ACT-06",
-            quadrant: "RT",
+            quadrant: "LT",
+            scope: "INTERNAL",
             name: "Datenschutz- & Compliance-Beauftragter",
             archetype: "Governance, Risk & Compliance (GRC)",
             avatar: "⚖️",
             industryContext: "Kirchenrecht & DSGVO / GRC",
             hitlType: "COMPLIANCE_AUDITOR",
-            hitlSummary: "Prüft DSGVO-/KDG-Verfahrensverzeichnisse, Berechtigungskonzepte und Schnittstellen-Sicherheit.",
+            hitlSummary: "Prüft DSGVO-/KDG-Verfahrensverzeichnisse, Berechtigungskonzepte und Cloud-Sicherheit.",
             clients: [
               {
                 id: "JOH-CL-06",
-                name: "OneTrust GRC & Security Portal",
+                name: "OneTrust GRC Cloud Portal (Web Browser)",
                 deviceType: "WEB_PORTAL",
-                os: "Web Browser",
+                os: "Web Browser (HTTPS)",
                 authMethod: "MFA via Entra ID",
                 targetSystemId: "SYS-03",
                 messagesEmitted: ["Auditbericht", "DSGVO-Freigabe REST"]
@@ -21525,19 +21535,20 @@
           },
           {
             id: "JOH-ACT-07",
-            quadrant: "RB",
+            quadrant: "RT",
+            scope: "EXTERNAL",
             name: "Bürger & Hausnotruf-Kunde",
             archetype: "Endkunde & Betreute Person",
             avatar: "👵",
             industryContext: "Soziale Dienste & Bürger",
             hitlType: "CONSUMER_AND_ALERT_INITIATOR",
-            hitlSummary: "Löst Handsender-Funkruf bei Hilfsbedürftigkeit aus und verwaltet Stammdaten im Kundenportal.",
+            hitlSummary: "Löst Handsender-Funkruf bei Hilfsbedürftigkeit aus und verwaltet Stammdaten im Kundenportal über das Web.",
             clients: [
               {
                 id: "JOH-CL-07",
                 name: "Johanniter Kundenportal & Funk-Handsender",
-                deviceType: "WEB_AND_IOT",
-                os: "Web Portal / 869 MHz Funkprotokoll",
+                deviceType: "WEB_PORTAL",
+                os: "Web Portal / 869 MHz Funkprotokoll (HTTPS)",
                 authMethod: "Kunden-Login / 2FA SMS",
                 targetSystemId: "SYS-60",
                 messagesEmitted: ["Notruf-Alarmierung", "Stammdatenaktualisierung"]
@@ -21550,18 +21561,19 @@
           {
             id: "JOH-ACT-08",
             quadrant: "RB",
+            scope: "EXTERNAL",
             name: "Kostenträger / Krankenkassen-Referent",
             archetype: "Kostenträger & Externe Abrechnung",
             avatar: "🏦",
             industryContext: "Gesetzliche & Private Krankenversicherung",
             hitlType: "EXTERNAL_PAYER_AUDITOR",
-            hitlSummary: "Prüft Sammelabrechnungen nach § 302 SGB V und klärt Rechnungsbeanstandungen über EDIFACT.",
+            hitlSummary: "Prüft Sammelabrechnungen nach § 302 SGB V und klärt Rechnungsbeanstandungen über On-Premises B2B-EDIFACT.",
             clients: [
               {
                 id: "JOH-CL-08",
-                name: "KVDT / DTA-Clearing Portal",
-                deviceType: "WEB_PORTAL",
-                os: "B2B Clearing Gateway",
+                name: "KVDT / DTA-Clearing Gateway",
+                deviceType: "GATEWAY_CLIENT",
+                os: "B2B Clearing Gateway (On-Premises)",
                 authMethod: "Zertifikatsbasierte B2B-Authentifizierung",
                 targetSystemId: "SYS-04",
                 messagesEmitted: ["EDIFACT Rechnungsquittung", "Beanstandungsprotokoll"]
@@ -23352,13 +23364,14 @@
   "actors": [
     {
       "id": "KV-ACT-01",
-      "quadrant": "LT",
+      "quadrant": "LB",
+      "scope": "INTERNAL",
       "name": "Oberarzt ZNA & Intensivmediziner",
       "archetype": "Klinisches Fachpersonal / Notfall- & Intensivmedizin",
       "avatar": "👨‍⚕️",
-      "industryContext": "Maximalversorgung & Intensivstation",
-      "hitlType": "DECISION_MAKER_AND_CLINICIAN",
-      "hitlSummary": "Führt Schockraum-Management, ordnet Notfall-CT an und überwacht Beatmungsparameter am PDMS.",
+      "industryContext": "Klinische Akut- & Intensivmedizin",
+      "hitlType": "DECISION_MAKER_AND_CLINICAL_SIGNER",
+      "hitlSummary": "Trifft zeitkritische Behandlungsentscheidungen, steuert Intensivbettbelegung und zeichnet Notfall-Befunde im KIS ab.",
       "clients": [
         {
           "id": "KV-CL-01",
@@ -23367,22 +23380,23 @@
           "os": "Windows 11 Enterprise (Workstation)",
           "authMethod": "SSO Entra ID + eHBA",
           "targetSystemId": "KV-10",
-          "messagesEmitted": ["Vitaldaten-Kurve Quittung", "Notfall-Laboranforderung HL7"]
+          "messagesEmitted": ["HL7 MDM Befundfreigabe", "HL7 ADT Bettendisposition"]
         }
       ],
-      "connections": ["KC-01", "KC-05"],
-      "integrations": ["KINT-01", "KINT-05"],
-      "processes": ["KP-01", "KP-04"]
+      "connections": ["KV-INT-02", "KV-INT-06"],
+      "integrations": ["KV-INT-02", "KV-INT-06"],
+      "processes": ["KV-P-01", "KV-P-03"]
     },
     {
       "id": "KV-ACT-02",
-      "quadrant": "LT",
+      "quadrant": "LB",
+      "scope": "INTERNAL",
       "name": "Facharzt für Radiologie & Neuroradiologie",
       "archetype": "Fachdiagnostik & Bildgebung",
       "avatar": "🩻",
       "industryContext": "Radiologie & Teleradiologie",
-      "hitlType": "DIAGNOSTICIAN_AND_VALIDATOR",
-      "hitlSummary": "Befundet CT/MRT-Serien am Sectra PACS und validiert KI-Vorbefunde bei akutem Schlaganfall.",
+      "hitlType": "DIAGNOSTIC_VERIFIER",
+      "hitlSummary": "Befundet CT-/MRT-Schnittbildserien, validiert KI-Vorschauen und signiert radiologische Gutachten.",
       "clients": [
         {
           "id": "KV-CL-02",
@@ -23391,22 +23405,23 @@
           "os": "Windows 11 Pro Multi-Monitor (DICOM kalibriert)",
           "authMethod": "Smartcard / Kerberos SSO",
           "targetSystemId": "KV-12",
-          "messagesEmitted": ["DICOM SR Befund", "Syngo RIS Statuswechsel"]
+          "messagesEmitted": ["DICOM SR Structured Report", "HL7 ORU Radiologiebefund"]
         }
       ],
-      "connections": ["KC-03", "KC-04"],
-      "integrations": ["KINT-03", "KINT-04"],
-      "processes": ["KP-03"]
+      "connections": ["KV-INT-04", "KV-INT-05"],
+      "integrations": ["KV-INT-04", "KV-INT-05"],
+      "processes": ["KV-P-02"]
     },
     {
       "id": "KV-ACT-03",
       "quadrant": "LB",
+      "scope": "INTERNAL",
       "name": "Telenotarzt & Rettungsdienst-Team",
       "archetype": "Mobiles Notfallteam & Tele-Konsil",
       "avatar": "🚑",
-      "industryContext": "Präklinische Notfallrettung",
-      "hitlType": "TELEMEDICINE_CONSULTANT",
-      "hitlSummary": "Leitet Notfallsanitäter per Audio-/Video-Stream telemedizinisch an und gibt Notfallmedikamente frei.",
+      "industryContext": "Prähospital & Telemedizin",
+      "hitlType": "REMOTE_SUPERVISOR_AND_DELEGATOR",
+      "hitlSummary": "Leitet Notfallsanitäter im RTW per Live-Audio/Video an, gibt Medikamente fernmündlich frei und veranlasst Klinikvoranmeldungen.",
       "clients": [
         {
           "id": "KV-CL-03",
@@ -23415,108 +23430,112 @@
           "os": "Windows 11 mit Live-Video & 12-Kanal EKG",
           "authMethod": "2FA VPN + eHBA",
           "targetSystemId": "KV-16",
-          "messagesEmitted": ["Tele-Konsilprotokoll", "Freigabe BTM / Notfallmedikation"]
+          "messagesEmitted": ["HL7 ADT Notfallvoranmeldung", "Telemetrie-Freigabeprotokoll"]
         }
       ],
-      "connections": ["KC-01", "KC-02"],
-      "integrations": ["KINT-01"],
-      "processes": ["KP-01"]
+      "connections": ["KV-INT-07"],
+      "integrations": ["KV-INT-07"],
+      "processes": ["KV-P-04"]
     },
     {
       "id": "KV-ACT-04",
-      "quadrant": "RT",
+      "quadrant": "LT",
+      "scope": "INTERNAL",
       "name": "Medizincontroller & Abrechnungsleiter",
       "archetype": "Krankenhaus-Controlling & DRG-Management",
-      "avatar": "💼",
-      "industryContext": "Klinikverwaltung & Finanzwesen",
-      "hitlType": "FINANCIAL_VALIDATOR",
-      "hitlSummary": "Prüft DRG-Kodierung auf MDK-Konformität und generiert § 301 DTA-Abrechnungsdatensätze für Krankenkassen.",
+      "avatar": "📈",
+      "industryContext": "Finanzmanagement & DRG-Kodierung",
+      "hitlType": "DRG_VALIDATOR_AND_FINANCIAL_SIGNER",
+      "hitlSummary": "Validiert DRG-Fallpauschalen, prüft MD-Gutachten (Medizinischer Dienst) und gibt Monatsabrechnungen im SAP S/4HANA Cloud frei.",
       "clients": [
         {
           "id": "KV-CL-04",
-          "name": "SAP S/4HANA Finance & Dedalus ORBIS Controlling",
-          "deviceType": "DESKTOP_GUI",
-          "os": "Web Browser / SAP GUI",
-          "authMethod": "SAML 2.0 SSO",
+          "name": "SAP S/4HANA Cloud Finance & Fiori Launchpad",
+          "deviceType": "WEB_PORTAL",
+          "os": "Web Browser (Chrome/Edge / HTTPS)",
+          "authMethod": "SAML 2.0 SSO via Entra ID",
           "targetSystemId": "KV-01",
-          "messagesEmitted": ["DTA § 301 Sammelrechnung", "Erlösabgrenzung Buchung"]
+          "messagesEmitted": ["DTA § 301 Rechnungsdaten", "ID DIACOS DRG-Kodierung"]
         }
       ],
-      "connections": ["KC-08", "KC-09"],
-      "integrations": ["KINT-08", "KINT-09"],
-      "processes": ["KP-05"]
+      "connections": ["KV-INT-01", "KV-INT-08"],
+      "integrations": ["KV-INT-01", "KV-INT-08"],
+      "processes": ["KV-P-05"]
     },
     {
       "id": "KV-ACT-05",
-      "quadrant": "RT",
+      "quadrant": "LT",
+      "scope": "INTERNAL",
       "name": "Informationssicherheitsbeauftragter (CISO)",
       "archetype": "KRITIS-Sicherheit & IT-Governance",
       "avatar": "🛡️",
-      "industryContext": "KRITIS-Krankenhaus § 8a BSIG",
-      "hitlType": "SECURITY_OFFICER",
-      "hitlSummary": "Überwacht SIEM-Alarme, Zero-Trust-Richtlinien und meldet IT-Sicherheitsvorfälle an das BSI.",
+      "industryContext": "IT-Security & KRITIS-B3S",
+      "hitlType": "SECURITY_GATEKEEPER_AND_AUDITOR",
+      "hitlSummary": "Überwacht B3S-KRITIS-Meldewege, Sicherheitsvorfälle im SIEM/SOC und genehmigt Zero-Trust-Tunnel über Cloud-Konsolen.",
       "clients": [
         {
           "id": "KV-CL-05",
-          "name": "Zscaler Zero Trust & Fortinet Security Console",
+          "name": "Zscaler Zero Trust & Fortinet Security Cloud Console",
           "deviceType": "WEB_PORTAL",
-          "os": "Hardened Linux / Windows Workstation",
+          "os": "Web Browser (HTTPS)",
           "authMethod": "FIDO2 Hardware-Token",
           "targetSystemId": "KV-17",
-          "messagesEmitted": ["Security Incident Ticket", "Firewall Policy Update"]
+          "messagesEmitted": ["BSI KRITIS Störungsmeldung", "SIEM Syslog Alert REST"]
         }
       ],
-      "connections": ["KC-11"],
-      "integrations": ["KINT-11"],
-      "processes": ["KP-06"]
+      "connections": ["KV-INT-03"],
+      "integrations": ["KV-INT-03"],
+      "processes": ["KV-P-06"]
     },
     {
       "id": "KV-ACT-06",
-      "quadrant": "RB",
+      "quadrant": "RT",
+      "scope": "EXTERNAL",
       "name": "Patient & KHZG-Portalnutzer",
       "archetype": "Patient & Bürger / Endnutzer",
-      "avatar": "📱",
-      "industryContext": "Patientenportal & Digitales Entlassmanagement",
-      "hitlType": "PORTAL_USER_AND_CONSENT_GIVER",
-      "hitlSummary": "Ruft Befunde online ab, unterzeichnet Behandlungsverträge digital und übermittelt Vitalwerte.",
+      "avatar": "🧑‍🦽",
+      "industryContext": "Patient Journey & Digitale Services",
+      "hitlType": "CONSENT_GIVER_AND_RECORD_VIEWER",
+      "hitlSummary": "Bucht Termine digital, erteilt Einwilligungen für Behandlungen und lädt Befunde aus der Patienten-App via HTTPS herunter.",
       "clients": [
         {
           "id": "KV-CL-06",
-          "name": "Klinikverbund Nord Patienten-App",
+          "name": "Klinikverbund Nord Patienten-App & Web-Portal",
           "deviceType": "SMARTPHONE_APP",
-          "os": "iOS / Android App",
+          "os": "iOS / Android App & Web Browser (HTTPS)",
           "authMethod": "GesundheitsID (gematik) / Biometrie",
           "targetSystemId": "KV-20",
-          "messagesEmitted": ["Digitale Einwilligung FHIR Consent", "Termin-Storno"]
+          "messagesEmitted": ["HL7 FHIR Consent", "Terminbuchung REST"]
         }
       ],
-      "connections": ["KC-10"],
-      "integrations": ["KINT-10"],
-      "processes": ["KP-06"]
+      "connections": ["KV-INT-06"],
+      "integrations": ["KV-INT-06"],
+      "processes": ["KV-P-03"]
     },
     {
       "id": "KV-ACT-07",
       "quadrant": "RB",
+      "scope": "EXTERNAL",
       "name": "Kassenärztliche Vereinigung & Zuweiser",
       "archetype": "Ambulanter Partner & Zuweisernetzwerk",
-      "avatar": "🏥",
-      "industryContext": "Ambulante Versorgung & KV-Sektor",
-      "hitlType": "REFERRING_PHYSICIAN",
-      "hitlSummary": "Übermittelt ambulante Zuweisungen per KIM und empfängt strukturierte eArztbriefe nach Entlassung.",
+      "avatar": "🏢",
+      "industryContext": "Ambulante Versorgung & KV-Netz",
+      "hitlType": "REFERRAL_PARTNER",
+      "hitlSummary": "Übermittelt digitale Einweisungen und empfängt eArztbriefe über die On-Premises KIM-Fachdienst-Schnittstelle.",
       "clients": [
         {
           "id": "KV-CL-07",
-          "name": "Praxis-PVS mit TI-KIM Fachdienst",
+          "name": "Praxis-PVS mit TI-KIM Fachdienst (On-Premises)",
           "deviceType": "DESKTOP_GUI",
-          "os": "Praxis-PC (Windows)",
+          "os": "Praxis-PC (Windows / Vor-Ort Konnektor)",
           "authMethod": "eHBA Arztausweis + SMC-B",
           "targetSystemId": "KV-17",
-          "messagesEmitted": ["KIM eArztbrief Empfangsbestätigung", "Elektronische Überweisung eU"]
+          "messagesEmitted": ["KIM eArztbrief (FHIR)", "DTA § 301 Abrechnungspaket"]
         }
       ],
-      "connections": ["KC-06", "KC-07"],
-      "integrations": ["KINT-06"],
-      "processes": ["KP-06"]
+      "connections": ["KV-INT-08"],
+      "integrations": ["KV-INT-08"],
+      "processes": ["KV-P-05"]
     }
   ]
 };
@@ -25829,61 +25848,64 @@
   "actors": [
     {
       "id": "JSD-ACT-01",
-      "quadrant": "LT",
+      "quadrant": "LB",
+      "scope": "INTERNAL",
       "name": "Stationsarzt & Klinischer Operateur",
       "archetype": "Klinisches Fachpersonal / Core Medical",
       "avatar": "👨‍⚕️",
-      "industryContext": "Healthcare Provider",
-      "hitlType": "DECISION_MAKER_AND_SIGNER",
-      "hitlSummary": "Stellt Diagnosen, verordnet Medikation mit AMTS-Prüfung und signiert eArztbriefe qualifiziert per eHBA.",
+      "industryContext": "Akutmedizin & Chirurgie",
+      "hitlType": "DECISION_MAKER_AND_CLINICAL_SIGNER",
+      "hitlSummary": "Stellt Diagnosen, ordnet Medikation und Laboruntersuchungen an und signiert OP-Berichte im KIS.",
       "clients": [
         {
           "id": "JSD-CL-01",
-          "name": "Dedalus ORBIS KIS Desktop Client",
+          "name": "CGM MEDICO KIS Desktop Client",
           "deviceType": "DESKTOP_GUI",
           "os": "Windows 11 Enterprise (Citrix/Fat Client)",
           "authMethod": "SSO (Entra ID) + eHBA (Kartenleser eHealth-BCS)",
-          "targetSystemId": "JSD-01",
-          "messagesEmitted": ["KIM 1.5 eArztbrief (XML-DSig)", "HL7 OMG^O19 Laboranforderung"]
+          "targetSystemId": "JSD-08",
+          "messagesEmitted": ["HL7 v2.5 ORM_O01 Laboranforderung", "HL7 MDT_T02 OP-Bericht"]
         }
       ],
-      "connections": ["JSD-C-01", "JSD-C-03", "JSD-C-19"],
-      "integrations": ["JSD-INT-02", "JSD-INT-06"],
-      "processes": ["JSD-P-02", "JSD-P-06"]
+      "connections": ["JSD-C-01", "JSD-C-02"],
+      "integrations": ["JSD-INT-02", "JSD-INT-03"],
+      "processes": ["JSD-P-02", "JSD-P-04"]
     },
     {
       "id": "JSD-ACT-02",
-      "quadrant": "LT",
+      "quadrant": "LB",
+      "scope": "INTERNAL",
       "name": "AEMP-Sterilgut-Fachkraft",
       "archetype": "Operative Logistik / Sterile Processing",
       "avatar": "🧼",
-      "industryContext": "Healthcare Provider & Services",
-      "hitlType": "DATA_CREATOR_AND_OPERATOR",
-      "hitlSummary": "Erfasst und quittiert Sieb- und Chargenprüfungen bei der Instrumentenaufbereitung im Reinraum.",
+      "industryContext": "Aufbereitungseinheit für Medizinprodukte (AEMP)",
+      "hitlType": "OPERATOR_AND_4EYES_CHECKER",
+      "hitlSummary": "Erfasst Sterilgut-Siebe per Barcode/RFID, kontrolliert Reinigungs- und Desinfektionschargen und gibt OP-Sets frei.",
       "clients": [
         {
           "id": "JSD-CL-02",
           "name": "Instacount Barcode- & RFID-Handscanner",
           "deviceType": "BARCODE_SCANNER",
-          "os": "Embedded Android Enterprise",
+          "os": "Embedded Android Enterprise (On-Premises)",
           "authMethod": "Mitarbeiter-RFID-Badge",
-          "targetSystemId": "JSD-29",
-          "messagesEmitted": ["Instacount Chargen-Protokoll & Sieb-Scan"]
+          "targetSystemId": "JSD-16",
+          "messagesEmitted": ["Sterilgut Chargenfreigabe (REST)", "Sieb-Routing HL7"]
         }
       ],
-      "connections": ["JSD-C-10", "JSD-C-11"],
-      "integrations": ["JSD-INT-07", "JSD-INT-08"],
-      "processes": ["JSD-P-04"]
+      "connections": ["JSD-C-19"],
+      "integrations": ["JSD-INT-08"],
+      "processes": ["JSD-P-05"]
     },
     {
       "id": "JSD-ACT-03",
       "quadrant": "LB",
+      "scope": "INTERNAL",
       "name": "Notfallsanitäter & RTW-Besatzung",
       "archetype": "Mobiles Einsatzpersonal / First Responder",
       "avatar": "🚑",
-      "industryContext": "Emergency Medical Services",
-      "hitlType": "DATA_CREATOR_AND_DISPATCHER",
-      "hitlSummary": "Erfasst Vitaldaten, EKG und Verdachtsdiagnose am Notfallort und übermittelt MTS-Triage-Score an ZNA.",
+      "industryContext": "Rettungsdienst & Notfallmedizin",
+      "hitlType": "FIELD_OPERATOR_AND_DISPATCHER",
+      "hitlSummary": "Dokumentiert Vitaldaten am Einsatzort, übermittelt EKG-Telemetrie und meldet Notfallpatienten an der ZNA an.",
       "clients": [
         {
           "id": "JSD-CL-03",
@@ -25891,109 +25913,138 @@
           "deviceType": "TABLET_MOBILE",
           "os": "Ruggedized Windows 11 Tablet",
           "authMethod": "Einsatz-PIN & mTLS Geräte-Zertifikat",
-          "targetSystemId": "JSD-07",
-          "messagesEmitted": ["HL7 ADT^A04 Notfallvoranmeldung", "DICOM 12-Kanal EKG Telemetrie"]
+          "targetSystemId": "JSD-28",
+          "messagesEmitted": ["HL7 v2.5 ADT_A04 Voranmeldung", "12-Kanal-EKG Telemetrie (MQTT)"]
         }
       ],
-      "connections": ["JSD-C-01", "JSD-C-02"],
+      "connections": ["JSD-C-15", "JSD-C-16"],
       "integrations": ["JSD-INT-01"],
       "processes": ["JSD-P-01"]
     },
     {
       "id": "JSD-ACT-04",
-      "quadrant": "RT",
+      "quadrant": "LB",
+      "scope": "INTERNAL",
       "name": "Patientenaufnahme & ZNA-Koordinator",
       "archetype": "Administration & Patientenmanagement",
-      "avatar": "🧑‍💼",
-      "industryContext": "Hospital Administration",
-      "hitlType": "IDENTIFIER_AND_REGISTRAR",
-      "hitlSummary": "Liest eGK am Kartenterminal ein, prüft VSDM online und eröffnet den administrativen Behandlungsfall.",
+      "avatar": "📋",
+      "industryContext": "Zentrale Notaufnahme & Aufnahmeverwaltung",
+      "hitlType": "ADMINISTRATOR_AND_REGISTRAR",
+      "hitlSummary": "Liest eGK-Versichertendaten ein, prüft Kostenträgerstammdaten und weist Patienten den ZNA-Behandlungsräumen zu.",
       "clients": [
         {
           "id": "JSD-CL-04",
           "name": "eHealth-Kartenterminal & KIS Aufnahme-Client",
           "deviceType": "DESKTOP_GUI",
-          "os": "Windows 11 / Dedalus ORBIS",
+          "os": "Windows 11 / CGM MEDICO KIS",
           "authMethod": "SSO Entra ID + SMC-B Institutionskarte",
-          "targetSystemId": "JSD-01",
-          "messagesEmitted": ["gematik VSDM Prüfnachweis", "HL7 ADT^A01 Aufnahme"]
+          "targetSystemId": "JSD-08",
+          "messagesEmitted": ["HL7 ADT_A01 Stationäre Aufnahme", "VSDM Prüfnachweis Telematik"]
         }
       ],
-      "connections": ["JSD-C-01", "JSD-C-19"],
-      "integrations": ["JSD-INT-01", "JSD-INT-06"],
-      "processes": ["JSD-P-01", "JSD-P-06"]
+      "connections": ["JSD-C-01", "JSD-C-14"],
+      "integrations": ["JSD-INT-02"],
+      "processes": ["JSD-P-01"]
     },
     {
       "id": "JSD-ACT-05",
-      "quadrant": "RT",
+      "quadrant": "LT",
+      "scope": "INTERNAL",
       "name": "Krankenhaus-Abrechner & Controller",
       "archetype": "Finanzen, Controlling & Abrechnung",
-      "avatar": "⚖️",
-      "industryContext": "Hospital Finance & Billing",
-      "hitlType": "APPROVER_AND_AUDITOR",
-      "hitlSummary": "Validiert DRG-Codierung, klärt MDK/MD-Auffälligkeiten und autorisiert § 301 DTA-Abrechnungsläufe.",
+      "avatar": "💶",
+      "industryContext": "Finanz- & Leistungscontrolling",
+      "hitlType": "FINANCIAL_APPROVER_AND_CODER",
+      "hitlSummary": "Prüft Fallabrechnungen, verhandelt Beanstandungen des Medizinischen Dienstes (MD) und gibt Monatsabschlüsse im SAP S/4HANA Cloud frei.",
       "clients": [
         {
           "id": "JSD-CL-05",
-          "name": "SAP S/4HANA Finance GUI / Fiori Client",
-          "deviceType": "DESKTOP_GUI",
-          "os": "Web Browser / SAP GUI",
+          "name": "SAP S/4HANA Finance Fiori Cloud Client",
+          "deviceType": "WEB_PORTAL",
+          "os": "Web Browser (Chrome/Edge / HTTPS)",
           "authMethod": "SSO (SAML 2.0 via Entra ID)",
-          "targetSystemId": "JSD-03",
-          "messagesEmitted": ["DTA § 301 SGB V EDIFACT Clearing", "GKV-Sammelrechnung"]
+          "targetSystemId": "JSD-01",
+          "messagesEmitted": ["DTA § 301 Rechnungsdaten", "ID DIACOS DRG-Kodierung OData"]
         }
       ],
-      "connections": ["JSD-C-05", "JSD-C-21", "JSD-C-22"],
-      "integrations": ["JSD-INT-13", "JSD-INT-14"],
-      "processes": ["JSD-P-07"]
+      "connections": ["JSD-C-21", "JSD-C-22"],
+      "integrations": ["JSD-INT-09"],
+      "processes": ["JSD-P-06"]
     },
     {
       "id": "JSD-ACT-06",
-      "quadrant": "RB",
+      "quadrant": "RT",
+      "scope": "EXTERNAL",
       "name": "Patient & Angehörige",
       "archetype": "Endnutzer & Kunde / Patient",
       "avatar": "📱",
-      "industryContext": "Digital Health / Citizen",
-      "hitlType": "CONSUMER_AND_APPOINTMENT_REQUESTER",
-      "hitlSummary": "Bucht Termine digital, lädt Vorbefunde hoch und ruft Entlassdokumente via KHZG-Portal ab.",
+      "industryContext": "Patientenportal & Digitale Patientenreise",
+      "hitlType": "END_USER_CONSUMER",
+      "hitlSummary": "Bucht präoperative Termine, füllt Anamnesebögen digital aus und greift via HTTPS auf Entlassbriefe zu.",
       "clients": [
         {
           "id": "JSD-CL-06",
           "name": "m.Doc Patientenportal (Web & Smartphone App)",
-          "deviceType": "WEB_AND_MOBILE_APP",
-          "os": "iOS / Android / Web",
+          "deviceType": "WEB_PORTAL",
+          "os": "iOS / Android / Web Browser (HTTPS)",
           "authMethod": "Zwei-Faktor-Authentifizierung (SMS / Authenticator)",
-          "targetSystemId": "JSD-05",
-          "messagesEmitted": ["FHIR Appointment.write", "REST DocumentReference.read (PDF/A-1)"]
+          "targetSystemId": "JSD-02",
+          "messagesEmitted": ["FHIR QuestionnaireResponse", "eTermin Buchungsbestätigung"]
         }
       ],
-      "connections": ["JSD-C-09", "JSD-C-17"],
-      "integrations": ["JSD-INT-09", "JSD-INT-10"],
-      "processes": ["JSD-P-05"]
+      "connections": ["JSD-C-17", "JSD-C-18"],
+      "integrations": ["JSD-INT-07"],
+      "processes": ["JSD-P-04"]
     },
     {
       "id": "JSD-ACT-07",
-      "quadrant": "RB",
+      "quadrant": "RT",
+      "scope": "EXTERNAL",
       "name": "Medizinprodukt- & Logistik-Lieferant",
       "archetype": "B2B-Partner & Supply Chain",
       "avatar": "📦",
-      "industryContext": "B2B Medical Supply Chain",
-      "hitlType": "SUPPLIER_AND_ORDER_FULFILLER",
-      "hitlSummary": "Bestätigt Bestellungen elektronisch über GHX und liefert XRechnungen über OpenPeppol ein.",
+      "industryContext": "B2B Medizintechnik & Pharmalogistik",
+      "hitlType": "B2B_INTEGRATION_PARTNER",
+      "hitlSummary": "Bestätigt Bestellungen für OP-Implantate und Pharmazeutika und übermittelt elektronische Lieferscheine über das GHX B2B Web-Portal.",
       "clients": [
         {
           "id": "JSD-CL-07",
-          "name": "GHX B2B Supplier Portal & Peppol Hub",
+          "name": "GHX B2B Supplier Web Portal & Peppol Hub",
           "deviceType": "WEB_PORTAL",
-          "os": "B2B Web Interface / AS4 EDI Gateway",
+          "os": "B2B Web Interface / HTTPS",
           "authMethod": "Peppol PKI-Zertifikat & API Key",
           "targetSystemId": "JSD-24",
-          "messagesEmitted": ["GHX cXML PurchaseOrderResponse", "Peppol BIS Billing 3.0 (XRechnung)"]
+          "messagesEmitted": ["Peppol BIS OrderResponse", "EDIFACT DESADV Lieferschein"]
         }
       ],
-      "connections": ["JSD-C-23", "JSD-C-24", "JSD-C-25"],
-      "integrations": ["JSD-INT-15", "JSD-INT-16"],
-      "processes": ["JSD-P-08"]
+      "connections": ["JSD-C-25"],
+      "integrations": ["JSD-INT-11"],
+      "processes": ["JSD-P-07"]
+    },
+    {
+      "id": "JSD-ACT-08",
+      "quadrant": "RB",
+      "scope": "EXTERNAL",
+      "name": "Kassenärztliche Vereinigung & DTA-Prüfer",
+      "archetype": "Abrechnungspartner & Kostenträger-Clearing",
+      "avatar": "🏛️",
+      "industryContext": "Ambulante Abrechnung & KV-SafeNet",
+      "hitlType": "EXTERNAL_PAYER_AUDITOR",
+      "hitlSummary": "Prüft ambulante Notfall- und KVDT-Abrechnungsdatensätze über das gesicherte On-Premises KV-SafeNet Gateway.",
+      "clients": [
+        {
+          "id": "JSD-CL-08",
+          "name": "KV-SafeNet § 301 B2B Gateway (On-Premises)",
+          "deviceType": "GATEWAY_CLIENT",
+          "os": "B2B Gateway / Hardware Konnektor",
+          "authMethod": "KV-Zertifikat & VPN IPSec",
+          "targetSystemId": "JSD-04",
+          "messagesEmitted": ["KVDT Prüfprotokoll", "DTA § 301 Abrechnungsbestätigung"]
+        }
+      ],
+      "connections": ["JSD-C-22"],
+      "integrations": ["JSD-INT-09"],
+      "processes": ["JSD-P-06"]
     }
   ]
 };
@@ -29934,7 +29985,8 @@
   "actors": [
     {
       "id": "BRK-ACT-01",
-      "quadrant": "LT",
+      "quadrant": "LB",
+      "scope": "INTERNAL",
       "name": "R&D Digital Engineer & Physiker",
       "archetype": "Forschung & Mechatronisches Engineering",
       "avatar": "🔬",
@@ -29946,7 +29998,7 @@
           "id": "BRK-CL-01",
           "name": "SolidWorks CAD Workstation & Teamcenter Client",
           "deviceType": "DESKTOP_GUI",
-          "os": "Windows 11 Pro CAD Workstation",
+          "os": "Windows 11 Pro CAD Workstation (On-Premises)",
           "authMethod": "SSO (Microsoft Entra ID Kerberos)",
           "targetSystemId": "BRK-08",
           "messagesEmitted": ["JT 3D-Baugruppenfreigabe", "Jira Issue Sync (REST)"]
@@ -29958,7 +30010,8 @@
     },
     {
       "id": "BRK-ACT-02",
-      "quadrant": "LT",
+      "quadrant": "LB",
+      "scope": "INTERNAL",
       "name": "Reinraum-Werker & Montagespezialist",
       "archetype": "Shopfloor & Fertigungssteuerung (MES)",
       "avatar": "🛠️",
@@ -29970,7 +30023,7 @@
           "id": "BRK-CL-02",
           "name": "VKS Werkerführung Touch-Terminal & Barcode-Scanner",
           "deviceType": "TERMINAL",
-          "os": "Industrial Touch Panel Windows IoT",
+          "os": "Industrial Touch Panel Windows IoT (On-Premises)",
           "authMethod": "Werker-Badge RFID / PIN",
           "targetSystemId": "BRK-09",
           "messagesEmitted": ["VKS SOP Rückmeldung (REST)", "eDHR Chargenprotokoll"]
@@ -29982,7 +30035,8 @@
     },
     {
       "id": "BRK-ACT-03",
-      "quadrant": "LT",
+      "quadrant": "LB",
+      "scope": "INTERNAL",
       "name": "Mikrobiologie-Laborant & Diagnostiker",
       "archetype": "Klinische Diagnostik & Analytik",
       "avatar": "🧫",
@@ -29992,9 +30046,9 @@
       "clients": [
         {
           "id": "BRK-CL-03",
-          "name": "MALDI Biotyper Compass Software",
+          "name": "MALDI Biotyper Compass Software Host",
           "deviceType": "DESKTOP_GUI",
-          "os": "Windows 10 IoT Instrument Host",
+          "os": "Windows 10 IoT Instrument Host (On-Premises)",
           "authMethod": "Labor-Benutzeranmeldung (LDAP)",
           "targetSystemId": "BRK-14",
           "messagesEmitted": ["HL7 v2.5 Keimidentifikation", "ASTM Spektrenabgleich"]
@@ -30006,19 +30060,20 @@
     },
     {
       "id": "BRK-ACT-04",
-      "quadrant": "LB",
+      "quadrant": "LT",
+      "scope": "INTERNAL",
       "name": "Global Field Service Engineer (Kryo & Magnete)",
       "archetype": "Technischer Außendienst & Field Service",
       "avatar": "🔧",
       "industryContext": "High-Tech Field Service & IoT",
       "hitlType": "DISPATCHED_EXPERT_AND_MAINTAINER",
-      "hitlSummary": "Befüllt flüssiges Helium an Supraleitermagneten vor Ort, kalibriert Sensoren und quittiert Service-Aufträge.",
+      "hitlSummary": "Befüllt flüssiges Helium an Supraleitermagneten vor Ort, kalibriert Sensoren und synchronisiert Service-Aufträge über die Salesforce Cloud.",
       "clients": [
         {
           "id": "BRK-CL-04",
-          "name": "Salesforce Field Service (FSL) Mobile App",
-          "deviceType": "TABLET_MOBILE",
-          "os": "Apple iPad Pro / iOS Enterprise",
+          "name": "Salesforce Field Service (FSL) Cloud Mobile App",
+          "deviceType": "SMARTPHONE_APP",
+          "os": "Apple iPad Pro / iOS Enterprise (HTTPS)",
           "authMethod": "SSO Entra ID + Microsoft Authenticator MFA",
           "targetSystemId": "BRK-23",
           "messagesEmitted": ["FSL Service-Bericht (REST)", "Heliumdruck-Kalibrierprotokoll"]
@@ -30030,19 +30085,20 @@
     },
     {
       "id": "BRK-ACT-05",
-      "quadrant": "RT",
+      "quadrant": "LT",
+      "scope": "INTERNAL",
       "name": "Global Procurement Manager & Einkäufer",
       "archetype": "Strategischer & Operativer Einkauf",
       "avatar": "💼",
       "industryContext": "Global Supply Chain & ERP",
       "hitlType": "DECISION_MAKER_AND_SPEND_APPROVER",
-      "hitlSummary": "Prüft Bestellbedarfe in SAP S/4HANA MM, verhandelt Rahmenverträge und autorisiert Bestellungen > 50.000 €.",
+      "hitlSummary": "Prüft Bestellbedarfe in SAP S/4HANA MM, verhandelt Rahmenverträge und autorisiert Bestellungen > 50.000 € über SAP BTP Cloud.",
       "clients": [
         {
           "id": "BRK-CL-05",
-          "name": "SAP Fiori Launchpad (SAP BTP Cloud)",
+          "name": "SAP Fiori Launchpad (SAP BTP Cloud Browser)",
           "deviceType": "WEB_PORTAL",
-          "os": "Web Browser (Chrome/Edge)",
+          "os": "Web Browser (Chrome/Edge / HTTPS)",
           "authMethod": "SSO SAML 2.0 via Microsoft Entra ID",
           "targetSystemId": "BRK-49",
           "messagesEmitted": ["Ariba PurchaseOrder cXML", "Onventis Katalog-Freigabe"]
@@ -30054,19 +30110,20 @@
     },
     {
       "id": "BRK-ACT-06",
-      "quadrant": "RT",
+      "quadrant": "LT",
+      "scope": "INTERNAL",
       "name": "Global Trade & Export Compliance Officer",
       "archetype": "Zoll, Außenhandel & Compliance",
       "avatar": "⚖️",
       "industryContext": "Trade Compliance & Governance",
       "hitlType": "COMPLIANCE_GATEKEEPER",
-      "hitlSummary": "Überwacht Sanktionslistenprüfungen (AEB) und erteilt Ausfuhrgenehmigungen für Hochtechnologie-Instrumente.",
+      "hitlSummary": "Überwacht Sanktionslistenprüfungen (AEB Cloud) und erteilt Ausfuhrgenehmigungen für Hochtechnologie-Instrumente über den Web-Browser.",
       "clients": [
         {
           "id": "BRK-CL-06",
-          "name": "AEB & ASSIST4 Zoll-Arbeitsplatz",
-          "deviceType": "DESKTOP_GUI",
-          "os": "Windows 11 / AEB Cloud Client",
+          "name": "AEB Cloud Trade Compliance Console (Web Browser)",
+          "deviceType": "WEB_PORTAL",
+          "os": "Web Browser (Chrome/Edge / HTTPS)",
           "authMethod": "Zoll-Signaturkarte / Elster-Zertifikat",
           "targetSystemId": "BRK-01",
           "messagesEmitted": ["AEB Sanktionslisten-Clearance", "ATLAS Ausfuhranmeldung"]
@@ -30078,19 +30135,20 @@
     },
     {
       "id": "BRK-ACT-07",
-      "quadrant": "RB",
+      "quadrant": "RT",
+      "scope": "EXTERNAL",
       "name": "B2B-Laborleiter / Forschungskunde",
       "archetype": "Kunde, Forscher & Reagenzien-Besteller",
       "avatar": "🌐",
       "industryContext": "Life Sciences & Academic Research",
       "hitlType": "CUSTOMER_ORDER_PLACER",
-      "hitlSummary": "Bestellt MALDI-Targets, NMR-Probenröhrchen und Software-Lizenzen über den MyBruker WebStore.",
+      "hitlSummary": "Bestellt MALDI-Targets, NMR-Probenröhrchen und Software-Lizenzen über den MyBruker Cloud WebStore.",
       "clients": [
         {
           "id": "BRK-CL-07",
-          "name": "MyBruker WebStore Portal & API",
+          "name": "MyBruker WebStore Portal & API (HTTPS)",
           "deviceType": "WEB_PORTAL",
-          "os": "Web Browser / B2B PunchOut",
+          "os": "Web Browser / B2B PunchOut (HTTPS)",
           "authMethod": "Kunden-Login / OIDC & OCI PunchOut",
           "targetSystemId": "BRK-20",
           "messagesEmitted": ["OData OrderPlacement", "Lizenz-Download (REST)"]
@@ -30102,19 +30160,20 @@
     },
     {
       "id": "BRK-ACT-08",
-      "quadrant": "RB",
+      "quadrant": "RT",
+      "scope": "EXTERNAL",
       "name": "ELITech B2B-Vertriebspartner & Distributor",
       "archetype": "Vertriebspartner & B2B-Handel",
       "avatar": "🤝",
       "industryContext": "Global Diagnostics Distribution",
       "hitlType": "DISTRIBUTOR_AND_ORDER_EXCHANGER",
-      "hitlSummary": "Übermittelt Großbestellungen für Real-Time PCR Diagnostiksysteme über das SAP Trading Partner Management.",
+      "hitlSummary": "Übermittelt Großbestellungen für Real-Time PCR Diagnostiksysteme über das SAP Trading Partner Management Cloud Portal.",
       "clients": [
         {
           "id": "BRK-CL-08",
-          "name": "SAP Trading Partner Management (TRM) Portal",
+          "name": "SAP Trading Partner Management (TRM) Cloud Portal",
           "deviceType": "WEB_PORTAL",
-          "os": "EDI AS2 / OFTP2 / Web",
+          "os": "Web Browser / HTTPS / EDI AS2",
           "authMethod": "AS2 Zertifikatsverschlüsselung & TRM Token",
           "targetSystemId": "BRK-28",
           "messagesEmitted": ["EDIFACT ORDERS", "AS2 / REST PCR Reagenzienabruf"]
@@ -30126,19 +30185,20 @@
     },
     {
       "id": "BRK-ACT-09",
-      "quadrant": "RB",
+      "quadrant": "RT",
+      "scope": "EXTERNAL",
       "name": "FDA & IVD-R Regulatory Auditor",
       "archetype": "Behördlicher Auditor & Prüfer",
       "avatar": "📋",
       "industryContext": "Medical Device Regulatory & Compliance",
       "hitlType": "AUDITOR_AND_RECORD_INSPECTOR",
-      "hitlSummary": "Prüft revisionssichere Device History Records (DHR) und Chargenfreigaben gem. 21 CFR Part 11 und IVD-R.",
+      "hitlSummary": "Prüft revisionssichere Device History Records (DHR) und Chargenfreigaben über das gesicherte OpenText Documentum Cloud Portal.",
       "clients": [
         {
           "id": "BRK-CL-09",
-          "name": "OpenText Documentum DHR Audit Viewer",
+          "name": "OpenText Documentum DHR Cloud Audit Viewer",
           "deviceType": "WEB_PORTAL",
-          "os": "Secure Web Portal",
+          "os": "Secure Web Portal (HTTPS)",
           "authMethod": "Auditor 2FA & Time-Limited Token",
           "targetSystemId": "BRK-10",
           "messagesEmitted": ["FDA 21 CFR Part 11 Audit-Log Abruf", "DHR-Zertifikatsabruf"]
@@ -30147,6 +30207,31 @@
       "connections": ["BRK-INT-15", "BRK-INT-16"],
       "integrations": ["BRK-INT-15", "BRK-INT-16"],
       "processes": ["BRK-P-08"]
+    },
+    {
+      "id": "BRK-ACT-10",
+      "quadrant": "RB",
+      "scope": "EXTERNAL",
+      "name": "Spediteur & Gefahrgut-Transporteur",
+      "archetype": "Logistik-Dienstleister & Transporteur",
+      "avatar": "🚛",
+      "industryContext": "Gefahrgut- & Kryo-Logistik",
+      "hitlType": "LOGISTICS_CARRIER_OPERATOR",
+      "hitlSummary": "Führt Vor-Ort-Gefahrgutprüfungen durch und tauscht elektronische Frachtbriefe und Zolldaten über das On-Premises ATLAS Gateway aus.",
+      "clients": [
+        {
+          "id": "BRK-CL-10",
+          "name": "On-Premises ATLAS Zoll-Gateway & Speditions-Terminal",
+          "deviceType": "GATEWAY_CLIENT",
+          "os": "B2B Gateway / Hardware Fracht-Terminal (On-Premises)",
+          "authMethod": "Zoll-Signaturkarte / mTLS",
+          "targetSystemId": "BRK-01",
+          "messagesEmitted": ["ATLAS Ausfuhr-Freigabe", "EDIFACT IFTMIN Speditionsauftrag"]
+        }
+      ],
+      "connections": ["BRK-INT-21"],
+      "integrations": ["BRK-INT-21"],
+      "processes": ["BRK-P-11"]
     }
   ]
 };
@@ -31009,39 +31094,79 @@
       let selectedHitlRoleId = null;
       window.selectedHitlRoleId = selectedHitlRoleId;
 
+      function determineActorQuadrant(actor, model) {
+        // 1. Determine Scope (X-Axis): Left = Internal, Right = External
+        const isExternal = (actor.scope === 'EXTERNAL') ||
+          /extern|kunde|patient|b2b|buerger|bürger|lieferant|partner|auditor|payer|kostentraeger|kostenträger|distributor|zuweiser|spedition|besucher/i.test(
+            (actor.name || '') + ' ' + (actor.archetype || '') + ' ' + (actor.hitlType || '') + ' ' + (actor.industryContext || '')
+          );
+
+        // 2. Determine Communication & Client Architecture (Y-Axis): Top = Cloud/Web/HTTPS, Bottom = On-Prem/Fat Client
+        const clients = actor.clients || [];
+        let isCloudWeb = false;
+        for (const cl of clients) {
+          const clText = ((cl.name || '') + ' ' + (cl.deviceType || '') + ' ' + (cl.os || '') + ' ' + (cl.authMethod || '') + ' ' + (cl.messagesEmitted || []).join(' ')).toLowerCase();
+          if (clText.includes('browser') || clText.includes('https') || clText.includes('cloud') || clText.includes('web') || clText.includes('fiori') || clText.includes('portal') || clText.includes('salesforce') || clText.includes('btp') || clText.includes('onetrust') || clText.includes('saas')) {
+            isCloudWeb = true;
+            break;
+          }
+          if (cl.deviceType === 'SMARTPHONE_APP' || cl.deviceType === 'WEB_PORTAL' || cl.deviceType === 'WEB_AND_MOBILE_APP') {
+            isCloudWeb = true;
+            break;
+          }
+          if (model && Array.isArray(model.systems)) {
+            const sys = model.systems.find(s => s.id === cl.targetSystemId);
+            if (sys) {
+              const sysText = ((sys.name || '') + ' ' + (sys.deployment || '') + ' ' + (sys.tags || []).join(' ')).toLowerCase();
+              if (sysText.includes('cloud') || sys.deployment === 'CLOUD') {
+                isCloudWeb = true;
+                break;
+              }
+            }
+          }
+        }
+
+        return isExternal ? (isCloudWeb ? 'RT' : 'RB') : (isCloudWeb ? 'LT' : 'LB');
+      }
+      window.determineActorQuadrant = determineActorQuadrant;
+
       function getOrDeriveActorsForModel(model) {
         if (model && Array.isArray(model.actors) && model.actors.length > 0) {
-          return model.actors;
+          return model.actors.map(a => {
+            if (!a.quadrant) a.quadrant = determineActorQuadrant(a, model);
+            return a;
+          });
         }
 
         const systems = (model && Array.isArray(model.systems)) ? model.systems : SYSTEMS_DATA;
         const orgName = model?.meta?.organization || model?.meta?.shortName || 'Organisation';
 
         // Candidates for LT, LB, RT, RB
-        const ltSys = systems.find(s => s.scope === 'INTERNAL' && (s.domain === 'D2' || s.domain === 'D1')) || systems[0] || { id: 'SYS-01', name: 'Kernsystem' };
-        const lbSys = systems.find(s => (s.tags || []).some(t => /mobile|field|iot|zna|rettung|logistik/i.test(t)) || s.id !== ltSys.id) || systems[Math.min(1, systems.length - 1)] || ltSys;
-        const rtSys = systems.find(s => (s.tags || []).some(t => /sap|erp|finanz|finance|governance|compliance/i.test(t)) || s.id !== ltSys.id) || systems[0] || ltSys;
-        const rbSys = systems.find(s => s.scope === 'EXTERNAL' || (s.tags || []).some(t => /portal|web|extern|kunde|b2b/i.test(t))) || systems[systems.length - 1] || ltSys;
+        const ltSys = systems.find(s => s.scope === 'INTERNAL' && (s.domain === 'D1' || (s.tags||[]).some(t => /cloud|sap|erp|fiori/i.test(t)))) || systems[0] || { id: 'SYS-01', name: 'Cloud ERP' };
+        const lbSys = systems.find(s => s.scope === 'INTERNAL' && s.id !== ltSys.id) || systems[Math.min(1, systems.length - 1)] || ltSys;
+        const rtSys = systems.find(s => (s.scope === 'EXTERNAL' || (s.tags||[]).some(t => /portal|web|app/i.test(t)))) || systems[systems.length - 1] || ltSys;
+        const rbSys = systems.find(s => s.scope === 'EXTERNAL' && s.id !== rtSys.id) || systems[systems.length - 1] || ltSys;
 
         return [
           {
             id: 'GEN-ACT-LT',
             quadrant: 'LT',
-            name: 'Operativer Fachexperte',
-            archetype: 'Kernleistung & Operative Fachexpertise',
-            avatar: '🛠️',
+            scope: 'INTERNAL',
+            name: 'Interner Fachexperte (Cloud & Web)',
+            archetype: 'Interne Fachkräfte & Management (Cloud/SaaS)',
+            avatar: '☁️',
             industryContext: orgName,
-            hitlType: 'DOMAIN_SPECIALIST',
-            hitlSummary: 'Verantwortet fachliche Kernprozesse, steuert Fachdaten und trifft operative Entscheidungen.',
+            hitlType: 'DOMAIN_SPECIALIST_CLOUD',
+            hitlSummary: 'Verantwortet Prozesse und steuert Daten über Web-Browser, HTTPS und Cloud-Dienste.',
             clients: [
               {
                 id: 'GEN-CL-LT',
-                name: 'Fachbereichs-Arbeitsplatz & Rich Client',
-                deviceType: 'DESKTOP_GUI',
-                os: 'Windows 11 / Enterprise Desktop',
-                authMethod: 'Enterprise SSO (Entra ID / Kerberos)',
+                name: 'Cloud Portal & Web-Browser Client',
+                deviceType: 'WEB_PORTAL',
+                os: 'Web Browser (Edge / Chrome / HTTPS)',
+                authMethod: 'Enterprise SSO (Entra ID / SAML 2.0)',
                 targetSystemId: ltSys.id,
-                messagesEmitted: ['Fachdaten-Transaktion', 'Statusaktualisierung']
+                messagesEmitted: ['Fachdaten-Transaktion (REST)', 'Freigabe-Status (OData)']
               }
             ],
             connections: [],
@@ -31051,21 +31176,22 @@
           {
             id: 'GEN-ACT-LB',
             quadrant: 'LB',
-            name: 'Frontline & Mobile Workforce',
-            archetype: 'Mobile Einsatzkräfte & Vor-Ort-Service',
-            avatar: '📱',
+            scope: 'INTERNAL',
+            name: 'Operative Fachkraft (On-Premises)',
+            archetype: 'Interne Fachkräfte & Werker (On-Premises / Fat Client)',
+            avatar: '🖥️',
             industryContext: orgName,
-            hitlType: 'FIELD_OPERATOR',
-            hitlSummary: 'Erfasst Daten direkt am Einsatzort, synchronisiert mobile Endgeräte und wickelt Vor-Ort-Aktivitäten ab.',
+            hitlType: 'FIELD_AND_ONPREM_OPERATOR',
+            hitlSummary: 'Bedient lokale Rich-Clients, Fat-Clients, Leitstände oder Vor-Ort-Terminals im internen LAN.',
             clients: [
               {
                 id: 'GEN-CL-LB',
-                name: 'Mobiles Handheld & Service-Tablet',
-                deviceType: 'TABLET_MOBILE',
-                os: 'Android Enterprise / iOS Ruggedized',
-                authMethod: 'Geräte-Zertifikat & PIN',
+                name: 'Lokale Workstation & Fat Client',
+                deviceType: 'DESKTOP_GUI',
+                os: 'Windows 11 / Enterprise Desktop (On-Premises)',
+                authMethod: 'Kerberos / Lokale Workstation-Auth',
                 targetSystemId: lbSys.id,
-                messagesEmitted: ['Einsatzquittung', 'Messwert-Telemetrie']
+                messagesEmitted: ['Prozess-Meldung (TCP/Socket)', 'Status-Quittung']
               }
             ],
             connections: [],
@@ -31075,21 +31201,22 @@
           {
             id: 'GEN-ACT-RT',
             quadrant: 'RT',
-            name: 'Governance & Management Officer',
-            archetype: 'Leitung, Finanzen, Compliance & Controlling',
-            avatar: '📊',
+            scope: 'EXTERNAL',
+            name: 'Kunde & Portalnutzer (Cloud)',
+            archetype: 'Externe Kunden & Partner (Cloud & Web)',
+            avatar: '🌐',
             industryContext: orgName,
-            hitlType: 'GOVERNANCE_AND_APPROVER',
-            hitlSummary: 'Überwacht Kennzahlen, Compliance-Richtlinien, Quartalsabschlüsse und gibt Budgets frei.',
+            hitlType: 'EXTERNAL_CLOUD_USER',
+            hitlSummary: 'Greift von extern über Web-Browser, HTTPS-Portale oder mobile Smartphone-Apps auf Cloud-Dienste zu.',
             clients: [
               {
                 id: 'GEN-CL-RT',
-                name: 'Management Cockpit & ERP Launchpad',
-                deviceType: 'DESKTOP_GUI',
-                os: 'Web Browser / Cloud Portal',
-                authMethod: 'SSO mit Multi-Faktor-Authentifizierung (MFA)',
+                name: 'Kunden- & Partnerportal (Web/App)',
+                deviceType: 'WEB_PORTAL',
+                os: 'Web Browser / Smartphone App (HTTPS)',
+                authMethod: 'Customer IAM (CIAM / OIDC / 2FA)',
                 targetSystemId: rtSys.id,
-                messagesEmitted: ['Freigabebestätigung', 'Reporting Query']
+                messagesEmitted: ['Self-Service Anfrage (HTTPS)', 'Dokumenten-Abruf']
               }
             ],
             connections: [],
@@ -31099,21 +31226,22 @@
           {
             id: 'GEN-ACT-RB',
             quadrant: 'RB',
-            name: 'Kunde, Partner & Externer Prüfer',
-            archetype: 'Externe Endnutzer, Lieferanten & B2B-Partner',
-            avatar: '🌐',
+            scope: 'EXTERNAL',
+            name: 'B2B-Partner & Zuweiser (On-Prem)',
+            archetype: 'Externe Partner & Zuweiser (On-Premises / Schnittstelle)',
+            avatar: '🔌',
             industryContext: orgName,
-            hitlType: 'EXTERNAL_ECOSYSTEM_USER',
-            hitlSummary: 'Interagiert über Self-Service-Portale, liefert B2B-Daten ein und greift auf freigegebene Dokumente zu.',
+            hitlType: 'EXTERNAL_B2B_PARTNER',
+            hitlSummary: 'Tauscht strukturierte B2B-Daten über On-Premises Schnittstellen, B2B-Gateways oder dedizierte Clearing-Strecken aus.',
             clients: [
               {
                 id: 'GEN-CL-RB',
-                name: 'Kunden- & Partnerportal',
-                deviceType: 'WEB_PORTAL',
-                os: 'Web Browser / Mobile Web',
-                authMethod: 'B2B/B2C Customer Identity & Access (CIAM)',
+                name: 'B2B Clearing Gateway & Lokaler Konnektor',
+                deviceType: 'GATEWAY_CLIENT',
+                os: 'B2B Gateway / Vor-Ort Terminal (On-Premises)',
+                authMethod: 'mTLS Zertifikat / VPN Tunnel',
                 targetSystemId: rbSys.id,
-                messagesEmitted: ['Self-Service Antrag', 'B2B EDI Transaktion']
+                messagesEmitted: ['B2B EDI Transaktion', 'Clearing-Quittung']
               }
             ],
             connections: [],
@@ -31126,10 +31254,10 @@
 
       function renderHitlCornerPods() {
         const podConfigs = {
-          'LT': { tag: 'LT · Kernleistung', defRole: 'Operative Fachkräfte', defAvatar: '🛠️' },
-          'LB': { tag: 'LB · Frontline / Field', defRole: 'Mobiles Team', defAvatar: '🚀' },
-          'RT': { tag: 'RT · Governance / Admin', defRole: 'Verwaltung & Steuerung', defAvatar: '⚖️' },
-          'RB': { tag: 'RB · Partner & Kunden', defRole: 'Kunden & Partner', defAvatar: '🌐' }
+          'LT': { tag: 'LT · Intern Cloud', defRole: 'Cloud & Web (Intern)', defAvatar: '☁️' },
+          'LB': { tag: 'LB · Intern On-Prem', defRole: 'On-Prem / Fat Client', defAvatar: '🖥️' },
+          'RT': { tag: 'RT · Extern Cloud', defRole: 'Cloud & Portal (Extern)', defAvatar: '🌐' },
+          'RB': { tag: 'RB · Extern On-Prem', defRole: 'On-Prem / B2B Gateway', defAvatar: '🔌' }
         };
 
         ['LT', 'LB', 'RT', 'RB'].forEach(corner => {
@@ -31176,7 +31304,7 @@
               cornerRoles.forEach(r => {
                 const isSelected = r.id === selectedHitlRoleId;
                 html += 
-                  '<div class="hitl-role-item' + (isSelected ? ' active' : '') + '" onclick="event.stopPropagation(); window.selectHitlRole(\'' + r.id + '\')">' +
+                  '<div class="hitl-role-item' + (isSelected ? ' active' : '') + '" onclick="event.stopPropagation(); window.selectHitlRole(\x27' + r.id + '\x27)">' +
                     '<span class="hitl-role-item-avatar">' + (r.avatar || '👤') + '</span>' +
                     '<div class="hitl-role-item-details">' +
                       '<div class="hitl-role-item-title">' + r.name + '</div>' +
@@ -31241,11 +31369,14 @@
         const orgShort = activeModelObj?.shortName || activeModelObj?.organization || 'EA';
 
         const quadDescriptions = {
-          'LT': 'LT · Fachspezialisten & Kernleistung (Intern)',
-          'LB': 'LB · Frontline, Mobile & Field Services',
-          'RT': 'RT · Steuerung, Governance & Administration',
-          'RB': 'RB · Externe Stakeholder, Kunden & Partner'
+          'LT': 'LT · Intern · Cloud & Web-Dienste (Browser / HTTPS)',
+          'LB': 'LB · Intern · On-Premises & Fat Clients (Workstation / Terminal)',
+          'RT': 'RT · Extern · Cloud & Web-Portale (Kunden / Partner / HTTPS)',
+          'RB': 'RB · Extern · On-Premises & B2B-Schnittstellen (Gateways / DTA)'
         };
+
+        const isInternal = (role.scope === 'INTERNAL') || (role.quadrant === 'LT' || role.quadrant === 'LB');
+        const isCloudWeb = (role.quadrant === 'LT' || role.quadrant === 'RT');
 
         const clientHtml = (role.clients || []).map(cl => {
           const targetSys = SYSTEMS_DATA.find(s => s.id === cl.targetSystemId);
@@ -31261,12 +31392,12 @@
               '<span class="insp-badge" style="background:rgba(168,85,247,0.15); color:#c084fc; border:1px solid rgba(168,85,247,0.3); font-size:0.62rem;">' + (cl.deviceType || 'CLIENT') + '</span>' +
             '</div>' +
             '<div style="font-size:0.67rem; color:var(--text-muted); margin-bottom:6px; line-height:1.4;">' +
-              (cl.os ? ('<strong>Betriebssystem:</strong> ' + cl.os + '<br>') : '') +
+              (cl.os ? ('<strong>Betriebssystem / Protokoll:</strong> ' + cl.os + '<br>') : '') +
               (cl.authMethod ? ('<strong>Authentifizierung:</strong> ' + cl.authMethod + '<br>') : '') +
               (targetSys ? ('<strong>Zielsystem:</strong> ' + targetSys.id + ' · ' + targetSys.name) : ('<strong>Ziel:</strong> ' + cl.targetSystemId)) +
             '</div>' +
             (targetSys ? 
-              '<button type="button" class="insp-action-btn" style="padding:2px 8px; font-size:0.65rem; margin-bottom:6px;" onclick="window.locateNodeInChord(\'' + targetSys.id + '\')">🎯 Zielsystem fokussieren (' + targetSys.id + ')</button>' 
+              '<button type="button" class="insp-action-btn" style="padding:2px 8px; font-size:0.65rem; margin-bottom:6px;" onclick="window.locateNodeInChord(\x27' + targetSys.id + '\x27)">🎯 Zielsystem fokussieren (' + targetSys.id + ')</button>' 
               : '') +
             (msgsHtml ? '<div style="margin-top:4px;"><div style="font-size:0.63rem; color:var(--text-muted); margin-bottom:3px;">Gesendete Nachrichten & Formate:</div><div style="display:flex; flex-wrap:wrap; gap:4px;">' + msgsHtml + '</div></div>' : '') +
           '</div>';
@@ -31275,7 +31406,7 @@
         const procsHtml = (role.processes || []).map(pId => {
           const proc = PROCESSES_DATA.find(p => p.id === pId);
           if (!proc) return '<span class="insp-tag">' + pId + '</span>';
-          return '<button type="button" class="apqc-proc-chip" style="margin-bottom:4px;" onclick="window.setDrilldownProcess(PROCESSES_DATA.find(p => p.id === \'' + pId + '\'))" title="Prozess im Chord fokussieren">' +
+          return '<button type="button" class="apqc-proc-chip" style="margin-bottom:4px;" onclick="window.setDrilldownProcess(PROCESSES_DATA.find(p => p.id === \x27' + pId + '\x27))" title="Prozess im Chord fokussieren">' +
             '<span>⚡ ' + proc.id + '</span> · <span>' + proc.name + '</span>' +
           '</button>';
         }).join('');
@@ -31283,7 +31414,7 @@
         const integsHtml = (role.integrations || []).map(intId => {
           const integ = INTEGRATIONS_DATA.find(i => i.id === intId);
           if (!integ) return '<span class="insp-tag">' + intId + '</span>';
-          return '<button type="button" class="insp-action-btn" style="padding:2px 7px; font-size:0.65rem; margin-bottom:4px;" onclick="window.activateIntegrationFromEdge && window.activateIntegrationFromEdge(\'' + intId + '\', 0)">' +
+          return '<button type="button" class="insp-action-btn" style="padding:2px 7px; font-size:0.65rem; margin-bottom:4px;" onclick="window.activateIntegrationFromEdge && window.activateIntegrationFromEdge(\x27' + intId + '\x27, 0)">' +
             '🔗 ' + integ.id + ' · ' + (integ.name || '') +
           '</button>';
         }).join('');
@@ -31305,6 +31436,8 @@
             '</div>' +
             '<div class="insp-badges">' +
               '<span class="insp-badge" style="background:var(--accent-glow); color:var(--accent); font-weight:700;">' + (quadDescriptions[role.quadrant] || role.quadrant) + '</span>' +
+              '<span class="insp-badge" style="background:rgba(59,130,246,0.15); color:#60a5fa; border-color:#60a5fa;">' + (isInternal ? '🏢 Intern (Links)' : '🌍 Extern (Rechts)') + '</span>' +
+              '<span class="insp-badge" style="background:rgba(168,85,247,0.15); color:#c084fc; border-color:#c084fc;">' + (isCloudWeb ? '☁️ Cloud & Web (Oben)' : '🖥️ On-Prem / Fat Client (Unten)') + '</span>' +
               '<span class="insp-badge" style="background:rgba(16,185,129,0.15); color:#34d399; border-color:#34d399;">' + (role.hitlType || 'HUMAN_OPERATOR') + '</span>' +
             '</div>' +
             '<div class="insp-desc" style="line-height:1.45; font-size:0.75rem;">' +
@@ -31410,8 +31543,11 @@
 
         // 4. Render role inspector & open drawer
         renderInspectorRole(role);
-        if (typeof openRightDrawer === 'function') {
-          openRightDrawer();
+        if (typeof toggleRightDrawer === 'function') {
+          toggleRightDrawer(true);
+        } else {
+          const sr = document.getElementById('sidebarRight');
+          if (sr) sr.classList.remove('collapsed');
         }
 
         // 5. Toast
