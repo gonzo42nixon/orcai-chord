@@ -19472,7 +19472,7 @@
       };
 
       // =========================================================================
-      // TOKEN FLOW ANIMATION & INTERMEDIATE STATION GLOW
+      // TOKEN FLOW ANIMATION (INTEGRATION & E2E PROCESS FLOW)
       // =========================================================================
       function stopTokenAnimation() {
         if (animTimer) {
@@ -19481,48 +19481,223 @@
         }
         gTokens.selectAll("*").remove();
         d3.selectAll(".intermediate-glow").classed("intermediate-glow", false);
+        d3.selectAll(".edge-link").classed("focused-step", false);
       }
+      window.stopTokenAnimation = stopTokenAnimation;
 
       function startTokenAnimationForIntegration(integ) {
         stopTokenAnimation();
         if (!integ || !integ.steps || integ.steps.length === 0) return;
 
-        const edgeObjs = integ.steps.map(s => CONNECTIONS_DATA.find(c => c.id === s.connectionId)).filter(Boolean);
-        if (edgeObjs.length === 0) return;
+        const validSteps = [];
+        integ.steps.forEach(st => {
+          const edge = CONNECTIONS_DATA.find(c => c.id === st.connectionId);
+          if (edge) {
+            const pathEl = document.getElementById("link-" + edge.id);
+            validSteps.push({
+              step: st,
+              edge: edge,
+              pathEl: pathEl,
+              isReverse: (st.from && st.to) ? (st.from === edge.to && st.to === edge.from) : false
+            });
+          }
+        });
+
+        if (validSteps.length === 0) return;
+
+        // Ensure ONLY the valid steps are fully visible and highlighted
+        validSteps.forEach(vs => {
+          if (vs.pathEl) {
+            vs.pathEl.classList.remove("dimmed");
+            vs.pathEl.classList.add("highlighted");
+            vs.pathEl.style.strokeOpacity = "1.0";
+            if (vs.pathEl.parentNode) vs.pathEl.parentNode.appendChild(vs.pathEl);
+          }
+        });
 
         const targetSysId = integ.targetSystem;
         let currentStepIdx = 0;
         let progress = 0;
 
         const token = gTokens.append("circle")
-          .attr("class", "token-bubble")
-          .attr("r", 5.5);
+          .attr("class", "token-bubble integ-token-bubble")
+          .attr("r", 5.8)
+          .style("fill", "#ffffff")
+          .style("stroke", "#38bdf8")
+          .style("stroke-width", "2.5px")
+          .style("filter", "drop-shadow(0 0 8px #38bdf8)");
+
+        function updateStepHighlight() {
+          d3.selectAll('.edge-link').classed('focused-step', false);
+          const cur = validSteps[currentStepIdx];
+          if (cur && cur.pathEl) {
+            cur.pathEl.classList.add('focused-step');
+            if (cur.pathEl.parentNode) cur.pathEl.parentNode.appendChild(cur.pathEl);
+          }
+        }
+        updateStepHighlight();
 
         animTimer = setInterval(() => {
           progress += 0.025;
           if (progress >= 1.0) {
             progress = 0;
-            const reachedStep = integ.steps[currentStepIdx];
-            if (reachedStep) {
-              const arrivedSysId = reachedStep.to;
+            const cur = validSteps[currentStepIdx];
+            if (cur) {
+              const arrivedSysId = cur.step.to || cur.edge.to;
               const circleEl = d3.select("#node-circle-" + arrivedSysId);
               if (!circleEl.empty() && arrivedSysId !== targetSysId) {
                 circleEl.classed("intermediate-glow", true);
                 setTimeout(() => { circleEl.classed("intermediate-glow", false); }, 900);
               }
             }
-            currentStepIdx = (currentStepIdx + 1) % edgeObjs.length;
+            currentStepIdx = (currentStepIdx + 1) % validSteps.length;
+            updateStepHighlight();
           }
 
-          const curEdge = edgeObjs[currentStepIdx];
-          const pathEl = document.getElementById("link-" + curEdge.id);
+          const cur = validSteps[currentStepIdx];
+          const pathEl = cur ? (cur.pathEl || document.getElementById("link-" + cur.edge.id)) : null;
           if (pathEl) {
             const totalLen = pathEl.getTotalLength();
-            const pt = pathEl.getPointAtLength(progress * totalLen);
+            const effectiveProgress = cur.isReverse ? (1 - progress) : progress;
+            const pt = pathEl.getPointAtLength(effectiveProgress * totalLen);
             token.attr("cx", pt.x).attr("cy", pt.y);
           }
-        }, 30);
+        }, 28);
       }
+      window.startTokenAnimationForIntegration = startTokenAnimationForIntegration;
+
+      function startTokenAnimationForProcess(proc) {
+        stopTokenAnimation();
+        if (!proc) return;
+
+        // 1. Gather all steps across all integrations of this process in order
+        const cleanIds = proc.cleanIntegIds || proc.integrations || [];
+        const validSteps = [];
+
+        cleanIds.forEach(intId => {
+          const integ = INTEGRATIONS_DATA.find(i => i.id === intId);
+          if (integ && integ.steps && integ.steps.length > 0) {
+            integ.steps.forEach((st, stIdx) => {
+              const edge = CONNECTIONS_DATA.find(c => c.id === st.connectionId);
+              if (edge) {
+                const pathEl = document.getElementById("link-" + edge.id);
+                validSteps.push({
+                  integId: integ.id,
+                  integName: integ.name,
+                  stepIdx: stIdx + 1,
+                  totalIntegSteps: integ.steps.length,
+                  step: st,
+                  edge: edge,
+                  pathEl: pathEl,
+                  isReverse: (st.from && st.to) ? (st.from === edge.to && st.to === edge.from) : false
+                });
+              }
+            });
+          }
+        });
+
+        if (validSteps.length === 0) return;
+
+        // 2. Guarantee: ONLY the process path is illuminated, all other edges are dimmed!
+        validSteps.forEach(vs => {
+          if (vs.pathEl) {
+            vs.pathEl.classList.remove("dimmed");
+            vs.pathEl.classList.add("highlighted");
+            vs.pathEl.style.strokeOpacity = "1.0";
+            if (vs.pathEl.parentNode) vs.pathEl.parentNode.appendChild(vs.pathEl);
+          }
+        });
+
+        let currentStepIdx = 0;
+        let progress = 0;
+        let isPaused = false;
+
+        const token = gTokens.append("circle")
+          .attr("class", "token-bubble proc-token-bubble")
+          .attr("r", 6.5)
+          .style("fill", "#38bdf8")
+          .style("stroke", "#ffffff")
+          .style("stroke-width", "2.5px")
+          .style("filter", "drop-shadow(0 0 10px #38bdf8)");
+
+        window.toggleProcessTokenFlow = function() {
+          isPaused = !isPaused;
+          const btn = document.getElementById('btnToggleProcToken');
+          const badge = document.getElementById('procTokenStepBadge');
+          if (btn) btn.innerHTML = isPaused ? '▶️ Fortsetzen' : '⏸ Anhalten';
+          if (badge) {
+            badge.textContent = isPaused ? 'Pausiert' : 'Aktiv';
+            badge.style.background = isPaused ? 'rgba(245,158,11,0.2)' : 'rgba(56,189,248,0.2)';
+            badge.style.color = isPaused ? '#f59e0b' : '#38bdf8';
+          }
+        };
+
+        window.restartProcessTokenFlow = function() {
+          currentStepIdx = 0;
+          progress = 0;
+          isPaused = false;
+          const btn = document.getElementById('btnToggleProcToken');
+          if (btn) btn.innerHTML = '⏸ Anhalten';
+          const badge = document.getElementById('procTokenStepBadge');
+          if (badge) {
+            badge.textContent = 'Aktiv';
+            badge.style.background = 'rgba(56,189,248,0.2)';
+            badge.style.color = '#38bdf8';
+          }
+          updateStepUI();
+        };
+
+        function updateStepUI() {
+          const cur = validSteps[currentStepIdx];
+          if (!cur) return;
+          const textEl = document.getElementById('procTokenCurrentStepText');
+          if (textEl) {
+            textEl.innerHTML = '<strong>' + cur.integId + '</strong> (' + cur.stepIdx + '/' + cur.totalIntegSteps + '): ' +
+              '<span style="color:#38bdf8; font-weight:700;">' + (cur.step.from || cur.edge.from) + '</span> ➔ <span style="color:#10b981; font-weight:700;">' + (cur.step.to || cur.edge.to) + '</span> ' +
+              '<span class="traffic-tag" style="font-size:0.6rem; padding:1px 4px; margin-left:4px;">' + (cur.edge.messageType || cur.edge.msgType || 'REST') + '</span>';
+          }
+
+          // Highlight current edge with .focused-step
+          d3.selectAll('.edge-link').classed('focused-step', false);
+          if (cur.pathEl) {
+            cur.pathEl.classList.add('focused-step');
+            if (cur.pathEl.parentNode) cur.pathEl.parentNode.appendChild(cur.pathEl);
+          }
+        }
+
+        updateStepUI();
+
+        animTimer = setInterval(() => {
+          if (isPaused) return;
+
+          progress += 0.022;
+          if (progress >= 1.0) {
+            progress = 0;
+            const cur = validSteps[currentStepIdx];
+            if (cur) {
+              const arrivedSysId = cur.step.to || cur.edge.to;
+              const circleEl = d3.select("#node-circle-" + arrivedSysId);
+              if (!circleEl.empty()) {
+                circleEl.classed("intermediate-glow", true);
+                setTimeout(() => { circleEl.classed("intermediate-glow", false); }, 900);
+              }
+            }
+
+            currentStepIdx = (currentStepIdx + 1) % validSteps.length;
+            updateStepUI();
+          }
+
+          const cur = validSteps[currentStepIdx];
+          const pathEl = cur ? (cur.pathEl || document.getElementById("link-" + cur.edge.id)) : null;
+          if (pathEl) {
+            const totalLen = pathEl.getTotalLength();
+            const effectiveProgress = cur.isReverse ? (1 - progress) : progress;
+            const pt = pathEl.getPointAtLength(effectiveProgress * totalLen);
+            token.attr("cx", pt.x).attr("cy", pt.y);
+          }
+        }, 28);
+      }
+      window.startTokenAnimationForProcess = startTokenAnimationForProcess;
 
       // =========================================================================
       // SELECTION & HIGHLIGHT LOGIC
@@ -19598,11 +19773,13 @@
         updateUI();
       }
 
-      function setDrilldownProcess(proc) {
-        if (selectedProcess?.id === proc.id) {
+      function setDrilldownProcess(proc, force = false) {
+        if (!force && selectedProcess?.id === proc.id && !selectedIntegration) {
           selectedProcess = null;
           selectedIntegration = null;
           selectedLink = null;
+          selectedNodeId = null;
+          window.selectedNodeId = null;
           stopTokenAnimation();
           if (selectedDomainId) {
             const dom = DOMAINS_DATA.find(d => d.id === selectedDomainId);
@@ -19614,12 +19791,24 @@
           selectedProcess = proc;
           selectedIntegration = null;
           selectedLink = null;
+          selectedNodeId = null; // Clear node focus so it doesn't override process path!
+          window.selectedNodeId = null;
           stopTokenAnimation();
+
           // Auto-select lead domain if none was active
           if (!selectedDomainId) {
             selectedDomainId = proc.leadDomain;
           }
+
+          // 1. Highlight path on canvas FIRST!
+          updateUI();
+          if (typeof window.renderConnections === 'function') window.renderConnections();
+
+          // 2. Render inspector with token flow controls
           renderInspectorProcess(selectedProcess);
+
+          // 3. Start E2E Process Token Flow!
+          startTokenAnimationForProcess(selectedProcess);
         }
         updateUI();
       }
@@ -19628,6 +19817,8 @@
         if (selectedIntegration?.id === integ.id) {
           selectedIntegration = null;
           selectedLink = null;
+          selectedNodeId = null;
+          window.selectedNodeId = null;
           stopTokenAnimation();
           if (selectedProcess) {
             renderInspectorProcess(selectedProcess);
@@ -19639,12 +19830,15 @@
           }
         } else {
           selectedIntegration = integ;
+          selectedNodeId = null; // Clear node focus so it doesn't override integration path!
+          window.selectedNodeId = null;
           selectedLink = integ.steps && integ.steps.length > 0
             ? (CONNECTIONS_DATA.find(c => c.id === integ.steps[0].connectionId) || null)
             : null;
+
           // Auto-sync process if none active
           if (!selectedProcess) {
-            const matchingProc = PROCESSES_DATA.find(p => p.cleanIntegIds.includes(integ.id));
+            const matchingProc = PROCESSES_DATA.find(p => (p.cleanIntegIds || []).includes(integ.id));
             if (matchingProc) {
               selectedProcess = matchingProc;
               if (!selectedDomainId) {
@@ -19652,7 +19846,15 @@
               }
             }
           }
+
+          // 1. Highlight path on canvas FIRST!
+          if (typeof window.renderConnections === 'function') window.renderConnections();
+          updateUI();
+
+          // 2. Render inspector
           renderInspectorIntegration(selectedIntegration, 0);
+
+          // 3. Start token animation AFTER path is visibly highlighted on canvas!
           startTokenAnimationForIntegration(selectedIntegration);
         }
         if (typeof window.renderConnections === 'function') window.renderConnections();
@@ -19902,17 +20104,11 @@
           radarSets = getRadarEntitySets(selectedRadarHub);
         }
 
-        // System selection (Level 1: Systemfokus) has absolute priority for link highlighting!
-        if (selectedNodeId) {
-          activeNodeIds.add(selectedNodeId);
-          CONNECTIONS_DATA.forEach(c => {
-            if (c.from === selectedNodeId || c.to === selectedNodeId) {
-              activeLinkIds.add(c.id);
-              activeNodeIds.add(c.from);
-              activeNodeIds.add(c.to);
-            }
-          });
-        } else if (selectedIntegration) {
+        // HIGHLIGHTING PRIORITY:
+        // 1. Selected Integration: EXACT path of integration steps is highlighted, all others dimmed!
+        // 2. Selected Process: Complete E2E path of all process integrations is highlighted!
+        // 3. Selected Node (only when no integration or process flow is being inspected)
+        if (selectedIntegration) {
           selectedIntegration.steps.forEach((s, idx) => {
             activeLinkIds.add(s.connectionId);
             activeNodeIds.add(s.from);
@@ -19923,9 +20119,9 @@
             if (idx === selectedIntegration.steps.length - 1) edgeEl.attr("marker-end", "url(#bpmn-marker-target)");
           });
         } else if (selectedProcess) {
-          selectedProcess.cleanIntegIds.forEach(integId => {
+          (selectedProcess.cleanIntegIds || []).forEach(integId => {
             const integ = INTEGRATIONS_DATA.find(i => i.id === integId);
-            if (integ) {
+            if (integ && integ.steps) {
               integ.steps.forEach(s => {
                 activeLinkIds.add(s.connectionId);
                 activeNodeIds.add(s.from);
@@ -19936,6 +20132,15 @@
           if (selectedProcess.participatingSystems) {
             selectedProcess.participatingSystems.forEach(sId => activeNodeIds.add(sId));
           }
+        } else if (selectedNodeId) {
+          activeNodeIds.add(selectedNodeId);
+          CONNECTIONS_DATA.forEach(c => {
+            if (c.from === selectedNodeId || c.to === selectedNodeId) {
+              activeLinkIds.add(c.id);
+              activeNodeIds.add(c.from);
+              activeNodeIds.add(c.to);
+            }
+          });
         } else if (selectedDomainId) {
           const domSys = new Set(SYSTEMS_DATA.filter(s => s.domain === selectedDomainId).map(s => s.id));
           CONNECTIONS_DATA.forEach(c => {
@@ -20019,6 +20224,18 @@
           .classed("focused-step", d => selectedLink && d.id === selectedLink.id)
           .classed("tag-matched", d => hasActiveTags && tagMatchingLinkIds.has(d.id))
           .classed("dimmed", d => {
+            // NEVER dim a connection that belongs to the active integration!
+            if (selectedIntegration && selectedIntegration.steps && selectedIntegration.steps.some(s => s.connectionId === d.id)) {
+              return false;
+            }
+            // NEVER dim a connection that belongs to the active process!
+            if (selectedProcess) {
+              const belongsToProc = (selectedProcess.cleanIntegIds || []).some(intId => {
+                const integ = INTEGRATIONS_DATA.find(i => i.id === intId);
+                return integ && integ.steps && integ.steps.some(s => s.connectionId === d.id);
+              });
+              if (belongsToProc) return false;
+            }
             if (selectedMessageType && d.messageType !== selectedMessageType) return true;
             if (hasActiveSelection) return !activeLinkIds.has(d.id);
             const cSrc = nodeCoords.get(d.from);
@@ -20958,6 +21175,22 @@
               '<span class="insp-badge" style="background:rgba(255,255,255,0.08); color:var(--text-bright);">' + partSys.length + ' beteiligte Systeme</span>' +
             '</div>' +
             '<div class="insp-desc">' + (proc.desc || proc.description || '') + '</div>' +
+            // E2E Process Tokenflow Controller
+            '<div class="proc-token-controller" style="margin:10px 0; padding:10px 12px; background:rgba(56,189,248,0.09); border:1px solid rgba(56,189,248,0.35); border-radius:8px;">' +
+              '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">' +
+                '<span style="font-size:0.75rem; font-weight:750; color:var(--text-bright); display:flex; align-items:center; gap:5px;">' +
+                  '<span>🔄</span> E2E-Prozess-Tokenfluss (Gesamtablauf)' +
+                '</span>' +
+                '<span id="procTokenStepBadge" class="insp-tag" style="background:rgba(56,189,248,0.2); color:#38bdf8; font-weight:700;">Aktiv</span>' +
+              '</div>' +
+              '<div id="procTokenCurrentStepText" style="font-size:0.69rem; color:var(--text-bright); margin-bottom:8px; line-height:1.4; min-height:22px;">' +
+                'Initialisiere E2E-Pfad...' +
+              '</div>' +
+              '<div style="display:flex; gap:6px;">' +
+                '<button type="button" class="insp-action-btn" id="btnToggleProcToken" onclick="window.toggleProcessTokenFlow()" style="flex:1; font-weight:700;">⏸ Anhalten</button>' +
+                '<button type="button" class="insp-action-btn" onclick="window.restartProcessTokenFlow()" style="font-weight:700;">⏮ Neustart</button>' +
+              '</div>' +
+            '</div>' +
             // PlantUML Sequenzdiagramm Section
             '<div style="margin:10px 0; padding:10px; background:rgba(56,189,248,0.06); border:1px solid rgba(56,189,248,0.25); border-radius:8px;">' +
               '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">' +
