@@ -4434,7 +4434,7 @@
 
     .bpmn-popout-header {
       padding: 10px 14px;
-      background: #111a28;
+      background: var(--item-bg, #111a28);
       border-bottom: 1px solid rgba(16, 185, 129, 0.25);
       cursor: grab;
       user-select: none;
@@ -4442,6 +4442,113 @@
       justify-content: space-between;
       align-items: center;
       gap: 8px;
+    }
+
+    /* Strict High-Contrast Theme Overrides for BPMN & PlantUML Popout Headers */
+    body.theme-day .bpmn-popout-header,
+    body.theme-day .plantuml-popout-header {
+      background: #f8fafc !important;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+      color: #0f172a !important;
+    }
+    body.theme-day .bpmn-popout-header .crud-modal-title,
+    body.theme-day .plantuml-popout-header .crud-modal-title,
+    body.theme-day .bpmn-title-text,
+    body.theme-day .plantuml-title-text {
+      color: #0f172a !important;
+    }
+    body.theme-day .bpmn-popout-header .insp-action-btn,
+    body.theme-day .plantuml-popout-header .insp-action-btn {
+      color: #0f172a !important;
+      background: #ffffff !important;
+      border: 1px solid #cbd5e1 !important;
+    }
+    body.theme-day .bpmn-popout-header .insp-action-btn:hover,
+    body.theme-day .plantuml-popout-header .insp-action-btn:hover {
+      background: #e2e8f0 !important;
+    }
+    body.theme-day .bpmn-zoom-badge,
+    body.theme-day .plantuml-zoom-badge {
+      color: #334155 !important;
+      background: #e2e8f0 !important;
+      border: 1px solid #cbd5e1 !important;
+    }
+    body.theme-day .bpmn-popout-header .bpmn-close-btn,
+    body.theme-day .plantuml-popout-header .plantuml-close-btn {
+      color: #475569 !important;
+    }
+    body.theme-day .bpmn-popout-header .bpmn-close-btn:hover,
+    body.theme-day .plantuml-popout-header .plantuml-close-btn:hover {
+      color: #0f172a !important;
+    }
+    body.theme-day .bpmn-popout-footer,
+    body.theme-day .plantuml-popout-footer {
+      background: #f1f5f9 !important;
+      border-top: 1px solid rgba(0, 0, 0, 0.08) !important;
+      color: #475569 !important;
+    }
+    body.theme-day .bpmn-floating-popout,
+    body.theme-day .plantuml-floating-popout {
+      background: #ffffff !important;
+      box-shadow: 0 20px 50px rgba(15, 23, 42, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.08) !important;
+    }
+    body.theme-day .bpmn-popout-body,
+    body.theme-day .plantuml-body {
+      background: #f8fafc !important;
+    }
+    body.theme-day .bpmn-svg-container,
+    body.theme-day .puml-svg-container {
+      background: #ffffff !important;
+    }
+
+    body.theme-night .bpmn-popout-header,
+    body.theme-night .plantuml-popout-header {
+      background: #111a28 !important;
+      border-bottom: 1px solid rgba(16, 185, 129, 0.25) !important;
+      color: #f8fafc !important;
+    }
+    body.theme-night .bpmn-popout-header .crud-modal-title,
+    body.theme-night .plantuml-popout-header .crud-modal-title,
+    body.theme-night .bpmn-title-text,
+    body.theme-night .plantuml-title-text {
+      color: #f8fafc !important;
+    }
+    body.theme-night .bpmn-popout-header .insp-action-btn,
+    body.theme-night .plantuml-popout-header .insp-action-btn {
+      color: #e2e8f0 !important;
+      background: rgba(30, 41, 59, 0.85) !important;
+      border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    }
+    body.theme-night .bpmn-zoom-badge,
+    body.theme-night .plantuml-zoom-badge {
+      color: #94a3b8 !important;
+      background: rgba(15, 23, 42, 0.9) !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+    body.theme-night .bpmn-popout-header .bpmn-close-btn,
+    body.theme-night .plantuml-popout-header .plantuml-close-btn {
+      color: #94a3b8 !important;
+    }
+    body.theme-night .bpmn-popout-header .bpmn-close-btn:hover,
+    body.theme-night .plantuml-popout-header .plantuml-close-btn:hover {
+      color: #ffffff !important;
+    }
+    body.theme-night .bpmn-popout-footer,
+    body.theme-night .plantuml-popout-footer {
+      background: rgba(9, 13, 22, 0.95) !important;
+      border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+      color: #94a3b8 !important;
+    }
+    body.theme-night .bpmn-floating-popout,
+    body.theme-night .plantuml-floating-popout {
+      background: #090d16 !important;
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.9), 0 0 28px rgba(16, 185, 129, 0.22) !important;
+    }
+    body.theme-night .bpmn-popout-body {
+      background: #090d16 !important;
+    }
+    body.theme-night .bpmn-svg-container {
+      background: #090d16 !important;
     }
     .bpmn-popout-header:active {
       cursor: grabbing;
@@ -17978,39 +18085,55 @@
       const themeToggleBtn = document.getElementById("btnThemeToggle");
       const themeToggleIcon = document.getElementById("themeToggleIcon");
 
+      // Remove legacy non-manual theme overrides so time-of-day dynamic detection takes full effect
+      try {
+        if (localStorage.getItem("ea_platform_theme_manual") !== "true") {
+          localStorage.removeItem("ea_platform_theme");
+          localStorage.removeItem("johanniter_ea_theme");
+        }
+      } catch (e) {}
+
       function getInitialTheme() {
         const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.has("theme")) return urlParams.get("theme");
-        const saved = localStorage.getItem("ea_platform_theme") || localStorage.getItem("johanniter_ea_theme");
-        if (saved === "day" || saved === "night") return saved;
-        if (window.location.pathname.includes('/ea')) return "day";
+        if (urlParams.has("theme")) {
+          const t = urlParams.get("theme");
+          if (t === "day" || t === "night") return t;
+        }
+        const isManual = localStorage.getItem("ea_platform_theme_manual") === "true";
+        if (isManual) {
+          const saved = localStorage.getItem("ea_platform_theme");
+          if (saved === "day" || saved === "night") return saved;
+        }
+        // Automatic time-of-day adaptation: Day 07:00-19:00, Night 19:00-07:00
         const currentHour = new Date().getHours();
         return (currentHour >= 7 && currentHour < 19) ? "day" : "night";
       }
 
-      function applyTheme(theme) {
+      function applyTheme(theme, isManual = false) {
         if (theme === "day") {
           bodyEl.classList.remove("theme-night");
           bodyEl.classList.add("theme-day");
           themeToggleIcon.textContent = "☀️";
           themeToggleBtn.title = "Night Mode aktivieren";
           themeToggleBtn.setAttribute("aria-label", "Night Mode aktivieren");
-          localStorage.setItem("ea_platform_theme", "day");
         } else {
           bodyEl.classList.remove("theme-day");
           bodyEl.classList.add("theme-night");
           themeToggleIcon.textContent = "🌙";
           themeToggleBtn.title = "Day Mode aktivieren";
           themeToggleBtn.setAttribute("aria-label", "Day Mode aktivieren");
-          localStorage.setItem("ea_platform_theme", "night");
+        }
+        if (isManual) {
+          localStorage.setItem("ea_platform_theme_manual", "true");
+          localStorage.setItem("ea_platform_theme", theme);
         }
       }
 
-      applyTheme(getInitialTheme());
+      applyTheme(getInitialTheme(), false);
 
       themeToggleBtn.onclick = () => {
         const nextTheme = bodyEl.classList.contains("theme-night") ? "day" : "night";
-        applyTheme(nextTheme);
+        applyTheme(nextTheme, true);
       };
 
       // =========================================================================
@@ -39026,7 +39149,7 @@
                 '<button class="insp-action-btn" onclick="window.copyPlantUml(\'' + esc(proc.id) + '\')" title="PlantUML-Code kopieren">📋 Kopieren</button>' +
                 '<button class="insp-action-btn" onclick="window.openPlantUmlEditor(\'' + esc(proc.id) + '\')" title="In externem Editor (PlantText) bearbeiten">↗ PlantText</button>' +
                 '<button class="insp-action-btn" onclick="window.openOfficialPlantUmlEditor(\'' + esc(proc.id) + '\')" title="Auf offiziellem PlantUML-Server öffnen">↗ PlantUML.com</button>' +
-                '<button onclick="window.closePlantUmlModal(\'' + esc(proc.id) + '\')" style="background:none; border:none; color:var(--text-muted); font-size:1.4rem; cursor:pointer; padding:0 6px; line-height:1;" title="Schließen">&times;</button>' +
+                '<button class="plantuml-close-btn" onclick="window.closePlantUmlModal(\'' + esc(proc.id) + '\')" style="background:none; border:none; font-size:1.4rem; cursor:pointer; padding:0 6px; line-height:1;" title="Schließen">&times;</button>' +
               '</div>' +
             '</div>' +
             '<div class="plantuml-popout-body" style="flex:1; display:flex; flex-direction:column; padding:0; overflow:hidden; position:relative; background:#0b0f17;">' +
@@ -39286,11 +39409,20 @@
         const puml = proc.plantUml || window.generatePlantUmlFromProcess(proc);
 
         try {
+          let res;
           const encoded = await window.encodeKroki(puml);
-          if (!encoded) throw new Error('Encoding fehlgeschlagen');
-
-          const krokiUrl = 'https://kroki.io/plantuml/svg/' + encoded;
-          const res = await fetch(krokiUrl);
+          if (encoded && encoded.length < 3500) {
+            try {
+              res = await fetch('https://kroki.io/plantuml/svg/' + encoded);
+            } catch (e) { res = null; }
+          }
+          if (!res || !res.ok) {
+            res = await fetch('https://kroki.io/plantuml/svg', {
+              method: 'POST',
+              headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+              body: puml
+            });
+          }
           if (!res.ok) throw new Error('HTTP ' + res.status);
 
           const svgText = await res.text();
@@ -39630,321 +39762,820 @@
       const bpmnElementMetaMap = new Map(); // procId -> Map(elementId -> metadata)
       window.bpmnElementMetaMap = bpmnElementMetaMap;
 
+      // Bruce Silver Method & Style Normalizer for Task & Event names
+      function normalizeBruceSilverTaskName(rawDesc, senderName, receiverName) {
+        let s = String(rawDesc || '').trim();
+        s = s.replace(/\[\[#[^\s\]]+\s+([^\]]+)\]\]/g, '$1');
+        s = s.replace(/\[\[[^\]]+\]\]/g, '');
+        let clean = s.replace(/\s*\([^)]*\)\s*$/, '').trim();
+
+        const directMap = {
+          'Notfalldaten, EKG & GPS': 'Notfalldaten & Vitalparameter erfassen',
+          'RTW-Daten an Telemedizin Hub': 'Telemetriedaten an Telemedizin-Hub übermitteln',
+          'Voranmeldung an ZNA E-Care': 'Notfall-Voranmeldung an ZNA übertragen',
+          'Manchester-Triage Einstufung & Bettenzuweisung': 'Manchester-Triage & Bettenzuweisung durchführen',
+          'Notfall-ADT an HealthShare': 'Notfall-Aufnahmedaten (ADT) an HealthShare weiterleiten',
+          'KIS Fallanlage & Stammdaten': 'Patientenfall & Stammdaten in KIS anlegen',
+          'KIS-Fallnummer Bestaetigung': 'Fallnummer-Rückmeldung bestätigen',
+          'KIS-Fall verknuepft': 'KIS-Fallverknüpfung quittieren',
+          'Laboranforderung erfassen': 'Laboranforderung erfassen & prüfen',
+          'Labor-Order an HealthShare': 'Laboranforderung an Integrations-Hub übertragen',
+          'Labor-Auftrag an Swisslab': 'Laborauftrag an Swisslab LIMS übermitteln',
+          'Proben-Scan & Barcode-Routing': 'Laborproben scannen & Barcode erfassen',
+          'Analysenergebnisse & Validierung': 'Analysenergebnisse ermitteln & validieren',
+          'Laborbefund an HealthShare': 'Laborbefund an Integrations-Hub senden',
+          'Laborbefund-Anzeige im KIS': 'Laborbefund in Patientenkurve bereitstellen',
+          'Laborwerte an Meona eKurve': 'Laborwerte in Meona eKurve synchronisieren'
+        };
+
+        for (const [k, v] of Object.entries(directMap)) {
+          if (clean.toLowerCase().includes(k.toLowerCase()) || k.toLowerCase().includes(clean.toLowerCase())) {
+            return v;
+          }
+        }
+
+        if (/^(erfassen|senden|übermitteln|übertragen|weiterleiten|anlegen|prüfen|durchführen|quittieren|bestätigen|verarbeiten|routen|synchronisieren|laden|starten|bereitstellen)/i.test(clean)) {
+          return clean;
+        }
+
+        if (/anforderung|auftrag/i.test(clean)) return clean + ' erfassen';
+        if (/meldung|bestaetigung|quittung/i.test(clean)) return clean + ' quittieren';
+        if (/daten|telemetrie|befund|werte/i.test(clean)) return clean + ' übermitteln';
+        if (/anlage|erstellung/i.test(clean)) return clean + ' durchführen';
+
+        return clean + ' verarbeiten';
+      }
+
       window.generateBpmnXmlFromProcess = function(proc) {
         if (!proc) return '';
         const safeProcId = safeXmlId(proc.id);
-        const cleanIds = proc.cleanIntegIds || proc.integrations || [];
-        const allIntegs = (typeof INTEGRATIONS_DATA !== 'undefined') ? INTEGRATIONS_DATA : [];
-        const allSystems = (typeof SYSTEMS_DATA !== 'undefined') ? SYSTEMS_DATA : [];
-        const allConns = (typeof CONNECTIONS_DATA !== 'undefined') ? CONNECTIONS_DATA : [];
-        const allActors = (typeof ACTORS_DATA !== 'undefined' && Array.isArray(ACTORS_DATA)) ? ACTORS_DATA : [];
+        const procName = proc.name || proc.id;
+        const escXml = (str) => String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
-        const integs = cleanIds.map(id => allIntegs.find(i => i.id === id)).filter(Boolean);
-        const getSys = (id) => (typeof sysById !== 'undefined' && sysById.get ? sysById.get(id) : allSystems.find(s => s.id === id));
-
-        // Mapped Actors & Clients
-        const mappedActors = allActors.filter(a => Array.isArray(a.processes) && a.processes.includes(proc.id));
-
-        // Participating systems
-        const sysMap = new Map();
-        integs.forEach(integ => {
-          if (integ.sourceSystem) sysMap.set(integ.sourceSystem, getSys(integ.sourceSystem));
-          if (integ.targetSystem) sysMap.set(integ.targetSystem, getSys(integ.targetSystem));
-          (integ.steps || []).forEach(st => {
-            if (st.from) sysMap.set(st.from, getSys(st.from));
-            if (st.to) sysMap.set(st.to, getSys(st.to));
-          });
-        });
-
-        // Ensure actor client target systems are included
-        mappedActors.forEach(act => {
-          (act.clients || []).forEach(cl => {
-            if (cl.targetSystemId && !sysMap.has(cl.targetSystemId)) {
-              sysMap.set(cl.targetSystemId, getSys(cl.targetSystemId));
-            }
-          });
-        });
-
-        // Lanes setup
-        const lanes = [];
-        const laneActor = {
-          id: 'Lane_Actor_' + safeProcId,
-          name: mappedActors.length > 0 
-            ? (mappedActors[0].name + ' (' + ((mappedActors[0].clients && mappedActors[0].clients[0]) ? mappedActors[0].clients[0].name : 'UI Client') + ')')
-            : 'Prozess-Initiator (Fachbereich / Client)',
-          category: 'ACTOR',
-          nodes: []
-        };
-        lanes.push(laneActor);
-
-        const hasBisCore = Array.from(sysMap.keys()).some(id => id.includes('SEE-01') || id.includes('SEE-02') || id.includes('BIS') || id.includes('JSD-01'));
-        let laneBis = null;
-        if (hasBisCore || sysMap.size > 2) {
-          const isSeeburger = (typeof currentModelId !== 'undefined' && currentModelId === 'ORCAI-MODEL-SEEBURGER-EA');
-          laneBis = {
-            id: 'Lane_Middleware_' + safeProcId,
-            name: isSeeburger ? 'SEEBURGER BIS Platform (iPaaS Hub & Converter)' : 'Enterprise Integration Hub (EAI / Middleware)',
-            category: 'MIDDLEWARE',
-            nodes: []
-          };
-          lanes.push(laneBis);
-        }
-
-        const laneBackend = {
-          id: 'Lane_Backend_' + safeProcId,
-          name: 'Zielsysteme & Verbundpartner (Backends)',
-          category: 'BACKEND',
-          nodes: []
-        };
-        lanes.push(laneBackend);
-
-        // Metadata registry for this process
+        // Metadata registry for canvas cross-highlighting
         const procMetaMap = new Map();
         bpmnElementMetaMap.set(proc.id, procMetaMap);
 
-        const flowNodes = [];
+        // Mapped Actors & Clients
+        const allActors = (typeof ACTORS_DATA !== 'undefined' && Array.isArray(ACTORS_DATA)) ? ACTORS_DATA : [];
+        const mappedActors = allActors.filter(a => Array.isArray(a.processes) && a.processes.includes(proc.id));
 
-        // 1. Start Event
+        // 1. DEDICATED MULTI-POOL ARCHITECTURE FOR JSD-P-01
+        // 3 Pools: (1) Praehospital, (2) Telemedizin, (3) Akutklinik
+        // Lanes: (1) Human [RTW] & JSD-28, (2) JSD-05 & JSD-10, (3) JSD-15 & JSD-08
+        if (proc.id === 'JSD-P-01') {
+          // Register interactive metadata for canvas integration
+          procMetaMap.set('StartEvent_RTW', { type: 'actor', actorId: 'JSD-ACT-03', clientId: 'JSD-CL-03', desc: 'Notfallversorgung initiiert' });
+          procMetaMap.set('Task_RTW_Capture', { type: 'client', actorId: 'JSD-ACT-03', clientId: 'JSD-CL-03', desc: 'Notfalldaten & Vitalparameter erfassen' });
+          procMetaMap.set('Lane_RTW_Human', { type: 'actor', actorId: 'JSD-ACT-03', clientId: 'JSD-CL-03' });
+          procMetaMap.set('Task_IoT_Send', { type: 'sys', sysId: 'JSD-28', desc: 'JSD-28: Medical IoT Gateway' });
+          procMetaMap.set('Lane_JSD_28', { type: 'sys', sysId: 'JSD-28' });
+          procMetaMap.set('Task_TM_Receive', { type: 'sys', sysId: 'JSD-05', desc: 'JSD-05: Telemedizin Hub' });
+          procMetaMap.set('Task_TM_Forward', { type: 'sys', sysId: 'JSD-05', desc: 'JSD-05: Telemedizin Hub' });
+          procMetaMap.set('Lane_JSD_05', { type: 'sys', sysId: 'JSD-05' });
+          procMetaMap.set('Task_HS_Route', { type: 'sys', sysId: 'JSD-10', desc: 'JSD-10: HealthShare Hub' });
+          procMetaMap.set('Task_HS_Ack', { type: 'sys', sysId: 'JSD-10', desc: 'JSD-10: HealthShare Hub' });
+          procMetaMap.set('Lane_JSD_10', { type: 'sys', sysId: 'JSD-10' });
+          procMetaMap.set('Task_ZNA_Receive', { type: 'sys', sysId: 'JSD-15', desc: 'JSD-15: ZNA E-Care & Triage' });
+          procMetaMap.set('Task_ZNA_Triage', { type: 'sys', sysId: 'JSD-15', desc: 'JSD-15: Manchester-Triage & Bettenzuweisung' });
+          procMetaMap.set('Task_ZNA_SendADT', { type: 'sys', sysId: 'JSD-15', desc: 'JSD-15: Notfall-Aufnahmedaten an HealthShare' });
+          procMetaMap.set('Task_ZNA_Finalize', { type: 'sys', sysId: 'JSD-15', desc: 'JSD-15: Fallübernahme abschließen' });
+          procMetaMap.set('Lane_JSD_15', { type: 'sys', sysId: 'JSD-15' });
+          procMetaMap.set('Task_KIS_Create', { type: 'sys', sysId: 'JSD-08', actorId: 'JSD-ACT-04', clientId: 'JSD-CL-04', desc: 'JSD-08: CGM MEDICO KIS' });
+          procMetaMap.set('Lane_JSD_08', { type: 'sys', sysId: 'JSD-08' });
+          procMetaMap.set('MsgFlow_1', { type: 'step', connId: 'JSD-C-15', integId: 'JSD-INT-01', desc: 'RTW-Daten an Telemedizin Hub (MQTT)' });
+          procMetaMap.set('MsgFlow_2', { type: 'step', connId: 'JSD-C-16', integId: 'JSD-INT-01', desc: 'Voranmeldung an ZNA E-Care (FHIR)' });
+          procMetaMap.set('MsgFlow_3', { type: 'step', connId: 'JSD-C-14', integId: 'JSD-INT-02', desc: 'Notfall-ADT an HealthShare (HL7)' });
+          procMetaMap.set('MsgFlow_4', { type: 'step', connId: 'JSD-C-01', integId: 'JSD-INT-02', desc: 'KIS Fallanlage & Stammdaten (MLLP)' });
+          procMetaMap.set('MsgFlow_5', { type: 'step', integId: 'JSD-INT-02', desc: 'KIS-Fallnummer Bestätigung' });
+          procMetaMap.set('MsgFlow_6', { type: 'step', integId: 'JSD-INT-02', desc: 'KIS-Fall verknüpft' });
+
+          const jsdXml = '<?xml version="1.0" encoding="UTF-8"?>\n' +
+'<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"\n' +
+'                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"\n' +
+'                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"\n' +
+'                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"\n' +
+'                  id="Definitions_JSD_P_01"\n' +
+'                  targetNamespace="http://bpmn.io/schema/bpmn">\n\n' +
+'  <bpmn:collaboration id="Collaboration_JSD_P_01">\n' +
+'    <bpmn:participant id="Pool_Praehospital" name="Praehospital &amp; Rettung" processRef="Process_Praehospital" />\n' +
+'    <bpmn:participant id="Pool_Telemedizin" name="Telemedizin &amp; Hub" processRef="Process_Telemedizin" />\n' +
+'    <bpmn:participant id="Pool_Akutklinik" name="Akutklinik &amp; Notaufnahme" processRef="Process_Akutklinik" />\n\n' +
+'    <bpmn:messageFlow id="MsgFlow_1" name="Notfalldaten &amp; EKG (MQTT/TLS)" sourceRef="Task_IoT_Send" targetRef="Task_TM_Receive" />\n' +
+'    <bpmn:messageFlow id="MsgFlow_2" name="Voranmeldung (REST FHIR R4)" sourceRef="Task_TM_Forward" targetRef="Task_ZNA_Receive" />\n' +
+'    <bpmn:messageFlow id="MsgFlow_3" name="Notfall-ADT (HL7 v2.5 ADT_A04)" sourceRef="Task_ZNA_SendADT" targetRef="Task_HS_Route" />\n' +
+'    <bpmn:messageFlow id="MsgFlow_4" name="KIS-Fallanlage (HL7 v2.5 MLLP)" sourceRef="Task_HS_Route" targetRef="Task_KIS_Create" />\n' +
+'    <bpmn:messageFlow id="MsgFlow_5" name="Fallnummer-Bestätigung (HL7 ACK)" sourceRef="Task_KIS_Create" targetRef="Task_HS_Ack" />\n' +
+'    <bpmn:messageFlow id="MsgFlow_6" name="Fallverknüpfung quittiert" sourceRef="Task_HS_Ack" targetRef="Task_ZNA_Finalize" />\n' +
+'  </bpmn:collaboration>\n\n' +
+'  <bpmn:process id="Process_Praehospital" isExecutable="false">\n' +
+'    <bpmn:laneSet id="LaneSet_Praehospital">\n' +
+'      <bpmn:lane id="Lane_RTW_Human" name="Rettungsdienst (RTW)">\n' +
+'        <bpmn:flowNodeRef>StartEvent_RTW</bpmn:flowNodeRef>\n' +
+'        <bpmn:flowNodeRef>Task_RTW_Capture</bpmn:flowNodeRef>\n' +
+'      </bpmn:lane>\n' +
+'      <bpmn:lane id="Lane_JSD_28" name="JSD-28: Medical IoT Gateway">\n' +
+'        <bpmn:flowNodeRef>Task_IoT_Send</bpmn:flowNodeRef>\n' +
+'        <bpmn:flowNodeRef>EndEvent_RTW</bpmn:flowNodeRef>\n' +
+'      </bpmn:lane>\n' +
+'    </bpmn:laneSet>\n' +
+'    <bpmn:startEvent id="StartEvent_RTW" name="Notfallversorgung initiiert">\n' +
+'      <bpmn:outgoing>Flow_P1_1</bpmn:outgoing>\n' +
+'    </bpmn:startEvent>\n' +
+'    <bpmn:userTask id="Task_RTW_Capture" name="Notfalldaten &amp; Vitalparameter erfassen">\n' +
+'      <bpmn:incoming>Flow_P1_1</bpmn:incoming>\n' +
+'      <bpmn:outgoing>Flow_P1_2</bpmn:outgoing>\n' +
+'    </bpmn:userTask>\n' +
+'    <bpmn:sendTask id="Task_IoT_Send" name="Telemetriedaten an Telemedizin-Hub senden">\n' +
+'      <bpmn:incoming>Flow_P1_2</bpmn:incoming>\n' +
+'      <bpmn:outgoing>Flow_P1_3</bpmn:outgoing>\n' +
+'    </bpmn:sendTask>\n' +
+'    <bpmn:endEvent id="EndEvent_RTW" name="Voranmeldung drahtlos übertragen">\n' +
+'      <bpmn:incoming>Flow_P1_3</bpmn:incoming>\n' +
+'    </bpmn:endEvent>\n' +
+'    <bpmn:sequenceFlow id="Flow_P1_1" sourceRef="StartEvent_RTW" targetRef="Task_RTW_Capture" />\n' +
+'    <bpmn:sequenceFlow id="Flow_P1_2" sourceRef="Task_RTW_Capture" targetRef="Task_IoT_Send" />\n' +
+'    <bpmn:sequenceFlow id="Flow_P1_3" sourceRef="Task_IoT_Send" targetRef="EndEvent_RTW" />\n' +
+'  </bpmn:process>\n\n' +
+'  <bpmn:process id="Process_Telemedizin" isExecutable="false">\n' +
+'    <bpmn:laneSet id="LaneSet_Telemedizin">\n' +
+'      <bpmn:lane id="Lane_JSD_05" name="JSD-05: Telemedizin Hub">\n' +
+'        <bpmn:flowNodeRef>StartEvent_TM</bpmn:flowNodeRef>\n' +
+'        <bpmn:flowNodeRef>Task_TM_Receive</bpmn:flowNodeRef>\n' +
+'        <bpmn:flowNodeRef>Task_TM_Forward</bpmn:flowNodeRef>\n' +
+'        <bpmn:flowNodeRef>EndEvent_TM</bpmn:flowNodeRef>\n' +
+'      </bpmn:lane>\n' +
+'      <bpmn:lane id="Lane_JSD_10" name="JSD-10: HealthShare Hub">\n' +
+'        <bpmn:flowNodeRef>Task_HS_Route</bpmn:flowNodeRef>\n' +
+'        <bpmn:flowNodeRef>Task_HS_Ack</bpmn:flowNodeRef>\n' +
+'      </bpmn:lane>\n' +
+'    </bpmn:laneSet>\n' +
+'    <bpmn:startEvent id="StartEvent_TM" name="Telemetrie-Paket eingegangen">\n' +
+'      <bpmn:outgoing>Flow_P2_1</bpmn:outgoing>\n' +
+'    </bpmn:startEvent>\n' +
+'    <bpmn:receiveTask id="Task_TM_Receive" name="Telemetriedaten empfangen &amp; prüfen">\n' +
+'      <bpmn:incoming>Flow_P2_1</bpmn:incoming>\n' +
+'      <bpmn:outgoing>Flow_P2_2</bpmn:outgoing>\n' +
+'    </bpmn:receiveTask>\n' +
+'    <bpmn:sendTask id="Task_TM_Forward" name="Voranmeldung an ZNA übermitteln">\n' +
+'      <bpmn:incoming>Flow_P2_2</bpmn:incoming>\n' +
+'      <bpmn:outgoing>Flow_P2_3</bpmn:outgoing>\n' +
+'    </bpmn:sendTask>\n' +
+'    <bpmn:serviceTask id="Task_HS_Route" name="HL7-Fallanlage an KIS weiterleiten">\n' +
+'      <bpmn:outgoing>Flow_P2_4</bpmn:outgoing>\n' +
+'    </bpmn:serviceTask>\n' +
+'    <bpmn:serviceTask id="Task_HS_Ack" name="Fallnummer an ZNA quittieren">\n' +
+'      <bpmn:incoming>Flow_P2_4</bpmn:incoming>\n' +
+'      <bpmn:outgoing>Flow_P2_5</bpmn:outgoing>\n' +
+'    </bpmn:serviceTask>\n' +
+'    <bpmn:endEvent id="EndEvent_TM" name="Routing &amp; Vermittlung ausgeführt">\n' +
+'      <bpmn:incoming>Flow_P2_3</bpmn:incoming>\n' +
+'      <bpmn:incoming>Flow_P2_5</bpmn:incoming>\n' +
+'    </bpmn:endEvent>\n' +
+'    <bpmn:sequenceFlow id="Flow_P2_1" sourceRef="StartEvent_TM" targetRef="Task_TM_Receive" />\n' +
+'    <bpmn:sequenceFlow id="Flow_P2_2" sourceRef="Task_TM_Receive" targetRef="Task_TM_Forward" />\n' +
+'    <bpmn:sequenceFlow id="Flow_P2_3" sourceRef="Task_TM_Forward" targetRef="EndEvent_TM" />\n' +
+'    <bpmn:sequenceFlow id="Flow_P2_4" sourceRef="Task_HS_Route" targetRef="Task_HS_Ack" />\n' +
+'    <bpmn:sequenceFlow id="Flow_P2_5" sourceRef="Task_HS_Ack" targetRef="EndEvent_TM" />\n' +
+'  </bpmn:process>\n\n' +
+'  <bpmn:process id="Process_Akutklinik" isExecutable="false">\n' +
+'    <bpmn:laneSet id="LaneSet_Akutklinik">\n' +
+'      <bpmn:lane id="Lane_JSD_15" name="JSD-15: ZNA E-Care &amp; Triage">\n' +
+'        <bpmn:flowNodeRef>Task_ZNA_Receive</bpmn:flowNodeRef>\n' +
+'        <bpmn:flowNodeRef>Task_ZNA_Triage</bpmn:flowNodeRef>\n' +
+'        <bpmn:flowNodeRef>Task_ZNA_SendADT</bpmn:flowNodeRef>\n' +
+'        <bpmn:flowNodeRef>Task_ZNA_Finalize</bpmn:flowNodeRef>\n' +
+'        <bpmn:flowNodeRef>EndEvent_Akutklinik</bpmn:flowNodeRef>\n' +
+'      </bpmn:lane>\n' +
+'      <bpmn:lane id="Lane_JSD_08" name="JSD-08: CGM MEDICO KIS">\n' +
+'        <bpmn:flowNodeRef>Task_KIS_Create</bpmn:flowNodeRef>\n' +
+'      </bpmn:lane>\n' +
+'    </bpmn:laneSet>\n' +
+'    <bpmn:receiveTask id="Task_ZNA_Receive" name="Voranmeldung in ZNA empfangen">\n' +
+'      <bpmn:outgoing>Flow_P3_1</bpmn:outgoing>\n' +
+'    </bpmn:receiveTask>\n' +
+'    <bpmn:userTask id="Task_ZNA_Triage" name="Manchester-Triage durchführen">\n' +
+'      <bpmn:incoming>Flow_P3_1</bpmn:incoming>\n' +
+'      <bpmn:outgoing>Flow_P3_2</bpmn:outgoing>\n' +
+'    </bpmn:userTask>\n' +
+'    <bpmn:sendTask id="Task_ZNA_SendADT" name="Notfall-Aufnahmedaten an HealthShare senden">\n' +
+'      <bpmn:incoming>Flow_P3_2</bpmn:incoming>\n' +
+'      <bpmn:outgoing>Flow_P3_3</bpmn:outgoing>\n' +
+'    </bpmn:sendTask>\n' +
+'    <bpmn:serviceTask id="Task_KIS_Create" name="Patientenfall in MEDICO anlegen">\n' +
+'      <bpmn:outgoing>Flow_P3_4</bpmn:outgoing>\n' +
+'    </bpmn:serviceTask>\n' +
+'    <bpmn:receiveTask id="Task_ZNA_Finalize" name="Fallübernahme abschließen">\n' +
+'      <bpmn:incoming>Flow_P3_3</bpmn:incoming>\n' +
+'      <bpmn:outgoing>Flow_P3_5</bpmn:outgoing>\n' +
+'    </bpmn:receiveTask>\n' +
+'    <bpmn:endEvent id="EndEvent_Akutklinik" name="Patient in Notaufnahme übernommen">\n' +
+'      <bpmn:incoming>Flow_P3_5</bpmn:incoming>\n' +
+'    </bpmn:endEvent>\n' +
+'    <bpmn:sequenceFlow id="Flow_P3_1" sourceRef="Task_ZNA_Receive" targetRef="Task_ZNA_Triage" />\n' +
+'    <bpmn:sequenceFlow id="Flow_P3_2" sourceRef="Task_ZNA_Triage" targetRef="Task_ZNA_SendADT" />\n' +
+'    <bpmn:sequenceFlow id="Flow_P3_3" sourceRef="Task_ZNA_SendADT" targetRef="Task_ZNA_Finalize" />\n' +
+'    <bpmn:sequenceFlow id="Flow_P3_5" sourceRef="Task_ZNA_Finalize" targetRef="EndEvent_Akutklinik" />\n' +
+'  </bpmn:process>\n\n' +
+'  <bpmndi:BPMNDiagram id="BPMNDiagram_JSD_P_01">\n' +
+'    <bpmndi:BPMNPlane id="BPMNPlane_JSD_P_01" bpmnElement="Collaboration_JSD_P_01">\n\n' +
+'      <!-- POOL 1: PRAEHOSPITAL -->\n' +
+'      <bpmndi:BPMNShape id="Pool_Praehospital_di" bpmnElement="Pool_Praehospital" isHorizontal="true">\n' +
+'        <dc:Bounds x="100" y="50" width="1380" height="240" />\n' +
+'      </bpmndi:BPMNShape>\n' +
+'      <bpmndi:BPMNShape id="Lane_RTW_Human_di" bpmnElement="Lane_RTW_Human" isHorizontal="true">\n' +
+'        <dc:Bounds x="130" y="50" width="1350" height="120" />\n' +
+'      </bpmndi:BPMNShape>\n' +
+'      <bpmndi:BPMNShape id="Lane_JSD_28_di" bpmnElement="Lane_JSD_28" isHorizontal="true">\n' +
+'        <dc:Bounds x="130" y="170" width="1350" height="120" />\n' +
+'      </bpmndi:BPMNShape>\n' +
+'      <bpmndi:BPMNShape id="StartEvent_RTW_di" bpmnElement="StartEvent_RTW">\n' +
+'        <dc:Bounds x="170" y="92" width="36" height="36" />\n' +
+'        <bpmndi:BPMNLabel>\n' +
+'          <dc:Bounds x="145" y="135" width="86" height="27" />\n' +
+'        </bpmndi:BPMNLabel>\n' +
+'      </bpmndi:BPMNShape>\n' +
+'      <bpmndi:BPMNShape id="Task_RTW_Capture_di" bpmnElement="Task_RTW_Capture">\n' +
+'        <dc:Bounds x="250" y="70" width="130" height="80" />\n' +
+'      </bpmndi:BPMNShape>\n' +
+'      <bpmndi:BPMNShape id="Task_IoT_Send_di" bpmnElement="Task_IoT_Send">\n' +
+'        <dc:Bounds x="420" y="190" width="130" height="80" />\n' +
+'      </bpmndi:BPMNShape>\n' +
+'      <bpmndi:BPMNShape id="EndEvent_RTW_di" bpmnElement="EndEvent_RTW">\n' +
+'        <dc:Bounds x="590" y="212" width="36" height="36" />\n' +
+'        <bpmndi:BPMNLabel>\n' +
+'          <dc:Bounds x="565" y="255" width="86" height="27" />\n' +
+'        </bpmndi:BPMNLabel>\n' +
+'      </bpmndi:BPMNShape>\n' +
+'      <bpmndi:BPMNEdge id="Flow_P1_1_di" bpmnElement="Flow_P1_1">\n' +
+'        <di:waypoint x="206" y="110" />\n' +
+'        <di:waypoint x="250" y="110" />\n' +
+'      </bpmndi:BPMNEdge>\n' +
+'      <bpmndi:BPMNEdge id="Flow_P1_2_di" bpmnElement="Flow_P1_2">\n' +
+'        <di:waypoint x="380" y="110" />\n' +
+'        <di:waypoint x="400" y="110" />\n' +
+'        <di:waypoint x="400" y="230" />\n' +
+'        <di:waypoint x="420" y="230" />\n' +
+'      </bpmndi:BPMNEdge>\n' +
+'      <bpmndi:BPMNEdge id="Flow_P1_3_di" bpmnElement="Flow_P1_3">\n' +
+'        <di:waypoint x="550" y="230" />\n' +
+'        <di:waypoint x="590" y="230" />\n' +
+'      </bpmndi:BPMNEdge>\n\n' +
+'      <!-- POOL 2: TELEMEDIZIN -->\n' +
+'      <bpmndi:BPMNShape id="Pool_Telemedizin_di" bpmnElement="Pool_Telemedizin" isHorizontal="true">\n' +
+'        <dc:Bounds x="100" y="340" width="1380" height="240" />\n' +
+'      </bpmndi:BPMNShape>\n' +
+'      <bpmndi:BPMNShape id="Lane_JSD_05_di" bpmnElement="Lane_JSD_05" isHorizontal="true">\n' +
+'        <dc:Bounds x="130" y="340" width="1350" height="120" />\n' +
+'      </bpmndi:BPMNShape>\n' +
+'      <bpmndi:BPMNShape id="Lane_JSD_10_di" bpmnElement="Lane_JSD_10" isHorizontal="true">\n' +
+'        <dc:Bounds x="130" y="460" width="1350" height="120" />\n' +
+'      </bpmndi:BPMNShape>\n' +
+'      <bpmndi:BPMNShape id="StartEvent_TM_di" bpmnElement="StartEvent_TM">\n' +
+'        <dc:Bounds x="350" y="382" width="36" height="36" />\n' +
+'        <bpmndi:BPMNLabel>\n' +
+'          <dc:Bounds x="325" y="425" width="86" height="27" />\n' +
+'        </bpmndi:BPMNLabel>\n' +
+'      </bpmndi:BPMNShape>\n' +
+'      <bpmndi:BPMNShape id="Task_TM_Receive_di" bpmnElement="Task_TM_Receive">\n' +
+'        <dc:Bounds x="420" y="360" width="130" height="80" />\n' +
+'      </bpmndi:BPMNShape>\n' +
+'      <bpmndi:BPMNShape id="Task_TM_Forward_di" bpmnElement="Task_TM_Forward">\n' +
+'        <dc:Bounds x="590" y="360" width="130" height="80" />\n' +
+'      </bpmndi:BPMNShape>\n' +
+'      <bpmndi:BPMNShape id="Task_HS_Route_di" bpmnElement="Task_HS_Route">\n' +
+'        <dc:Bounds x="1000" y="480" width="130" height="80" />\n' +
+'      </bpmndi:BPMNShape>\n' +
+'      <bpmndi:BPMNShape id="Task_HS_Ack_di" bpmnElement="Task_HS_Ack">\n' +
+'        <dc:Bounds x="1230" y="480" width="130" height="80" />\n' +
+'      </bpmndi:BPMNShape>\n' +
+'      <bpmndi:BPMNShape id="EndEvent_TM_di" bpmnElement="EndEvent_TM">\n' +
+'        <dc:Bounds x="1400" y="382" width="36" height="36" />\n' +
+'        <bpmndi:BPMNLabel>\n' +
+'          <dc:Bounds x="1375" y="425" width="86" height="27" />\n' +
+'        </bpmndi:BPMNLabel>\n' +
+'      </bpmndi:BPMNShape>\n' +
+'      <bpmndi:BPMNEdge id="Flow_P2_1_di" bpmnElement="Flow_P2_1">\n' +
+'        <di:waypoint x="386" y="400" />\n' +
+'        <di:waypoint x="420" y="400" />\n' +
+'      </bpmndi:BPMNEdge>\n' +
+'      <bpmndi:BPMNEdge id="Flow_P2_2_di" bpmnElement="Flow_P2_2">\n' +
+'        <di:waypoint x="550" y="400" />\n' +
+'        <di:waypoint x="590" y="400" />\n' +
+'      </bpmndi:BPMNEdge>\n' +
+'      <bpmndi:BPMNEdge id="Flow_P2_3_di" bpmnElement="Flow_P2_3">\n' +
+'        <di:waypoint x="720" y="400" />\n' +
+'        <di:waypoint x="1400" y="400" />\n' +
+'      </bpmndi:BPMNEdge>\n' +
+'      <bpmndi:BPMNEdge id="Flow_P2_4_di" bpmnElement="Flow_P2_4">\n' +
+'        <di:waypoint x="1130" y="520" />\n' +
+'        <di:waypoint x="1230" y="520" />\n' +
+'      </bpmndi:BPMNEdge>\n' +
+'      <bpmndi:BPMNEdge id="Flow_P2_5_di" bpmnElement="Flow_P2_5">\n' +
+'        <di:waypoint x="1360" y="520" />\n' +
+'        <di:waypoint x="1380" y="520" />\n' +
+'        <di:waypoint x="1380" y="400" />\n' +
+'        <di:waypoint x="1400" y="400" />\n' +
+'      </bpmndi:BPMNEdge>\n\n' +
+'      <!-- POOL 3: AKUTKLINIK -->\n' +
+'      <bpmndi:BPMNShape id="Pool_Akutklinik_di" bpmnElement="Pool_Akutklinik" isHorizontal="true">\n' +
+'        <dc:Bounds x="100" y="630" width="1380" height="240" />\n' +
+'      </bpmndi:BPMNShape>\n' +
+'      <bpmndi:BPMNShape id="Lane_JSD_15_di" bpmnElement="Lane_JSD_15" isHorizontal="true">\n' +
+'        <dc:Bounds x="130" y="630" width="1350" height="120" />\n' +
+'      </bpmndi:BPMNShape>\n' +
+'      <bpmndi:BPMNShape id="Lane_JSD_08_di" bpmnElement="Lane_JSD_08" isHorizontal="true">\n' +
+'        <dc:Bounds x="130" y="750" width="1350" height="120" />\n' +
+'      </bpmndi:BPMNShape>\n' +
+'      <bpmndi:BPMNShape id="Task_ZNA_Receive_di" bpmnElement="Task_ZNA_Receive">\n' +
+'        <dc:Bounds x="650" y="650" width="130" height="80" />\n' +
+'      </bpmndi:BPMNShape>\n' +
+'      <bpmndi:BPMNShape id="Task_ZNA_Triage_di" bpmnElement="Task_ZNA_Triage">\n' +
+'        <dc:Bounds x="810" y="650" width="130" height="80" />\n' +
+'      </bpmndi:BPMNShape>\n' +
+'      <bpmndi:BPMNShape id="Task_ZNA_SendADT_di" bpmnElement="Task_ZNA_SendADT">\n' +
+'        <dc:Bounds x="970" y="650" width="130" height="80" />\n' +
+'      </bpmndi:BPMNShape>\n' +
+'      <bpmndi:BPMNShape id="Task_KIS_Create_di" bpmnElement="Task_KIS_Create">\n' +
+'        <dc:Bounds x="1120" y="770" width="130" height="80" />\n' +
+'      </bpmndi:BPMNShape>\n' +
+'      <bpmndi:BPMNShape id="Task_ZNA_Finalize_di" bpmnElement="Task_ZNA_Finalize">\n' +
+'        <dc:Bounds x="1270" y="650" width="130" height="80" />\n' +
+'      </bpmndi:BPMNShape>\n' +
+'      <bpmndi:BPMNShape id="EndEvent_Akutklinik_di" bpmnElement="EndEvent_Akutklinik">\n' +
+'        <dc:Bounds x="1430" y="672" width="36" height="36" />\n' +
+'        <bpmndi:BPMNLabel>\n' +
+'          <dc:Bounds x="1405" y="715" width="86" height="27" />\n' +
+'        </bpmndi:BPMNLabel>\n' +
+'      </bpmndi:BPMNShape>\n' +
+'      <bpmndi:BPMNEdge id="Flow_P3_1_di" bpmnElement="Flow_P3_1">\n' +
+'        <di:waypoint x="780" y="690" />\n' +
+'        <di:waypoint x="810" y="690" />\n' +
+'      </bpmndi:BPMNEdge>\n' +
+'      <bpmndi:BPMNEdge id="Flow_P3_2_di" bpmnElement="Flow_P3_2">\n' +
+'        <di:waypoint x="940" y="690" />\n' +
+'        <di:waypoint x="970" y="690" />\n' +
+'      </bpmndi:BPMNEdge>\n' +
+'      <bpmndi:BPMNEdge id="Flow_P3_3_di" bpmnElement="Flow_P3_3">\n' +
+'        <di:waypoint x="1100" y="690" />\n' +
+'        <di:waypoint x="1270" y="690" />\n' +
+'      </bpmndi:BPMNEdge>\n' +
+'      <bpmndi:BPMNEdge id="Flow_P3_5_di" bpmnElement="Flow_P3_5">\n' +
+'        <di:waypoint x="1400" y="690" />\n' +
+'        <di:waypoint x="1430" y="690" />\n' +
+'      </bpmndi:BPMNEdge>\n\n' +
+'      <!-- MESSAGE FLOWS (INTER-POOL) -->\n' +
+'      <bpmndi:BPMNEdge id="MsgFlow_1_di" bpmnElement="MsgFlow_1">\n' +
+'        <di:waypoint x="485" y="270" />\n' +
+'        <di:waypoint x="485" y="360" />\n' +
+'        <bpmndi:BPMNLabel>\n' +
+'          <dc:Bounds x="495" y="295" width="120" height="27" />\n' +
+'        </bpmndi:BPMNLabel>\n' +
+'      </bpmndi:BPMNEdge>\n' +
+'      <bpmndi:BPMNEdge id="MsgFlow_2_di" bpmnElement="MsgFlow_2">\n' +
+'        <di:waypoint x="680" y="440" />\n' +
+'        <di:waypoint x="680" y="650" />\n' +
+'        <bpmndi:BPMNLabel>\n' +
+'          <dc:Bounds x="690" y="530" width="120" height="27" />\n' +
+'        </bpmndi:BPMNLabel>\n' +
+'      </bpmndi:BPMNEdge>\n' +
+'      <bpmndi:BPMNEdge id="MsgFlow_3_di" bpmnElement="MsgFlow_3">\n' +
+'        <di:waypoint x="1035" y="650" />\n' +
+'        <di:waypoint x="1035" y="560" />\n' +
+'        <bpmndi:BPMNLabel>\n' +
+'          <dc:Bounds x="1045" y="590" width="120" height="27" />\n' +
+'        </bpmndi:BPMNLabel>\n' +
+'      </bpmndi:BPMNEdge>\n' +
+'      <bpmndi:BPMNEdge id="MsgFlow_4_di" bpmnElement="MsgFlow_4">\n' +
+'        <di:waypoint x="1100" y="560" />\n' +
+'        <di:waypoint x="1100" y="770" />\n' +
+'        <bpmndi:BPMNLabel>\n' +
+'          <dc:Bounds x="1110" y="650" width="120" height="27" />\n' +
+'        </bpmndi:BPMNLabel>\n' +
+'      </bpmndi:BPMNEdge>\n' +
+'      <bpmndi:BPMNEdge id="MsgFlow_5_di" bpmnElement="MsgFlow_5">\n' +
+'        <di:waypoint x="1200" y="770" />\n' +
+'        <di:waypoint x="1200" y="560" />\n' +
+'        <bpmndi:BPMNLabel>\n' +
+'          <dc:Bounds x="1210" y="650" width="120" height="27" />\n' +
+'        </bpmndi:BPMNLabel>\n' +
+'      </bpmndi:BPMNEdge>\n' +
+'      <bpmndi:BPMNEdge id="MsgFlow_6_di" bpmnElement="MsgFlow_6">\n' +
+'        <di:waypoint x="1310" y="560" />\n' +
+'        <di:waypoint x="1310" y="650" />\n' +
+'        <bpmndi:BPMNLabel>\n' +
+'          <dc:Bounds x="1320" y="590" width="120" height="27" />\n' +
+'        </bpmndi:BPMNLabel>\n' +
+'      </bpmndi:BPMNEdge>\n\n' +
+'    </bpmndi:BPMNPlane>\n' +
+'  </bpmndi:BPMNDiagram>\n' +
+'</bpmn:definitions>';
+
+          proc.bpmnXml = jsdXml;
+          return jsdXml;
+        }
+
+        // 2. PARSE PLANTUML FOR MULTI-POOL COLLABORATIONS (e.g. Other JSD and SEEBURGER processes)
+        const pumlText = proc.plantUml || (typeof window.generatePlantUmlFromProcess === 'function' ? window.generatePlantUmlFromProcess(proc) : '');
+        const lines = pumlText ? pumlText.split('\n') : [];
+
+        const pools = [];
+        let currentBox = null;
+        const aliasToPool = new Map();
+        const aliasToLane = new Map();
+
+        for (let line of lines) {
+          line = line.trim();
+          const boxMatch = line.match(/^box\s+"([^"]+)"/i);
+          if (boxMatch) {
+            const boxName = boxMatch[1].trim();
+            const poolIndex = pools.length + 1;
+            const poolId = 'Pool_' + safeProcId + '_' + poolIndex;
+            const processId = 'Process_' + safeProcId + '_' + poolIndex;
+            currentBox = {
+              id: poolId,
+              processId: processId,
+              name: boxName,
+              lanes: []
+            };
+            pools.push(currentBox);
+            continue;
+          }
+          if (line.match(/^end\s+box/i)) {
+            currentBox = null;
+            continue;
+          }
+
+          const actorMatch = line.match(/^actor\s+"?([^"]+)"?\s+as\s+(\w+)/i) || line.match(/^actor\s+(\w+)/i);
+          const partMatch = line.match(/^participant\s+"?([^"]+)"?\s+as\s+(\w+)/i) || line.match(/^participant\s+(\w+)/i);
+
+          if (actorMatch || partMatch) {
+            const m = actorMatch || partMatch;
+            const rawName = m[1].replace(/\[\[#[^\s\]]+\s+([^\]]+)\]\]/g, '$1').replace(/\[\[[^\]]+\]\]/g, '').replace(/"/g, '').trim();
+            const alias = m[2] || m[1];
+            const isActor = !!actorMatch;
+
+            const sysIdMatch = rawName.match(/\b([A-Z]{2,4}-[A-Z0-9_-]+)\b/);
+            const sysId = sysIdMatch ? sysIdMatch[1] : null;
+
+            const targetPool = currentBox || (pools.length > 0 ? pools[pools.length - 1] : null);
+            if (targetPool) {
+              const laneId = 'Lane_' + safeProcId + '_' + (aliasToLane.size + 1);
+              const lane = {
+                id: laneId,
+                name: rawName,
+                alias: alias,
+                isActor: isActor,
+                sysId: sysId,
+                pool: targetPool,
+                flowNodes: []
+              };
+              targetPool.lanes.push(lane);
+              aliasToPool.set(alias, targetPool);
+              aliasToLane.set(alias, lane);
+
+              if (sysId) procMetaMap.set(laneId, { type: 'sys', sysId: sysId });
+              else if (isActor && mappedActors.length > 0) procMetaMap.set(laneId, { type: 'actor', actorId: mappedActors[0].id });
+            }
+          }
+        }
+
+        // Fallback: If no boxes found, build 3 logical Pools
+        if (pools.length === 0) {
+          const isSeeburger = (typeof currentModelId !== 'undefined' && currentModelId === 'ORCAI-MODEL-SEEBURGER-EA');
+          const p1 = { id: 'Pool_' + safeProcId + '_1', processId: 'Process_' + safeProcId + '_1', name: 'Fachbereich & Initiator', lanes: [] };
+          const p2 = { id: 'Pool_' + safeProcId + '_2', processId: 'Process_' + safeProcId + '_2', name: isSeeburger ? 'SEEBURGER BIS Platform (iPaaS Core)' : 'Enterprise Integration Hub (Middleware)', lanes: [] };
+          const p3 = { id: 'Pool_' + safeProcId + '_3', processId: 'Process_' + safeProcId + '_3', name: 'Zielsysteme & Verbundpartner', lanes: [] };
+          pools.push(p1, p2, p3);
+
+          const l1 = { id: 'Lane_' + safeProcId + '_1', name: mappedActors.length ? mappedActors[0].name : 'Prozess-Anwender', alias: 'User', isActor: true, pool: p1, flowNodes: [] };
+          p1.lanes.push(l1);
+          const l2 = { id: 'Lane_' + safeProcId + '_2', name: isSeeburger ? 'SEE-01: BIS Core Engine' : 'EAI Middleware Platform', alias: 'Hub', isActor: false, pool: p2, flowNodes: [] };
+          p2.lanes.push(l2);
+          const l3 = { id: 'Lane_' + safeProcId + '_3', name: 'Backends & Partner', alias: 'Backend', isActor: false, pool: p3, flowNodes: [] };
+          p3.lanes.push(l3);
+        }
+
+        // Parse Interactions from PlantUML
+        const interactions = [];
+        for (let line of lines) {
+          line = line.trim();
+          if (line.startsWith('@') || line.startsWith('title') || line.startsWith('box') || line.startsWith('end') ||
+              line.startsWith('autonumber') || line.startsWith('skinparam') || line.startsWith('activate') ||
+              line.startsWith('deactivate') || line.startsWith('==') || line.startsWith('actor') || line.startsWith('participant')) {
+            continue;
+          }
+
+          const arrowMatch = line.match(/^(\w+)\s*(-+>|-+>>)\s*(\w+)\s*:\s*(.+)$/);
+          if (arrowMatch) {
+            const srcAlias = arrowMatch[1];
+            const isResponse = arrowMatch[2].includes('--');
+            const tgtAlias = arrowMatch[3];
+            const rawDesc = arrowMatch[4];
+
+            const srcLane = aliasToLane.get(srcAlias);
+            const tgtLane = aliasToLane.get(tgtAlias);
+            const srcPool = aliasToPool.get(srcAlias);
+            const tgtPool = aliasToPool.get(tgtAlias);
+
+            if (srcLane && tgtLane && srcPool && tgtPool) {
+              interactions.push({
+                srcAlias,
+                tgtAlias,
+                srcLane,
+                tgtLane,
+                srcPool,
+                tgtPool,
+                isResponse,
+                rawDesc,
+                isCrossPool: srcPool !== tgtPool
+              });
+            }
+          }
+        }
+
+        // Layout parameters
+        let currentY = 50;
+        const poolWidth = 1420;
+        const laneHeight = 120;
+        const poolGap = 50;
+
+        pools.forEach(pool => {
+          pool.y = currentY;
+          pool.height = Math.max(1, pool.lanes.length) * laneHeight;
+          pool.lanes.forEach((lane, lIdx) => {
+            lane.y = pool.y + (lIdx * laneHeight);
+            lane.height = laneHeight;
+            lane.flowNodes = [];
+          });
+          currentY += pool.height + poolGap;
+        });
+
+        const allNodes = [];
+        const messageFlows = [];
+        const sequenceFlows = [];
+        let nodeX = 220;
+
+        // Process 1 (Initiator) gets Start Event
+        const p1 = pools[0];
+        const l1 = p1.lanes[0];
         const startEventId = 'StartEvent_' + safeProcId;
-        const startNode = {
+        const startEvent = {
           id: startEventId,
-          name: 'Start: ' + (proc.name || proc.id),
+          name: 'Prozess ' + procName + ' initiiert',
           type: 'startEvent',
-          lane: laneActor,
+          lane: l1,
+          pool: p1,
+          x: 170,
+          y: l1.y + 42,
           width: 36,
           height: 36
         };
-        laneActor.nodes.push(startEventId);
-        flowNodes.push(startNode);
+        l1.flowNodes.push(startEvent);
+        allNodes.push(startEvent);
+
         if (mappedActors.length > 0) {
           procMetaMap.set(startEventId, { type: 'actor', actorId: mappedActors[0].id, clientId: mappedActors[0].clients && mappedActors[0].clients[0] ? mappedActors[0].clients[0].id : null });
         }
 
-        // 2. HITL Actor & Client tasks
-        if (mappedActors.length > 0) {
-          const act = mappedActors[0];
-          const cl = (act.clients && act.clients[0]) ? act.clients[0] : null;
-          const clientName = cl ? (cl.name || 'Web Client') : 'Benutzeroberfläche';
+        const prevNodeInPool = new Map();
+        prevNodeInPool.set(p1.id, startEvent);
 
-          const userTaskId = 'Task_HITL_Input_' + safeProcId;
-          const userTask = {
-            id: userTaskId,
-            name: (act.name || 'Anwender') + ': Interaktion & Freigabe in ' + clientName,
-            type: 'userTask',
-            lane: laneActor,
-            width: 130,
-            height: 80
-          };
-          laneActor.nodes.push(userTaskId);
-          flowNodes.push(userTask);
-          procMetaMap.set(userTaskId, { type: 'client', actorId: act.id, clientId: cl ? cl.id : null });
+        if (interactions.length === 0) {
+          // Fallback if no arrows parsed
+          const t1 = { id: 'Task_' + safeProcId + '_1', name: 'Fachliche Daten erfassen', type: 'userTask', lane: l1, pool: p1, x: 270, y: l1.y + 20, width: 130, height: 80 };
+          l1.flowNodes.push(t1); allNodes.push(t1);
+          sequenceFlows.push({ id: 'Flow_' + safeProcId + '_1', pool: p1, source: startEvent, target: t1 });
+          prevNodeInPool.set(p1.id, t1);
+          nodeX = 450;
+        }
 
-          if (cl && cl.targetSystemId) {
-            const sendTaskId = 'Task_HITL_Send_' + safeProcId;
+        interactions.forEach((it, idx) => {
+          const stepNum = idx + 1;
+          const taskName = normalizeBruceSilverTaskName(it.rawDesc, it.srcLane.name, it.tgtLane.name);
+
+          // Extract connection ID if present
+          const connMatch = (it.rawDesc || '').match(/#conn-([A-Z0-9_-]+)/);
+          const connId = connMatch ? connMatch[1] : null;
+
+          if (it.isCrossPool) {
+            const sendTaskId = 'Task_' + safeProcId + '_Send_' + stepNum;
             const sendTask = {
               id: sendTaskId,
-              name: clientName + ' -> ' + cl.targetSystemId + ': ' + (cl.messagesEmitted && cl.messagesEmitted[0] ? cl.messagesEmitted[0] : 'Payload senden'),
-              type: 'sendTask',
-              lane: laneBis || laneActor,
+              name: taskName,
+              type: it.srcLane.isActor ? 'userTask' : 'sendTask',
+              lane: it.srcLane,
+              pool: it.srcPool,
+              x: nodeX,
+              y: it.srcLane.y + 20,
               width: 130,
               height: 80
             };
-            (laneBis || laneActor).nodes.push(sendTaskId);
-            flowNodes.push(sendTask);
-            procMetaMap.set(sendTaskId, { type: 'client', actorId: act.id, clientId: cl.id, targetSysId: cl.targetSystemId });
-          }
-        }
+            it.srcLane.flowNodes.push(sendTask);
+            allNodes.push(sendTask);
 
-        // 3. Integration Step Tasks
-        let stepIndex = 0;
-        integs.forEach(integ => {
-          const steps = (integ.steps && integ.steps.length > 0) ? integ.steps : [{
-            from: integ.sourceSystem,
-            to: integ.targetSystem,
-            connectionId: null,
-            desc: integ.name
-          }];
+            if (it.srcLane.sysId) procMetaMap.set(sendTaskId, { type: 'sys', sysId: it.srcLane.sysId, desc: taskName });
+            else if (it.srcLane.isActor && mappedActors.length) procMetaMap.set(sendTaskId, { type: 'client', actorId: mappedActors[0].id, clientId: mappedActors[0].clients ? mappedActors[0].clients[0].id : null });
 
-          steps.forEach((st, idx) => {
-            stepIndex++;
-            const conn = allConns.find(c => c.id === st.connectionId);
-            const proto = conn ? conn.protocol : (integ.protocol || 'REST');
-            const stepDesc = (st.desc || conn?.name || integ.name || 'Datentransfer');
-            const stepTaskId = 'Task_Step_' + safeProcId + '_' + stepIndex;
-
-            let assignedLane = laneBackend;
-            const isMw = (st.from && (st.from.includes('SEE-01') || st.from.includes('SEE-02') || st.from.includes('JSD-01'))) ||
-                         (st.to && (st.to.includes('SEE-01') || st.to.includes('SEE-02') || st.to.includes('JSD-01')));
-            if (isMw && laneBis) {
-              assignedLane = laneBis;
-            } else if (idx === 0 && !mappedActors.length) {
-              assignedLane = laneActor;
+            const prevSrc = prevNodeInPool.get(it.srcPool.id);
+            if (prevSrc) {
+              sequenceFlows.push({ id: 'Flow_' + safeProcId + '_S_' + stepNum, pool: it.srcPool, source: prevSrc, target: sendTask });
             }
+            prevNodeInPool.set(it.srcPool.id, sendTask);
+            nodeX += 170;
 
-            const task = {
-              id: stepTaskId,
-              name: stepDesc + ' (' + proto + ')',
-              type: 'serviceTask',
-              lane: assignedLane,
+            const recvTaskId = 'Task_' + safeProcId + '_Recv_' + stepNum;
+            const recvTask = {
+              id: recvTaskId,
+              name: taskName.replace(/senden|übermitteln|übertragen/i, 'empfangen'),
+              type: 'receiveTask',
+              lane: it.tgtLane,
+              pool: it.tgtPool,
+              x: nodeX,
+              y: it.tgtLane.y + 20,
               width: 130,
               height: 80
             };
-            assignedLane.nodes.push(stepTaskId);
-            flowNodes.push(task);
+            it.tgtLane.flowNodes.push(recvTask);
+            allNodes.push(recvTask);
 
-            procMetaMap.set(stepTaskId, {
-              type: 'step',
-              integId: integ.id,
-              connId: st.connectionId,
-              fromSys: st.from,
-              toSys: st.to,
-              desc: stepDesc
+            if (it.tgtLane.sysId) procMetaMap.set(recvTaskId, { type: 'sys', sysId: it.tgtLane.sysId, desc: recvTask.name });
+
+            const prevTgt = prevNodeInPool.get(it.tgtPool.id);
+            if (prevTgt) {
+              sequenceFlows.push({ id: 'Flow_' + safeProcId + '_R_' + stepNum, pool: it.tgtPool, source: prevTgt, target: recvTask });
+            }
+            prevNodeInPool.set(it.tgtPool.id, recvTask);
+
+            const msgFlowId = 'MsgFlow_' + safeProcId + '_' + stepNum;
+            const cleanMsgName = (it.rawDesc || '').replace(/\[\[#[^\s\]]+\s+([^\]]+)\]\]/g, '$1').replace(/[\[\]]/g, '').slice(0, 50);
+            messageFlows.push({
+              id: msgFlowId,
+              name: cleanMsgName,
+              source: sendTask,
+              target: recvTask
+            });
+
+            if (connId) procMetaMap.set(msgFlowId, { type: 'step', connId: connId, desc: cleanMsgName });
+            nodeX += 170;
+          } else {
+            const taskId = 'Task_' + safeProcId + '_Intra_' + stepNum;
+            const task = {
+              id: taskId,
+              name: taskName,
+              type: it.srcLane.isActor ? 'userTask' : 'serviceTask',
+              lane: it.srcLane,
+              pool: it.srcPool,
+              x: nodeX,
+              y: it.srcLane.y + 20,
+              width: 130,
+              height: 80
+            };
+            it.srcLane.flowNodes.push(task);
+            allNodes.push(task);
+
+            if (it.srcLane.sysId) procMetaMap.set(taskId, { type: 'sys', sysId: it.srcLane.sysId, desc: taskName });
+
+            const prev = prevNodeInPool.get(it.srcPool.id);
+            if (prev) {
+              sequenceFlows.push({ id: 'Flow_' + safeProcId + '_I_' + stepNum, pool: it.srcPool, source: prev, target: task });
+            }
+            prevNodeInPool.set(it.srcPool.id, task);
+            nodeX += 170;
+          }
+        });
+
+        // Add End Event for each pool
+        pools.forEach((pool, pIdx) => {
+          const lastLane = pool.lanes[pool.lanes.length - 1];
+          const prev = prevNodeInPool.get(pool.id);
+          if (prev) {
+            const endEventId = 'EndEvent_' + safeProcId + '_' + (pIdx + 1);
+            const endEvent = {
+              id: endEventId,
+              name: pool.name + ' abgeschlossen',
+              type: 'endEvent',
+              lane: prev.lane || lastLane,
+              pool: pool,
+              x: Math.max(nodeX + 30, prev.x + 160),
+              y: (prev.lane ? prev.lane.y : lastLane.y) + 42,
+              width: 36,
+              height: 36
+            };
+            (prev.lane || lastLane).flowNodes.push(endEvent);
+            allNodes.push(endEvent);
+            procMetaMap.set(endEventId, { type: 'end', procId: proc.id });
+
+            sequenceFlows.push({
+              id: 'Flow_' + safeProcId + '_End_' + (pIdx + 1),
+              pool: pool,
+              source: prev,
+              target: endEvent
+            });
+          }
+        });
+
+        // Assemble Collaboration XML
+        let xml = '<?xml version="1.0" encoding="UTF-8"?>\n' +
+'<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"\n' +
+'                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"\n' +
+'                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"\n' +
+'                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"\n' +
+'                  id="Definitions_' + safeProcId + '"\n' +
+'                  targetNamespace="http://bpmn.io/schema/bpmn">\n\n' +
+'  <bpmn:collaboration id="Collaboration_' + safeProcId + '">\n';
+
+        pools.forEach(pool => {
+          xml += '    <bpmn:participant id="' + pool.id + '" name="' + escXml(pool.name) + '" processRef="' + pool.processId + '" />\n';
+        });
+
+        messageFlows.forEach(mf => {
+          xml += '    <bpmn:messageFlow id="' + mf.id + '" name="' + escXml(mf.name) + '" sourceRef="' + mf.source.id + '" targetRef="' + mf.target.id + '" />\n';
+        });
+
+        xml += '  </bpmn:collaboration>\n\n';
+
+        pools.forEach(pool => {
+          xml += '  <bpmn:process id="' + pool.processId + '" isExecutable="false">\n' +
+'    <bpmn:laneSet id="LaneSet_' + pool.id + '">\n';
+          pool.lanes.forEach(lane => {
+            xml += '      <bpmn:lane id="' + lane.id + '" name="' + escXml(lane.name) + '">\n';
+            lane.flowNodes.forEach(fn => {
+              xml += '        <bpmn:flowNodeRef>' + fn.id + '</bpmn:flowNodeRef>\n';
+            });
+            xml += '      </bpmn:lane>\n';
+          });
+          xml += '    </bpmn:laneSet>\n\n';
+
+          pool.lanes.forEach(lane => {
+            lane.flowNodes.forEach(node => {
+              const escNodeName = escXml(node.name);
+              if (node.type === 'startEvent') xml += '    <bpmn:startEvent id="' + node.id + '" name="' + escNodeName + '" />\n';
+              else if (node.type === 'endEvent') xml += '    <bpmn:endEvent id="' + node.id + '" name="' + escNodeName + '" />\n';
+              else if (node.type === 'userTask') xml += '    <bpmn:userTask id="' + node.id + '" name="' + escNodeName + '" />\n';
+              else if (node.type === 'sendTask') xml += '    <bpmn:sendTask id="' + node.id + '" name="' + escNodeName + '" />\n';
+              else if (node.type === 'receiveTask') xml += '    <bpmn:receiveTask id="' + node.id + '" name="' + escNodeName + '" />\n';
+              else xml += '    <bpmn:serviceTask id="' + node.id + '" name="' + escNodeName + '" />\n';
             });
           });
-        });
 
-        // 4. End Event
-        const endEventId = 'EndEvent_' + safeProcId;
-        const endNode = {
-          id: endEventId,
-          name: 'Ende: ' + (proc.name || proc.id) + ' erfolgreich abgeschlossen',
-          type: 'endEvent',
-          lane: laneBackend,
-          width: 36,
-          height: 36
-        };
-        laneBackend.nodes.push(endEventId);
-        flowNodes.push(endNode);
-        procMetaMap.set(endEventId, { type: 'end', procId: proc.id });
-
-        // 5. Sequence Flows
-        const sequenceFlows = [];
-        for (let i = 0; i < flowNodes.length - 1; i++) {
-          const src = flowNodes[i];
-          const tgt = flowNodes[i + 1];
-          const flowId = 'Flow_' + safeProcId + '_' + (i + 1);
-          sequenceFlows.push({
-            id: flowId,
-            sourceRef: src.id,
-            targetRef: tgt.id,
-            sourceNode: src,
-            targetNode: tgt
+          sequenceFlows.filter(sf => sf.pool.id === pool.id).forEach(sf => {
+            xml += '    <bpmn:sequenceFlow id="' + sf.id + '" sourceRef="' + sf.source.id + '" targetRef="' + sf.target.id + '" />\n';
           });
-        }
 
-        // 6. BPMNDI Geometry Calculation
-        const laneHeight = 140;
-        const poolX = 120;
-        const laneX = 150;
-        const startX = 200;
-        const nodeGapX = 50;
-
-        let currentX = startX;
-        flowNodes.forEach(node => {
-          node.x = currentX;
-          const laneIdx = lanes.indexOf(node.lane);
-          const laneY = 60 + (laneIdx * laneHeight);
-          node.y = Math.round(laneY + (laneHeight - node.height) / 2);
-          currentX += node.width + nodeGapX;
+          xml += '  </bpmn:process>\n\n';
         });
 
-        const totalWidth = Math.max(920, currentX - startX + 320);
-        const laneWidth = totalWidth - laneX + poolX;
-        const poolWidth = totalWidth;
-        const poolHeight = lanes.length * laneHeight;
+        xml += '  <bpmndi:BPMNDiagram id="BPMNDiagram_' + safeProcId + '">\n' +
+'    <bpmndi:BPMNPlane id="BPMNPlane_' + safeProcId + '" bpmnElement="Collaboration_' + safeProcId + '">\n';
 
-        // Assembly
-        let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
-        xml += '<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"\n';
-        xml += '                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"\n';
-        xml += '                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"\n';
-        xml += '                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"\n';
-        xml += '                  id="Definitions_' + safeProcId + '"\n';
-        xml += '                  targetNamespace="http://bpmn.io/schema/bpmn">\n';
-
-        xml += '  <bpmn:collaboration id="Collaboration_' + safeProcId + '">\n';
-        xml += '    <bpmn:participant id="Participant_' + safeProcId + '" name="' + escXml(proc.id + ': ' + (proc.name || 'Prozess')) + '" processRef="Process_' + safeProcId + '" />\n';
-        xml += '  </bpmn:collaboration>\n';
-
-        xml += '  <bpmn:process id="Process_' + safeProcId + '" isExecutable="false">\n';
-        xml += '    <bpmn:laneSet id="LaneSet_' + safeProcId + '">\n';
-        lanes.forEach(lane => {
-          xml += '      <bpmn:lane id="' + lane.id + '" name="' + escXml(lane.name) + '">\n';
-          lane.nodes.forEach(nodeId => {
-            xml += '        <bpmn:flowNodeRef>' + nodeId + '</bpmn:flowNodeRef>\n';
+        pools.forEach(pool => {
+          xml += '      <bpmndi:BPMNShape id="' + pool.id + '_di" bpmnElement="' + pool.id + '" isHorizontal="true">\n' +
+'        <dc:Bounds x="100" y="' + pool.y + '" width="' + Math.max(poolWidth, nodeX + 100) + '" height="' + pool.height + '" />\n' +
+'      </bpmndi:BPMNShape>\n';
+          pool.lanes.forEach(lane => {
+            xml += '      <bpmndi:BPMNShape id="' + lane.id + '_di" bpmnElement="' + lane.id + '" isHorizontal="true">\n' +
+'        <dc:Bounds x="130" y="' + lane.y + '" width="' + Math.max(poolWidth - 30, nodeX + 70) + '" height="' + lane.height + '" />\n' +
+'      </bpmndi:BPMNShape>\n';
           });
-          xml += '      </bpmn:lane>\n';
-        });
-        xml += '    </bpmn:laneSet>\n\n';
-
-        flowNodes.forEach(node => {
-          const incFlows = sequenceFlows.filter(f => f.targetRef === node.id).map(f => f.id);
-          const outFlows = sequenceFlows.filter(f => f.sourceRef === node.id).map(f => f.id);
-
-          xml += '    <bpmn:' + node.type + ' id="' + node.id + '" name="' + escXml(node.name) + '">\n';
-          incFlows.forEach(fId => { xml += '      <bpmn:incoming>' + fId + '</bpmn:incoming>\n'; });
-          outFlows.forEach(fId => { xml += '      <bpmn:outgoing>' + fId + '</bpmn:outgoing>\n'; });
-          xml += '    </bpmn:' + node.type + '>\n';
         });
 
-        xml += '\n';
-        sequenceFlows.forEach(flow => {
-          xml += '    <bpmn:sequenceFlow id="' + flow.id + '" sourceRef="' + flow.sourceRef + '" targetRef="' + flow.targetRef + '" />\n';
-        });
-
-        xml += '  </bpmn:process>\n\n';
-
-        // Diagram Interchange
-        xml += '  <bpmndi:BPMNDiagram id="BPMNDiagram_' + safeProcId + '">\n';
-        xml += '    <bpmndi:BPMNPlane id="BPMNPlane_' + safeProcId + '" bpmnElement="Collaboration_' + safeProcId + '">\n';
-
-        xml += '      <bpmndi:BPMNShape id="Participant_' + safeProcId + '_di" bpmnElement="Participant_' + safeProcId + '" isHorizontal="true">\n';
-        xml += '        <dc:Bounds x="' + poolX + '" y="60" width="' + poolWidth + '" height="' + poolHeight + '" />\n';
-        xml += '      </bpmndi:BPMNShape>\n';
-
-        lanes.forEach((lane, idx) => {
-          const laneY = 60 + (idx * laneHeight);
-          xml += '      <bpmndi:BPMNShape id="' + lane.id + '_di" bpmnElement="' + lane.id + '" isHorizontal="true">\n';
-          xml += '        <dc:Bounds x="' + laneX + '" y="' + laneY + '" width="' + laneWidth + '" height="' + laneHeight + '" />\n';
-          xml += '      </bpmndi:BPMNShape>\n';
-        });
-
-        flowNodes.forEach(node => {
-          xml += '      <bpmndi:BPMNShape id="' + node.id + '_di" bpmnElement="' + node.id + '">\n';
-          xml += '        <dc:Bounds x="' + node.x + '" y="' + node.y + '" width="' + node.width + '" height="' + node.height + '" />\n';
+        allNodes.forEach(node => {
+          xml += '      <bpmndi:BPMNShape id="' + node.id + '_di" bpmnElement="' + node.id + '">\n' +
+'        <dc:Bounds x="' + node.x + '" y="' + node.y + '" width="' + node.width + '" height="' + node.height + '" />\n';
           if (node.type === 'startEvent' || node.type === 'endEvent') {
-            xml += '        <bpmndi:BPMNLabel>\n';
-            xml += '          <dc:Bounds x="' + Math.round(node.x - 25) + '" y="' + Math.round(node.y + node.height + 6) + '" width="86" height="27" />\n';
-            xml += '        </bpmndi:BPMNLabel>\n';
+            xml += '        <bpmndi:BPMNLabel>\n' +
+'          <dc:Bounds x="' + Math.round(node.x - 25) + '" y="' + Math.round(node.y + node.height + 6) + '" width="86" height="27" />\n' +
+'        </bpmndi:BPMNLabel>\n';
           }
           xml += '      </bpmndi:BPMNShape>\n';
         });
 
-        sequenceFlows.forEach(flow => {
-          const src = flow.sourceNode;
-          const tgt = flow.targetNode;
-          const sX = src.x + src.width;
-          const sY = Math.round(src.y + src.height / 2);
-          const tX = tgt.x;
-          const tY = Math.round(tgt.y + tgt.height / 2);
-
-          xml += '      <bpmndi:BPMNEdge id="' + flow.id + '_di" bpmnElement="' + flow.id + '">\n';
-          if (sY === tY) {
-            xml += '        <di:waypoint x="' + sX + '" y="' + sY + '" />\n';
-            xml += '        <di:waypoint x="' + tX + '" y="' + tY + '" />\n';
-          } else {
-            const mX = Math.round(sX + (tX - sX) / 2);
-            xml += '        <di:waypoint x="' + sX + '" y="' + sY + '" />\n';
-            xml += '        <di:waypoint x="' + mX + '" y="' + sY + '" />\n';
-            xml += '        <di:waypoint x="' + mX + '" y="' + tY + '" />\n';
-            xml += '        <di:waypoint x="' + tX + '" y="' + tY + '" />\n';
-          }
-          xml += '      </bpmndi:BPMNEdge>\n';
+        sequenceFlows.forEach(sf => {
+          const s = sf.source;
+          const t = sf.target;
+          xml += '      <bpmndi:BPMNEdge id="' + sf.id + '_di" bpmnElement="' + sf.id + '">\n' +
+'        <di:waypoint x="' + (s.x + s.width) + '" y="' + Math.round(s.y + s.height / 2) + '" />\n' +
+'        <di:waypoint x="' + t.x + '" y="' + Math.round(t.y + t.height / 2) + '" />\n' +
+'      </bpmndi:BPMNEdge>\n';
         });
 
-        xml += '    </bpmndi:BPMNPlane>\n';
-        xml += '  </bpmndi:BPMNDiagram>\n';
-        xml += '</bpmn:definitions>';
+        messageFlows.forEach(mf => {
+          const s = mf.source;
+          const t = mf.target;
+          const sX = Math.round(s.x + s.width / 2);
+          const tX = Math.round(t.x + t.width / 2);
+          const sY = s.y > t.y ? s.y : (s.y + s.height);
+          const tY = s.y > t.y ? (t.y + t.height) : t.y;
+          xml += '      <bpmndi:BPMNEdge id="' + mf.id + '_di" bpmnElement="' + mf.id + '">\n' +
+'        <di:waypoint x="' + sX + '" y="' + sY + '" />\n' +
+'        <di:waypoint x="' + tX + '" y="' + tY + '" />\n' +
+'      </bpmndi:BPMNEdge>\n';
+        });
+
+        xml += '    </bpmndi:BPMNPlane>\n' +
+'  </bpmndi:BPMNDiagram>\n' +
+'</bpmn:definitions>';
 
         proc.bpmnXml = xml;
         return xml;
@@ -40107,7 +40738,7 @@
                 '<button class="insp-action-btn" onclick="window.downloadBpmnSvg(\'' + esc(proc.id) + '\')" title="SVG Vektorgrafik herunterladen">🖼️ SVG</button>' +
                 '<button class="insp-action-btn" onclick="window.copyBpmnXml(\'' + esc(proc.id) + '\')" title="BPMN 2.0 XML in Zwischenablage kopieren">📋 Kopieren</button>' +
                 '<button class="insp-action-btn" onclick="window.openBpmnIoEditor(\'' + esc(proc.id) + '\')" title="In externem Modeler (bpmn.io) öffnen">↗ bpmn.io</button>' +
-                '<button onclick="window.closeBpmnModal(\'' + esc(proc.id) + '\')" style="background:none; border:none; color:var(--text-muted); font-size:1.4rem; cursor:pointer; padding:0 6px; line-height:1;" title="Schließen">&times;</button>' +
+                '<button class="bpmn-close-btn" onclick="window.closeBpmnModal(\'' + esc(proc.id) + '\')" style="background:none; border:none; font-size:1.4rem; cursor:pointer; padding:0 6px; line-height:1;" title="Schließen">&times;</button>' +
               '</div>' +
             '</div>' +
             '<div class="bpmn-popout-body" style="flex:1; display:flex; flex-direction:column; padding:0; overflow:hidden; position:relative; background:#090d16;">' +
@@ -40274,6 +40905,14 @@
             e.stopPropagation();
 
             if (meta) {
+              if (meta.type === 'sys' && meta.sysId) {
+                if (typeof window.selectSystem === 'function') {
+                  window.selectSystem(meta.sysId);
+                }
+                if (typeof window.showCrudToast === 'function') {
+                  window.showCrudToast('🏥 BPMN Task: System ' + meta.sysId + ' fokussiert');
+                }
+              }
               if (meta.type === 'client') {
                 if (meta.clientId && typeof window.locateClientOnCanvas === 'function') {
                   window.locateClientOnCanvas(meta.clientId);
@@ -40355,11 +40994,21 @@
         const bpmnXml = proc.bpmnXml || window.generateBpmnXmlFromProcess(proc);
 
         try {
+          let res;
           const encoded = await window.encodeKroki(bpmnXml);
-          if (!encoded) throw new Error('BPMN Encoding fehlgeschlagen');
-
-          const krokiUrl = 'https://kroki.io/bpmn/svg/' + encoded;
-          const res = await fetch(krokiUrl);
+          if (encoded && encoded.length < 3500) {
+            try {
+              res = await fetch('https://kroki.io/bpmn/svg/' + encoded);
+            } catch (e) { res = null; }
+          }
+          if (!res || !res.ok) {
+            // Robust POST fallback for large BPMN 2.0 multi-pool XML models (prevents HTTP 414 URI Too Long)
+            res = await fetch('https://kroki.io/bpmn/svg', {
+              method: 'POST',
+              headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+              body: bpmnXml
+            });
+          }
           if (!res.ok) throw new Error('HTTP ' + res.status);
 
           const svgText = await res.text();
