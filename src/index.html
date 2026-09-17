@@ -4415,7 +4415,7 @@
     }
     
     .plantuml-title-text, .bpmn-title-text {
-      max-width: 240px;
+      max-width: min(650px, 50vw);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -39806,6 +39806,81 @@
         return clean + ' verarbeiten';
       }
 
+            function formatLaneNameForBpmn(name) {
+        if (!name) return '';
+        name = String(name).trim();
+        if (name.includes('\n') || name.includes('&#10;')) return name;
+        if (name.length <= 14) return name;
+
+        const parenMatch = name.match(/^(.+?)\s+(\([A-Z0-9_ -]+\))$/i);
+        if (parenMatch) {
+          return parenMatch[1].trim() + '&#10;' + parenMatch[2].trim();
+        }
+
+        const colonMatch = name.match(/^([A-Z0-9_ -]+:)\s*(.+)$/i);
+        if (colonMatch) {
+          const prefix = colonMatch[1];
+          const rest = colonMatch[2];
+          if (rest.length > 15) {
+            const words = rest.split(/\s+/);
+            if (words.length >= 2) {
+              let l1 = '', l2 = '';
+              words.forEach(w => {
+                if (!l1 || (l1.length + w.length + 1 <= 15 && !l2)) {
+                  l1 = l1 ? (l1 + ' ' + w) : w;
+                } else {
+                  l2 = l2 ? (l2 + ' ' + w) : w;
+                }
+              });
+              if (l2) return prefix + '&#10;' + l1 + '&#10;' + l2;
+            }
+          }
+          return prefix + '&#10;' + rest;
+        }
+
+        const words = name.split(/\s+/);
+        if (words.length <= 1) return name;
+        const lines = [];
+        let cur = '';
+        words.forEach(w => {
+          if (!cur) {
+            cur = w;
+          } else if ((cur.length + w.length + 1) <= 15) {
+            cur += ' ' + w;
+          } else {
+            lines.push(cur);
+            cur = w;
+          }
+        });
+        if (cur) lines.push(cur);
+        return lines.slice(0, 3).join('&#10;');
+      }
+
+      function formatBpmnSvg(svgText) {
+        if (!svgText) return svgText;
+        return svgText.replace(
+          /(<text[^>]*transform="matrix\(-1\.83697e-16 -1 1 -1\.83697e-16 0 120\)"[^>]*>)([\s\S]*?)(<\/text>)/gi,
+          (match, open, inner, close) => {
+            const tspans = inner.match(/<tspan[^>]*>[\s\S]*?<\/tspan>/gi) || [];
+            if (tspans.length === 3) {
+              const modifiedOpen = open.replace(/font-size:\s*12px/i, 'font-size: 10.5px');
+              const baselines = ['7.5', '17.5', '27.5'];
+              let idx = 0;
+              const newInner = inner.replace(/<tspan([^>]*)>([\s\S]*?)<\/tspan>/gi, (tm, attrs, text) => {
+                let newAttrs = attrs.replace(/x="[^"]+"/g, 'x="14"');
+                const by = baselines[idx++] || '18.6';
+                newAttrs = newAttrs.replace(/y="[^"]+"/g, 'y="' + by + '"');
+                return '<tspan' + newAttrs + '>' + text + '</tspan>';
+              });
+              return modifiedOpen + newInner + close;
+            } else {
+              const newInner = inner.replace(/x="[^"]+"/g, 'x="14"');
+              return open + newInner + close;
+            }
+          }
+        );
+      }
+
       window.generateBpmnXmlFromProcess = function(proc) {
         if (!proc) return '';
         const safeProcId = safeXmlId(proc.id);
@@ -39881,11 +39956,11 @@
 '  <!-- ==================== PROCESS 1: PRAEHOSPITAL ==================== -->\n' +
 '  <bpmn:process id="Process_Praehospital" isExecutable="false">\n' +
 '    <bpmn:laneSet id="LaneSet_Praehospital">\n' +
-'      <bpmn:lane id="Lane_RTW_Human" name="Rettungsdienst (RTW)">\n' +
+'      <bpmn:lane id="Lane_RTW_Human" name="Rettungsdienst&#10;(RTW)">\n' +
 '        <bpmn:flowNodeRef>StartEvent_RTW</bpmn:flowNodeRef>\n' +
 '        <bpmn:flowNodeRef>Task_RTW_Capture</bpmn:flowNodeRef>\n' +
 '      </bpmn:lane>\n' +
-'      <bpmn:lane id="Lane_JSD_28" name="JSD-28: Medical IoT Gateway">\n' +
+'      <bpmn:lane id="Lane_JSD_28" name="JSD-28: Medical&#10;IoT Gateway">\n' +
 '        <bpmn:flowNodeRef>Task_IoT_Send</bpmn:flowNodeRef>\n' +
 '        <bpmn:flowNodeRef>EndEvent_RTW</bpmn:flowNodeRef>\n' +
 '      </bpmn:lane>\n' +
@@ -39911,13 +39986,13 @@
 '  <!-- ==================== PROCESS 2: TELEMEDIZIN ==================== -->\n' +
 '  <bpmn:process id="Process_Telemedizin" isExecutable="false">\n' +
 '    <bpmn:laneSet id="LaneSet_Telemedizin">\n' +
-'      <bpmn:lane id="Lane_JSD_05" name="JSD-05: Telemedizin Hub">\n' +
+'      <bpmn:lane id="Lane_JSD_05" name="JSD-05:&#10;Telemedizin Hub">\n' +
 '        <bpmn:flowNodeRef>StartEvent_TM</bpmn:flowNodeRef>\n' +
 '        <bpmn:flowNodeRef>Task_TM_Receive</bpmn:flowNodeRef>\n' +
 '        <bpmn:flowNodeRef>Task_TM_Forward</bpmn:flowNodeRef>\n' +
 '        <bpmn:flowNodeRef>EndEvent_TM</bpmn:flowNodeRef>\n' +
 '      </bpmn:lane>\n' +
-'      <bpmn:lane id="Lane_JSD_10" name="JSD-10: HealthShare Hub">\n' +
+'      <bpmn:lane id="Lane_JSD_10" name="JSD-10:&#10;HealthShare Hub">\n' +
 '        <bpmn:flowNodeRef>Task_HS_Route</bpmn:flowNodeRef>\n' +
 '        <bpmn:flowNodeRef>Task_HS_Ack</bpmn:flowNodeRef>\n' +
 '        <bpmn:flowNodeRef>EndEvent_HS</bpmn:flowNodeRef>\n' +
@@ -39956,14 +40031,14 @@
 '  <!-- ==================== PROCESS 3: AKUTKLINIK ==================== -->\n' +
 '  <bpmn:process id="Process_Akutklinik" isExecutable="false">\n' +
 '    <bpmn:laneSet id="LaneSet_Akutklinik">\n' +
-'      <bpmn:lane id="Lane_JSD_15" name="JSD-15: ZNA E-Care &amp; Triage">\n' +
+'      <bpmn:lane id="Lane_JSD_15" name="JSD-15: ZNA&#10;E-Care &amp; Triage">\n' +
 '        <bpmn:flowNodeRef>Task_ZNA_Receive</bpmn:flowNodeRef>\n' +
 '        <bpmn:flowNodeRef>Task_ZNA_Triage</bpmn:flowNodeRef>\n' +
 '        <bpmn:flowNodeRef>Task_ZNA_SendADT</bpmn:flowNodeRef>\n' +
 '        <bpmn:flowNodeRef>Task_ZNA_Finalize</bpmn:flowNodeRef>\n' +
 '        <bpmn:flowNodeRef>EndEvent_Akutklinik</bpmn:flowNodeRef>\n' +
 '      </bpmn:lane>\n' +
-'      <bpmn:lane id="Lane_JSD_08" name="JSD-08: CGM MEDICO KIS">\n' +
+'      <bpmn:lane id="Lane_JSD_08" name="JSD-08: CGM&#10;MEDICO KIS">\n' +
 '        <bpmn:flowNodeRef>Task_KIS_Create</bpmn:flowNodeRef>\n' +
 '      </bpmn:lane>\n' +
 '    </bpmn:laneSet>\n' +
@@ -40551,7 +40626,7 @@
           xml += '  <bpmn:process id="' + pool.processId + '" isExecutable="false">\n' +
 '    <bpmn:laneSet id="LaneSet_' + pool.id + '">\n';
           pool.lanes.forEach(lane => {
-            xml += '      <bpmn:lane id="' + lane.id + '" name="' + escXml(lane.name) + '">\n';
+            xml += '      <bpmn:lane id="' + lane.id + '" name="' + escXml(formatLaneNameForBpmn(lane.name)) + '">\n';
             lane.flowNodes.forEach(fn => {
               xml += '        <bpmn:flowNodeRef>' + fn.id + '</bpmn:flowNodeRef>\n';
             });
@@ -40736,6 +40811,7 @@
         if (!proc) return null;
 
         activeBpmnProcId = proc.id;
+        const esc = (str) => String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
         let popoutsContainer = document.getElementById('bpmnPopoutsContainer');
         if (!popoutsContainer) {
@@ -41102,10 +41178,25 @@
           record.svgText = svgText;
 
           if (spinner) spinner.style.display = 'none';
+          const processedSvg = formatBpmnSvg(svgText);
+          const titleBannerHtml = 
+            '<div class="bpmn-canvas-title-banner" style="margin-bottom:20px; padding-bottom:14px; border-bottom:2px solid #e2e8f0; display:flex; align-items:center; justify-content:space-between; gap:16px;">' +
+              '<div style="display:flex; align-items:center; gap:12px;">' +
+                '<span style="background:#0284c7; color:#ffffff; font-weight:800; font-size:0.88rem; padding:4px 10px; border-radius:6px; letter-spacing:0.04em;">' + esc(proc.id) + '</span>' +
+                '<span style="font-size:1.25rem; font-weight:800; color:#0f172a; letter-spacing:-0.01em;">' + esc(proc.name || 'BPMN Prozessmodell') + '</span>' +
+              '</div>' +
+              '<div style="display:flex; align-items:center; gap:8px;">' +
+                (proc.apqc ? '<span style="font-size:0.8rem; font-weight:600; color:#64748b; background:#f1f5f9; padding:4px 10px; border-radius:6px; border:1px solid #cbd5e1;">📋 APQC ' + esc(proc.apqc) + '</span>' : '') +
+                '<span style="font-size:0.8rem; font-weight:600; color:#64748b; background:#f1f5f9; padding:4px 10px; border-radius:6px; border:1px solid #cbd5e1;">BPMN 2.0 Collaboration Diagram</span>' +
+                '<span style="font-size:0.8rem; font-weight:600; color:#64748b; background:#f1f5f9; padding:4px 10px; border-radius:6px; border:1px solid #cbd5e1;">Bruce Silver Method &amp; Style</span>' +
+              '</div>' +
+            '</div>';
+
           if (container) {
             container.innerHTML = 
-              '<div class="bpmn-svg-wrapper" style="position:absolute; left:0; top:0; transform-origin:0 0; will-change:transform; background:#ffffff; border-radius:8px; padding:24px; box-shadow:0 12px 40px rgba(0,0,0,0.6); display:inline-block; width:max-content; max-width:none;">' + 
-                svgText + 
+              '<div class="bpmn-svg-wrapper" style="position:absolute; left:0; top:0; transform-origin:0 0; will-change:transform; background:#ffffff; border-radius:8px; padding:24px 32px 32px 32px; box-shadow:0 12px 40px rgba(0,0,0,0.6); display:inline-block; width:max-content; max-width:none;">' + 
+                titleBannerHtml + 
+                processedSvg + 
               '</div>';
 
             const svgEl = container.querySelector('svg');
