@@ -3471,9 +3471,28 @@
       box-shadow: 0 0 20px rgba(56, 189, 248, 0.45);
     }
     .hitl-pod-avatar {
-      font-size: 1.35rem;
-      line-height: 1;
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 36px;
+      flex-shrink: 0;
+      color: var(--text-muted, #94a3b8);
+      transition: all 0.2s ease;
+    }
+    .uml-actor-svg {
+      width: 22px;
+      height: 34px;
+      display: block;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+    }
+    .hitl-corner-pod.active .hitl-pod-avatar {
+      color: var(--accent, #38bdf8);
+      filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.7));
+    }
+    body.theme-day .hitl-corner-pod.active .hitl-pod-avatar {
+      color: #0284c7;
+      filter: drop-shadow(0 0 8px rgba(2, 132, 199, 0.5));
     }
     .hitl-pod-info {
       display: flex;
@@ -4605,7 +4624,13 @@
       <!-- 4 HITL (HUMAN IN THE LOOP) CORNER PODS -->
       <div class="hitl-corner-pod hitl-pod-lt" id="podLT" data-corner="LT" title="LT: Intern · Cloud & Web-Dienste (Browser / HTTPS)">
         <div class="hitl-pod-header" onclick="window.toggleHitlDropdown('LT')">
-          <span class="hitl-pod-avatar" id="avatarLT">☁️</span>
+          <span class="hitl-pod-avatar" id="avatarLT" title="Mensch (UML Akteur)"><svg class="uml-actor-svg" viewBox="0 0 24 38" width="22" height="34" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="7" r="5" fill="none"/>
+            <line x1="12" y1="12" x2="12" y2="24"/>
+            <line x1="3" y1="17" x2="21" y2="17"/>
+            <line x1="12" y1="24" x2="5" y2="35"/>
+            <line x1="12" y1="24" x2="19" y2="35"/>
+          </svg></span>
           <div class="hitl-pod-info">
             <span class="hitl-pod-corner-tag">LT · Intern Cloud</span>
             <span class="hitl-pod-role-label" id="labelLT">Cloud & Web</span>
@@ -4617,7 +4642,13 @@
 
       <div class="hitl-corner-pod hitl-pod-lb" id="podLB" data-corner="LB" title="LB: Intern · On-Premises & Fat Clients (Workstation / Terminal)">
         <div class="hitl-pod-header" onclick="window.toggleHitlDropdown('LB')">
-          <span class="hitl-pod-avatar" id="avatarLB">🖥️</span>
+          <span class="hitl-pod-avatar" id="avatarLB" title="Mensch (UML Akteur)"><svg class="uml-actor-svg" viewBox="0 0 24 38" width="22" height="34" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="7" r="5" fill="none"/>
+            <line x1="12" y1="12" x2="12" y2="24"/>
+            <line x1="3" y1="17" x2="21" y2="17"/>
+            <line x1="12" y1="24" x2="5" y2="35"/>
+            <line x1="12" y1="24" x2="19" y2="35"/>
+          </svg></span>
           <div class="hitl-pod-info">
             <span class="hitl-pod-corner-tag">LB · Intern On-Prem</span>
             <span class="hitl-pod-role-label" id="labelLB">On-Prem / Fat Client</span>
@@ -4629,7 +4660,13 @@
 
       <div class="hitl-corner-pod hitl-pod-rt" id="podRT" data-corner="RT" title="RT: Extern · Cloud & Web-Portale (Kunden / Partner / HTTPS)">
         <div class="hitl-pod-header" onclick="window.toggleHitlDropdown('RT')">
-          <span class="hitl-pod-avatar" id="avatarRT">🌐</span>
+          <span class="hitl-pod-avatar" id="avatarRT" title="Mensch (UML Akteur)"><svg class="uml-actor-svg" viewBox="0 0 24 38" width="22" height="34" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="7" r="5" fill="none"/>
+            <line x1="12" y1="12" x2="12" y2="24"/>
+            <line x1="3" y1="17" x2="21" y2="17"/>
+            <line x1="12" y1="24" x2="5" y2="35"/>
+            <line x1="12" y1="24" x2="19" y2="35"/>
+          </svg></span>
           <div class="hitl-pod-info">
             <span class="hitl-pod-corner-tag">RT · Extern Cloud</span>
             <span class="hitl-pod-role-label" id="labelRT">Cloud & Portal</span>
@@ -4641,7 +4678,13 @@
 
       <div class="hitl-corner-pod hitl-pod-rb" id="podRB" data-corner="RB" title="RB: Extern · On-Premises & B2B-Schnittstellen (Gateways / DTA)">
         <div class="hitl-pod-header" onclick="window.toggleHitlDropdown('RB')">
-          <span class="hitl-pod-avatar" id="avatarRB">🔌</span>
+          <span class="hitl-pod-avatar" id="avatarRB" title="Mensch (UML Akteur)"><svg class="uml-actor-svg" viewBox="0 0 24 38" width="22" height="34" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="7" r="5" fill="none"/>
+            <line x1="12" y1="12" x2="12" y2="24"/>
+            <line x1="3" y1="17" x2="21" y2="17"/>
+            <line x1="12" y1="24" x2="5" y2="35"/>
+            <line x1="12" y1="24" x2="19" y2="35"/>
+          </svg></span>
           <div class="hitl-pod-info">
             <span class="hitl-pod-corner-tag">RB · Extern On-Prem</span>
             <span class="hitl-pod-role-label" id="labelRB">On-Prem / B2B</span>
@@ -18677,7 +18720,13 @@
 
       const zoom = d3.zoom()
         .scaleExtent([0.4, 4.5])
-        .on("zoom", (event) => gMain.attr("transform", event.transform));
+        .on("zoom", (event) => {
+          gMain.attr("transform", event.transform);
+          if (window.selectedHitlRoleId && typeof window.renderHitlCommunicationChain === 'function') {
+            const activeRole = (window.ACTORS_DATA || []).find(a => a.id === window.selectedHitlRoleId);
+            if (activeRole) window.renderHitlCommunicationChain(activeRole);
+          }
+        });
 
       svg.call(zoom);
       const defaultZoomTransform = d3.zoomIdentity.translate(0, -90).scale(0.82);
@@ -18715,11 +18764,26 @@
         .attr("stroke", "#0b0f17")
         .attr("stroke-width", 1.0);
 
-      // Dedicated HITL Dual-Stage Markers
+      // Dedicated HITL Dual-Stage Bidirectional Double Arrow Markers
+      // Vertical Edge 1 (Human ↕ Client)
       defs.append("marker")
-        .attr("id", "hitl-marker-human-client")
+        .attr("id", "hitl-marker-human-client-start")
         .attr("viewBox", "0 0 10 10")
-        .attr("refX", 8)
+        .attr("refX", 1)
+        .attr("refY", 5)
+        .attr("markerWidth", 8)
+        .attr("markerHeight", 8)
+        .attr("orient", "auto")
+        .append("polygon")
+        .attr("points", "9 1.5, 0 5, 9 8.5")
+        .attr("fill", "#06b6d4")
+        .attr("stroke", "#0891b2")
+        .attr("stroke-width", 0.5);
+
+      defs.append("marker")
+        .attr("id", "hitl-marker-human-client-end")
+        .attr("viewBox", "0 0 10 10")
+        .attr("refX", 9)
         .attr("refY", 5)
         .attr("markerWidth", 8)
         .attr("markerHeight", 8)
@@ -18730,10 +18794,55 @@
         .attr("stroke", "#0891b2")
         .attr("stroke-width", 0.5);
 
+      // Backwards compatibility alias
+      defs.append("marker")
+        .attr("id", "hitl-marker-human-client")
+        .attr("viewBox", "0 0 10 10")
+        .attr("refX", 9)
+        .attr("refY", 5)
+        .attr("markerWidth", 8)
+        .attr("markerHeight", 8)
+        .attr("orient", "auto")
+        .append("polygon")
+        .attr("points", "0 1.5, 9 5, 0 8.5")
+        .attr("fill", "#06b6d4")
+        .attr("stroke", "#0891b2")
+        .attr("stroke-width", 0.5);
+
+      // Horizontal Edge 2 (Client ↔ Backend)
+      defs.append("marker")
+        .attr("id", "hitl-marker-client-backend-start")
+        .attr("viewBox", "0 0 10 10")
+        .attr("refX", 1)
+        .attr("refY", 5)
+        .attr("markerWidth", 8)
+        .attr("markerHeight", 8)
+        .attr("orient", "auto")
+        .append("polygon")
+        .attr("points", "9 1.5, 0 5, 9 8.5")
+        .attr("fill", "#38bdf8")
+        .attr("stroke", "#0284c7")
+        .attr("stroke-width", 0.5);
+
+      defs.append("marker")
+        .attr("id", "hitl-marker-client-backend-end")
+        .attr("viewBox", "0 0 10 10")
+        .attr("refX", 9)
+        .attr("refY", 5)
+        .attr("markerWidth", 8)
+        .attr("markerHeight", 8)
+        .attr("orient", "auto")
+        .append("polygon")
+        .attr("points", "0 1.5, 9 5, 0 8.5")
+        .attr("fill", "#38bdf8")
+        .attr("stroke", "#0284c7")
+        .attr("stroke-width", 0.5);
+
+      // Backwards compatibility alias
       defs.append("marker")
         .attr("id", "hitl-marker-client-backend")
         .attr("viewBox", "0 0 10 10")
-        .attr("refX", 8)
+        .attr("refX", 9)
         .attr("refY", 5)
         .attr("markerWidth", 8)
         .attr("markerHeight", 8)
@@ -31346,7 +31455,15 @@
           pod.classList.toggle('active', !!activeRole);
 
           if (avatarEl) {
-            avatarEl.textContent = activeRole ? (activeRole.avatar || cfg.defAvatar) : (cornerRoles[0]?.avatar || cfg.defAvatar);
+            const actorColor = activeRole ? (corner.startsWith('L') ? '#38bdf8' : '#c084fc') : 'var(--text-muted, #94a3b8)';
+            avatarEl.innerHTML = `<svg class="uml-actor-svg" viewBox="0 0 24 38" width="22" height="34" fill="none" stroke="${actorColor}" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="7" r="5" fill="none"/>
+              <line x1="12" y1="12" x2="12" y2="24"/>
+              <line x1="3" y1="17" x2="21" y2="17"/>
+              <line x1="12" y1="24" x2="5" y2="35"/>
+              <line x1="12" y1="24" x2="19" y2="35"/>
+            </svg>`;
+            avatarEl.title = activeRole ? (`Mensch (Rolle): ${activeRole.name}`) : (`Mensch (Rolle): ${cfg.tag}`);
           }
 
           if (labelEl) {
@@ -31555,6 +31672,27 @@
       // HITL DUAL-STAGE COMMUNICATION CHAIN RENDERER (SVG CANVAS)
       // Mensch (= Rolle) ──Kante 1──► Client (= UI) ──Kante 2──► Zielsystem (= Backend)
       // =====================================================================
+      // =====================================================================
+      // HITL ORTHOGONAL DUAL-STAGE COMMUNICATION CHAIN RENDERER (SVG CANVAS)
+      // 1. Mensch: 1x im aktiven Corner-Pod mit UML-Ikonogramm (kein Duplikat)
+      // 2. Client UI: Rechteck an (X_Human, Y_TargetSystem)
+      // 3. Kante 1: Senkrechter Doppelpfeil (↕) Human <-> Client
+      // 4. Kante 2: Waagerechter Doppelpfeil (↔) Client <-> Target-System
+      // =====================================================================
+      // =====================================================================
+      // HITL ORTHOGONAL DUAL-STAGE COMMUNICATION CHAIN RENDERER (SVG CANVAS)
+      // 1. Mensch: 1x im aktiven Corner-Pod mit UML-Ikonogramm (kein Duplikat)
+      // 2. Client UI: Rechteck an (X_Human, Y_TargetSystem)
+      // 3. Kante 1: Senkrechter Doppelpfeil (↕) Human <-> Client
+      // 4. Kante 2: Waagerechter Doppelpfeil (↔) Client <-> Target-System
+      // =====================================================================
+      // =====================================================================
+      // HITL ORTHOGONAL DUAL-STAGE COMMUNICATION CHAIN RENDERER (SVG CANVAS)
+      // 1. Mensch: 1x im aktiven Corner-Pod mit UML-Ikonogramm (kein Duplikat)
+      // 2. Client UI: Rechteck an (X_Human, Y_TargetSystem)
+      // 3. Kante 1: Senkrechter Doppelpfeil (↕) Human <-> Client
+      // 4. Kante 2: Waagerechter Doppelpfeil (↔) Client <-> Target-System
+      // =====================================================================
       function renderHitlCommunicationChain(role) {
         if (!role || typeof d3 === 'undefined') return;
         let gHitl = d3.select('#gHitlOverlay');
@@ -31568,76 +31706,38 @@
         const gHitlEdges = gHitl.append('g').attr('class', 'hitl-edges');
         const gHitlNodes = gHitl.append('g').attr('class', 'hitl-nodes');
 
-        // Determine Human Anchor position based on 2x2 coordinate matrix
-        const quad = role.quadrant || 'LB';
+        // Determine Quadrant & Geometric Anchor
+        const quad = role.quadrant || 'LT';
         const isLeft = quad.startsWith('L');
         const isTop = quad.endsWith('T');
-        const baseHumanX = isLeft ? -730 : 730;
-        const baseHumanY = isTop ? -380 : 380;
 
-        // 1. KNOTEN: Der Mensch (= Rolle)
-        const gHuman = gHitlNodes.append('g')
-          .attr('class', 'hitl-node hitl-node-human')
-          .attr('id', 'hitl-human-' + role.id)
-          .attr('transform', 'translate(' + baseHumanX + ', ' + baseHumanY + ')')
-          .style('cursor', 'pointer')
-          .on('click', () => {
-            renderInspectorRole(role);
-            if (typeof toggleRightDrawer === 'function') toggleRightDrawer(true);
-          });
+        // Column Alignment: Dynamically aligned with the Human Actor Iconogram in the active Corner Pod
+        let baseHumanX = isLeft ? -760 : 760;
+        let baseHumanY = isTop ? -505 : 505;
 
-        gHuman.append('rect')
-          .attr('x', -95)
-          .attr('y', -32)
-          .attr('width', 190)
-          .attr('height', 64)
-          .attr('rx', 10)
-          .style('fill', 'rgba(15, 23, 42, 0.94)')
-          .style('stroke', isLeft ? '#06b6d4' : '#a855f7')
-          .style('stroke-width', '2.2px')
-          .style('filter', 'drop-shadow(0 8px 20px rgba(0,0,0,0.65))');
+        try {
+          const svgEl = document.getElementById('hebSvg');
+          const gMainEl = d3.select('.g-main').node();
+          const avEl = document.getElementById('avatar' + quad);
+          const podEl = document.getElementById('pod' + quad);
+          if (svgEl && gMainEl && avEl && podEl) {
+            const ctm = gMainEl.getScreenCTM().inverse();
+            const avBox = avEl.getBoundingClientRect();
+            const podBox = podEl.getBoundingClientRect();
+            const pt = svgEl.createSVGPoint();
+            pt.x = avBox.left + avBox.width / 2;
+            pt.y = isTop ? (podBox.bottom + 2) : (podBox.top - 2);
+            const svgPt = pt.matrixTransform(ctm);
+            if (Number.isFinite(svgPt.x) && Number.isFinite(svgPt.y)) {
+              baseHumanX = svgPt.x;
+              baseHumanY = svgPt.y;
+            }
+          }
+        } catch (err) {
+          console.warn('Dynamic anchor transform fallback', err);
+        }
 
-        gHuman.append('circle')
-          .attr('cx', -62)
-          .attr('cy', 0)
-          .attr('r', 20)
-          .style('fill', isLeft ? 'rgba(6,182,212,0.2)' : 'rgba(168,85,247,0.2)')
-          .style('stroke', isLeft ? '#06b6d4' : '#a855f7')
-          .style('stroke-width', '1.5px');
-
-        gHuman.append('text')
-          .attr('x', -62)
-          .attr('y', 6)
-          .attr('text-anchor', 'middle')
-          .style('font-size', '18px')
-          .text(role.avatar || '👤');
-
-        gHuman.append('text')
-          .attr('x', -34)
-          .attr('y', -12)
-          .style('font-size', '8.5px')
-          .style('font-weight', '800')
-          .style('letter-spacing', '0.5px')
-          .style('fill', isLeft ? '#38bdf8' : '#c084fc')
-          .text(isLeft ? 'MENSCH · INTERN (ROLLE)' : 'MENSCH · EXTERN (ROLLE)');
-
-        const cleanRoleName = (role.name || role.id);
-        gHuman.append('text')
-          .attr('x', -34)
-          .attr('y', 4)
-          .style('font-size', '10.5px')
-          .style('font-weight', '750')
-          .style('fill', '#ffffff')
-          .text(cleanRoleName.length > 20 ? (cleanRoleName.slice(0, 19) + '…') : cleanRoleName);
-
-        gHuman.append('text')
-          .attr('x', -34)
-          .attr('y', 19)
-          .style('font-size', '8px')
-          .style('fill', '#94a3b8')
-          .text(quad + ' · ' + (isTop ? 'Cloud & Web' : 'On-Prem / Local'));
-
-        // 2. KNOTEN & KANTEN: Kommunikations-Clients (= UI) & Zielsysteme (= Backend)
+        // Clients
         const clientSysIds = (role.clients || []).map(c => c.targetSystemId).filter(Boolean);
         const clients = (role.clients && role.clients.length > 0) ? role.clients : [
           { id: role.id + '_CL', name: 'Web-Client / UI', deviceType: 'WEB_PORTAL', os: 'Web Browser (HTTPS)', authMethod: 'SSO', targetSystemId: clientSysIds[0] || 'SYS-01' }
@@ -31646,109 +31746,141 @@
         clients.forEach((cl, clIdx) => {
           const tgtCoords = (window.nodeCoords && window.nodeCoords.get) ? window.nodeCoords.get(cl.targetSystemId) : null;
           const tgtX = tgtCoords ? tgtCoords.x : (isLeft ? -440 : 440);
-          const tgtY = tgtCoords ? tgtCoords.y : (isTop ? -240 : 240);
+          const tgtY = tgtCoords ? tgtCoords.y : (isTop ? -260 : 260);
 
-          // Compute Client UI position between Human and Target Backend System
-          const offsetMultiplier = (clIdx - (clients.length - 1) / 2) * 55;
-          const clientX = baseHumanX * 0.44 + tgtX * 0.56;
-          const clientY = baseHumanY * 0.44 + tgtY * 0.56 + offsetMultiplier;
+          // ORTHOGONAL COORDINATE INTERSECTION:
+          // X: Aligned vertically with Human Iconogram (baseHumanX)
+          // Y: Aligned horizontally with Target System Backend (tgtY)
+          const clientX = baseHumanX;
+          const clientY = tgtY;
 
-          // --- KANTE 1: Mensch (= Rolle) -> Kommunikations-Client (= UI) ---
-          const edge1Path = 'M ' + baseHumanX + ' ' + baseHumanY + ' Q ' + ((baseHumanX + clientX) / 2) + ' ' + ((baseHumanY + clientY) / 2 - 15) + ' ' + clientX + ' ' + clientY;
+          const clientW = 160;
+          const clientH = 50;
+          const sysNodeRadius = 15;
+
+          // Align the Client UI rectangle so it NEVER clips off the canvas edge:
+          // For Left pods (LT/LB): The left edge sits at baseHumanX - 22, so baseHumanX enters at x = 22 inside the card
+          // For Right pods (RT/RB): The right edge sits at baseHumanX + 22, so baseHumanX enters at x = clientW - 22 inside the card
+          const rectLeft = isLeft ? (baseHumanX - 22) : (baseHumanX + 22 - clientW);
+          const rectTop = clientY - clientH / 2;
+          const rectRight = rectLeft + clientW;
+          const rectBottom = clientY + clientH / 2;
+
+          // ===================================================================
+          // KANTE 1: SENKRECHTER DOPPELPFEIL (↕) Mensch (Pod) <───► Client (UI)
+          // ===================================================================
+          const edge1YStart = baseHumanY;
+          const edge1YEnd = isTop ? rectTop : rectBottom;
+          const edge1Path = 'M ' + clientX + ' ' + edge1YStart + ' L ' + clientX + ' ' + edge1YEnd;
+
           gHitlEdges.append('path')
             .attr('class', 'hitl-edge hitl-edge-human-client')
             .attr('id', 'hitl-edge-human-client-' + clIdx)
             .attr('d', edge1Path)
             .style('fill', 'none')
             .style('stroke', '#06b6d4')
-            .style('stroke-width', '3px')
+            .style('stroke-width', '2.8px')
             .style('stroke-dasharray', '6 3')
-            .attr('marker-end', 'url(#hitl-marker-human-client)');
+            .attr('marker-start', 'url(#hitl-marker-human-client-start)')
+            .attr('marker-end', 'url(#hitl-marker-human-client-end)');
 
-          // Kante 1 Badge
-          const mid1X = (baseHumanX + clientX) / 2;
-          const mid1Y = (baseHumanY + clientY) / 2 - 20;
+          // Badge on Vertical Edge 1
+          const mid1Y = (edge1YStart + edge1YEnd) / 2;
           const gBadge1 = gHitlEdges.append('g')
             .attr('class', 'hitl-edge-badge')
-            .attr('transform', 'translate(' + mid1X + ', ' + mid1Y + ')');
+            .attr('transform', 'translate(' + (clientX + (isLeft ? 10 : -10)) + ', ' + mid1Y + ')');
 
+          const badge1Text = 'UI ↕ Mensch (Interaktion)';
+          const b1W = 136;
           gBadge1.append('rect')
-            .attr('x', -62)
-            .attr('y', -9)
-            .attr('width', 124)
-            .attr('height', 18)
-            .attr('rx', 9)
-            .style('fill', 'rgba(15, 23, 42, 0.92)')
+            .attr('x', isLeft ? 0 : -b1W)
+            .attr('y', -10)
+            .attr('width', b1W)
+            .attr('height', 20)
+            .attr('rx', 10)
+            .style('fill', 'rgba(15, 23, 42, 0.94)')
             .style('stroke', '#06b6d4')
-            .style('stroke-width', '1px');
+            .style('stroke-width', '1.2px')
+            .style('filter', 'drop-shadow(0 2px 8px rgba(0,0,0,0.5))');
 
           gBadge1.append('text')
+            .attr('x', isLeft ? (b1W / 2) : (-b1W / 2))
+            .attr('y', 0)
             .attr('text-anchor', 'middle')
             .attr('dominant-baseline', 'middle')
-            .style('font-size', '8px')
+            .style('font-size', '8.5px')
             .style('font-weight', '750')
             .style('fill', '#67e8f9')
-            .text('UI-Interaktion (Eingabe)');
+            .text(badge1Text);
 
-          // --- KANTE 2: Kommunikations-Client (= UI) -> Zielsystem (= Backend) ---
-          const edge2Path = 'M ' + clientX + ' ' + clientY + ' Q ' + ((clientX + tgtX) / 2) + ' ' + ((clientY + tgtY) / 2 + 15) + ' ' + tgtX + ' ' + tgtY;
+          // ===================================================================
+          // KANTE 2: WAAGERECHTER DOPPELPFEIL (↔) Client (UI) <───► Target-System
+          // ===================================================================
+          const edge2XStart = isLeft ? rectRight : rectLeft;
+          const edge2XEnd = isLeft ? (tgtX - sysNodeRadius) : (tgtX + sysNodeRadius);
+          const edge2Path = 'M ' + edge2XStart + ' ' + clientY + ' L ' + edge2XEnd + ' ' + clientY;
+
           gHitlEdges.append('path')
             .attr('class', 'hitl-edge hitl-edge-client-backend')
             .attr('id', 'hitl-edge-client-backend-' + clIdx)
             .attr('d', edge2Path)
             .style('fill', 'none')
             .style('stroke', '#38bdf8')
-            .style('stroke-width', '3px')
-            .attr('marker-end', 'url(#hitl-marker-client-backend)');
+            .style('stroke-width', '2.8px')
+            .attr('marker-start', 'url(#hitl-marker-client-backend-start)')
+            .attr('marker-end', 'url(#hitl-marker-client-backend-end)');
 
-          // Animated Token along Edge 2 (Datenfluss)
+          // Animated Flow Token along Horizontal Edge 2
           const token = gHitlEdges.append('circle')
             .attr('class', 'hitl-flow-token')
             .attr('r', 4.5)
             .style('fill', '#38bdf8')
             .style('stroke', '#ffffff')
-            .style('stroke-width', '1.5px');
+            .style('stroke-width', '1.5px')
+            .style('filter', 'drop-shadow(0 0 6px #38bdf8)');
 
           const animMotion = document.createElementNS('http://www.w3.org/2000/svg', 'animateMotion');
           animMotion.setAttribute('path', edge2Path);
-          animMotion.setAttribute('dur', '2.2s');
+          animMotion.setAttribute('dur', '2.4s');
           animMotion.setAttribute('repeatCount', 'indefinite');
           token.node().appendChild(animMotion);
 
-          // Kante 2 Badge (Protokoll & Nachricht)
-          const mid2X = (clientX + tgtX) / 2;
-          const mid2Y = (clientY + tgtY) / 2 + 18;
+          // Badge on Horizontal Edge 2 (Protocol & Message)
+          const mid2X = (edge2XStart + edge2XEnd) / 2;
           const msgLabel = (cl.messagesEmitted && cl.messagesEmitted[0]) ? cl.messagesEmitted[0] : (cl.os?.includes('HTTPS') ? 'HTTPS REST' : 'API / Datenfluss');
           const cleanMsg = msgLabel.length > 22 ? (msgLabel.slice(0, 21) + '…') : msgLabel;
-          const badgeW = Math.max(90, cleanMsg.length * 6.8 + 18);
+          const b2W = Math.max(96, cleanMsg.length * 7 + 22);
 
           const gBadge2 = gHitlEdges.append('g')
             .attr('class', 'hitl-edge-badge')
-            .attr('transform', 'translate(' + mid2X + ', ' + mid2Y + ')');
+            .attr('transform', 'translate(' + mid2X + ', ' + (clientY - 16) + ')');
 
           gBadge2.append('rect')
-            .attr('x', -badgeW / 2)
-            .attr('y', -9)
-            .attr('width', badgeW)
-            .attr('height', 18)
-            .attr('rx', 9)
-            .style('fill', 'rgba(15, 23, 42, 0.92)')
+            .attr('x', -b2W / 2)
+            .attr('y', -10)
+            .attr('width', b2W)
+            .attr('height', 20)
+            .attr('rx', 10)
+            .style('fill', 'rgba(15, 23, 42, 0.94)')
             .style('stroke', '#38bdf8')
-            .style('stroke-width', '1px');
+            .style('stroke-width', '1.2px')
+            .style('filter', 'drop-shadow(0 2px 8px rgba(0,0,0,0.5))');
 
           gBadge2.append('text')
             .attr('text-anchor', 'middle')
             .attr('dominant-baseline', 'middle')
-            .style('font-size', '8px')
+            .style('font-size', '8.5px')
             .style('font-weight', '750')
             .style('fill', '#bae6fd')
             .text(cleanMsg);
 
-          // --- KNOTEN 2: Kommunikations-Client (= UI der Anwendung) ---
+          // ===================================================================
+          // KNOTEN: USER-INTERFACE / CLIENT (RECHTECK)
+          // ===================================================================
           const gClient = gHitlNodes.append('g')
             .attr('class', 'hitl-node hitl-node-client')
             .attr('id', 'hitl-client-' + (cl.id || clIdx))
-            .attr('transform', 'translate(' + clientX + ', ' + clientY + ')')
+            .attr('transform', 'translate(' + rectLeft + ', ' + rectTop + ')')
             .style('cursor', 'pointer')
             .on('click', () => {
               renderInspectorRole(role);
@@ -31758,54 +31890,58 @@
               }
             });
 
+          // Card Background Rectangle
           gClient.append('rect')
-            .attr('x', -95)
-            .attr('y', -30)
-            .attr('width', 190)
-            .attr('height', 60)
-            .attr('rx', 10)
-            .style('fill', 'rgba(30, 41, 59, 0.95)')
+            .attr('width', clientW)
+            .attr('height', clientH)
+            .attr('rx', 9)
+            .style('fill', 'rgba(15, 23, 42, 0.95)')
             .style('stroke', '#38bdf8')
-            .style('stroke-width', '2px')
-            .style('filter', 'drop-shadow(0 6px 16px rgba(0,0,0,0.55))');
+            .style('stroke-width', '2.2px')
+            .style('filter', 'drop-shadow(0 8px 24px rgba(0,0,0,0.65))');
 
+          // Device Icon Badge
           const devIcon = cl.deviceType === 'WEB_PORTAL' ? '🌐' : (cl.deviceType === 'TABLET_MOBILE' ? '📱' : (cl.deviceType === 'TERMINAL' ? '🖥️' : '💻'));
           gClient.append('circle')
-            .attr('cx', -65)
-            .attr('cy', 0)
-            .attr('r', 18)
-            .style('fill', 'rgba(56, 189, 248, 0.16)')
+            .attr('cx', 20)
+            .attr('cy', 25)
+            .attr('r', 13)
+            .style('fill', 'rgba(56, 189, 248, 0.18)')
             .style('stroke', '#38bdf8')
             .style('stroke-width', '1.2px');
 
           gClient.append('text')
-            .attr('x', -65)
-            .attr('y', 5)
+            .attr('x', 20)
+            .attr('y', 29.5)
             .attr('text-anchor', 'middle')
-            .style('font-size', '15px')
+            .style('font-size', '12px')
             .text(devIcon);
 
+          // Header Tag
           gClient.append('text')
-            .attr('x', -38)
-            .attr('y', -11)
-            .style('font-size', '8px')
+            .attr('x', 39)
+            .attr('y', 15)
+            .style('font-size', '7.5px')
             .style('font-weight', '800')
+            .style('letter-spacing', '0.5px')
             .style('fill', '#38bdf8')
-            .text('KOMMUNIKATIONS-CLIENT (' + (cl.deviceType || 'UI') + ')');
+            .text('CLIENT · USER INTERFACE');
 
+          // Client Title
           const cleanClName = (cl.name || cl.id);
           gClient.append('text')
-            .attr('x', -38)
-            .attr('y', 4)
-            .style('font-size', '10px')
+            .attr('x', 39)
+            .attr('y', 28)
+            .style('font-size', '9.5px')
             .style('font-weight', '750')
             .style('fill', '#ffffff')
-            .text(cleanClName.length > 22 ? (cleanClName.slice(0, 21) + '…') : cleanClName);
+            .text(cleanClName.length > 25 ? (cleanClName.slice(0, 24) + '…') : cleanClName);
 
-          const subInfo = (cl.os ? cl.os.split(' ')[0] : 'UI') + ' · ' + (cl.authMethod ? cl.authMethod.slice(0, 15) : 'Auth');
+          // Subtitle / Auth / OS
+          const subInfo = (cl.os ? cl.os.split(' ')[0] : 'UI') + ' · ' + (cl.authMethod ? cl.authMethod.slice(0, 14) : 'SSO');
           gClient.append('text')
-            .attr('x', -38)
-            .attr('y', 17)
+            .attr('x', 39)
+            .attr('y', 40)
             .style('font-size', '7.5px')
             .style('fill', '#94a3b8')
             .text(subInfo);
@@ -31894,13 +32030,11 @@
           renderHitlCommunicationChain(role);
         }
 
-        // 4. Render role inspector & open drawer
+        // 4. Render role inspector (preserve collapsed state if user closed it)
         renderInspectorRole(role);
-        if (typeof toggleRightDrawer === 'function') {
+        const sr = document.getElementById('sidebarRight');
+        if (sr && !sr.classList.contains('collapsed') && typeof toggleRightDrawer === 'function') {
           toggleRightDrawer(true);
-        } else {
-          const sr = document.getElementById('sidebarRight');
-          if (sr) sr.classList.remove('collapsed');
         }
 
         // 5. Toast
