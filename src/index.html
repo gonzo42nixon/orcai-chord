@@ -4942,6 +4942,474 @@
       filter: drop-shadow(0 0 5px rgba(2, 132, 199, 0.55)) !important;
     }
 
+  
+    /* =====================================================================
+       ORCAI AI AGENT BOT DRAWER & VOICE UI STYLES
+       ===================================================================== */
+    .agent-bot-trigger-btn {
+      position: relative;
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(56, 189, 248, 0.15)) !important;
+      border: 1px solid rgba(139, 92, 246, 0.45) !important;
+      color: #c084fc !important;
+      transition: all 0.25s ease !important;
+    }
+    .agent-bot-trigger-btn:hover {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.35), rgba(56, 189, 248, 0.28)) !important;
+      border-color: #a855f7 !important;
+      color: #f3e8ff !important;
+      box-shadow: 0 0 16px rgba(168, 85, 247, 0.5) !important;
+      transform: translateY(-1px);
+    }
+    .agent-bot-icon {
+      font-size: 1.15rem;
+      line-height: 1;
+      display: inline-block;
+      filter: drop-shadow(0 0 6px rgba(168, 85, 247, 0.6));
+    }
+    .agent-bot-glow-dot {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 7px;
+      height: 7px;
+      background: #10b981;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #10b981, 0 0 14px #10b981;
+      animation: agentPulseDot 2.2s infinite ease-in-out;
+    }
+    @keyframes agentPulseDot {
+      0%, 100% { transform: scale(1); opacity: 0.9; }
+      50% { transform: scale(1.35); opacity: 0.4; }
+    }
+
+    /* Agent Drawer Container */
+    .drawer-agent {
+      width: 440px;
+      min-width: 320px;
+      max-width: 780px;
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(20px);
+      z-index: 45;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      flex-shrink: 0;
+      transition: width 0.25s ease, transform 0.25s ease;
+      box-shadow: 0 0 35px rgba(0, 0, 0, 0.6);
+    }
+    .drawer-agent-right {
+      order: 10;
+      border-left: 1px solid rgba(168, 85, 247, 0.3);
+    }
+    .drawer-agent-left {
+      order: -1;
+      border-right: 1px solid rgba(168, 85, 247, 0.3);
+    }
+    .drawer-agent.collapsed {
+      display: none !important;
+    }
+
+    /* Agent Header */
+    .agent-drawer-header {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.18), rgba(15, 23, 42, 0.8));
+      border-bottom: 1px solid rgba(168, 85, 247, 0.25);
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .agent-avatar-icon {
+      font-size: 1.45rem;
+      background: rgba(168, 85, 247, 0.2);
+      border: 1px solid rgba(168, 85, 247, 0.4);
+      border-radius: 10px;
+      padding: 3px 6px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 12px rgba(168, 85, 247, 0.35);
+    }
+    .agent-status-sub {
+      font-size: 0.66rem;
+      color: #94a3b8;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 175px;
+    }
+
+    /* Chat Messages Stream */
+    .agent-chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      scroll-behavior: smooth;
+    }
+    .agent-chat-messages::-webkit-scrollbar {
+      width: 6px;
+    }
+    .agent-chat-messages::-webkit-scrollbar-thumb {
+      background: rgba(168, 85, 247, 0.3);
+      border-radius: 3px;
+    }
+
+    /* Message Bubbles */
+    .agent-msg {
+      display: flex;
+      flex-direction: column;
+      max-width: 96%;
+      animation: agentMsgFadeIn 0.25s ease-out;
+    }
+    @keyframes agentMsgFadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .agent-msg-user {
+      align-self: flex-end;
+    }
+    .agent-msg-user .agent-msg-bubble {
+      background: linear-gradient(135deg, rgba(14, 165, 233, 0.25), rgba(99, 102, 241, 0.35));
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      color: #f8fafc;
+      border-radius: 14px 14px 2px 14px;
+      padding: 8px 12px;
+      font-size: 0.8rem;
+      line-height: 1.4;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    }
+    .agent-msg-bot {
+      align-self: flex-start;
+      width: 100%;
+    }
+    .agent-msg-bot .agent-msg-bubble {
+      background: rgba(30, 41, 59, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-left: 3px solid #a855f7;
+      color: #e2e8f0;
+      border-radius: 14px 14px 14px 2px;
+      padding: 10px 12px;
+      font-size: 0.8rem;
+      line-height: 1.45;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+    }
+    .agent-msg-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+      font-size: 0.68rem;
+      color: #a855f7;
+      font-weight: 700;
+    }
+    .agent-msg-body {
+      word-break: break-word;
+    }
+    .agent-msg-body p {
+      margin: 0 0 6px 0;
+    }
+    .agent-msg-body p:last-child {
+      margin-bottom: 0;
+    }
+    .agent-msg-body ul {
+      margin: 4px 0 6px 18px;
+      padding: 0;
+    }
+    .agent-msg-body li {
+      margin-bottom: 3px;
+    }
+
+    /* Action Chips Container in Messages */
+    .agent-action-bar {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed rgba(255, 255, 255, 0.12);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .agent-action-bar-label {
+      width: 100%;
+      font-size: 0.64rem;
+      color: #94a3b8;
+      font-weight: 600;
+      margin-bottom: 2px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Interactive Action Chips */
+    .agent-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.18s ease;
+      background: rgba(255, 255, 255, 0.06);
+      color: #f1f5f9;
+      text-decoration: none;
+      line-height: 1.25;
+    }
+    .agent-chip:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+    }
+    .agent-chip-sys {
+      background: rgba(14, 165, 233, 0.15);
+      border-color: rgba(56, 189, 248, 0.4);
+      color: #38bdf8;
+    }
+    .agent-chip-sys:hover {
+      background: rgba(14, 165, 233, 0.3);
+      border-color: #38bdf8;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+    }
+    .agent-chip-proc {
+      background: rgba(16, 185, 129, 0.15);
+      border-color: rgba(16, 185, 129, 0.4);
+      color: #34d399;
+    }
+    .agent-chip-proc:hover {
+      background: rgba(16, 185, 129, 0.3);
+      border-color: #10b981;
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+    }
+    .agent-chip-puml {
+      background: rgba(168, 85, 247, 0.15);
+      border-color: rgba(168, 85, 247, 0.4);
+      color: #c084fc;
+    }
+    .agent-chip-puml:hover {
+      background: rgba(168, 85, 247, 0.3);
+      border-color: #a855f7;
+      box-shadow: 0 0 12px rgba(168, 85, 247, 0.4);
+    }
+    .agent-chip-hitl {
+      background: rgba(245, 158, 11, 0.15);
+      border-color: rgba(245, 158, 11, 0.4);
+      color: #fbbf24;
+    }
+    .agent-chip-hitl:hover {
+      background: rgba(245, 158, 11, 0.3);
+      border-color: #f59e0b;
+      box-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
+    }
+    .agent-chip-ux {
+      background: rgba(6, 182, 212, 0.15);
+      border-color: rgba(6, 182, 212, 0.4);
+      color: #22d3ee;
+    }
+    .agent-chip-ux:hover {
+      background: rgba(6, 182, 212, 0.3);
+      border-color: #06b6d4;
+      box-shadow: 0 0 12px rgba(6, 182, 212, 0.4);
+    }
+    .agent-chip-integ {
+      background: rgba(234, 179, 8, 0.15);
+      border-color: rgba(234, 179, 8, 0.4);
+      color: #facc15;
+    }
+    .agent-chip-integ:hover {
+      background: rgba(234, 179, 8, 0.3);
+      border-color: #eab308;
+      box-shadow: 0 0 12px rgba(234, 179, 8, 0.4);
+    }
+    .agent-chip-model {
+      background: rgba(99, 102, 241, 0.18);
+      border-color: rgba(129, 140, 248, 0.45);
+      color: #a5b4fc;
+    }
+    .agent-chip-model:hover {
+      background: rgba(99, 102, 241, 0.35);
+      border-color: #6366f1;
+      box-shadow: 0 0 12px rgba(99, 102, 241, 0.4);
+    }
+
+    /* Prompt Suggestions */
+    .agent-prompt-suggestions {
+      padding: 6px 14px 8px 14px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      background: rgba(15, 23, 42, 0.4);
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+      flex-shrink: 0;
+    }
+    .agent-prompt-chip {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 3px 10px;
+      font-size: 0.68rem;
+      color: #cbd5e1;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      white-space: nowrap;
+    }
+    .agent-prompt-chip:hover {
+      background: rgba(168, 85, 247, 0.2);
+      border-color: #a855f7;
+      color: #f3e8ff;
+      transform: translateY(-1px);
+    }
+
+    /* Voice Listening Bar */
+    .agent-listening-bar {
+      background: linear-gradient(90deg, rgba(239, 68, 68, 0.25), rgba(168, 85, 247, 0.3), rgba(14, 165, 233, 0.25));
+      border-top: 1px solid rgba(239, 68, 68, 0.5);
+      border-bottom: 1px solid rgba(239, 68, 68, 0.3);
+      padding: 7px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      animation: listeningBarPulse 1.8s infinite ease-in-out;
+      flex-shrink: 0;
+    }
+    @keyframes listeningBarPulse {
+      0%, 100% { background-color: rgba(239, 68, 68, 0.2); }
+      50% { background-color: rgba(168, 85, 247, 0.3); }
+    }
+    .agent-mic-pulse {
+      font-size: 1.15rem;
+      animation: micPulseAnimation 1s infinite alternate ease-in-out;
+    }
+    @keyframes micPulseAnimation {
+      from { transform: scale(0.9); opacity: 0.7; }
+      to { transform: scale(1.25); opacity: 1; filter: drop-shadow(0 0 8px #ef4444); }
+    }
+    .agent-listening-text {
+      flex: 1;
+      font-size: 0.73rem;
+      font-weight: 600;
+      color: #fef2f2;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .agent-cancel-mic-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #f8fafc;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      font-size: 0.65rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .agent-cancel-mic-btn:hover {
+      background: #ef4444;
+      border-color: #ef4444;
+    }
+
+    /* Input Bar */
+    .agent-input-bar {
+      padding: 10px 12px;
+      background: rgba(15, 23, 42, 0.9);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    .agent-mic-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid rgba(168, 85, 247, 0.4);
+      background: rgba(168, 85, 247, 0.15);
+      color: #f3e8ff;
+      font-size: 1.05rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+    .agent-mic-btn:hover {
+      background: rgba(168, 85, 247, 0.35);
+      border-color: #a855f7;
+      box-shadow: 0 0 12px rgba(168, 85, 247, 0.4);
+      transform: scale(1.05);
+    }
+    .agent-mic-btn.recording {
+      background: #ef4444 !important;
+      border-color: #f87171 !important;
+      box-shadow: 0 0 16px rgba(239, 68, 68, 0.8) !important;
+      animation: micRecordingGlow 1s infinite alternate ease-in-out;
+    }
+    @keyframes micRecordingGlow {
+      from { transform: scale(1); box-shadow: 0 0 8px #ef4444; }
+      to { transform: scale(1.1); box-shadow: 0 0 18px #ef4444; }
+    }
+    .agent-text-input {
+      flex: 1;
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 10px;
+      color: #f8fafc;
+      font-size: 0.78rem;
+      padding: 8px 12px;
+      resize: none;
+      outline: none;
+      font-family: inherit;
+      line-height: 1.35;
+      max-height: 90px;
+      min-height: 36px;
+      box-sizing: border-box;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .agent-text-input:focus {
+      border-color: #a855f7;
+      box-shadow: 0 0 12px rgba(168, 85, 247, 0.35);
+    }
+    .agent-send-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      border: 1px solid rgba(168, 85, 247, 0.4);
+      background: linear-gradient(135deg, #a855f7, #6366f1);
+      color: #ffffff;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+    .agent-send-btn:hover {
+      filter: brightness(1.15);
+      transform: scale(1.05);
+      box-shadow: 0 0 14px rgba(168, 85, 247, 0.5);
+    }
+    .btn-msg-speak {
+      background: none;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      font-size: 0.72rem;
+      padding: 0 4px;
+      transition: color 0.15s ease;
+    }
+    .btn-msg-speak:hover {
+      color: #a855f7;
+    }
+
   </style>
 </head>
 <body class="theme-night">
@@ -4968,6 +5436,12 @@
 
     <div class="header-actions">
       <!-- Omni-Search & Command Palette (Ctrl+K / Cmd+K) -->
+      <!-- ORCAI AI Agent Bot Activation (Voice & Text) -->
+      <button class="header-action-btn agent-bot-trigger-btn" id="btnAgentToggle" type="button" title="ORCAI KI-Architektur-Agent öffnen (Sprach- &amp; Texteingabe)" aria-label="KI-Architektur-Agent öffnen">
+        <span class="agent-bot-icon">🤖</span>
+        <span class="agent-bot-glow-dot"></span>
+      </button>
+
       <button class="header-action-btn" id="btnOmniSearch" type="button" title="Omni-Search &amp; Befehlspalette öffnen (Strg+K / ⌘K)" aria-label="Omni-Search &amp; Befehlspalette öffnen (Strg+K)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       </button>
@@ -5380,6 +5854,60 @@
         </span>
       </div>
     </main>
+
+    <!-- AI ARCHITECTURE AGENT DRAWER (Voice & Text) -->
+    <aside class="drawer drawer-agent drawer-agent-right collapsed" id="sidebarAgent">
+      <div class="agent-drawer-header">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span class="agent-avatar-icon">🤖</span>
+          <div>
+            <div style="font-size:0.86rem; font-weight:700; color:var(--text-bright); line-height:1.2;">ORCAI KI-Architekt</div>
+            <div class="agent-status-sub" id="agentStatusSub">Bereit für Sprach- oder Textanfragen</div>
+          </div>
+        </div>
+        <div class="drawer-actions">
+          <button class="drawer-btn-icon" id="btnAgentSideToggle" title="Seite wechseln: Links ⇄ Rechts" aria-label="Seite wechseln">⇄</button>
+          <button class="drawer-btn-icon active" id="btnAgentVoiceToggle" title="Sprachausgabe (Vorlesen) an/aus" aria-label="Sprachausgabe an/aus">🔊</button>
+          <button class="drawer-btn-icon" id="btnAgentS" title="Kompakt (360px)">S</button>
+          <button class="drawer-btn-icon active" id="btnAgentM" title="Standard (440px)">M</button>
+          <button class="drawer-btn-icon" id="btnAgentL" title="Breit (640px)">L</button>
+          <button class="drawer-btn-icon" id="btnAgentCollapse" title="Agent schließen (✕)">✕</button>
+        </div>
+      </div>
+
+      <!-- Chat Messages Stream -->
+      <div class="agent-chat-messages" id="agentChatMessages">
+        <!-- Initial Welcome Message will be rendered by JS -->
+      </div>
+
+      <!-- Prompt Suggestions -->
+      <div class="agent-prompt-suggestions" id="agentPromptSuggestions">
+        <div class="agent-prompt-chip" onclick="window.askOrcaiAgent('Welche Systeme gehören zur Notaufnahme?')">🏥 Notaufnahme Systeme</div>
+        <div class="agent-prompt-chip" onclick="window.askOrcaiAgent('Zeige mir den Notfallprozess JSD-P-01')">📋 Notfallprozess JSD-P-01</div>
+        <div class="agent-prompt-chip" onclick="window.askOrcaiAgent('Wer bedient den NIDApad Mobile Client?')">📱 NIDApad &amp; RTW</div>
+        <div class="agent-prompt-chip" onclick="window.askOrcaiAgent('Welche Schnittstellen nutzen FHIR oder HL7?')">⚡ FHIR &amp; HL7 Schnittstellen</div>
+        <div class="agent-prompt-chip" onclick="window.askOrcaiAgent('Wie funktioniert das Quad-Chord Modell?')">ℹ️ Quad-Chord Architektur</div>
+        <div class="agent-prompt-chip" onclick="window.askOrcaiAgent('Befundungsprozess JSD-P-02 in BPMN öffnen')">🔬 Befundung BPMN</div>
+      </div>
+
+      <!-- Live Voice Listening Status Bar -->
+      <div class="agent-listening-bar" id="agentListeningBar" style="display:none;">
+        <span class="agent-mic-pulse">🎤</span>
+        <span class="agent-listening-text" id="agentListeningText">Ich höre zu... Sprechen Sie jetzt</span>
+        <button class="agent-cancel-mic-btn" id="btnAgentCancelMic" title="Spracheingabe abbrechen">✕</button>
+      </div>
+
+      <!-- Input Bar -->
+      <div class="agent-input-bar">
+        <button class="agent-mic-btn" id="btnAgentMic" type="button" title="Spracheingabe starten (Mikrofon)" aria-label="Spracheingabe">
+          <span class="mic-icon">🎤</span>
+        </button>
+        <textarea class="agent-text-input" id="agentTextInput" rows="1" placeholder="Frage zur Architektur stellen oder einsprechen..."></textarea>
+        <button class="agent-send-btn" id="btnAgentSend" type="button" title="Anfrage senden (Enter)" aria-label="Senden">
+          <span>➤</span>
+        </button>
+      </div>
+    </aside>
 
     <!-- RIGHT DRAWER: Inspektor + Aktive Tags (pinned at bottom) -->
     <aside class="drawer drawer-right" id="sidebarRight">
@@ -42505,7 +43033,579 @@
         window.updateBpmnTransform(entry, true);
       };
 
-</script>
+
+
+      // =====================================================================
+      // ORCAI AI ARCHITECTURE AGENT ENGINE (VOICE & TEXT + CANVAS ACTIVATION)
+      // =====================================================================
+      (function() {
+        let isAgentOpen = false;
+        let agentDockSide = localStorage.getItem('orcai_agent_dock_side') || 'right';
+        let isVoiceOutputEnabled = localStorage.getItem('orcai_agent_voice_enabled') !== 'false';
+        let isSpeechRecognizing = false;
+        let speechRecognitionInstance = null;
+
+        const sidebarAgent = document.getElementById('sidebarAgent');
+        const btnAgentToggle = document.getElementById('btnAgentToggle');
+        const btnAgentSideToggle = document.getElementById('btnAgentSideToggle');
+        const btnAgentVoiceToggle = document.getElementById('btnAgentVoiceToggle');
+        const btnAgentCollapse = document.getElementById('btnAgentCollapse');
+        const btnAgentMic = document.getElementById('btnAgentMic');
+        const btnAgentCancelMic = document.getElementById('btnAgentCancelMic');
+        const btnAgentSend = document.getElementById('btnAgentSend');
+        const agentTextInput = document.getElementById('agentTextInput');
+        const agentChatMessages = document.getElementById('agentChatMessages');
+        const agentListeningBar = document.getElementById('agentListeningBar');
+        const agentListeningText = document.getElementById('agentListeningText');
+        const workspace = document.querySelector('.workspace');
+
+        // Apply initial docking side
+        function applyDockSide(side) {
+          agentDockSide = side;
+          localStorage.setItem('orcai_agent_dock_side', side);
+          if (!sidebarAgent || !workspace) return;
+
+          sidebarAgent.classList.remove('drawer-agent-left', 'drawer-agent-right');
+          if (side === 'left') {
+            sidebarAgent.classList.add('drawer-agent-left');
+            // Insert at the beginning of workspace
+            workspace.insertBefore(sidebarAgent, workspace.firstChild);
+            if (btnAgentSideToggle) btnAgentSideToggle.title = "Seite wechseln (Aktuell: Links ➔ Rechts)";
+          } else {
+            sidebarAgent.classList.add('drawer-agent-right');
+            // Append at the end of workspace
+            workspace.appendChild(sidebarAgent);
+            if (btnAgentSideToggle) btnAgentSideToggle.title = "Seite wechseln (Aktuell: Rechts ➔ Links)";
+          }
+          if (typeof window.updatePopoutBayLayout === 'function') {
+            setTimeout(window.updatePopoutBayLayout, 260);
+          }
+        }
+
+        // Toggle Open/Collapse
+        function toggleAgentDrawer(forceOpen) {
+          if (!sidebarAgent) return;
+          const shouldOpen = forceOpen !== undefined ? forceOpen : sidebarAgent.classList.contains('collapsed');
+          if (shouldOpen) {
+            sidebarAgent.classList.remove('collapsed');
+            sidebarAgent.style.display = 'flex';
+            isAgentOpen = true;
+            if (btnAgentToggle) btnAgentToggle.classList.add('active');
+            if (agentTextInput) agentTextInput.focus();
+            if (agentChatMessages && agentChatMessages.children.length === 0) {
+              renderInitialAgentGreeting();
+            }
+          } else {
+            sidebarAgent.classList.add('collapsed');
+            sidebarAgent.style.display = 'none';
+            isAgentOpen = false;
+            if (btnAgentToggle) btnAgentToggle.classList.remove('active');
+            stopSpeechRecognition();
+          }
+          if (typeof window.updatePopoutBayLayout === 'function') {
+            setTimeout(window.updatePopoutBayLayout, 260);
+          }
+        }
+        window.toggleAgentDrawer = toggleAgentDrawer;
+
+        // Toggle Left ⇄ Right Side
+        function toggleAgentSide() {
+          const targetSide = (agentDockSide === 'right') ? 'left' : 'right';
+          applyDockSide(targetSide);
+          if (typeof window.showCrudToast === 'function') {
+            window.showCrudToast('🤖 KI-Agent angedockt auf der ' + (targetSide === 'left' ? 'linken' : 'rechten') + ' Seite');
+          }
+        }
+        window.toggleAgentSide = toggleAgentSide;
+
+        // Preset sizes
+        const btnAgentS = document.getElementById('btnAgentS');
+        const btnAgentM = document.getElementById('btnAgentM');
+        const btnAgentL = document.getElementById('btnAgentL');
+
+        function setAgentWidth(w, activeBtn) {
+          if (!sidebarAgent) return;
+          sidebarAgent.style.width = w + 'px';
+          [btnAgentS, btnAgentM, btnAgentL].forEach(b => b?.classList.remove('active'));
+          activeBtn?.classList.add('active');
+          if (typeof window.updatePopoutBayLayout === 'function') {
+            setTimeout(window.updatePopoutBayLayout, 260);
+          }
+        }
+        if (btnAgentS) btnAgentS.onclick = () => setAgentWidth(360, btnAgentS);
+        if (btnAgentM) btnAgentM.onclick = () => setAgentWidth(440, btnAgentM);
+        if (btnAgentL) btnAgentL.onclick = () => setAgentWidth(640, btnAgentL);
+
+        // Voice Output Toggle
+        function updateVoiceToggleUI() {
+          if (!btnAgentVoiceToggle) return;
+          if (isVoiceOutputEnabled) {
+            btnAgentVoiceToggle.textContent = '🔊';
+            btnAgentVoiceToggle.title = 'Sprachausgabe aktiv (Klicken zum Stummschalten)';
+            btnAgentVoiceToggle.classList.add('active');
+          } else {
+            btnAgentVoiceToggle.textContent = '🔇';
+            btnAgentVoiceToggle.title = 'Sprachausgabe stummgeschaltet (Klicken zum Aktivieren)';
+            btnAgentVoiceToggle.classList.remove('active');
+          }
+        }
+
+        if (btnAgentVoiceToggle) {
+          btnAgentVoiceToggle.onclick = () => {
+            isVoiceOutputEnabled = !isVoiceOutputEnabled;
+            localStorage.setItem('orcai_agent_voice_enabled', isVoiceOutputEnabled);
+            updateVoiceToggleUI();
+            if (!isVoiceOutputEnabled && window.speechSynthesis) {
+              window.speechSynthesis.cancel();
+            }
+          };
+        }
+
+        // Text-to-Speech (TTS)
+        function speakAgentText(text) {
+          if (!isVoiceOutputEnabled || !('speechSynthesis' in window)) return;
+          window.speechSynthesis.cancel();
+
+          // Strip HTML tags, action tokens, brackets, and emojis for natural spoken text
+          let clean = text.replace(/<[^>]*>/g, ' ');
+          clean = clean.replace(/\[\[[^\]]*\]\]/g, ' ');
+          clean = clean.replace(/[🏥📋📊👤📱💻⚡🔄🔗ℹ️💡✕➤]/g, ' ');
+          clean = clean.replace(/action:[a-z0-9_:-]+/gi, ' ');
+          clean = clean.replace(/JSD-([A-Z0-9_-]+)/g, 'J S D $1');
+          clean = clean.replace(/SYS-([A-Z0-9_-]+)/g, 'System $1');
+          clean = clean.replace(/INT-([A-Z0-9_-]+)/g, 'Integration $1');
+          clean = clean.replace(/\s+/g, ' ').trim();
+
+          if (!clean) return;
+
+          const utterance = new SpeechSynthesisUtterance(clean);
+          utterance.lang = 'de-DE';
+          utterance.rate = 1.05;
+          utterance.pitch = 1.0;
+
+          // Prefer German voices if available
+          const voices = window.speechSynthesis.getVoices();
+          const deVoice = voices.find(v => v.lang.startsWith('de') && (v.name.includes('Google') || v.name.includes('Microsoft') || v.name.includes('Hedda') || v.name.includes('Stefan')));
+          if (deVoice) utterance.voice = deVoice;
+
+          window.speechSynthesis.speak(utterance);
+        }
+        window.speakAgentText = speakAgentText;
+
+        // Speech-to-Text (STT) via Web Speech API
+        function startSpeechRecognition() {
+          const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+          if (!SpeechRec) {
+            alert('Die Web Speech API wird von diesem Browser leider nicht unterstützt. Bitte nutzen Sie Microsoft Edge oder Google Chrome.');
+            return;
+          }
+
+          if (isSpeechRecognizing) {
+            stopSpeechRecognition();
+            return;
+          }
+
+          try {
+            speechRecognitionInstance = new SpeechRec();
+            speechRecognitionInstance.lang = 'de-DE';
+            speechRecognitionInstance.continuous = false;
+            speechRecognitionInstance.interimResults = true;
+
+            speechRecognitionInstance.onstart = () => {
+              isSpeechRecognizing = true;
+              if (btnAgentMic) btnAgentMic.classList.add('recording');
+              if (agentListeningBar) agentListeningBar.style.display = 'flex';
+              if (agentListeningText) agentListeningText.textContent = 'Ich höre zu... Sprechen Sie jetzt';
+            };
+
+            speechRecognitionInstance.onresult = (event) => {
+              let interimTranscript = '';
+              let finalTranscript = '';
+              for (let i = event.resultIndex; i < event.results.length; ++i) {
+                if (event.results[i].isFinal) {
+                  finalTranscript += event.results[i][0].transcript;
+                } else {
+                  interimTranscript += event.results[i][0].transcript;
+                }
+              }
+
+              if (agentListeningText && (interimTranscript || finalTranscript)) {
+                agentListeningText.textContent = '🎤 ' + (finalTranscript || interimTranscript);
+              }
+              if (agentTextInput && (finalTranscript || interimTranscript)) {
+                agentTextInput.value = finalTranscript || interimTranscript;
+              }
+
+              if (finalTranscript) {
+                stopSpeechRecognition();
+                window.askOrcaiAgent(finalTranscript, true);
+              }
+            };
+
+            speechRecognitionInstance.onerror = (e) => {
+              console.warn('Speech recognition error:', e.error);
+              stopSpeechRecognition();
+              if (agentListeningText) agentListeningText.textContent = 'Spracheingabe abgebrochen (' + e.error + ')';
+            };
+
+            speechRecognitionInstance.onend = () => {
+              stopSpeechRecognition();
+            };
+
+            speechRecognitionInstance.start();
+          } catch (err) {
+            console.error('Failed to start speech recognition:', err);
+            stopSpeechRecognition();
+          }
+        }
+
+        function stopSpeechRecognition() {
+          isSpeechRecognizing = false;
+          if (speechRecognitionInstance) {
+            try { speechRecognitionInstance.stop(); } catch (e) {}
+            speechRecognitionInstance = null;
+          }
+          if (btnAgentMic) btnAgentMic.classList.remove('recording');
+          if (agentListeningBar) agentListeningBar.style.display = 'none';
+        }
+
+        if (btnAgentMic) btnAgentMic.onclick = startSpeechRecognition;
+        if (btnAgentCancelMic) btnAgentCancelMic.onclick = stopSpeechRecognition;
+
+        // Wire Event Listeners
+        if (btnAgentToggle) btnAgentToggle.onclick = () => toggleAgentDrawer();
+        if (btnAgentSideToggle) btnAgentSideToggle.onclick = toggleAgentSide;
+        if (btnAgentCollapse) btnAgentCollapse.onclick = () => toggleAgentDrawer(false);
+
+        // Keyboard Shortcut (Alt+A or ? to open agent)
+        window.addEventListener('keydown', (e) => {
+          if ((e.altKey && (e.key === 'a' || e.key === 'A')) || (e.ctrlKey && e.shiftKey && (e.key === 'A' || e.key === 'a'))) {
+            e.preventDefault();
+            toggleAgentDrawer();
+          }
+        });
+
+        // Input submit handlers
+        function submitCurrentAgentInput() {
+          if (!agentTextInput) return;
+          const query = agentTextInput.value.trim();
+          if (!query) return;
+          agentTextInput.value = '';
+          agentTextInput.style.height = 'auto';
+          window.askOrcaiAgent(query, false);
+        }
+
+        if (btnAgentSend) btnAgentSend.onclick = submitCurrentAgentInput;
+        if (agentTextInput) {
+          agentTextInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault();
+              submitCurrentAgentInput();
+            }
+          });
+          agentTextInput.addEventListener('input', () => {
+            agentTextInput.style.height = 'auto';
+            agentTextInput.style.height = Math.min(90, agentTextInput.scrollHeight) + 'px';
+          });
+        }
+
+        // Render message in chat stream
+        function appendMessage(htmlContent, isUser = false, actionChips = [], rawSpokenText = '') {
+          if (!agentChatMessages) return;
+
+          const msgEl = document.createElement('div');
+          msgEl.className = 'agent-msg ' + (isUser ? 'agent-msg-user' : 'agent-msg-bot');
+
+          let inner = '<div class="agent-msg-bubble">';
+          if (!isUser) {
+            inner += '<div class="agent-msg-header">' +
+              '<span>🤖 ORCAI Architekt</span>' +
+              '<button class="btn-msg-speak" title="Antwort vorlesen">🔊</button>' +
+            '</div>';
+          }
+          inner += '<div class="agent-msg-body">' + htmlContent + '</div>';
+
+          if (Array.isArray(actionChips) && actionChips.length > 0) {
+            inner += '<div class="agent-action-bar">' +
+              '<div class="agent-action-bar-label"><span>🎯 Zeichenflächen-Aktionen:</span></div>' +
+              actionChips.join('') +
+            '</div>';
+          }
+          inner += '</div>';
+
+          msgEl.innerHTML = inner;
+
+          // Attach speak button handler
+          const speakBtn = msgEl.querySelector('.btn-msg-speak');
+          if (speakBtn) {
+            speakBtn.onclick = () => {
+              speakAgentText(rawSpokenText || htmlContent);
+            };
+          }
+
+          agentChatMessages.appendChild(msgEl);
+          agentChatMessages.scrollTop = agentChatMessages.scrollHeight;
+
+          if (!isUser && isVoiceOutputEnabled) {
+            speakAgentText(rawSpokenText || htmlContent);
+          }
+        }
+
+        // Initial Greeting
+        function renderInitialAgentGreeting() {
+          const modelName = (typeof currentModelId !== 'undefined' && currentModelId) ? currentModelId.replace('ORCAI-MODEL-', '') : 'Johannesstift Diakonie';
+          const greetingHtml = '<p>Hallo! Ich bin Ihr <strong>ORCAI KI-Architektur-Agent</strong>.</p>' +
+            '<p>Ich kenne alle <strong>5 persistierten IT-Landschaftsmodelle</strong>, Schnittstellen, E2E-Geschäftsprozesse, HITL-Akteure sowie das gesamte GitHub-Architektur-Repository.</p>' +
+            '<p>Fragen Sie mich per <strong>Sprache (🎤)</strong> oder <strong>Text</strong>. Meine Antworten enthalten direkte Aktions-Links, mit denen Sie Elemente sofort auf der Zeichenfläche oder in Diagramm-Pop-Outs aktivieren können.</p>';
+
+          const defaultChips = [
+            '<button class="agent-chip agent-chip-proc" onclick="window.openBpmnModal(\'JSD-P-01\')">📋 Notfallprozess BPMN</button>',
+            '<button class="agent-chip agent-chip-puml" onclick="window.openPlantUmlModal(\'JSD-P-01\')">📊 Notfall PlantUML</button>',
+            '<button class="agent-chip agent-chip-hitl" onclick="window.locateRoleOnCanvas(\'JSD-ACT-03\')">👤 Notfallsanitäter RTW</button>',
+            '<button class="agent-chip agent-chip-ux" onclick="window.showUxPopout(\'JSD-CL-03\',\'JSD-ACT-03\')">📱 NIDApad Tablet (UX)</button>',
+            '<button class="agent-chip agent-chip-sys" onclick="window.selectSystem(\'JSD-08\'); window.locateNodeInChord(\'JSD-08\');">🏥 JSD-08 CGM MEDICO KIS</button>'
+          ];
+
+          appendMessage(greetingHtml, false, defaultChips, 'Hallo! Ich bin Ihr ORCAI KI-Architektur-Agent. Sprechen Sie eine Frage ein oder klicken Sie auf eine der vorgeschlagenen Aktionen.');
+        }
+
+        // =====================================================================
+        // ORCAI AGENT COGNITIVE KNOWLEDGE & INTENT PARSER
+        // =====================================================================
+        function processAgentQuery(query, wasVoice = false) {
+          const q = String(query || '').trim();
+          if (!q) return;
+
+          // 1. Show User message
+          appendMessage(q, true);
+
+          // Typing indicator simulation
+          const typingId = 'agentTyping_' + Date.now();
+          const typingEl = document.createElement('div');
+          typingEl.id = typingId;
+          typingEl.className = 'agent-msg agent-msg-bot';
+          typingEl.innerHTML = '<div class="agent-msg-bubble"><div style="font-size:0.75rem; color:#94a3b8; display:flex; align-items:center; gap:6px;"><span>🤖</span> <em>Analysiere IT-Landschaft &amp; Architekturmodelle...</em></div></div>';
+          agentChatMessages.appendChild(typingEl);
+          agentChatMessages.scrollTop = agentChatMessages.scrollHeight;
+
+          setTimeout(() => {
+            const el = document.getElementById(typingId);
+            if (el) el.remove();
+
+            const response = generateAgentAnswer(q);
+            appendMessage(response.html, false, response.chips, response.spoken);
+          }, 350);
+        }
+        window.askOrcaiAgent = (q, wasVoice = false) => {
+          toggleAgentDrawer(true);
+          processAgentQuery(q, wasVoice);
+        };
+
+        // Semantic Engine
+        function generateAgentAnswer(query) {
+          const qLower = query.toLowerCase();
+          const systems = (typeof SYSTEMS_DATA !== 'undefined') ? SYSTEMS_DATA : [];
+          const processes = (typeof PROCESSES_DATA !== 'undefined') ? PROCESSES_DATA : [];
+          const integrations = (typeof INTEGRATIONS_DATA !== 'undefined') ? INTEGRATIONS_DATA : [];
+          const actors = (typeof ACTORS_DATA !== 'undefined') ? ACTORS_DATA : [];
+          const domains = (typeof DOMAINS_DATA !== 'undefined') ? DOMAINS_DATA : [];
+          const registeredModels = (typeof registeredLandscapeModels !== 'undefined') ? registeredLandscapeModels : [];
+
+          const chips = [];
+          let html = '';
+          let spoken = '';
+
+          // 1. INTENT: SPECIFIC SYSTEM SEARCH (e.g. JSD-08, MEDICO, HealthShare, SYS-...)
+          const sysIdMatch = query.match(/\b([A-Z]{2,4}-[0-9]{2,3})\b/i);
+          const foundSys = sysIdMatch ? systems.find(s => s.id.toLowerCase() === sysIdMatch[1].toLowerCase()) : null;
+          const foundSysByName = !foundSys ? systems.find(s => qLower.includes(s.name.toLowerCase()) || (s.vendor && qLower.includes(s.vendor.toLowerCase()))) : null;
+          const targetSys = foundSys || foundSysByName;
+
+          if (targetSys) {
+            const relInteg = integrations.filter(i => i.source === targetSys.id || i.target === targetSys.id || (i.participatingSystems || []).includes(targetSys.id));
+            const relProcs = processes.filter(p => (p.participatingSystems || []).includes(targetSys.id) || (p.cleanIntegIds || []).some(cid => relInteg.some(ri => ri.id === cid)));
+
+            html = '<p><strong>🏥 System-Analyse: ' + targetSys.id + ' · ' + targetSys.name + '</strong></p>' +
+              '<p>' + (targetSys.desc || 'Kernsystem der IT-Architektur') + '</p>' +
+              '<ul>' +
+                '<li><strong>Hersteller:</strong> ' + (targetSys.vendor || 'Unbekannt') + '</li>' +
+                '<li><strong>Domäne:</strong> ' + (targetSys.leadDomain || targetSys.domain || 'Allgemein') + '</li>' +
+                '<li><strong>Kritikalität:</strong> <span style="color:#f59e0b;">' + (targetSys.criticality || 'Normal') + '</span></li>' +
+                '<li><strong>Aktive Schnittstellen:</strong> ' + relInteg.length + ' Verbindungen</li>' +
+                '<li><strong>Beteiligte E2E-Prozesse:</strong> ' + relProcs.length + ' Geschäftsprozesse</li>' +
+              '</ul>';
+
+            chips.push('<button class="agent-chip agent-chip-sys" onclick="window.selectSystem(\'' + targetSys.id + '\'); window.locateNodeInChord(\'' + targetSys.id + '\');">🏥 ' + targetSys.id + ' auf Zeichenfläche fokussieren</button>');
+
+            relProcs.slice(0, 2).forEach(p => {
+              chips.push('<button class="agent-chip agent-chip-proc" onclick="window.openBpmnModal(\'' + p.id + '\')">📋 BPMN: ' + p.id + '</button>');
+            });
+
+            spoken = 'Hier sind die Architekturdetails für das System ' + targetSys.id + ' ' + targetSys.name + '. Es ist in ' + relInteg.length + ' Schnittstellen und ' + relProcs.length + ' End-to-End Prozessen eingebunden. Sie können es über den Button direkt auf der Zeichenfläche fokussieren.';
+            return { html, chips, spoken };
+          }
+
+          // 2. INTENT: PROCESSES & BPMN / PLANTUML (e.g. Notfall, Triage, Labor, JSD-P-01, JSD-P-02)
+          const procIdMatch = query.match(/\b([A-Z]{2,4}-P-[0-9]{2}|PROC-[0-9]{2})\b/i);
+          const foundProc = procIdMatch ? processes.find(p => p.id.toLowerCase() === procIdMatch[1].toLowerCase()) : null;
+          const foundProcByName = !foundProc ? processes.find(p => qLower.includes(p.name.toLowerCase()) || (p.apqc && qLower.includes(p.apqc.toLowerCase())) || (p.desc && qLower.includes('notfall') && p.desc.toLowerCase().includes('notfall')) || (p.desc && qLower.includes('labor') && p.desc.toLowerCase().includes('labor'))) : null;
+          const targetProc = foundProc || foundProcByName;
+
+          if (targetProc || qLower.includes('prozess') || qLower.includes('bpmn') || qLower.includes('plantuml') || qLower.includes('sequenz') || qLower.includes('notfall') || qLower.includes('triage') || qLower.includes('labor') || qLower.includes('befund')) {
+            const p = targetProc || processes[0];
+            if (p) {
+              html = '<p><strong>📋 E2E-Prozess: ' + p.id + ' · ' + p.name + '</strong></p>' +
+                '<p>' + (p.desc || 'Geschäftsprozess der IT-Landschaft.') + '</p>' +
+                '<ul>' +
+                  (p.apqc ? ('<li><strong>APQC Klassifikation:</strong> ' + p.apqc + '</li>') : '') +
+                  '<li><strong>Federführende Domäne:</strong> ' + (p.leadDomain || 'D1') + '</li>' +
+                  '<li><strong>Beteiligte Systeme:</strong> ' + ((p.participatingSystems || []).join(', ') || 'Mehrere') + '</li>' +
+                '</ul>' +
+                '<p>Sie können diesen Prozess sowohl als <strong>BPMN 2.0 Collaboration-Diagramm</strong> als auch als <strong>PlantUML Sequenzdiagramm</strong> als modales Popout mit asynchroner Zoom- &amp; Formfaktor-Anpassung öffnen:</p>';
+
+              chips.push('<button class="agent-chip agent-chip-proc" onclick="window.openBpmnModal(\'' + p.id + '\')">📋 BPMN 2.0 öffnen (' + p.id + ')</button>');
+              chips.push('<button class="agent-chip agent-chip-puml" onclick="window.openPlantUmlModal(\'' + p.id + '\')">📊 PlantUML Sequenz öffnen (' + p.id + ')</button>');
+              chips.push('<button class="agent-chip agent-chip-proc" onclick="window.selectProcess(\'' + p.id + '\')">🎯 Auf Zeichenfläche filtern</button>');
+
+              spoken = 'Ich habe den Geschäftsprozess ' + p.id + ', ' + p.name + ', identifiziert. Über die Aktionsbuttons können Sie direkt das BPMN Diagramm oder das PlantUML Sequenzdiagramm öffnen.';
+              return { html, chips, spoken };
+            }
+          }
+
+          // 3. INTENT: HUMAN IN THE LOOP (HITL) ROLES & UX CLIENTS (e.g. NIDApad, Tablet, Notarzt, Sanitäter, Triage, Fiori, SAP-GUI)
+          if (qLower.includes('hitl') || qLower.includes('rolle') || qLower.includes('mensch') || qLower.includes('nidapad') || qLower.includes('tablet') || qLower.includes('notarzt') || qLower.includes('sanit') || qLower.includes('triage') || qLower.includes('client') || qLower.includes('ux') || qLower.includes('workstation') || qLower.includes('fiori')) {
+            let matchedActor = actors.find(a => qLower.includes(a.name.toLowerCase()) || (a.clients || []).some(c => qLower.includes(c.name.toLowerCase()) || qLower.includes(c.id.toLowerCase())));
+            if (!matchedActor && actors.length > 0) {
+              if (qLower.includes('notfall') || qLower.includes('nida') || qLower.includes('rtw')) {
+                matchedActor = actors.find(a => a.id === 'JSD-ACT-03') || actors[0];
+              } else if (qLower.includes('triage') || qLower.includes('zna')) {
+                matchedActor = actors.find(a => a.id === 'JSD-ACT-04') || actors[0];
+              } else {
+                matchedActor = actors[0];
+              }
+            }
+
+            if (matchedActor) {
+              const primaryClient = (matchedActor.clients && matchedActor.clients[0]) ? matchedActor.clients[0] : null;
+              html = '<p><strong>👤 Human-in-the-Loop Analyse: ' + matchedActor.id + ' · ' + matchedActor.name + '</strong></p>' +
+                '<p>' + (matchedActor.desc || 'Menschlicher Akteur in der IT-Landschaft.') + '</p>' +
+                '<ul>' +
+                  '<li><strong>Quadrant:</strong> ' + (matchedActor.quadrant || 'LB') + '</li>' +
+                  (primaryClient ? ('<li><strong>Genutztes User-Interface:</strong> ' + primaryClient.id + ' (' + primaryClient.name + ')</li>') : '') +
+                  (primaryClient?.deviceType ? ('<li><strong>Endgerät:</strong> ' + primaryClient.deviceType + '</li>') : '') +
+                  (primaryClient?.os ? ('<li><strong>Betriebssystem:</strong> ' + primaryClient.os + '</li>') : '') +
+                  (primaryClient?.targetSystemId ? ('<li><strong>Angebundenes Backend:</strong> ' + primaryClient.targetSystemId + '</li>') : '') +
+                '</ul>' +
+                '<p>Die <strong>2-stufige HITL-Kette</strong> visualisiert den Datenfluss vom Menschen über die UI-Schicht bis in das Backend-System.</p>';
+
+              chips.push('<button class="agent-chip agent-chip-hitl" onclick="window.locateRoleOnCanvas(\'' + matchedActor.id + '\')">👤 Rolle auf Zeichenfläche lokalisieren</button>');
+              if (primaryClient) {
+                chips.push('<button class="agent-chip agent-chip-ux" onclick="window.showUxPopout(\'' + primaryClient.id + '\', \'' + matchedActor.id + '\')">📱 UX-Pop-Out im Bay öffnen (' + primaryClient.id + ')</button>');
+              }
+
+              spoken = 'Hier ist die Human-in-the-Loop Rolle ' + matchedActor.name + '. Sie bedient das System über den Client ' + (primaryClient ? primaryClient.name : 'Workstation') + '. Die Buttons lokalisieren die Rolle auf der Zeichenfläche oder öffnen das UX-Pop-Out.';
+              return { html, chips, spoken };
+            }
+          }
+
+          // 4. INTENT: PROTOCOLS & INTEGRATION STANDARDS (e.g. FHIR, HL7, MQTT, MLLP, DICOM, REST)
+          const protoMatch = qLower.match(/\b(fhir|hl7|mqtt|mllp|dicom|rest|astm|soap|kafka)\b/i);
+          if (protoMatch || qLower.includes('schnittstelle') || qLower.includes('integration') || qLower.includes('protokoll')) {
+            const proto = protoMatch ? protoMatch[1].toUpperCase() : 'HL7';
+            const matchedInteg = integrations.filter(i => (i.protocol && i.protocol.toUpperCase().includes(proto)) || (i.desc && i.desc.toUpperCase().includes(proto)) || (i.name && i.name.toUpperCase().includes(proto)));
+
+            html = '<p><strong>⚡ Schnittstellen-Analyse nach Protokoll: ' + proto + '</strong></p>' +
+              '<p>Im aktuellen Modell wurden <strong>' + matchedInteg.length + ' Schnittstellen</strong> mit dem Protokoll/Standard <em>' + proto + '</em> gefunden.</p>' +
+              '<ul>';
+
+            matchedInteg.slice(0, 4).forEach(i => {
+              html += '<li><strong>' + i.id + ':</strong> ' + (i.name || i.desc) + ' (' + i.source + ' ➔ ' + i.target + ')</li>';
+              chips.push('<button class="agent-chip agent-chip-integ" onclick="const it = (typeof INTEGRATIONS_DATA !== \'undefined\' ? INTEGRATIONS_DATA : []).find(x => x.id === \'' + i.id + '\'); if(it && typeof setDrilldownIntegration === \'function\') setDrilldownIntegration(it);">⚡ ' + i.id + ' fokussieren</button>');
+            });
+
+            html += '</ul>';
+            spoken = 'Es wurden ' + matchedInteg.length + ' Schnittstellen für das Protokoll ' + proto + ' identifiziert. Über die Aktions-Chips können Sie einzelne Schnittstellen direkt auf der Zeichenfläche inspizieren.';
+            return { html, chips, spoken };
+          }
+
+          // 5. INTENT: ARCHITECTURE, QUAD-CHORD MODEL & HELP (e.g. Quad-Chord, 4 Quadranten, DMZ, Hybrid Cloud)
+          if (qLower.includes('quad-chord') || qLower.includes('quadrant') || qLower.includes('modell') || qLower.includes('hilfe') || qLower.includes('anwendung') || qLower.includes('wie funktioniert') || qLower.includes('architektur')) {
+            html = '<p><strong>ℹ️ Architektur-Wissen: Das Quad-Chord Modell</strong></p>' +
+              '<p>Das Quad-Chord-Modell teilt alle Systeme auf einem 360°-Kreis in <strong>4 funktionale Quadranten</strong> auf:</p>' +
+              '<ul>' +
+                '<li><strong>LT (Links-Oben):</strong> Intern Cloud / Hyperscaler Workloads</li>' +
+                '<li><strong>LB (Links-Unten):</strong> Intern On-Premises / Klinikum RZ</li>' +
+                '<li><strong>RT (Rechts-Oben):</strong> Extern Cloud / SaaS-Partner, Behörden</li>' +
+                '<li><strong>RB (Rechts-Unten):</strong> Extern On-Prem / Externe Praxen &amp; Partner</li>' +
+              '</ul>' +
+              '<p>Zwei kritische Schutzkorridore werden transparent gemacht: Die <strong>Hybrid Cloud Bridge</strong> (oben ↕ unten) und der <strong>Perimeter DMZ-Korridor</strong> (links ↔ rechts).</p>';
+
+            chips.push('<button class="agent-chip agent-chip-sys" onclick="window.resetAllFilters && window.resetAllFilters();">⟲ Zeichenfläche zurücksetzen</button>');
+            chips.push('<a href="https://orcai-54321.web.app/markdown/?key=ORCAI-260913-23H55-QUAD-CHORD" target="_blank" rel="noopener noreferrer" class="agent-chip agent-chip-model">📖 Offizielles Handbuch öffnen ↗</a>');
+
+            spoken = 'Das Quad-Chord Modell teilt die IT-Landschaft in vier Quadranten für interne und externe Systeme sowie Cloud- und Rechenzentrums-Workloads ein.';
+            return { html, chips, spoken };
+          }
+
+          // 6. INTENT: CROSS-LANDSCAPE SWITCHING (e.g. SEEBURGER, Johanniter, Johannesstift, Klinikverbund)
+          if (qLower.includes('seeburger') || qLower.includes('johanniter') || qLower.includes('johannesstift') || qLower.includes('klinikverbund') || qLower.includes('bruker') || qLower.includes('landschaft wechseln')) {
+            html = '<p><strong>🔄 Cross-Landscape Federation</strong></p>' +
+              '<p>In ORCAI sind 5 Enterprise-Architekturmodelle hinterlegt. Sie können jederzeit zu einer anderen Landschaft wechseln:</p>' +
+              '<ul>' +
+                '<li><strong>Johannesstift Diakonie:</strong> Kliniken, Notfallaufnahme &amp; ZNA Manchester Triage</li>' +
+                '<li><strong>SEEBURGER BIS Platform:</strong> iPaaS, B2B/EDI &amp; Hybrid Cloud Integration</li>' +
+                '<li><strong>Johanniter Quad-Chord:</strong> Rettungsdienst, Telemedizin &amp; KHZG Verbund</li>' +
+              '</ul>';
+
+            chips.push('<button class="agent-chip agent-chip-model" onclick="window.jumpToCrossLandscape(\'ORCAI-MODEL-JOHANNESSTIFT-DIAKONIE-EA\')">🔄 Johannesstift Diakonie</button>');
+            chips.push('<button class="agent-chip agent-chip-model" onclick="window.jumpToCrossLandscape(\'ORCAI-MODEL-SEEBURGER-EA\')">🔄 SEEBURGER BIS</button>');
+            chips.push('<button class="agent-chip agent-chip-model" onclick="window.jumpToCrossLandscape(\'ORCAI-MODEL-JOHANNITER-EA\')">🔄 Johanniter Quad-Chord</button>');
+
+            spoken = 'Sie können zwischen fünf verschiedenen IT-Landschaftsmodellen wechseln. Klicken Sie auf die Modellauswahl, um die Landschaft direkt zu laden.';
+            return { html, chips, spoken };
+          }
+
+          // 7. FALLBACK: GENERAL SEARCH ACROSS ALL ENTITIES
+          const matchedSys = systems.filter(s => qLower.split(' ').some(w => w.length > 2 && (s.name.toLowerCase().includes(w) || s.id.toLowerCase().includes(w) || (s.desc && s.desc.toLowerCase().includes(w)))));
+          const matchedProc = processes.filter(p => qLower.split(' ').some(w => w.length > 2 && (p.name.toLowerCase().includes(w) || p.id.toLowerCase().includes(w) || (p.desc && p.desc.toLowerCase().includes(w)))));
+
+          html = '<p>Ich habe Ihre Anfrage <em>"' + qLower + '"</em> analysiert und folgende Architektur-Elemente auf der Zeichenfläche zugeordnet:</p>';
+
+          if (matchedSys.length > 0) {
+            html += '<p><strong>Gefundene Systeme (' + matchedSys.length + '):</strong></p><ul>';
+            matchedSys.slice(0, 3).forEach(s => {
+              html += '<li>' + s.id + ': ' + s.name + ' (' + (s.vendor || 'Kernsystem') + ')</li>';
+              chips.push('<button class="agent-chip agent-chip-sys" onclick="window.selectSystem(\'' + s.id + '\'); window.locateNodeInChord(\'' + s.id + '\');">🏥 ' + s.id + ' fokussieren</button>');
+            });
+            html += '</ul>';
+          }
+
+          if (matchedProc.length > 0) {
+            html += '<p><strong>Zugeordnete Prozesse (' + matchedProc.length + '):</strong></p><ul>';
+            matchedProc.slice(0, 2).forEach(p => {
+              html += '<li>' + p.id + ': ' + p.name + '</li>';
+              chips.push('<button class="agent-chip agent-chip-proc" onclick="window.openBpmnModal(\'' + p.id + '\')">📋 BPMN: ' + p.id + '</button>');
+            });
+            html += '</ul>';
+          }
+
+          if (chips.length === 0) {
+            html += '<p>Möchten Sie eine spezifische Analyse zu Notfallprozessen, Human-in-the-Loop Akteuren oder Schnittstellenprotokollen (FHIR, HL7, MQTT)?</p>';
+            chips.push('<button class="agent-chip agent-chip-proc" onclick="window.openBpmnModal(\'JSD-P-01\')">📋 Notfall BPMN (JSD-P-01)</button>');
+            chips.push('<button class="agent-chip agent-chip-hitl" onclick="window.locateRoleOnCanvas(\'JSD-ACT-03\')">👤 Notarzt / RTW</button>');
+            chips.push('<button class="agent-chip agent-chip-sys" onclick="window.selectSystem(\'JSD-08\'); window.locateNodeInChord(\'JSD-08\');">🏥 KIS (JSD-08)</button>');
+          }
+
+          spoken = 'Ich habe passende Architekturelemente für Ihre Anfrage gefunden. Nutzen Sie die Aktionsbuttons, um die Elemente direkt auf der Zeichenfläche zu aktivieren.';
+          return { html, chips, spoken };
+        }
+
+        // Initialize on DOM ready
+        applyDockSide(agentDockSide);
+        updateVoiceToggleUI();
+      })();
+
+    </script>
 
   <!-- =====================================================================
        CRUD MODAL DIALOG & TOAST NOTIFICATION
