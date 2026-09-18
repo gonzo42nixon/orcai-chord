@@ -1,0 +1,42 @@
+{
+  "$schema": "https://orcai-54321.web.app/schemas/ai-agent-manifest-v1.json",
+  "name": "ORCAI Architecture AI Agent",
+  "version": "1.2.0",
+  "type": "enterprise_architecture_advisor",
+  "identity": {
+    "title": "ORCAI KI-Architektur-Agent",
+    "description": "Autonomer kognitiver Architektur-Berater für Enterprise Architecture Landschaften im Quad-Chord Modell.",
+    "role": "Lead Enterprise & Healthcare IT Architect",
+    "creator": "ORCAI AI Platform & Architecture Team",
+    "repository": "https://github.com/gonzo42nixon/orcai-chord",
+    "handbook": "https://orcai-54321.web.app/markdown/?key=ORCAI-260913-23H55-QUAD-CHORD",
+    "manifestUrl": "https://orcai-54321.web.app/ea/agent-manifest.json"
+  },
+  "capabilities": [
+    "Text and Voice Interaction (Web Speech API de-DE)",
+    "Natural Speech Synthesis with Phonetic Smoothing",
+    "Quad-Chord Landscape Analysis (4 Quadrants: Cloud vs. On-Premises, Internal vs. External)",
+    "BPMN 2.0 and PlantUML Sequence Diagram Popout Automation with Aspect Ratio Locking",
+    "HITL (Human-in-the-Loop) Role and Multi-UX Mapping (Mobile Client, Fat Client, SAP-GUI, Fiori-App, SPA)",
+    "Dynamic Landscape Querying (Processes, Systems, Interfaces, Domains)",
+    "User Identity Binding & Multi-Chat Session Persistence with Cross-Chat Full-Text Search",
+    "Live Web Research, Encyclopedia Integration and Financial Market Data Synthesis"
+  ],
+  "supportedStandards": [
+    "APQC Process Classification Framework (PCF)",
+    "OMG BPMN 2.0 & UML 2.5",
+    "HL7 v2.x & HL7 FHIR R4",
+    "DICOM PS 3.x",
+    "IHE Integration Profiles (XDS.b, PIX, PDQ)",
+    "W3C Web Standards & REST OpenAPI"
+  ],
+  "monitoredCompanies": [
+    { "name": "SAP SE", "ticker": "SAP", "exchange": "XETRA / NYSE", "role": "ERP & Cloud Platform Leader" },
+    { "name": "Microsoft Corp.", "ticker": "MSFT", "exchange": "NASDAQ", "role": "Azure Hyperscaler & Copilot AI" },
+    { "name": "Alphabet Inc.", "ticker": "GOOGL", "exchange": "NASDAQ", "role": "GCP Cloud & Gemini Foundation Models" },
+    { "name": "Apple Inc.", "ticker": "AAPL", "exchange": "NASDAQ", "role": "Mobile Platforms & Client Ecosystem" },
+    { "name": "Nvidia Corp.", "ticker": "NVDA", "exchange": "NASDAQ", "role": "AI Accelerators & Accelerated Computing" },
+    { "name": "Amazon.com Inc.", "ticker": "AMZN", "exchange": "NASDAQ", "role": "AWS Hyperscaler & Cloud Infrastructure" },
+    { "name": "Bruker Corp.", "ticker": "BRKR", "exchange": "NASDAQ", "role": "Scientific Instruments & Life Science EA" }
+  ]
+}

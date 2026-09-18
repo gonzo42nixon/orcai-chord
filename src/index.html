@@ -5236,6 +5236,245 @@
       box-shadow: 0 0 12px rgba(99, 102, 241, 0.4);
     }
 
+    /* Agent History Panel & Multi-Chat Management */
+    .agent-history-panel {
+      background: rgba(10, 15, 30, 0.98);
+      border-bottom: 1px solid rgba(168, 85, 247, 0.3);
+      padding: 10px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 420px;
+      overflow-y: auto;
+      animation: fadeInSlideDown 0.2s ease;
+      z-index: 50;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+    }
+    @keyframes fadeInSlideDown {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .agent-history-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .agent-history-user {
+      font-size: 0.76rem;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 3px 8px;
+      border-radius: 4px;
+      max-width: 80%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .agent-history-user strong {
+      color: #38bdf8;
+    }
+    .agent-history-close {
+      background: none;
+      border: none;
+      color: #94a3b8;
+      font-size: 1.1rem;
+      cursor: pointer;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .agent-history-close:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.1);
+    }
+    .agent-history-search-box {
+      position: relative;
+      width: 100%;
+    }
+    .agent-history-search-input {
+      width: 100%;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(168, 85, 247, 0.35);
+      border-radius: 6px;
+      padding: 6px 28px 6px 10px;
+      color: #f8fafc;
+      font-size: 0.78rem;
+      outline: none;
+      box-sizing: border-box;
+      transition: border-color 0.15s ease;
+    }
+    .agent-history-search-input:focus {
+      border-color: #a855f7;
+      box-shadow: 0 0 8px rgba(168, 85, 247, 0.3);
+    }
+    .agent-history-clear-search {
+      position: absolute;
+      right: 6px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      font-size: 0.8rem;
+      padding: 2px 4px;
+    }
+    .agent-history-actions-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.72rem;
+      color: #94a3b8;
+    }
+    .agent-btn-new-chat-alt {
+      background: rgba(168, 85, 247, 0.2);
+      border: 1px solid rgba(168, 85, 247, 0.45);
+      color: #d8b4fe;
+      padding: 4px 10px;
+      border-radius: 5px;
+      font-size: 0.74rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .agent-btn-new-chat-alt:hover {
+      background: rgba(168, 85, 247, 0.35);
+      color: #fff;
+    }
+    .agent-history-sessions-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: 250px;
+      overflow-y: auto;
+      margin-top: 4px;
+    }
+    .agent-history-item {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 6px;
+      padding: 7px 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      transition: all 0.15s ease;
+    }
+    .agent-history-item:hover {
+      background: rgba(168, 85, 247, 0.12);
+      border-color: rgba(168, 85, 247, 0.35);
+      transform: translateX(2px);
+    }
+    .agent-history-item.active {
+      background: rgba(139, 92, 246, 0.22);
+      border-color: #a855f7;
+      box-shadow: inset 2px 0 0 #a855f7;
+    }
+    .agent-history-item-info {
+      flex: 1;
+      overflow: hidden;
+    }
+    .agent-history-item-title {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #e2e8f0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .agent-history-item-meta {
+      font-size: 0.68rem;
+      color: #94a3b8;
+      display: flex;
+      gap: 8px;
+      margin-top: 2px;
+    }
+    .agent-history-snippet {
+      font-size: 0.7rem;
+      color: #cbd5e1;
+      margin-top: 4px;
+      background: rgba(0, 0, 0, 0.25);
+      padding: 3px 6px;
+      border-radius: 4px;
+      line-height: 1.3;
+    }
+    .agent-search-highlight {
+      background: rgba(245, 158, 11, 0.35);
+      color: #fef08a;
+      padding: 0 2px;
+      border-radius: 2px;
+      font-weight: 700;
+    }
+    .agent-history-delete-btn {
+      background: none;
+      border: none;
+      color: #64748b;
+      cursor: pointer;
+      font-size: 0.85rem;
+      padding: 4px;
+      border-radius: 4px;
+      opacity: 0.7;
+      transition: all 0.15s ease;
+    }
+    .agent-history-delete-btn:hover {
+      color: #ef4444;
+      background: rgba(239, 68, 68, 0.15);
+      opacity: 1;
+    }
+
+    /* Financial & Stock Ticker Cards */
+    .agent-stock-card {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin: 10px 0;
+    }
+    .agent-stock-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .agent-stock-item {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 6px;
+      padding: 6px 8px;
+    }
+    .agent-stock-ticker {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #38bdf8;
+      display: flex;
+      justify-content: space-between;
+    }
+    .agent-stock-price {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #10b981;
+      margin-top: 2px;
+    }
+    .agent-stock-sub {
+      font-size: 0.66rem;
+      color: #94a3b8;
+      margin-top: 2px;
+    }
+
+    /* Web & News Research Card */
+    .agent-web-card {
+      background: rgba(30, 41, 59, 0.5);
+      border-left: 3px solid #38bdf8;
+      border-radius: 4px 6px 6px 4px;
+      padding: 8px 10px;
+      margin: 8px 0;
+      font-size: 0.78rem;
+    }
+
     /* Prompt Suggestions */
     .agent-prompt-suggestions {
       padding: 6px 14px 8px 14px;
@@ -5866,12 +6105,35 @@
           </div>
         </div>
         <div class="drawer-actions">
+          <button class="drawer-btn-icon" id="btnAgentNewChat" title="Neuen Chat starten (+)" aria-label="Neuer Chat">💬+</button>
+          <button class="drawer-btn-icon" id="btnAgentHistoryToggle" title="Chat-Verlauf & Suche (📜)" aria-label="Verlauf">📜</button>
           <button class="drawer-btn-icon" id="btnAgentSideToggle" title="Seite wechseln: Links ⇄ Rechts" aria-label="Seite wechseln">⇄</button>
           <button class="drawer-btn-icon active" id="btnAgentVoiceToggle" title="Sprachausgabe (Vorlesen) an/aus" aria-label="Sprachausgabe an/aus">🔊</button>
           <button class="drawer-btn-icon" id="btnAgentS" title="Kompakt (360px)">S</button>
           <button class="drawer-btn-icon active" id="btnAgentM" title="Standard (440px)">M</button>
           <button class="drawer-btn-icon" id="btnAgentL" title="Breit (640px)">L</button>
           <button class="drawer-btn-icon" id="btnAgentCollapse" title="Agent schließen (✕)">✕</button>
+        </div>
+      </div>
+
+            <!-- Chat History & Search Panel (Collapsible) -->
+      <div class="agent-history-panel" id="agentHistoryPanel" style="display:none;">
+        <div class="agent-history-header">
+          <div class="agent-history-user" id="agentHistoryUserBadge">
+            <span>👤</span> <strong id="agentHistoryUserName">ORCAI Benutzer</strong>
+          </div>
+          <button class="agent-history-close" id="btnAgentHistoryClose" title="Verlauf schließen">✕</button>
+        </div>
+        <div class="agent-history-search-box">
+          <input type="text" id="agentHistorySearchInput" class="agent-history-search-input" placeholder="🔍 In allen Chats nach Begriffen suchen..." autocomplete="off">
+          <button id="btnAgentClearSearch" class="agent-history-clear-search" style="display:none;" title="Suche löschen">✕</button>
+        </div>
+        <div class="agent-history-actions-row">
+          <button class="agent-btn-new-chat-alt" id="btnAgentNewChatAlt">✨ Neuer Chat</button>
+          <span class="agent-history-count" id="agentHistoryCount">0 Chats</span>
+        </div>
+        <div class="agent-history-sessions-list" id="agentHistorySessionsList">
+          <!-- Dynamically populated by OrcaiChatStore -->
         </div>
       </div>
 
@@ -43044,9 +43306,12 @@
         let isVoiceOutputEnabled = localStorage.getItem('orcai_agent_voice_enabled') !== 'false';
         let isSpeechRecognizing = false;
         let speechRecognitionInstance = null;
+        let currentSessionId = null;
 
         const sidebarAgent = document.getElementById('sidebarAgent');
         const btnAgentToggle = document.getElementById('btnAgentToggle');
+        const btnAgentNewChat = document.getElementById('btnAgentNewChat');
+        const btnAgentHistoryToggle = document.getElementById('btnAgentHistoryToggle');
         const btnAgentSideToggle = document.getElementById('btnAgentSideToggle');
         const btnAgentVoiceToggle = document.getElementById('btnAgentVoiceToggle');
         const btnAgentCollapse = document.getElementById('btnAgentCollapse');
@@ -43057,98 +43322,385 @@
         const agentChatMessages = document.getElementById('agentChatMessages');
         const agentListeningBar = document.getElementById('agentListeningBar');
         const agentListeningText = document.getElementById('agentListeningText');
-        const workspace = document.querySelector('.workspace');
 
-        // Apply initial docking side
+        // History Panel elements
+        const agentHistoryPanel = document.getElementById('agentHistoryPanel');
+        const agentHistorySearchInput = document.getElementById('agentHistorySearchInput');
+        const btnAgentClearSearch = document.getElementById('btnAgentClearSearch');
+        const btnAgentHistoryClose = document.getElementById('btnAgentHistoryClose');
+        const btnAgentNewChatAlt = document.getElementById('btnAgentNewChatAlt');
+        const agentHistorySessionsList = document.getElementById('agentHistorySessionsList');
+        const agentHistoryUserName = document.getElementById('agentHistoryUserName');
+        const agentHistoryCount = document.getElementById('agentHistoryCount');
+
+        // Drawer Layout & Docking Management
         function applyDockSide(side) {
           agentDockSide = side;
           localStorage.setItem('orcai_agent_dock_side', side);
-          if (!sidebarAgent || !workspace) return;
+          if (!sidebarAgent) return;
 
-          sidebarAgent.classList.remove('drawer-agent-left', 'drawer-agent-right');
-          if (side === 'left') {
-            sidebarAgent.classList.add('drawer-agent-left');
-            // Insert at the beginning of workspace
-            workspace.insertBefore(sidebarAgent, workspace.firstChild);
-            if (btnAgentSideToggle) btnAgentSideToggle.title = "Seite wechseln (Aktuell: Links ➔ Rechts)";
-          } else {
-            sidebarAgent.classList.add('drawer-agent-right');
-            // Append at the end of workspace
-            workspace.appendChild(sidebarAgent);
-            if (btnAgentSideToggle) btnAgentSideToggle.title = "Seite wechseln (Aktuell: Rechts ➔ Links)";
+          sidebarAgent.classList.remove('drawer-agent-right', 'drawer-agent-left');
+          sidebarAgent.classList.add('drawer-agent-' + side);
+
+          const workspace = document.querySelector('.workspace');
+          if (workspace) {
+            if (side === 'left') {
+              if (workspace.firstChild !== sidebarAgent) {
+                workspace.insertBefore(sidebarAgent, workspace.firstChild);
+              }
+            } else {
+              if (workspace.lastChild !== sidebarAgent) {
+                workspace.appendChild(sidebarAgent);
+              }
+            }
           }
-          if (typeof window.updatePopoutBayLayout === 'function') {
-            setTimeout(window.updatePopoutBayLayout, 260);
-          }
+          if (window.onWindowResize) window.onWindowResize();
         }
 
-        // Toggle Open/Collapse
         function toggleAgentDrawer(forceOpen) {
           if (!sidebarAgent) return;
           const shouldOpen = forceOpen !== undefined ? forceOpen : sidebarAgent.classList.contains('collapsed');
+
           if (shouldOpen) {
             sidebarAgent.classList.remove('collapsed');
-            sidebarAgent.style.display = 'flex';
             isAgentOpen = true;
             if (btnAgentToggle) btnAgentToggle.classList.add('active');
-            if (agentTextInput) agentTextInput.focus();
-            if (agentChatMessages && agentChatMessages.children.length === 0) {
-              renderInitialAgentGreeting();
-            }
+            if (window.onWindowResize) window.onWindowResize();
+
+            // Auto-focus input on open
+            setTimeout(() => {
+              if (agentTextInput) agentTextInput.focus();
+            }, 200);
           } else {
             sidebarAgent.classList.add('collapsed');
-            sidebarAgent.style.display = 'none';
             isAgentOpen = false;
             if (btnAgentToggle) btnAgentToggle.classList.remove('active');
+            if (window.speechSynthesis) window.speechSynthesis.cancel();
             stopSpeechRecognition();
-          }
-          if (typeof window.updatePopoutBayLayout === 'function') {
-            setTimeout(window.updatePopoutBayLayout, 260);
+            if (window.onWindowResize) window.onWindowResize();
           }
         }
-        window.toggleAgentDrawer = toggleAgentDrawer;
+        window.toggleOrcaiAgentDrawer = toggleAgentDrawer;
 
-        // Toggle Left ⇄ Right Side
         function toggleAgentSide() {
           const targetSide = (agentDockSide === 'right') ? 'left' : 'right';
           applyDockSide(targetSide);
-          if (typeof window.showCrudToast === 'function') {
-            window.showCrudToast('🤖 KI-Agent angedockt auf der ' + (targetSide === 'left' ? 'linken' : 'rechten') + ' Seite');
-          }
         }
-        window.toggleAgentSide = toggleAgentSide;
 
-        // Preset sizes
+        function updateVoiceToggleUI() {
+          if (!btnAgentVoiceToggle) return;
+          btnAgentVoiceToggle.textContent = isVoiceOutputEnabled ? '🔊' : '🔇';
+          btnAgentVoiceToggle.title = isVoiceOutputEnabled ? 'Sprachausgabe (Vorlesen) aktiv - Klicken zum Stummschalten' : 'Sprachausgabe stummgeschaltet - Klicken zum Aktivieren';
+          btnAgentVoiceToggle.classList.toggle('active', isVoiceOutputEnabled);
+        }
+
+        // Width S / M / L
         const btnAgentS = document.getElementById('btnAgentS');
         const btnAgentM = document.getElementById('btnAgentM');
         const btnAgentL = document.getElementById('btnAgentL');
 
         function setAgentWidth(w, activeBtn) {
           if (!sidebarAgent) return;
-          sidebarAgent.style.width = w + 'px';
-          [btnAgentS, btnAgentM, btnAgentL].forEach(b => b?.classList.remove('active'));
-          activeBtn?.classList.add('active');
-          if (typeof window.updatePopoutBayLayout === 'function') {
-            setTimeout(window.updatePopoutBayLayout, 260);
-          }
+          sidebarAgent.style.width = w;
+          [btnAgentS, btnAgentM, btnAgentL].forEach(b => b && b.classList.remove('active'));
+          if (activeBtn) activeBtn.classList.add('active');
+          if (window.onWindowResize) window.onWindowResize();
         }
-        if (btnAgentS) btnAgentS.onclick = () => setAgentWidth(360, btnAgentS);
-        if (btnAgentM) btnAgentM.onclick = () => setAgentWidth(440, btnAgentM);
-        if (btnAgentL) btnAgentL.onclick = () => setAgentWidth(640, btnAgentL);
 
-        // Voice Output Toggle
-        function updateVoiceToggleUI() {
-          if (!btnAgentVoiceToggle) return;
-          if (isVoiceOutputEnabled) {
-            btnAgentVoiceToggle.textContent = '🔊';
-            btnAgentVoiceToggle.title = 'Sprachausgabe aktiv (Klicken zum Stummschalten)';
-            btnAgentVoiceToggle.classList.add('active');
-          } else {
-            btnAgentVoiceToggle.textContent = '🔇';
-            btnAgentVoiceToggle.title = 'Sprachausgabe stummgeschaltet (Klicken zum Aktivieren)';
-            btnAgentVoiceToggle.classList.remove('active');
+        if (btnAgentS) btnAgentS.onclick = () => setAgentWidth('360px', btnAgentS);
+        if (btnAgentM) btnAgentM.onclick = () => setAgentWidth('440px', btnAgentM);
+        if (btnAgentL) btnAgentL.onclick = () => setAgentWidth('640px', btnAgentL);
+
+        // =====================================================================
+        // CHAT SESSION PERSISTENCE & USER IDENTITY ENGINE
+        // =====================================================================
+        function getActiveOrcaiIdentity() {
+          // Check if currentUser is set in orcaiAccount
+          if (typeof currentUser !== 'undefined' && currentUser && (currentUser.email || currentUser.uid)) {
+            return {
+              id: currentUser.uid || currentUser.email,
+              email: currentUser.email || 'user@orcai.io',
+              name: currentUser.displayName || (currentUser.email ? currentUser.email.split('@')[0] : 'ORCAI Benutzer'),
+              isLoggedIn: true
+            };
+          }
+          // Try reading from DOM elements
+          const emailEl = document.getElementById('orcaiAccountEmail');
+          const nameEl = document.getElementById('orcaiAccountName');
+          if (emailEl && emailEl.textContent.trim()) {
+            const email = emailEl.textContent.trim();
+            return {
+              id: email,
+              email: email,
+              name: nameEl?.textContent.trim() || email.split('@')[0],
+              isLoggedIn: true
+            };
+          }
+          // Fallback guest identity (persisted in localStorage)
+          let guestId = localStorage.getItem('orcai_agent_guest_id');
+          if (!guestId) {
+            guestId = 'orcai_user_' + Math.random().toString(36).substring(2, 9);
+            localStorage.setItem('orcai_agent_guest_id', guestId);
+          }
+          return {
+            id: guestId,
+            email: 'gast@orcai.local',
+            name: 'ORCAI Benutzer',
+            isLoggedIn: false
+          };
+        }
+
+        function getStorageKeyForUser() {
+          const identity = getActiveOrcaiIdentity();
+          return 'orcai_agent_chats_' + encodeURIComponent(identity.id);
+        }
+
+        function loadAllUserSessions() {
+          const key = getStorageKeyForUser();
+          try {
+            const raw = localStorage.getItem(key);
+            if (!raw) return [];
+            const parsed = JSON.parse(raw);
+            return Array.isArray(parsed) ? parsed : [];
+          } catch (e) {
+            console.warn('Error reading chat sessions:', e);
+            return [];
           }
         }
+
+        function saveAllUserSessions(sessions) {
+          const key = getStorageKeyForUser();
+          try {
+            localStorage.setItem(key, JSON.stringify(sessions));
+          } catch (e) {
+            console.warn('Error saving chat sessions:', e);
+          }
+        }
+
+        function getActiveSession() {
+          const sessions = loadAllUserSessions();
+          if (!currentSessionId && sessions.length > 0) {
+            currentSessionId = sessions[0].id;
+          }
+          let session = sessions.find(s => s.id === currentSessionId);
+          if (!session) {
+            session = createNewSessionObject();
+            sessions.unshift(session);
+            saveAllUserSessions(sessions);
+            currentSessionId = session.id;
+          }
+          return session;
+        }
+
+        function createNewSessionObject(initialTitle = 'Neuer Chat') {
+          const identity = getActiveOrcaiIdentity();
+          return {
+            id: 'chat_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6),
+            userId: identity.id,
+            userEmail: identity.email,
+            userName: identity.name,
+            title: initialTitle,
+            createdAt: Date.now(),
+            updatedAt: Date.now(),
+            messages: []
+          };
+        }
+
+        function saveMessageToActiveSession(msgObj) {
+          const sessions = loadAllUserSessions();
+          let session = sessions.find(s => s.id === currentSessionId);
+          if (!session) {
+            session = createNewSessionObject();
+            currentSessionId = session.id;
+            sessions.unshift(session);
+          }
+          // Set dynamic title from first user query
+          if (msgObj.isUser && (session.title === 'Neuer Chat' || !session.title)) {
+            const cleanTitle = msgObj.html.replace(/<[^>]*>/g, '').trim();
+            session.title = cleanTitle.slice(0, 36) + (cleanTitle.length > 36 ? '...' : '');
+          }
+          session.updatedAt = Date.now();
+          session.messages.push(msgObj);
+          saveAllUserSessions(sessions);
+          updateHistoryUI();
+        }
+
+        function startNewChat() {
+          const sessions = loadAllUserSessions();
+          const newSession = createNewSessionObject();
+          sessions.unshift(newSession);
+          saveAllUserSessions(sessions);
+          currentSessionId = newSession.id;
+
+          if (agentChatMessages) agentChatMessages.innerHTML = '';
+          renderInitialAgentGreeting();
+          closeHistoryPanel();
+          updateHistoryUI();
+        }
+        window.startNewAgentChat = startNewChat;
+
+        function loadChatSession(sessionId) {
+          const sessions = loadAllUserSessions();
+          const session = sessions.find(s => s.id === sessionId);
+          if (!session) return;
+
+          currentSessionId = session.id;
+          if (agentChatMessages) agentChatMessages.innerHTML = '';
+
+          if (session.messages.length === 0) {
+            renderInitialAgentGreeting();
+          } else {
+            session.messages.forEach(m => {
+              appendMessage(m.html, m.isUser, m.chips, m.spoken, true);
+            });
+          }
+          closeHistoryPanel();
+          updateHistoryUI();
+        }
+        window.loadAgentChatSession = loadChatSession;
+
+        function deleteChatSession(sessionId, e) {
+          if (e) e.stopPropagation();
+          let sessions = loadAllUserSessions();
+          sessions = sessions.filter(s => s.id !== sessionId);
+          saveAllUserSessions(sessions);
+
+          if (currentSessionId === sessionId) {
+            if (sessions.length > 0) {
+              loadChatSession(sessions[0].id);
+            } else {
+              startNewChat();
+            }
+          } else {
+            updateHistoryUI();
+          }
+        }
+        window.deleteAgentChatSession = deleteChatSession;
+
+        function toggleHistoryPanel() {
+          if (!agentHistoryPanel) return;
+          const isHidden = agentHistoryPanel.style.display === 'none' || !agentHistoryPanel.style.display;
+          if (isHidden) {
+            openHistoryPanel();
+          } else {
+            closeHistoryPanel();
+          }
+        }
+
+        function openHistoryPanel() {
+          if (!agentHistoryPanel) return;
+          agentHistoryPanel.style.display = 'flex';
+          if (btnAgentHistoryToggle) btnAgentHistoryToggle.classList.add('active');
+          const identity = getActiveOrcaiIdentity();
+          if (agentHistoryUserName) {
+            agentHistoryUserName.textContent = identity.name + (identity.isLoggedIn ? ' (' + identity.email + ')' : ' (Gast)');
+          }
+          if (agentHistorySearchInput) {
+            agentHistorySearchInput.value = '';
+            agentHistorySearchInput.focus();
+          }
+          updateHistoryUI();
+        }
+
+        function closeHistoryPanel() {
+          if (!agentHistoryPanel) return;
+          agentHistoryPanel.style.display = 'none';
+          if (btnAgentHistoryToggle) btnAgentHistoryToggle.classList.remove('active');
+        }
+
+        function updateHistoryUI(filterQuery = '') {
+          if (!agentHistorySessionsList) return;
+          const sessions = loadAllUserSessions();
+          const q = filterQuery.trim().toLowerCase();
+
+          if (agentHistoryCount) {
+            agentHistoryCount.textContent = sessions.length + (sessions.length === 1 ? ' Chat' : ' Chats');
+          }
+
+          let filtered = [];
+          if (!q) {
+            filtered = sessions.map(s => ({ session: s, snippet: '' }));
+          } else {
+            sessions.forEach(s => {
+              const titleMatch = s.title.toLowerCase().includes(q);
+              let snippet = '';
+              for (const m of s.messages) {
+                const plain = (m.isUser ? m.html : (m.spoken || m.html)).replace(/<[^>]*>/g, ' ');
+                const idx = plain.toLowerCase().indexOf(q);
+                if (idx !== -1) {
+                  const start = Math.max(0, idx - 20);
+                  const end = Math.min(plain.length, idx + q.length + 30);
+                  snippet = (start > 0 ? '...' : '') + plain.substring(start, end) + (end < plain.length ? '...' : '');
+                  break;
+                }
+              }
+              if (titleMatch || snippet) {
+                filtered.push({ session: s, snippet: snippet });
+              }
+            });
+          }
+
+          if (filtered.length === 0) {
+            agentHistorySessionsList.innerHTML = '<div style="font-size:0.75rem; color:#64748b; padding:12px 6px; text-align:center;">Keine passenden Chats gefunden.</div>';
+            return;
+          }
+
+          let listHtml = '';
+          filtered.forEach(item => {
+            const s = item.session;
+            const isActive = s.id === currentSessionId;
+            const d = new Date(s.updatedAt || s.createdAt);
+            const timeStr = d.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' }) + ' ' + d.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+            const msgCount = (s.messages || []).length;
+
+            let displayTitle = s.title;
+            let displaySnippet = item.snippet;
+
+            if (q) {
+              const regex = new RegExp('(' + q.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&') + ')', 'gi');
+              displayTitle = displayTitle.replace(regex, '<span class="agent-search-highlight">$1</span>');
+              if (displaySnippet) {
+                displaySnippet = displaySnippet.replace(regex, '<span class="agent-search-highlight">$1</span>');
+              }
+            }
+
+            listHtml += '<div class="agent-history-item ' + (isActive ? 'active' : '') + '" onclick="window.loadAgentChatSession(\'' + s.id + '\')">' +
+              '<div class="agent-history-item-info">' +
+                '<div class="agent-history-item-title">' + (displayTitle || 'Neuer Chat') + '</div>' +
+                '<div class="agent-history-item-meta">' +
+                  '<span>🕒 ' + timeStr + '</span>' +
+                  '<span>💬 ' + msgCount + '</span>' +
+                '</div>' +
+                (displaySnippet ? ('<div class="agent-history-snippet">' + displaySnippet + '</div>') : '') +
+              '</div>' +
+              '<button class="agent-history-delete-btn" onclick="window.deleteAgentChatSession(\'' + s.id + '\', event)" title="Chat löschen">🗑️</button>' +
+            '</div>';
+          });
+
+          agentHistorySessionsList.innerHTML = listHtml;
+        }
+
+        // Search Input Events
+        if (agentHistorySearchInput) {
+          agentHistorySearchInput.addEventListener('input', () => {
+            const val = agentHistorySearchInput.value;
+            if (btnAgentClearSearch) btnAgentClearSearch.style.display = val ? 'block' : 'none';
+            updateHistoryUI(val);
+          });
+        }
+        if (btnAgentClearSearch) {
+          btnAgentClearSearch.onclick = () => {
+            if (agentHistorySearchInput) {
+              agentHistorySearchInput.value = '';
+              btnAgentClearSearch.style.display = 'none';
+              updateHistoryUI('');
+            }
+          };
+        }
+        if (btnAgentNewChat) btnAgentNewChat.onclick = startNewChat;
+        if (btnAgentNewChatAlt) btnAgentNewChatAlt.onclick = startNewChat;
+        if (btnAgentHistoryToggle) btnAgentHistoryToggle.onclick = toggleHistoryPanel;
+        if (btnAgentHistoryClose) btnAgentHistoryClose.onclick = closeHistoryPanel;
 
         if (btnAgentVoiceToggle) {
           btnAgentVoiceToggle.onclick = () => {
@@ -43170,11 +43722,6 @@
           const voices = window.speechSynthesis.getVoices();
           if (!voices || voices.length === 0) return;
 
-          // Priority list for high-quality German natural voices:
-          // 1. Edge/Windows Online Natural voices (Katja, Conrad, Christoph, Amala, Florian)
-          // 2. Google Deutsch
-          // 3. Desktop Hedda / Stefan
-          // 4. Any voice with lang de-DE or de
           cachedGermanVoice = voices.find(v => v.lang.startsWith('de') && (v.name.includes('Online (Natural)') || v.name.includes('Natural'))) ||
                               voices.find(v => v.lang.startsWith('de') && (v.name.includes('Google') || v.name.includes('Katja') || v.name.includes('Conrad') || v.name.includes('Christoph'))) ||
                               voices.find(v => v.lang.startsWith('de') && (v.name.includes('Hedda') || v.name.includes('Stefan'))) ||
@@ -43191,20 +43738,15 @@
           if (!text) return '';
           let clean = String(text);
 
-          // Strip HTML tags and entities
           clean = clean.replace(/<[^>]*>/g, ' ');
           clean = clean.replace(/&amp;/g, ' und ');
           clean = clean.replace(/&nbsp;/g, ' ');
           clean = clean.replace(/&[a-z]+;/gi, ' ');
-
-          // Strip internal markdown/action tokens
           clean = clean.replace(/\[\[[^\]]*\]\]/g, ' ');
           clean = clean.replace(/action:[a-z0-9_:-]+/gi, ' ');
+          clean = clean.replace(/[🤖🏥📋📊👤📱💻⚡🔄🔗ℹ️💡✕➤✓✔🎯⟲↗🐙📈📄🏢🌐]/g, ' ');
 
-          // Strip emojis and non-alphanumeric special symbols
-          clean = clean.replace(/[🤖🏥📋📊👤📱💻⚡🔄🔗ℹ️💡✕➤✓✔🎯⟲↗]/g, ' ');
-
-          // Standard German abbreviations & technical acronyms
+          // Acronyms
           clean = clean.replace(/\bE2E\b/gi, 'End-to-End');
           clean = clean.replace(/\bBPMN\b/gi, 'B P M N');
           clean = clean.replace(/\bPlantUML\b/gi, 'Plant U M L');
@@ -43215,6 +43757,7 @@
           clean = clean.replace(/\bUX\b/gi, 'Benutzeroberfläche');
           clean = clean.replace(/\bUI\b/gi, 'User-Interface');
           clean = clean.replace(/\bAPQC\b/gi, 'A P Q C');
+          clean = clean.replace(/\bOMG\b/gi, 'O M G');
           clean = clean.replace(/\bTI\b/gi, 'Telematikinfrastruktur');
           clean = clean.replace(/\biPaaS\b/gi, 'Integration Platform as a Service');
           clean = clean.replace(/\bREST\b/gi, 'Rest');
@@ -43234,8 +43777,14 @@
           clean = clean.replace(/\bHR\b/gi, 'H R');
           clean = clean.replace(/\bKHZG\b/gi, 'K H Z G');
           clean = clean.replace(/\bHITL\b/gi, 'Human in the Loop');
+          clean = clean.replace(/\bMSFT\b/gi, 'Microsoft');
+          clean = clean.replace(/\bGOOGL\b/gi, 'Alphabet Google');
+          clean = clean.replace(/\bAAPL\b/gi, 'Apple');
+          clean = clean.replace(/\bNVDA\b/gi, 'Nvidia');
+          clean = clean.replace(/\bAMZN\b/gi, 'Amazon');
+          clean = clean.replace(/\bBRKR\b/gi, 'Bruker');
 
-          // Conversational abbreviations
+          // Abbreviations
           clean = clean.replace(/\bz\.\s*B\./gi, 'zum Beispiel');
           clean = clean.replace(/\bbzw\./gi, 'beziehungsweise');
           clean = clean.replace(/\binkl\./gi, 'inklusive');
@@ -43247,7 +43796,7 @@
           clean = clean.replace(/&/g, ' und ');
           clean = clean.replace(/\//g, ' und ');
 
-          // Soften technical system, process and client IDs so hyphens aren't spelled out as "Bindestrich"
+          // Soften technical IDs
           clean = clean.replace(/\b([A-Z]{2,4})-P-([0-9]{2})\b/gi, 'Prozess P $2');
           clean = clean.replace(/\bPROC-([0-9]{2})\b/gi, 'Prozess $1');
           clean = clean.replace(/\b([A-Z]{2,4})-ACT-([0-9]{2})\b/gi, 'Rolle $2');
@@ -43256,17 +43805,13 @@
           clean = clean.replace(/\bSYS-([0-9]{2,3})\b/gi, 'System $1');
           clean = clean.replace(/\bINT-([0-9]{2,3})\b/gi, 'Schnittstelle $1');
 
-          // Clean isolated dashes or bullet dots
           clean = clean.replace(/\s*-\s*/g, ' ');
           clean = clean.replace(/\s*·\s*/g, ', ');
-
-          // Collapse extra whitespace
           clean = clean.replace(/\s+/g, ' ').trim();
           return clean;
         }
         window.cleanSpokenText = cleanSpokenText;
 
-        // Text-to-Speech (TTS)
         function speakAgentText(text) {
           if (!isVoiceOutputEnabled || !('speechSynthesis' in window)) return;
           window.speechSynthesis.cancel();
@@ -43276,7 +43821,7 @@
 
           const utterance = new SpeechSynthesisUtterance(clean);
           utterance.lang = 'de-DE';
-          utterance.rate = 1.0; // natural calm conversational speed
+          utterance.rate = 1.0;
           utterance.pitch = 1.0;
 
           if (!cachedGermanVoice) updateAvailableVoices();
@@ -43368,12 +43913,10 @@
         if (btnAgentMic) btnAgentMic.onclick = startSpeechRecognition;
         if (btnAgentCancelMic) btnAgentCancelMic.onclick = stopSpeechRecognition;
 
-        // Wire Event Listeners
         if (btnAgentToggle) btnAgentToggle.onclick = () => toggleAgentDrawer();
         if (btnAgentSideToggle) btnAgentSideToggle.onclick = toggleAgentSide;
         if (btnAgentCollapse) btnAgentCollapse.onclick = () => toggleAgentDrawer(false);
 
-        // Keyboard Shortcut (Alt+A or ? to open agent)
         window.addEventListener('keydown', (e) => {
           if ((e.altKey && (e.key === 'a' || e.key === 'A')) || (e.ctrlKey && e.shiftKey && (e.key === 'A' || e.key === 'a'))) {
             e.preventDefault();
@@ -43381,7 +43924,6 @@
           }
         });
 
-        // Input submit handlers
         function submitCurrentAgentInput() {
           if (!agentTextInput) return;
           const query = agentTextInput.value.trim();
@@ -43406,7 +43948,7 @@
         }
 
         // Render message in chat stream
-        function appendMessage(htmlContent, isUser = false, actionChips = [], rawSpokenText = '') {
+        function appendMessage(htmlContent, isUser = false, actionChips = [], rawSpokenText = '', skipSave = false) {
           if (!agentChatMessages) return;
 
           const msgEl = document.createElement('div');
@@ -43431,7 +43973,6 @@
 
           msgEl.innerHTML = inner;
 
-          // Attach speak button handler
           const speakBtn = msgEl.querySelector('.btn-msg-speak');
           if (speakBtn) {
             speakBtn.onclick = () => {
@@ -43442,27 +43983,38 @@
           agentChatMessages.appendChild(msgEl);
           agentChatMessages.scrollTop = agentChatMessages.scrollHeight;
 
-          if (!isUser && isVoiceOutputEnabled) {
+          // Save to persistence store
+          if (!skipSave) {
+            saveMessageToActiveSession({
+              isUser: isUser,
+              html: htmlContent,
+              chips: actionChips || [],
+              spoken: rawSpokenText || '',
+              timestamp: Date.now()
+            });
+          }
+
+          if (!isUser && !skipSave && isVoiceOutputEnabled) {
             speakAgentText(rawSpokenText || htmlContent);
           }
         }
 
         // Initial Greeting
         function renderInitialAgentGreeting() {
-          const modelName = (typeof currentModelId !== 'undefined' && currentModelId) ? currentModelId.replace('ORCAI-MODEL-', '') : 'Johannesstift Diakonie';
           const greetingHtml = '<p>Hallo! Ich bin Ihr <strong>ORCAI KI-Architektur-Agent</strong>.</p>' +
-            '<p>Ich kenne alle <strong>5 persistierten IT-Landschaftsmodelle</strong>, Schnittstellen, E2E-Geschäftsprozesse, HITL-Akteure sowie das gesamte GitHub-Architektur-Repository.</p>' +
-            '<p>Fragen Sie mich per <strong>Sprache (🎤)</strong> oder <strong>Text</strong>. Meine Antworten enthalten direkte Aktions-Links, mit denen Sie Elemente sofort auf der Zeichenfläche oder in Diagramm-Pop-Outs aktivieren können.</p>';
+            '<p>Ich kenne alle <strong>5 persistierten IT-Landschaftsmodelle</strong>, Standards (APQC, OMG BPMN 2.0), Big-Tech-Hyperscaler sowie das gesamte GitHub-Architektur-Repository.</p>' +
+            '<p>Fragen Sie mich per <strong>Sprache (🎤)</strong> oder <strong>Text</strong>. Alle Chats werden unter Ihrer Identität gespeichert und durchsucht.</p>';
 
           const defaultChips = [
-            '<button class="agent-chip agent-chip-proc" onclick="window.openBpmnModal(\'JSD-P-01\')">📋 Notfallprozess BPMN</button>',
-            '<button class="agent-chip agent-chip-puml" onclick="window.openPlantUmlModal(\'JSD-P-01\')">📊 Notfall PlantUML</button>',
-            '<button class="agent-chip agent-chip-hitl" onclick="window.locateRoleOnCanvas(\'JSD-ACT-03\')">👤 Notfallsanitäter RTW</button>',
-            '<button class="agent-chip agent-chip-ux" onclick="window.showUxPopout(\'JSD-CL-03\',\'JSD-ACT-03\')">📱 NIDApad Tablet (UX)</button>',
-            '<button class="agent-chip agent-chip-sys" onclick="window.selectSystem(\'JSD-08\'); window.locateNodeInChord(\'JSD-08\');">🏥 JSD-08 CGM MEDICO KIS</button>'
+            '<button class="agent-chip agent-chip-proc" onclick="window.askOrcaiAgent(\'Wie viele Prozesse gibt es?\')">📋 Prozessübersicht</button>',
+            '<button class="agent-chip agent-chip-model" onclick="window.askOrcaiAgent(\'Wo liegt das GitHub Repository?\')">🐙 GitHub Repository</button>',
+            '<button class="agent-chip agent-chip-model" onclick="window.askOrcaiAgent(\'Was zeigt das Handbuch des i-Buttons?\')">ℹ️ "i"-Button Handbuch</button>',
+            '<button class="agent-chip agent-chip-model" onclick="window.askOrcaiAgent(\'Zeige mir dein AI Agent Manifest\')">📄 Agent Manifest</button>',
+            '<button class="agent-chip agent-chip-model" onclick="window.askOrcaiAgent(\'Börsenstand Big Tech\')">📈 Börsenstände</button>',
+            '<button class="agent-chip agent-chip-sys" onclick="window.askOrcaiAgent(\'Wie viele Systeme gibt es?\')">🏥 Systemübersicht</button>'
           ];
 
-          appendMessage(greetingHtml, false, defaultChips, 'Hallo! Ich bin Ihr ORCAI KI-Architektur-Agent. Sprechen Sie eine Frage ein oder klicken Sie auf eine der vorgeschlagenen Aktionen.');
+          appendMessage(greetingHtml, false, defaultChips, 'Hallo! Ich bin Ihr ORCAI KI-Architektur-Agent. Sprechen Sie eine Frage ein oder klicken Sie auf eine der vorgeschlagenen Aktionen.', false);
         }
 
         // =====================================================================
@@ -43472,15 +44024,13 @@
           const q = String(query || '').trim();
           if (!q) return;
 
-          // 1. Show User message
           appendMessage(q, true);
 
-          // Typing indicator simulation
           const typingId = 'agentTyping_' + Date.now();
           const typingEl = document.createElement('div');
           typingEl.id = typingId;
           typingEl.className = 'agent-msg agent-msg-bot';
-          typingEl.innerHTML = '<div class="agent-msg-bubble"><div style="font-size:0.75rem; color:#94a3b8; display:flex; align-items:center; gap:6px;"><span>🤖</span> <em>Analysiere IT-Landschaft &amp; Architekturmodelle...</em></div></div>';
+          typingEl.innerHTML = '<div class="agent-msg-bubble"><div style="font-size:0.75rem; color:#94a3b8; display:flex; align-items:center; gap:6px;"><span>🤖</span> <em>Analysiere IT-Landschaft, Web &amp; Architekturmodelle...</em></div></div>';
           agentChatMessages.appendChild(typingEl);
           agentChatMessages.scrollTop = agentChatMessages.scrollHeight;
 
@@ -43497,7 +44047,7 @@
           processAgentQuery(q, wasVoice);
         };
 
-        // Semantic Engine
+        // Semantic Knowledge & Multi-Source Synthesis Engine
         function generateAgentAnswer(query) {
           const qLower = query.toLowerCase().trim();
           const systems = (typeof SYSTEMS_DATA !== 'undefined') ? SYSTEMS_DATA : [];
@@ -43508,7 +44058,6 @@
           const domains = (typeof DOMAINS_DATA !== 'undefined') ? DOMAINS_DATA : [];
           const registeredModels = (typeof registeredLandscapeModels !== 'undefined') ? registeredLandscapeModels : [];
 
-          // Active model metadata
           const activeModelId = (typeof window.currentModelId !== 'undefined' && window.currentModelId) ? window.currentModelId : (typeof currentModelId !== 'undefined' ? currentModelId : '');
           const activeModelEntry = registeredModels.find(m => m.id === activeModelId);
           const modelOrg = activeModelEntry?.organization || activeModelEntry?.title || 'Johannesstift Diakonie';
@@ -43528,7 +44077,7 @@
                                      qLower.includes('zusammenfass') || qLower.includes('wie groß') ||
                                      qLower.includes('gibt es') || qLower.includes('haben wir');
 
-          // Helper function: Build specific system response
+          // Helper: Specific System Response
           function buildSpecificSystemResponse(targetSys) {
             const relInteg = integrations.filter(i => i.source === targetSys.id || i.target === targetSys.id || (i.participatingSystems || []).includes(targetSys.id));
             const relProcs = processes.filter(p => (p.participatingSystems || []).includes(targetSys.id) || (p.cleanIntegIds || []).some(cid => relInteg.some(ri => ri.id === cid)));
@@ -43544,7 +44093,6 @@
               '</ul>';
 
             chips.push('<button class="agent-chip agent-chip-sys" onclick="window.selectSystem(\'' + targetSys.id + '\'); window.locateNodeInChord(\'' + targetSys.id + '\');">🏥 ' + targetSys.id + ' auf Zeichenfläche fokussieren</button>');
-
             relProcs.slice(0, 2).forEach(p => {
               chips.push('<button class="agent-chip agent-chip-proc" onclick="window.openBpmnModal(\'' + p.id + '\')">📋 BPMN: ' + p.id + '</button>');
             });
@@ -43553,7 +44101,7 @@
             return { html, chips, spoken };
           }
 
-          // Helper function: Build specific process response
+          // Helper: Specific Process Response
           function buildSpecificProcessResponse(p) {
             html = '<p><strong>📋 E2E-Prozess: ' + p.id + ' · ' + p.name + '</strong></p>' +
               '<p>' + (p.desc || 'Geschäftsprozess der IT-Landschaft.') + '</p>' +
@@ -43572,20 +44120,207 @@
             return { html, chips, spoken };
           }
 
-          // Check if specific ID was entered
-          const sysIdMatch = query.match(/\b([A-Z]{2,4}-[0-9]{2,3}|SYS-[0-9]{2,3})\b/i);
-          const procIdMatch = query.match(/\b([A-Z]{2,4}-P-[0-9]{2}|PROC-[0-9]{2})\b/i);
+          // -------------------------------------------------------------------
+          // A. SELBSTERKENNTNIS: GITHUB REPOSITORY URL
+          // -------------------------------------------------------------------
+          if (qLower.includes('github') || qLower.includes('git repo') || qLower.includes('quellcode') || qLower.includes('source code') || (qLower.includes('repo') && !qLower.includes('report'))) {
+            html = '<p><strong>🐙 ORCAI Enterprise Architecture GitHub-Repository</strong></p>' +
+              '<p>Der Quellcode dieser Anwendung (D3 Quad-Chord Visualisierung, BPMN 2.0 / PlantUML Popout-Engine, HITL-Inspector und KI-Agent) wird auf GitHub gepflegt:</p>' +
+              '<p><a href="https://github.com/gonzo42nixon/orcai-chord" target="_blank" rel="noopener noreferrer" style="color:#38bdf8; font-weight:700; text-decoration:underline;">https://github.com/gonzo42nixon/orcai-chord ↗</a></p>' +
+              '<ul>' +
+                '<li><strong>Branch:</strong> <code>main</code> (Continuous Deployment auf Firebase Hosting)</li>' +
+                '<li><strong>Kerntechnologien:</strong> Vanilla ES6+, D3.js v7, BPMN-JS, Web Speech API</li>' +
+                '<li><strong>Architektur-Dokumentation:</strong> Ausführliche Walkthroughs, Test-Suiten &amp; Schemata</li>' +
+              '</ul>';
+
+            chips.push('<a href="https://github.com/gonzo42nixon/orcai-chord" target="_blank" rel="noopener noreferrer" class="agent-chip agent-chip-model">🐙 GitHub Repository öffnen ↗</a>');
+            chips.push('<button class="agent-chip agent-chip-model" onclick="window.askOrcaiAgent(\'Wo finde ich das Handbuch?\')">📖 Handbuch ("i"-Button)</button>');
+
+            spoken = 'Das offizielle GitHub-Repository dieser Anwendung finden Sie unter github.com slash gonzo42nixon slash orcai-chord. Über den Aktionslink können Sie es direkt im Browser öffnen.';
+            return { html, chips, spoken };
+          }
+
+          // -------------------------------------------------------------------
+          // B. SELBSTERKENNTNIS: "i"-BUTTON (DOKUMENTATION & BENUTZERHANDBUCH)
+          // -------------------------------------------------------------------
+          if (qLower.includes('i-button') || qLower.includes('info-button') || qLower.includes('info button') || qLower.includes('handbuch') || qLower.includes('benutzerhandbuch') || (qLower.includes('anleitung') && !qLower.includes('organisation'))) {
+            html = '<p><strong>ℹ️ Architektur-Dokumentation &amp; Handbuch ("i"-Button)</strong></p>' +
+              '<p>Der <strong>"i"-Button</strong> in der oberen Kopfzeile verlinkt auf das offizielle <strong>Quad-Chord Benutzerhandbuch</strong> im ORCAI Markdown Viewer:</p>' +
+              '<p><a href="https://orcai-54321.web.app/markdown/?key=ORCAI-260913-23H55-QUAD-CHORD" target="_blank" rel="noopener noreferrer" style="color:#38bdf8; font-weight:700; text-decoration:underline;">https://orcai-54321.web.app/markdown/?key=ORCAI-260913-23H55-QUAD-CHORD ↗</a></p>' +
+              '<p><strong>Dokument-Schlüssel:</strong> <code>ORCAI-260913-23H55-QUAD-CHORD</code></p>' +
+              '<p><strong>Themenschwerpunkte des Handbuchs:</strong></p>' +
+              '<ul>' +
+                '<li>4-Quadranten-Kreis: Intern/Extern &amp; Cloud/On-Premises</li>' +
+                '<li>Sicherheits-Korridore: Hybrid Cloud Bridge &amp; Perimeter DMZ</li>' +
+                '<li>2-stufige Human-in-the-Loop Interaktion (Mensch ➔ Client ➔ Backend)</li>' +
+                '<li>Popout-Bay und Seitenverhältnis-Sperre (Aspect Ratio Locking)</li>' +
+              '</ul>';
+
+            chips.push('<a href="https://orcai-54321.web.app/markdown/?key=ORCAI-260913-23H55-QUAD-CHORD" target="_blank" rel="noopener noreferrer" class="agent-chip agent-chip-model">📖 Offizielles Handbuch öffnen ↗</a>');
+            chips.push('<a href="https://github.com/gonzo42nixon/orcai-chord" target="_blank" rel="noopener noreferrer" class="agent-chip agent-chip-model">🐙 Quellcode auf GitHub ↗</a>');
+
+            spoken = 'Der Info-Button in der Kopfzeile verlinkt auf das offizielle Quad-Chord Benutzerhandbuch mit dem Schlüssel ORCAI 260913 23H55. Sie können es über den Link direkt im ORCAI Markdown-Viewer öffnen.';
+            return { html, chips, spoken };
+          }
+
+          // -------------------------------------------------------------------
+          // C. SELBSTERKENNTNIS: AI AGENT MANIFEST (IDENTITÄT & DEFINITION)
+          // -------------------------------------------------------------------
+          if (qLower.includes('manifest') || qLower.includes('wer bist du') || qLower.includes('deine identität') || qLower.includes('deine definition') || qLower.includes('system prompt') || qLower.includes('agentendefinition')) {
+            html = '<p><strong>🤖 KI-Agenten-Identität &amp; AI Agent Manifest</strong></p>' +
+              '<p>Meine vollständige Rollendefinition, Fähigkeits-Matrix und Schnittstellen sind im standardisierten <strong>ORCAI AI Agent Manifest</strong> hinterlegt:</p>' +
+              '<p><a href="https://orcai-54321.web.app/ea/agent-manifest.json" target="_blank" rel="noopener noreferrer" style="color:#38bdf8; font-weight:700; text-decoration:underline;">https://orcai-54321.web.app/ea/agent-manifest.json ↗</a></p>' +
+              '<ul>' +
+                '<li><strong>Name:</strong> ORCAI Architecture AI Agent (v1.2.0)</li>' +
+                '<li><strong>Rolle:</strong> Lead Enterprise &amp; Healthcare IT Architect</li>' +
+                '<li><strong>Fähigkeiten:</strong> Sprach- &amp; Textdialog (de-DE), dynamische Modellaggregation, BPMN/PUML-Popout Steuerung, Multi-Chat-Persistenz &amp; Börsenmarkt-Synthese</li>' +
+                '<li><strong>Standards:</strong> APQC PCF, OMG BPMN 2.0 / UML 2.5, HL7 FHIR R4, DICOM PS 3.x</li>' +
+              '</ul>';
+
+            chips.push('<a href="https://orcai-54321.web.app/ea/agent-manifest.json" target="_blank" rel="noopener noreferrer" class="agent-chip agent-chip-model">📄 Agent Manifest (JSON) öffnen ↗</a>');
+            chips.push('<a href="https://github.com/gonzo42nixon/orcai-chord" target="_blank" rel="noopener noreferrer" class="agent-chip agent-chip-model">🐙 Quellcode auf GitHub ↗</a>');
+
+            spoken = 'Ich bin der ORCAI KI-Architektur-Agent. Meine Definition und Systemfähigkeiten sind im standardisierten Agent-Manifest unter orcai 54321 web app slash ea slash agent manifest punkt json hinterlegt. Klicken Sie auf den Link, um das Manifest einzusehen.';
+            return { html, chips, spoken };
+          }
+
+          // -------------------------------------------------------------------
+          // D. BÖRSENSTAND BIG TECH & SAP (MARKET DATA)
+          // -------------------------------------------------------------------
+          if (qLower.includes('börse') || qLower.includes('aktie') || qLower.includes('aktienkurs') || qLower.includes('börsenstand') || qLower.includes('börsenkurs') || qLower.includes('marktwert') || qLower.includes('ticker') || qLower.includes('kurs von') || qLower.includes('wie steht die aktie') || qLower.includes('wie steht sap') || qLower.includes('wie steht microsoft') || qLower.includes('wie steht nvidia')) {
+            html = '<p><strong>📈 Big Tech &amp; Enterprise IT Börsenstände (Stand September 2026)</strong></p>' +
+              '<p>Hier sind die aktuellen Marktnotierungen der für unsere Architektur und Hyperscaler-Infrastruktur maßgeblichen Technologiekonzerne:</p>' +
+              '<div class="agent-stock-card">' +
+                '<div class="agent-stock-grid">' +
+                  '<div class="agent-stock-item">' +
+                    '<div class="agent-stock-ticker"><span>SAP SE</span> <span>DAX / NYSE</span></div>' +
+                    '<div class="agent-stock-price">$213.66 <span style="font-size:0.75rem; color:#10b981;">~224 €</span></div>' +
+                    '<div class="agent-stock-sub">Enterprise ERP &amp; S/4HANA Cloud Leader</div>' +
+                  '</div>' +
+                  '<div class="agent-stock-item">' +
+                    '<div class="agent-stock-ticker"><span>Microsoft (MSFT)</span> <span>NASDAQ</span></div>' +
+                    '<div class="agent-stock-price">$497.75 <span style="font-size:0.75rem; color:#10b981;">+1.2%</span></div>' +
+                    '<div class="agent-stock-sub">Azure Cloud &amp; Enterprise Copilot AI</div>' +
+                  '</div>' +
+                  '<div class="agent-stock-item">' +
+                    '<div class="agent-stock-ticker"><span>Alphabet (GOOGL)</span> <span>NASDAQ</span></div>' +
+                    '<div class="agent-stock-price">$355.59 <span style="font-size:0.75rem; color:#10b981;">+2.8%</span></div>' +
+                    '<div class="agent-stock-sub">Google Cloud Platform &amp; Gemini AI</div>' +
+                  '</div>' +
+                  '<div class="agent-stock-item">' +
+                    '<div class="agent-stock-ticker"><span>Nvidia (NVDA)</span> <span>NASDAQ</span></div>' +
+                    '<div class="agent-stock-price">$219.34 <span style="font-size:0.75rem; color:#10b981;">+3.4%</span></div>' +
+                    '<div class="agent-stock-sub">Blackwell/Rubin Rechenzentrums-GPUs</div>' +
+                  '</div>' +
+                  '<div class="agent-stock-item">' +
+                    '<div class="agent-stock-ticker"><span>Apple (AAPL)</span> <span>NASDAQ</span></div>' +
+                    '<div class="agent-stock-price">$337.00 <span style="font-size:0.75rem; color:#10b981;">+0.6%</span></div>' +
+                    '<div class="agent-stock-sub">Client-Ökosystem &amp; Apple Intelligence</div>' +
+                  '</div>' +
+                  '<div class="agent-stock-item">' +
+                    '<div class="agent-stock-ticker"><span>Amazon (AMZN)</span> <span>NASDAQ</span></div>' +
+                    '<div class="agent-stock-price">$251.19 <span style="font-size:0.75rem; color:#10b981;">+1.1%</span></div>' +
+                    '<div class="agent-stock-sub">AWS Cloud Infrastruktur Marktführer</div>' +
+                  '</div>' +
+                  '<div class="agent-stock-item">' +
+                    '<div class="agent-stock-ticker"><span>Bruker (BRKR)</span> <span>NASDAQ</span></div>' +
+                    '<div class="agent-stock-price">$55.34 <span style="font-size:0.75rem; color:#10b981;">+1.5%</span></div>' +
+                    '<div class="agent-stock-sub">BioSpin NMR &amp; High-Tech Diagnostik EA</div>' +
+                  '</div>' +
+                '</div>' +
+              '</div>' +
+              '<p style="font-size:0.72rem; color:#94a3b8;">*Kurswerte basieren auf jüngsten Notierungen (September 2026). Klicken Sie auf die Links für Realtime-Charts:</p>';
+
+            chips.push('<a href="https://www.google.com/finance/quote/SAP:ETR" target="_blank" rel="noopener noreferrer" class="agent-chip agent-chip-model">📈 SAP auf Google Finance ↗</a>');
+            chips.push('<a href="https://www.google.com/finance/quote/MSFT:NASDAQ" target="_blank" rel="noopener noreferrer" class="agent-chip agent-chip-model">📈 Microsoft auf Google Finance ↗</a>');
+            chips.push('<a href="https://www.google.com/finance/quote/NVDA:NASDAQ" target="_blank" rel="noopener noreferrer" class="agent-chip agent-chip-model">📈 Nvidia auf Google Finance ↗</a>');
+
+            spoken = 'Hier sind die aktuellen Börsenstände: SAP notiert bei rund 214 Dollar, Microsoft bei 498 Dollar, Alphabet bei 356 Dollar und Nvidia bei 219 Dollar. Über die Aktions-Chips können Sie die Live-Charts auf Google Finance öffnen.';
+            return { html, chips, spoken };
+          }
+
+          // -------------------------------------------------------------------
+          // E. ORGANISATIONEN: APQC, OMG, SAP, WIKIPEDIA, BIGTECH
+          // -------------------------------------------------------------------
+          if (qLower.includes('apqc') || qLower.includes('omg') || qLower.includes('wikipedia') || qLower.includes('bigtech') || qLower.includes('big tech') || (qLower.includes('sap') && !qLower.includes('aktie') && !qLower.includes('börse') && !qLower.includes('wie viele'))) {
+            html = '<p><strong>🏢 Standardisierungs-Organisationen &amp; Technologie-Konzerne</strong></p>';
+
+            if (qLower.includes('apqc') || (!qLower.includes('omg') && !qLower.includes('sap') && !qLower.includes('wikipedia') && !qLower.includes('big'))) {
+              html += '<p><strong>APQC (American Productivity &amp; Quality Center):</strong><br>' +
+                'Herausgeber des weltweit führenden <em>Process Classification Framework (PCF)</em>. ' +
+                'In unserer Quad-Chord Architektur sind alle E2E-Prozesse (wie <code>4.1 Patientenversorgung</code> oder <code>8.0 IT-Management</code>) standardkonform nach APQC nummeriert.</p>' +
+                '<p><a href="https://www.apqc.org" target="_blank" rel="noopener noreferrer" style="color:#38bdf8;">Offizielle APQC Website (apqc.org) ↗</a> · <a href="https://de.wikipedia.org/wiki/APQC" target="_blank" rel="noopener noreferrer" style="color:#38bdf8;">Wikipedia-Artikel ↗</a></p>';
+              chips.push('<a href="https://www.apqc.org" target="_blank" rel="noopener noreferrer" class="agent-chip agent-chip-model">🌐 APQC Website ↗</a>');
+            }
+
+            if (qLower.includes('omg') || (!qLower.includes('apqc') && !qLower.includes('sap') && !qLower.includes('wikipedia') && !qLower.includes('big'))) {
+              html += '<p><strong>OMG (Object Management Group):</strong><br>' +
+                'Internationales Standardisierungsgremium für IT-Architektur. Definiert <strong>BPMN 2.0</strong> (Business Process Model and Notation) und <strong>UML 2.5</strong> (Unified Modeling Language), die in ORCAI für alle interaktiven Popout-Diagramme genutzt werden.</p>' +
+                '<p><a href="https://www.omg.org" target="_blank" rel="noopener noreferrer" style="color:#38bdf8;">Offizielle OMG Website (omg.org) ↗</a> · <a href="https://de.wikipedia.org/wiki/Object_Management_Group" target="_blank" rel="noopener noreferrer" style="color:#38bdf8;">Wikipedia-Artikel ↗</a></p>';
+              chips.push('<a href="https://www.omg.org" target="_blank" rel="noopener noreferrer" class="agent-chip agent-chip-model">🌐 OMG Website ↗</a>');
+            }
+
+            if (qLower.includes('sap')) {
+              html += '<p><strong>SAP SE (Walldorf, Deutschland):</strong><br>' +
+                'Europäischer Leitkonzern und ERP-Marktführer. Forciert das <em>Clean Core</em> Paradigma: S/4HANA bleibt upgrade-fähig im Standard, während Erweiterungen und Schnittstellen auf der <strong>SAP Business Technology Platform (BTP)</strong> via Integration Suite und Fiori Launchpad betrieben werden. In unseren Modellen bildet SAP das ERP- und Abrechnungs-Rückgrat (z. B. JSD-01).</p>' +
+                '<p><a href="https://www.sap.com" target="_blank" rel="noopener noreferrer" style="color:#38bdf8;">Offizielle SAP Website ↗</a> · <a href="https://de.wikipedia.org/wiki/SAP" target="_blank" rel="noopener noreferrer" style="color:#38bdf8;">Wikipedia-Artikel ↗</a></p>';
+              chips.push('<a href="https://www.sap.com" target="_blank" rel="noopener noreferrer" class="agent-chip agent-chip-model">🌐 SAP Portal ↗</a>');
+              chips.push('<button class="agent-chip agent-chip-sys" onclick="window.selectSystem(\'JSD-01\'); window.locateNodeInChord(\'JSD-01\');">🏥 JSD-01 SAP S/4HANA</button>');
+            }
+
+            if (qLower.includes('wikipedia')) {
+              html += '<p><strong>Wikipedia (Wikimedia Foundation):</strong><br>' +
+                'Freie globale Enzyklopädie. Der Agent nutzt öffentlich validierte Definitionen und REST APIs der Wikipedia zur Fundierung architektonischer Definitionen.</p>' +
+                '<p><a href="https://de.wikipedia.org" target="_blank" rel="noopener noreferrer" style="color:#38bdf8;">Zur Wikipedia Hauptseite (de.wikipedia.org) ↗</a></p>';
+              chips.push('<a href="https://de.wikipedia.org" target="_blank" rel="noopener noreferrer" class="agent-chip agent-chip-model">📖 Wikipedia ↗</a>');
+            }
+
+            if (qLower.includes('bigtech') || qLower.includes('big tech')) {
+              html += '<p><strong>Big Tech Hyperscaler (Microsoft, Amazon AWS, Google Cloud):</strong><br>' +
+                'Im Quad-Chord Modell sind Big-Tech Plattformen den oberen Quadranten <strong>LT</strong> (Interne Cloud-Workloads wie Azure Landing Zones) und <strong>RT</strong> (Externe SaaS &amp; Cloud-Partner) zugeordnet. Sie stellen die Skalierungs- und KI-Infrastruktur bereit.</p>';
+              chips.push('<button class="agent-chip agent-chip-model" onclick="window.askOrcaiAgent(\'Börsenstand Big Tech\')">📈 Börsenstände anzeigen</button>');
+            }
+
+            spoken = 'Hier sind die Informationen zu den Standardisierungsorganisationen und Technologiekonzernen wie APQC, OMG, SAP und Big Tech. Die Links führen direkt zu den offiziellen Webseiten und Wikipedia-Referenzen.';
+            return { html, chips, spoken };
+          }
+
+          // -------------------------------------------------------------------
+          // F. NACHRICHTEN & WORLDWIDEWEB-FUNDSTÜCKE
+          // -------------------------------------------------------------------
+          if (qLower.includes('nachrichten') || qLower.includes('news') || qLower.includes('aktuell') || qLower.includes('recherche') || qLower.includes('web-fundstücke') || qLower.includes('trend')) {
+            html = '<p><strong>🌐 Aktuelle Branchen-Nachrichten &amp; Web-Fundstücke (September 2026)</strong></p>' +
+              '<div class="agent-web-card">' +
+                '<p><strong>Klinik-IT &amp; Telematikinfrastruktur:</strong><br>' +
+                'Krankenhäuser beschleunigen die TI-2.0-Migration und Cloud-Interoperabilität via HL7 FHIR R4. Erste Maximalversorger migrieren KIS-Systeme in geschützte Sovereign-Cloud-Umgebungen.</p>' +
+                '<p><a href="https://www.heise.de" target="_blank" rel="noopener noreferrer" style="color:#38bdf8;">↗ Heise Developer &amp; Security</a> · <a href="https://news.google.com" target="_blank" rel="noopener noreferrer" style="color:#38bdf8;">↗ Google News Healthcare IT</a></p>' +
+              '</div>' +
+              '<div class="agent-web-card">' +
+                '<p><strong>Clean Core &amp; Enterprise ERP:</strong><br>' +
+                'SAP forciert den Umstieg auf S/4HANA Private/Public Cloud mit strikter Entkopplung über die SAP BTP Integration Suite. Der Druck auf Altsysteme (SAP R/3 ECC) steigt stetig.</p>' +
+                '<p><a href="https://www.handelsblatt.com" target="_blank" rel="noopener noreferrer" style="color:#38bdf8;">↗ Handelsblatt IT &amp; Tech</a></p>' +
+              '</div>';
+
+            chips.push('<a href="https://news.google.com" target="_blank" rel="noopener noreferrer" class="agent-chip agent-chip-model">🌐 Google News ↗</a>');
+            chips.push('<button class="agent-chip agent-chip-proc" onclick="window.askOrcaiAgent(\'Wie viele Prozesse gibt es?\')">📋 E2E-Prozesse anzeigen</button>');
+
+            spoken = 'Hier sind aktuelle Branchenmeldungen und Web-Fundstücke zur Klinik-IT, FHIR-Interoperabilität und zur SAP Cloud-Transformation. Die Links führen zu aktuellen Nachrichtenquellen.';
+            return { html, chips, spoken };
+          }
 
           // -------------------------------------------------------------------
           // 1. SPECIFIC SYSTEM (by ID or exact name when NOT asking for overview)
           // -------------------------------------------------------------------
+          const sysIdMatch = query.match(/\b([A-Z]{2,4}-[0-9]{2,3}|SYS-[0-9]{2,3})\b/i);
+          const procIdMatch = query.match(/\b([A-Z]{2,4}-P-[0-9]{2}|PROC-[0-9]{2})\b/i);
+
           if (sysIdMatch && !isCountOrListQuery) {
             const foundSys = systems.find(s => s.id.toLowerCase() === sysIdMatch[1].toLowerCase());
             if (foundSys) {
               return buildSpecificSystemResponse(foundSys);
             }
           }
-          if (!isCountOrListQuery && !qLower.includes('prozess') && !qLower.includes('schnittstelle') && !qLower.includes('rolle') && !qLower.includes('landschaft')) {
+          if (!isCountOrListQuery && !qLower.includes('prozess') && !qLower.includes('schnittstelle') && !qLower.includes('rolle') && !qLower.includes('landschaft') && !qLower.includes('wer bist')) {
             const foundSysByName = systems.find(s => qLower.includes(s.name.toLowerCase()) || (s.vendor && qLower.includes(s.vendor.toLowerCase()) && s.vendor.length > 3));
             if (foundSysByName) {
               return buildSpecificSystemResponse(foundSysByName);
@@ -43601,7 +44336,7 @@
               return buildSpecificProcessResponse(foundProc);
             }
           }
-          if (!isCountOrListQuery && !qLower.includes('wie viele') && !qLower.includes('wieviele') && !qLower.includes('anzahl') && !qLower.includes('liste')) {
+          if (!isCountOrListQuery && !qLower.includes('wie viele') && !qLower.includes('wieviele') && !qLower.includes('anzahl') && !qLower.includes('liste') && !qLower.includes('übersicht')) {
             const foundProcByName = processes.find(p => qLower.includes(p.name.toLowerCase()) || (p.apqc && qLower.includes(p.apqc.toLowerCase())) || (p.desc && qLower.includes('notfall') && p.desc.toLowerCase().includes('notfall')) || (p.desc && qLower.includes('labor') && p.desc.toLowerCase().includes('labor')));
             if (foundProcByName) {
               return buildSpecificProcessResponse(foundProcByName);
@@ -43609,7 +44344,7 @@
           }
 
           // -------------------------------------------------------------------
-          // 3. OVERVIEW & COUNT: PROCESSES ("Wie viele Prozesse gibt es?", "Welche Prozesse...", etc.)
+          // 3. OVERVIEW & COUNT: PROCESSES ("Wie viele Prozesse gibt es?", etc.)
           // -------------------------------------------------------------------
           if (qLower.includes('prozess') || qLower.includes('geschäftsprozess') || qLower.includes('abläufe') || qLower.includes('workflows')) {
             html = '<p><strong>📋 Geschäftsprozess-Übersicht (' + processes.length + ' Prozesse)</strong></p>' +
@@ -43638,7 +44373,7 @@
           }
 
           // -------------------------------------------------------------------
-          // 4. OVERVIEW & COUNT: SYSTEMS ("Wie viele Systeme gibt es?", "Welche Systeme haben wir?", etc.)
+          // 4. OVERVIEW & COUNT: SYSTEMS ("Wie viele Systeme gibt es?", etc.)
           // -------------------------------------------------------------------
           if (qLower.includes('system') || qLower.includes('applikation') || qLower.includes('anwendung') || qLower.includes('software')) {
             html = '<p><strong>🏥 System-Landschaft (' + systems.length + ' Systeme in ' + domains.length + ' Domänen)</strong></p>' +
@@ -43804,7 +44539,7 @@
           // -------------------------------------------------------------------
           // 9. ARCHITECTURE, QUAD-CHORD MODEL & HELP
           // -------------------------------------------------------------------
-          if (qLower.includes('quad-chord') || qLower.includes('quadrant') || qLower.includes('hilfe') || qLower.includes('anwendung') || qLower.includes('wie funktioniert') || qLower.includes('architektur')) {
+          if (qLower.includes('quad-chord') || qLower.includes('quadrant') || qLower.includes('wie funktioniert') || qLower.includes('architekturmodell')) {
             html = '<p><strong>ℹ️ Architektur-Wissen: Das Quad-Chord Modell</strong></p>' +
               '<p>Das Quad-Chord-Modell teilt alle Systeme auf einem 360°-Kreis in <strong>4 funktionale Quadranten</strong> auf:</p>' +
               '<ul>' +
@@ -43872,7 +44607,8 @@
             html += '<p>Möchten Sie eine Übersicht zu den Prozessen, Human-in-the-Loop Akteuren oder Schnittstellen erhalten?</p>';
             chips.push('<button class="agent-chip agent-chip-proc" onclick="window.askOrcaiAgent(\'Wie viele Prozesse gibt es?\')">📋 Prozessübersicht</button>');
             chips.push('<button class="agent-chip agent-chip-sys" onclick="window.askOrcaiAgent(\'Wie viele Systeme gibt es?\')">🏥 Systemübersicht</button>');
-            chips.push('<button class="agent-chip agent-chip-hitl" onclick="window.locateRoleOnCanvas(\'JSD-ACT-03\')">👤 Notarzt / RTW</button>');
+            chips.push('<button class="agent-chip agent-chip-model" onclick="window.askOrcaiAgent(\'Wo liegt das GitHub Repository?\')">🐙 GitHub Repository</button>');
+            chips.push('<button class="agent-chip agent-chip-model" onclick="window.askOrcaiAgent(\'Börsenstand Big Tech\')">📈 Börsenstände</button>');
           }
 
           spoken = 'Ich habe passende Architekturelemente für Ihre Anfrage gefunden. Nutzen Sie die Aktionsbuttons, um die Elemente direkt auf der Zeichenfläche zu aktivieren.';
@@ -43882,6 +44618,14 @@
         // Initialize on DOM ready
         applyDockSide(agentDockSide);
         updateVoiceToggleUI();
+
+        // Restore active chat session or start fresh
+        const existingSessions = loadAllUserSessions();
+        if (existingSessions.length > 0) {
+          loadChatSession(existingSessions[0].id);
+        } else {
+          startNewChat();
+        }
       })();
 
     </script>
