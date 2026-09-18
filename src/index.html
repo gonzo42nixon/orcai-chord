@@ -19702,13 +19702,20 @@
 
         const popoutKey = 'ux-' + client.id;
 
-        // If card already exists in Bay, bring to front with focus flash
+        // If card already exists in Bay, bring to front with focus flash & promote in layout
         if (openPopouts.has(popoutKey)) {
           const existingCard = openPopouts.get(popoutKey);
           popoutZIndexCounter++;
           existingCard.style.zIndex = popoutZIndexCounter;
           existingCard.classList.add("popout-focus-flash");
-          setTimeout(() => existingCard.classList.remove("popout-focus-flash"), 600);
+          const bay = document.getElementById('popoutsContainer');
+          if (bay && existingCard.parentNode === bay) {
+            bay.appendChild(existingCard);
+            openPopouts.delete(popoutKey);
+            openPopouts.set(popoutKey, existingCard);
+            updatePopoutBayLayout();
+          }
+          setTimeout(() => existingCard.classList.remove("popout-focus-flash"), 800);
           return existingCard;
         }
 
@@ -19888,6 +19895,8 @@
         popoutsContainer.appendChild(card);
         openPopouts.set(popoutKey, card);
         updatePopoutBayLayout();
+        card.classList.add("popout-focus-flash");
+        setTimeout(() => card.classList.remove("popout-focus-flash"), 800);
         return card;
       }
       window.showUxPopout = showUxPopout;
@@ -36355,30 +36364,69 @@
             .attr('class', 'hitl-node hitl-node-client')
             .attr('id', 'hitl-client-' + (cl.id || clIdx))
             .attr('transform', 'translate(' + clientX + ', ' + clientY + ')')
-            .style('cursor', 'pointer')
-            .on('click', () => {
-              renderInspectorRole(role);
-              if (typeof toggleRightDrawer === 'function') toggleRightDrawer(true);
-              if (typeof window.showCrudToast === 'function') {
-                window.showCrudToast((isS4Hana ? '🌸 SAP Fiori Client: ' : '🌐 Chrome Web-Client: ') + cl.name + ' (' + (cl.deviceType || 'UI') + ')');
-              }
-            });
+            .style('cursor', 'pointer');
+
+          // Determine UX Technology info (Fiori-App, SAP-GUI, Mobile Client, Plain Vanilla SPA, Fat Client)
+          const techInfo = (typeof determineUxTechnology === 'function')
+            ? determineUxTechnology(cl, tgtSys)
+            : { tech: isS4Hana ? 'Fiori-App' : 'Fat Client', label: isS4Hana ? 'Fiori-App' : 'Fat Client', icon: isS4Hana ? UX_TECH_ICONS.fioriApp : UX_TECH_ICONS.fatClient, categoryLabel: isS4Hana ? 'S/4HANA UX' : 'Desktop App', desc: 'Client Interface' };
+
+          // Technology-specific color palette for aura and border
+          let strokeColor = '#38bdf8';
+          let glowColor = 'rgba(56,189,248,0.5)';
+          let auraFill = 'rgba(56,189,248,0.15)';
+          if (techInfo.tech === 'Fiori-App') {
+            strokeColor = '#0070f2';
+            glowColor = 'rgba(0,112,242,0.7)';
+            auraFill = 'rgba(0,112,242,0.2)';
+          } else if (techInfo.tech === 'SAP-GUI') {
+            strokeColor = '#f59e0b';
+            glowColor = 'rgba(245,158,11,0.7)';
+            auraFill = 'rgba(245,158,11,0.2)';
+          } else if (techInfo.tech === 'Mobile Client') {
+            strokeColor = '#06b6d4';
+            glowColor = 'rgba(6,182,212,0.7)';
+            auraFill = 'rgba(6,182,212,0.2)';
+          } else if (techInfo.tech === 'Plain Vanilla SPA') {
+            strokeColor = '#10b981';
+            glowColor = 'rgba(16,185,129,0.7)';
+            auraFill = 'rgba(16,185,129,0.2)';
+          } else if (techInfo.tech === 'Fat Client') {
+            strokeColor = '#818cf8';
+            glowColor = 'rgba(129,140,248,0.7)';
+            auraFill = 'rgba(129,140,248,0.2)';
+          }
+
+          gClient.on('click', (event) => {
+            renderInspectorRole(role);
+            if (typeof toggleRightDrawer === 'function') toggleRightDrawer(true);
+            if (typeof window.showUxPopout === 'function') {
+              const nodeEl = gClient.node();
+              const bcr = nodeEl ? nodeEl.getBoundingClientRect() : { left: event.clientX, top: event.clientY, width: 0, height: 0 };
+              window.showUxPopout(cl.id, role.id, null, bcr.left + bcr.width / 2, bcr.top + bcr.height / 2);
+            }
+            if (typeof window.showCrudToast === 'function') {
+              window.showCrudToast('💻 ' + techInfo.tech + ': ' + (cl.name || cl.id));
+            }
+          });
 
           // Interactive Hover Tooltip Handlers (Dark glassmorphism only, no duplicate native SVG title)
           const tooltipHtml = 
-            '<div style="font-weight:800; font-size:0.82rem; color:' + (isS4Hana ? '#60a5fa' : '#38bdf8') + '; margin-bottom:4px; display:flex; align-items:center; gap:6px;">' +
-              '<span>' + (isS4Hana ? '🌸 SAP Fiori Web-Client' : '🌐 Chrome Web-Client') + '</span>' +
+            '<div style="font-weight:800; font-size:0.82rem; color:' + strokeColor + '; margin-bottom:4px; display:flex; align-items:center; gap:6px;">' +
+              '<span>' + techInfo.tech + ' (' + (techInfo.categoryLabel || 'UX') + ')</span>' +
             '</div>' +
             '<div style="font-weight:700; font-size:0.75rem; color:#f8fafc; margin-bottom:6px;">' + (cl.name || cl.id) + '</div>' +
             '<div style="font-size:0.68rem; color:#94a3b8; line-height:1.45; border-top:1px solid rgba(255,255,255,0.1); padding-top:6px;">' +
+              '<div><strong>Technologie:</strong> ' + techInfo.tech + (techInfo.desc ? (' · ' + techInfo.desc) : '') + '</div>' +
               '<div><strong>Zielsystem:</strong> ' + cl.targetSystemId + (tgtSys ? (' · ' + tgtSys.name) : '') + '</div>' +
+              (cl.deviceType ? ('<div><strong>Endgerät:</strong> ' + cl.deviceType + '</div>') : '') +
               (cl.os ? ('<div><strong>Betriebssystem / Protokoll:</strong> ' + cl.os + '</div>') : '') +
               (cl.authMethod ? ('<div><strong>Authentifizierung:</strong> ' + cl.authMethod + '</div>') : '') +
               ((cl.messagesEmitted && cl.messagesEmitted.length > 0) ? ('<div><strong>Datenaustausch:</strong> ' + cl.messagesEmitted.join(', ') + '</div>') : '') +
-              '<div style="margin-top:4px; color:#38bdf8; font-style:italic;">2-Stufige HITL-Kette: Mensch ↕ UI ↔ Backend</div>' +
+              '<div style="margin-top:4px; color:' + strokeColor + '; font-style:italic;">2-Stufige HITL-Kette: Mensch ↕ UI ↔ Backend</div>' +
             '</div>' +
             '<div style="margin-top:6px; font-size:0.68rem; color:#cbd5e1; border-top:1px dashed rgba(255,255,255,0.15); padding-top:5px; display:flex; align-items:center; gap:5px;">' +
-              '<span>💡</span> <em>Klicken für detaillierten Rollen- &amp; Client-Inspektor</em>' +
+              '<span>💡</span> <em>Klicken für UX-Pop-Out im Bay &amp; Inspector</em>' +
             '</div>';
 
           const tipDiv = document.getElementById('hitlClientFloatingTooltip');
@@ -36409,95 +36457,39 @@
             if (tipDiv) tipDiv.style.display = 'none';
           });
 
-          // Render Icon Graphic based on target system type
-          if (isS4Hana) {
-            // ===============================================================
-            // SAP FIORI LAUNCHPAD ICON (CIRCULAR FLOWER / DIAMOND)
-            // ===============================================================
-            // Base sapphire badge
-            gClient.append('circle')
-              .attr('class', 'client-icon-base client-icon-fiori-base')
-              .attr('r', clientRadius)
-              .attr('fill', '#0b1329')
-              .attr('stroke', '#0070f2')
-              .attr('stroke-width', '2.5')
-              .style('filter', 'drop-shadow(0 4px 14px rgba(0,112,242,0.75))');
+          // ===============================================================
+          // FREIGESTELLTES UX-TECHNOLOGIE ICON (DIRECT RENDERING ON CANVAS)
+          // ===============================================================
+          // 1. Subtle Outer Aura Ring
+          gClient.append('circle')
+            .attr('class', 'client-icon-aura')
+            .attr('r', clientRadius + 3)
+            .attr('fill', auraFill)
+            .attr('stroke', strokeColor)
+            .attr('stroke-width', '1')
+            .attr('stroke-dasharray', '2,2')
+            .attr('opacity', 0.7);
 
-            // Fiori aura ring
-            gClient.append('circle')
-              .attr('r', 16)
-              .attr('fill', 'rgba(0,112,242,0.22)');
+          // 2. Base circular container (dark slate backdrop)
+          gClient.append('circle')
+            .attr('class', 'client-icon-base')
+            .attr('r', clientRadius)
+            .attr('fill', '#0b1329')
+            .attr('stroke', strokeColor)
+            .attr('stroke-width', '2.5')
+            .style('filter', 'drop-shadow(0 4px 12px ' + glowColor + ')');
 
-            // 4 Fiori Petals (Curved flower motif)
-            gClient.append('path')
-              .attr('d', 'M 0,-15 C 5.5,-15 10,-10.5 10,-5 C 10,0 0,4 0,4 C 0,4 -10,0 -10,-5 C -10,-10.5 -5.5,-15 0,-15 Z')
-              .attr('fill', '#00b4d8')
-              .attr('opacity', 0.95);
-
-            gClient.append('path')
-              .attr('d', 'M 15,0 C 15,5.5 10.5,10 5,10 C 0,10 -4,0 -4,0 C -4,0 0,-10 5,-10 C 10.5,-10 15,-5.5 15,0 Z')
-              .attr('fill', '#0a6ed1')
-              .attr('opacity', 0.95);
-
-            gClient.append('path')
-              .attr('d', 'M 0,15 C -5.5,15 -10,10.5 -10,5 C -10,0 0,-4 0,-4 C 0,-4 10,0 10,5 C 10,10.5 5.5,15 0,15 Z')
-              .attr('fill', '#0070f2')
-              .attr('opacity', 0.95);
-
-            gClient.append('path')
-              .attr('d', 'M -15,0 C -15,-5.5 -10.5,-10 -5,-10 C 0,-10 4,0 4,0 C 4,0 0,10 -5,10 C -10.5,10 -15,5.5 -15,0 Z')
-              .attr('fill', '#38bdf8')
-              .attr('opacity', 0.95);
-
-            // Center core
-            gClient.append('circle')
-              .attr('r', 4.5)
-              .attr('fill', '#ffffff');
-
-            gClient.append('circle')
-              .attr('r', 2.8)
-              .attr('fill', '#0a6ed1');
-
-          } else {
-            // ===============================================================
-            // GOOGLE CHROME ICON (CIRCULAR BROWSER SEGMENTS)
-            // ===============================================================
-            // Base white circle
-            gClient.append('circle')
-              .attr('class', 'client-icon-base client-icon-chrome-base')
-              .attr('r', clientRadius)
-              .attr('fill', '#ffffff')
-              .attr('stroke', '#38bdf8')
-              .attr('stroke-width', '2')
-              .style('filter', 'drop-shadow(0 4px 14px rgba(0,0,0,0.6))');
-
-            // Official Chrome segment geometry (scaled to fit radius 22)
-            const gChrome = gClient.append('g').attr('transform', 'translate(-24, -24)');
-
-            gChrome.append('path')
-              .attr('d', 'M24 4C14.5 4 6.6 10.6 4.5 19.5L14 25c.8-4.6 4.8-8 9.7-8h18.8C39.4 9.6 32.3 4 24 4z')
-              .attr('fill', '#EA4335');
-
-            gChrome.append('path')
-              .attr('d', 'M4.5 19.5C4.2 21 4 22.5 4 24c0 9.5 6.6 17.4 15.5 19.5L25 34c-4.6-.8-8-4.8-8-9.7 0-1.8.5-3.4 1.3-4.8L4.5 19.5z')
-              .attr('fill', '#34A853');
-
-            gChrome.append('path')
-              .attr('d', 'M42.5 17H23.7c-.5 0-1 .1-1.5.2l5.7 9.8c.8 1.4 1.3 3 1.3 4.8 0 4.9-3.4 8.9-8 9.7L25 43.5C33.9 41.4 40.5 33.5 40.5 24c0-2.5-.5-4.9-1.4-7.1L42.5 17z')
-              .attr('fill', '#FBBC05');
-
-            gChrome.append('circle')
-              .attr('cx', 24)
-              .attr('cy', 24)
-              .attr('r', 9.2)
-              .attr('fill', '#ffffff');
-
-            gChrome.append('circle')
-              .attr('cx', 24)
-              .attr('cy', 24)
-              .attr('r', 7.4)
-              .attr('fill', '#1A73E8');
-          }
+          // 3. Freigestelltes UX-Technologie Icon Image (centered)
+          const clientImgSize = 28; // Fits cleanly inside radius 22 (diameter 44)
+          gClient.append('image')
+            .attr('class', 'client-tech-icon-img')
+            .attr('href', techInfo.icon)
+            .attr('x', -clientImgSize / 2)
+            .attr('y', -clientImgSize / 2)
+            .attr('width', clientImgSize)
+            .attr('height', clientImgSize)
+            .attr('preserveAspectRatio', 'xMidYMid meet')
+            .style('pointer-events', 'none');
 
           // ===================================================================
           // LABELING: KURZ, 1-ZEILIG, UNTERHALB (TOP-LAGE) BZW. OBERHALB (BOTTOM-LAGE)
@@ -36506,12 +36498,15 @@
           let shortLabel = cl.shortName;
           if (!shortLabel) {
             const n = cl.name || cl.id;
-            if (isS4Hana || n.toLowerCase().includes('fiori') || n.toLowerCase().includes('s/4')) shortLabel = 'SAP Fiori Client';
+            if (techInfo.tech === 'Fiori-App') shortLabel = 'SAP Fiori App';
+            else if (techInfo.tech === 'SAP-GUI') shortLabel = 'SAP GUI Client';
+            else if (techInfo.tech === 'Mobile Client') shortLabel = 'Mobile Client';
+            else if (techInfo.tech === 'Plain Vanilla SPA') shortLabel = 'Web Portal (SPA)';
+            else if (techInfo.tech === 'Fat Client') shortLabel = 'Desktop Client';
             else if (n.toLowerCase().includes('console') || n.toLowerCase().includes('frontend')) shortLabel = 'BIS Cloud Console';
             else if (n.toLowerCase().includes('webedi') || n.toLowerCase().includes('supplier')) shortLabel = 'Supplier WebEDI';
             else if (n.toLowerCase().includes('atlas') || n.toLowerCase().includes('zoll')) shortLabel = 'ATLAS Zoll-Portal';
             else if (n.toLowerCase().includes('gkv') || n.includes('301')) shortLabel = 'GKV § 301 Portal';
-            else if (n.toLowerCase().includes('portal') || n.toLowerCase().includes('web')) shortLabel = 'Web Portal (UI)';
             else {
               const cleaned = n.split('&')[0].split('(')[0].split('/')[0].trim();
               shortLabel = cleaned.length > 20 ? (cleaned.slice(0, 19) + '…') : cleaned;
@@ -41227,6 +41222,55 @@
             const sysIdMatch = rawName.match(/\b([A-Z]{2,4}-[A-Z0-9_-]+)\b/);
             const sysId = sysIdMatch ? sysIdMatch[1] : null;
 
+            // Extract hitl / ux tags from participant or actor definition
+            const hitlMatch = line.match(/\[\[#hitl-([A-Za-z0-9_-]+)/);
+            const uxMatch = line.match(/\[\[#ux-([A-Za-z0-9_-]+)/);
+            let hitlId = hitlMatch ? hitlMatch[1] : null;
+            let uxId = uxMatch ? uxMatch[1] : null;
+
+            let matchedActor = null;
+            let matchedClient = null;
+
+            if (hitlId) {
+              matchedActor = allActors.find(a => a.id === hitlId);
+              if (matchedActor && Array.isArray(matchedActor.clients) && matchedActor.clients.length > 0) {
+                matchedClient = matchedActor.clients[0];
+              }
+            }
+            if (uxId) {
+              for (const a of allActors) {
+                const cl = (a.clients || []).find(c => c.id === uxId);
+                if (cl) {
+                  matchedClient = cl;
+                  if (!matchedActor) matchedActor = a;
+                  break;
+                }
+              }
+            }
+
+            // Fallback match by actor name or alias if no tag
+            if (!matchedActor && (isActor || line.toLowerCase().includes('ux') || line.toLowerCase().includes('client') || line.toLowerCase().includes('human'))) {
+              const normRaw = rawName.toLowerCase();
+              matchedActor = mappedActors.find(a => 
+                normRaw.includes(a.name.toLowerCase()) || 
+                a.name.toLowerCase().includes(normRaw) ||
+                (a.alias && normRaw.includes(a.alias.toLowerCase())) ||
+                normRaw.includes(a.id.toLowerCase())
+              ) || allActors.find(a => 
+                normRaw.includes(a.name.toLowerCase()) || 
+                a.name.toLowerCase().includes(normRaw) ||
+                (a.alias && normRaw.includes(a.alias.toLowerCase())) ||
+                normRaw.includes(a.id.toLowerCase())
+              );
+              if (matchedActor && !matchedClient && Array.isArray(matchedActor.clients) && matchedActor.clients.length > 0) {
+                matchedClient = matchedActor.clients[0];
+              }
+            }
+
+            const laneActorId = matchedActor ? matchedActor.id : (hitlId || null);
+            const laneClientId = matchedClient ? matchedClient.id : (uxId || (matchedActor?.clients?.[0]?.id) || null);
+            const isHumanLane = isActor || !!matchedActor || !!laneActorId || !!laneClientId || !!uxMatch;
+
             const targetPool = currentBox || (pools.length > 0 ? pools[pools.length - 1] : null);
             if (targetPool) {
               const laneId = 'Lane_' + safeProcId + '_' + (aliasToLane.size + 1);
@@ -41234,7 +41278,9 @@
                 id: laneId,
                 name: rawName,
                 alias: alias,
-                isActor: isActor,
+                isActor: isHumanLane,
+                actorId: laneActorId,
+                clientId: laneClientId,
                 sysId: sysId,
                 pool: targetPool,
                 flowNodes: []
@@ -41243,8 +41289,11 @@
               aliasToPool.set(alias, targetPool);
               aliasToLane.set(alias, lane);
 
-              if (sysId) procMetaMap.set(laneId, { type: 'sys', sysId: sysId });
-              else if (isActor && mappedActors.length > 0) procMetaMap.set(laneId, { type: 'actor', actorId: mappedActors[0].id });
+              if (sysId && !isHumanLane) {
+                procMetaMap.set(laneId, { type: 'sys', sysId: sysId, desc: rawName });
+              } else if (laneActorId || laneClientId) {
+                procMetaMap.set(laneId, { type: 'human', actorId: laneActorId, clientId: laneClientId, desc: rawName });
+              }
             }
           }
         }
@@ -41367,12 +41416,30 @@
           const connMatch = (it.rawDesc || '').match(/#conn-([A-Z0-9_-]+)/);
           const connId = connMatch ? connMatch[1] : null;
 
+          // Resolve step-specific Actor & Client from description or lanes
+          const descHitl = (it.rawDesc || '').match(/\[\[#hitl-([A-Za-z0-9_-]+)/);
+          const descUx = (it.rawDesc || '').match(/\[\[#ux-([A-Za-z0-9_-]+)/);
+          let stepActorId = descHitl ? descHitl[1] : (it.srcLane.actorId || (it.tgtLane && it.tgtLane.actorId) || null);
+          let stepClientId = descUx ? descUx[1] : (it.srcLane.clientId || (it.tgtLane && it.tgtLane.clientId) || null);
+
+          if (stepActorId && !stepClientId) {
+            const aObj = allActors.find(a => a.id === stepActorId);
+            if (aObj && Array.isArray(aObj.clients) && aObj.clients.length > 0) stepClientId = aObj.clients[0].id;
+          }
+          if (stepClientId && !stepActorId) {
+            for (const a of allActors) {
+              if ((a.clients || []).some(c => c.id === stepClientId)) { stepActorId = a.id; break; }
+            }
+          }
+
+          const isSrcHuman = it.srcLane.isActor || !!stepActorId || !!stepClientId;
+
           if (it.isCrossPool) {
             const sendTaskId = 'Task_' + safeProcId + '_Send_' + stepNum;
             const sendTask = {
               id: sendTaskId,
               name: taskName,
-              type: it.srcLane.isActor ? 'userTask' : 'sendTask',
+              type: isSrcHuman ? 'userTask' : 'sendTask',
               lane: it.srcLane,
               pool: it.srcPool,
               x: nodeX,
@@ -41383,8 +41450,18 @@
             it.srcLane.flowNodes.push(sendTask);
             allNodes.push(sendTask);
 
-            if (it.srcLane.sysId) procMetaMap.set(sendTaskId, { type: 'sys', sysId: it.srcLane.sysId, desc: taskName });
-            else if (it.srcLane.isActor && mappedActors.length) procMetaMap.set(sendTaskId, { type: 'client', actorId: mappedActors[0].id, clientId: mappedActors[0].clients ? mappedActors[0].clients[0].id : null });
+            if (it.srcLane.sysId && !isSrcHuman) {
+              procMetaMap.set(sendTaskId, { type: 'sys', sysId: it.srcLane.sysId, desc: taskName });
+            } else if (stepActorId || stepClientId || it.srcLane.actorId || it.srcLane.clientId) {
+              procMetaMap.set(sendTaskId, { 
+                type: 'human', 
+                actorId: stepActorId || it.srcLane.actorId, 
+                clientId: stepClientId || it.srcLane.clientId, 
+                desc: taskName 
+              });
+            } else if (it.srcLane.sysId) {
+              procMetaMap.set(sendTaskId, { type: 'sys', sysId: it.srcLane.sysId, desc: taskName });
+            }
 
             const prevSrc = prevNodeInPool.get(it.srcPool.id);
             if (prevSrc) {
@@ -41408,7 +41485,11 @@
             it.tgtLane.flowNodes.push(recvTask);
             allNodes.push(recvTask);
 
-            if (it.tgtLane.sysId) procMetaMap.set(recvTaskId, { type: 'sys', sysId: it.tgtLane.sysId, desc: recvTask.name });
+            if (it.tgtLane.sysId) {
+              procMetaMap.set(recvTaskId, { type: 'sys', sysId: it.tgtLane.sysId, desc: recvTask.name });
+            } else if (it.tgtLane.actorId || it.tgtLane.clientId) {
+              procMetaMap.set(recvTaskId, { type: 'human', actorId: it.tgtLane.actorId, clientId: it.tgtLane.clientId, desc: recvTask.name });
+            }
 
             const prevTgt = prevNodeInPool.get(it.tgtPool.id);
             if (prevTgt) {
@@ -41432,7 +41513,7 @@
             const task = {
               id: taskId,
               name: taskName,
-              type: it.srcLane.isActor ? 'userTask' : 'serviceTask',
+              type: isSrcHuman ? 'userTask' : 'serviceTask',
               lane: it.srcLane,
               pool: it.srcPool,
               x: nodeX,
@@ -41443,7 +41524,18 @@
             it.srcLane.flowNodes.push(task);
             allNodes.push(task);
 
-            if (it.srcLane.sysId) procMetaMap.set(taskId, { type: 'sys', sysId: it.srcLane.sysId, desc: taskName });
+            if (it.srcLane.sysId && !isSrcHuman) {
+              procMetaMap.set(taskId, { type: 'sys', sysId: it.srcLane.sysId, desc: taskName });
+            } else if (stepActorId || stepClientId || it.srcLane.actorId || it.srcLane.clientId) {
+              procMetaMap.set(taskId, { 
+                type: 'human', 
+                actorId: stepActorId || it.srcLane.actorId, 
+                clientId: stepClientId || it.srcLane.clientId, 
+                desc: taskName 
+              });
+            } else if (it.srcLane.sysId) {
+              procMetaMap.set(taskId, { type: 'sys', sysId: it.srcLane.sysId, desc: taskName });
+            }
 
             const prev = prevNodeInPool.get(it.srcPool.id);
             if (prev) {
@@ -41964,11 +42056,21 @@
             const metaMap = bpmnElementMetaMap.get(proc.id);
             let meta = metaMap ? metaMap.get(elemId) : null;
 
-            // Fallback: If not registered in metaMap, check if element ID or Lane contains a system ID
+            // Fallback: If not registered in metaMap, check if element ID contains system, actor, or client ID
             if (!meta) {
               const sysMatch = elemId.match(/\b([A-Z]{2,4}-[A-Z0-9_-]+)\b/);
               if (sysMatch && Array.isArray(SYSTEMS_DATA) && SYSTEMS_DATA.some(s => s.id === sysMatch[1])) {
                 meta = { type: 'sys', sysId: sysMatch[1] };
+              } else {
+                const actMatch = elemId.match(/\b([A-Z]{2,4}-ACT-[0-9_-]+)\b/);
+                if (actMatch) {
+                  meta = { type: 'human', actorId: actMatch[1] };
+                } else {
+                  const clMatch = elemId.match(/\b([A-Z]{2,4}-CL-[0-9_-]+)\b/);
+                  if (clMatch) {
+                    meta = { type: 'client', clientId: clMatch[1] };
+                  }
+                }
               }
             }
 
@@ -41988,23 +42090,32 @@
                 }
               } else if (meta.type === 'human' || meta.type === 'client' || meta.type === 'actor') {
                 // 2. Switch human role and client on canvas
-                if (meta.actorId) {
-                  if (typeof window.locateRoleOnCanvas === 'function') {
-                    window.locateRoleOnCanvas(meta.actorId);
-                  } else if (typeof window.selectHitlRole === 'function') {
-                    window.selectHitlRole(meta.actorId);
+                const targetActorId = meta.actorId || (meta.clientId && Array.isArray(ACTORS_DATA) ? ACTORS_DATA.find(a => (a.clients || []).some(c => c.id === meta.clientId))?.id : null);
+                let targetClientId = meta.clientId;
+                if (!targetClientId && targetActorId && Array.isArray(ACTORS_DATA)) {
+                  const actObj = ACTORS_DATA.find(a => a.id === targetActorId);
+                  if (actObj && Array.isArray(actObj.clients) && actObj.clients.length > 0) {
+                    targetClientId = actObj.clients[0].id;
                   }
                 }
-                if (meta.clientId && typeof window.locateClientOnCanvas === 'function') {
-                  window.locateClientOnCanvas(meta.clientId);
+
+                if (targetActorId) {
+                  if (typeof window.locateRoleOnCanvas === 'function') {
+                    window.locateRoleOnCanvas(targetActorId);
+                  } else if (typeof window.selectHitlRole === 'function') {
+                    window.selectHitlRole(targetActorId);
+                  }
                 }
-                // Show UX Popout in Bay for Human Tasks and Clients
-                if (typeof window.showUxPopout === 'function' && (meta.type === 'human' || meta.type === 'client')) {
+                if (targetClientId && typeof window.locateClientOnCanvas === 'function') {
+                  window.locateClientOnCanvas(targetClientId);
+                }
+                // Show UX Popout in Bay for Human Tasks, Clients, and Actor lanes
+                if (typeof window.showUxPopout === 'function') {
                   const rect = hitShape.getBoundingClientRect();
-                  window.showUxPopout(meta.clientId, meta.actorId, proc.id, rect.left + rect.width / 2, rect.top + rect.height / 2);
+                  window.showUxPopout(targetClientId, targetActorId, proc.id, rect.left + rect.width / 2, rect.top + rect.height / 2);
                 }
                 if (typeof window.showCrudToast === 'function') {
-                  const actObj = (typeof ACTORS_DATA !== 'undefined' ? ACTORS_DATA : []).find(a => a.id === meta.actorId);
+                  const actObj = (typeof ACTORS_DATA !== 'undefined' ? ACTORS_DATA : []).find(a => a.id === targetActorId);
                   const actName = actObj ? actObj.name : (meta.desc || 'Menschliche Rolle');
                   window.showCrudToast('👤 Human Task: ' + actName + ' auf Zeichenfläche aktiviert');
                 }
