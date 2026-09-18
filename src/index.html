@@ -43161,32 +43161,128 @@
           };
         }
 
+        // =====================================================================
+        // VOICE MANAGEMENT & TEXT-TO-SPEECH (TTS) OPTIMIZATION
+        // =====================================================================
+        let cachedGermanVoice = null;
+        function updateAvailableVoices() {
+          if (!('speechSynthesis' in window)) return;
+          const voices = window.speechSynthesis.getVoices();
+          if (!voices || voices.length === 0) return;
+
+          // Priority list for high-quality German natural voices:
+          // 1. Edge/Windows Online Natural voices (Katja, Conrad, Christoph, Amala, Florian)
+          // 2. Google Deutsch
+          // 3. Desktop Hedda / Stefan
+          // 4. Any voice with lang de-DE or de
+          cachedGermanVoice = voices.find(v => v.lang.startsWith('de') && (v.name.includes('Online (Natural)') || v.name.includes('Natural'))) ||
+                              voices.find(v => v.lang.startsWith('de') && (v.name.includes('Google') || v.name.includes('Katja') || v.name.includes('Conrad') || v.name.includes('Christoph'))) ||
+                              voices.find(v => v.lang.startsWith('de') && (v.name.includes('Hedda') || v.name.includes('Stefan'))) ||
+                              voices.find(v => v.lang === 'de-DE') ||
+                              voices.find(v => v.lang.startsWith('de')) || null;
+        }
+
+        if ('speechSynthesis' in window) {
+          updateAvailableVoices();
+          window.speechSynthesis.onvoiceschanged = updateAvailableVoices;
+        }
+
+        function cleanSpokenText(text) {
+          if (!text) return '';
+          let clean = String(text);
+
+          // Strip HTML tags and entities
+          clean = clean.replace(/<[^>]*>/g, ' ');
+          clean = clean.replace(/&amp;/g, ' und ');
+          clean = clean.replace(/&nbsp;/g, ' ');
+          clean = clean.replace(/&[a-z]+;/gi, ' ');
+
+          // Strip internal markdown/action tokens
+          clean = clean.replace(/\[\[[^\]]*\]\]/g, ' ');
+          clean = clean.replace(/action:[a-z0-9_:-]+/gi, ' ');
+
+          // Strip emojis and non-alphanumeric special symbols
+          clean = clean.replace(/[🤖🏥📋📊👤📱💻⚡🔄🔗ℹ️💡✕➤✓✔🎯⟲↗]/g, ' ');
+
+          // Standard German abbreviations & technical acronyms
+          clean = clean.replace(/\bE2E\b/gi, 'End-to-End');
+          clean = clean.replace(/\bBPMN\b/gi, 'B P M N');
+          clean = clean.replace(/\bPlantUML\b/gi, 'Plant U M L');
+          clean = clean.replace(/\bPUML\b/gi, 'Plant U M L');
+          clean = clean.replace(/\bKIS\b/gi, 'K I S');
+          clean = clean.replace(/\bZNA\b/gi, 'Zentrale Notaufnahme');
+          clean = clean.replace(/\bRTW\b/gi, 'Rettungswagen');
+          clean = clean.replace(/\bUX\b/gi, 'Benutzeroberfläche');
+          clean = clean.replace(/\bUI\b/gi, 'User-Interface');
+          clean = clean.replace(/\bAPQC\b/gi, 'A P Q C');
+          clean = clean.replace(/\bTI\b/gi, 'Telematikinfrastruktur');
+          clean = clean.replace(/\biPaaS\b/gi, 'Integration Platform as a Service');
+          clean = clean.replace(/\bREST\b/gi, 'Rest');
+          clean = clean.replace(/\bFHIR\b/gi, 'F H I R');
+          clean = clean.replace(/\bHL7\b/gi, 'H L 7');
+          clean = clean.replace(/\bDICOM\b/gi, 'Dicom');
+          clean = clean.replace(/\bAPI\b/gi, 'A P I');
+          clean = clean.replace(/\bAPIs\b/gi, 'A P Is');
+          clean = clean.replace(/\bERP\b/gi, 'E R P');
+          clean = clean.replace(/\bSAP\b/gi, 'S A P');
+          clean = clean.replace(/\bS\/4HANA\b/gi, 'S 4 Hana');
+          clean = clean.replace(/\bS4HANA\b/gi, 'S 4 Hana');
+          clean = clean.replace(/\bBTP\b/gi, 'B T P');
+          clean = clean.replace(/\bRZ\b/gi, 'Rechenzentrum');
+          clean = clean.replace(/\bIT\b/gi, 'I T');
+          clean = clean.replace(/\bDMZ\b/gi, 'D M Z');
+          clean = clean.replace(/\bHR\b/gi, 'H R');
+          clean = clean.replace(/\bKHZG\b/gi, 'K H Z G');
+          clean = clean.replace(/\bHITL\b/gi, 'Human in the Loop');
+
+          // Conversational abbreviations
+          clean = clean.replace(/\bz\.\s*B\./gi, 'zum Beispiel');
+          clean = clean.replace(/\bbzw\./gi, 'beziehungsweise');
+          clean = clean.replace(/\binkl\./gi, 'inklusive');
+          clean = clean.replace(/\bca\./gi, 'circa');
+          clean = clean.replace(/\bvs\./gi, 'versus');
+          clean = clean.replace(/\betc\./gi, 'und so weiter');
+          clean = clean.replace(/➔|->/g, ' nach ');
+          clean = clean.replace(/\+/g, ' plus ');
+          clean = clean.replace(/&/g, ' und ');
+          clean = clean.replace(/\//g, ' und ');
+
+          // Soften technical system, process and client IDs so hyphens aren't spelled out as "Bindestrich"
+          clean = clean.replace(/\b([A-Z]{2,4})-P-([0-9]{2})\b/gi, 'Prozess P $2');
+          clean = clean.replace(/\bPROC-([0-9]{2})\b/gi, 'Prozess $1');
+          clean = clean.replace(/\b([A-Z]{2,4})-ACT-([0-9]{2})\b/gi, 'Rolle $2');
+          clean = clean.replace(/\b([A-Z]{2,4})-CL-([0-9]{2})\b/gi, 'Client $2');
+          clean = clean.replace(/\b([A-Z]{2,4})-([0-9]{2,3})\b/gi, 'System $1 $2');
+          clean = clean.replace(/\bSYS-([0-9]{2,3})\b/gi, 'System $1');
+          clean = clean.replace(/\bINT-([0-9]{2,3})\b/gi, 'Schnittstelle $1');
+
+          // Clean isolated dashes or bullet dots
+          clean = clean.replace(/\s*-\s*/g, ' ');
+          clean = clean.replace(/\s*·\s*/g, ', ');
+
+          // Collapse extra whitespace
+          clean = clean.replace(/\s+/g, ' ').trim();
+          return clean;
+        }
+        window.cleanSpokenText = cleanSpokenText;
+
         // Text-to-Speech (TTS)
         function speakAgentText(text) {
           if (!isVoiceOutputEnabled || !('speechSynthesis' in window)) return;
           window.speechSynthesis.cancel();
 
-          // Strip HTML tags, action tokens, brackets, and emojis for natural spoken text
-          let clean = text.replace(/<[^>]*>/g, ' ');
-          clean = clean.replace(/\[\[[^\]]*\]\]/g, ' ');
-          clean = clean.replace(/[🏥📋📊👤📱💻⚡🔄🔗ℹ️💡✕➤]/g, ' ');
-          clean = clean.replace(/action:[a-z0-9_:-]+/gi, ' ');
-          clean = clean.replace(/JSD-([A-Z0-9_-]+)/g, 'J S D $1');
-          clean = clean.replace(/SYS-([A-Z0-9_-]+)/g, 'System $1');
-          clean = clean.replace(/INT-([A-Z0-9_-]+)/g, 'Integration $1');
-          clean = clean.replace(/\s+/g, ' ').trim();
-
+          const clean = cleanSpokenText(text);
           if (!clean) return;
 
           const utterance = new SpeechSynthesisUtterance(clean);
           utterance.lang = 'de-DE';
-          utterance.rate = 1.05;
+          utterance.rate = 1.0; // natural calm conversational speed
           utterance.pitch = 1.0;
 
-          // Prefer German voices if available
-          const voices = window.speechSynthesis.getVoices();
-          const deVoice = voices.find(v => v.lang.startsWith('de') && (v.name.includes('Google') || v.name.includes('Microsoft') || v.name.includes('Hedda') || v.name.includes('Stefan')));
-          if (deVoice) utterance.voice = deVoice;
+          if (!cachedGermanVoice) updateAvailableVoices();
+          if (cachedGermanVoice) {
+            utterance.voice = cachedGermanVoice;
+          }
 
           window.speechSynthesis.speak(utterance);
         }
@@ -43403,30 +43499,42 @@
 
         // Semantic Engine
         function generateAgentAnswer(query) {
-          const qLower = query.toLowerCase();
+          const qLower = query.toLowerCase().trim();
           const systems = (typeof SYSTEMS_DATA !== 'undefined') ? SYSTEMS_DATA : [];
           const processes = (typeof PROCESSES_DATA !== 'undefined') ? PROCESSES_DATA : [];
           const integrations = (typeof INTEGRATIONS_DATA !== 'undefined') ? INTEGRATIONS_DATA : [];
+          const connections = (typeof CONNECTIONS_DATA !== 'undefined') ? CONNECTIONS_DATA : [];
           const actors = (typeof ACTORS_DATA !== 'undefined') ? ACTORS_DATA : [];
           const domains = (typeof DOMAINS_DATA !== 'undefined') ? DOMAINS_DATA : [];
           const registeredModels = (typeof registeredLandscapeModels !== 'undefined') ? registeredLandscapeModels : [];
+
+          // Active model metadata
+          const activeModelId = (typeof window.currentModelId !== 'undefined' && window.currentModelId) ? window.currentModelId : (typeof currentModelId !== 'undefined' ? currentModelId : '');
+          const activeModelEntry = registeredModels.find(m => m.id === activeModelId);
+          const modelOrg = activeModelEntry?.organization || activeModelEntry?.title || 'Johannesstift Diakonie';
+          const modelShort = activeModelEntry?.shortName || 'JSD';
 
           const chips = [];
           let html = '';
           let spoken = '';
 
-          // 1. INTENT: SPECIFIC SYSTEM SEARCH (e.g. JSD-08, MEDICO, HealthShare, SYS-...)
-          const sysIdMatch = query.match(/\b([A-Z]{2,4}-[0-9]{2,3})\b/i);
-          const foundSys = sysIdMatch ? systems.find(s => s.id.toLowerCase() === sysIdMatch[1].toLowerCase()) : null;
-          const foundSysByName = !foundSys ? systems.find(s => qLower.includes(s.name.toLowerCase()) || (s.vendor && qLower.includes(s.vendor.toLowerCase()))) : null;
-          const targetSys = foundSys || foundSysByName;
+          // Determine if query is an aggregation / counting / overview question
+          const isCountOrListQuery = qLower.includes('wie viele') || qLower.includes('wieviele') || 
+                                     qLower.includes('anzahl') || qLower.includes('welche') || 
+                                     qLower.includes('liste') || qLower.includes('alle ') || 
+                                     qLower.includes('übersicht') || qLower.includes('uebersicht') || 
+                                     qLower.includes('überblick') || qLower.includes('ueberblick') || 
+                                     qLower.includes('statist') || qLower.includes('kennzahl') || 
+                                     qLower.includes('zusammenfass') || qLower.includes('wie groß') ||
+                                     qLower.includes('gibt es') || qLower.includes('haben wir');
 
-          if (targetSys) {
+          // Helper function: Build specific system response
+          function buildSpecificSystemResponse(targetSys) {
             const relInteg = integrations.filter(i => i.source === targetSys.id || i.target === targetSys.id || (i.participatingSystems || []).includes(targetSys.id));
             const relProcs = processes.filter(p => (p.participatingSystems || []).includes(targetSys.id) || (p.cleanIntegIds || []).some(cid => relInteg.some(ri => ri.id === cid)));
 
             html = '<p><strong>🏥 System-Analyse: ' + targetSys.id + ' · ' + targetSys.name + '</strong></p>' +
-              '<p>' + (targetSys.desc || 'Kernsystem der IT-Architektur') + '</p>' +
+              '<p>' + (targetSys.desc || 'Kernsystem der IT-Architektur.') + '</p>' +
               '<ul>' +
                 '<li><strong>Hersteller:</strong> ' + (targetSys.vendor || 'Unbekannt') + '</li>' +
                 '<li><strong>Domäne:</strong> ' + (targetSys.leadDomain || targetSys.domain || 'Allgemein') + '</li>' +
@@ -43441,39 +43549,164 @@
               chips.push('<button class="agent-chip agent-chip-proc" onclick="window.openBpmnModal(\'' + p.id + '\')">📋 BPMN: ' + p.id + '</button>');
             });
 
-            spoken = 'Hier sind die Architekturdetails für das System ' + targetSys.id + ' ' + targetSys.name + '. Es ist in ' + relInteg.length + ' Schnittstellen und ' + relProcs.length + ' End-to-End Prozessen eingebunden. Sie können es über den Button direkt auf der Zeichenfläche fokussieren.';
+            spoken = 'Hier sind die Architekturdetails für das System ' + targetSys.name + '. Es ist in ' + relInteg.length + ' Schnittstellen und ' + relProcs.length + ' Geschäftsprozesse eingebunden. Über den Aktionsbutton können Sie es direkt auf der Zeichenfläche fokussieren.';
             return { html, chips, spoken };
           }
 
-          // 2. INTENT: PROCESSES & BPMN / PLANTUML (e.g. Notfall, Triage, Labor, JSD-P-01, JSD-P-02)
+          // Helper function: Build specific process response
+          function buildSpecificProcessResponse(p) {
+            html = '<p><strong>📋 E2E-Prozess: ' + p.id + ' · ' + p.name + '</strong></p>' +
+              '<p>' + (p.desc || 'Geschäftsprozess der IT-Landschaft.') + '</p>' +
+              '<ul>' +
+                (p.apqc ? ('<li><strong>APQC Klassifikation:</strong> ' + p.apqc + '</li>') : '') +
+                '<li><strong>Federführende Domäne:</strong> ' + (p.leadDomain || 'D1') + '</li>' +
+                '<li><strong>Beteiligte Systeme:</strong> ' + ((p.participatingSystems || []).join(', ') || 'Mehrere') + '</li>' +
+              '</ul>' +
+              '<p>Sie können diesen Prozess sowohl als <strong>BPMN 2.0 Collaboration-Diagramm</strong> als auch als <strong>PlantUML Sequenzdiagramm</strong> als modales Popout mit asynchroner Zoom- &amp; Formfaktor-Anpassung öffnen:</p>';
+
+            chips.push('<button class="agent-chip agent-chip-proc" onclick="window.openBpmnModal(\'' + p.id + '\')">📋 BPMN 2.0 öffnen (' + p.id + ')</button>');
+            chips.push('<button class="agent-chip agent-chip-puml" onclick="window.openPlantUmlModal(\'' + p.id + '\')">📊 PlantUML Sequenz öffnen (' + p.id + ')</button>');
+            chips.push('<button class="agent-chip agent-chip-proc" onclick="window.selectProcess(\'' + p.id + '\')">🎯 Auf Zeichenfläche filtern</button>');
+
+            spoken = 'Ich habe den Geschäftsprozess ' + p.name + ' identifiziert. Sie können das BPMN-Diagramm oder das PlantUML-Sequenzdiagramm direkt über die Aktions-Buttons öffnen.';
+            return { html, chips, spoken };
+          }
+
+          // Check if specific ID was entered
+          const sysIdMatch = query.match(/\b([A-Z]{2,4}-[0-9]{2,3}|SYS-[0-9]{2,3})\b/i);
           const procIdMatch = query.match(/\b([A-Z]{2,4}-P-[0-9]{2}|PROC-[0-9]{2})\b/i);
-          const foundProc = procIdMatch ? processes.find(p => p.id.toLowerCase() === procIdMatch[1].toLowerCase()) : null;
-          const foundProcByName = !foundProc ? processes.find(p => qLower.includes(p.name.toLowerCase()) || (p.apqc && qLower.includes(p.apqc.toLowerCase())) || (p.desc && qLower.includes('notfall') && p.desc.toLowerCase().includes('notfall')) || (p.desc && qLower.includes('labor') && p.desc.toLowerCase().includes('labor'))) : null;
-          const targetProc = foundProc || foundProcByName;
 
-          if (targetProc || qLower.includes('prozess') || qLower.includes('bpmn') || qLower.includes('plantuml') || qLower.includes('sequenz') || qLower.includes('notfall') || qLower.includes('triage') || qLower.includes('labor') || qLower.includes('befund')) {
-            const p = targetProc || processes[0];
-            if (p) {
-              html = '<p><strong>📋 E2E-Prozess: ' + p.id + ' · ' + p.name + '</strong></p>' +
-                '<p>' + (p.desc || 'Geschäftsprozess der IT-Landschaft.') + '</p>' +
-                '<ul>' +
-                  (p.apqc ? ('<li><strong>APQC Klassifikation:</strong> ' + p.apqc + '</li>') : '') +
-                  '<li><strong>Federführende Domäne:</strong> ' + (p.leadDomain || 'D1') + '</li>' +
-                  '<li><strong>Beteiligte Systeme:</strong> ' + ((p.participatingSystems || []).join(', ') || 'Mehrere') + '</li>' +
-                '</ul>' +
-                '<p>Sie können diesen Prozess sowohl als <strong>BPMN 2.0 Collaboration-Diagramm</strong> als auch als <strong>PlantUML Sequenzdiagramm</strong> als modales Popout mit asynchroner Zoom- &amp; Formfaktor-Anpassung öffnen:</p>';
-
-              chips.push('<button class="agent-chip agent-chip-proc" onclick="window.openBpmnModal(\'' + p.id + '\')">📋 BPMN 2.0 öffnen (' + p.id + ')</button>');
-              chips.push('<button class="agent-chip agent-chip-puml" onclick="window.openPlantUmlModal(\'' + p.id + '\')">📊 PlantUML Sequenz öffnen (' + p.id + ')</button>');
-              chips.push('<button class="agent-chip agent-chip-proc" onclick="window.selectProcess(\'' + p.id + '\')">🎯 Auf Zeichenfläche filtern</button>');
-
-              spoken = 'Ich habe den Geschäftsprozess ' + p.id + ', ' + p.name + ', identifiziert. Über die Aktionsbuttons können Sie direkt das BPMN Diagramm oder das PlantUML Sequenzdiagramm öffnen.';
-              return { html, chips, spoken };
+          // -------------------------------------------------------------------
+          // 1. SPECIFIC SYSTEM (by ID or exact name when NOT asking for overview)
+          // -------------------------------------------------------------------
+          if (sysIdMatch && !isCountOrListQuery) {
+            const foundSys = systems.find(s => s.id.toLowerCase() === sysIdMatch[1].toLowerCase());
+            if (foundSys) {
+              return buildSpecificSystemResponse(foundSys);
+            }
+          }
+          if (!isCountOrListQuery && !qLower.includes('prozess') && !qLower.includes('schnittstelle') && !qLower.includes('rolle') && !qLower.includes('landschaft')) {
+            const foundSysByName = systems.find(s => qLower.includes(s.name.toLowerCase()) || (s.vendor && qLower.includes(s.vendor.toLowerCase()) && s.vendor.length > 3));
+            if (foundSysByName) {
+              return buildSpecificSystemResponse(foundSysByName);
             }
           }
 
-          // 3. INTENT: HUMAN IN THE LOOP (HITL) ROLES & UX CLIENTS (e.g. NIDApad, Tablet, Notarzt, Sanitäter, Triage, Fiori, SAP-GUI)
-          if (qLower.includes('hitl') || qLower.includes('rolle') || qLower.includes('mensch') || qLower.includes('nidapad') || qLower.includes('tablet') || qLower.includes('notarzt') || qLower.includes('sanit') || qLower.includes('triage') || qLower.includes('client') || qLower.includes('ux') || qLower.includes('workstation') || qLower.includes('fiori')) {
+          // -------------------------------------------------------------------
+          // 2. SPECIFIC PROCESS (by ID or specific title when NOT asking for overview)
+          // -------------------------------------------------------------------
+          if (procIdMatch && !isCountOrListQuery) {
+            const foundProc = processes.find(p => p.id.toLowerCase() === procIdMatch[1].toLowerCase());
+            if (foundProc) {
+              return buildSpecificProcessResponse(foundProc);
+            }
+          }
+          if (!isCountOrListQuery && !qLower.includes('wie viele') && !qLower.includes('wieviele') && !qLower.includes('anzahl') && !qLower.includes('liste')) {
+            const foundProcByName = processes.find(p => qLower.includes(p.name.toLowerCase()) || (p.apqc && qLower.includes(p.apqc.toLowerCase())) || (p.desc && qLower.includes('notfall') && p.desc.toLowerCase().includes('notfall')) || (p.desc && qLower.includes('labor') && p.desc.toLowerCase().includes('labor')));
+            if (foundProcByName) {
+              return buildSpecificProcessResponse(foundProcByName);
+            }
+          }
+
+          // -------------------------------------------------------------------
+          // 3. OVERVIEW & COUNT: PROCESSES ("Wie viele Prozesse gibt es?", "Welche Prozesse...", etc.)
+          // -------------------------------------------------------------------
+          if (qLower.includes('prozess') || qLower.includes('geschäftsprozess') || qLower.includes('abläufe') || qLower.includes('workflows')) {
+            html = '<p><strong>📋 Geschäftsprozess-Übersicht (' + processes.length + ' Prozesse)</strong></p>' +
+              '<p>In der aktuellen IT-Landschaft <em>' + modelOrg + '</em> sind <strong>' + processes.length + ' End-to-End Geschäftsprozesse</strong> modelliert und hinterlegt:</p>' +
+              '<div style="display:flex; flex-direction:column; gap:8px; margin:10px 0;">';
+
+            processes.forEach(p => {
+              const sysCount = (p.participatingSystems || []).length;
+              html += '<div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:6px; padding:6px 10px; font-size:0.8rem;">' +
+                '<div style="font-weight:700; color:#38bdf8; display:flex; justify-content:space-between;">' +
+                  '<span>' + p.id + ': ' + p.name + '</span>' +
+                  (sysCount > 0 ? ('<span style="font-size:0.7rem; color:#94a3b8;">' + sysCount + ' Systeme</span>') : '') +
+                '</div>' +
+                (p.apqc ? ('<div style="font-size:0.72rem; color:#cbd5e1; margin-top:2px;">Klassifikation: ' + p.apqc + '</div>') : '') +
+              '</div>';
+
+              chips.push('<button class="agent-chip agent-chip-proc" onclick="window.openBpmnModal(\'' + p.id + '\')">📋 BPMN: ' + p.id + '</button>');
+            });
+
+            html += '</div>' +
+              '<p>Klicken Sie auf einen der BPMN-Buttons, um das proportionale Kollaborationsdiagramm inklusive Human-Task-Verlinkung direkt zu öffnen.</p>';
+
+            const sampleNames = processes.slice(0, 2).map(p => p.name.replace(/&amp;/g, 'und')).join(', ');
+            spoken = 'In der aktuellen IT-Landschaft der ' + modelShort + ' sind insgesamt ' + processes.length + ' Geschäftsprozesse hinterlegt, darunter ' + sampleNames + '. Sie können jeden Ablauf direkt über die BPMN-Buttons öffnen.';
+            return { html, chips, spoken };
+          }
+
+          // -------------------------------------------------------------------
+          // 4. OVERVIEW & COUNT: SYSTEMS ("Wie viele Systeme gibt es?", "Welche Systeme haben wir?", etc.)
+          // -------------------------------------------------------------------
+          if (qLower.includes('system') || qLower.includes('applikation') || qLower.includes('anwendung') || qLower.includes('software')) {
+            html = '<p><strong>🏥 System-Landschaft (' + systems.length + ' Systeme in ' + domains.length + ' Domänen)</strong></p>' +
+              '<p>Die aktive IT-Landschaft <em>' + modelOrg + '</em> umfasst aktuell <strong>' + systems.length + ' dokumentierte Systeme</strong>.</p>' +
+              '<ul>';
+
+            domains.slice(0, 6).forEach(d => {
+              const sysInDomain = systems.filter(s => (s.leadDomain || s.domain) === d.id);
+              html += '<li><strong>' + (d.name || d.id) + ':</strong> ' + sysInDomain.length + ' Systeme</li>';
+            });
+
+            html += '</ul>' +
+              '<p>Häufig referenzierte Kernsysteme der Landschaft:</p>';
+
+            systems.slice(0, 5).forEach(s => {
+              chips.push('<button class="agent-chip agent-chip-sys" onclick="window.selectSystem(\'' + s.id + '\'); window.locateNodeInChord(\'' + s.id + '\');">🏥 ' + s.id + ' (' + s.name.slice(0, 18) + ')</button>');
+            });
+            chips.push('<button class="agent-chip agent-chip-sys" onclick="window.resetAllFilters && window.resetAllFilters();">⟲ Filter zurücksetzen</button>');
+
+            spoken = 'Die aktuelle Landschaft umfasst insgesamt ' + systems.length + ' Systeme, gegliedert in ' + domains.length + ' Domänen. Über die Aktionsbuttons können Sie die Kernsysteme direkt auf der Zeichenfläche ansteuern.';
+            return { html, chips, spoken };
+          }
+
+          // -------------------------------------------------------------------
+          // 5. OVERVIEW & COUNT: INTERFACES & INTEGRATIONS ("Wie viele Schnittstellen gibt es?", etc.)
+          // -------------------------------------------------------------------
+          if (qLower.includes('schnittstelle') || qLower.includes('integration') || qLower.includes('verbindung') || qLower.includes('kante') || qLower.includes('datenfluss')) {
+            html = '<p><strong>⚡ Schnittstellen- &amp; Integrationsübersicht</strong></p>' +
+              '<p>Im IT-Landschaftsmodell sind <strong>' + integrations.length + ' Schnittstellen</strong> mit insgesamt <strong>' + (connections.length || integrations.length) + ' Datenverbindungen</strong> dokumentiert.</p>' +
+              '<ul>' +
+                '<li><strong>HL7 &amp; FHIR:</strong> Klinische Interoperabilität &amp; Befundübertragung</li>' +
+                '<li><strong>REST &amp; Web-APIs:</strong> Cloud-Konnektoren, Portale &amp; Apps</li>' +
+                '<li><strong>DICOM:</strong> Bildgebende Diagnostik &amp; PACS-Archivierung</li>' +
+                '<li><strong>B2B / EDI / Clearing:</strong> Abrechnung &amp; Lieferketten (SEEBURGER/GKV/Peppol)</li>' +
+              '</ul>';
+
+            integrations.slice(0, 4).forEach(i => {
+              chips.push('<button class="agent-chip agent-chip-integ" onclick="const it = (typeof INTEGRATIONS_DATA !== \'undefined\' ? INTEGRATIONS_DATA : []).find(x => x.id === \'' + i.id + '\'); if(it && typeof setDrilldownIntegration === \'function\') setDrilldownIntegration(it);">⚡ ' + i.id + ' (' + (i.name || i.desc).slice(0, 18) + ')</button>');
+            });
+
+            spoken = 'Im Modell sind insgesamt ' + integrations.length + ' Schnittstellen und ' + (connections.length || integrations.length) + ' Datenverbindungen hinterlegt. Die führenden Protokolle sind HL7, FHIR und REST.';
+            return { html, chips, spoken };
+          }
+
+          // -------------------------------------------------------------------
+          // 6. OVERVIEW & COUNT: HITL ROLES & UX CLIENTS ("Wie viele Rollen gibt es?", etc.)
+          // -------------------------------------------------------------------
+          if (qLower.includes('rolle') || qLower.includes('akteur') || qLower.includes('mensch') || qLower.includes('hitl') || qLower.includes('client') || qLower.includes('ux') || qLower.includes('benutzeroberfläche') || qLower.includes('nidapad') || qLower.includes('tablet') || qLower.includes('notarzt') || qLower.includes('sanit') || qLower.includes('triage') || qLower.includes('fiori')) {
+            if (isCountOrListQuery || qLower.includes('alle') || qLower.includes('liste') || (!qLower.includes('notfall') && !qLower.includes('notarzt') && !qLower.includes('sanit') && !qLower.includes('triage') && !qLower.includes('nidapad'))) {
+              html = '<p><strong>👤 Human-in-the-Loop Rollen &amp; Benutzeroberflächen</strong></p>' +
+                '<p>In der 2-stufigen HITL-Architektur sind <strong>' + actors.length + ' menschliche Rollen</strong> mit ihren jeweiligen Endgeräten und Benutzeroberflächen (UX) erfasst:</p>' +
+                '<ul>';
+
+              actors.forEach(a => {
+                const client = (a.clients && a.clients[0]) ? a.clients[0] : null;
+                html += '<li><strong>' + a.name + ' (' + a.id + '):</strong> ' + (client ? (client.name + ' · ' + (client.deviceType || 'Client')) : 'Arbeitsplatz') + '</li>';
+                chips.push('<button class="agent-chip agent-chip-hitl" onclick="window.locateRoleOnCanvas(\'' + a.id + '\')">👤 ' + a.name.slice(0, 18) + '</button>');
+                if (client) {
+                  chips.push('<button class="agent-chip agent-chip-ux" onclick="window.showUxPopout(\'' + client.id + '\',\'' + a.id + '\')">📱 ' + client.name.slice(0, 18) + '</button>');
+                }
+              });
+
+              html += '</ul>';
+              spoken = 'Im aktuellen Modell sind ' + actors.length + ' menschliche Rollen mit zugeordneten Benutzeroberflächen definiert. Nutzen Sie die Aktionschips, um Rollen auf der Zeichenfläche hervorzuheben oder UX-Karten zu öffnen.';
+              return { html, chips, spoken };
+            }
+
+            // Specific role/client search
             let matchedActor = actors.find(a => qLower.includes(a.name.toLowerCase()) || (a.clients || []).some(c => qLower.includes(c.name.toLowerCase()) || qLower.includes(c.id.toLowerCase())));
             if (!matchedActor && actors.length > 0) {
               if (qLower.includes('notfall') || qLower.includes('nida') || qLower.includes('rtw')) {
@@ -43503,15 +43736,55 @@
                 chips.push('<button class="agent-chip agent-chip-ux" onclick="window.showUxPopout(\'' + primaryClient.id + '\', \'' + matchedActor.id + '\')">📱 UX-Pop-Out im Bay öffnen (' + primaryClient.id + ')</button>');
               }
 
-              spoken = 'Hier ist die Human-in-the-Loop Rolle ' + matchedActor.name + '. Sie bedient das System über den Client ' + (primaryClient ? primaryClient.name : 'Workstation') + '. Die Buttons lokalisieren die Rolle auf der Zeichenfläche oder öffnen das UX-Pop-Out.';
+              spoken = 'Hier ist die Rolle ' + matchedActor.name + '. Sie bedient das System über ' + (primaryClient ? primaryClient.name : 'das User-Interface') + '. Die Buttons heben die Rolle hervor und öffnen die Benutzeroberflächen-Karte.';
               return { html, chips, spoken };
             }
           }
 
-          // 4. INTENT: PROTOCOLS & INTEGRATION STANDARDS (e.g. FHIR, HL7, MQTT, MLLP, DICOM, REST)
+          // -------------------------------------------------------------------
+          // 7. OVERALL LANDSCAPE METRICS & SUMMARY ("Überblick über die Landschaft", "Statistik", etc.)
+          // -------------------------------------------------------------------
+          if (qLower.includes('landschaft') || qLower.includes('überblick') || qLower.includes('ueberblick') || qLower.includes('übersicht') || qLower.includes('uebersicht') || qLower.includes('statist') || qLower.includes('kennzahl') || qLower.includes('zusammenfass') || qLower.includes('wie groß') || qLower.includes('status')) {
+            html = '<p><strong>📊 Gesamtübersicht: ' + modelOrg + '</strong></p>' +
+              '<p>' + (activeModelEntry?.desc || 'Enterprise Architecture Landschaftsmodell.') + '</p>' +
+              '<div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:12px 0;">' +
+                '<div style="background:rgba(56,189,248,0.08); border:1px solid rgba(56,189,248,0.2); border-radius:6px; padding:8px; text-align:center;">' +
+                  '<div style="font-size:1.4rem; font-weight:800; color:#38bdf8;">' + systems.length + '</div>' +
+                  '<div style="font-size:0.75rem; color:#94a3b8;">Systeme</div>' +
+                '</div>' +
+                '<div style="background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.2); border-radius:6px; padding:8px; text-align:center;">' +
+                  '<div style="font-size:1.4rem; font-weight:800; color:#10b981;">' + integrations.length + '</div>' +
+                  '<div style="font-size:0.75rem; color:#94a3b8;">Schnittstellen</div>' +
+                '</div>' +
+                '<div style="background:rgba(245,158,11,0.08); border:1px solid rgba(245,158,11,0.2); border-radius:6px; padding:8px; text-align:center;">' +
+                  '<div style="font-size:1.4rem; font-weight:800; color:#f59e0b;">' + processes.length + '</div>' +
+                  '<div style="font-size:0.75rem; color:#94a3b8;">E2E-Prozesse</div>' +
+                '</div>' +
+                '<div style="background:rgba(168,85,247,0.08); border:1px solid rgba(168,85,247,0.2); border-radius:6px; padding:8px; text-align:center;">' +
+                  '<div style="font-size:1.4rem; font-weight:800; color:#a855f7;">' + domains.length + '</div>' +
+                  '<div style="font-size:0.75rem; color:#94a3b8;">Domänen</div>' +
+                '</div>' +
+              '</div>';
+
+            if (processes.length > 0) {
+              chips.push('<button class="agent-chip agent-chip-proc" onclick="window.openBpmnModal(\'' + processes[0].id + '\')">📋 BPMN: ' + processes[0].id + '</button>');
+            }
+            if (systems.length > 0) {
+              chips.push('<button class="agent-chip agent-chip-sys" onclick="window.selectSystem(\'' + systems[0].id + '\'); window.locateNodeInChord(\'' + systems[0].id + '\');">🏥 ' + systems[0].id + ' fokussieren</button>');
+            }
+            chips.push('<button class="agent-chip agent-chip-model" onclick="window.jumpToCrossLandscape(\'ORCAI-MODEL-SEEBURGER-EA\')">🔄 SEEBURGER BIS</button>');
+            chips.push('<button class="agent-chip agent-chip-model" onclick="window.jumpToCrossLandscape(\'ORCAI-MODEL-JOHANNITER-EA\')">🔄 Johanniter EA</button>');
+
+            spoken = 'Hier ist der Gesamtüberblick: Die aktive IT-Landschaft der ' + modelShort + ' umfasst ' + systems.length + ' Systeme, ' + integrations.length + ' Schnittstellen und ' + processes.length + ' Geschäftsprozesse. Über die Aktions-Buttons gelangen Sie direkt zu den Details.';
+            return { html, chips, spoken };
+          }
+
+          // -------------------------------------------------------------------
+          // 8. PROTOCOLS & INTEGRATION STANDARDS
+          // -------------------------------------------------------------------
           const protoMatch = qLower.match(/\b(fhir|hl7|mqtt|mllp|dicom|rest|astm|soap|kafka)\b/i);
-          if (protoMatch || qLower.includes('schnittstelle') || qLower.includes('integration') || qLower.includes('protokoll')) {
-            const proto = protoMatch ? protoMatch[1].toUpperCase() : 'HL7';
+          if (protoMatch) {
+            const proto = protoMatch[1].toUpperCase();
             const matchedInteg = integrations.filter(i => (i.protocol && i.protocol.toUpperCase().includes(proto)) || (i.desc && i.desc.toUpperCase().includes(proto)) || (i.name && i.name.toUpperCase().includes(proto)));
 
             html = '<p><strong>⚡ Schnittstellen-Analyse nach Protokoll: ' + proto + '</strong></p>' +
@@ -43528,8 +43801,10 @@
             return { html, chips, spoken };
           }
 
-          // 5. INTENT: ARCHITECTURE, QUAD-CHORD MODEL & HELP (e.g. Quad-Chord, 4 Quadranten, DMZ, Hybrid Cloud)
-          if (qLower.includes('quad-chord') || qLower.includes('quadrant') || qLower.includes('modell') || qLower.includes('hilfe') || qLower.includes('anwendung') || qLower.includes('wie funktioniert') || qLower.includes('architektur')) {
+          // -------------------------------------------------------------------
+          // 9. ARCHITECTURE, QUAD-CHORD MODEL & HELP
+          // -------------------------------------------------------------------
+          if (qLower.includes('quad-chord') || qLower.includes('quadrant') || qLower.includes('hilfe') || qLower.includes('anwendung') || qLower.includes('wie funktioniert') || qLower.includes('architektur')) {
             html = '<p><strong>ℹ️ Architektur-Wissen: Das Quad-Chord Modell</strong></p>' +
               '<p>Das Quad-Chord-Modell teilt alle Systeme auf einem 360°-Kreis in <strong>4 funktionale Quadranten</strong> auf:</p>' +
               '<ul>' +
@@ -43547,7 +43822,9 @@
             return { html, chips, spoken };
           }
 
-          // 6. INTENT: CROSS-LANDSCAPE SWITCHING (e.g. SEEBURGER, Johanniter, Johannesstift, Klinikverbund)
+          // -------------------------------------------------------------------
+          // 10. CROSS-LANDSCAPE SWITCHING
+          // -------------------------------------------------------------------
           if (qLower.includes('seeburger') || qLower.includes('johanniter') || qLower.includes('johannesstift') || qLower.includes('klinikverbund') || qLower.includes('bruker') || qLower.includes('landschaft wechseln')) {
             html = '<p><strong>🔄 Cross-Landscape Federation</strong></p>' +
               '<p>In ORCAI sind 5 Enterprise-Architekturmodelle hinterlegt. Sie können jederzeit zu einer anderen Landschaft wechseln:</p>' +
@@ -43565,7 +43842,9 @@
             return { html, chips, spoken };
           }
 
-          // 7. FALLBACK: GENERAL SEARCH ACROSS ALL ENTITIES
+          // -------------------------------------------------------------------
+          // 11. GENERAL SEARCH FALLBACK ACROSS ALL ENTITIES
+          // -------------------------------------------------------------------
           const matchedSys = systems.filter(s => qLower.split(' ').some(w => w.length > 2 && (s.name.toLowerCase().includes(w) || s.id.toLowerCase().includes(w) || (s.desc && s.desc.toLowerCase().includes(w)))));
           const matchedProc = processes.filter(p => qLower.split(' ').some(w => w.length > 2 && (p.name.toLowerCase().includes(w) || p.id.toLowerCase().includes(w) || (p.desc && p.desc.toLowerCase().includes(w)))));
 
@@ -43590,10 +43869,10 @@
           }
 
           if (chips.length === 0) {
-            html += '<p>Möchten Sie eine spezifische Analyse zu Notfallprozessen, Human-in-the-Loop Akteuren oder Schnittstellenprotokollen (FHIR, HL7, MQTT)?</p>';
-            chips.push('<button class="agent-chip agent-chip-proc" onclick="window.openBpmnModal(\'JSD-P-01\')">📋 Notfall BPMN (JSD-P-01)</button>');
+            html += '<p>Möchten Sie eine Übersicht zu den Prozessen, Human-in-the-Loop Akteuren oder Schnittstellen erhalten?</p>';
+            chips.push('<button class="agent-chip agent-chip-proc" onclick="window.askOrcaiAgent(\'Wie viele Prozesse gibt es?\')">📋 Prozessübersicht</button>');
+            chips.push('<button class="agent-chip agent-chip-sys" onclick="window.askOrcaiAgent(\'Wie viele Systeme gibt es?\')">🏥 Systemübersicht</button>');
             chips.push('<button class="agent-chip agent-chip-hitl" onclick="window.locateRoleOnCanvas(\'JSD-ACT-03\')">👤 Notarzt / RTW</button>');
-            chips.push('<button class="agent-chip agent-chip-sys" onclick="window.selectSystem(\'JSD-08\'); window.locateNodeInChord(\'JSD-08\');">🏥 KIS (JSD-08)</button>');
           }
 
           spoken = 'Ich habe passende Architekturelemente für Ihre Anfrage gefunden. Nutzen Sie die Aktionsbuttons, um die Elemente direkt auf der Zeichenfläche zu aktivieren.';
