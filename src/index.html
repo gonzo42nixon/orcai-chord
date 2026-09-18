@@ -2759,6 +2759,64 @@
       flex-shrink: 0;
     }
 
+    .ux-weblink-section {
+      margin-top: 6px;
+      padding: 6px 8px;
+      background: rgba(56, 189, 248, 0.04);
+      border: 1px solid rgba(56, 189, 248, 0.22);
+      border-radius: 8px;
+    }
+    body.theme-day .ux-weblink-section {
+      background: rgba(2, 132, 199, 0.05);
+      border-color: rgba(2, 132, 199, 0.25);
+    }
+    .ux-weblink-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 8px;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      border-radius: 6px;
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.72rem;
+      font-weight: 600;
+      transition: all 0.15s ease;
+      cursor: pointer;
+    }
+    .ux-weblink-btn:hover {
+      background: rgba(56, 189, 248, 0.25);
+      border-color: var(--accent);
+      color: #ffffff;
+      transform: translateX(2px);
+    }
+    body.theme-day .ux-weblink-btn {
+      background: rgba(2, 132, 199, 0.1);
+      border-color: rgba(2, 132, 199, 0.35);
+      color: var(--accent);
+    }
+    body.theme-day .ux-weblink-btn:hover {
+      background: rgba(2, 132, 199, 0.2);
+      color: #0369a1;
+    }
+    .ux-weblink-icon {
+      font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+    .ux-weblink-text {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex: 1;
+    }
+    .ux-weblink-arrow {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+
+
     @keyframes popIn {
       from { opacity: 0; transform: scale(0.95) translateY(10px); }
       to { opacity: 1; transform: scale(1) translateY(0); }
@@ -19569,6 +19627,41 @@
       }
       window.determineUxTechnology = determineUxTechnology;
 
+      function resolveClientWebUrl(client, targetSys) {
+        if (!client) return 'https://portal.eam-architecture.io';
+        if (client.webUrl) return client.webUrl;
+        if (client.url) return client.url;
+
+        const combined = ((client.name || '') + ' ' + (client.deviceType || '') + ' ' + (client.os || '') + ' ' + (targetSys?.name || '')).toLowerCase();
+        if (combined.includes('fiori') || combined.includes('s/4hana')) {
+          return 'https://my300123.s4hana.ondemand.com/ui#Launchpad-openFLP';
+        }
+        if (combined.includes('sap')) {
+          return 'https://help.sap.com/docs/sap_gui';
+        }
+        if (combined.includes('nidapad') || combined.includes('rescue')) {
+          return 'https://www.rescuetrack.de/telemedizin-portal';
+        }
+        if (combined.includes('medico') || combined.includes('kis')) {
+          return 'https://cgm.com/de-de/produkte/krankenhausinformationssysteme/cgm-medico';
+        }
+        if (combined.includes('meona')) {
+          return 'https://meona.de/patientenkurve-medikation';
+        }
+        if (combined.includes('seeburger')) {
+          return 'https://bis.cloud.seeburger.com/console';
+        }
+        if (combined.includes('ghx')) {
+          return 'https://exchange.ghx.com/portal';
+        }
+        if (targetSys) {
+          return 'https://' + targetSys.id.toLowerCase() + '.cloud.hospital.org/portal';
+        }
+        return 'https://' + client.id.toLowerCase() + '.portal.eam-architecture.io';
+      }
+      window.resolveClientWebUrl = resolveClientWebUrl;
+
+
       // =========================================================================
       // UX POPOUT FUNCTION (Show UX card in the Bay for Human Tasks)
       // =========================================================================
@@ -19622,6 +19715,7 @@
         const systems = (typeof SYSTEMS_DATA !== 'undefined' ? SYSTEMS_DATA : []);
         const targetSys = client.targetSystemId ? systems.find(s => s.id === client.targetSystemId) : null;
         const techInfo = determineUxTechnology(client, targetSys);
+        const webUrl = resolveClientWebUrl(client, targetSys);
 
         // Gather all processes associated with this client / actor
         const procIds = new Set();
@@ -19705,6 +19799,17 @@
               '<div class="ux-process-list">' +
                 procListHtml +
               '</div>' +
+            '</div>' +
+            '<div class="ux-weblink-section">' +
+              '<div style="font-size:0.72rem; font-weight:700; color:var(--text-bright); display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">' +
+                '<span>🌐 Zugehörige Web-Seite / Portal:</span>' +
+                '<span style="font-size:0.65rem; color:var(--text-muted);">Externer Aufruf</span>' +
+              '</div>' +
+              '<a href="' + webUrl + '" target="_blank" rel="noopener noreferrer" class="ux-weblink-btn" title="Web-Portal im Browser öffnen">' +
+                '<span class="ux-weblink-icon">🌐</span>' +
+                '<span class="ux-weblink-text">' + webUrl + '</span>' +
+                '<span class="ux-weblink-arrow">↗</span>' +
+              '</a>' +
             '</div>' +
             '<div class="insp-meta-grid" style="margin-top:6px;">' +
               '<div class="insp-meta-box"><div class="insp-meta-lbl">Endgerät</div><div class="insp-meta-val">' + (client.deviceType || 'Workstation') + '</div></div>' +
@@ -25325,7 +25430,7 @@
       ],
       "apqc": "4.1 Notfallaufnahme & Manchester-Triage",
       "desc": "Echtzeit-Notfallzuweisung aus RTW/Feuerwehr über Telemedizin, IVENA-Kapazitätsabgleich und ZNA-Manchester-Triage.",
-      "plantUml": "@startuml\ntitle JSD-P-01: Notfallaufnahme, ZNA Manchester-Triage & Voranmeldung\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"Praehospital & Rettung\" #e0f2fe\nactor \"Rettungsdienst (RTW)\" as RTW\nparticipant \"[[#sys-JSD-28 JSD-28: Medical IoT Gateway]]\" as IoT\nend box\n\nbox \"Telemedizin & Hub\" #fef3c7\nparticipant \"[[#sys-JSD-05 JSD-05: Telemedizin Hub]]\" as TM\nparticipant \"[[#sys-JSD-10 JSD-10: HealthShare Hub]]\" as HS\nend box\n\nbox \"Akutklinik & Notaufnahme\" #dcfce7\nparticipant \"[[#sys-JSD-15 JSD-15: ZNA E-Care & Triage]]\" as ZNA\nparticipant \"[[#sys-JSD-08 JSD-08: CGM MEDICO KIS]]\" as KIS\nend box\n\nRTW -> IoT: Notfalldaten, EKG & GPS\n== [[#integ-JSD-INT-01 JSD-INT-01: Notfall-Voranmeldung RTW ➔ ZNA E-Care]] ==\nIoT -> TM: [[#conn-JSD-C-15 RTW-Daten an Telemedizin Hub (MQTT / TLS)]]\nTM -> ZNA: [[#conn-JSD-C-16 Voranmeldung an ZNA E-Care (REST FHIR R4)]]\nactivate ZNA\nZNA -> ZNA: Manchester-Triage Einstufung & Bettenzuweisung\n\n== [[#integ-JSD-INT-02 JSD-INT-02: ZNA Aufnahme ➔ CGM MEDICO KIS Sync]] ==\nZNA -> HS: [[#conn-JSD-C-14 Notfall-ADT an HealthShare (HL7 v2.5 ADT_A04)]]\nactivate HS\nHS -> KIS: [[#conn-JSD-C-01 KIS Fallanlage & Stammdaten (HL7 v2.5 MLLP)]]\nactivate KIS\nKIS --> HS: KIS-Fallnummer Bestaetigung (HL7 ACK)\ndeactivate KIS\nHS --> ZNA: KIS-Fall verknuepft (HL7 ACK)\ndeactivate HS\ndeactivate ZNA\n@enduml"
+      "plantUml": "@startuml\ntitle JSD-P-01: Notfallaufnahme, ZNA Manchester-Triage & Voranmeldung\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"Praehospital & Rettungsdienst\" #e0f2fe\nactor \"[[#hitl-JSD-ACT-03 🚑 Notfallsanitaeter (RTW)]]\" as RTW\nparticipant \"[[#ux-JSD-CL-03 📱 NIDApad Tablet (UX)]]\" as UX_RTW\nparticipant \"[[#sys-JSD-28 JSD-28: Medical IoT Gateway]]\" as IoT\nend box\n\nbox \"Telemedizin & Hubs\" #fef3c7\nparticipant \"[[#sys-JSD-05 JSD-05: Telemedizin Hub]]\" as TM\nparticipant \"[[#sys-JSD-10 JSD-10: HealthShare Hub]]\" as HS\nend box\n\nbox \"Akutklinik & Notaufnahme\" #dcfce7\nactor \"[[#hitl-JSD-ACT-04 📋 ZNA-Koordinator]]\" as ZNA_Coord\nparticipant \"[[#ux-JSD-CL-04 💻 eHealth / KIS Client (UX)]]\" as UX_KIS\nparticipant \"[[#sys-JSD-15 JSD-15: ZNA E-Care & Triage]]\" as ZNA\nparticipant \"[[#sys-JSD-08 JSD-08: CGM MEDICO KIS]]\" as KIS\nend box\n\nRTW -> UX_RTW: [[#ux-JSD-CL-03 Notfalldaten & Vitalparameter erfassen]]\nactivate UX_RTW\nUX_RTW -> IoT: [[#conn-JSD-C-15 RTW-Telemetrie & EKG senden (MQTT / TLS)]]\ndeactivate UX_RTW\n\n== [[#integ-JSD-INT-01 JSD-INT-01: Notfall-Voranmeldung RTW ➔ ZNA E-Care]] ==\nIoT -> TM: [[#conn-JSD-C-15 RTW-Daten an Telemedizin Hub (MQTT)]]\nTM -> ZNA: [[#conn-JSD-C-16 Voranmeldung an ZNA E-Care (REST FHIR R4)]]\nactivate ZNA\nZNA -> UX_KIS: [[#ux-JSD-CL-04 Notfall-Voranmeldung auf ZNA-Monitor anzeigen]]\ndeactivate ZNA\nactivate UX_KIS\nUX_KIS -> ZNA_Coord: [[#hitl-JSD-ACT-04 Voranmeldung pruefen & Patient disponieren]]\nZNA_Coord -> UX_KIS: [[#ux-JSD-CL-04 Manchester-Triage & Bettenzuweisung durchfuehren]]\n\n== [[#integ-JSD-INT-02 JSD-INT-02: ZNA Aufnahme ➔ CGM MEDICO KIS Sync]] ==\nUX_KIS -> HS: [[#conn-JSD-C-14 Notfall-ADT an HealthShare (HL7 v2.5 ADT_A04)]]\ndeactivate UX_KIS\nactivate HS\nHS -> KIS: [[#conn-JSD-C-01 KIS Fallanlage & Stammdaten (HL7 v2.5 MLLP)]]\nactivate KIS\nKIS --> HS: KIS-Fallnummer Bestaetigung (HL7 ACK)\ndeactivate KIS\nHS --> UX_KIS: [[#ux-JSD-CL-04 KIS-Fall verknuepft (HL7 ACK)]]\ndeactivate HS\nactivate UX_KIS\nUX_KIS -> ZNA_Coord: [[#hitl-JSD-ACT-04 Falluebernahme quittieren]]\ndeactivate UX_KIS\n@enduml"
     },
     {
       "id": "JSD-P-02",
@@ -25342,7 +25447,7 @@
       ],
       "apqc": "4.2 Klinischer Diagnostikpfad & Zentrallabor",
       "desc": "Order Entry für Laboruntersuchungen aus CGM MEDICO / Martin Luther KIS an Swisslab LIMS mit prioritärer Rückmeldung.",
-      "plantUml": "@startuml\ntitle JSD-P-02: Klinischer Diagnostikpfad & Zentrallabor-Befundung\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"Station & Ambulanz\" #e0f2fe\nactor \"Klinikarzt / Station\" as Doc\nparticipant \"[[#sys-JSD-08 JSD-08: CGM MEDICO KIS]]\" as KIS\nparticipant \"[[#sys-JSD-07 JSD-07: Meona Kurve]]\" as Meona\nend box\n\nbox \"Klinischer Integrations-Hub\" #fef3c7\nparticipant \"[[#sys-JSD-10 JSD-10: HealthShare Hub]]\" as HS\nend box\n\nbox \"Diagnostik & Zentrallabor\" #dcfce7\nparticipant \"[[#sys-JSD-11 JSD-11: Swisslab LIMS]]\" as LIMS\nactor \"Laboranalytik (Cobas)\" as Analyzer\nend box\n\nDoc -> KIS: Laboranforderung erfassen\nactivate KIS\n== [[#integ-JSD-INT-03 JSD-INT-03: KIS Laboranforderung ➔ Swisslab LIMS]] ==\nKIS -> HS: [[#conn-JSD-C-01 Labor-Order an HealthShare (HL7 v2.5 ORM_O01)]]\nactivate HS\nHS -> LIMS: [[#conn-JSD-C-03 Labor-Auftrag an Swisslab (HL7 v2.5 MLLP)]]\nactivate LIMS\ndeactivate HS\nLIMS -> Analyzer: Proben-Scan & Barcode-Routing\nAnalyzer --> LIMS: Analysenergebnisse & Validierung\n\n== [[#integ-JSD-INT-04 JSD-INT-04: Swisslab Laborbefund-Rueckmeldung]] ==\nLIMS -> HS: [[#conn-JSD-C-04 Laborbefund an HealthShare (HL7 v2.5 ORU_R01)]]\nactivate HS\ndeactivate LIMS\nHS -> KIS: [[#conn-JSD-C-05 Laborbefund-Anzeige im KIS (HL7 ORU)]]\nHS -> Meona: [[#conn-JSD-C-13 Laborwerte an Meona eKurve (HL7 / FHIR)]]\ndeactivate HS\ndeactivate KIS\n@enduml"
+      "plantUml": "@startuml\ntitle JSD-P-02: Klinischer Diagnostikpfad & Zentrallabor-Befundung\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"Station & Ambulanz\" #e0f2fe\nactor \"[[#hitl-JSD-ACT-01 👨‍⚕️ Klinikarzt (Station)]]\" as Doc\nparticipant \"[[#ux-JSD-CL-01 💻 CGM MEDICO Workstation (UX)]]\" as UX_Doc\nparticipant \"[[#sys-JSD-08 JSD-08: CGM MEDICO KIS]]\" as KIS\nparticipant \"[[#sys-JSD-07 JSD-07: Meona Kurve]]\" as Meona\nend box\n\nbox \"Klinischer Integrations-Hub\" #fef3c7\nparticipant \"[[#sys-JSD-10 JSD-10: HealthShare Hub]]\" as HS\nend box\n\nbox \"Diagnostik & Zentrallabor\" #dcfce7\nactor \"[[#hitl-JSD-ACT-02 🔬 MTA & Laborarzt]]\" as LabDoc\nparticipant \"[[#ux-JSD-CL-02 💻 Swisslab LIMS Client (UX)]]\" as UX_Lab\nparticipant \"[[#sys-JSD-11 JSD-11: Swisslab LIMS]]\" as LIMS\nparticipant \"[[#sys-JSD-12 JSD-12: Roche Cobas Analyzer]]\" as Analyzer\nend box\n\nDoc -> UX_Doc: [[#ux-JSD-CL-01 Laboranforderung erfassen & validieren]]\nactivate UX_Doc\nUX_Doc -> KIS: [[#conn-JSD-C-01 Anforderung in Patientenkurve speichern]]\ndeactivate UX_Doc\nactivate KIS\n== [[#integ-JSD-INT-03 JSD-INT-03: KIS Laboranforderung ➔ Swisslab LIMS]] ==\nKIS -> HS: [[#conn-JSD-C-01 Labor-Order an HealthShare (HL7 v2.5 ORM_O01)]]\nactivate HS\nHS -> LIMS: [[#conn-JSD-C-03 Labor-Auftrag an Swisslab (HL7 v2.5 MLLP)]]\nactivate LIMS\ndeactivate HS\nLIMS -> Analyzer: [[#conn-JSD-C-06 Proben-Scan & Barcode-Routing (ASTM)]]\nAnalyzer --> LIMS: Analysenergebnisse ermitteln\nLIMS -> UX_Lab: [[#ux-JSD-CL-02 Messwerte zur Freigabe anzeigen]]\nactivate UX_Lab\nUX_Lab -> LabDoc: [[#hitl-JSD-ACT-02 Befundvalidierung durchfuehren]]\nLabDoc -> UX_Lab: [[#ux-JSD-CL-02 Laborbefund medizinisch freigeben]]\nUX_Lab -> LIMS: Befund signieren\ndeactivate UX_Lab\n\n== [[#integ-JSD-INT-04 JSD-INT-04: Swisslab Laborbefund-Rueckmeldung]] ==\nLIMS -> HS: [[#conn-JSD-C-04 Laborbefund an HealthShare (HL7 v2.5 ORU_R01)]]\nactivate HS\ndeactivate LIMS\nHS -> KIS: [[#conn-JSD-C-05 Laborbefund-Anzeige im KIS (HL7 ORU)]]\nHS -> Meona: [[#conn-JSD-C-13 Laborwerte an Meona eKurve (HL7 / FHIR)]]\ndeactivate HS\ndeactivate KIS\n@enduml"
     },
     {
       "id": "JSD-P-03",
@@ -27541,6 +27646,7 @@
         {
           "id": "JSD-CL-01",
           "name": "CGM MEDICO KIS Desktop Client",
+          "webUrl": "https://medico.jsd.intern/station-order-entry",
           "deviceType": "DESKTOP_GUI",
           "os": "Windows 11 Enterprise (Citrix/Fat Client)",
           "authMethod": "SSO (Entra ID) + eHBA (Kartenleser eHealth-BCS)",
@@ -27566,6 +27672,7 @@
         {
           "id": "JSD-CL-02",
           "name": "Instacount Barcode- & RFID-Handscanner",
+          "webUrl": "https://swisslab.jsd.intern/lims-web-review",
           "deviceType": "BARCODE_SCANNER",
           "os": "Embedded Android Enterprise (On-Premises)",
           "authMethod": "Mitarbeiter-RFID-Badge",
@@ -27591,6 +27698,7 @@
         {
           "id": "JSD-CL-03",
           "name": "NIDApad RTW-Einsatztablet & RescueTrack",
+          "webUrl": "https://www.rescuetrack.de/telemedizin-portal",
           "deviceType": "TABLET_MOBILE",
           "os": "Ruggedized Windows 11 Tablet",
           "authMethod": "Einsatz-PIN & mTLS Geräte-Zertifikat",
@@ -27616,6 +27724,7 @@
         {
           "id": "JSD-CL-04",
           "name": "eHealth-Kartenterminal & KIS Aufnahme-Client",
+          "webUrl": "https://cgm.com/de-de/produkte/krankenhausinformationssysteme/cgm-medico",
           "deviceType": "DESKTOP_GUI",
           "os": "Windows 11 / CGM MEDICO KIS",
           "authMethod": "SSO Entra ID + SMC-B Institutionskarte",
@@ -27641,6 +27750,7 @@
         {
           "id": "JSD-CL-05",
           "name": "SAP S/4HANA Finance Fiori Cloud Client",
+          "webUrl": "https://my300123.s4hana.ondemand.com/ui#Launchpad-openFLP",
           "deviceType": "WEB_PORTAL",
           "os": "Web Browser (Chrome/Edge / HTTPS)",
           "authMethod": "SSO (SAML 2.0 via Entra ID)",
@@ -27666,6 +27776,7 @@
         {
           "id": "JSD-CL-06",
           "name": "m.Doc Patientenportal (Web & Smartphone App)",
+          "webUrl": "https://portal.jsd.de/patientenportal-login",
           "deviceType": "WEB_PORTAL",
           "os": "iOS / Android / Web Browser (HTTPS)",
           "authMethod": "Zwei-Faktor-Authentifizierung (SMS / Authenticator)",
@@ -27691,6 +27802,7 @@
         {
           "id": "JSD-CL-07",
           "name": "GHX B2B Supplier Web Portal & Peppol Hub",
+          "webUrl": "https://exchange.ghx.com/portal/login",
           "deviceType": "WEB_PORTAL",
           "os": "B2B Web Interface / HTTPS",
           "authMethod": "Peppol PKI-Zertifikat & API Key",
@@ -27716,6 +27828,7 @@
         {
           "id": "JSD-CL-08",
           "name": "KV-SafeNet § 301 B2B Gateway (On-Premises)",
+          "webUrl": "https://meona.de/patientenkurve-medikation",
           "deviceType": "GATEWAY_CLIENT",
           "os": "B2B Gateway / Hardware Konnektor",
           "authMethod": "KV-Zertifikat & VPN IPSec",
@@ -27741,6 +27854,7 @@
         {
           "id": "JSD-CL-09",
           "name": "SAP S/4HANA Sourcing & Procurement Client",
+          "webUrl": "https://my300123.s4hana.ondemand.com/ui#PurchaseOrder-manage",
           "deviceType": "WEB_PORTAL",
           "os": "Web Browser (Chrome/Edge / HTTPS)",
           "authMethod": "SSO (SAML 2.0 via Entra ID)",
@@ -39433,7 +39547,7 @@
           puml += 'actor "[[#hitl-' + act.id + ' ' + avatar + cleanName + ']]" as ' + actAlias + '\n';
         });
 
-        // Add Communication Clients (UI) as participants
+        // Add Communication Clients (UX) as participants
         const clientAliasSet = new Set();
         mappedActors.forEach(act => {
           (act.clients || []).forEach(cl => {
@@ -39443,7 +39557,7 @@
                 clientAliasSet.add(clAlias);
                 const cleanClientName = (cl.name || cl.id).replace(/"/g, "'").slice(0, 80);
                 const clientIcon = (cl.deviceType === 'WEB_PORTAL' ? '🌐 ' : (cl.deviceType === 'TABLET_MOBILE' ? '📱 ' : '💻 '));
-                puml += 'participant "[[' + '#client-' + (cl.id || clAlias) + ' ' + clientIcon + cleanClientName + ' (UI)]]" as ' + clAlias + '\n';
+                puml += 'participant "[[' + '#ux-' + (cl.id || clAlias) + ' ' + clientIcon + cleanClientName + ' (UX)]]" as ' + clAlias + '\n';
               }
             }
           });
@@ -39468,7 +39582,7 @@
                 const targetAlias = cl.targetSystemId.replace(/[^a-zA-Z0-9]/g, '_');
                 const msg = (cl.messagesEmitted && cl.messagesEmitted[0]) ? cl.messagesEmitted[0] : 'Fachdatenübermittlung';
                 
-                puml += actAlias + ' -> ' + clAlias + ': [[#hitl-' + act.id + ' UI-Interaktion & Eingabe]]\n';
+                puml += actAlias + ' -> ' + clAlias + ': [[#ux-' + cl.id + ' UI-Interaktion & Eingabe]]\n';
                 puml += clAlias + ' -> ' + targetAlias + ': [[#msg-' + cl.id + ' ' + msg.replace(/"/g, "'") + ' (' + (cl.os ? cl.os.split(' ')[0] : 'API') + ')]]\n';
               }
             });
@@ -40066,23 +40180,89 @@
 
             let a = e.target.closest('a');
             if (!a) {
-              const partGroup = e.target.closest('.participant, .participant-head, .participant-tail, .participant-lifeline');
+              const partGroup = e.target.closest('.participant, .participant-head, .participant-tail, .participant-lifeline, g[id^="elem_"], g[id*="head"], g[id*="tail"], g[id*="part"]');
               if (partGroup) {
                 a = partGroup.querySelector('a');
               }
             }
-            if (!a) return;
-            const href = a.getAttribute('href') || a.getAttribute('xlink:href') || '';
+            if (!a) {
+              const parentG = e.target.closest('g');
+              if (parentG) {
+                a = parentG.querySelector('a') || parentG.parentElement?.querySelector('a');
+              }
+            }
+
+            const hitEl = a || e.target;
+            const rect = hitEl.getBoundingClientRect();
+            const clickX = rect.left + rect.width / 2;
+            const clickY = rect.top + rect.height / 2;
+
+            let href = a ? (a.getAttribute('href') || a.getAttribute('xlink:href') || '') : '';
+
+            // Fallback: If no explicit <a> tag found, check text/ID of clicked element or parent
+            if (!href) {
+              const rawText = (hitEl.textContent || '').trim();
+              const elId = hitEl.id || hitEl.closest('g')?.id || '';
+              const actors = (typeof ACTORS_DATA !== 'undefined' ? ACTORS_DATA : []);
+              for (const act of actors) {
+                if (rawText && (act.name.includes(rawText) || (rawText.length >= 4 && act.name.toLowerCase().includes(rawText.toLowerCase())) || elId.includes(act.id))) {
+                  href = '#hitl-' + act.id;
+                  break;
+                }
+                for (const cl of (act.clients || [])) {
+                  if (rawText && (cl.name.includes(rawText) || cl.id === rawText || (rawText.length >= 4 && cl.name.toLowerCase().includes(rawText.toLowerCase())) || elId.includes(cl.id))) {
+                    href = '#ux-' + cl.id;
+                    break;
+                  }
+                }
+                if (href) break;
+              }
+              if (!href && /rtw/i.test(rawText + ' ' + elId)) href = '#ux-JSD-CL-03';
+              else if (!href && /(zna|triage|aufnahme)/i.test(rawText + ' ' + elId)) href = '#ux-JSD-CL-04';
+            }
+
             if (!href || !href.startsWith('#')) return;
 
             e.preventDefault();
             e.stopPropagation();
 
-            const rect = a.getBoundingClientRect();
-            const clickX = rect.left + rect.width / 2;
-            const clickY = rect.top + rect.height / 2;
-
-            if (href.startsWith('#sys-')) {
+            if (href.startsWith('#ux-') || href.startsWith('#client-')) {
+              const clientId = href.replace(/^#(ux|client)-/, '');
+              // 1. Locate client on chord canvas
+              if (typeof window.locateClientOnCanvas === 'function') {
+                window.locateClientOnCanvas(clientId);
+              }
+              // 2. Open UX Popout Card in the Bay!
+              if (typeof window.showUxPopout === 'function') {
+                window.showUxPopout(clientId, null, proc.id, clickX, clickY);
+              }
+              if (typeof window.showCrudToast === 'function') {
+                const actors = (typeof ACTORS_DATA !== 'undefined' ? ACTORS_DATA : []);
+                let clName = clientId;
+                for (const a of actors) {
+                  const cl = (a.clients || []).find(c => c.id === clientId);
+                  if (cl) { clName = cl.name; break; }
+                }
+                window.showCrudToast('📱 PlantUML: UX-Interface ' + clientId + ' (' + clName.slice(0, 24) + ') in der Bay geöffnet');
+              }
+            } else if (href.startsWith('#hitl-') || href.startsWith('#act-') || href.startsWith('#actor-')) {
+              const roleId = href.replace(/^#(hitl|act|actor)-/, '');
+              // 1. Locate role on canvas
+              if (typeof window.locateRoleOnCanvas === 'function') {
+                window.locateRoleOnCanvas(roleId);
+              } else if (typeof window.selectHitlRole === 'function') {
+                window.selectHitlRole(roleId);
+              }
+              // 2. Also open corresponding UX card in the Bay!
+              if (typeof window.showUxPopout === 'function') {
+                window.showUxPopout(null, roleId, proc.id, clickX, clickY);
+              }
+              if (typeof window.showCrudToast === 'function') {
+                const actObj = (typeof ACTORS_DATA !== 'undefined' ? ACTORS_DATA : []).find(a => a.id === roleId);
+                const actName = actObj ? actObj.name : roleId;
+                window.showCrudToast('👤 PlantUML: Menschliche Rolle ' + actName + ' aktiviert & UX geöffnet');
+              }
+            } else if (href.startsWith('#sys-')) {
               const sysId = href.replace(/^#sys-/, '');
               const sys = SYSTEMS_DATA.find(s => s.id === sysId);
               if (sys) {
@@ -40113,22 +40293,13 @@
                   window.showCrudToast('⚡ Integrationsfluss ' + integ.id + ' (' + (integ.name || '') + ') aktiviert');
                 }
               }
-            } else if (href.startsWith('#client-')) {
-              const clientId = href.replace(/^#client-/, '');
-              if (typeof window.locateClientOnCanvas === 'function') {
-                window.locateClientOnCanvas(clientId);
-              }
-            } else if (href.startsWith('#hitl-') || href.startsWith('#act-') || href.startsWith('#actor-')) {
-              const roleId = href.replace(/^#(hitl|act|actor)-/, '');
-              if (typeof window.locateRoleOnCanvas === 'function') {
-                window.locateRoleOnCanvas(roleId);
-              } else if (typeof window.selectHitlRole === 'function') {
-                window.selectHitlRole(roleId);
-              }
             } else if (href.startsWith('#msg-')) {
               const msgId = href.replace(/^#msg-/, '');
               if (typeof window.locateClientOnCanvas === 'function') {
                 window.locateClientOnCanvas(msgId);
+              }
+              if (typeof window.showUxPopout === 'function') {
+                window.showUxPopout(msgId, null, proc.id, clickX, clickY);
               }
             }
           });
