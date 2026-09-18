@@ -2627,6 +2627,138 @@
       box-shadow: 0 0 28px var(--accent-glow) !important;
       transform: scale(1.02);
     }
+
+    /* =========================================================================
+       UX POPOUT CARDS (User Interface Cards in Popout Bay)
+       ========================================================================= */
+    .ux-popout-card {
+      border-color: rgba(139, 92, 246, 0.45);
+    }
+    .ux-popout-card.popout-bay-hovered {
+      border-color: #a855f7 !important;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75), 0 0 0 2px #a855f7 !important;
+    }
+    .ux-type-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #8b5cf6;
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 0.65rem;
+      letter-spacing: 0.5px;
+      padding: 1px 6px;
+      border-radius: 4px;
+      box-shadow: 0 1px 4px rgba(139, 92, 246, 0.4);
+    }
+    .ux-tech-banner {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      margin: 8px 0 6px 0;
+      transition: all 0.2s ease;
+    }
+    .ux-tech-banner.tech-fiori {
+      background: rgba(2, 132, 199, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+    }
+    .ux-tech-banner.tech-sapgui {
+      background: rgba(30, 64, 175, 0.14);
+      border: 1px solid rgba(96, 165, 250, 0.35);
+    }
+    .ux-tech-banner.tech-mobile {
+      background: rgba(6, 182, 212, 0.12);
+      border: 1px solid rgba(6, 182, 212, 0.35);
+    }
+    .ux-tech-banner.tech-fatclient {
+      background: rgba(139, 92, 246, 0.12);
+      border: 1px solid rgba(167, 139, 250, 0.35);
+    }
+    .ux-tech-banner.tech-spa {
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(52, 211, 153, 0.35);
+    }
+    .ux-tech-icon {
+      width: 36px;
+      height: 36px;
+      object-fit: contain;
+      flex-shrink: 0;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.35));
+    }
+    .ux-tech-label {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-bright);
+    }
+    .ux-tech-pill {
+      font-size: 0.6rem;
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-muted);
+    }
+    .ux-tech-desc {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      line-height: 1.25;
+      margin-top: 1px;
+    }
+    .ux-processes-section {
+      margin-top: 6px;
+      padding: 6px 8px;
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+    }
+    .ux-process-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      max-height: 110px;
+      overflow-y: auto;
+    }
+    .ux-process-pill {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      background: rgba(56, 189, 248, 0.08);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      color: var(--text-bright);
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.15s ease;
+      font-family: inherit;
+    }
+    .ux-process-pill:hover {
+      background: rgba(56, 189, 248, 0.22);
+      border-color: var(--accent);
+      transform: translateX(2px);
+    }
+    .ux-process-pill-id {
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+    .ux-process-pill-name {
+      font-size: 0.68rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex: 1;
+    }
+    .ux-process-pill-arrow {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+
     @keyframes popIn {
       from { opacity: 0; transform: scale(0.95) translateY(10px); }
       to { opacity: 1; transform: scale(1) translateY(0); }
@@ -19371,6 +19503,290 @@
         return card;
       }
       window.showNodePopout = showNodePopout;
+
+      // =========================================================================
+      // UX TECHNOLOGY ICONS REGISTRY & CLASSIFICATION
+      // =========================================================================
+      const UX_TECH_ICONS = {
+        sapGui: "data:image/png;base64,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",
+        fatClient: "data:image/png;base64,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",
+        mobileClient: "data:image/png;base64,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",
+        fioriApp: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiIgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImZpb3JpR3JhZCIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzAyODRjNyIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzM4YmRmOCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjIiIHk9IjIiIHdpZHRoPSIyOCIgaGVpZ2h0PSIyOCIgcng9IjciIGZpbGw9InVybCgjZmlvcmlHcmFkKSIvPjxyZWN0IHg9IjciIHk9IjciIHdpZHRoPSI3LjUiIGhlaWdodD0iNy41IiByeD0iMiIgZmlsbD0iI2ZmZmZmZiIgb3BhY2l0eT0iMC45NSIvPjxyZWN0IHg9IjE3LjUiIHk9IjciIHdpZHRoPSI3LjUiIGhlaWdodD0iNy41IiByeD0iMiIgZmlsbD0iI2ZmZmZmZiIgb3BhY2l0eT0iMC44Ii8+PHJlY3QgeD0iNyIgeT0iMTcuNSIgd2lkdGg9IjcuNSIgaGVpZ2h0PSI3LjUiIHJ4PSIyIiBmaWxsPSIjZmZmZmZmIiBvcGFjaXR5PSIwLjgiLz48cmVjdCB4PSIxNy41IiB5PSIxNy41IiB3aWR0aD0iNy41IiBoZWlnaHQ9IjcuNSIgcng9IjIiIGZpbGw9IiNmNTllMGIiIG9wYWNpdHk9IjAuOTUiLz48L3N2Zz4=",
+        spa: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiIgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9InNwYUdyYWQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMxMGI5ODEiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMwNmI2ZDQiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB4PSIyIiB5PSIyIiB3aWR0aD0iMjgiIGhlaWdodD0iMjgiIHJ4PSI3IiBmaWxsPSJ1cmwoI3NwYUdyYWQpIi8+PHJlY3QgeD0iNSIgeT0iNiIgd2lkdGg9IjIyIiBoZWlnaHQ9IjIwIiByeD0iMyIgZmlsbD0iIzBmMTcyYSIgZmlsbC1vcGFjaXR5PSIwLjg1IiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iMC44Ii8+PGNpcmNsZSBjeD0iOCIgY3k9IjkuNSIgcj0iMSIgZmlsbD0iI2VmNDQ0NCIvPjxjaXJjbGUgY3g9IjExIiBjeT0iOS41IiByPSIxIiBmaWxsPSIjZjU5ZTBiIi8+PGNpcmNsZSBjeD0iMTQiIGN5PSI5LjUiIHI9IjEiIGZpbGw9IiMxMGI5ODEiLz48cGF0aCBkPSJNMTEgMTggTDggMjAgTDExIDIyIE0yMSAxOCBMMjQgMjAgTDIxIDIyIE0xNyAxNyBMMTUgMjMiIHN0cm9rZT0iIzM4YmRmOCIgc3Ryb2tlLXdpZHRoPSIxLjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgZmlsbD0ibm9uZSIvPjwvc3ZnPg=="
+      };
+      window.UX_TECH_ICONS = UX_TECH_ICONS;
+
+      function determineUxTechnology(client, targetSys) {
+        if (!client) return { tech: 'Fat Client', label: 'Fat Client', icon: UX_TECH_ICONS.fatClient, themeClass: 'tech-fatclient', categoryLabel: 'Desktop App', desc: 'Native Desktop-Anwendung (Non-Web-Browser)' };
+
+        if (client.uxTechnology) {
+          const t = client.uxTechnology;
+          if (t === 'Fiori-App') return { tech: 'Fiori-App', label: 'Fiori-App', icon: UX_TECH_ICONS.fioriApp, themeClass: 'tech-fiori', categoryLabel: 'S/4HANA UX', desc: 'SAP Fiori UI & Launchpad (SAP S/4HANA)' };
+          if (t === 'SAP-GUI') return { tech: 'SAP-GUI', label: 'SAP-GUI', icon: UX_TECH_ICONS.sapGui, themeClass: 'tech-sapgui', categoryLabel: 'SAP R/3 UX', desc: 'SAP GUI / SAP Logon Transaktions-Interface' };
+          if (t === 'Mobile Client') return { tech: 'Mobile Client', label: 'Mobile Client', icon: UX_TECH_ICONS.mobileClient, themeClass: 'tech-mobile', categoryLabel: 'Mobile UX', desc: 'Mobiles Einsatzgerät / Tablet / Smartphone' };
+          if (t === 'Fat Client') return { tech: 'Fat Client', label: 'Fat Client', icon: UX_TECH_ICONS.fatClient, themeClass: 'tech-fatclient', categoryLabel: 'Desktop App', desc: 'Native Desktop-Anwendung (Non-Web-Browser)' };
+          if (t === 'Plain Vanilla SPA') return { tech: 'Plain Vanilla SPA', label: 'Plain Vanilla SPA', icon: UX_TECH_ICONS.spa, themeClass: 'tech-spa', categoryLabel: 'Web Portal / SPA', desc: 'Browser-basierte Single-Page-Application (SPA)' };
+        }
+
+        const combined = [
+          client.name || '',
+          client.deviceType || '',
+          client.os || '',
+          client.authMethod || '',
+          Array.isArray(client.messagesEmitted) ? client.messagesEmitted.join(' ') : '',
+          targetSys ? ((targetSys.name || '') + ' ' + (targetSys.desc || '') + ' ' + (targetSys.vendor || '')) : ''
+        ].join(' ').toLowerCase();
+
+        // 1. SAP S/4HANA / Fiori
+        if (/fiori|s\/4hana|s4hana|s\/4|sap\s*btp/i.test(combined)) {
+          return { tech: 'Fiori-App', label: 'Fiori-App', icon: UX_TECH_ICONS.fioriApp, themeClass: 'tech-fiori', categoryLabel: 'S/4HANA UX', desc: 'SAP Fiori UI & Launchpad (SAP S/4HANA)' };
+        }
+
+        // 2. SAP R/3 / SAP GUI / SAP Logon / ECC
+        if (/sap\s*gui|sap\s*logon|r\/3|r3|sap\s*ecc/i.test(combined)) {
+          return { tech: 'SAP-GUI', label: 'SAP-GUI', icon: UX_TECH_ICONS.sapGui, themeClass: 'tech-sapgui', categoryLabel: 'SAP R/3 UX', desc: 'SAP GUI / SAP Logon Transaktions-Interface' };
+        }
+
+        // 3. Mobile Client (tablet, smartphone, iPad, Android, iOS, ruggedized, nida)
+        if (
+          client.deviceType === 'TABLET_MOBILE' ||
+          client.deviceType === 'SMARTPHONE_APP' ||
+          /tablet|mobile|smartphone|ipad|iphone|android|ios|ruggedized|nidapad|rtw/i.test(combined)
+        ) {
+          return { tech: 'Mobile Client', label: 'Mobile Client', icon: UX_TECH_ICONS.mobileClient, themeClass: 'tech-mobile', categoryLabel: 'Mobile UX', desc: 'Mobiles Einsatzgerät / Tablet / Smartphone' };
+        }
+
+        // 4. Web Browser / SPA (Plain Vanilla SPA)
+        if (
+          client.deviceType === 'WEB_PORTAL' ||
+          /browser|web_portal|web\s*portal|single\s*page|spa|angular|react|vue|html5|chrome|edge|https/i.test(combined)
+        ) {
+          return { tech: 'Plain Vanilla SPA', label: 'Plain Vanilla SPA', icon: UX_TECH_ICONS.spa, themeClass: 'tech-spa', categoryLabel: 'Web Portal / SPA', desc: 'Browser-basierte Single-Page-Application (SPA)' };
+        }
+
+        // 5. Fallback: Fat Client
+        return { tech: 'Fat Client', label: 'Fat Client', icon: UX_TECH_ICONS.fatClient, themeClass: 'tech-fatclient', categoryLabel: 'Desktop App', desc: 'Native Desktop-Anwendung (Non-Web-Browser)' };
+      }
+      window.determineUxTechnology = determineUxTechnology;
+
+      // =========================================================================
+      // UX POPOUT FUNCTION (Show UX card in the Bay for Human Tasks)
+      // =========================================================================
+      function showUxPopout(clientId, actorId, procId, mouseX, mouseY) {
+        const actors = (typeof ACTORS_DATA !== 'undefined' ? ACTORS_DATA : []);
+        let actor = null;
+        let client = null;
+
+        if (actorId) {
+          actor = actors.find(a => a.id === actorId);
+        }
+        if (clientId) {
+          for (const a of actors) {
+            const cl = (a.clients || []).find(c => c.id === clientId);
+            if (cl) {
+              client = cl;
+              if (!actor) actor = a;
+              break;
+            }
+          }
+        }
+        if (!client && actor && Array.isArray(actor.clients) && actor.clients.length > 0) {
+          client = actor.clients[0];
+        }
+
+        // Fallback client if not found
+        if (!client) {
+          client = {
+            id: clientId || ('CL-' + (actorId || 'GENERIC')),
+            name: 'User-Interface (' + (actor ? actor.name : 'Human Task') + ')',
+            deviceType: 'DESKTOP_GUI',
+            os: 'Desktop / Workstation',
+            authMethod: 'SSO / Authentifizierung',
+            targetSystemId: null,
+            messagesEmitted: []
+          };
+        }
+
+        const popoutKey = 'ux-' + client.id;
+
+        // If card already exists in Bay, bring to front with focus flash
+        if (openPopouts.has(popoutKey)) {
+          const existingCard = openPopouts.get(popoutKey);
+          popoutZIndexCounter++;
+          existingCard.style.zIndex = popoutZIndexCounter;
+          existingCard.classList.add("popout-focus-flash");
+          setTimeout(() => existingCard.classList.remove("popout-focus-flash"), 600);
+          return existingCard;
+        }
+
+        const systems = (typeof SYSTEMS_DATA !== 'undefined' ? SYSTEMS_DATA : []);
+        const targetSys = client.targetSystemId ? systems.find(s => s.id === client.targetSystemId) : null;
+        const techInfo = determineUxTechnology(client, targetSys);
+
+        // Gather all processes associated with this client / actor
+        const procIds = new Set();
+        if (actor && Array.isArray(actor.processes)) {
+          actor.processes.forEach(p => procIds.add(p));
+        }
+        if (procId) {
+          procIds.add(procId);
+        }
+        const allProcs = (typeof PROCESSES_DATA !== 'undefined' ? PROCESSES_DATA : []);
+        allProcs.forEach(p => {
+          if (p.steps && p.steps.some(st => st.from === client.id || st.to === client.id || st.sender === actor?.name || st.receiver === actor?.name)) {
+            procIds.add(p.id);
+          }
+        });
+
+        // Format process pills
+        let procListHtml = '';
+        if (procIds.size > 0) {
+          procListHtml = Array.from(procIds).map(pId => {
+            const pObj = allProcs.find(p => p.id === pId);
+            const pName = pObj ? pObj.name : pId;
+            return '<div class="ux-process-pill" onclick="if(typeof window.openBpmnModal === \'function\'){ window.openBpmnModal(\'' + pId + '\'); } else if(typeof window.selectProcess === \'function\'){ window.selectProcess(\'' + pId + '\'); }" title="Prozess \'' + pName + '\' in BPMN öffnen">' +
+              '<span class="ux-process-pill-id">' + pId + '</span>' +
+              '<span class="ux-process-pill-name">' + pName + '</span>' +
+              '<span class="ux-process-pill-arrow">➔</span>' +
+            '</div>';
+          }).join('');
+        } else {
+          procListHtml = '<div style="font-size:0.68rem; color:var(--text-muted); font-style:italic;">Keine direkten E2E-Prozesse hinterlegt.</div>';
+        }
+
+        // Build Card Element
+        const card = document.createElement("div");
+        card.className = "edge-popout-card ux-popout-card";
+        card.id = "popout-ux-" + client.id;
+
+        card.innerHTML =
+          '<div class="edge-popout-header" style="background: rgba(139, 92, 246, 0.18); border-bottom: 1px solid rgba(139, 92, 246, 0.3);">' +
+            '<div class="popout-title-box">' +
+              '<span class="ux-type-badge">UX</span>' +
+              '<span class="popout-badge-id" style="background: #8b5cf6;">' + client.id + '</span>' +
+              '<span class="insp-id" style="padding:1px 6px; font-size:0.65rem; background:rgba(255,255,255,0.08);">' + techInfo.tech + '</span>' +
+            '</div>' +
+            '<div class="popout-actions">' +
+              '<button class="popout-btn-icon locator-btn" data-id="' + client.id + '" title="Client &amp; Rolle auf der Zeichenfläche lokalisieren (🎯)">🎯 Lokalisieren</button>' +
+              '<button class="popout-btn-icon close-btn" data-id="' + popoutKey + '" title="Pop-Out schließen (✕)">✕</button>' +
+            '</div>' +
+          '</div>' +
+          '<div class="edge-popout-body">' +
+            '<div style="font-size:0.86rem; font-weight:700; color:var(--text-bright); line-height:1.25;">' + client.name + '</div>' +
+            '<div style="font-size:0.72rem; color:var(--text-muted); margin-top:3px; display:flex; align-items:center; gap:6px; flex-wrap:wrap;">' +
+              '<span>Bedient von:</span>' +
+              '<span class="insp-badge" style="background:rgba(6,182,212,0.15); color:#06b6d4; font-weight:600; cursor:pointer;" onclick="if(typeof window.locateRoleOnCanvas === \'function\') window.locateRoleOnCanvas(\'' + (actor ? actor.id : '') + '\');" title="Rolle auf Zeichenfläche lokalisieren">' +
+                (actor ? ((actor.avatar || '👤') + ' ' + actor.name) : 'Menschliche Rolle') +
+              '</span>' +
+            '</div>' +
+            '<div class="ux-tech-banner ' + techInfo.themeClass + '">' +
+              '<img class="ux-tech-icon" src="' + techInfo.icon + '" alt="' + techInfo.tech + '" />' +
+              '<div style="flex:1; min-width:0;">' +
+                '<div style="display:flex; align-items:center; gap:6px;">' +
+                  '<span class="ux-tech-label">' + techInfo.tech + '</span>' +
+                  '<span class="ux-tech-pill">' + techInfo.categoryLabel + '</span>' +
+                '</div>' +
+                '<div class="ux-tech-desc">' + techInfo.desc + '</div>' +
+              '</div>' +
+            '</div>' +
+            (targetSys ? (
+              '<div style="display:flex; align-items:center; gap:6px; font-size:0.72rem; margin-top:4px; padding:4px 6px; background:rgba(255,255,255,0.03); border-radius:6px; border:1px solid rgba(255,255,255,0.06);">' +
+                '<span style="color:var(--text-muted); font-size:0.68rem; flex-shrink:0;">Backend:</span>' +
+                '<span class="insp-badge" style="cursor:pointer; background:rgba(56,189,248,0.15); color:var(--accent); font-weight:700; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" onclick="if(typeof selectSystem === \'function\') selectSystem(\'' + targetSys.id + '\'); if(typeof locateNodeInChord === \'function\') locateNodeInChord(\'' + targetSys.id + '\');" title="System auf der Zeichenfläche fokussieren">' +
+                  '🏥 ' + targetSys.id + ' · ' + targetSys.name +
+                '</span>' +
+              '</div>'
+            ) : '') +
+            '<div class="ux-processes-section">' +
+              '<div style="font-size:0.72rem; font-weight:700; color:var(--text-bright); display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">' +
+                '<span>📋 Zugeordnete E2E-Prozesse:</span>' +
+                '<span style="font-size:0.65rem; color:var(--text-muted);">' + procIds.size + ' Prozess(e)</span>' +
+              '</div>' +
+              '<div class="ux-process-list">' +
+                procListHtml +
+              '</div>' +
+            '</div>' +
+            '<div class="insp-meta-grid" style="margin-top:6px;">' +
+              '<div class="insp-meta-box"><div class="insp-meta-lbl">Endgerät</div><div class="insp-meta-val">' + (client.deviceType || 'Workstation') + '</div></div>' +
+              '<div class="insp-meta-box"><div class="insp-meta-lbl">Betriebssystem</div><div class="insp-meta-val">' + (client.os || 'Standard OS') + '</div></div>' +
+              '<div class="insp-meta-box" style="grid-column: span 2;"><div class="insp-meta-lbl">Authentifizierung</div><div class="insp-meta-val">' + (client.authMethod || 'Single Sign-On (SSO)') + '</div></div>' +
+            '</div>' +
+            ((client.messagesEmitted && client.messagesEmitted.length > 0) ? (
+              '<div style="margin-top:5px; font-size:0.67rem; color:var(--text-muted); line-height:1.3;">' +
+                '<strong>Emittierte Nachrichten:</strong> ' + client.messagesEmitted.join(', ') +
+              '</div>'
+            ) : '') +
+          '</div>';
+
+        card.dataset.popoutId = popoutKey;
+        card.addEventListener('mouseenter', () => {
+          card.style.zIndex = '300';
+          card.classList.add('popout-bay-hovered');
+        });
+        card.addEventListener('mouseleave', () => {
+          const idx = parseInt(card.dataset.bayIndex || '0', 10);
+          card.style.zIndex = 100 + idx;
+          card.classList.remove('popout-bay-hovered');
+        });
+
+        card.addEventListener("mousedown", () => {
+          popoutZIndexCounter++;
+          card.style.zIndex = popoutZIndexCounter;
+        });
+
+        // Dragging handler on header
+        const header = card.querySelector(".edge-popout-header");
+        let isDragging = false;
+        let dragStartX, dragStartY, cardInitLeft, cardInitTop;
+
+        header.addEventListener("mousedown", (e) => {
+          if (e.target.closest("button")) return;
+          isDragging = true;
+          dragStartX = e.clientX;
+          dragStartY = e.clientY;
+          cardInitLeft = card.offsetLeft;
+          cardInitTop = card.offsetTop;
+          document.body.style.userSelect = "none";
+        });
+
+        window.addEventListener("mousemove", (e) => {
+          if (!isDragging) return;
+          const dx = e.clientX - dragStartX;
+          const dy = e.clientY - dragStartY;
+          card.style.left = (cardInitLeft + dx) + "px";
+          card.style.top = (cardInitTop + dy) + "px";
+        });
+
+        window.addEventListener("mouseup", () => {
+          if (isDragging) {
+            isDragging = false;
+            document.body.style.userSelect = "auto";
+          }
+        });
+
+        // Action Buttons
+        card.querySelector(".locator-btn").onclick = (e) => {
+          e.stopPropagation();
+          if (client.id && typeof window.locateClientOnCanvas === 'function') {
+            window.locateClientOnCanvas(client.id);
+          }
+          if (actor && actor.id && typeof window.locateRoleOnCanvas === 'function') {
+            window.locateRoleOnCanvas(actor.id);
+          }
+        };
+
+        card.querySelector(".close-btn").onclick = (e) => {
+          e.stopPropagation();
+          closePopout(popoutKey);
+        };
+
+        popoutsContainer.appendChild(card);
+        openPopouts.set(popoutKey, card);
+        updatePopoutBayLayout();
+        return card;
+      }
+      window.showUxPopout = showUxPopout;
+
 
       // =========================================================================
       // QUAD-CHORD (4 KREIS-SEGMENTE) MATHEMATICAL LAYOUT ENGINE
@@ -41410,6 +41826,11 @@
                 }
                 if (meta.clientId && typeof window.locateClientOnCanvas === 'function') {
                   window.locateClientOnCanvas(meta.clientId);
+                }
+                // Show UX Popout in Bay for Human Tasks and Clients
+                if (typeof window.showUxPopout === 'function' && (meta.type === 'human' || meta.type === 'client')) {
+                  const rect = hitShape.getBoundingClientRect();
+                  window.showUxPopout(meta.clientId, meta.actorId, proc.id, rect.left + rect.width / 2, rect.top + rect.height / 2);
                 }
                 if (typeof window.showCrudToast === 'function') {
                   const actObj = (typeof ACTORS_DATA !== 'undefined' ? ACTORS_DATA : []).find(a => a.id === meta.actorId);
