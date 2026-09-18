@@ -4291,6 +4291,8 @@
     /* Floating Draggable & Resizable PlantUML Popout Window (No Backdrop, No Blur) */
     .plantuml-floating-popout {
       position: fixed;
+      container-type: inline-size;
+      container-name: popout;
       top: 50px;
       left: calc(50vw - 480px);
       width: 960px;
@@ -4383,6 +4385,8 @@
        ===================================================================== */
     .bpmn-floating-popout {
       position: fixed;
+      container-type: inline-size;
+      container-name: popout;
       top: 55px;
       left: calc(50vw - 460px);
       width: 950px;
@@ -4430,6 +4434,60 @@
       white-space: nowrap;
       display: inline-block;
       vertical-align: middle;
+    }
+    .plantuml-popout-header .apqc-code-badge.apqc-slim-btn,
+    .bpmn-popout-header .apqc-code-badge.apqc-slim-btn {
+      padding: 2px 7px !important;
+      font-size: 0.72rem !important;
+      font-weight: 750 !important;
+      letter-spacing: 0.05em !important;
+      max-width: none !important;
+      flex-shrink: 0 !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      line-height: 1.3 !important;
+    }
+
+    .popout-header-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+      flex: 1;
+      overflow: hidden;
+    }
+    .popout-header-right {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-shrink: 0;
+      margin-left: 8px;
+    }
+    .popout-zoom-controls {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    @container popout (max-width: 780px) {
+      .popout-zoom-controls {
+        display: none !important;
+      }
+    }
+    .is-compact-header .popout-zoom-controls {
+      display: none !important;
+    }
+    .plantuml-close-btn,
+    .bpmn-close-btn {
+      flex-shrink: 0 !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      min-width: 24px !important;
+      min-height: 24px !important;
+      cursor: pointer !important;
+      line-height: 1 !important;
+      margin-left: 4px !important;
     }
 
     .bpmn-popout-header {
@@ -39025,6 +39083,88 @@
         }
       };
 
+            // =====================================================================
+      // DYNAMIC POPOUT AUTO-SIZING TO DIAGRAM ASPECT RATIO
+      // =====================================================================
+      window.autoSizePopoutToDiagram = function(modal, wrapperEl, containerEl, procId, type) {
+        if (!modal || !wrapperEl || !containerEl) return;
+        if (modal.classList.contains('is-fullscreen')) {
+          if (type === 'bpmn' && typeof window.fitBpmn === 'function') window.fitBpmn(procId);
+          if (type === 'puml' && typeof window.fitPlantUml === 'function') window.fitPlantUml(procId);
+          return;
+        }
+
+        let diagW = wrapperEl.scrollWidth || wrapperEl.offsetWidth;
+        let diagH = wrapperEl.scrollHeight || wrapperEl.offsetHeight;
+        if (diagW <= 0 || diagH <= 0) {
+          const svg = wrapperEl.querySelector('svg');
+          if (svg && svg.viewBox && svg.viewBox.baseVal && svg.viewBox.baseVal.width > 0) {
+            diagW = svg.viewBox.baseVal.width;
+            diagH = svg.viewBox.baseVal.height;
+          }
+        }
+        if (diagW <= 0 || diagH <= 0) return;
+
+        const ar = diagW / diagH;
+        const sW = window.innerWidth;
+        const sH = window.innerHeight;
+        const chromeH = 72; // ~44px header + 28px footer
+
+        const marginW = sW > 1200 ? 32 : 16;
+        const marginH = sH > 900 ? 36 : 20;
+        const maxBodyW = Math.max(560, sW - marginW);
+        const maxBodyH = Math.max(340, sH - marginH - chromeH);
+
+        // Calculate target body size adopting the exact aspect ratio of the diagram
+        let targetBodyW = Math.min(maxBodyW, Math.max(640, diagW + 36));
+        let targetBodyH = Math.round(targetBodyW / ar);
+
+        if (targetBodyH > maxBodyH) {
+          targetBodyH = maxBodyH;
+          targetBodyW = Math.round(targetBodyH * ar);
+        }
+
+        targetBodyW = Math.max(540, Math.min(maxBodyW, targetBodyW));
+        targetBodyH = Math.max(320, Math.min(maxBodyH, targetBodyH));
+
+        const targetModalW = targetBodyW;
+        const targetModalH = targetBodyH + chromeH;
+
+        const targetLeft = Math.max(8, Math.round((sW - targetModalW) / 2));
+        const targetTop = Math.max(12, Math.round((sH - targetModalH) / 2));
+
+        modal.style.width = targetModalW + 'px';
+        modal.style.height = targetModalH + 'px';
+        modal.style.left = targetLeft + 'px';
+        modal.style.top = targetTop + 'px';
+        modal.style.right = 'auto';
+        modal.style.bottom = 'auto';
+
+        if (targetModalW < 780) {
+          modal.classList.add('is-compact-header');
+        } else {
+          modal.classList.remove('is-compact-header');
+        }
+
+        const entry = (type === 'bpmn' ? (window.openBpmnPopouts ? window.openBpmnPopouts.get(procId) : null) : (window.openPlantUmlPopouts ? window.openPlantUmlPopouts.get(procId) : null));
+        if (entry) {
+          entry.savedBounds = {
+            top: targetTop + 'px',
+            left: targetLeft + 'px',
+            width: targetModalW + 'px',
+            height: targetModalH + 'px'
+          };
+        }
+
+        setTimeout(() => {
+          if (type === 'bpmn' && typeof window.fitBpmn === 'function') {
+            window.fitBpmn(procId);
+          } else if (type === 'puml' && typeof window.fitPlantUml === 'function') {
+            window.fitPlantUml(procId);
+          }
+        }, 40);
+      };
+
       window.togglePlantUmlFullscreen = function(procId) {
         const pid = procId || activePlantUmlProcId || Array.from(openPlantUmlPopouts.keys()).pop();
         const entry = openPlantUmlPopouts.get(pid);
@@ -39138,28 +39278,30 @@
 
           modal.innerHTML = 
             '<div class="plantuml-popout-header">' +
-              '<div style="display:flex; align-items:center; gap:8px;">' +
-                '<span style="font-size:1.1rem;">📊</span>' +
-                '<div class="crud-modal-title" style="font-size:0.92rem; font-weight:750; color:var(--text-bright); display:flex; align-items:center; gap:6px;">' +
-                  '<span class="plantuml-title-text">' + titleLabel + '</span>' +
-                  '<button type="button" class="puml-selfref-btn btn-puml-selfref" onclick="window.restorePlantUmlCallingContext(\'' + esc(proc.id) + '\')" title="Aufrufumgebung im EAM-Modell wiederherstellen (' + titleLabel + ')">🔗</button>' +
+              '<div class="popout-header-left">' +
+                '<span style="font-size:1.1rem; flex-shrink:0;">📊</span>' +
+                '<div class="crud-modal-title" style="font-size:0.92rem; font-weight:750; color:var(--text-bright); display:flex; align-items:center; gap:6px; min-width:0; overflow:hidden;">' +
+                  '<span class="plantuml-title-text" title="' + titleLabel + '">' + titleLabel + '</span>' +
+                  '<button type="button" class="puml-selfref-btn btn-puml-selfref" style="flex-shrink:0;" onclick="window.restorePlantUmlCallingContext(\'' + esc(proc.id) + '\')" title="Aufrufumgebung im EAM-Modell wiederherstellen (' + titleLabel + ')">🔗</button>' +
                 '</div>' +
-                '<span class="traffic-tag" style="background:rgba(56,189,248,0.2); color:var(--accent); font-weight:700;">UML 2.5</span>' +
-                (proc.apqc ? '<button type="button" class="apqc-code-badge" onclick="event.stopPropagation(); window.openApqcExplorer(\'' + esc(proc.apqc) + '\')" title="APQC PCF Klassifikation ' + esc(proc.apqc) + ' im Explorer öffnen" style="cursor:pointer;">📋 APQC ' + esc(proc.apqc) + '</button>' : '') +
+                '<span class="traffic-tag" style="flex-shrink:0; background:rgba(56,189,248,0.2); color:var(--accent); font-weight:700;">UML 2.5</span>' +
+                (proc.apqc ? '<button type="button" class="apqc-code-badge apqc-slim-btn" onclick="event.stopPropagation(); window.openApqcExplorer(\'' + esc(proc.apqc) + '\')" title="APQC PCF Klassifikation ' + esc(proc.apqc) + ' im Explorer öffnen" style="cursor:pointer;">APQC</button>' : '') +
               '</div>' +
-              '<div style="display:flex; align-items:center; gap:5px;">' +
-                '<button class="insp-action-btn" onclick="window.zoomPuml(\'' + esc(proc.id) + '\', 0.2)" title="Vergrößern (+)">➕</button>' +
-                '<button class="insp-action-btn" onclick="window.zoomPuml(\'' + esc(proc.id) + '\', -0.2)" title="Verkleinern (-)">➖</button>' +
-                '<span class="puml-zoom-badge" title="Aktueller Zoomfaktor">100%</span>' +
-                '<button class="insp-action-btn" onclick="window.resetPumlZoom(\'' + esc(proc.id) + '\')" title="Standardgröße (1:1 / 100%)">1:1</button>' +
-                '<button class="insp-action-btn" onclick="window.fitPlantUml(\'' + esc(proc.id) + '\')" title="Gesamtes Diagramm in Fenster einpassen">⊡</button>' +
-                '<button class="insp-action-btn" onclick="window.jumpToPumlStart(\'' + esc(proc.id) + '\')" title="Direkt an den Diagrammanfang (Initiator links) springen">⏮</button>' +
+              '<div class="popout-header-right">' +
+                '<div class="popout-zoom-controls">' +
+                  '<button class="insp-action-btn" onclick="window.zoomPuml(\'' + esc(proc.id) + '\', 0.2)" title="Vergrößern (+)">➕</button>' +
+                  '<button class="insp-action-btn" onclick="window.zoomPuml(\'' + esc(proc.id) + '\', -0.2)" title="Verkleinern (-)">➖</button>' +
+                  '<span class="puml-zoom-badge" title="Aktueller Zoomfaktor">100%</span>' +
+                  '<button class="insp-action-btn" onclick="window.resetPumlZoom(\'' + esc(proc.id) + '\')" title="Standardgröße (1:1 / 100%)">1:1</button>' +
+                  '<button class="insp-action-btn" onclick="window.fitPlantUml(\'' + esc(proc.id) + '\')" title="Gesamtes Diagramm in Fenster einpassen">⊡</button>' +
+                  '<button class="insp-action-btn" onclick="window.jumpToPumlStart(\'' + esc(proc.id) + '\')" title="Direkt an den Diagrammanfang (Initiator links) springen">⏮</button>' +
+                '</div>' +
                 '<button class="insp-action-btn btn-puml-fullscreen" onclick="window.togglePlantUmlFullscreen(\'' + esc(proc.id) + '\')" title="Vollbild umschalten (oder Klick auf Kopfzeile)">⛶</button>' +
                 '<button class="insp-action-btn" onclick="window.downloadPumlSvg(\'' + esc(proc.id) + '\')" title="SVG Vektorgrafik herunterladen">💾</button>' +
                 '<button class="insp-action-btn" onclick="window.copyPlantUml(\'' + esc(proc.id) + '\')" title="PlantUML-Code in die Zwischenablage kopieren">📋</button>' +
                 '<button class="insp-action-btn" onclick="window.openPlantUmlEditor(\'' + esc(proc.id) + '\')" title="In externem Editor (PlantText) bearbeiten">↗</button>' +
                 '<button class="insp-action-btn" onclick="window.openOfficialPlantUmlEditor(\'' + esc(proc.id) + '\')" title="Auf offiziellem PlantUML-Server öffnen">🌐</button>' +
-                '<button class="plantuml-close-btn" onclick="window.closePlantUmlModal(\'' + esc(proc.id) + '\')" style="background:none; border:none; font-size:1.4rem; cursor:pointer; padding:0 6px; line-height:1;" title="Schließen">&times;</button>' +
+                '<button class="plantuml-close-btn" onclick="window.closePlantUmlModal(\'' + esc(proc.id) + '\')" title="Schließen">&times;</button>' +
               '</div>' +
             '</div>' +
             '<div class="plantuml-popout-body" style="flex:1; display:flex; flex-direction:column; padding:0; overflow:hidden; position:relative; background:#0b0f17;">' +
@@ -39468,24 +39610,7 @@
 
             const wrapper = container.querySelector('.puml-svg-wrapper');
             if (wrapper) {
-              const cW = container.clientWidth || 800;
-              const cH = container.clientHeight || 500;
-              const w = wrapper.offsetWidth || 800;
-              const h = wrapper.offsetHeight || 500;
-
-              if (w > cW - 48 || h > cH - 48) {
-                const scaleX = (cW - 48) / w;
-                const scaleY = (cH - 48) / h;
-                const fitScale = Math.min(1.0, Math.min(scaleX, scaleY));
-                record.zoom = Math.max(0.25, Math.min(1.0, Math.round(fitScale * 100) / 100));
-                record.panX = Math.max(24, Math.round((cW - w * record.zoom) / 2));
-                record.panY = Math.max(16, Math.round((cH - h * record.zoom) / 2));
-              } else {
-                record.zoom = 1.0;
-                record.panX = Math.round((cW - w) / 2);
-                record.panY = Math.max(20, Math.round((cH - h) / 2));
-              }
-              window.updatePumlTransform(record, false);
+              window.autoSizePopoutToDiagram(modal, wrapper, container, proc.id, 'puml');
             }
           }
         } catch (err) {
@@ -40874,28 +40999,30 @@
 
           modal.innerHTML = 
             '<div class="bpmn-popout-header">' +
-              '<div style="display:flex; align-items:center; gap:8px;">' +
-                '<span style="font-size:1.15rem;">⚙️</span>' +
-                '<div class="crud-modal-title" style="font-size:0.92rem; font-weight:750; color:var(--text-bright); display:flex; align-items:center; gap:6px;">' +
+              '<div class="popout-header-left">' +
+                '<span style="font-size:1.15rem; flex-shrink:0;">⚙️</span>' +
+                '<div class="crud-modal-title" style="font-size:0.92rem; font-weight:750; color:var(--text-bright); display:flex; align-items:center; gap:6px; min-width:0; overflow:hidden;">' +
                   '<span class="bpmn-title-text" title="' + titleLabel + '">' + titleLabel + '</span>' +
-                  '<button type="button" class="bpmn-selfref-btn btn-bpmn-selfref" onclick="window.restoreBpmnCallingContext(\'' + esc(proc.id) + '\')" title="Aufrufumgebung im EAM-Modell wiederherstellen (' + titleLabel + ')">🔗</button>' +
+                  '<button type="button" class="bpmn-selfref-btn btn-bpmn-selfref" style="flex-shrink:0;" onclick="window.restoreBpmnCallingContext(\'' + esc(proc.id) + '\')" title="Aufrufumgebung im EAM-Modell wiederherstellen (' + titleLabel + ')">🔗</button>' +
                 '</div>' +
-                '<span class="traffic-tag" style="background:rgba(16,185,129,0.2); color:#34d399; font-weight:700;">BPMN 2.0</span>' +
-                (proc.apqc ? '<button type="button" class="apqc-code-badge" onclick="event.stopPropagation(); window.openApqcExplorer(\'' + esc(proc.apqc) + '\')" title="APQC PCF Klassifikation ' + esc(proc.apqc) + ' im Explorer öffnen" style="cursor:pointer;">📋 APQC ' + esc(proc.apqc) + '</button>' : '') +
+                '<span class="traffic-tag" style="flex-shrink:0; background:rgba(16,185,129,0.2); color:#34d399; font-weight:700;">BPMN 2.0</span>' +
+                (proc.apqc ? '<button type="button" class="apqc-code-badge apqc-slim-btn" onclick="event.stopPropagation(); window.openApqcExplorer(\'' + esc(proc.apqc) + '\')" title="APQC PCF Klassifikation ' + esc(proc.apqc) + ' im Explorer öffnen" style="cursor:pointer;">APQC</button>' : '') +
               '</div>' +
-              '<div style="display:flex; align-items:center; gap:5px;">' +
-                '<button class="insp-action-btn" onclick="window.zoomBpmn(\'' + esc(proc.id) + '\', 0.2)" title="Vergrößern (+)">➕</button>' +
-                '<button class="insp-action-btn" onclick="window.zoomBpmn(\'' + esc(proc.id) + '\', -0.2)" title="Verkleinern (-)">➖</button>' +
-                '<span class="bpmn-zoom-badge" title="Aktueller Zoomfaktor">100%</span>' +
-                '<button class="insp-action-btn" onclick="window.resetBpmnZoom(\'' + esc(proc.id) + '\')" title="Standardgröße (1:1 / 100%)">1:1</button>' +
-                '<button class="insp-action-btn" onclick="window.fitBpmn(\'' + esc(proc.id) + '\')" title="Gesamtes Diagramm in Fenster einpassen">⊡</button>' +
-                '<button class="insp-action-btn" onclick="window.jumpToBpmnStart(\'' + esc(proc.id) + '\')" title="Direkt an den Diagrammanfang springen">⏮</button>' +
+              '<div class="popout-header-right">' +
+                '<div class="popout-zoom-controls">' +
+                  '<button class="insp-action-btn" onclick="window.zoomBpmn(\'' + esc(proc.id) + '\', 0.2)" title="Vergrößern (+)">➕</button>' +
+                  '<button class="insp-action-btn" onclick="window.zoomBpmn(\'' + esc(proc.id) + '\', -0.2)" title="Verkleinern (-)">➖</button>' +
+                  '<span class="bpmn-zoom-badge" title="Aktueller Zoomfaktor">100%</span>' +
+                  '<button class="insp-action-btn" onclick="window.resetBpmnZoom(\'' + esc(proc.id) + '\')" title="Standardgröße (1:1 / 100%)">1:1</button>' +
+                  '<button class="insp-action-btn" onclick="window.fitBpmn(\'' + esc(proc.id) + '\')" title="Gesamtes Diagramm in Fenster einpassen">⊡</button>' +
+                  '<button class="insp-action-btn" onclick="window.jumpToBpmnStart(\'' + esc(proc.id) + '\')" title="Direkt an den Diagrammanfang springen">⏮</button>' +
+                '</div>' +
                 '<button class="insp-action-btn btn-bpmn-fullscreen" onclick="window.toggleBpmnFullscreen(\'' + esc(proc.id) + '\')" title="Vollbild umschalten (oder Klick auf Kopfzeile)">⛶</button>' +
                 '<button class="insp-action-btn" onclick="window.downloadBpmnFile(\'' + esc(proc.id) + '\')" title="BPMN 2.0 XML Datei herunterladen (.bpmn)">💾</button>' +
                 '<button class="insp-action-btn" onclick="window.downloadBpmnSvg(\'' + esc(proc.id) + '\')" title="SVG Vektorgrafik herunterladen">🖼️</button>' +
                 '<button class="insp-action-btn" onclick="window.copyBpmnXml(\'' + esc(proc.id) + '\')" title="BPMN 2.0 XML in die Zwischenablage kopieren">📋</button>' +
                 '<button class="insp-action-btn" onclick="window.openBpmnIoEditor(\'' + esc(proc.id) + '\')" title="In externem Modeler (bpmn.io) öffnen">↗</button>' +
-                '<button class="bpmn-close-btn" onclick="window.closeBpmnModal(\'' + esc(proc.id) + '\')" style="background:none; border:none; font-size:1.4rem; cursor:pointer; padding:0 6px; line-height:1;" title="Schließen">&times;</button>' +
+                '<button class="bpmn-close-btn" onclick="window.closeBpmnModal(\'' + esc(proc.id) + '\')" title="Schließen">&times;</button>' +
               '</div>' +
             '</div>' +
             '<div class="bpmn-popout-body" style="flex:1; display:flex; flex-direction:column; padding:0; overflow:hidden; position:relative; background:#090d16;">' +
@@ -41226,10 +41353,15 @@
               svgEl.style.maxHeight = 'none';
             }
 
-            record.panX = 32;
-            record.panY = 28;
-            record.zoom = 1.0;
-            window.updateBpmnTransform(record, false);
+            const wrapper = container.querySelector('.bpmn-svg-wrapper');
+            if (wrapper) {
+              window.autoSizePopoutToDiagram(modal, wrapper, container, proc.id, 'bpmn');
+            } else {
+              record.panX = 32;
+              record.panY = 28;
+              record.zoom = 1.0;
+              window.updateBpmnTransform(record, false);
+            }
           }
         } catch (err) {
           console.error('Failed to load BPMN SVG from Kroki:', err);
@@ -41452,6 +41584,37 @@
           window.updateBpmnTransform(entry, true);
         }
       };
+
+      
+      // Auto-adapt open BPMN & PlantUML popouts when browser window resizes
+      let popoutResizeDebounceTimer = null;
+      window.addEventListener('resize', () => {
+        if (popoutResizeDebounceTimer) clearTimeout(popoutResizeDebounceTimer);
+        popoutResizeDebounceTimer = setTimeout(() => {
+          if (typeof openBpmnPopouts !== 'undefined' && openBpmnPopouts) {
+            openBpmnPopouts.forEach((entry, pid) => {
+              if (entry && entry.modal && entry.modal.style.display !== 'none' && !entry.modal.classList.contains('is-fullscreen')) {
+                const cont = entry.modal.querySelector('.bpmn-svg-container');
+                const wrap = entry.modal.querySelector('.bpmn-svg-wrapper');
+                if (cont && wrap && typeof window.autoSizePopoutToDiagram === 'function') {
+                  window.autoSizePopoutToDiagram(entry.modal, wrap, cont, pid, 'bpmn');
+                }
+              }
+            });
+          }
+          if (typeof openPlantUmlPopouts !== 'undefined' && openPlantUmlPopouts) {
+            openPlantUmlPopouts.forEach((entry, pid) => {
+              if (entry && entry.modal && entry.modal.style.display !== 'none' && !entry.modal.classList.contains('is-fullscreen')) {
+                const cont = entry.modal.querySelector('.puml-svg-container');
+                const wrap = entry.modal.querySelector('.puml-svg-wrapper');
+                if (cont && wrap && typeof window.autoSizePopoutToDiagram === 'function') {
+                  window.autoSizePopoutToDiagram(entry.modal, wrap, cont, pid, 'puml');
+                }
+              }
+            });
+          }
+        }, 150);
+      });
 
       window.jumpToBpmnStart = function(procId) {
         const pid = procId || activeBpmnProcId || Array.from(openBpmnPopouts.keys()).pop();
