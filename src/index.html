@@ -6072,23 +6072,99 @@
       margin-top: 2px;
     }
     .agent-history-snippet {
-      font-size: 0.67rem;
-      color: #cbd5e1;
-      margin-top: 3px;
-      background: rgba(0, 0, 0, 0.25);
-      padding: 2px 5px;
-      border-radius: 3px;
-      line-height: 1.25;
-      white-space: nowrap;
+      font-size: 0.68rem;
+      color: #e2e8f0;
+      margin-top: 4px;
+      background: rgba(15, 23, 42, 0.75);
+      border-left: 2px solid #f59e0b;
+      padding: 3px 6px;
+      border-radius: 4px;
+      line-height: 1.35;
+      white-space: normal;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      line-clamp: 2;
       overflow: hidden;
-      text-overflow: ellipsis;
+      word-break: break-word;
     }
     .agent-search-highlight {
-      background: rgba(245, 158, 11, 0.35);
+      background: rgba(245, 158, 11, 0.45);
       color: #fef08a;
-      padding: 0 2px;
-      border-radius: 2px;
+      padding: 1px 4px;
+      border-radius: 3px;
       font-weight: 700;
+      border-bottom: 1px solid #f59e0b;
+    }
+    .agent-search-hit-badge {
+      background: rgba(245, 158, 11, 0.22);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      font-size: 0.62rem;
+      font-weight: 700;
+      padding: 1px 5px;
+      border-radius: 8px;
+      margin-left: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .agent-timeline-match.active-match-focus {
+      background: #f59e0b !important;
+      color: #0f172a !important;
+      box-shadow: 0 0 12px #f59e0b, 0 0 20px rgba(245, 158, 11, 0.6) !important;
+      outline: 2px solid #ffffff;
+      border-radius: 2px;
+      animation: pulseMatch 1.5s infinite alternate;
+    }
+    @keyframes pulseMatch {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.06); }
+    }
+    .agent-timeline-search-bar {
+      position: sticky;
+      top: 0;
+      z-index: 60;
+      background: rgba(15, 23, 42, 0.96);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      border-radius: 6px;
+      padding: 6px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.76rem;
+      color: #fef08a;
+      margin: 0 0 10px 0;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+    }
+    .agent-timeline-search-bar .agent-search-nav-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      color: #f1f5f9;
+      border-radius: 4px;
+      padding: 2px 7px;
+      font-size: 0.72rem;
+      cursor: pointer;
+      margin-left: 4px;
+      transition: all 0.15s ease;
+    }
+    .agent-timeline-search-bar .agent-search-nav-btn:hover {
+      background: rgba(245, 158, 11, 0.25);
+      color: #fbbf24;
+      border-color: #f59e0b;
+    }
+    .agent-timeline-search-bar .agent-search-close-btn {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      font-size: 0.85rem;
+      padding: 2px 6px;
+      margin-left: 6px;
+    }
+    .agent-timeline-search-bar .agent-search-close-btn:hover {
+      color: #f43f5e;
     }
     .agent-history-delete-btn {
       background: none;
@@ -44761,6 +44837,9 @@
             });
           }
           updateHistoryUI(agentHistorySearchInput ? agentHistorySearchInput.value : '');
+          if (agentHistorySearchInput && agentHistorySearchInput.value) {
+            updateTimelineSearchHighlights(agentHistorySearchInput.value);
+          }
         }
         window.loadAgentChatSession = loadChatSession;
 
@@ -46105,6 +46184,199 @@
         if (btnAgentHistoryToggle) btnAgentHistoryToggle.onclick = () => toggleHistorySidebar();
         if (btnAgentNewChat) btnAgentNewChat.onclick = startNewChat;
 
+        
+      // Smart snippet extraction that never truncates the keyword in narrow sidebar cards
+      function extractSmartSnippet(text, query) {
+        if (!text || !query) return '';
+        const plain = text.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+        const qLower = query.toLowerCase();
+        const idx = plain.toLowerCase().indexOf(qLower);
+        if (idx === -1) return '';
+
+        // Find clean word boundary at most 8-12 characters before the match
+        let start = Math.max(0, idx - 10);
+        if (start > 0) {
+          const spaceIdx = plain.lastIndexOf(' ', idx);
+          if (spaceIdx !== -1 && spaceIdx >= idx - 12) {
+            start = spaceIdx + 1;
+          }
+        }
+
+        // Take up to 65 chars after the match
+        let end = Math.min(plain.length, idx + query.length + 55);
+        if (end < plain.length) {
+          const nextSpace = plain.indexOf(' ', end - 8);
+          if (nextSpace !== -1 && nextSpace <= end + 8) {
+            end = nextSpace;
+          }
+        }
+
+        let snippet = plain.substring(start, end);
+        if (start > 0) snippet = '...' + snippet;
+        if (end < plain.length) snippet = snippet + '...';
+        return snippet;
+      }
+
+      let currentTimelineMatchIndex = 0;
+      let totalTimelineMatches = 0;
+
+      function clearTimelineSearchHighlights() {
+        if (!agentChatMessages) return;
+        const marks = agentChatMessages.querySelectorAll('mark.agent-timeline-match');
+        marks.forEach(m => {
+          const parent = m.parentNode;
+          if (parent) {
+            parent.replaceChild(document.createTextNode(m.textContent), m);
+            parent.normalize();
+          }
+        });
+        const bar = document.getElementById('agentTimelineSearchBar');
+        if (bar) bar.remove();
+        totalTimelineMatches = 0;
+        currentTimelineMatchIndex = 0;
+      }
+
+      function updateTimelineSearchHighlights(query) {
+        clearTimelineSearchHighlights();
+        const q = String(query || '').trim();
+        if (!q || !agentChatMessages) return;
+
+        const qLower = q.toLowerCase();
+        const msgBodies = agentChatMessages.querySelectorAll('.agent-msg-body');
+        const textNodes = [];
+
+        msgBodies.forEach(body => {
+          const walker = document.createTreeWalker(body, NodeFilter.SHOW_TEXT, {
+            acceptNode(node) {
+              if (!node.nodeValue || !node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+              let parent = node.parentNode;
+              while (parent && parent !== body) {
+                if (parent.tagName === 'BUTTON' || parent.classList?.contains('agent-action-bar') || parent.classList?.contains('btn-msg-speak')) {
+                  return NodeFilter.FILTER_REJECT;
+                }
+                parent = parent.parentNode;
+              }
+              return node.nodeValue.toLowerCase().includes(qLower) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+            }
+          }, false);
+
+          while (walker.nextNode()) {
+            textNodes.push(walker.currentNode);
+          }
+        });
+
+        let matchId = 0;
+        const regex = new RegExp('(' + q.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&') + ')', 'gi');
+
+        textNodes.forEach(node => {
+          const parent = node.parentNode;
+          if (!parent) return;
+          const text = node.nodeValue;
+          const parts = text.split(regex);
+          const fragment = document.createDocumentFragment();
+
+          parts.forEach(part => {
+            if (part.toLowerCase() === qLower) {
+              matchId++;
+              const mark = document.createElement('mark');
+              mark.className = 'agent-search-highlight agent-timeline-match';
+              mark.id = 'agentTimelineMatch_' + matchId;
+              mark.dataset.matchIdx = String(matchId);
+              mark.textContent = part;
+              fragment.appendChild(mark);
+            } else if (part) {
+              fragment.appendChild(document.createTextNode(part));
+            }
+          });
+
+          parent.replaceChild(fragment, node);
+        });
+
+        totalTimelineMatches = matchId;
+        currentTimelineMatchIndex = 0;
+
+        // Render In-Chat Search Navigation Toolbar at top of messages container
+        let bar = document.getElementById('agentTimelineSearchBar');
+        if (!bar) {
+          bar = document.createElement('div');
+          bar.id = 'agentTimelineSearchBar';
+          bar.className = 'agent-timeline-search-bar';
+          agentChatMessages.insertBefore(bar, agentChatMessages.firstChild);
+        }
+
+        const sessions = typeof loadAllUserSessions === 'function' ? loadAllUserSessions() : [];
+        const otherSessionsWithHits = sessions.filter(s => {
+          if (s.id === currentSessionId) return false;
+          const plainAll = (s.title + ' ' + (s.messages || []).map(m => (m.html || '') + ' ' + (m.spoken || '')).join(' ')).toLowerCase();
+          return plainAll.includes(qLower);
+        });
+
+        if (totalTimelineMatches > 0) {
+          bar.innerHTML = `
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span>🎯</span>
+              <span id="agentSearchStatusText" style="font-weight:600;">1 von ${totalTimelineMatches} Treffern im Chat</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:4px;">
+              <button type="button" class="agent-search-nav-btn" onclick="window.navigateChatSearch(-1)" title="Vorheriger Treffer (Shift+Enter)">▲</button>
+              <button type="button" class="agent-search-nav-btn" onclick="window.navigateChatSearch(1)" title="Nächster Treffer (Enter)">▼</button>
+              <button type="button" class="agent-search-close-btn" onclick="window.clearChatSearch()" title="Suche schließen">✕</button>
+            </div>
+          `;
+
+          // Focus and scroll to match #1
+          const firstMatch = document.getElementById('agentTimelineMatch_1');
+          if (firstMatch) {
+            firstMatch.classList.add('active-match-focus');
+            setTimeout(() => {
+              firstMatch.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 100);
+          }
+        } else {
+          bar.innerHTML = `
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span>🔍</span>
+              <span>0 Treffer in diesem Chat ${otherSessionsWithHits.length > 0 ? ('• ' + otherSessionsWithHits.length + ' Chat(s) mit Treffern links') : ''}</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:4px;">
+              ${otherSessionsWithHits.length > 0 ? `<button type="button" class="agent-search-nav-btn" onclick="window.loadAgentChatSession('${otherSessionsWithHits[0].id}')" title="Zu Chat mit Treffern wechseln" style="color:#38bdf8;">Zu '${(otherSessionsWithHits[0].title || 'Chat').substring(0, 16)}...' ↗</button>` : ''}
+              <button type="button" class="agent-search-close-btn" onclick="window.clearChatSearch()" title="Suche schließen">✕</button>
+            </div>
+          `;
+        }
+      }
+
+      window.navigateChatSearch = function(direction) {
+        if (totalTimelineMatches === 0) return;
+        const prevEl = document.getElementById('agentTimelineMatch_' + (currentTimelineMatchIndex + 1));
+        if (prevEl) prevEl.classList.remove('active-match-focus');
+
+        currentTimelineMatchIndex = (currentTimelineMatchIndex + direction + totalTimelineMatches) % totalTimelineMatches;
+
+        const nextEl = document.getElementById('agentTimelineMatch_' + (currentTimelineMatchIndex + 1));
+        if (nextEl) {
+          nextEl.classList.add('active-match-focus');
+          nextEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        const statusEl = document.getElementById('agentSearchStatusText');
+        if (statusEl) {
+          statusEl.textContent = (currentTimelineMatchIndex + 1) + ' von ' + totalTimelineMatches + ' Treffern im Chat';
+        }
+      };
+
+      window.clearChatSearch = function() {
+        if (agentHistorySearchInput) {
+          agentHistorySearchInput.value = '';
+        }
+        if (btnAgentClearSearch) {
+          btnAgentClearSearch.style.display = 'none';
+        }
+        updateHistoryUI('');
+        clearTimelineSearchHighlights();
+      };
+
+
         function updateHistoryUI(filterQuery = '') {
           if (!agentHistorySessionsList) return;
           const sessions = loadAllUserSessions();
@@ -46133,35 +46405,57 @@
             avatarFallback.textContent = initial || 'U';
           }
 
-          if (agentHistoryCount) {
-            agentHistoryCount.textContent = sessions.length + (sessions.length === 1 ? ' Chat' : ' Chats');
-          }
-
           let filtered = [];
           if (!q) {
-            filtered = sessions.map(s => ({ session: s, snippet: '' }));
+            filtered = sessions.map(s => ({ session: s, snippet: '', matchCount: 0 }));
+            if (agentHistoryCount) {
+              agentHistoryCount.textContent = sessions.length + (sessions.length === 1 ? ' Chat' : ' Chats');
+              agentHistoryCount.style.color = '';
+              agentHistoryCount.style.fontWeight = '';
+            }
           } else {
+            let totalHitsAllChats = 0;
             sessions.forEach(s => {
               const titleMatch = (s.title || '').toLowerCase().includes(q);
-              let snippet = '';
+              let sessionHits = 0;
+              let bestSnippet = '';
+
+              if (titleMatch) {
+                sessionHits += 1;
+              }
+
               for (const m of (s.messages || [])) {
-                const plain = (m.isUser ? m.html : (m.spoken || m.html)).replace(/<[^>]*>/g, ' ');
-                const idx = plain.toLowerCase().indexOf(q);
+                const combined = ((m.html || '') + ' ' + (m.spoken || '')).replace(/<[^>]*>/g, ' ');
+                const idx = combined.toLowerCase().indexOf(q);
                 if (idx !== -1) {
-                  const start = Math.max(0, idx - 20);
-                  const end = Math.min(plain.length, idx + q.length + 30);
-                  snippet = (start > 0 ? '...' : '') + plain.substring(start, end) + (end < plain.length ? '...' : '');
-                  break;
+                  const occurrences = (combined.toLowerCase().match(new RegExp(q.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&'), 'g')) || []).length;
+                  sessionHits += occurrences;
+                  if (!bestSnippet) {
+                    bestSnippet = extractSmartSnippet(combined, q);
+                  }
                 }
               }
-              if (titleMatch || snippet) {
-                filtered.push({ session: s, snippet: snippet });
+
+              if (sessionHits > 0) {
+                totalHitsAllChats += sessionHits;
+                filtered.push({
+                  session: s,
+                  snippet: bestSnippet,
+                  matchCount: sessionHits
+                });
               }
             });
+
+            if (agentHistoryCount) {
+              agentHistoryCount.textContent = totalHitsAllChats + ' Treffer in ' + filtered.length + ' Chat' + (filtered.length === 1 ? '' : 's');
+              agentHistoryCount.style.color = '#f59e0b';
+              agentHistoryCount.style.fontWeight = '700';
+            }
           }
 
           if (filtered.length === 0) {
-            agentHistorySessionsList.innerHTML = '<div style="font-size:0.75rem; color:#64748b; padding:12px 6px; text-align:center;">' + (q ? 'Keine Treffer' : 'Noch keine Chats') + '</div>';
+            agentHistorySessionsList.innerHTML = '<div style="font-size:0.75rem; color:#64748b; padding:12px 6px; text-align:center;">' + (q ? 'Keine Treffer für "' + q + '"' : 'Noch keine Chats') + '</div>';
+            updateTimelineSearchHighlights(q);
             return;
           }
 
@@ -46190,6 +46484,7 @@
                 '<div class="agent-history-item-meta">' +
                   '<span>🕒 ' + timeStr + '</span>' +
                   '<span>💬 ' + msgCount + '</span>' +
+                  (q && item.matchCount ? '<span class="agent-search-hit-badge">🎯 ' + item.matchCount + ' Treffer</span>' : '') +
                 '</div>' +
                 (displaySnippet ? ('<div class="agent-history-snippet">' + displaySnippet + '</div>') : '') +
               '</div>' +
@@ -46198,6 +46493,9 @@
           });
 
           agentHistorySessionsList.innerHTML = listHtml;
+
+          // Also highlight occurrences inside the active chat timeline!
+          updateTimelineSearchHighlights(q);
         }
 
         // Search Input Events
@@ -46206,6 +46504,18 @@
             const val = agentHistorySearchInput.value;
             if (btnAgentClearSearch) btnAgentClearSearch.style.display = val ? 'block' : 'none';
             updateHistoryUI(val);
+          });
+          agentHistorySearchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              if (e.shiftKey) {
+                if (window.navigateChatSearch) window.navigateChatSearch(-1);
+              } else {
+                if (window.navigateChatSearch) window.navigateChatSearch(1);
+              }
+            } else if (e.key === 'Escape') {
+              if (window.clearChatSearch) window.clearChatSearch();
+            }
           });
         }
         if (btnAgentClearSearch) {
