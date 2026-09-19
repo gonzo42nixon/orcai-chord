@@ -4484,11 +4484,11 @@
       container-type: inline-size;
       container-name: popout;
       top: 50px;
-      left: calc(50vw - 480px);
-      width: 960px;
-      height: 680px;
-      min-width: 480px;
-      min-height: 380px;
+      left: calc(50vw - 240px);
+      width: 480px;
+      height: 340px;
+      min-width: 420px;
+      min-height: 280px;
       max-width: calc(100vw - 20px);
       max-height: calc(100vh - 20px);
       z-index: 10000;
@@ -4614,11 +4614,11 @@
       container-type: inline-size;
       container-name: popout;
       top: 55px;
-      left: calc(50vw - 460px);
-      width: 950px;
-      height: 680px;
-      min-width: 460px;
-      min-height: 340px;
+      left: calc(50vw - 230px);
+      width: 460px;
+      height: 340px;
+      min-width: 420px;
+      min-height: 280px;
       background: #090d16;
       border: 1px solid rgba(16, 185, 129, 0.45);
       border-radius: 12px;
@@ -19708,9 +19708,9 @@
       }
 
       const savedLeftW = parseInt(localStorage.getItem("heb_left_drawer_w") || "400");
-      const savedRightW = parseInt(localStorage.getItem("heb_right_drawer_w") || "480");
       if (savedLeftW) sidebarLeft.style.width = savedLeftW + "px";
-      if (savedRightW) sidebarRight.style.width = savedRightW + "px";
+      // Inspektor Drawer immer mit "M" wie Medium (480px) initialisieren
+      sidebarRight.style.width = "480px";
       updatePresetButtons();
 
       let isDraggingLeft = false;
@@ -19794,6 +19794,9 @@
           sidebarRight.classList.remove("collapsed");
           resizerRight.style.display = "block";
           btnReopenRight.style.display = "none";
+          // Inspektor Drawer immer mit "M" wie Medium (480px) öffnen
+          sidebarRight.style.width = "480px";
+          updatePresetButtons();
         }
       }
       window.toggleRightDrawer = toggleRightDrawer;
@@ -40860,28 +40863,23 @@
         const sH = window.innerHeight;
         const chromeH = 72; // ~44px header + 28px footer
 
-        const marginW = sW > 1200 ? 32 : 16;
-        const marginH = sH > 900 ? 36 : 20;
-        const maxBodyW = Math.max(560, sW - marginW);
-        const maxBodyH = Math.max(340, sH - marginH - chromeH);
+        // Pop-Outs zu BPMN und PlantUML immer möglichst klein öffnen (kompakt)
+        const compactModalW = type === 'bpmn' ? 460 : 480;
+        const compactModalH = 340;
 
-        // Calculate target body size adopting the exact aspect ratio of the diagram
-        let targetBodyW = Math.min(maxBodyW, Math.max(640, diagW + 36));
-        let targetBodyH = Math.round(targetBodyW / ar);
+        const targetModalW = Math.min(compactModalW, sW - 16);
+        const targetModalH = Math.min(compactModalH, sH - 24);
 
-        if (targetBodyH > maxBodyH) {
-          targetBodyH = maxBodyH;
-          targetBodyW = Math.round(targetBodyH * ar);
+        // Vorhandene Position beibehalten (z. B. bei Cascade-Offset) oder zentrieren
+        let targetLeft = parseInt(modal.style.left);
+        let targetTop = parseInt(modal.style.top);
+        if (isNaN(targetLeft) || isNaN(targetTop) || targetLeft <= 0 || targetTop <= 0) {
+          targetLeft = Math.max(10, Math.round((sW - targetModalW) / 2));
+          targetTop = Math.max(15, Math.round((sH - targetModalH) / 2));
+        } else {
+          targetLeft = Math.max(10, Math.min(sW - targetModalW - 10, targetLeft));
+          targetTop = Math.max(15, Math.min(sH - targetModalH - 10, targetTop));
         }
-
-        targetBodyW = Math.max(540, Math.min(maxBodyW, targetBodyW));
-        targetBodyH = Math.max(320, Math.min(maxBodyH, targetBodyH));
-
-        const targetModalW = targetBodyW;
-        const targetModalH = targetBodyH + chromeH;
-
-        const targetLeft = Math.max(8, Math.round((sW - targetModalW) / 2));
-        const targetTop = Math.max(12, Math.round((sH - targetModalH) / 2));
 
         modal.style.width = targetModalW + 'px';
         modal.style.height = targetModalH + 'px';
@@ -40998,15 +40996,16 @@
         } else {
           // 2. Create a brand new cascading floating popout for this process
           const existingCount = openPlantUmlPopouts.size;
-          const w = Math.min(940, window.innerWidth - 40);
-          const h = Math.min(680, window.innerHeight - 60);
+          // Pop-Out immer möglichst klein öffnen (kompakt: 480x340)
+          const w = Math.min(480, window.innerWidth - 30);
+          const h = Math.min(340, window.innerHeight - 40);
           const baseLeft = Math.max(20, Math.floor((window.innerWidth - w) / 2));
           const baseTop = Math.max(30, Math.floor((window.innerHeight - h) / 2));
-          const cascadeStep = 34;
+          const cascadeStep = 24;
           const offsetX = (existingCount % 8) * cascadeStep;
           const offsetY = (existingCount % 8) * cascadeStep;
-          const finalLeft = Math.max(10, Math.min(window.innerWidth - 120, baseLeft + offsetX));
-          const finalTop = Math.max(10, Math.min(window.innerHeight - 80, baseTop + offsetY));
+          const finalLeft = Math.max(10, Math.min(window.innerWidth - w - 10, baseLeft + offsetX));
+          const finalTop = Math.max(10, Math.min(window.innerHeight - h - 10, baseTop + offsetY));
 
           if (typeof popoutZIndexCounter === 'number') {
             popoutZIndexCounter++;
@@ -42876,15 +42875,16 @@
           modal = record.modal;
         } else {
           const existingCount = openBpmnPopouts.size;
-          const w = Math.min(960, window.innerWidth - 40);
-          const h = Math.min(680, window.innerHeight - 60);
-          const baseLeft = Math.max(20, Math.floor((window.innerWidth - w) / 2) + 30);
+          // Pop-Out immer möglichst klein öffnen (kompakt: 460x340)
+          const w = Math.min(460, window.innerWidth - 30);
+          const h = Math.min(340, window.innerHeight - 40);
+          const baseLeft = Math.max(20, Math.floor((window.innerWidth - w) / 2) + 20);
           const baseTop = Math.max(30, Math.floor((window.innerHeight - h) / 2) + 20);
-          const cascadeStep = 34;
+          const cascadeStep = 24;
           const offsetX = (existingCount % 8) * cascadeStep;
           const offsetY = (existingCount % 8) * cascadeStep;
-          const finalLeft = Math.max(10, Math.min(window.innerWidth - 120, baseLeft + offsetX));
-          const finalTop = Math.max(10, Math.min(window.innerHeight - 80, baseTop + offsetY));
+          const finalLeft = Math.max(10, Math.min(window.innerWidth - w - 10, baseLeft + offsetX));
+          const finalTop = Math.max(10, Math.min(window.innerHeight - h - 10, baseTop + offsetY));
 
           if (typeof popoutZIndexCounter === 'number') {
             popoutZIndexCounter++;
