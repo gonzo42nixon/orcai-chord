@@ -7074,6 +7074,232 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
+
+    /* ==========================================================================
+       EA-APP SETTINGS MODAL & LANDSCAPE PERSONALIZATION
+       ========================================================================== */
+    .ea-settings-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(4, 8, 16, 0.72);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 99990;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      animation: eaFadeIn 0.2s ease-out;
+    }
+    @keyframes eaFadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .ea-settings-modal {
+      width: 100%;
+      max-width: 640px;
+      max-height: 90vh;
+      background: rgba(15, 23, 42, 0.98);
+      border: 1px solid rgba(168, 85, 247, 0.35);
+      border-radius: 14px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75), 0 0 30px rgba(168, 85, 247, 0.15);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-sizing: border-box;
+      animation: eaModalPop 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes eaModalPop {
+      from { opacity: 0; transform: scale(0.96) translateY(10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    body.theme-day .ea-settings-modal {
+      background: #ffffff !important;
+      border: 1px solid #cbd5e1 !important;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.2) !important;
+      color: #0f172a !important;
+    }
+
+    .ea-settings-header {
+      padding: 12px 18px;
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.18), rgba(15, 23, 42, 0.8));
+      border-bottom: 1px solid rgba(168, 85, 247, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    body.theme-day .ea-settings-header {
+      background: linear-gradient(135deg, #ede9fe, #f8fafc) !important;
+      border-bottom: 1px solid #e2e8f0 !important;
+    }
+
+    .ea-settings-title {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .ea-settings-title-main {
+      font-size: 0.96rem;
+      font-weight: 700;
+      color: #f8fafc;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    body.theme-day .ea-settings-title-main {
+      color: #0f172a !important;
+    }
+    .ea-settings-title-sub {
+      font-size: 0.7rem;
+      color: #a855f7;
+      font-family: monospace;
+    }
+    body.theme-day .ea-settings-title-sub {
+      color: #7c3aed !important;
+    }
+
+    .ea-settings-close-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #cbd5e1;
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.88rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+    }
+    .ea-settings-close-btn:hover {
+      background: rgba(239, 68, 68, 0.2);
+      color: #f87171;
+      border-color: #ef4444;
+    }
+    body.theme-day .ea-settings-close-btn {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+      color: #475569;
+    }
+
+    .ea-settings-tabs {
+      display: flex;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 0 14px;
+      background: rgba(0, 0, 0, 0.15);
+      overflow-x: auto;
+      flex-shrink: 0;
+    }
+    body.theme-day .ea-settings-tabs {
+      background: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .ea-settings-tab-btn {
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      padding: 10px 14px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #94a3b8;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+    }
+    .ea-settings-tab-btn:hover {
+      color: #f1f5f9;
+    }
+    .ea-settings-tab-btn.active {
+      color: #38bdf8;
+      border-bottom-color: #38bdf8;
+    }
+    body.theme-day .ea-settings-tab-btn {
+      color: #64748b;
+    }
+    body.theme-day .ea-settings-tab-btn:hover {
+      color: #0f172a;
+    }
+    body.theme-day .ea-settings-tab-btn.active {
+      color: #7c3aed !important;
+      border-bottom-color: #7c3aed !important;
+    }
+
+    .ea-settings-body {
+      padding: 16px 20px;
+      overflow-y: auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .ea-settings-group {
+      background: rgba(30, 41, 59, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 10px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    body.theme-day .ea-settings-group {
+      background: #f8fafc !important;
+      border: 1px solid #e2e8f0 !important;
+    }
+
+    .ea-settings-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #e2e8f0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    body.theme-day .ea-settings-label {
+      color: #1e293b !important;
+    }
+
+    .ea-settings-footer {
+      padding: 12px 20px;
+      background: rgba(15, 23, 42, 0.9);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+    body.theme-day .ea-settings-footer {
+      background: #f8fafc !important;
+      border-top: 1px solid #e2e8f0 !important;
+    }
+
+    .ea-settings-save-btn {
+      background: linear-gradient(135deg, #0284c7, #2563eb);
+      border: 1px solid #38bdf8;
+      color: #ffffff;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 8px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 2px 10px rgba(2, 132, 199, 0.35);
+      transition: all 0.15s ease;
+    }
+    .ea-settings-save-btn:hover {
+      background: linear-gradient(135deg, #0369a1, #1d4ed8);
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.45);
+      transform: translateY(-1px);
+    }
+
 </style>
   <link rel="stylesheet" href="./mobile-agent-navigation.css?v=20260918-1">
 </head>
@@ -7127,6 +7353,13 @@
       </button>
 
       <!-- Google Firebase Account -->
+      <!-- EA App Settings Button (Gear) - Right next to Login (Gemini style) -->
+      <button class="header-action-btn" id="btnHeaderEaSettings" type="button" title="EA-App Einstellungen (Design, Landschaft, Hintergrund, ORCAI-Integration)" aria-label="EA-App Einstellungen öffnen" onclick="window.toggleEaSettingsModal()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width: 17px; height: 17px;">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+      </button>
       <div class="orcai-account" id="orcaiAccount" data-authenticated="false">
         <button class="orcai-account-trigger" id="orcaiAccountTrigger" type="button" aria-label="Mit Google anmelden" aria-haspopup="menu" aria-expanded="false" title="Mit Google anmelden">
           <img class="orcai-account-photo" id="orcaiAccountPhoto" alt="" hidden>
@@ -7394,6 +7627,8 @@
       
 
     <main class="canvas-container" id="canvasContainer">
+      <!-- EA Landscape Background Image Overlay (Supports ORCAI-ID) -->
+      <div class="ea-canvas-custom-overlay" id="eaCanvasCustomOverlay" style="position: absolute; inset: 0; pointer-events: none; background-size: cover; background-position: center; z-index: 1; opacity: 0.15; display: none; transition: opacity 0.3s ease, filter 0.3s ease;"></div>
 
       <!-- MIDDLEWARE RADAR CONTROL BAR (Top Centered inside Canvas) -->
       <div class="middleware-radar-bar" id="middlewareRadarBar">
@@ -46480,7 +46715,653 @@
         window.switchAgentSettingsTab('design');
       };
 
-      window.saveNewAgentLink = function() {
+      
+      /* =========================================================================
+         ORCAI EA-APP SETTINGS & ARCHITECTURE LANDSCAPE PERSONALIZATION STORE
+         ========================================================================= */
+      const DEFAULT_EA_SETTINGS = {
+        theme: 'night',
+        canvasBgColor: '',
+        canvasBgImage: '',
+        canvasBgImageKey: '',
+        canvasBgOpacity: 0.15,
+        canvasBgBlur: 0,
+        defaultLevel: '1',
+        defaultRadarDimension: 'system',
+        defaultOnlyActive: true,
+        particleAnimations: true,
+        savedEaLinks: [
+          { id: 'EA-LNK-01', title: 'FHIR R4 Ressourcen & Basisprofile', url: 'https://hl7.org/fhir/R4/', category: 'Interoperabilität', notes: 'Klinische Ressourcen-Spezifikation' },
+          { id: 'EA-LNK-02', title: 'IHE Deutschland - IT-Infrastruktur & XDS.b', url: 'https://www.ihe-d.de', category: 'Standards', notes: 'IHE Profile für elektronische Patientenakten' },
+          { id: 'EA-LNK-03', title: 'APQC Process Classification Framework Healthcare', url: 'https://www.apqc.org/pcf', category: 'Prozessmodelle', notes: 'Krankenhaus- und Versorgungs-Referenzprozesse' },
+          { id: 'EA-LNK-04', title: 'ORCAI Quad-Chord EA Repository', url: 'https://github.com/gonzo42nixon/orcai-chord', category: 'Architektur-Code', notes: 'Quellcode & EA-Modell des Quad-Chord Viewers' }
+        ],
+        githubEaRepos: [
+          { id: 'EA-REPO-01', repo: 'gonzo42nixon/orcai-chord', branch: 'main', description: 'ORCAI Quad-Chord EA Viewer & Architektur-Modell', isDefault: true },
+          { id: 'EA-REPO-02', repo: 'open-telecom-cloud/okf-cloud-ea', branch: 'main', description: 'Open Knowledge Framework EA Standards & Schemata', isDefault: false }
+        ]
+      };
+
+      class OrcaiEaSettingsStore {
+        static getStorageKey() {
+          let id = 'guest';
+          try {
+            if (typeof window.getActiveOrcaiIdentity === 'function') {
+              id = window.getActiveOrcaiIdentity().id;
+            } else if (typeof getActiveOrcaiIdentity === 'function') {
+              id = getActiveOrcaiIdentity().id;
+            }
+          } catch(e) {}
+          return 'orcai_ea_settings_' + id;
+        }
+
+        static getSettings() {
+          try {
+            const userKey = this.getStorageKey();
+            let raw = localStorage.getItem(userKey);
+            if (!raw) {
+              raw = localStorage.getItem('orcai_ea_settings_v1');
+            }
+            if (raw) {
+              const parsed = JSON.parse(raw);
+              return Object.assign({}, DEFAULT_EA_SETTINGS, parsed);
+            }
+          } catch (e) {}
+          return Object.assign({}, DEFAULT_EA_SETTINGS);
+        }
+
+        static saveSettings(patch) {
+          const current = this.getSettings();
+          const updated = Object.assign({}, current, patch);
+          let identity = { id: 'guest', name: 'Benutzer' };
+          try {
+            if (typeof window.getActiveOrcaiIdentity === 'function') {
+              identity = window.getActiveOrcaiIdentity();
+            }
+          } catch(e) {}
+
+          try {
+            const userKey = this.getStorageKey();
+            localStorage.setItem(userKey, JSON.stringify(updated));
+            localStorage.setItem('orcai_ea_settings_v1', JSON.stringify(updated));
+            localStorage.setItem('orcai_ea_active_settings', JSON.stringify(updated));
+
+            // Also synchronize with profile
+            const profileKey = 'orcai_profile_' + identity.id;
+            let profileRaw = localStorage.getItem(profileKey);
+            let profile = profileRaw ? JSON.parse(profileRaw) : { orcaiId: identity.id, name: identity.name };
+            profile.eaSettings = updated;
+            profile.lastSavedAt = new Date().toISOString();
+            localStorage.setItem(profileKey, JSON.stringify(profile));
+          } catch (e) {
+            console.warn('[OrcaiEaSettings] Error saving EA settings:', e);
+          }
+
+          this.applyToDOM(updated);
+          return updated;
+        }
+
+        static applyToDOM(settings) {
+          const s = settings || this.getSettings();
+          const canvas = document.getElementById('canvasContainer');
+          const overlay = document.getElementById('eaCanvasCustomOverlay');
+
+          // 1. Theme application
+          if (s.theme === 'day' && typeof window.applyEaTheme === 'function') {
+            window.applyEaTheme('day', true);
+          } else if (s.theme === 'night' && typeof window.applyEaTheme === 'function') {
+            window.applyEaTheme('night', true);
+          }
+
+          // 2. Canvas Background Color
+          if (canvas) {
+            if (s.canvasBgColor) {
+              canvas.style.setProperty('background', s.canvasBgColor, 'important');
+              document.documentElement.style.setProperty('--canvas-bg', s.canvasBgColor);
+              canvas.classList.add('ea-canvas-custom-bg');
+            } else {
+              canvas.style.removeProperty('background');
+              const isDay = document.body.classList.contains('theme-day');
+              const defaultCanvas = isDay ? 'radial-gradient(circle at center, #ffffff 0%, #f1f5f9 85%)' : 'radial-gradient(circle at center, rgba(17, 30, 56, 0.45) 0%, rgba(11, 15, 23, 1) 78%)';
+              document.documentElement.style.setProperty('--canvas-bg', defaultCanvas);
+              canvas.classList.remove('ea-canvas-custom-bg');
+            }
+          }
+
+          // 3. Canvas Background Image (Supports ORCAI-ID and URLs)
+          if (overlay) {
+            const rawKey = s.canvasBgImageKey || s.canvasBgImage;
+            if (rawKey) {
+              overlay.style.opacity = s.canvasBgOpacity !== undefined ? s.canvasBgOpacity : 0.15;
+              overlay.style.filter = 'blur(' + (s.canvasBgBlur || 0) + 'px)';
+              overlay.style.display = 'block';
+
+              if (typeof window.resolveOrcaiImageKey === 'function') {
+                window.resolveOrcaiImageKey(rawKey).then(resolvedUrl => {
+                  if (overlay && resolvedUrl) {
+                    overlay.style.backgroundImage = 'url("' + resolvedUrl + '")';
+                  }
+                }).catch(() => {
+                  if (overlay && s.canvasBgImage) {
+                    overlay.style.backgroundImage = 'url("' + s.canvasBgImage + '")';
+                  }
+                });
+              } else if (s.canvasBgImage) {
+                overlay.style.backgroundImage = 'url("' + s.canvasBgImage + '")';
+              }
+            } else {
+              overlay.style.display = 'none';
+            }
+          }
+
+          // 4. Radar Dimension Default
+          if (s.defaultRadarDimension) {
+            const radarSel = document.getElementById('radarDimension');
+            if (radarSel && radarSel.value !== s.defaultRadarDimension) {
+              radarSel.value = s.defaultRadarDimension;
+              radarSel.dispatchEvent(new Event('change'));
+            }
+          }
+        }
+      }
+      window.OrcaiEaSettings = OrcaiEaSettingsStore;
+
+      // Auto-apply EA settings on load
+      setTimeout(() => {
+        try { OrcaiEaSettingsStore.applyToDOM(); } catch(e) {}
+      }, 100);
+
+      /* =========================================================================
+         EA SETTINGS MODAL UI CONTROLLER
+         ========================================================================= */
+
+      window.toggleEaSettingsModal = function(forceOpen) {
+        let modalBackdrop = document.getElementById('eaSettingsBackdrop');
+        if (modalBackdrop && forceOpen !== true) {
+          modalBackdrop.remove();
+          return;
+        }
+
+        if (modalBackdrop) modalBackdrop.remove();
+
+        const settings = OrcaiEaSettingsStore.getSettings();
+        let identity = { id: 'guest', name: 'Benutzer' };
+        try {
+          if (typeof window.getActiveOrcaiIdentity === 'function') {
+            identity = window.getActiveOrcaiIdentity();
+          }
+        } catch(e) {}
+
+        modalBackdrop = document.createElement('div');
+        modalBackdrop.id = 'eaSettingsBackdrop';
+        modalBackdrop.className = 'ea-settings-backdrop';
+        modalBackdrop.onclick = function(e) {
+          if (e.target === modalBackdrop) window.toggleEaSettingsModal(false);
+        };
+
+        modalBackdrop.innerHTML = `
+          <div class="ea-settings-modal" onclick="event.stopPropagation()">
+            <!-- Modal Header -->
+            <div class="ea-settings-header">
+              <div class="ea-settings-title">
+                <div class="ea-settings-title-main">
+                  <span>⚙️ EA-App Einstellungen &amp; Landschaft</span>
+                </div>
+                <div class="ea-settings-title-sub">https://orcai-54321.web.app/ea</div>
+              </div>
+              <button class="ea-settings-close-btn" onclick="window.toggleEaSettingsModal(false)" title="Schließen (ESC)">✕</button>
+            </div>
+
+            <!-- Identity Banner -->
+            <div style="padding: 12px 18px 0 18px;">
+              <div class="agent-settings-identity-banner">
+                <div class="agent-settings-identity-avatar">
+                  ${identity.photoURL ? ('<img src="' + identity.photoURL + '" alt="' + identity.name + '">') : ('<span>' + (identity.name || 'U').charAt(0).toUpperCase() + '</span>')}
+                </div>
+                <div class="agent-settings-identity-info">
+                  <div class="agent-settings-identity-name-row">
+                    <strong>${identity.name}</strong>
+                    <span class="agent-settings-auth-badge ${identity.isLoggedIn ? 'active' : ''}">${identity.isLoggedIn ? '● Google Login' : '○ Gast-Sitzung'}</span>
+                  </div>
+                  <div class="agent-settings-id-row" style="display:flex; align-items:center; gap:8px; margin-top:4px; flex-wrap:wrap;">
+                    <span style="color:#94a3b8; font-size:0.68rem; font-weight:600;">ORCAI-ID:</span>
+                    <span class="agent-settings-id-badge" style="font-family:monospace; font-size:0.72rem; background:rgba(0,0,0,0.25); border:1px solid rgba(56,189,248,0.35); border-radius:4px; padding:2px 7px; color:#38bdf8; word-break:break-all;">${identity.id}</span>
+                    <button type="button" class="agent-settings-btn-option" id="btnCopyEaOrcaiId" onclick="window.copyOrcaiIdFromSettings()" style="padding:2px 8px !important; font-size:0.68rem !important; height:24px;" title="ORCAI-ID kopieren">
+                      📋 Kopieren
+                    </button>
+                    ${identity.isLoggedIn ? '<button type="button" class="agent-settings-btn-option" onclick="window.openOrcaiAccountDetails()" style="padding:2px 8px !important; font-size:0.68rem !important; height:24px;" title="Google-Konto öffnen">👤 Konto</button>' : ''}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="ea-settings-tabs" style="margin-top:10px;">
+              <button class="ea-settings-tab-btn active" onclick="window.switchEaSettingsTab('design')">🎨 Design &amp; Landschaft</button>
+              <button class="ea-settings-tab-btn" onclick="window.switchEaSettingsTab('views')">📐 Ansichten &amp; Modell</button>
+              <button class="ea-settings-tab-btn" onclick="window.switchEaSettingsTab('links')">🔗 EA-Ressourcen</button>
+              <button class="ea-settings-tab-btn" onclick="window.switchEaSettingsTab('repos')">🐙 GitHub OKF Repos</button>
+            </div>
+
+            <!-- Body -->
+            <div class="ea-settings-body" id="eaSettingsBody">
+              <!-- Dynamic Content -->
+            </div>
+
+            <!-- Footer -->
+            <div class="ea-settings-footer">
+              <div class="agent-settings-status" id="eaSettingsStatusText"></div>
+              <button type="button" class="ea-settings-save-btn" id="btnSaveEaSettingsAll" onclick="window.saveAllEaSettingsFromUi()">
+                💾 EA-Einstellungen speichern
+              </button>
+            </div>
+          </div>
+        `;
+
+        document.body.appendChild(modalBackdrop);
+        window.switchEaSettingsTab('design');
+      };
+
+      window.switchEaSettingsTab = function(tabName) {
+        const body = document.getElementById('eaSettingsBody');
+        const tabBtns = document.querySelectorAll('.ea-settings-tab-btn');
+        if (!body) return;
+
+        tabBtns.forEach(btn => {
+          btn.classList.toggle('active', btn.textContent.toLowerCase().includes(tabName));
+        });
+
+        const settings = OrcaiEaSettingsStore.getSettings();
+        const isDay = document.body.classList.contains('theme-day') || settings.theme === 'day';
+
+        if (tabName === 'design') {
+          const currentImgVal = settings.canvasBgImageKey || settings.canvasBgImage || '';
+          body.innerHTML = `
+            <div class="ea-settings-group">
+              <label class="ea-settings-label">Erscheinungsbild der EA-App (Day / Night Mode)</label>
+              <div style="display:flex; gap:8px;">
+                <button type="button" class="agent-settings-btn-option ${!isDay ? 'active' : ''}" style="flex:1;" onclick="window.setEaThemeMode('night')">🌙 Night Mode (Dunkel)</button>
+                <button type="button" class="agent-settings-btn-option ${isDay ? 'active' : ''}" style="flex:1;" onclick="window.setEaThemeMode('day')">☀️ Day Mode (Hell)</button>
+              </div>
+            </div>
+
+            <div class="ea-settings-group">
+              <label class="ea-settings-label">Hintergrundfarbe der EA-Zeichenfläche (Canvas / Landschaft)</label>
+              <div style="display:flex; align-items:center; gap:10px;">
+                <input type="color" id="eaCanvasBgColorPicker" value="${settings.canvasBgColor || (isDay ? '#ffffff' : '#0b0f17')}" oninput="window.previewEaBgColor(this.value)" onchange="window.previewEaBgColor(this.value)" style="width:40px; height:34px; border:none; background:none; cursor:pointer; border-radius:6px;">
+                <input type="text" id="eaCanvasBgColorText" value="${settings.canvasBgColor || ''}" placeholder="${isDay ? '#ffffff' : '#0b0f17'}" class="agent-settings-input" style="font-family:monospace; width:120px;" oninput="window.previewEaBgColor(this.value)" onchange="window.previewEaBgColor(this.value)">
+                <button type="button" class="agent-settings-btn-option" onclick="window.previewEaBgColor('')" title="Standard-Verlauf wiederherstellen">Standard</button>
+              </div>
+              <div class="agent-color-presets" style="margin-top:8px;">
+                <span style="font-size:0.72rem; color:#94a3b8; margin-right:6px;">Presets:</span>
+                <button type="button" class="agent-color-chip ${settings.canvasBgColor === '#0b0f17' ? 'active' : ''}" style="background:#0b0f17;" onclick="window.previewEaBgColor('#0b0f17')" title="Enterprise Deep Obsidian"></button>
+                <button type="button" class="agent-color-chip ${settings.canvasBgColor === '#0f172a' ? 'active' : ''}" style="background:#0f172a;" onclick="window.previewEaBgColor('#0f172a')" title="Cloud Slate"></button>
+                <button type="button" class="agent-color-chip ${settings.canvasBgColor === '#0a192f' ? 'active' : ''}" style="background:#0a192f;" onclick="window.previewEaBgColor('#0a192f')" title="Hospital Navy"></button>
+                <button type="button" class="agent-color-chip ${settings.canvasBgColor === '#172554' ? 'active' : ''}" style="background:#172554;" onclick="window.previewEaBgColor('#172554')" title="Blueprint Navy"></button>
+                <button type="button" class="agent-color-chip ${settings.canvasBgColor === '#064e3b' ? 'active' : ''}" style="background:#064e3b;" onclick="window.previewEaBgColor('#064e3b')" title="Emerald Matrix"></button>
+                <button type="button" class="agent-color-chip ${settings.canvasBgColor === '#f8fafc' ? 'active' : ''}" style="background:#f8fafc;" onclick="window.previewEaBgColor('#f8fafc')" title="Architect Light"></button>
+              </div>
+
+              <!-- Live Preview Bar -->
+              <div class="agent-color-preview-box" id="eaCanvasColorPreviewBox" style="background:${settings.canvasBgColor || (isDay ? '#ffffff' : '#0b0f17')}; height:32px; border-radius:6px; border:1px solid rgba(255,255,255,0.25); display:flex; align-items:center; justify-content:center; color:${isDay ? '#0f172a' : '#ffffff'}; font-size:0.75rem; font-weight:600; text-shadow:0 1px 2px rgba(0,0,0,0.5); margin-top:8px; box-shadow:inset 0 0 10px rgba(0,0,0,0.2);">
+                Live-Vorschau Landschaft: ${settings.canvasBgColor || (isDay ? 'Standard Hell (#ffffff / #f1f5f9)' : 'Standard Radial-Verlauf (#0b0f17)')}
+              </div>
+            </div>
+
+            <div class="ea-settings-group">
+              <label class="ea-settings-label">Hintergrundbild der EA-Landschaft (ORCAI-ID oder Bild-URL)</label>
+              <div style="display:flex; gap:6px; align-items:center;">
+                <input type="text" id="eaCanvasBgImageUrl" class="agent-settings-input" placeholder="ORCAI-ID (z. B. ORCAI-260826-21H12-IMAGE-WGETM) oder URL" value="${currentImgVal}" onchange="window.previewEaBgImage(this.value)" style="flex:1;">
+                <button type="button" class="agent-settings-btn-option" onclick="window.previewEaBgImage(document.getElementById('eaCanvasBgImageUrl').value)" title="Bild oder ORCAI-ID laden">🔍 Laden</button>
+              </div>
+              <div id="eaCanvasBgImageStatus" style="font-size:0.72rem; margin-top:4px;">
+                ${currentImgVal ? ('<span style="color:#10b981;">✓ Aktiv: <code style="color:#38bdf8;">' + currentImgVal + '</code></span>') : '<span style="color:#94a3b8;">Kein Hintergrundbild aktiv.</span>'}
+              </div>
+
+              <div style="display:flex; align-items:center; gap:8px; margin-top:6px;">
+                <span style="font-size:0.72rem; color:#94a3b8; width:70px;">Deckkraft:</span>
+                <input type="range" id="eaCanvasBgOpacityRange" min="0" max="0.4" step="0.02" value="${settings.canvasBgOpacity !== undefined ? settings.canvasBgOpacity : 0.15}" style="flex:1;" oninput="window.previewEaBgOpacity(this.value)">
+                <span id="eaCanvasBgOpacityVal" style="font-size:0.72rem; color:#f8fafc; font-family:monospace; width:40px; text-align:right;">${Math.round((settings.canvasBgOpacity !== undefined ? settings.canvasBgOpacity : 0.15) * 100)}%</span>
+              </div>
+
+              <div style="display:flex; align-items:center; gap:8px; margin-top:4px;">
+                <span style="font-size:0.72rem; color:#94a3b8; width:70px;">Weichzeichner:</span>
+                <input type="range" id="eaCanvasBgBlurRange" min="0" max="10" step="1" value="${settings.canvasBgBlur || 0}" style="flex:1;" oninput="window.previewEaBgBlur(this.value)">
+                <span id="eaCanvasBgBlurVal" style="font-size:0.72rem; color:#f8fafc; font-family:monospace; width:40px; text-align:right;">${settings.canvasBgBlur || 0}px</span>
+              </div>
+
+              <div style="margin-top:8px;">
+                <div style="font-size:0.68rem; color:#94a3b8; margin-bottom:4px; font-weight:600;">ORCAI-Bilder &amp; Presets für die Landschaft:</div>
+                <div style="display:flex; flex-wrap:wrap; gap:6px;">
+                  <button type="button" class="agent-settings-btn-option" onclick="window.previewEaBgImage('ORCAI-260826-21H12-IMAGE-WGETM')" title="ORCAI Bild WGETM">🐳 ORCAI: WGETM</button>
+                  <button type="button" class="agent-settings-btn-option" onclick="window.previewEaBgImage('ORCAI-260907-23H47-IMAGE-EB3EB')" title="ORCAI Bild EB3EB">✨ ORCAI: EB3EB</button>
+                  <button type="button" class="agent-settings-btn-option" onclick="window.previewEaBgImage('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1400&q=80')">Blueprint Grid</button>
+                  <button type="button" class="agent-settings-btn-option" onclick="window.previewEaBgImage('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1400&q=80')">Network Cloud</button>
+                  <button type="button" class="agent-settings-btn-option" onclick="window.previewEaBgImage('')">Kein Bild</button>
+                </div>
+              </div>
+            </div>
+          `;
+        } else if (tabName === 'views') {
+          body.innerHTML = `
+            <div class="ea-settings-group">
+              <label class="ea-settings-label">Standard-Architekturstufe beim Start</label>
+              <select id="eaSettingDefaultLevel" class="agent-settings-input">
+                <option value="1" ${settings.defaultLevel === '1' ? 'selected' : ''}>Stufe 1 (Wurzel - 6 Domänen D1 bis D6)</option>
+                <option value="2" ${settings.defaultLevel === '2' ? 'selected' : ''}>Stufe 2 (Prozess-Cluster &amp; Fachprozesse)</option>
+                <option value="3" ${settings.defaultLevel === '3' ? 'selected' : ''}>Stufe 3 (End-to-End Integrationen &amp; Fachpfade)</option>
+                <option value="4" ${settings.defaultLevel === '4' ? 'selected' : ''}>Stufe 4 (Verbindungen &amp; Technische Schnittstellen)</option>
+              </select>
+            </div>
+
+            <div class="ea-settings-group">
+              <label class="ea-settings-label">Standard Middleware-Radar Dimension</label>
+              <select id="eaSettingDefaultRadar" class="agent-settings-input">
+                <option value="system" ${settings.defaultRadarDimension === 'system' ? 'selected' : ''}>System (Beteiligte Fachsysteme)</option>
+                <option value="domain" ${settings.defaultRadarDimension === 'domain' ? 'selected' : ''}>Domäne (Architektur-Domänen D1-D6)</option>
+                <option value="osi" ${settings.defaultRadarDimension === 'osi' ? 'selected' : ''}>OSI-Schicht (L1 bis L7)</option>
+                <option value="msgType" ${settings.defaultRadarDimension === 'msgType' ? 'selected' : ''}>Nachrichtentyp (HL7, FHIR, REST, B2B)</option>
+              </select>
+            </div>
+
+            <div class="ea-settings-group">
+              <label class="ea-settings-label">Filter- &amp; Performance-Optionen</label>
+              <label style="display:flex; align-items:center; gap:8px; font-size:0.75rem; color:#f1f5f9; cursor:pointer;">
+                <input type="checkbox" id="eaSettingOnlyActive" ${settings.defaultOnlyActive ? 'checked' : ''}>
+                <span>Standardmäßig nur aktive Verbindungen &amp; Domänen einblenden</span>
+              </label>
+              <label style="display:flex; align-items:center; gap:8px; font-size:0.75rem; color:#f1f5f9; cursor:pointer; margin-top:6px;">
+                <input type="checkbox" id="eaSettingParticleAnim" ${settings.particleAnimations ? 'checked' : ''}>
+                <span>Fließende Chord-Partikel &amp; Animations-Glow aktivieren (hohe visuelle Dynamik)</span>
+              </label>
+            </div>
+          `;
+        } else if (tabName === 'links') {
+          let linksHtml = '';
+          (settings.savedEaLinks || []).forEach((l, idx) => {
+            linksHtml += `
+              <div class="agent-link-item">
+                <div class="agent-link-info">
+                  <div class="agent-link-title">${l.title}</div>
+                  <a href="${l.url}" target="_blank" rel="noopener noreferrer" class="agent-link-url">${l.url}</a>
+                  <div class="agent-link-category">${l.category || 'Allgemein'}</div>
+                </div>
+                <button type="button" class="agent-link-delete" onclick="window.deleteEaLink('${l.id || idx}')" title="Link entfernen">🗑️</button>
+              </div>
+            `;
+          });
+          body.innerHTML = `
+            <div class="ea-settings-group">
+              <label class="ea-settings-label">Neuen Architektur-Standard / EA-Link hinterlegen</label>
+              <div style="display:flex; flex-direction:column; gap:6px;">
+                <input type="text" id="newEaLinkTitle" class="agent-settings-input" placeholder="Titel (z. B. Diakonie IT-Bebauungsplan 2026)">
+                <input type="url" id="newEaLinkUrl" class="agent-settings-input" placeholder="https://...">
+                <div style="display:flex; gap:6px;">
+                  <select id="newEaLinkCat" class="agent-settings-input" style="flex:1;">
+                    <option value="Interoperabilität">Interoperabilität &amp; Schnittstellen</option>
+                    <option value="Standards">Standards (FHIR, HL7, IHE)</option>
+                    <option value="Prozessmodelle">Prozessmodelle &amp; APQC</option>
+                    <option value="Sicherheit">Sicherheit &amp; BSI KRITIS</option>
+                    <option value="Architektur-Code">Architektur-Code &amp; Repos</option>
+                  </select>
+                  <button type="button" class="agent-settings-btn-option" onclick="window.saveNewEaLink()">+ Link hinzufügen</button>
+                </div>
+              </div>
+            </div>
+            <div class="ea-settings-group">
+              <label class="ea-settings-label">Gespeicherte EA-Ressourcen (${(settings.savedEaLinks || []).length})</label>
+              <div class="agent-links-list">
+                ${linksHtml || '<div style="color:#64748b; font-size:0.75rem;">Noch keine Architektur-Links hinterlegt.</div>'}
+              </div>
+            </div>
+          `;
+        } else if (tabName === 'repos') {
+          let reposHtml = '';
+          (settings.githubEaRepos || []).forEach((r, idx) => {
+            reposHtml += `
+              <div class="agent-link-item">
+                <div class="agent-link-info">
+                  <div class="agent-link-title">${r.repo} <span style="font-size:0.68rem; color:#38bdf8;">(${r.branch || 'main'})</span></div>
+                  <div style="font-size:0.72rem; color:#94a3b8;">${r.description || 'Keine Beschreibung'}</div>
+                </div>
+                <button type="button" class="agent-link-delete" onclick="window.deleteEaRepo('${r.id || idx}')" title="Repo entfernen">🗑️</button>
+              </div>
+            `;
+          });
+          body.innerHTML = `
+            <div class="ea-settings-group">
+              <label class="ea-settings-label">Externes Architektur-Repository (GitHub OKF) verknüpfen</label>
+              <div style="display:flex; flex-direction:column; gap:6px;">
+                <input type="text" id="newEaRepoPath" class="agent-settings-input" placeholder="owner/repo (z. B. gonzo42nixon/orcai-chord)">
+                <div style="display:flex; gap:6px;">
+                  <input type="text" id="newEaRepoBranch" class="agent-settings-input" placeholder="Branch" value="main" style="width:120px;">
+                  <input type="text" id="newEaRepoDesc" class="agent-settings-input" placeholder="Beschreibung" style="flex:1;">
+                  <button type="button" class="agent-settings-btn-option" onclick="window.saveNewEaRepo()">+ OKF Repo</button>
+                </div>
+              </div>
+            </div>
+            <div class="ea-settings-group">
+              <label class="ea-settings-label">Verknüpfte OKF-Repositories (${(settings.githubEaRepos || []).length})</label>
+              <div class="agent-links-list">
+                ${reposHtml || '<div style="color:#64748b; font-size:0.75rem;">Noch keine Repositories hinterlegt.</div>'}
+              </div>
+            </div>
+          `;
+        }
+      };
+
+      window.setEaThemeMode = function(mode) {
+        if (typeof window.applyEaTheme === 'function') {
+          window.applyEaTheme(mode, true);
+        }
+        OrcaiEaSettingsStore.saveSettings({ theme: mode });
+        window.switchEaSettingsTab('design');
+      };
+
+      window.previewEaBgColor = function(color) {
+        let finalColor = (color || '').trim();
+        if (finalColor && !finalColor.startsWith('#') && /^[0-9a-fA-F]{6}$/.test(finalColor)) {
+          finalColor = '#' + finalColor;
+        }
+        const picker = document.getElementById('eaCanvasBgColorPicker');
+        const text = document.getElementById('eaCanvasBgColorText');
+        const previewBox = document.getElementById('eaCanvasColorPreviewBox');
+        if (picker && finalColor && finalColor.startsWith('#')) picker.value = finalColor;
+        if (text) text.value = finalColor;
+        if (previewBox) {
+          previewBox.style.backgroundColor = finalColor || '#0b0f17';
+          previewBox.textContent = 'Live-Vorschau Landschaft: ' + (finalColor || 'Standard Radial-Verlauf');
+        }
+
+        OrcaiEaSettingsStore.saveSettings({ canvasBgColor: finalColor });
+
+        document.querySelectorAll('.agent-color-chip').forEach(chip => {
+          chip.classList.toggle('active', chip.getAttribute('onclick')?.includes(finalColor));
+        });
+      };
+
+      window.previewEaBgImage = function(keyOrUrl) {
+        const inp = document.getElementById('eaCanvasBgImageUrl');
+        if (inp) inp.value = keyOrUrl;
+        const statusEl = document.getElementById('eaCanvasBgImageStatus');
+        const opacityEl = document.getElementById('eaCanvasBgOpacityRange');
+        const blurEl = document.getElementById('eaCanvasBgBlurRange');
+        const opacity = opacityEl ? parseFloat(opacityEl.value) : 0.15;
+        const blur = blurEl ? parseInt(blurEl.value) : 0;
+
+        if (!keyOrUrl) {
+          if (statusEl) statusEl.innerHTML = '<span style="color:#94a3b8;">Kein Hintergrundbild aktiv.</span>';
+          OrcaiEaSettingsStore.saveSettings({ canvasBgImage: '', canvasBgImageKey: '', canvasBgOpacity: opacity, canvasBgBlur: blur });
+          return;
+        }
+
+        if (statusEl) statusEl.innerHTML = '<span style="color:#f59e0b;">⏳ Löse Bild / ORCAI-ID auf...</span>';
+
+        if (typeof window.resolveOrcaiImageKey === 'function') {
+          window.resolveOrcaiImageKey(keyOrUrl).then(resolvedUrl => {
+            if (statusEl) {
+              statusEl.innerHTML = '<span style="color:#10b981;">✓ Aktiv: <code style="color:#38bdf8;">' + keyOrUrl + '</code></span>';
+            }
+            OrcaiEaSettingsStore.saveSettings({ canvasBgImage: resolvedUrl, canvasBgImageKey: keyOrUrl, canvasBgOpacity: opacity, canvasBgBlur: blur });
+          }).catch(err => {
+            if (statusEl) statusEl.innerHTML = '<span style="color:#ef4444;">✕ Konnte Bild nicht laden</span>';
+          });
+        }
+      };
+
+      window.previewEaBgOpacity = function(val) {
+        const num = parseFloat(val);
+        const lbl = document.getElementById('eaCanvasBgOpacityVal');
+        if (lbl) lbl.textContent = Math.round(num * 100) + '%';
+        const inp = document.getElementById('eaCanvasBgImageUrl');
+        const keyOrUrl = inp ? inp.value.trim() : '';
+        const current = OrcaiEaSettingsStore.getSettings();
+        const merged = Object.assign({}, current, { canvasBgImageKey: keyOrUrl, canvasBgOpacity: num });
+        OrcaiEaSettingsStore.applyToDOM(merged);
+      };
+
+      window.previewEaBgBlur = function(val) {
+        const num = parseInt(val) || 0;
+        const lbl = document.getElementById('eaCanvasBgBlurVal');
+        if (lbl) lbl.textContent = num + 'px';
+        const inp = document.getElementById('eaCanvasBgImageUrl');
+        const keyOrUrl = inp ? inp.value.trim() : '';
+        const current = OrcaiEaSettingsStore.getSettings();
+        const merged = Object.assign({}, current, { canvasBgImageKey: keyOrUrl, canvasBgBlur: num });
+        OrcaiEaSettingsStore.applyToDOM(merged);
+      };
+
+      window.saveAllEaSettingsFromUi = function() {
+        const current = OrcaiEaSettingsStore.getSettings();
+        const patch = {};
+
+        const colorText = document.getElementById('eaCanvasBgColorText');
+        const colorPicker = document.getElementById('eaCanvasBgColorPicker');
+        if (colorText || colorPicker) {
+          let canvasBgColor = (colorText && colorText.value.trim()) || (colorPicker && colorPicker.value.trim()) || '';
+          if (canvasBgColor && !canvasBgColor.startsWith('#') && /^[0-9a-fA-F]{6}$/.test(canvasBgColor)) {
+            canvasBgColor = '#' + canvasBgColor;
+          }
+          patch.canvasBgColor = canvasBgColor;
+        }
+
+        const bgImgInp = document.getElementById('eaCanvasBgImageUrl');
+        if (bgImgInp) {
+          patch.canvasBgImageKey = bgImgInp.value.trim();
+        }
+
+        const opacityEl = document.getElementById('eaCanvasBgOpacityRange');
+        if (opacityEl) patch.canvasBgOpacity = parseFloat(opacityEl.value);
+
+        const blurEl = document.getElementById('eaCanvasBgBlurRange');
+        if (blurEl) patch.canvasBgBlur = parseInt(blurEl.value) || 0;
+
+        const levelEl = document.getElementById('eaSettingDefaultLevel');
+        if (levelEl) patch.defaultLevel = levelEl.value;
+
+        const radarEl = document.getElementById('eaSettingDefaultRadar');
+        if (radarEl) patch.defaultRadarDimension = radarEl.value;
+
+        const onlyActiveEl = document.getElementById('eaSettingOnlyActive');
+        if (onlyActiveEl) patch.defaultOnlyActive = onlyActiveEl.checked;
+
+        const particleEl = document.getElementById('eaSettingParticleAnim');
+        if (particleEl) patch.particleAnimations = particleEl.checked;
+
+        patch.theme = document.body.classList.contains('theme-day') ? 'day' : 'night';
+
+        const rawImg = patch.canvasBgImageKey !== undefined ? patch.canvasBgImageKey : (current.canvasBgImageKey || current.canvasBgImage);
+
+        if (rawImg && typeof window.resolveOrcaiImageKey === 'function') {
+          window.resolveOrcaiImageKey(rawImg).then(resolvedUrl => {
+            patch.canvasBgImage = resolvedUrl;
+            finishSave(patch);
+          }).catch(() => finishSave(patch));
+        } else {
+          finishSave(patch);
+        }
+
+        function finishSave(p) {
+          const updated = OrcaiEaSettingsStore.saveSettings(p);
+
+          const statusEl = document.getElementById('eaSettingsStatusText');
+          const btnSave = document.getElementById('btnSaveEaSettingsAll');
+          let identity = { id: 'guest', name: 'Benutzer' };
+          try {
+            if (typeof window.getActiveOrcaiIdentity === 'function') {
+              identity = window.getActiveOrcaiIdentity();
+            }
+          } catch(e) {}
+
+          if (statusEl) {
+            statusEl.innerHTML = '✓ EA-Einstellungen gespeichert für: <code style="color:#38bdf8;">' + identity.id + '</code>';
+          }
+          if (btnSave) {
+            btnSave.innerHTML = '✓ Gespeichert!';
+            btnSave.classList.add('saved-success');
+            setTimeout(() => {
+              btnSave.innerHTML = '💾 EA-Einstellungen speichern';
+              btnSave.classList.remove('saved-success');
+            }, 2500);
+          }
+          if (typeof window.showAgentToast === 'function') {
+            window.showAgentToast('✓ EA-App Einstellungen erfolgreich gespeichert!');
+          }
+        }
+      };
+
+      window.saveNewEaLink = function() {
+        const titleEl = document.getElementById('newEaLinkTitle');
+        const urlEl = document.getElementById('newEaLinkUrl');
+        const catEl = document.getElementById('newEaLinkCat');
+        if (!titleEl || !urlEl || !urlEl.value.trim()) return;
+
+        const settings = OrcaiEaSettingsStore.getSettings();
+        const links = settings.savedEaLinks || [];
+        links.push({
+          id: 'EA-LNK-' + String(links.length + 1).padStart(2, '0'),
+          title: titleEl.value.trim() || 'Link',
+          url: urlEl.value.trim(),
+          category: catEl?.value.trim() || 'Standards'
+        });
+        OrcaiEaSettingsStore.saveSettings({ savedEaLinks: links });
+        window.switchEaSettingsTab('links');
+      };
+
+      window.deleteEaLink = function(linkId) {
+        const settings = OrcaiEaSettingsStore.getSettings();
+        const links = (settings.savedEaLinks || []).filter(l => l.id !== linkId);
+        OrcaiEaSettingsStore.saveSettings({ savedEaLinks: links });
+        window.switchEaSettingsTab('links');
+      };
+
+      window.saveNewEaRepo = function() {
+        const pathEl = document.getElementById('newEaRepoPath');
+        const branchEl = document.getElementById('newEaRepoBranch');
+        const descEl = document.getElementById('newEaRepoDesc');
+        if (!pathEl || !pathEl.value.trim()) return;
+
+        const settings = OrcaiEaSettingsStore.getSettings();
+        const repos = settings.githubEaRepos || [];
+        repos.push({
+          id: 'EA-REPO-' + String(repos.length + 1).padStart(2, '0'),
+          repo: pathEl.value.trim(),
+          branch: branchEl?.value.trim() || 'main',
+          description: descEl?.value.trim() || 'Architektur-Repository',
+          isDefault: false
+        });
+        OrcaiEaSettingsStore.saveSettings({ githubEaRepos: repos });
+        window.switchEaSettingsTab('repos');
+      };
+
+      window.deleteEaRepo = function(repoId) {
+        const settings = OrcaiEaSettingsStore.getSettings();
+        const repos = (settings.githubEaRepos || []).filter(r => r.id !== repoId);
+        OrcaiEaSettingsStore.saveSettings({ githubEaRepos: repos });
+        window.switchEaSettingsTab('repos');
+      };
+
+window.saveNewAgentLink = function() {
         const titleEl = document.getElementById('newLinkTitle');
         const urlEl = document.getElementById('newLinkUrl');
         const catEl = document.getElementById('newLinkCat');
