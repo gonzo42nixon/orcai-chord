@@ -5650,6 +5650,7 @@
     }
 
   </style>
+  <link rel="stylesheet" href="./mobile-agent-navigation.css?v=20260918-1">
 </head>
 <body class="theme-night">
 
@@ -6149,6 +6150,8 @@
         <div class="agent-prompt-chip" onclick="window.askOrcaiAgent('Wer bedient den NIDApad Mobile Client?')">📱 NIDApad &amp; RTW</div>
         <div class="agent-prompt-chip" onclick="window.askOrcaiAgent('Welche Schnittstellen nutzen FHIR oder HL7?')">⚡ FHIR &amp; HL7 Schnittstellen</div>
         <div class="agent-prompt-chip" onclick="window.askOrcaiAgent('Wie funktioniert das Quad-Chord Modell?')">ℹ️ Quad-Chord Architektur</div>
+        <div class="agent-prompt-chip" onclick="window.askOrcaiAgent('Öffne das AI Agent Manifest im JSON Viewer')">📋 Manifest im JSON Viewer</div>
+        <div class="agent-prompt-chip" onclick="window.askOrcaiAgent('Zeige das IT-Landschaftsmodell im JSON Viewer')">🔍 Modell im JSON Viewer</div>
         <div class="agent-prompt-chip" onclick="window.askOrcaiAgent('Befundungsprozess JSD-P-02 in BPMN öffnen')">🔬 Befundung BPMN</div>
       </div>
 
@@ -44009,7 +44012,8 @@
             '<button class="agent-chip agent-chip-proc" onclick="window.askOrcaiAgent(\'Wie viele Prozesse gibt es?\')">📋 Prozessübersicht</button>',
             '<button class="agent-chip agent-chip-model" onclick="window.askOrcaiAgent(\'Wo liegt das GitHub Repository?\')">🐙 GitHub Repository</button>',
             '<button class="agent-chip agent-chip-model" onclick="window.askOrcaiAgent(\'Was zeigt das Handbuch des i-Buttons?\')">ℹ️ "i"-Button Handbuch</button>',
-            '<button class="agent-chip agent-chip-model" onclick="window.askOrcaiAgent(\'Zeige mir dein AI Agent Manifest\')">📄 Agent Manifest</button>',
+            '<button class="agent-chip agent-chip-model" onclick="window.askOrcaiAgent(\'Zeige mir dein AI Agent Manifest im JSON Viewer\')">📋 Manifest im JSON Viewer</button>',
+            '<button class="agent-chip agent-chip-model" onclick="window.askOrcaiAgent(\'Zeige das IT-Landschaftsmodell im JSON Viewer\')">🔍 Modell im JSON Viewer</button>',
             '<button class="agent-chip agent-chip-model" onclick="window.askOrcaiAgent(\'Börsenstand Big Tech\')">📈 Börsenstände</button>',
             '<button class="agent-chip agent-chip-sys" onclick="window.askOrcaiAgent(\'Wie viele Systeme gibt es?\')">🏥 Systemübersicht</button>'
           ];
@@ -44047,6 +44051,64 @@
           processAgentQuery(q, wasVoice);
         };
 
+        window.openInOrcaiJsonViewer = function(docKeyOrUrl, optionalPayload) {
+          let baseUrl = 'https://orcai-54321.web.app/json/';
+          if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            baseUrl = window.location.pathname.includes('/ea') ? '../json/' : '/json/';
+          }
+
+          let targetUrl = baseUrl;
+          if (!docKeyOrUrl) docKeyOrUrl = 'https://orcai-54321.web.app/ea/agent-manifest.json';
+
+          if (optionalPayload && typeof optionalPayload === 'object') {
+            const customKey = 'payload_' + Date.now();
+            try {
+              const serialized = JSON.stringify(optionalPayload);
+              sessionStorage.setItem('orcai_json_payload_' + customKey, serialized);
+              sessionStorage.setItem('orcai_json_payload_latest', serialized);
+              localStorage.setItem('orcai_json_payload_' + customKey, serialized);
+              localStorage.setItem('orcai_json_payload_latest', serialized);
+            } catch (e) {
+              console.warn('[ORCAI JSON] Storage error:', e);
+            }
+            targetUrl += '?key=' + encodeURIComponent(customKey);
+          } else if (docKeyOrUrl.startsWith('http://') || docKeyOrUrl.startsWith('https://') || docKeyOrUrl.startsWith('/')) {
+            targetUrl += '?url=' + encodeURIComponent(docKeyOrUrl);
+          } else {
+            targetUrl += '?key=' + encodeURIComponent(docKeyOrUrl);
+          }
+
+          window.open(targetUrl, '_blank', 'noopener,noreferrer');
+        };
+
+        window.openCurrentModelInJsonViewer = function() {
+          const registeredModels = (typeof registeredLandscapeModels !== 'undefined') ? registeredLandscapeModels : [];
+          const activeId = (typeof window.currentModelId !== 'undefined' && window.currentModelId) ? window.currentModelId : (typeof currentModelId !== 'undefined' ? currentModelId : '');
+          const activeModel = registeredModels.find(m => m.id === activeId) || registeredModels[0];
+
+          const payload = activeModel?.data || {
+            id: activeId || 'ORCAI-CURRENT-MODEL',
+            organization: activeModel?.organization || 'Enterprise Architecture',
+            title: activeModel?.title || 'ORCAI IT-Landschaftsmodell',
+            stats: activeModel?.stats || {},
+            systems: (typeof SYSTEMS_DATA !== 'undefined') ? SYSTEMS_DATA : [],
+            processes: (typeof PROCESSES_DATA !== 'undefined') ? PROCESSES_DATA : [],
+            integrations: (typeof INTEGRATIONS_DATA !== 'undefined') ? INTEGRATIONS_DATA : [],
+            connections: (typeof CONNECTIONS_DATA !== 'undefined') ? CONNECTIONS_DATA : []
+          };
+
+          const modelKey = activeModel?.id || 'ORCAI-CURRENT-MODEL';
+          try {
+            const serialized = JSON.stringify(payload);
+            sessionStorage.setItem('orcai_json_payload_' + modelKey, serialized);
+            sessionStorage.setItem('orcai_json_payload_latest', serialized);
+            localStorage.setItem('orcai_json_payload_' + modelKey, serialized);
+            localStorage.setItem('orcai_json_payload_latest', serialized);
+          } catch (e) {}
+
+          window.openInOrcaiJsonViewer(modelKey, payload);
+        };
+
         // Semantic Knowledge & Multi-Source Synthesis Engine
         function generateAgentAnswer(query) {
           const qLower = query.toLowerCase().trim();
@@ -44062,6 +44124,8 @@
           const activeModelEntry = registeredModels.find(m => m.id === activeModelId);
           const modelOrg = activeModelEntry?.organization || activeModelEntry?.title || 'Johannesstift Diakonie';
           const modelShort = activeModelEntry?.shortName || 'JSD';
+          const esc = (str) => String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+          const escapeHtml = esc;
 
           const chips = [];
           let html = '';
@@ -44170,6 +44234,8 @@
             html = '<p><strong>🤖 KI-Agenten-Identität &amp; AI Agent Manifest</strong></p>' +
               '<p>Meine vollständige Rollendefinition, Fähigkeits-Matrix und Schnittstellen sind im standardisierten <strong>ORCAI AI Agent Manifest</strong> hinterlegt:</p>' +
               '<p><a href="https://orcai-54321.web.app/ea/agent-manifest.json" target="_blank" rel="noopener noreferrer" style="color:#38bdf8; font-weight:700; text-decoration:underline;">https://orcai-54321.web.app/ea/agent-manifest.json ↗</a></p>' +
+              '<p>🔍 <strong>ORCAI JSON Viewer:</strong> Nutzen Sie den interaktiven <strong>ORCAI JSON Viewer</strong> mit auf- und zuklappbaren Pills zur strukturierten Analyse meiner Manifest-Definition:<br>' +
+              '<a href="https://orcai-54321.web.app/json/?url=/ea/agent-manifest.json" target="_blank" rel="noopener noreferrer" style="color:#38bdf8; font-weight:700;">https://orcai-54321.web.app/json/?url=/ea/agent-manifest.json ↗</a></p>' +
               '<ul>' +
                 '<li><strong>Name:</strong> ORCAI Architecture AI Agent (v1.2.0)</li>' +
                 '<li><strong>Rolle:</strong> Lead Enterprise &amp; Healthcare IT Architect</li>' +
@@ -44177,10 +44243,133 @@
                 '<li><strong>Standards:</strong> APQC PCF, OMG BPMN 2.0 / UML 2.5, HL7 FHIR R4, DICOM PS 3.x</li>' +
               '</ul>';
 
-            chips.push('<a href="https://orcai-54321.web.app/ea/agent-manifest.json" target="_blank" rel="noopener noreferrer" class="agent-chip agent-chip-model">📄 Agent Manifest (JSON) öffnen ↗</a>');
+            chips.push('<a href="https://orcai-54321.web.app/json/?url=/ea/agent-manifest.json" target="_blank" rel="noopener noreferrer" class="agent-chip agent-chip-model" style="background:#0070f2; color:#fff; font-weight:bold; border-color:#38bdf8;">📋 Im ORCAI JSON Viewer öffnen ↗</a>');
+            chips.push('<a href="https://orcai-54321.web.app/ea/agent-manifest.json" target="_blank" rel="noopener noreferrer" class="agent-chip agent-chip-model">📄 Rohes Manifest (JSON) ↗</a>');
+            chips.push('<button class="agent-chip agent-chip-proc" onclick="window.openCurrentModelInJsonViewer()">🌐 Modell im JSON Viewer ↗</button>');
             chips.push('<a href="https://github.com/gonzo42nixon/orcai-chord" target="_blank" rel="noopener noreferrer" class="agent-chip agent-chip-model">🐙 Quellcode auf GitHub ↗</a>');
 
-            spoken = 'Ich bin der ORCAI KI-Architektur-Agent. Meine Definition und Systemfähigkeiten sind im standardisierten Agent-Manifest unter orcai 54321 web app slash ea slash agent manifest punkt json hinterlegt. Klicken Sie auf den Link, um das Manifest einzusehen.';
+            spoken = 'Meine Definition und Fähigkeiten sind im standardisierten Agent-Manifest hinterlegt. Sie können es direkt im interaktiven ORCAI JSON Viewer mit aufklappbaren Pills öffnen.';
+            return { html, chips, spoken };
+          }
+
+          // -------------------------------------------------------------------
+          // C2. ORCAI JSON VIEWER & DOKUMENT-OBJEKTE (URL / KEY / LANDSCHAFTSMODELLE)
+          // -------------------------------------------------------------------
+          const urlPattern = /(?:https?:\/\/[^\s"'<>]+|\/api\/orcai\/v1\/docs\/[A-Za-z0-9_\-]+(?:\?[^\s"'<>]*)?)/i;
+          const directUrlMatch = query.match(urlPattern);
+          let detectedDocKey = '';
+          let detectedModelEntry = null;
+
+          if (directUrlMatch) {
+            const rawMatchedUrl = directUrlMatch[0];
+            const docKeyMatch = rawMatchedUrl.match(/\/docs\/([A-Za-z0-9_\-]+)/i) || 
+                                rawMatchedUrl.match(/[?&](?:key|url)=([^&"'<>\s]+)/i);
+            if (docKeyMatch) {
+              const decoded = decodeURIComponent(docKeyMatch[1]);
+              const keyExtract = decoded.match(/([A-Za-z0-9_\-]+)/);
+              detectedDocKey = keyExtract ? keyExtract[1] : decoded;
+            }
+          }
+
+          if (!detectedDocKey) {
+            detectedModelEntry = registeredModels.find(m => 
+              qLower.includes(m.id.toLowerCase()) || 
+              (m.shortName && qLower.includes(m.shortName.toLowerCase())) ||
+              (m.organization && qLower.includes(m.organization.toLowerCase().split(' ')[0]))
+            );
+            if (detectedModelEntry) {
+              detectedDocKey = detectedModelEntry.id;
+            }
+          } else {
+            detectedModelEntry = registeredModels.find(m => m.id === detectedDocKey);
+          }
+
+          // Case C2a: User requested specific URL or explicit Model in JSON Viewer
+          if (directUrlMatch || (detectedDocKey && (qLower.includes('json') || qLower.includes('viewer') || qLower.includes('betracht') || qLower.includes('öffn') || qLower.includes('oeffn') || qLower.includes('zeig')))) {
+            const targetKey = detectedDocKey || 'ORCAI-MODEL-JOHANNESSTIFT-DIAKONIE-EA';
+            const targetEntry = detectedModelEntry || registeredModels.find(m => m.id === targetKey);
+            const targetTitle = targetEntry ? targetEntry.title : targetKey;
+            const targetOrg = targetEntry ? targetEntry.organization : 'ORCAI Architecture Repository';
+            const targetSysCount = targetEntry?.stats?.systems || (targetKey === activeModelId ? systems.length : 34);
+            const targetProcCount = targetEntry?.stats?.processes || (targetKey === activeModelId ? processes.length : 8);
+            const targetConCount = targetEntry?.stats?.connections || (targetKey === activeModelId ? connections.length : 45);
+
+            const docRawUrl = directUrlMatch ? directUrlMatch[0] : (targetEntry?.url || ('https://orcai-54321.web.app/api/orcai/v1/docs/' + targetKey));
+            const viewerTargetUrl = 'https://orcai-54321.web.app/json/?url=' + encodeURIComponent(docRawUrl);
+
+            html = '<p><strong>📋 ORCAI JSON Viewer – Dokument &amp; IT-Landschaftsmodell</strong></p>' +
+              '<p>Das angefragte Objekt <code>' + escapeHtml(targetKey) + '</code> steht im standardisierten ORCAI JSON Viewer mit interaktiven RGB-Pills, Syntax-Highlighting und Volltextsuche bereit:</p>' +
+              '<p>🔍 <strong>Im ORCAI JSON Viewer öffnen:</strong><br>' +
+              '<a href="' + viewerTargetUrl + '" target="_blank" rel="noopener noreferrer" style="color:#38bdf8; font-weight:700; text-decoration:underline; font-size:0.95rem;">' + viewerTargetUrl + ' ↗</a></p>' +
+              '<div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:10px 12px; margin:8px 0;">' +
+                '<div style="font-size:0.75rem; color:#94a3b8; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:4px;">Metadaten &amp; Modellkennzahlen</div>' +
+                '<div style="font-weight:700; color:#f8fafc; margin-bottom:4px;">' + escapeHtml(targetTitle) + '</div>' +
+                '<div style="font-size:0.8rem; color:#cbd5e1;">Organisation: <strong>' + escapeHtml(targetOrg) + '</strong></div>' +
+                '<div style="font-size:0.8rem; color:#38bdf8; margin-top:4px;">📊 ' + targetSysCount + ' Systeme · ' + targetConCount + ' Kanten/Verbindungen · ' + targetProcCount + ' E2E-Prozesse</div>' +
+              '</div>' +
+              '<p style="font-size:0.8rem; color:#94a3b8;">Im Viewer können Sie zwischen der farbcodierten, aufklappbaren <strong>RGB-Pill-Strukturansicht</strong> und dem <strong>formatierten Roh-JSON</strong> umschalten, nach Systemen/Prozessen filtern sowie das Dokument exportieren.</p>';
+
+            chips.push('<a href="' + viewerTargetUrl + '" target="_blank" rel="noopener noreferrer" class="agent-chip agent-chip-model" style="background:#0070f2; color:#fff; font-weight:bold; border-color:#38bdf8;">📋 Im ORCAI JSON Viewer öffnen ↗</a>');
+            if (targetEntry) {
+              chips.push('<button class="agent-chip agent-chip-proc" onclick="window.switchCurrentModel && window.switchCurrentModel(\'' + targetKey + '\')">🌐 Im Quad-Chord laden ↗</button>');
+            }
+            chips.push('<a href="' + docRawUrl + '" target="_blank" rel="noopener noreferrer" class="agent-chip agent-chip-sys">📄 Rohe API Dokumenten-URL ↗</a>');
+            chips.push('<a href="https://orcai-54321.web.app/json/?url=/ea/agent-manifest.json" target="_blank" rel="noopener noreferrer" class="agent-chip agent-chip-model">🤖 AI Agent Manifest im Viewer ↗</a>');
+
+            spoken = 'Das Dokument ' + (targetEntry ? targetEntry.shortName || targetKey : targetKey) + ' kann per Klick direkt im ORCAI JSON-Viewer mit interaktiven RGB-Pills und Filterung betrachtet werden.';
+            return { html, chips, spoken };
+          }
+
+          // Case C2b: User requests overview of all 5 models in JSON Viewer
+          if (qLower.includes('alle 5') || qLower.includes('alle modelle') || (qLower.includes('5 modelle') && (qLower.includes('json') || qLower.includes('viewer')))) {
+            html = '<p><strong>📚 Alle 5 registrierten IT-Landschaftsmodelle im ORCAI JSON Viewer</strong></p>' +
+              '<p>Jedes unserer 5 Enterprise Architecture Modelle kann direkt im interaktiven JSON Viewer betrachtet werden:</p>' +
+              '<ul>';
+            registeredModels.forEach(m => {
+              const vUrl = 'https://orcai-54321.web.app/json/?url=' + encodeURIComponent(m.url || ('https://orcai-54321.web.app/api/orcai/v1/docs/' + m.id));
+              html += '<li><strong>' + escapeHtml(m.shortName || m.id) + ' (' + (m.stats?.systems || '?') + ' Systeme, ' + (m.stats?.processes || '?') + ' Prozesse):</strong><br>' +
+                '<em>' + escapeHtml(m.title) + '</em><br>' +
+                '<a href="' + vUrl + '" target="_blank" rel="noopener noreferrer" style="color:#38bdf8; font-weight:700;">' + vUrl + ' ↗</a></li>';
+            });
+            html += '</ul>';
+
+            registeredModels.forEach(m => {
+              const vUrl = 'https://orcai-54321.web.app/json/?url=' + encodeURIComponent(m.url || ('https://orcai-54321.web.app/api/orcai/v1/docs/' + m.id));
+              chips.push('<a href="' + vUrl + '" target="_blank" rel="noopener noreferrer" class="agent-chip agent-chip-model">' + (m.shortName || m.id) + ' im Viewer ↗</a>');
+            });
+
+            spoken = 'Hier sind alle fünf registrierten IT-Landschaftsmodelle. Sie können jedes einzelne direkt im ORCAI JSON-Viewer öffnen.';
+            return { html, chips, spoken };
+          }
+
+          // Case C2c: General JSON Viewer / Payload Query
+          if (qLower.includes('json') || qLower.includes('payload') || qLower.includes('datenstruktur')) {
+            const activeModel = registeredModels.find(m => m.id === activeModelId) || registeredModels[0];
+            const activeModelTitle = activeModel?.title || activeModel?.organization || 'Aktives IT-Landschaftsmodell';
+            const activeModelKey = activeModel?.id || 'ORCAI-MODEL-JOHANNESSTIFT-DIAKONIE-EA';
+            const sysCount = activeModel?.stats?.systems || systems.length;
+            const conCount = activeModel?.stats?.connections || connections.length;
+            const procCount = activeModel?.stats?.processes || processes.length;
+
+            html = '<p><strong>📋 ORCAI JSON Viewer – Interaktive Objekt- &amp; Datenstruktur-Inspektion</strong></p>' +
+              '<p>Der <strong>ORCAI JSON Viewer</strong> visualisiert JSON-Objekte wahlweise als Quellcode oder als interaktive, farbcodierte <strong>auf- und zuklappbare RGB-Pills</strong> mit Volltext-Filterung, Syntax-Validierung und Export.</p>' +
+              '<p><strong>Verfügbare JSON-Objekte &amp; Architekturmodelle:</strong></p>' +
+              '<ul>' +
+                '<li><strong>🤖 AI Agent Manifest (v1.2.0):</strong> Meine Spezifikation, Systemfähigkeiten &amp; Standards<br>' +
+                  '<a href="https://orcai-54321.web.app/json/?url=/ea/agent-manifest.json" target="_blank" rel="noopener noreferrer" style="color:#38bdf8; font-weight:700;">https://orcai-54321.web.app/json/?url=/ea/agent-manifest.json ↗</a></li>' +
+                '<li><strong>🌐 ' + escapeHtml(activeModelTitle) + ':</strong> Vollständige JSON-Datenstruktur (' + sysCount + ' Systeme, ' + conCount + ' Kanten, ' + procCount + ' Prozesse)<br>' +
+                  '<a href="https://orcai-54321.web.app/json/?url=' + encodeURIComponent(activeModel?.url || ('https://orcai-54321.web.app/api/orcai/v1/docs/' + activeModelKey)) + '" target="_blank" rel="noopener noreferrer" style="color:#38bdf8; font-weight:700;">https://orcai-54321.web.app/json/?url=' + encodeURIComponent(activeModel?.url || ('https://orcai-54321.web.app/api/orcai/v1/docs/' + activeModelKey)) + ' ↗</a></li>' +
+                '<li><strong>🏢 S/4HANA Business Partner Batch:</strong> Inbound Master Data Referenz-Payload<br>' +
+                  '<a href="https://orcai-54321.web.app/json/?key=ORCAI-S4HBP-JSDMDM-JSD-BP-100007" target="_blank" rel="noopener noreferrer" style="color:#38bdf8; font-weight:700;">https://orcai-54321.web.app/json/?key=ORCAI-S4HBP-JSDMDM-JSD-BP-100007 ↗</a></li>' +
+              '</ul>' +
+              '<p>Wählen Sie eine der Aktionen, um das gewünschte JSON-Objekt im Viewer zu öffnen:</p>';
+
+            chips.push('<a href="https://orcai-54321.web.app/json/?url=/ea/agent-manifest.json" target="_blank" rel="noopener noreferrer" class="agent-chip agent-chip-model" style="background:#0070f2; color:#fff; font-weight:bold; border-color:#38bdf8;">🤖 Manifest im JSON Viewer ↗</a>');
+            chips.push('<button class="agent-chip agent-chip-proc" onclick="window.openCurrentModelInJsonViewer()">🌐 Aktives Modell im JSON Viewer ↗</button>');
+            chips.push('<a href="https://orcai-54321.web.app/json/?key=ORCAI-S4HBP-JSDMDM-JSD-BP-100007" target="_blank" rel="noopener noreferrer" class="agent-chip agent-chip-sys">🏢 S/4HANA BP Sample ↗</a>');
+            chips.push('<button class="agent-chip agent-chip-model" onclick="window.askOrcaiAgent(\'Zeige mir alle 5 Modelle im JSON Viewer\')">📚 Alle 5 Modelle als JSON...</button>');
+
+            spoken = 'Der ORCAI JSON Viewer visualisiert JSON-Objekte mit aufklappbaren Pills. Sie können das AI Agent Manifest sowie das vollständige IT-Landschaftsmodell direkt per Klick im JSON Viewer öffnen.';
             return { html, chips, spoken };
           }
 
@@ -44507,6 +44696,7 @@
             if (systems.length > 0) {
               chips.push('<button class="agent-chip agent-chip-sys" onclick="window.selectSystem(\'' + systems[0].id + '\'); window.locateNodeInChord(\'' + systems[0].id + '\');">🏥 ' + systems[0].id + ' fokussieren</button>');
             }
+            chips.push('<button class="agent-chip agent-chip-proc" onclick="window.openCurrentModelInJsonViewer()">📋 Modell im JSON Viewer ↗</button>');
             chips.push('<button class="agent-chip agent-chip-model" onclick="window.jumpToCrossLandscape(\'ORCAI-MODEL-SEEBURGER-EA\')">🔄 SEEBURGER BIS</button>');
             chips.push('<button class="agent-chip agent-chip-model" onclick="window.jumpToCrossLandscape(\'ORCAI-MODEL-JOHANNITER-EA\')">🔄 Johanniter EA</button>');
 
@@ -44658,5 +44848,6 @@
   <div id="plantUmlPopoutsContainer"></div>
     <div id="bpmnPopoutsContainer"></div>
   <div id="hitlClientFloatingTooltip"></div>
+  <script src="./mobile-agent-navigation.js?v=20260918-1"></script>
 </body>
 </html>

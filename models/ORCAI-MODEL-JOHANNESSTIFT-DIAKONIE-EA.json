@@ -1,0 +1,2297 @@
+{
+  "$schema": "https://orcai-54321.web.app/schemas/ea-landscape-v1.json",
+  "meta": {
+    "id": "ORCAI-MODEL-JOHANNESSTIFT-DIAKONIE-EA",
+    "orcaiKey": "ORCAI-MODEL-JOHANNESSTIFT-DIAKONIE-EA",
+    "orcaiUrl": "https://orcai-54321.web.app/api/orcai/v1/docs/ORCAI-MODEL-JOHANNESSTIFT-DIAKONIE-EA?v=1.0.0",
+    "organization": "Johannesstift Diakonie gAG & Conciliamus IT",
+    "shortName": "JOHANNESSTIFT DIAKONIE",
+    "modelTitle": "Johannesstift Diakonie Enterprise Architecture (Conciliamus IT, Kliniken & Services)",
+    "description": "Konzernweite IT-Landschaft der Johannesstift Diakonie gAG, betrieben durch den internen IT-Vollversorger Conciliamus GmbH (10 Kliniken, 20 Pflegeeinrichtungen, JSD Services AEMP & Logistik, CGM MEDICO/ORBIS KIS, HealthShare Hub, SAP BTP/S4 & TI-Cluster).",
+    "version": "1.0.0",
+    "updatedAt": "2026-09-16T12:00:00.000Z",
+    "author": "Johannesstift Diakonie EA Team & ORCAI",
+    "stats": {
+      "systemsCount": 34,
+      "connectionsCount": 32,
+      "integrationsCount": 16,
+      "processesCount": 8,
+      "domainsCount": 6,
+      "connections": 45
+    }
+  },
+  "domains": [
+    {
+      "id": "D1",
+      "name": "Finanzen, Beschaffung & JSD Services",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "D2",
+      "name": "KIS, Akutmedizin & Fachkliniken",
+      "color": "#10b981"
+    },
+    {
+      "id": "D3",
+      "name": "Bildgebung, Diagnostik & Zentrallabor",
+      "color": "#f59e0b"
+    },
+    {
+      "id": "D4",
+      "name": "Notaufnahme, Triage & Rettungsnetz",
+      "color": "#ef4444"
+    },
+    {
+      "id": "D5",
+      "name": "Telematik, eHealth & Patientenportal",
+      "color": "#8b5cf6"
+    },
+    {
+      "id": "D6",
+      "name": "Integration, Middleware & IT-Perimeter",
+      "color": "#06b6d4"
+    }
+  ],
+  "domainDetails": {
+    "D1": {
+      "shortName": "D1 · Finanzen & Services",
+      "sysRange": "JSD-01 bis JSD-06, JSD-16, JSD-17",
+      "desc": "SAP S/4HANA Finance & MM, JSD Einkauf & Logistik, AEMP Sterilgutaufbereitung & Atoss HR"
+    },
+    "D2": {
+      "shortName": "D2 · KIS & Fachkliniken",
+      "sysRange": "JSD-07 bis JSD-09, JSD-14",
+      "desc": "CGM MEDICO Multi-Site KIS, Martin Luther KIS, Meona eKurve & Intensiv-PDMS"
+    },
+    "D3": {
+      "shortName": "D3 · Diagnostik & Bildgebung",
+      "sysRange": "JSD-11 bis JSD-13, JSD-27",
+      "desc": "Agfa Enterprise PACS/VNA, Siemens Syngo RIS, Swisslab Zentrallabor & Brainomix Cloud-KI"
+    },
+    "D4": {
+      "shortName": "D4 · ZNA & Notfallnetz",
+      "sysRange": "JSD-05, JSD-15, JSD-23, JSD-28, JSD-29",
+      "desc": "ZNA E-Care Manchester-Triage, IVENA Versorgungsnachweis, Berliner Feuerwehr 112"
+    },
+    "D5": {
+      "shortName": "D5 · Telematik & Portal",
+      "sysRange": "JSD-02, JSD-18, JSD-21, JSD-22, JSD-26",
+      "desc": "m.Doc Patientenportal FTB 2, TI-Cluster Kocobox, ePA 3.0, KIM-Fachdienst & DEMIS"
+    },
+    "D6": {
+      "shortName": "D6 · Integration & Core",
+      "sysRange": "JSD-04, JSD-10, JSD-20",
+      "desc": "InterSystems HealthShare Hub, SAP CPI / BTP Integration Suite & B3S KRITIS Perimeter"
+    }
+  },
+  "processes": [
+    {
+      "id": "JSD-P-01",
+      "name": "Notfallaufnahme, ZNA Manchester-Triage & Voranmeldung",
+      "leadDomain": "D4",
+      "involvedDomains": [
+        "D4",
+        "D2",
+        "D3",
+        "D6"
+      ],
+      "cleanIntegIds": [
+        "JSD-INT-01",
+        "JSD-INT-02"
+      ],
+      "desc": "Echtzeit-Notfallzuweisung aus RTW/Feuerwehr über Telemedizin, IVENA-Kapazitätsabgleich und ZNA-Manchester-Triage.",
+      "plantUml": "@startuml\ntitle JSD-P-01: Notfallaufnahme, ZNA Manchester-Triage & Voranmeldung\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"Praehospital & Rettung\" #e0f2fe\nactor \"Rettungsdienst (RTW)\" as RTW\nparticipant \"[[#sys-JSD-28 JSD-28: Medical IoT Gateway]]\" as IoT\nend box\n\nbox \"Telemedizin & Hub\" #fef3c7\nparticipant \"[[#sys-JSD-05 JSD-05: Telemedizin Hub]]\" as TM\nparticipant \"[[#sys-JSD-10 JSD-10: HealthShare Hub]]\" as HS\nend box\n\nbox \"Akutklinik & Notaufnahme\" #dcfce7\nparticipant \"[[#sys-JSD-15 JSD-15: ZNA E-Care & Triage]]\" as ZNA\nparticipant \"[[#sys-JSD-08 JSD-08: CGM MEDICO KIS]]\" as KIS\nend box\n\nRTW -> IoT: Notfalldaten, EKG & GPS\n== [[#integ-JSD-INT-01 JSD-INT-01: Notfall-Voranmeldung RTW ➔ ZNA E-Care]] ==\nIoT -> TM: [[#conn-JSD-C-15 RTW-Daten an Telemedizin Hub (MQTT / TLS)]]\nTM -> ZNA: [[#conn-JSD-C-16 Voranmeldung an ZNA E-Care (REST FHIR R4)]]\nactivate ZNA\nZNA -> ZNA: Manchester-Triage Einstufung & Bettenzuweisung\n\n== [[#integ-JSD-INT-02 JSD-INT-02: ZNA Aufnahme ➔ CGM MEDICO KIS Sync]] ==\nZNA -> HS: [[#conn-JSD-C-14 Notfall-ADT an HealthShare (HL7 v2.5 ADT_A04)]]\nactivate HS\nHS -> KIS: [[#conn-JSD-C-01 KIS Fallanlage & Stammdaten (HL7 v2.5 MLLP)]]\nactivate KIS\nKIS --> HS: KIS-Fallnummer Bestaetigung (HL7 ACK)\ndeactivate KIS\nHS --> ZNA: KIS-Fall verknuepft (HL7 ACK)\ndeactivate HS\ndeactivate ZNA\n@enduml"
+    },
+    {
+      "id": "JSD-P-02",
+      "name": "Klinischer Diagnostikpfad & Zentrallabor-Befundung",
+      "leadDomain": "D2",
+      "involvedDomains": [
+        "D2",
+        "D3",
+        "D6"
+      ],
+      "cleanIntegIds": [
+        "JSD-INT-03",
+        "JSD-INT-04"
+      ],
+      "desc": "Order Entry für Laboruntersuchungen aus CGM MEDICO / Martin Luther KIS an Swisslab LIMS mit prioritärer Rückmeldung.",
+      "plantUml": "@startuml\ntitle JSD-P-02: Klinischer Diagnostikpfad & Zentrallabor-Befundung\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"Station & Ambulanz\" #e0f2fe\nactor \"Klinikarzt / Station\" as Doc\nparticipant \"[[#sys-JSD-08 JSD-08: CGM MEDICO KIS]]\" as KIS\nparticipant \"[[#sys-JSD-07 JSD-07: Meona Kurve]]\" as Meona\nend box\n\nbox \"Klinischer Integrations-Hub\" #fef3c7\nparticipant \"[[#sys-JSD-10 JSD-10: HealthShare Hub]]\" as HS\nend box\n\nbox \"Diagnostik & Zentrallabor\" #dcfce7\nparticipant \"[[#sys-JSD-11 JSD-11: Swisslab LIMS]]\" as LIMS\nactor \"Laboranalytik (Cobas)\" as Analyzer\nend box\n\nDoc -> KIS: Laboranforderung erfassen\nactivate KIS\n== [[#integ-JSD-INT-03 JSD-INT-03: KIS Laboranforderung ➔ Swisslab LIMS]] ==\nKIS -> HS: [[#conn-JSD-C-01 Labor-Order an HealthShare (HL7 v2.5 ORM_O01)]]\nactivate HS\nHS -> LIMS: [[#conn-JSD-C-03 Labor-Auftrag an Swisslab (HL7 v2.5 MLLP)]]\nactivate LIMS\ndeactivate HS\nLIMS -> Analyzer: Proben-Scan & Barcode-Routing\nAnalyzer --> LIMS: Analysenergebnisse & Validierung\n\n== [[#integ-JSD-INT-04 JSD-INT-04: Swisslab Laborbefund-Rueckmeldung]] ==\nLIMS -> HS: [[#conn-JSD-C-04 Laborbefund an HealthShare (HL7 v2.5 ORU_R01)]]\nactivate HS\ndeactivate LIMS\nHS -> KIS: [[#conn-JSD-C-05 Laborbefund-Anzeige im KIS (HL7 ORU)]]\nHS -> Meona: [[#conn-JSD-C-13 Laborwerte an Meona eKurve (HL7 / FHIR)]]\ndeactivate HS\ndeactivate KIS\n@enduml"
+    },
+    {
+      "id": "JSD-P-03",
+      "name": "Radiologie DICOM-Workflow, PACS & KI-Diagnostik",
+      "leadDomain": "D3",
+      "involvedDomains": [
+        "D3",
+        "D2",
+        "D6"
+      ],
+      "cleanIntegIds": [
+        "JSD-INT-05",
+        "JSD-INT-06"
+      ],
+      "desc": "Modalitäten-Steuerung über Siemens Syngo RIS, Bildarchivierung im Agfa VNA und KI-Schlaganfall-Triage via Brainomix.",
+      "plantUml": "@startuml\ntitle JSD-P-03: Radiologie DICOM-Workflow, PACS & KI-Diagnostik\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"Klinische Anforderung\" #e0f2fe\nparticipant \"[[#sys-JSD-08 JSD-08: CGM MEDICO KIS]]\" as KIS\nparticipant \"[[#sys-JSD-10 JSD-10: HealthShare Hub]]\" as HS\nend box\n\nbox \"Radiologie & Bildarchivierung\" #fef3c7\nparticipant \"[[#sys-JSD-13 JSD-13: Syngo RIS]]\" as RIS\nactor \"CT / MRT Modalitaet\" as Modality\nparticipant \"[[#sys-JSD-12 JSD-12: Agfa Enterprise PACS]]\" as PACS\nend box\n\nbox \"KI-Cloud & Diagnostik-Support\" #fee2e2\nparticipant \"[[#sys-JSD-27 JSD-27: Brainomix KI]]\" as KI\nend box\n\n== [[#integ-JSD-INT-05 JSD-INT-05: Radiologie DICOM-Workflow & PACS]] ==\nKIS -> HS: [[#conn-JSD-C-01 Untersuchungsauftrag an HealthShare (HL7 ORM)]]\nactivate HS\nHS -> RIS: [[#conn-JSD-C-07 Anforderung an Syngo RIS (HL7 ORM_O01)]]\nactivate RIS\ndeactivate HS\nRIS -> Modality: DICOM Modality Worklist (MWL)\nModality -> PACS: DICOM C-STORE Bilddatensatz\nRIS -> PACS: [[#conn-JSD-C-08 Worklist & Untersuchungs-Metadaten (HL7 / DICOM)]]\nactivate PACS\n\n== [[#integ-JSD-INT-06 JSD-INT-06: Agfa PACS ➔ Brainomix Cloud-KI]] ==\nPACS -> KI: [[#conn-JSD-C-09 CT-Bilddaten an Brainomix KI (DICOMweb TLS / AWS)]]\nactivate KI\nKI -> KI: Automatisierte e-ASPECTS Schlaganfall-Analyse\nKI -> RIS: [[#conn-JSD-C-10 KI-Ergebnis an Syngo RIS (REST FHIR / DICOM SR)]]\ndeactivate KI\nRIS --> KIS: Freigegebener Radiologiebefund (HL7 ORU)\ndeactivate RIS\ndeactivate PACS\n@enduml"
+    },
+    {
+      "id": "JSD-P-04",
+      "name": "JSD Services AEMP Instrumentenaufbereitung & Sterilgutlogistik",
+      "leadDomain": "D1",
+      "involvedDomains": [
+        "D1",
+        "D2",
+        "D6"
+      ],
+      "cleanIntegIds": [
+        "JSD-INT-07",
+        "JSD-INT-08"
+      ],
+      "desc": "Digitale OP-Siebanforderung, AEMP-Chargenfreigabe nach MPG in Instacount und Translog-Belieferung der OP-Säle.",
+      "plantUml": "@startuml\ntitle JSD-P-04: JSD Services AEMP Instrumentenaufbereitung & Sterilgutlogistik\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"OP-Bereich & KIS\" #e0f2fe\nactor \"OP-Leitung / Saal\" as OP\nparticipant \"[[#sys-JSD-08 JSD-08: CGM MEDICO KIS]]\" as KIS\nend box\n\nbox \"AEMP Sterilgutmanagement\" #fef3c7\nparticipant \"[[#sys-JSD-16 JSD-16: Instacount AEMP]]\" as AEMP\nparticipant \"[[#sys-JSD-17 JSD-17: Translog Fuhrpark]]\" as Trans\nend box\n\nbox \"ERP & Integrations-Plattform\" #dcfce7\nparticipant \"[[#sys-JSD-04 JSD-04: SAP CPI]]\" as CPI\nparticipant \"[[#sys-JSD-01 JSD-01: SAP S/4HANA]]\" as S4H\nend box\n\nOP -> KIS: OP-Saalplanung & Sieblisten reservieren\nactivate KIS\n== [[#integ-JSD-INT-07 JSD-INT-07: OP-Planung ➔ AEMP Instacount]] ==\nKIS -> AEMP: [[#conn-JSD-C-19 Siebanforderung an Instacount (REST / TCP)]]\nactivate AEMP\ndeactivate KIS\nAEMP -> AEMP: Pack- & Sterilisationszyklus freigegeben\n\n== [[#integ-JSD-INT-08 JSD-INT-08: AEMP Freigabe ➔ Translog & SAP Buchung]] ==\nAEMP -> Trans: [[#conn-JSD-C-20 Tourenplanung an Translog (REST JSON)]]\nactivate Trans\nTrans --> OP: Physische Sieblieferung an OP-Schleuse\ndeactivate Trans\nAEMP -> CPI: [[#conn-JSD-C-21 Materialmeldung an SAP CPI (HTTPS REST)]]\nactivate CPI\ndeactivate AEMP\nCPI -> S4H: [[#conn-JSD-C-22 Kostenstellenbuchung in S/4HANA (OData / RFC)]]\nactivate S4H\nS4H --> CPI: Belegnummer generiert\ndeactivate S4H\ndeactivate CPI\n@enduml"
+    },
+    {
+      "id": "JSD-P-05",
+      "name": "KHZG Patientenportal, Termine & Entlassdokumente",
+      "leadDomain": "D5",
+      "involvedDomains": [
+        "D5",
+        "D2",
+        "D1",
+        "D6"
+      ],
+      "cleanIntegIds": [
+        "JSD-INT-09",
+        "JSD-INT-10"
+      ],
+      "desc": "Online-Terminbuchung, digitale Patientenaufnahme und Bereitstellung von Entlassbriefen im m.Doc Portal (FTB 2).",
+      "plantUml": "@startuml\ntitle JSD-P-05: KHZG Patientenportal, Termine & Entlassdokumente\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"Patient & Mobile App (FTB 2)\" #e0f2fe\nactor \"Patient (Smartphone / Web)\" as Pat\nparticipant \"[[#sys-JSD-02 JSD-02: m.Doc Portal Cloud]]\" as mDoc\nend box\n\nbox \"Hybrid Integration Platform\" #fef3c7\nparticipant \"[[#sys-JSD-04 JSD-04: SAP CPI]]\" as CPI\nend box\n\nbox \"Klinik & Enterprise Core\" #dcfce7\nparticipant \"[[#sys-JSD-08 JSD-08: CGM MEDICO KIS]]\" as KIS\nend box\n\nPat -> mDoc: Online-Terminbuchung & Frageboegen\nactivate mDoc\n== [[#integ-JSD-INT-09 JSD-INT-09: m.Doc Voraufnahme ➔ KIS Import]] ==\nmDoc -> CPI: [[#conn-JSD-C-28 FHIR Patient Payload an SAP CPI (REST HTTPS / Azure)]]\nactivate CPI\nCPI -> KIS: [[#conn-JSD-C-29 Voraufnahme-Import in KIS (REST FHIR R4)]]\nactivate KIS\nKIS --> CPI: Encounter-ID bestaetigt\ndeactivate KIS\nCPI --> mDoc: Sync Status OK\ndeactivate CPI\ndeactivate mDoc\n\n== [[#integ-JSD-INT-10 JSD-INT-10: Befundfreigabe ➔ m.Doc Portal]] ==\nKIS -> CPI: [[#conn-JSD-C-26 Befund-Export an SAP CPI (REST HTTPS)]]\nactivate CPI\nCPI -> mDoc: [[#conn-JSD-C-28 Bereitstellung in m.Doc Cloud (REST HTTPS)]]\nactivate mDoc\nmDoc --> Pat: Push-Benachrichtigung \"Neuer Befund verfuegbar\"\ndeactivate mDoc\ndeactivate CPI\n@enduml"
+    },
+    {
+      "id": "JSD-P-06",
+      "name": "Telematik, eArztbrief & KIM-Fachdienste",
+      "leadDomain": "D5",
+      "involvedDomains": [
+        "D5",
+        "D2",
+        "D6"
+      ],
+      "cleanIntegIds": [
+        "JSD-INT-11",
+        "JSD-INT-12"
+      ],
+      "desc": "Sicherer Versand strukturierter eArztbriefe über KIM 1.5 und Upload von Notfalldatensätzen in die ePA 3.0 via TI-Cluster.",
+      "plantUml": "@startuml\ntitle JSD-P-06: Telematik, eArztbrief & KIM-Fachdienste\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"Klinische Dokumentation\" #e0f2fe\nactor \"Chefarzt / Stationsarzt\" as Doc\nparticipant \"[[#sys-JSD-08 JSD-08: CGM MEDICO KIS]]\" as KIS\nparticipant \"[[#sys-JSD-10 JSD-10: HealthShare Hub]]\" as HS\nend box\n\nbox \"Telematikinfrastruktur (TI)\" #fef3c7\nparticipant \"[[#sys-JSD-18 JSD-18: TI Konnektor Cluster]]\" as TI\nend box\n\nbox \"Nationale Fachdienste (gematik)\" #dcfce7\nparticipant \"[[#sys-JSD-22 JSD-22: CGM KIM Fachdienst]]\" as KIM\nparticipant \"[[#sys-JSD-21 JSD-21: gematik ePA 3.0]]\" as ePA\nend box\n\nDoc -> KIS: eArztbrief finalisieren & mit HBA signieren\nactivate KIS\n== [[#integ-JSD-INT-11 JSD-INT-11: eArztbrief-Versand ueber KIM]] ==\nKIS -> HS: [[#conn-JSD-C-01 Brief-Payload an HealthShare (HL7 CDA / FHIR)]]\nactivate HS\nHS -> TI: [[#conn-JSD-C-30 Uebergabe an TI-Konnektor (SOAP / TLS)]]\nactivate TI\ndeactivate HS\nTI -> KIM: [[#conn-JSD-C-31 KIM-Mail an Weiterbehandler (SMTP / S-MIME)]]\nactivate KIM\nKIM --> TI: MDN Empfangsbestaetigung\ndeactivate KIM\ndeactivate TI\n\n== [[#integ-JSD-INT-12 JSD-INT-12: ePA 3.0 Dokumenten-Upload]] ==\nHS -> TI: [[#conn-JSD-C-30 Dokument an TI-Konnektor (SOAP / TLS)]]\nactivate TI\nTI -> ePA: [[#conn-JSD-C-32 ePA-Ablage in gematik Bundestelematic (IHE XDS.b)]]\nactivate ePA\nePA --> TI: Registry Stored Document OK\ndeactivate ePA\ndeactivate TI\ndeactivate KIS\n@enduml"
+    },
+    {
+      "id": "JSD-P-07",
+      "name": "Stationäre DRG-Abrechnung & GKV-Clearing § 301",
+      "leadDomain": "D1",
+      "involvedDomains": [
+        "D1",
+        "D2",
+        "D6"
+      ],
+      "cleanIntegIds": [
+        "JSD-INT-13",
+        "JSD-INT-14"
+      ],
+      "desc": "Klinische Leistungserfassung in MEDICO, Übernahme in SAP S/4HANA Finance und DTA § 301 EDIFACT-Abrechnung an Krankenkassen.",
+      "plantUml": "@startuml\ntitle JSD-P-07: Stationaere DRG-Abrechnung & GKV-Clearing § 301\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"Medizincontrolling & KIS\" #e0f2fe\nactor \"Medizincontroller\" as Controller\nparticipant \"[[#sys-JSD-08 JSD-08: CGM MEDICO KIS]]\" as KIS\nend box\n\nbox \"Enterprise Integration & Finance\" #fef3c7\nparticipant \"[[#sys-JSD-04 JSD-04: SAP CPI]]\" as CPI\nparticipant \"[[#sys-JSD-01 JSD-01: SAP S/4HANA]]\" as S4H\nend box\n\nbox \"Kostentraeger & Clearing\" #dcfce7\nparticipant \"[[#sys-JSD-30 JSD-30: GKV Clearing DTA]]\" as GKV\nactor \"Gesetzliche Krankenkasse\" as Payer\nend box\n\nController -> KIS: DRG-Kodierung & Fallabschluss\nactivate KIS\n== [[#integ-JSD-INT-13 JSD-INT-13: KIS Falldaten ➔ SAP S/4HANA]] ==\nKIS -> CPI: [[#conn-JSD-C-26 Falldaten an SAP CPI (HTTPS REST)]]\nactivate CPI\nCPI -> S4H: [[#conn-JSD-C-22 Buchungsbeleg in SAP S/4HANA (OData / RFC)]]\nactivate S4H\ndeactivate KIS\nS4H -> S4H: Debitorenbuchung & § 301 EDIFACT Generierung\n\n== [[#integ-JSD-INT-14 JSD-INT-14: DTA § 301 DRG-Schlussrechnung]] ==\nS4H -> GKV: [[#conn-JSD-C-27 DTA § 301 Daten an GKV Clearing (FTAM / AS2)]]\nactivate GKV\ndeactivate S4H\nGKV -> Payer: Rechnungsweiterleitung & Kostengutsprache\nPayer --> GKV: Zahlungsavis\nGKV --> S4H: Elektronischer Zahlungsavis (EDIFACT)\ndeactivate GKV\ndeactivate CPI\n@enduml"
+    },
+    {
+      "id": "JSD-P-08",
+      "name": "JSD Einkauf, Materialwirtschaft & GHX B2B-Clearing",
+      "leadDomain": "D1",
+      "involvedDomains": [
+        "D1",
+        "D6"
+      ],
+      "cleanIntegIds": [
+        "JSD-INT-15",
+        "JSD-INT-16"
+      ],
+      "desc": "Zentralisierter Einkauf durch JSD Services GmbH, elektronische Bestellungen via GHX Exchange und Peppol XRechnung.",
+      "plantUml": "@startuml\ntitle JSD-P-08: JSD Einkauf, Materialwirtschaft & GHX B2B-Clearing\nautonumber\nskinparam responseMessageBelowArrow true\n\nbox \"JSD Zentraleinkauf\" #e0f2fe\nactor \"Einkaeufer / Logistik\" as Buyer\nparticipant \"[[#sys-JSD-01 JSD-01: SAP S/4HANA]]\" as S4H\nend box\n\nbox \"B2B Medical Exchange & EDI\" #fef3c7\nparticipant \"[[#sys-JSD-24 JSD-24: GHX Medical Exchange]]\" as GHX\nparticipant \"[[#sys-JSD-25 JSD-25: OpenPeppol Access Point]]\" as Peppol\nend box\n\nbox \"Hybrid Integration Hub\" #dcfce7\nparticipant \"[[#sys-JSD-04 JSD-04: SAP CPI]]\" as CPI\nactor \"Medizintechnik-Lieferant\" as Vendor\nend box\n\nBuyer -> S4H: Bestellbanf generieren & freigeben\nactivate S4H\n== [[#integ-JSD-INT-15 JSD-INT-15: JSD Einkauf ➔ GHX Exchange]] ==\nS4H -> GHX: [[#conn-JSD-C-23 Bestellung an GHX Exchange (cXML / EDIFACT)]]\nactivate GHX\nGHX -> Vendor: Purchase Order Routing\nVendor --> GHX: Order Confirmation & Lieferavis\nGHX --> S4H: Auftragsbestaetigung verbucht\ndeactivate GHX\ndeactivate S4H\n\n== [[#integ-JSD-INT-16 JSD-INT-16: Rechnungen OpenPeppol ➔ SAP]] ==\nVendor -> Peppol: XRechnung elektronisch einreichen\nactivate Peppol\nPeppol -> CPI: [[#conn-JSD-C-24 XRechnung an SAP CPI (AS4 Peppol)]]\nactivate CPI\nCPI -> S4H: [[#conn-JSD-C-25 Kontierung in SAP S/4HANA (OData / IDoc)]]\nactivate S4H\nS4H --> CPI: Buchungsbeleg & Rechnungsfreigabe\ndeactivate S4H\ndeactivate CPI\ndeactivate Peppol\n@enduml"
+    }
+  ],
+  "integrations": [
+    {
+      "id": "JSD-INT-01",
+      "name": "Notfall-Voranmeldung RTW ➔ ZNA E-Care Triage",
+      "cluster": "RETTUNG",
+      "hub": "Direct",
+      "hubName": "Direct Cloud Bridge",
+      "protocol": "MQTT / FHIR R4",
+      "desc": "Telemetriedaten und Voranmeldung aus dem Rettungswagen über das JSD Telemedizin-Portal an die Notaufnahme.",
+      "sourceSystem": "JSD-28",
+      "targetSystem": "JSD-15",
+      "steps": [
+        {
+          "connectionId": "JSD-C-15",
+          "from": "JSD-28",
+          "to": "JSD-05",
+          "desc": "RTW-Daten an Telemedizin Hub"
+        },
+        {
+          "connectionId": "JSD-C-16",
+          "from": "JSD-05",
+          "to": "JSD-15",
+          "desc": "Voranmeldung an ZNA E-Care"
+        }
+      ]
+    },
+    {
+      "id": "JSD-INT-02",
+      "name": "ZNA Aufnahme ➔ CGM MEDICO KIS Synchronisation",
+      "cluster": "KLINIK",
+      "hub": "HealthShare",
+      "hubName": "InterSystems HealthShare",
+      "protocol": "HL7 v2.5 ADT",
+      "desc": "Stationäre Aufnahme aus der Notaufnahme über HealthShare an das klinikweite KIS.",
+      "sourceSystem": "JSD-15",
+      "targetSystem": "JSD-08",
+      "steps": [
+        {
+          "connectionId": "JSD-C-14",
+          "from": "JSD-15",
+          "to": "JSD-10",
+          "desc": "Notfall-ADT an HealthShare"
+        },
+        {
+          "connectionId": "JSD-C-01",
+          "from": "JSD-08",
+          "to": "JSD-10",
+          "desc": "Synchronisation mit KIS Stammdaten"
+        }
+      ]
+    },
+    {
+      "id": "JSD-INT-03",
+      "name": "KIS Laboranforderung ➔ Swisslab LIMS",
+      "cluster": "KLINIK",
+      "hub": "HealthShare",
+      "hubName": "InterSystems HealthShare",
+      "protocol": "HL7 v2.5 ORM",
+      "desc": "Elektronische Laboranforderung aus CGM MEDICO KIS an das standortübergreifende Swisslab Zentrallabor.",
+      "sourceSystem": "JSD-08",
+      "targetSystem": "JSD-11",
+      "steps": [
+        {
+          "connectionId": "JSD-C-01",
+          "from": "JSD-08",
+          "to": "JSD-10",
+          "desc": "Labor-Order an HealthShare"
+        },
+        {
+          "connectionId": "JSD-C-03",
+          "from": "JSD-10",
+          "to": "JSD-11",
+          "desc": "Auftrag an Swisslab LIMS"
+        }
+      ]
+    },
+    {
+      "id": "JSD-INT-04",
+      "name": "Swisslab Laborbefund-Rückmeldung ➔ KIS & Meona Kurve",
+      "cluster": "KLINIK",
+      "hub": "HealthShare",
+      "hubName": "InterSystems HealthShare",
+      "protocol": "HL7 v2.5 ORU / FHIR",
+      "desc": "Automatisierte Befundübermittlung aus dem Zentrallabor an das KIS und die digitale Fieberkurve Meona.",
+      "sourceSystem": "JSD-11",
+      "targetSystem": "JSD-07",
+      "steps": [
+        {
+          "connectionId": "JSD-C-04",
+          "from": "JSD-11",
+          "to": "JSD-10",
+          "desc": "Befundübermittlung an HealthShare"
+        },
+        {
+          "connectionId": "JSD-C-05",
+          "from": "JSD-10",
+          "to": "JSD-08",
+          "desc": "Befundanzeige im MEDICO KIS"
+        },
+        {
+          "connectionId": "JSD-C-13",
+          "from": "JSD-10",
+          "to": "JSD-07",
+          "desc": "Laborwerte an Meona eKurve"
+        }
+      ]
+    },
+    {
+      "id": "JSD-INT-05",
+      "name": "Radiologie DICOM-Workflow & Agfa PACS Archivierung",
+      "cluster": "KLINIK",
+      "hub": "HealthShare",
+      "hubName": "InterSystems HealthShare",
+      "protocol": "HL7 / DICOM C-FIND",
+      "desc": "Radiologie-Auftragsrouting an Siemens Syngo RIS und Bildarchivierung im Agfa Enterprise PACS/VNA.",
+      "sourceSystem": "JSD-08",
+      "targetSystem": "JSD-12",
+      "steps": [
+        {
+          "connectionId": "JSD-C-01",
+          "from": "JSD-08",
+          "to": "JSD-10",
+          "desc": "Untersuchungsauftrag an HealthShare"
+        },
+        {
+          "connectionId": "JSD-C-07",
+          "from": "JSD-10",
+          "to": "JSD-13",
+          "desc": "Auftrag an Siemens Syngo RIS"
+        },
+        {
+          "connectionId": "JSD-C-08",
+          "from": "JSD-13",
+          "to": "JSD-12",
+          "desc": "Modality Worklist an Agfa PACS"
+        }
+      ]
+    },
+    {
+      "id": "JSD-INT-06",
+      "name": "Agfa PACS ➔ Brainomix Cloud-KI Schlaganfall-Triage",
+      "cluster": "KLINIK",
+      "hub": "Direct",
+      "hubName": "Direct Cloud Bridge",
+      "protocol": "DICOMweb WADO-RS / HTTPS",
+      "desc": "Automatisierter Upload von Schädel-CTs an die Brainomix KI-Cloud zur Erkennung von Großgefäßverschlüssen.",
+      "sourceSystem": "JSD-12",
+      "targetSystem": "JSD-13",
+      "steps": [
+        {
+          "connectionId": "JSD-C-09",
+          "from": "JSD-12",
+          "to": "JSD-27",
+          "desc": "CT-Bilddaten an Brainomix KI"
+        },
+        {
+          "connectionId": "JSD-C-10",
+          "from": "JSD-27",
+          "to": "JSD-13",
+          "desc": "KI-Analyseergebnis an Syngo RIS"
+        }
+      ]
+    },
+    {
+      "id": "JSD-INT-07",
+      "name": "OP-Planung KIS ➔ JSD AEMP Instacount Siebanforderung",
+      "cluster": "JSD_SERVICES",
+      "hub": "HealthShare",
+      "hubName": "InterSystems HealthShare",
+      "protocol": "HL7 v2.5 ORM / REST",
+      "desc": "OP-Planung übermittelt benötigte Siebe und Spezialinstrumente an das AEMP-System Instacount.",
+      "sourceSystem": "JSD-08",
+      "targetSystem": "JSD-16",
+      "steps": [
+        {
+          "connectionId": "JSD-C-19",
+          "from": "JSD-08",
+          "to": "JSD-16",
+          "desc": "Siebanforderung an Instacount"
+        }
+      ]
+    },
+    {
+      "id": "JSD-INT-08",
+      "name": "AEMP Freigabe ➔ Translog Belieferung & SAP Buchung",
+      "cluster": "JSD_SERVICES",
+      "hub": "SAP CPI",
+      "hubName": "SAP CPI / BTP Integration Suite",
+      "protocol": "REST / OData v4",
+      "desc": "Sterilgut-Freigabe erzeugt Fahrauftrag in Translog und Verbrauchs-Buchung in SAP S/4HANA Finance.",
+      "sourceSystem": "JSD-16",
+      "targetSystem": "JSD-01",
+      "steps": [
+        {
+          "connectionId": "JSD-C-20",
+          "from": "JSD-16",
+          "to": "JSD-17",
+          "desc": "Tourenplanung an Translog"
+        },
+        {
+          "connectionId": "JSD-C-21",
+          "from": "JSD-16",
+          "to": "JSD-04",
+          "desc": "Materialmeldung an SAP CPI"
+        },
+        {
+          "connectionId": "JSD-C-22",
+          "from": "JSD-04",
+          "to": "JSD-01",
+          "desc": "Kostenbuchung in SAP S/4HANA"
+        }
+      ]
+    },
+    {
+      "id": "JSD-INT-09",
+      "name": "m.Doc Patientenportal Voraufnahme ➔ KIS Import",
+      "cluster": "PORTAL",
+      "hub": "SAP CPI",
+      "hubName": "SAP CPI / BTP Integration Suite",
+      "protocol": "REST FHIR R4",
+      "desc": "Patienten-Stammdaten und Anamnesefragebögen aus dem m.Doc Portal werden validiert in CGM MEDICO übernommen.",
+      "sourceSystem": "JSD-02",
+      "targetSystem": "JSD-08",
+      "steps": [
+        {
+          "connectionId": "JSD-C-28",
+          "from": "JSD-02",
+          "to": "JSD-04",
+          "desc": "FHIR Patient Payload an SAP CPI"
+        },
+        {
+          "connectionId": "JSD-C-29",
+          "from": "JSD-04",
+          "to": "JSD-08",
+          "desc": "Import in CGM MEDICO KIS"
+        }
+      ]
+    },
+    {
+      "id": "JSD-INT-10",
+      "name": "Befundfreigabe KIS ➔ m.Doc Patientenportal (KHZG FTB 2)",
+      "cluster": "PORTAL",
+      "hub": "SAP CPI",
+      "hubName": "SAP CPI / BTP Integration Suite",
+      "protocol": "HL7 FHIR DocumentReference",
+      "desc": "Freigegebene Arztbriefe und Laborbefunde werden verschlüsselt im Patientenportal bereitgestellt.",
+      "sourceSystem": "JSD-08",
+      "targetSystem": "JSD-02",
+      "steps": [
+        {
+          "connectionId": "JSD-C-26",
+          "from": "JSD-08",
+          "to": "JSD-04",
+          "desc": "Befund-Export an SAP CPI"
+        },
+        {
+          "connectionId": "JSD-C-28",
+          "from": "JSD-02",
+          "to": "JSD-04",
+          "desc": "Bereitstellung in m.Doc Cloud"
+        }
+      ]
+    },
+    {
+      "id": "JSD-INT-11",
+      "name": "eArztbrief-Versand über CGM KIM via TI-Cluster",
+      "cluster": "TI",
+      "hub": "TI-Cluster",
+      "hubName": "TI-Cluster Kocobox",
+      "protocol": "KIM S/MIME / TLS",
+      "desc": "Elektronischer Versand qualifiziert signierter Arztbriefe (eHBA) über die TI-Konnektorfarm.",
+      "sourceSystem": "JSD-08",
+      "targetSystem": "JSD-22",
+      "steps": [
+        {
+          "connectionId": "JSD-C-01",
+          "from": "JSD-08",
+          "to": "JSD-10",
+          "desc": "Brief-Payload an HealthShare"
+        },
+        {
+          "connectionId": "JSD-C-30",
+          "from": "JSD-10",
+          "to": "JSD-18",
+          "desc": "Konnektor-Übergabe an TI-Cluster"
+        },
+        {
+          "connectionId": "JSD-C-31",
+          "from": "JSD-18",
+          "to": "JSD-22",
+          "desc": "KIM-Versand an Empfänger"
+        }
+      ]
+    },
+    {
+      "id": "JSD-INT-12",
+      "name": "ePA 3.0 Dokumenten-Upload an gematik Bundestelematic",
+      "cluster": "TI",
+      "hub": "TI-Cluster",
+      "hubName": "TI-Cluster Kocobox",
+      "protocol": "IHE XDS.b / gematik ePA",
+      "desc": "Automatisierter Upload von Medikationsplänen und Befundberichten in die elektronische Patientenakte.",
+      "sourceSystem": "JSD-08",
+      "targetSystem": "JSD-21",
+      "steps": [
+        {
+          "connectionId": "JSD-C-01",
+          "from": "JSD-08",
+          "to": "JSD-10",
+          "desc": "Dokumentenbereitstellung HealthShare"
+        },
+        {
+          "connectionId": "JSD-C-30",
+          "from": "JSD-10",
+          "to": "JSD-18",
+          "desc": "Signierung & Konnektor-Transfer"
+        },
+        {
+          "connectionId": "JSD-C-32",
+          "from": "JSD-18",
+          "to": "JSD-21",
+          "desc": "ePA-Ablage in gematik Fachdienst"
+        }
+      ]
+    },
+    {
+      "id": "JSD-INT-13",
+      "name": "KIS Falldaten & DRG-Leistungen ➔ SAP S/4HANA Finance",
+      "cluster": "ERP_HR",
+      "hub": "SAP CPI",
+      "hubName": "SAP CPI / BTP Integration Suite",
+      "protocol": "SAP RFC / OData v4",
+      "desc": "Transfer abgerechneter Fall- und DRG-Daten aus CGM MEDICO in das SAP Hauptbuch.",
+      "sourceSystem": "JSD-08",
+      "targetSystem": "JSD-01",
+      "steps": [
+        {
+          "connectionId": "JSD-C-26",
+          "from": "JSD-08",
+          "to": "JSD-04",
+          "desc": "Falldaten an SAP CPI"
+        },
+        {
+          "connectionId": "JSD-C-22",
+          "from": "JSD-04",
+          "to": "JSD-01",
+          "desc": "Buchungsbeleg in SAP S/4HANA"
+        }
+      ]
+    },
+    {
+      "id": "JSD-INT-14",
+      "name": "DTA § 301 SGB V DRG-Schlussrechnung an GKV Clearing",
+      "cluster": "ERP_HR",
+      "hub": "Direct",
+      "hubName": "Direct EDI Interface",
+      "protocol": "FTPS EDIFACT / TLS",
+      "desc": "Gesetzlicher elektronischer Abrechnungsaustausch mit gesetzlichen Krankenkassen.",
+      "sourceSystem": "JSD-01",
+      "targetSystem": "JSD-30",
+      "steps": [
+        {
+          "connectionId": "JSD-C-27",
+          "from": "JSD-01",
+          "to": "JSD-30",
+          "desc": "DTA § 301 Daten an GKV Clearing"
+        }
+      ]
+    },
+    {
+      "id": "JSD-INT-15",
+      "name": "JSD Einkauf Bestellungen ➔ GHX Medical & Pharma Exchange",
+      "cluster": "JSD_SERVICES",
+      "hub": "SAP CPI",
+      "hubName": "SAP CPI / BTP Integration Suite",
+      "protocol": "EDIFACT ORDERS / AS2",
+      "desc": "Elektronische Material- und Zytostatikabestellungen der JSD Services GmbH an Lieferanten.",
+      "sourceSystem": "JSD-01",
+      "targetSystem": "JSD-24",
+      "steps": [
+        {
+          "connectionId": "JSD-C-23",
+          "from": "JSD-01",
+          "to": "JSD-24",
+          "desc": "Bestellung an GHX Exchange"
+        }
+      ]
+    },
+    {
+      "id": "JSD-INT-16",
+      "name": "Eingangsrechnungen OpenPeppol ➔ SAP S/4HANA Finance",
+      "cluster": "ERP_HR",
+      "hub": "SAP CPI",
+      "hubName": "SAP CPI / BTP Integration Suite",
+      "protocol": "AS4 Peppol / UBL",
+      "desc": "Empfang und automatische Kontierung von Lieferanten-E-Rechnungen (XRechnung) via Peppol.",
+      "sourceSystem": "JSD-25",
+      "targetSystem": "JSD-01",
+      "steps": [
+        {
+          "connectionId": "JSD-C-24",
+          "from": "JSD-25",
+          "to": "JSD-04",
+          "desc": "XRechnung-Zustellung via Peppol"
+        },
+        {
+          "connectionId": "JSD-C-25",
+          "from": "JSD-04",
+          "to": "JSD-01",
+          "desc": "Kontierung in SAP S/4HANA"
+        }
+      ]
+    },
+    {
+      "id": "JSD-INT-17",
+      "name": "Dienstplan- und Personal-Sync (SAP HCM ➔ Atoss ➔ KIS)",
+      "cluster": "HUMAN_RESOURCES",
+      "hub": "JSD-03",
+      "hubName": "Atoss Medical Staff Cloud",
+      "protocol": "REST / JSON Webhook over TLS",
+      "desc": "Automatisierte Bereitstellung von Personal- und Dienstplandaten aus SAP HCM über Atoss in die Stations- und OP-Planung des KIS.",
+      "sourceSystem": "JSD-01",
+      "targetSystem": "JSD-08",
+      "steps": [
+        {
+          "connectionId": "JSD-C-33",
+          "from": "JSD-01",
+          "to": "JSD-03",
+          "desc": "SAP HCM Personal- und Dienstplan-Sync an Atoss"
+        },
+        {
+          "connectionId": "JSD-C-34",
+          "from": "JSD-03",
+          "to": "JSD-08",
+          "desc": "Atoss Dienstplan- und OP-Verfügbarkeit an KIS"
+        }
+      ]
+    },
+    {
+      "id": "JSD-INT-18",
+      "name": "Konzernweites Realtime Data Lakehouse Streaming (HealthShare & SAP ➔ Lakehouse)",
+      "cluster": "ANALYTICS",
+      "hub": "JSD-10",
+      "hubName": "InterSystems HealthShare Hub",
+      "protocol": "Kafka FHIR Stream & JDBC OData ETL",
+      "desc": "Zentrale Datenkonsolidierung klinischer und kaufmännischer Ereignisse im JSD Cloud Data Lakehouse für Realtime-Analytics und Konzern-Reporting.",
+      "sourceSystem": "JSD-10",
+      "targetSystem": "JSD-06",
+      "steps": [
+        {
+          "connectionId": "JSD-C-35",
+          "from": "JSD-10",
+          "to": "JSD-06",
+          "desc": "HealthShare Realtime FHIR Stream an Lakehouse"
+        },
+        {
+          "connectionId": "JSD-C-36",
+          "from": "JSD-01",
+          "to": "JSD-06",
+          "desc": "SAP Finance Kostenrechnung und Controlling ETL"
+        }
+      ]
+    },
+    {
+      "id": "JSD-INT-19",
+      "name": "Revisionssichere Patientenakte und Langzeitarchivierung (KIS ➔ d.velop)",
+      "cluster": "ARCHIVE",
+      "hub": "JSD-19",
+      "hubName": "d.velop / D3 ECM Digitales Archiv",
+      "protocol": "IHE XDS.b / HL7 MDM",
+      "desc": "Standardisierte Dokumenten-Archivierung aus CGM MEDICO und Martin Luther KIS in das revisionssichere Konzernarchiv (IHE XDS.b konform).",
+      "sourceSystem": "JSD-08",
+      "targetSystem": "JSD-19",
+      "steps": [
+        {
+          "connectionId": "JSD-C-37",
+          "from": "JSD-08",
+          "to": "JSD-19",
+          "desc": "CGM MEDICO Patientenakten-Archivierung (IHE XDS.b)"
+        },
+        {
+          "connectionId": "JSD-C-38",
+          "from": "JSD-09",
+          "to": "JSD-19",
+          "desc": "MLK KIS Dokumenten-Archivierung (IHE XDS.b)"
+        }
+      ]
+    },
+    {
+      "id": "JSD-INT-20",
+      "name": "Zero-Trust KRITIS-Perimeterschutz und Telematik-Inspektion (TI ➔ Fortinet ➔ HealthShare)",
+      "cluster": "SECURITY",
+      "hub": "JSD-20",
+      "hubName": "Fortinet & Cisco KRITIS-Perimeter",
+      "protocol": "IPSec VPN & TLS 1.3 Deep Packet Inspection",
+      "desc": "Kapselung und L7-Sicherheitsüberprüfung des TI- und Schnittstellen-Datenverkehrs durch den KRITIS-Perimeter zur Einhaltung der B3S-Vorgaben.",
+      "sourceSystem": "JSD-21",
+      "targetSystem": "JSD-10",
+      "steps": [
+        {
+          "connectionId": "JSD-C-40",
+          "from": "JSD-21",
+          "to": "JSD-20",
+          "desc": "gematik TI VPN Tunnel an KRITIS Perimeter"
+        },
+        {
+          "connectionId": "JSD-C-39",
+          "from": "JSD-20",
+          "to": "JSD-10",
+          "desc": "Inspizierter HealthShare Ingress (B3S Zero-Trust)"
+        }
+      ]
+    },
+    {
+      "id": "JSD-INT-21",
+      "name": "Notfall-Zuweisung und Rettungsdienst-Routing (Feuerwehr 112 ➔ IVENA ➔ ZNA)",
+      "cluster": "EMERGENCY",
+      "hub": "JSD-23",
+      "hubName": "IVENA eHealth Versorgungsnachweis",
+      "protocol": "B3S REST API over TLS",
+      "desc": "Echtzeit-Routing von Rettungstransporten der Berliner Feuerwehr über das IVENA eHealth Portal direkt in die Notaufnahme (E-Care ZNA).",
+      "sourceSystem": "JSD-29",
+      "targetSystem": "JSD-15",
+      "steps": [
+        {
+          "connectionId": "JSD-C-18",
+          "from": "JSD-29",
+          "to": "JSD-23",
+          "desc": "Berliner Feuerwehr Notfalleinsatz-Routing an IVENA"
+        },
+        {
+          "connectionId": "JSD-C-17",
+          "from": "JSD-15",
+          "to": "JSD-23",
+          "desc": "ZNA E-Care Kapazitätsrückmeldung an IVENA"
+        }
+      ]
+    },
+    {
+      "id": "JSD-INT-22",
+      "name": "Infektionsschutz-Meldung an das RKI (Swisslab LIMS ➔ DEMIS Portal)",
+      "cluster": "PUBLIC_HEALTH",
+      "hub": null,
+      "hubName": "RKI DEMIS Cloud",
+      "protocol": "HL7 FHIR R4 IfSG REST API",
+      "desc": "Gesetzlich vorgeschriebene elektronische Meldung meldepflichtiger Krankheitserreger (§ 6, 7 IfSG) aus dem Swisslab LIMS direkt an das RKI DEMIS Portal.",
+      "sourceSystem": "JSD-11",
+      "targetSystem": "JSD-26",
+      "steps": [
+        {
+          "connectionId": "JSD-C-41",
+          "from": "JSD-11",
+          "to": "JSD-26",
+          "desc": "LIMS Labormeldung an RKI DEMIS Portal"
+        }
+      ]
+    },
+    {
+      "id": "JSD-INT-23",
+      "name": "Privatabrechnung und GOÄ-Clearing (CGM MEDICO ➔ PKV Verband)",
+      "cluster": "FINANCE",
+      "hub": null,
+      "hubName": "PKV Clearingstelle",
+      "protocol": "DTA PKV § 301 EDIFACT / SFTP",
+      "desc": "Elektronischer DTA-Versand privatärztlicher Krankenhausabrechnungen nach GOÄ an den Verband der Privaten Krankenversicherung.",
+      "sourceSystem": "JSD-08",
+      "targetSystem": "JSD-31",
+      "steps": [
+        {
+          "connectionId": "JSD-C-42",
+          "from": "JSD-08",
+          "to": "JSD-31",
+          "desc": "DTA § 301 EDIFACT Abrechnungsversand an PKV Verband"
+        }
+      ]
+    },
+    {
+      "id": "JSD-INT-24",
+      "name": "Notfall-Bluttransfusion und Depot-Bestellung (LIMS ➔ DRK Blutspendedienst)",
+      "cluster": "LABORATORY",
+      "hub": null,
+      "hubName": "DRK Blutspendedienst Nord-Ost",
+      "protocol": "HL7 v2.5 OML / REST JSON",
+      "desc": "Elektronische Anforderung von Blutkonserven bei akutem Bedarf und automatisierte Chargen-Rückmeldung für Kreuzproben.",
+      "sourceSystem": "JSD-11",
+      "targetSystem": "JSD-32",
+      "steps": [
+        {
+          "connectionId": "JSD-C-43",
+          "from": "JSD-11",
+          "to": "JSD-32",
+          "desc": "LIMS Konserven-Bestellung an DRK Blutspendedienst"
+        }
+      ]
+    },
+    {
+      "id": "JSD-INT-25",
+      "name": "Strukturierte Ersteinschätzung und KV-Zuweisung (116117 SmED ➔ ZNA)",
+      "cluster": "EMERGENCY",
+      "hub": null,
+      "hubName": "KV Berlin 116117",
+      "protocol": "HL7 FHIR SmED REST API",
+      "desc": "Übernahme strukturierter Ersteinschätzungsdaten (SmED) aus dem Patientennavigationssystem 116117 in die Notaufnahme E-Care ZNA.",
+      "sourceSystem": "JSD-33",
+      "targetSystem": "JSD-15",
+      "steps": [
+        {
+          "connectionId": "JSD-C-44",
+          "from": "JSD-33",
+          "to": "JSD-15",
+          "desc": "KV Berlin 116117 Notfallzuweisung (SmED) an ZNA"
+        }
+      ]
+    },
+    {
+      "id": "JSD-INT-26",
+      "name": "Gesetzliche Krebsregistermeldung Berlin-Brandenburg (CGM MEDICO ➔ GKR)",
+      "cluster": "REGULATORY",
+      "hub": null,
+      "hubName": "Gemeinsames Krebsregister Berlin-BB",
+      "protocol": "oBDS § 65c SGB V REST / XML",
+      "desc": "Übermittlung onkologischer Basisdatensätze (oBDS) bei stationären Diagnosen, Tumorboards und Therapien an das Gemeinsame Krebsregister.",
+      "sourceSystem": "JSD-08",
+      "targetSystem": "JSD-34",
+      "steps": [
+        {
+          "connectionId": "JSD-C-45",
+          "from": "JSD-08",
+          "to": "JSD-34",
+          "desc": "oBDS Tumordaten-Meldung an GKR Berlin-BB"
+        }
+      ]
+    },
+    {
+      "id": "JSD-INT-27",
+      "name": "Intensivüberwachung und Vitaldaten-Streaming (PDMS ➔ HealthShare Hub)",
+      "cluster": "INTENSIVE_CARE",
+      "hub": "JSD-10",
+      "hubName": "InterSystems HealthShare Hub",
+      "protocol": "HL7 v2.6 PCD-01 / MLLP",
+      "desc": "Streaming kontinuierlicher Vitalparameter und Beatmungsdaten aus dem Philips/GE Intensiv-PDMS in den HealthShare Hub zur klinikweiten Verfügbarkeit.",
+      "sourceSystem": "JSD-14",
+      "targetSystem": "JSD-10",
+      "steps": [
+        {
+          "connectionId": "JSD-C-11",
+          "from": "JSD-08",
+          "to": "JSD-14",
+          "desc": "MEDICO Patientenübernahme an Intensiv-PDMS"
+        },
+        {
+          "connectionId": "JSD-C-12",
+          "from": "JSD-14",
+          "to": "JSD-10",
+          "desc": "PCD-01 Vitaldaten-Streaming an HealthShare Hub"
+        }
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "JSD-C-01",
+      "from": "JSD-08",
+      "to": "JSD-10",
+      "name": "CGM MEDICO ➔ HealthShare Hub (ADT, ORM, MDM)",
+      "protocol": "HL7 v2.5 MLLP / TLS",
+      "msgType": "HL7",
+      "flowType": "INTRA_ON_PREM",
+      "overlay": "ON_PREM_LAN",
+      "isCrossBoundary": false,
+      "tags": [
+        "Klinik",
+        "HL7",
+        "Middleware"
+      ],
+      "messageType": "HL7",
+      "transportOverlay": "ON_PREM_LAN",
+      "rawWeight": 240,
+      "trafficPct": 2.4
+    },
+    {
+      "id": "JSD-C-02",
+      "from": "JSD-09",
+      "to": "JSD-10",
+      "name": "Martin Luther KIS ➔ HealthShare Hub (ADT, ORM)",
+      "protocol": "HL7 v2.5 MLLP / TLS",
+      "msgType": "HL7",
+      "flowType": "INTRA_ON_PREM",
+      "overlay": "ON_PREM_LAN",
+      "isCrossBoundary": false,
+      "tags": [
+        "Klinik",
+        "HL7",
+        "Middleware"
+      ],
+      "messageType": "HL7",
+      "transportOverlay": "ON_PREM_LAN",
+      "rawWeight": 247,
+      "trafficPct": 2.5
+    },
+    {
+      "id": "JSD-C-03",
+      "from": "JSD-10",
+      "to": "JSD-11",
+      "name": "HealthShare Hub ➔ Swisslab LIMS Laborauftrag",
+      "protocol": "HL7 v2.5 ORM / MLLP",
+      "msgType": "HL7",
+      "flowType": "INTRA_ON_PREM",
+      "overlay": "ON_PREM_LAN",
+      "isCrossBoundary": false,
+      "tags": [
+        "Diagnostik / Labor",
+        "HL7"
+      ],
+      "messageType": "HL7",
+      "transportOverlay": "ON_PREM_LAN",
+      "rawWeight": 254,
+      "trafficPct": 2.6
+    },
+    {
+      "id": "JSD-C-04",
+      "from": "JSD-11",
+      "to": "JSD-10",
+      "name": "Swisslab LIMS ➔ HealthShare Hub Laborbefunde",
+      "protocol": "HL7 v2.5 ORU / MLLP",
+      "msgType": "HL7",
+      "flowType": "INTRA_ON_PREM",
+      "overlay": "ON_PREM_LAN",
+      "isCrossBoundary": false,
+      "tags": [
+        "Diagnostik / Labor",
+        "HL7"
+      ],
+      "messageType": "HL7",
+      "transportOverlay": "ON_PREM_LAN",
+      "rawWeight": 261,
+      "trafficPct": 2.7
+    },
+    {
+      "id": "JSD-C-05",
+      "from": "JSD-10",
+      "to": "JSD-08",
+      "name": "HealthShare Hub ➔ CGM MEDICO Befundrückmeldung",
+      "protocol": "HL7 v2.5 ORU / MLLP",
+      "msgType": "HL7",
+      "flowType": "INTRA_ON_PREM",
+      "overlay": "ON_PREM_LAN",
+      "isCrossBoundary": false,
+      "tags": [
+        "Klinik",
+        "HL7"
+      ],
+      "messageType": "HL7",
+      "transportOverlay": "ON_PREM_LAN",
+      "rawWeight": 268,
+      "trafficPct": 2.8
+    },
+    {
+      "id": "JSD-C-06",
+      "from": "JSD-10",
+      "to": "JSD-09",
+      "name": "HealthShare Hub ➔ Martin Luther Befundrückmeldung",
+      "protocol": "HL7 v2.5 ORU / MLLP",
+      "msgType": "HL7",
+      "flowType": "INTRA_ON_PREM",
+      "overlay": "ON_PREM_LAN",
+      "isCrossBoundary": false,
+      "tags": [
+        "Klinik",
+        "HL7"
+      ],
+      "messageType": "HL7",
+      "transportOverlay": "ON_PREM_LAN",
+      "rawWeight": 275,
+      "trafficPct": 2.9
+    },
+    {
+      "id": "JSD-C-07",
+      "from": "JSD-10",
+      "to": "JSD-13",
+      "name": "HealthShare Hub ➔ Siemens Syngo RIS Radiologie-Order",
+      "protocol": "HL7 v2.5 OMG / MLLP",
+      "msgType": "HL7",
+      "flowType": "INTRA_ON_PREM",
+      "overlay": "ON_PREM_LAN",
+      "isCrossBoundary": false,
+      "tags": [
+        "Radiologie / PACS",
+        "HL7"
+      ],
+      "messageType": "HL7",
+      "transportOverlay": "ON_PREM_LAN",
+      "rawWeight": 282,
+      "trafficPct": 3
+    },
+    {
+      "id": "JSD-C-08",
+      "from": "JSD-13",
+      "to": "JSD-12",
+      "name": "Syngo RIS ➔ Agfa PACS Modality Worklist (MWL)",
+      "protocol": "DICOM C-FIND / TCP",
+      "msgType": "DICOM",
+      "flowType": "INTRA_ON_PREM",
+      "overlay": "ON_PREM_LAN",
+      "isCrossBoundary": false,
+      "tags": [
+        "Radiologie / PACS",
+        "DICOM"
+      ],
+      "messageType": "DICOM",
+      "transportOverlay": "ON_PREM_LAN",
+      "rawWeight": 429,
+      "trafficPct": 4.5
+    },
+    {
+      "id": "JSD-C-09",
+      "from": "JSD-12",
+      "to": "JSD-27",
+      "name": "Agfa PACS ➔ Brainomix Cloud-KI Notfall-CT Upload",
+      "protocol": "DICOMweb WADO-RS / TLS",
+      "msgType": "REST_API",
+      "flowType": "EXTERNAL_EGRESS",
+      "overlay": "PUBLIC_INTERNET_TLS",
+      "isCrossBoundary": true,
+      "tags": [
+        "Radiologie / PACS",
+        "Cloud"
+      ],
+      "messageType": "REST_API",
+      "transportOverlay": "PUBLIC_INTERNET_TLS",
+      "rawWeight": 106,
+      "trafficPct": 1
+    },
+    {
+      "id": "JSD-C-10",
+      "from": "JSD-27",
+      "to": "JSD-13",
+      "name": "Brainomix Cloud-KI ➔ Syngo RIS KI-Befund Score",
+      "protocol": "REST API JSON / TLS",
+      "msgType": "REST_API",
+      "flowType": "EXTERNAL_INGRESS",
+      "overlay": "PUBLIC_INTERNET_TLS",
+      "isCrossBoundary": true,
+      "tags": [
+        "Radiologie / PACS",
+        "Cloud"
+      ],
+      "messageType": "REST_API",
+      "transportOverlay": "PUBLIC_INTERNET_TLS",
+      "rawWeight": 113,
+      "trafficPct": 1.1
+    },
+    {
+      "id": "JSD-C-11",
+      "from": "JSD-08",
+      "to": "JSD-14",
+      "name": "CGM MEDICO ➔ Intensiv-PDMS Patientenübernahme",
+      "protocol": "HL7 v2.5 ADT A02/A08",
+      "msgType": "HL7",
+      "flowType": "INTRA_ON_PREM",
+      "overlay": "ON_PREM_LAN",
+      "isCrossBoundary": false,
+      "tags": [
+        "Klinik",
+        "HL7"
+      ],
+      "messageType": "HL7",
+      "transportOverlay": "ON_PREM_LAN",
+      "rawWeight": 260,
+      "trafficPct": 2.6
+    },
+    {
+      "id": "JSD-C-12",
+      "from": "JSD-14",
+      "to": "JSD-10",
+      "name": "Intensiv-PDMS ➔ HealthShare Hub Vitaldaten-Stream",
+      "protocol": "HL7 v2.6 PCD-01 / MLLP",
+      "msgType": "HL7",
+      "flowType": "INTRA_ON_PREM",
+      "overlay": "ON_PREM_LAN",
+      "isCrossBoundary": false,
+      "tags": [
+        "Klinik",
+        "HL7"
+      ],
+      "messageType": "HL7",
+      "transportOverlay": "ON_PREM_LAN",
+      "rawWeight": 267,
+      "trafficPct": 2.7
+    },
+    {
+      "id": "JSD-C-13",
+      "from": "JSD-10",
+      "to": "JSD-07",
+      "name": "HealthShare Hub ➔ Meona eKurve Cloud Synchronisation",
+      "protocol": "HL7 FHIR R4 / TLS",
+      "msgType": "FHIR",
+      "flowType": "HYBRID_EGRESS",
+      "overlay": "HYBRID_VPN_IPSEC",
+      "isCrossBoundary": true,
+      "tags": [
+        "Klinik",
+        "FHIR",
+        "Cloud"
+      ],
+      "messageType": "FHIR",
+      "transportOverlay": "HYBRID_VPN_IPSEC",
+      "rawWeight": 214,
+      "trafficPct": 2.2
+    },
+    {
+      "id": "JSD-C-14",
+      "from": "JSD-15",
+      "to": "JSD-10",
+      "name": "ZNA E-Care ➔ HealthShare Hub Manchester Triage",
+      "protocol": "HL7 v2.5 ADT A04 / MLLP",
+      "msgType": "HL7",
+      "flowType": "INTRA_ON_PREM",
+      "overlay": "ON_PREM_LAN",
+      "isCrossBoundary": false,
+      "tags": [
+        "Notfallrettung",
+        "HL7"
+      ],
+      "messageType": "HL7",
+      "transportOverlay": "ON_PREM_LAN",
+      "rawWeight": 281,
+      "trafficPct": 2.9
+    },
+    {
+      "id": "JSD-C-15",
+      "from": "JSD-28",
+      "to": "JSD-05",
+      "name": "Medical IoT RTW ➔ JSD Telemedizin Hub Vitaldaten",
+      "protocol": "MQTT over TLS / WebRTC",
+      "msgType": "IOT_STREAM",
+      "flowType": "EXTERNAL_INGRESS",
+      "overlay": "PUBLIC_INTERNET_TLS",
+      "isCrossBoundary": true,
+      "tags": [
+        "Notfallrettung",
+        "Cloud"
+      ],
+      "messageType": "IOT_STREAM",
+      "transportOverlay": "PUBLIC_INTERNET_TLS",
+      "rawWeight": 148,
+      "trafficPct": 1.6
+    },
+    {
+      "id": "JSD-C-16",
+      "from": "JSD-05",
+      "to": "JSD-15",
+      "name": "JSD Telemedizin Hub ➔ ZNA E-Care Notfall-Voranmeldung",
+      "protocol": "REST FHIR Encounter / TLS",
+      "msgType": "FHIR",
+      "flowType": "HYBRID_INGRESS",
+      "overlay": "HYBRID_VPN_IPSEC",
+      "isCrossBoundary": true,
+      "tags": [
+        "Notfallrettung",
+        "Cloud"
+      ],
+      "messageType": "FHIR",
+      "transportOverlay": "HYBRID_VPN_IPSEC",
+      "rawWeight": 185,
+      "trafficPct": 2.5
+    },
+    {
+      "id": "JSD-C-17",
+      "from": "JSD-15",
+      "to": "JSD-23",
+      "name": "ZNA E-Care ➔ IVENA Versorgungsnachweis Kapazitäten",
+      "protocol": "REST API JSON / TLS",
+      "msgType": "REST_API",
+      "flowType": "EXTERNAL_EGRESS",
+      "overlay": "PUBLIC_INTERNET_TLS",
+      "isCrossBoundary": true,
+      "tags": [
+        "Notfallrettung",
+        "REST_API"
+      ],
+      "messageType": "REST_API",
+      "transportOverlay": "PUBLIC_INTERNET_TLS",
+      "rawWeight": 112,
+      "trafficPct": 1
+    },
+    {
+      "id": "JSD-C-18",
+      "from": "JSD-29",
+      "to": "JSD-23",
+      "name": "Berliner Feuerwehr 112 ➔ IVENA Notfalleinsatz-Routing",
+      "protocol": "B3S API / REST",
+      "msgType": "REST_API",
+      "flowType": "EXTERNAL_B2B",
+      "overlay": "PUBLIC_INTERNET_TLS",
+      "isCrossBoundary": true,
+      "tags": [
+        "Notfallrettung",
+        "KRITIS"
+      ],
+      "messageType": "REST_API",
+      "transportOverlay": "PUBLIC_INTERNET_TLS",
+      "rawWeight": 119,
+      "trafficPct": 1.1
+    },
+    {
+      "id": "JSD-C-19",
+      "from": "JSD-08",
+      "to": "JSD-16",
+      "name": "CGM MEDICO OP-Plan ➔ AEMP Instacount Siebanforderung",
+      "protocol": "HL7 v2.5 ORM / MLLP",
+      "msgType": "HL7",
+      "flowType": "INTRA_ON_PREM",
+      "overlay": "ON_PREM_LAN",
+      "isCrossBoundary": false,
+      "tags": [
+        "JSD Services",
+        "Logistik",
+        "HL7"
+      ],
+      "messageType": "HL7",
+      "transportOverlay": "ON_PREM_LAN",
+      "rawWeight": 266,
+      "trafficPct": 2.6
+    },
+    {
+      "id": "JSD-C-20",
+      "from": "JSD-16",
+      "to": "JSD-17",
+      "name": "AEMP Instacount ➔ JSD Translog Tourenplanung",
+      "protocol": "REST API JSON / TLS",
+      "msgType": "REST_API",
+      "flowType": "INTRA_ON_PREM",
+      "overlay": "ON_PREM_LAN",
+      "isCrossBoundary": false,
+      "tags": [
+        "JSD Services",
+        "Logistik"
+      ],
+      "messageType": "REST_API",
+      "transportOverlay": "ON_PREM_LAN",
+      "rawWeight": 133,
+      "trafficPct": 1.3
+    },
+    {
+      "id": "JSD-C-21",
+      "from": "JSD-16",
+      "to": "JSD-04",
+      "name": "AEMP Instacount ➔ SAP CPI Materialverbrauch",
+      "protocol": "OData v4 / HTTPS",
+      "msgType": "REST_API",
+      "flowType": "HYBRID_EGRESS",
+      "overlay": "HYBRID_VPN_IPSEC",
+      "isCrossBoundary": true,
+      "tags": [
+        "JSD Services",
+        "Logistik",
+        "SAP"
+      ],
+      "messageType": "REST_API",
+      "transportOverlay": "HYBRID_VPN_IPSEC",
+      "rawWeight": 140,
+      "trafficPct": 1.4
+    },
+    {
+      "id": "JSD-C-22",
+      "from": "JSD-04",
+      "to": "JSD-01",
+      "name": "SAP CPI ➔ SAP S/4HANA Finance Buchungsbeleg",
+      "protocol": "OData v4 / HTTPS",
+      "msgType": "REST_API",
+      "flowType": "INTRA_CLOUD",
+      "overlay": "INTRA_CLOUD_MESH",
+      "isCrossBoundary": false,
+      "tags": [
+        "Finanzen / ERP",
+        "SAP",
+        "Cloud"
+      ],
+      "messageType": "REST_API",
+      "transportOverlay": "INTRA_CLOUD_MESH",
+      "rawWeight": 147,
+      "trafficPct": 1.5
+    },
+    {
+      "id": "JSD-C-23",
+      "from": "JSD-01",
+      "to": "JSD-24",
+      "name": "SAP S/4HANA MM ➔ GHX Medical Exchange Bestellungen",
+      "protocol": "EDIFACT ORDERS / AS2",
+      "msgType": "B2B_EDI",
+      "flowType": "EXTERNAL_B2B",
+      "overlay": "PUBLIC_INTERNET_TLS",
+      "isCrossBoundary": true,
+      "tags": [
+        "Finanzen / ERP",
+        "EDIFACT"
+      ],
+      "messageType": "B2B_EDI",
+      "transportOverlay": "PUBLIC_INTERNET_TLS",
+      "rawWeight": 104,
+      "trafficPct": 1.6
+    },
+    {
+      "id": "JSD-C-24",
+      "from": "JSD-25",
+      "to": "JSD-04",
+      "name": "OpenPeppol E-Invoicing ➔ SAP CPI XRechnung",
+      "protocol": "AS4 Peppol / TLS",
+      "msgType": "B2B_EDI",
+      "flowType": "EXTERNAL_INGRESS",
+      "overlay": "PUBLIC_INTERNET_TLS",
+      "isCrossBoundary": true,
+      "tags": [
+        "Finanzen / ERP",
+        "EDIFACT"
+      ],
+      "messageType": "B2B_EDI",
+      "transportOverlay": "PUBLIC_INTERNET_TLS",
+      "rawWeight": 111,
+      "trafficPct": 1.7
+    },
+    {
+      "id": "JSD-C-25",
+      "from": "JSD-04",
+      "to": "JSD-01",
+      "name": "SAP CPI ➔ SAP S/4HANA Kontierung & Workflow",
+      "protocol": "OData v4 / HTTPS",
+      "msgType": "REST_API",
+      "flowType": "INTRA_CLOUD",
+      "overlay": "INTRA_CLOUD_MESH",
+      "isCrossBoundary": false,
+      "tags": [
+        "Finanzen / ERP",
+        "SAP",
+        "Cloud"
+      ],
+      "messageType": "REST_API",
+      "transportOverlay": "INTRA_CLOUD_MESH",
+      "rawWeight": 118,
+      "trafficPct": 1
+    },
+    {
+      "id": "JSD-C-26",
+      "from": "JSD-08",
+      "to": "JSD-04",
+      "name": "CGM MEDICO KIS Falldaten ➔ SAP CPI Gateway",
+      "protocol": "SAP RFC / BAPI over TLS",
+      "msgType": "REST_API",
+      "flowType": "HYBRID_EGRESS",
+      "overlay": "HYBRID_VPN_IPSEC",
+      "isCrossBoundary": true,
+      "tags": [
+        "Finanzen / ERP",
+        "SAP"
+      ],
+      "messageType": "REST_API",
+      "transportOverlay": "HYBRID_VPN_IPSEC",
+      "rawWeight": 125,
+      "trafficPct": 1.1
+    },
+    {
+      "id": "JSD-C-27",
+      "from": "JSD-01",
+      "to": "JSD-30",
+      "name": "SAP S/4HANA Finance ➔ GKV § 301 DTA DRG-Rechnung",
+      "protocol": "FTPS EDIFACT / TLS",
+      "msgType": "B2B_EDI",
+      "flowType": "EXTERNAL_EGRESS",
+      "overlay": "PUBLIC_INTERNET_TLS",
+      "isCrossBoundary": true,
+      "tags": [
+        "Finanzen / ERP",
+        "EDIFACT",
+        "KRITIS"
+      ],
+      "messageType": "B2B_EDI",
+      "transportOverlay": "PUBLIC_INTERNET_TLS",
+      "rawWeight": 132,
+      "trafficPct": 1.2
+    },
+    {
+      "id": "JSD-C-28",
+      "from": "JSD-02",
+      "to": "JSD-04",
+      "name": "m.Doc Patientenportal ➔ SAP CPI REST FHIR Gateway",
+      "protocol": "REST FHIR R4 / HTTPS",
+      "msgType": "FHIR",
+      "flowType": "INTRA_CLOUD",
+      "overlay": "INTRA_CLOUD_MESH",
+      "isCrossBoundary": false,
+      "tags": [
+        "Telematik / TI",
+        "Cloud",
+        "FHIR"
+      ],
+      "messageType": "FHIR",
+      "transportOverlay": "INTRA_CLOUD_MESH",
+      "rawWeight": 219,
+      "trafficPct": 2.1
+    },
+    {
+      "id": "JSD-C-29",
+      "from": "JSD-04",
+      "to": "JSD-08",
+      "name": "SAP CPI ➔ CGM MEDICO Patienten-Import",
+      "protocol": "HL7 FHIR / MLLP Bridge",
+      "msgType": "FHIR",
+      "flowType": "HYBRID_INGRESS",
+      "overlay": "HYBRID_VPN_IPSEC",
+      "isCrossBoundary": true,
+      "tags": [
+        "Klinik",
+        "FHIR"
+      ],
+      "messageType": "FHIR",
+      "transportOverlay": "HYBRID_VPN_IPSEC",
+      "rawWeight": 226,
+      "trafficPct": 2.2
+    },
+    {
+      "id": "JSD-C-30",
+      "from": "JSD-10",
+      "to": "JSD-18",
+      "name": "HealthShare Hub ➔ TI-Cluster Kocobox Fachdienst-Aufruf",
+      "protocol": "SOAP XML / IPsec VPN",
+      "msgType": "REST_API",
+      "flowType": "INTRA_ON_PREM",
+      "overlay": "ON_PREM_LAN",
+      "isCrossBoundary": false,
+      "tags": [
+        "Telematik / TI",
+        "Middleware",
+        "KRITIS"
+      ],
+      "messageType": "REST_API",
+      "transportOverlay": "ON_PREM_LAN",
+      "rawWeight": 103,
+      "trafficPct": 1.5
+    },
+    {
+      "id": "JSD-C-31",
+      "from": "JSD-18",
+      "to": "JSD-22",
+      "name": "TI-Cluster Kocobox ➔ CGM KIM Provider eArztbrief",
+      "protocol": "SMTP over TLS / S-MIME",
+      "msgType": "REST_API",
+      "flowType": "EXTERNAL_EGRESS",
+      "overlay": "PUBLIC_INTERNET_TLS",
+      "isCrossBoundary": true,
+      "tags": [
+        "Telematik / TI",
+        "KRITIS"
+      ],
+      "messageType": "REST_API",
+      "transportOverlay": "PUBLIC_INTERNET_TLS",
+      "rawWeight": 110,
+      "trafficPct": 1.6
+    },
+    {
+      "id": "JSD-C-32",
+      "from": "JSD-18",
+      "to": "JSD-21",
+      "name": "TI-Cluster Kocobox ➔ gematik Zentrale ePA 3.0",
+      "protocol": "HTTPS / TLS Bundessicherheitsnetz",
+      "msgType": "FHIR",
+      "flowType": "EXTERNAL_EGRESS",
+      "overlay": "PUBLIC_INTERNET_TLS",
+      "isCrossBoundary": true,
+      "tags": [
+        "Telematik / TI",
+        "KRITIS"
+      ],
+      "messageType": "FHIR",
+      "transportOverlay": "PUBLIC_INTERNET_TLS",
+      "rawWeight": 197,
+      "trafficPct": 2.5
+    },
+    {
+      "id": "JSD-C-33",
+      "from": "JSD-01",
+      "to": "JSD-03",
+      "name": "SAP HCM ➔ Atoss Personal-Stammdaten & Dienstplan-Sync",
+      "protocol": "HTTPS / REST JSON",
+      "msgType": "REST",
+      "flowType": "INTRA_CLOUD",
+      "overlay": "CLOUD_VPC",
+      "isCrossBoundary": true,
+      "tags": [
+        "HR",
+        "Cloud",
+        "SAP",
+        "REST"
+      ],
+      "messageType": "REST",
+      "transportOverlay": "CLOUD_VPC",
+      "rawWeight": 174,
+      "trafficPct": 1.5
+    },
+    {
+      "id": "JSD-C-34",
+      "from": "JSD-03",
+      "to": "JSD-08",
+      "name": "Atoss ➔ CGM MEDICO OP- & Dienstplan-Verfügbarkeit",
+      "protocol": "REST / JSON Webhook",
+      "msgType": "REST",
+      "flowType": "CLOUD_TO_PREM",
+      "overlay": "HTTPS_MTLS",
+      "isCrossBoundary": true,
+      "tags": [
+        "Klinik",
+        "HR",
+        "REST",
+        "Cloud"
+      ],
+      "messageType": "REST",
+      "transportOverlay": "HTTPS_MTLS",
+      "rawWeight": 181,
+      "trafficPct": 1.6
+    },
+    {
+      "id": "JSD-C-35",
+      "from": "JSD-10",
+      "to": "JSD-06",
+      "name": "HealthShare Hub ➔ Data Lakehouse Realtime FHIR Stream",
+      "protocol": "Kafka / FHIR Bulk Data (ndjson)",
+      "msgType": "FHIR",
+      "flowType": "PREM_TO_CLOUD",
+      "overlay": "AZURE_EXPRESSROUTE",
+      "isCrossBoundary": true,
+      "tags": [
+        "Analytics",
+        "FHIR",
+        "Streaming",
+        "Cloud"
+      ],
+      "messageType": "FHIR",
+      "transportOverlay": "AZURE_EXPRESSROUTE",
+      "rawWeight": 218,
+      "trafficPct": 2
+    },
+    {
+      "id": "JSD-C-36",
+      "from": "JSD-01",
+      "to": "JSD-06",
+      "name": "SAP Finance ➔ Lakehouse Kostenrechnung & Controlling ETL",
+      "protocol": "OData / JDBC SQL ETL",
+      "msgType": "SQL",
+      "flowType": "CLOUD_VPC",
+      "overlay": "TLS_1_3",
+      "isCrossBoundary": false,
+      "tags": [
+        "Finanzen",
+        "Analytics",
+        "SQL",
+        "Cloud"
+      ],
+      "messageType": "SQL",
+      "transportOverlay": "TLS_1_3",
+      "rawWeight": 165,
+      "trafficPct": 1.5
+    },
+    {
+      "id": "JSD-C-37",
+      "from": "JSD-08",
+      "to": "JSD-19",
+      "name": "CGM MEDICO ➔ d.velop Revisionssichere Patientenakte (IHE XDS.b)",
+      "protocol": "IHE XDS.b / HL7 MDM",
+      "msgType": "HL7",
+      "flowType": "INTRA_ON_PREM",
+      "overlay": "ON_PREM_LAN",
+      "isCrossBoundary": false,
+      "tags": [
+        "Klinik",
+        "Archiv",
+        "IHE",
+        "HL7"
+      ],
+      "messageType": "HL7",
+      "transportOverlay": "ON_PREM_LAN",
+      "rawWeight": 242,
+      "trafficPct": 2.8
+    },
+    {
+      "id": "JSD-C-38",
+      "from": "JSD-09",
+      "to": "JSD-19",
+      "name": "MLK KIS ➔ d.velop Dokumenten-Archivierung (IHE XDS.b)",
+      "protocol": "IHE XDS.b WebDAV / PDF/A",
+      "msgType": "REST",
+      "flowType": "INTRA_ON_PREM",
+      "overlay": "ON_PREM_LAN",
+      "isCrossBoundary": false,
+      "tags": [
+        "Klinik",
+        "Archiv",
+        "IHE"
+      ],
+      "messageType": "REST",
+      "transportOverlay": "ON_PREM_LAN",
+      "rawWeight": 159,
+      "trafficPct": 2
+    },
+    {
+      "id": "JSD-C-39",
+      "from": "JSD-20",
+      "to": "JSD-10",
+      "name": "KRITIS Perimeter ➔ HealthShare Hub (B3S Zero-Trust Gateway)",
+      "protocol": "TLS 1.3 Inspection / B3S WAF",
+      "msgType": "REST",
+      "flowType": "PERIMETER_TO_PREM",
+      "overlay": "B3S_PERIMETER",
+      "isCrossBoundary": true,
+      "tags": [
+        "Sicherheit",
+        "KRITIS",
+        "Perimeter",
+        "VPN"
+      ],
+      "messageType": "REST",
+      "transportOverlay": "B3S_PERIMETER",
+      "rawWeight": 166,
+      "trafficPct": 2.1
+    },
+    {
+      "id": "JSD-C-40",
+      "from": "JSD-21",
+      "to": "JSD-20",
+      "name": "gematik TI Backbone ➔ KRITIS-Perimeter (Sicherer VPN-Tunnel)",
+      "protocol": "gematik TI IPsec VPN Tunnel",
+      "msgType": "VPN",
+      "flowType": "EXT_TO_PERIMETER",
+      "overlay": "TI_VPN",
+      "isCrossBoundary": true,
+      "tags": [
+        "TI",
+        "VPN",
+        "Sicherheit",
+        "KRITIS"
+      ],
+      "messageType": "VPN",
+      "transportOverlay": "TI_VPN",
+      "rawWeight": 233,
+      "trafficPct": 2.8
+    },
+    {
+      "id": "JSD-C-41",
+      "from": "JSD-11",
+      "to": "JSD-26",
+      "name": "Swisslab LIMS ➔ RKI DEMIS Erregernachweis-Meldung (§ 6, 7 IfSG)",
+      "protocol": "HL7 FHIR R4 IfSG REST API",
+      "msgType": "FHIR",
+      "flowType": "PREM_TO_EXT",
+      "overlay": "BUND_DE_MTLS",
+      "isCrossBoundary": true,
+      "tags": [
+        "Labor",
+        "FHIR",
+        "DEMIS",
+        "Behörde"
+      ],
+      "messageType": "FHIR",
+      "transportOverlay": "BUND_DE_MTLS",
+      "rawWeight": 210,
+      "trafficPct": 2.6
+    },
+    {
+      "id": "JSD-C-42",
+      "from": "JSD-08",
+      "to": "JSD-31",
+      "name": "CGM MEDICO ➔ PKV Verband Elektronische Abrechnung § 301",
+      "protocol": "DTA PKV § 301 EDIFACT / SFTP",
+      "msgType": "EDIFACT",
+      "flowType": "PREM_TO_EXT",
+      "overlay": "SFTP_SSH",
+      "isCrossBoundary": true,
+      "tags": [
+        "Abrechnung",
+        "EDIFACT",
+        "PKV"
+      ],
+      "messageType": "EDIFACT",
+      "transportOverlay": "SFTP_SSH",
+      "rawWeight": 122,
+      "trafficPct": 1
+    },
+    {
+      "id": "JSD-C-43",
+      "from": "JSD-11",
+      "to": "JSD-32",
+      "name": "Swisslab LIMS ➔ DRK Blutspende Konserven-Bestellung & Kreuzprobe",
+      "protocol": "HL7 v2.5 OML / REST JSON",
+      "msgType": "HL7",
+      "flowType": "PREM_TO_EXT",
+      "overlay": "HTTPS_MTLS",
+      "isCrossBoundary": true,
+      "tags": [
+        "Labor",
+        "HL7",
+        "Blutspende"
+      ],
+      "messageType": "HL7",
+      "transportOverlay": "HTTPS_MTLS",
+      "rawWeight": 284,
+      "trafficPct": 2.6
+    },
+    {
+      "id": "JSD-C-44",
+      "from": "JSD-33",
+      "to": "JSD-15",
+      "name": "KV Berlin 116117 ➔ ZNA E-Care Notfall-Patientenzuweisung (SmED)",
+      "protocol": "HL7 FHIR SmED REST API",
+      "msgType": "FHIR",
+      "flowType": "EXT_TO_PREM",
+      "overlay": "KV_CONNECT_MTLS",
+      "isCrossBoundary": true,
+      "tags": [
+        "Notaufnahme",
+        "FHIR",
+        "KV-Berlin"
+      ],
+      "messageType": "FHIR",
+      "transportOverlay": "KV_CONNECT_MTLS",
+      "rawWeight": 181,
+      "trafficPct": 2.1
+    },
+    {
+      "id": "JSD-C-45",
+      "from": "JSD-08",
+      "to": "JSD-34",
+      "name": "CGM MEDICO ➔ GKR Berlin-BB Onkologische Basisdaten-Meldung",
+      "protocol": "oBDS § 65c SGB V REST / XML",
+      "msgType": "REST",
+      "flowType": "PREM_TO_EXT",
+      "overlay": "HTTPS_MTLS",
+      "isCrossBoundary": true,
+      "tags": [
+        "Klinik",
+        "Krebsregister",
+        "REST",
+        "Behörde"
+      ],
+      "messageType": "REST",
+      "transportOverlay": "HTTPS_MTLS",
+      "rawWeight": 158,
+      "trafficPct": 1.9
+    }
+  ],
+  "systems": [
+    {
+      "id": "JSD-01",
+      "name": "SAP S/4HANA Cloud Finance & MM",
+      "domain": "D1",
+      "scope": "INTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "SAP PCE Frankfurt (SAP BTP)",
+      "vendor": "SAP",
+      "desc": "Zentrales Finanz- und Rechnungswesen, Debitorenbuchhaltung und Materialwirtschaft der Johannesstift Diakonie.",
+      "tags": [
+        "Finanzen / ERP",
+        "SAP",
+        "Cloud"
+      ],
+      "hyperscaler": "SAP_BTP"
+    },
+    {
+      "id": "JSD-02",
+      "name": "JSD Patientenportal (m.Doc Cloud FTB 2)",
+      "domain": "D5",
+      "scope": "INTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "AWS Cloud Frankfurt",
+      "vendor": "m.Doc",
+      "desc": "KHZG FTB 2 zertifiziertes Patientenportal für Online-Terminvergabe, digitale Aufnahme und Befundfreigabe.",
+      "tags": [
+        "Telematik / TI",
+        "Cloud",
+        "REST_API"
+      ],
+      "hyperscaler": "AWS"
+    },
+    {
+      "id": "JSD-03",
+      "name": "Atoss Medical Staff Cloud",
+      "domain": "D1",
+      "scope": "INTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "Atoss Cloud München (Azure)",
+      "vendor": "Atoss",
+      "desc": "Dienstplanung, Arbeitszeitmanagement und Pflegepersonalregelung (PPR 2.0) für alle JSD Standorte.",
+      "tags": [
+        "Finanzen / ERP",
+        "HR",
+        "Cloud"
+      ],
+      "hyperscaler": "AZURE"
+    },
+    {
+      "id": "JSD-04",
+      "name": "SAP CPI / BTP Integration Suite",
+      "domain": "D6",
+      "scope": "INTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "SAP BTP Cloud Frankfurt",
+      "vendor": "SAP",
+      "desc": "Zentrale Cloud-Middleware für Enterprise iPaaS, B2B-EDI, KHZG-Portal-Routing und ERP-Kopplung.",
+      "tags": [
+        "Integration",
+        "Middleware",
+        "Cloud",
+        "REST_API"
+      ],
+      "hyperscaler": "SAP_BTP"
+    },
+    {
+      "id": "JSD-05",
+      "name": "JSD Telemedizin & Telenotarzt Hub",
+      "domain": "D4",
+      "scope": "INTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "Azure Germany West Central",
+      "vendor": "Microsoft / JSD",
+      "desc": "Telemedizinische Konsile, Schlaganfall-Netzwerk und teleärztliche Unterstützung für Notaufnahmen.",
+      "tags": [
+        "Notfallrettung",
+        "Cloud",
+        "WebRTC"
+      ],
+      "hyperscaler": "AZURE"
+    },
+    {
+      "id": "JSD-06",
+      "name": "JSD Cloud Analytics & Data Lakehouse",
+      "domain": "D1",
+      "scope": "INTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "Snowflake on Azure",
+      "vendor": "Snowflake",
+      "desc": "Konzernweites medizinisches und wirtschaftliches Data Warehouse für InEK-Controlling und Qualitätsmanagement.",
+      "tags": [
+        "Finanzen / ERP",
+        "Cloud",
+        "Analytics"
+      ],
+      "hyperscaler": "AZURE"
+    },
+    {
+      "id": "JSD-07",
+      "name": "Meona eKurve & AMTS Medikation",
+      "domain": "D2",
+      "scope": "INTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "Dedalus Health Cloud (AWS)",
+      "vendor": "Dedalus / Meona",
+      "desc": "Digitale Patientenkurve, Vitaldatenüberwachung und Arzneimitteltherapiesicherheit (AMTS) mit Wechselwirkungsprüfung.",
+      "tags": [
+        "Klinik",
+        "Cloud",
+        "REST_API"
+      ],
+      "hyperscaler": "AWS"
+    },
+    {
+      "id": "JSD-08",
+      "name": "CGM MEDICO KIS (Waldkrankenhaus & Paul Gerhardt)",
+      "domain": "D2",
+      "scope": "INTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "JSD RZ Spandau",
+      "vendor": "CompuGroup Medical",
+      "desc": "Multi-Site KIS für Patientenadministration, OP-Dokumentation und Leistungsabrechnung für Waldkrankenhaus & Paul Gerhardt Stift.",
+      "tags": [
+        "Klinik",
+        "KIS",
+        "HL7"
+      ],
+      "hyperscaler": null
+    },
+    {
+      "id": "JSD-09",
+      "name": "Martin Luther KIS & Stationsarbeitsplatz",
+      "domain": "D2",
+      "scope": "INTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "JSD RZ Wilmersdorf / Spandau",
+      "vendor": "Dedalus ORBIS",
+      "desc": "Klinisches Informationssystem für das Martin Luther Krankenhaus, Elisabeth Klinik und Hubertus Zehlendorf.",
+      "tags": [
+        "Klinik",
+        "KIS",
+        "HL7"
+      ],
+      "hyperscaler": null
+    },
+    {
+      "id": "JSD-10",
+      "name": "InterSystems HealthShare Clinical Hub",
+      "domain": "D6",
+      "scope": "INTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "JSD RZ Spandau Core",
+      "vendor": "InterSystems",
+      "desc": "Konzernweiter klinischer Integrations- und Kommunikationsserver (EAI), Master Patient Index (MPI) und HL7-Routing.",
+      "tags": [
+        "Integration",
+        "Middleware",
+        "HL7",
+        "FHIR"
+      ],
+      "hyperscaler": null
+    },
+    {
+      "id": "JSD-11",
+      "name": "Swisslab Zentrallabor LIMS",
+      "domain": "D3",
+      "scope": "INTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "JSD RZ Spandau",
+      "vendor": "Nexus / Swisslab",
+      "desc": "Standortübergreifendes Labor-Informations- und Managementsystem für Klinische Chemie, Hämatologie und Mikrobiologie.",
+      "tags": [
+        "Diagnostik / Labor",
+        "HL7"
+      ],
+      "hyperscaler": null
+    },
+    {
+      "id": "JSD-12",
+      "name": "Agfa Enterprise PACS & VNA Archiv",
+      "domain": "D3",
+      "scope": "INTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "JSD RZ Zehlendorf Storage",
+      "vendor": "Agfa HealthCare",
+      "desc": "Enterprise Imaging Platform, DICOM-Bildarchivierung (VNA) und Befundverteilung für alle Klinikstandorte.",
+      "tags": [
+        "Radiologie / PACS",
+        "DICOM"
+      ],
+      "hyperscaler": null
+    },
+    {
+      "id": "JSD-13",
+      "name": "Siemens Syngo Imaging RIS",
+      "domain": "D3",
+      "scope": "INTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "JSD RZ Spandau",
+      "vendor": "Siemens Healthineers",
+      "desc": "Radiologie-Informationssystem zur Terminierung, Ressourcenplanung und radiologischen Befunderstellung.",
+      "tags": [
+        "Radiologie / PACS",
+        "HL7",
+        "DICOM"
+      ],
+      "hyperscaler": null
+    },
+    {
+      "id": "JSD-14",
+      "name": "Philips / GE Intensiv-PDMS",
+      "domain": "D2",
+      "scope": "INTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "Kliniknetzwerk ICU/IMC",
+      "vendor": "Philips",
+      "desc": "Patientendaten-Managementsystem für Intensivstationen, Narkosedokumentation und Beatmungsgeräte-Telemetrie.",
+      "tags": [
+        "Klinik",
+        "PDMS",
+        "HL7"
+      ],
+      "hyperscaler": null
+    },
+    {
+      "id": "JSD-15",
+      "name": "ZNA Notaufnahme E-Care & Triage",
+      "domain": "D4",
+      "scope": "INTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "Klinikstandorte Notaufnahme",
+      "vendor": "Dedalus / E-Care",
+      "desc": "Notaufnahme-Dokumentationssystem mit automatisierter Manchester-Triage-Einstufung und Wartezeitmonitoring.",
+      "tags": [
+        "Notfallrettung",
+        "Klinik",
+        "HL7"
+      ],
+      "hyperscaler": null
+    },
+    {
+      "id": "JSD-16",
+      "name": "JSD Services AEMP Instacount",
+      "domain": "D1",
+      "scope": "INTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "JSD Services RZ Spandau",
+      "vendor": "B. Braun / Instacount",
+      "desc": "Zentralsterilisations- und Instrumentenmanagement für OP-Siebe, Chargenrückverfolgung und Validierung (MPG).",
+      "tags": [
+        "JSD Services",
+        "Logistik",
+        "REST_API"
+      ],
+      "hyperscaler": null
+    },
+    {
+      "id": "JSD-17",
+      "name": "JSD Translog Versorgungslogistik",
+      "domain": "D1",
+      "scope": "INTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "JSD Services RZ Spandau",
+      "vendor": "Translog",
+      "desc": "Flotten- und Tourenmanagement zur Belieferung der Krankenhäuser, Wohnheime und Hospize mit Sterilgut, Speisen und Wäsche.",
+      "tags": [
+        "JSD Services",
+        "Logistik"
+      ],
+      "hyperscaler": null
+    },
+    {
+      "id": "JSD-18",
+      "name": "TI-Cluster Kocobox Konnektor-Farm",
+      "domain": "D5",
+      "scope": "INTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "JSD TI-Perimeter RZ",
+      "vendor": "KoCo Connector / CGM",
+      "desc": "Hochverfügbares Rechenzentrums-Cluster aus Kocobox-Konnektoren für VSDM, ePA, KIM und eRezept.",
+      "tags": [
+        "Telematik / TI",
+        "Middleware",
+        "KRITIS"
+      ],
+      "hyperscaler": null
+    },
+    {
+      "id": "JSD-19",
+      "name": "d.velop / D3 ECM Digitales Archiv",
+      "domain": "D1",
+      "scope": "INTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "JSD RZ Zehlendorf",
+      "vendor": "d.velop",
+      "desc": "Revisionssicheres Langzeitarchiv für elektronische Patientenakten, Arztbriefe, Rechnungen und Personalakten.",
+      "tags": [
+        "Archiv / DMS",
+        "REST_API"
+      ],
+      "hyperscaler": null
+    },
+    {
+      "id": "JSD-20",
+      "name": "Fortinet & Cisco KRITIS-Perimeter",
+      "domain": "D6",
+      "scope": "INTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "JSD RZ Core Network",
+      "vendor": "Fortinet / Cisco",
+      "desc": "B3S-zertifizierte NextGen-Firewalls, Mikrosegmentierung und Zero-Trust-Zugang für Kliniken und Medizintechnik.",
+      "tags": [
+        "Security",
+        "KRITIS"
+      ],
+      "hyperscaler": null
+    },
+    {
+      "id": "JSD-21",
+      "name": "gematik Zentrale Telematik-Dienste",
+      "domain": "D5",
+      "scope": "EXTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "gematik Bundessicherheitsnetz",
+      "vendor": "gematik",
+      "desc": "Zentrale Bundestelematic mit ePA 3.0 Aktensystem, eRezept Fachdienst und Versichertenstammdaten-Management.",
+      "tags": [
+        "Telematik / TI",
+        "KRITIS"
+      ],
+      "hyperscaler": null
+    },
+    {
+      "id": "JSD-22",
+      "name": "CGM KIM Provider E-Mail-Fachdienst",
+      "domain": "D5",
+      "scope": "EXTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "CGM KIM Cloud",
+      "vendor": "CompuGroup Medical",
+      "desc": "Kommunikation im Medizinwesen (KIM) für den sicheren, Ende-zu-Ende verschlüsselten Austausch von eArztbriefen.",
+      "tags": [
+        "Telematik / TI",
+        "KIM"
+      ],
+      "hyperscaler": null
+    },
+    {
+      "id": "JSD-23",
+      "name": "IVENA eHealth Versorgungsnachweis",
+      "domain": "D4",
+      "scope": "EXTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "IVENA Cloud Berlin/Brandenburg",
+      "vendor": "IVENA eHealth",
+      "desc": "Interdisziplinärer Versorgungsnachweis zur Echtzeit-Anzeige freier Notfall- und Intensivkapazitäten für Leitstellen.",
+      "tags": [
+        "Notfallrettung",
+        "REST_API"
+      ],
+      "hyperscaler": null
+    },
+    {
+      "id": "JSD-24",
+      "name": "GHX B2B Medical & Pharma Exchange",
+      "domain": "D1",
+      "scope": "EXTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "GHX Cloud Frankfurt",
+      "vendor": "Global Healthcare Exchange",
+      "desc": "B2B-Beschaffungsplattform für OP-Materialien, Implantate, Medikalprodukte und Pharmazeutika.",
+      "tags": [
+        "Finanzen / ERP",
+        "B2B_EDI"
+      ],
+      "hyperscaler": null
+    },
+    {
+      "id": "JSD-25",
+      "name": "OpenPeppol E-Invoicing Behördennetz",
+      "domain": "D1",
+      "scope": "EXTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "Peppol Authority EU",
+      "vendor": "OpenPeppol",
+      "desc": "Elektronischer XRechnung- und ZUGFeRD-Standard für Lieferantenabrechnungen und Kostenträger.",
+      "tags": [
+        "Finanzen / ERP",
+        "EDIFACT"
+      ],
+      "hyperscaler": null
+    },
+    {
+      "id": "JSD-26",
+      "name": "RKI DEMIS Infektionsschutz Meldeportal",
+      "domain": "D5",
+      "scope": "EXTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "RKI Bund",
+      "vendor": "Robert Koch-Institut",
+      "desc": "Deutsches Elektronisches Melde- und Informationssystem für meldepflichtige Krankheitserreger nach IfSG.",
+      "tags": [
+        "Klinik",
+        "FHIR"
+      ],
+      "hyperscaler": null
+    },
+    {
+      "id": "JSD-27",
+      "name": "Brainomix AI Stroke & Lung Cloud",
+      "domain": "D3",
+      "scope": "EXTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "Brainomix Cloud UK/EU",
+      "vendor": "Brainomix",
+      "desc": "KI-gestützte Schlaganfall- und Lungen-CT-Bildanalyse zur automatisierten Ischämie- und Blutungserkennung.",
+      "tags": [
+        "Radiologie / PACS",
+        "Cloud",
+        "REST_API"
+      ],
+      "hyperscaler": null
+    },
+    {
+      "id": "JSD-28",
+      "name": "Telefónica / Vodafone Medical IoT Gateway",
+      "domain": "D4",
+      "scope": "EXTERNAL",
+      "deployment": "CLOUD",
+      "hosting": "Mobilfunk-Provider Cloud",
+      "vendor": "Telefónica / Vodafone",
+      "desc": "Gesicherte APN-Mobilfunkstrecke für RTW-Notfalldaten, Telenotarzt-Streaming und Vitalparameter.",
+      "tags": [
+        "Notfallrettung",
+        "IOT_STREAM"
+      ],
+      "hyperscaler": null
+    },
+    {
+      "id": "JSD-29",
+      "name": "Berliner Feuerwehr Leitstelle IGNIS 112",
+      "domain": "D4",
+      "scope": "EXTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "Leitstelle Feuerwehr Berlin",
+      "vendor": "Berliner Feuerwehr",
+      "desc": "Einsatzleitsystem der Berliner Feuerwehr zur Disposition von Rettungswagen und Notarzt-Zuweisung.",
+      "tags": [
+        "Notfallrettung",
+        "KRITIS"
+      ],
+      "hyperscaler": null
+    },
+    {
+      "id": "JSD-30",
+      "name": "GKV Clearingstelle DTA § 301 SGB V",
+      "domain": "D1",
+      "scope": "EXTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "Bitmarck / ITSG RZ",
+      "vendor": "ITSG / GKV",
+      "desc": "Gesetzlicher Datenträgeraustausch für stationäre Aufnahme-, Entlass- und DRG-Abrechnungsanzeigen.",
+      "tags": [
+        "Finanzen / ERP",
+        "EDIFACT",
+        "KRITIS"
+      ],
+      "hyperscaler": null
+    },
+    {
+      "id": "JSD-31",
+      "name": "PKV Verband & Abrechnungs-Clearing",
+      "domain": "D1",
+      "scope": "EXTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "PKV Verband Köln",
+      "vendor": "PKV Verband",
+      "desc": "Elektronischer Abrechnungsaustausch für Privatpatienten, Wahlleistungen und Beihilfestellen.",
+      "tags": [
+        "Finanzen / ERP",
+        "EDIFACT"
+      ],
+      "hyperscaler": null
+    },
+    {
+      "id": "JSD-32",
+      "name": "DRK Blutspendedienst Nord-Ost",
+      "domain": "D2",
+      "scope": "EXTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "DRK Blutspende RZ Berlin-Wannsee",
+      "vendor": "DRK",
+      "desc": "Bestellung, Chargenverfolgung und Verträglichkeitsprüfung von Erythrozytenkonzentraten und Blutplasma.",
+      "tags": [
+        "Klinik",
+        "HL7"
+      ],
+      "hyperscaler": null
+    },
+    {
+      "id": "JSD-33",
+      "name": "KV Berlin Schnittstelle (116117)",
+      "domain": "D5",
+      "scope": "EXTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "KV Berlin RZ",
+      "vendor": "Kassenärztliche Vereinigung",
+      "desc": "Terminservicestelle 116117 und ambulante Notdienstkoordination zur Entlastung der Notaufnahmen.",
+      "tags": [
+        "Telematik / TI",
+        "REST_API"
+      ],
+      "hyperscaler": null
+    },
+    {
+      "id": "JSD-34",
+      "name": "Gemeinsames Krebsregister (GKR) Berlin-BB",
+      "domain": "D2",
+      "scope": "EXTERNAL",
+      "deployment": "ON_PREM",
+      "hosting": "GKR Berlin-Brandenburg",
+      "vendor": "GKR",
+      "desc": "Gesetzliche Meldung onkologischer Verlaufs- und Behandlungsdaten nach oBDS-Standard gem. § 65c SGB V.",
+      "tags": [
+        "Klinik",
+        "REST_API"
+      ],
+      "hyperscaler": null
+    }
+  ]
+}
