@@ -5653,7 +5653,7 @@
     }
 
     /* Timeline Topic Banner (ChatGPT & Claude style) */
-    .agent-timeline-headline-banner {
+    .agent-timeline-headline-banner { display: none !important;
       padding: 12px 14px;
       background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), rgba(15, 23, 42, 0.5));
       border: 1px solid rgba(168, 85, 247, 0.22);
@@ -44617,30 +44617,36 @@
         }
 
         function renderTimelineHeadlineBanner(title, timestamp) {
-          const headlineBanner = document.getElementById('agentTimelineBanner');
-          const headlineEl = document.getElementById('agentTimelineHeadline');
-          const metaEl = document.getElementById('agentTimelineSubline');
-          if (headlineEl) headlineEl.textContent = title || 'Neuer Chat';
-          if (metaEl) {
-            const d = new Date(timestamp || Date.now());
-            const dateStr = d.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' }) + ' ' + d.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
-            metaEl.textContent = 'Unterhaltung gestartet • ' + dateStr;
-          }
+          // Redundancy removed: Chat title is already prominently shown in the header bar (#agentChatHeaderTitle).
+          const existing = document.getElementById('agentTimelineBanner');
+          if (existing) existing.remove();
           const headerTitleEl = document.getElementById('agentChatHeaderTitle');
-          if (headerTitleEl) headerTitleEl.textContent = title || 'Neuer Chat';
+          if (headerTitleEl && title && title !== 'Neuer Chat') {
+            headerTitleEl.textContent = title;
+          }
         }
 
         function saveMessageToActiveSession(msgObj) {
           let sessions = loadAllUserSessions();
           let session = sessions.find(s => s.id === currentSessionId);
           if (!session) {
-            session = createNewChatSession();
-            sessions = loadAllUserSessions();
+            const title = msgObj.isUser ? generateChatTitleFromQuery(msgObj.html) : 'Neuer Chat';
+            session = {
+              id: currentSessionId || ('orcai_session_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7)),
+              title: title,
+              createdAt: Date.now(),
+              updatedAt: Date.now(),
+              messages: []
+            };
+            currentSessionId = session.id;
+            sessions.unshift(session);
+          } else if (msgObj.isUser && (!session.title || session.title === 'Neuer Chat')) {
+            session.title = generateChatTitleFromQuery(msgObj.html);
           }
 
-          if (msgObj.isUser && (!session.title || session.title === 'Neuer Chat')) {
-            session.title = generateChatTitleFromQuery(msgObj.html);
-            renderTimelineHeadlineBanner(session.title, session.createdAt);
+          const headerTitleEl = document.getElementById('agentChatHeaderTitle');
+          if (headerTitleEl && session.title && session.title !== 'Neuer Chat') {
+            headerTitleEl.textContent = session.title;
           }
 
           session.messages.push(msgObj);
@@ -44649,6 +44655,8 @@
           const idx = sessions.findIndex(s => s.id === session.id);
           if (idx !== -1) {
             sessions.splice(idx, 1);
+            sessions.unshift(session);
+          } else {
             sessions.unshift(session);
           }
 
@@ -44706,20 +44714,10 @@
         }
 
         function ensureTimelineBannerElement() {
-          if (!agentChatMessages) return;
-          let banner = document.getElementById('agentTimelineBanner');
-          if (!banner) {
-            banner = document.createElement('div');
-            banner.className = 'agent-timeline-headline-banner';
-            banner.id = 'agentTimelineBanner';
-            banner.innerHTML = '<h2 class="agent-timeline-headline" id="agentTimelineHeadline">Neuer Chat</h2><div class="agent-timeline-subline" id="agentTimelineSubline">Unterhaltung gestartet</div>';
-            if (agentChatMessages.firstChild) {
-              agentChatMessages.insertBefore(banner, agentChatMessages.firstChild);
-            } else {
-              agentChatMessages.appendChild(banner);
-            }
-          }
-          return banner;
+          // Redundancy removed: No timeline banner inside the message stream.
+          const existing = document.getElementById('agentTimelineBanner');
+          if (existing) existing.remove();
+          return null;
         }
 
         function startNewChat() {
@@ -44727,7 +44725,12 @@
           renderEmptyHeroGreeting();
           const headerTitleEl = document.getElementById('agentChatHeaderTitle');
           if (headerTitleEl) headerTitleEl.textContent = 'Neuer Chat';
-          updateHistoryUI(agentHistorySearchInput ? agentHistorySearchInput.value : '');
+          if (agentHistorySearchInput) {
+            agentHistorySearchInput.value = '';
+            const clearBtn = document.getElementById('btnAgentClearSearch');
+            if (clearBtn) clearBtn.style.display = 'none';
+          }
+          updateHistoryUI('');
         }
         window.startNewAgentChat = startNewChat;
 
@@ -46524,10 +46527,45 @@
           const q = String(query || '').trim();
           if (!q) return;
 
+          // Remove empty hero greeting if present
           const heroEl = document.getElementById('agentEmptyHero');
           if (heroEl) heroEl.remove();
 
-          ensureTimelineBannerElement();
+          // Clear any search filter so the new chat immediately appears at the top of the list!
+          if (agentHistorySearchInput && agentHistorySearchInput.value) {
+            agentHistorySearchInput.value = '';
+            const clearBtn = document.getElementById('btnAgentClearSearch');
+            if (clearBtn) clearBtn.style.display = 'none';
+          }
+
+          // Immediately create session if not exists, so it shows in sidebar on 1st question!
+          let sessions = loadAllUserSessions();
+          let session = sessions.find(s => s.id === currentSessionId);
+          if (!session) {
+            const chatTitle = generateChatTitleFromQuery(q);
+            session = {
+              id: 'orcai_session_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7),
+              title: chatTitle,
+              createdAt: Date.now(),
+              updatedAt: Date.now(),
+              messages: []
+            };
+            currentSessionId = session.id;
+            sessions.unshift(session);
+            saveAllUserSessions(sessions);
+          } else if (!session.title || session.title === 'Neuer Chat') {
+            session.title = generateChatTitleFromQuery(q);
+            session.updatedAt = Date.now();
+            saveAllUserSessions(sessions);
+          }
+
+          const headerTitleEl = document.getElementById('agentChatHeaderTitle');
+          if (headerTitleEl && session.title) {
+            headerTitleEl.textContent = session.title;
+          }
+
+          // Render updated history immediately
+          updateHistoryUI('');
 
           appendMessage(q, true);
 
