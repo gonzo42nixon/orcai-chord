@@ -22658,6 +22658,7 @@
           '</div>';
       }
       window.renderPlaceholder = renderPlaceholder;
+      window.renderInspectorNode = renderInspectorNode;
 
       function renderInspectorNode(sys) {
         const dom = DOMAINS_DATA.find(d => d.id === sys.domain);
@@ -22685,6 +22686,7 @@
             '</div>' +
             '<div class="insp-action-bar">' +
               '<button class="insp-action-btn" onclick="window.startInspectorEdit(\'system\', \'' + sys.id + '\')">✏ Bearbeiten</button>' +
+              '<button class="insp-action-btn" onclick="window.openEntityInJsonViewer(\'system\', \'' + sys.id + '\')" title="Dieses System im ORCAI JSON Viewer betrachten">{ } JSON</button>' +
               '<button class="insp-action-btn delete" onclick="window.confirmDeleteEntity(\'system\', \'' + sys.id + '\')">🗑 Löschen</button>' +
             '</div>' +
             '<div class="insp-badges">' +
@@ -22855,6 +22857,7 @@
             '</div>' +
             '<div class="insp-action-bar">' +
               '<button class="insp-action-btn" onclick="window.startInspectorEdit(\'connection\', \'' + edge.id + '\')">✏ Bearbeiten</button>' +
+              '<button class="insp-action-btn" onclick="window.openEntityInJsonViewer(\'connection\', \'' + edge.id + '\')" title="Diese Verbindung im ORCAI JSON Viewer betrachten">{ } JSON</button>' +
               '<button class="insp-action-btn delete" onclick="window.confirmDeleteEntity(\'connection\', \'' + edge.id + '\')">🗑 Löschen</button>' +
             '</div>' +
             '<div class="insp-badges">' +
@@ -22981,6 +22984,7 @@
             '</div>' +
             '<div class="insp-action-bar">' +
               '<button class="insp-action-btn" onclick="window.startInspectorEdit(\'domain\', \'' + dom.id + '\')">✏ Bearbeiten</button>' +
+              '<button class="insp-action-btn" onclick="window.openEntityInJsonViewer(\'domain\', \'' + dom.id + '\')" title="Diese Domäne im ORCAI JSON Viewer betrachten">{ } JSON</button>' +
               '<button class="insp-action-btn delete" onclick="window.confirmDeleteEntity(\'domain\', \'' + dom.id + '\')">🗑 Löschen</button>' +
             '</div>' +
             '<div class="insp-badges">' +
@@ -23045,6 +23049,7 @@
             '</div>' +
             '<div class="insp-action-bar">' +
               '<button class="insp-action-btn" onclick="window.startInspectorEdit(\'process\', \'' + proc.id + '\')">✏ Bearbeiten</button>' +
+              '<button class="insp-action-btn" onclick="window.openEntityInJsonViewer(\'process\', \'' + proc.id + '\')" title="Diesen Geschäftsprozess im ORCAI JSON Viewer betrachten">{ } JSON</button>' +
               '<button class="insp-action-btn delete" onclick="window.confirmDeleteEntity(\'process\', \'' + proc.id + '\')">🗑 Löschen</button>' +
             '</div>' +
             '<div class="insp-badges">' +
@@ -23166,6 +23171,7 @@
             '</div>' +
             '<div class="insp-action-bar">' +
               '<button class="insp-action-btn" onclick="window.startInspectorEdit(\'integration\', \'' + integ.id + '\')">✏ Bearbeiten</button>' +
+              '<button class="insp-action-btn" onclick="window.openEntityInJsonViewer(\'integration\', \'' + integ.id + '\')" title="Diese Integration im ORCAI JSON Viewer betrachten">{ } JSON</button>' +
               '<button class="insp-action-btn delete" onclick="window.confirmDeleteEntity(\'integration\', \'' + integ.id + '\')">🗑 Löschen</button>' +
             '</div>' +
 
@@ -36202,6 +36208,7 @@
               '<div style="display:flex; gap:6px; margin-bottom:8px;">' +
                 '<input type="text" id="inpOrcaiKey" placeholder="ORCAI Key (z.B. ORCAI-MODEL-KLINIKVERBUND-EA)" style="flex:1; padding:4px 8px; font-size:0.7rem; border-radius:4px; border:1px solid var(--card-border); background:var(--card-bg); color:var(--text-bright);">' +
                 '<button onclick="window.loadModelFromOrcaiInput()" class="btn-activate-model" style="padding:4px 12px; font-size:0.7rem;">Laden</button>' +
+                '<button onclick="window.viewEnteredModelInJsonViewer()" class="btn-activate-model" style="padding:4px 10px; font-size:0.7rem; background:rgba(56,189,248,0.2); border-color:var(--accent); color:var(--accent);" title="Eingegebenen ORCAI Key direkt im ORCAI JSON Viewer betrachten">👁️ Im JSON Viewer</button>' +
               '</div>' +
               '<div style="display:flex; gap:6px; flex-wrap:wrap; align-items:center;">' +
                 '<label style="padding:4px 8px; font-size:0.68rem; background:rgba(255,255,255,0.06); border:1px solid var(--card-border); border-radius:4px; cursor:pointer;">' +
@@ -36210,6 +36217,9 @@
                 '</label>' +
                 '<button onclick="window.downloadCurrentModelJson()" id="btnDownloadModelJson" style="padding:4px 8px; font-size:0.68rem; background:rgba(255,255,255,0.06); border:1px solid var(--card-border); border-radius:4px; color:var(--text-bright); cursor:pointer;" title="Exportiert das aktuell geladene Landschaftsmodell als JSON-Datei">' +
                   '💾 Als JSON herunterladen' +
+                '</button>' +
+                '<button onclick="window.openCurrentModelInJsonViewer()" id="btnViewModelJson" style="padding:4px 8px; font-size:0.68rem; background:rgba(0,112,242,0.2); border:1px solid #0070f2; border-radius:4px; color:#38bdf8; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:4px;" title="Aktuelles Modell mit allen Live-Daten im ORCAI JSON Viewer öffnen">' +
+                  '<span>👁️ Im JSON Viewer betrachten</span> ↗' +
                 '</button>' +
                 '<label style="display:inline-flex; align-items:center; gap:5px; font-size:0.68rem; color:var(--text-bright); cursor:pointer; user-select:none; margin-left:4px; padding:3px 7px; background:rgba(56,189,248,0.08); border:1px solid rgba(56,189,248,0.25); border-radius:4px;" title="Hinweis: PlantUML ist zur Laufzeit nicht im JSON-Objekt gespeichert (On-the-fly Synthese). Bei Aktivierung wird das Feld \'plantUml\' beim Export dynamisch für alle Prozesse generiert und eingebettet.">' +
                   '<input type="checkbox" id="chkIncludePlantUmlExport" style="cursor:pointer; accent-color:var(--accent);" />' +
@@ -36873,6 +36883,7 @@
             '</div>' +
             '<div class="insp-action-bar">' +
               '<button class="insp-action-btn" onclick="window.clearHitlRole()">✕ Fokus aufheben</button>' +
+              '<button class="insp-action-btn" onclick="window.openEntityInJsonViewer(\'role\', \'' + role.id + '\')" title="Diese Rolle im ORCAI JSON Viewer betrachten">{ } JSON</button>' +
             '</div>' +
             '<div class="insp-badges">' +
               '<span class="insp-badge" style="background:var(--accent-glow); color:var(--accent); font-weight:700;">' + (quadDescriptions[role.quadrant] || role.quadrant) + '</span>' +
@@ -40789,7 +40800,8 @@
                   '<button class="insp-action-btn" onclick="window.jumpToPumlStart(\'' + esc(proc.id) + '\')" title="Direkt an den Diagrammanfang (Initiator links) springen">⏮</button>' +
                 '</div>' +
                 '<button class="insp-action-btn btn-puml-fullscreen" onclick="window.togglePlantUmlFullscreen(\'' + esc(proc.id) + '\')" title="Vollbild umschalten (oder Klick auf Kopfzeile)">⛶</button>' +
-                '<button class="insp-action-btn" onclick="window.downloadPumlSvg(\'' + esc(proc.id) + '\')" title="SVG Vektorgrafik herunterladen">💾</button>' +
+                '<button class="insp-action-btn" onclick="window.openEntityInJsonViewer(\'process\', \'' + esc(proc.id) + '\')" title="Prozess-JSON im ORCAI JSON Viewer betrachten">{ } JSON</button>' +
+              '<button class="insp-action-btn" onclick="window.downloadPumlSvg(\'' + esc(proc.id) + '\')" title="SVG Vektorgrafik herunterladen">💾</button>' +
                 '<button class="insp-action-btn" onclick="window.copyPlantUml(\'' + esc(proc.id) + '\')" title="PlantUML-Code in die Zwischenablage kopieren">📋</button>' +
                 '<button class="insp-action-btn" onclick="window.openPlantUmlEditor(\'' + esc(proc.id) + '\')" title="In externem Editor (PlantText) bearbeiten">↗</button>' +
                 '<button class="insp-action-btn" onclick="window.openOfficialPlantUmlEditor(\'' + esc(proc.id) + '\')" title="Auf offiziellem PlantUML-Server öffnen">🌐</button>' +
@@ -42666,7 +42678,8 @@
                   '<button class="insp-action-btn" onclick="window.jumpToBpmnStart(\'' + esc(proc.id) + '\')" title="Direkt an den Diagrammanfang springen">⏮</button>' +
                 '</div>' +
                 '<button class="insp-action-btn btn-bpmn-fullscreen" onclick="window.toggleBpmnFullscreen(\'' + esc(proc.id) + '\')" title="Vollbild umschalten (oder Klick auf Kopfzeile)">⛶</button>' +
-                '<button class="insp-action-btn" onclick="window.downloadBpmnFile(\'' + esc(proc.id) + '\')" title="BPMN 2.0 XML Datei herunterladen (.bpmn)">💾</button>' +
+                '<button class="insp-action-btn" onclick="window.openEntityInJsonViewer(\'process\', \'' + esc(proc.id) + '\')" title="Prozess-JSON im ORCAI JSON Viewer betrachten">{ } JSON</button>' +
+              '<button class="insp-action-btn" onclick="window.downloadBpmnFile(\'' + esc(proc.id) + '\')" title="BPMN 2.0 XML Datei herunterladen (.bpmn)">💾</button>' +
                 '<button class="insp-action-btn" onclick="window.downloadBpmnSvg(\'' + esc(proc.id) + '\')" title="SVG Vektorgrafik herunterladen">🖼️</button>' +
                 '<button class="insp-action-btn" onclick="window.copyBpmnXml(\'' + esc(proc.id) + '\')" title="BPMN 2.0 XML in die Zwischenablage kopieren">📋</button>' +
                 '<button class="insp-action-btn" onclick="window.openBpmnIoEditor(\'' + esc(proc.id) + '\')" title="In externem Modeler (bpmn.io) öffnen">↗</button>' +
@@ -44061,17 +44074,19 @@
           if (!docKeyOrUrl) docKeyOrUrl = 'https://orcai-54321.web.app/ea/agent-manifest.json';
 
           if (optionalPayload && typeof optionalPayload === 'object') {
-            const customKey = 'payload_' + Date.now();
+            const cleanKey = (typeof docKeyOrUrl === 'string' && !docKeyOrUrl.startsWith('http') && !docKeyOrUrl.startsWith('/'))
+              ? docKeyOrUrl
+              : ('payload_' + Date.now());
             try {
               const serialized = JSON.stringify(optionalPayload);
-              sessionStorage.setItem('orcai_json_payload_' + customKey, serialized);
+              sessionStorage.setItem('orcai_json_payload_' + cleanKey, serialized);
               sessionStorage.setItem('orcai_json_payload_latest', serialized);
-              localStorage.setItem('orcai_json_payload_' + customKey, serialized);
+              localStorage.setItem('orcai_json_payload_' + cleanKey, serialized);
               localStorage.setItem('orcai_json_payload_latest', serialized);
             } catch (e) {
               console.warn('[ORCAI JSON] Storage error:', e);
             }
-            targetUrl += '?key=' + encodeURIComponent(customKey);
+            targetUrl += '?key=' + encodeURIComponent(cleanKey);
           } else if (docKeyOrUrl.startsWith('http://') || docKeyOrUrl.startsWith('https://') || docKeyOrUrl.startsWith('/')) {
             targetUrl += '?url=' + encodeURIComponent(docKeyOrUrl);
           } else {
@@ -44079,6 +44094,62 @@
           }
 
           window.open(targetUrl, '_blank', 'noopener,noreferrer');
+        };
+
+        window.openEntityInJsonViewer = function(type, id) {
+          const systems = (typeof SYSTEMS_DATA !== 'undefined') ? SYSTEMS_DATA : [];
+          const processes = (typeof PROCESSES_DATA !== 'undefined') ? PROCESSES_DATA : [];
+          const integrations = (typeof INTEGRATIONS_DATA !== 'undefined') ? INTEGRATIONS_DATA : [];
+          const connections = (typeof CONNECTIONS_DATA !== 'undefined') ? CONNECTIONS_DATA : [];
+          const actors = (typeof ACTORS_DATA !== 'undefined') ? ACTORS_DATA : [];
+          const domains = (typeof DOMAINS_DATA !== 'undefined') ? DOMAINS_DATA : [];
+
+          let entity = null;
+          let entityName = id;
+
+          if (type === 'system') {
+            entity = systems.find(s => s.id === id);
+            entityName = entity ? entity.name : id;
+          } else if (type === 'process') {
+            entity = processes.find(p => p.id === id);
+            entityName = entity ? entity.name : id;
+          } else if (type === 'integration') {
+            entity = integrations.find(i => i.id === id);
+            entityName = entity ? entity.name : id;
+          } else if (type === 'connection' || type === 'edge') {
+            entity = connections.find(c => c.id === id);
+            entityName = entity ? entity.name : id;
+          } else if (type === 'role' || type === 'actor') {
+            entity = actors.find(a => a.id === id);
+            entityName = entity ? entity.name : id;
+          } else if (type === 'domain') {
+            entity = domains.find(d => d.id === id);
+            entityName = entity ? entity.name : id;
+          }
+
+          if (!entity) {
+            console.warn('[ORCAI] Entity not found for JSON Viewer:', type, id);
+            return;
+          }
+
+          const activeId = (typeof window.currentModelId !== 'undefined' && window.currentModelId) ? window.currentModelId : (typeof currentModelId !== 'undefined' ? currentModelId : 'ORCAI-CURRENT-MODEL');
+          const payload = {
+            $schema: 'https://orcai-54321.web.app/schemas/ea-' + type + '-v1.json',
+            entityType: type,
+            id: entity.id || id,
+            name: entityName,
+            modelId: activeId,
+            details: entity
+          };
+
+          window.openInOrcaiJsonViewer(entity.id || id, payload);
+        };
+
+        window.viewEnteredModelInJsonViewer = function() {
+          const inp = document.getElementById('inpOrcaiKey');
+          const rawVal = inp ? inp.value.trim() : '';
+          const targetKey = rawVal || (typeof currentModelId !== 'undefined' ? currentModelId : 'ORCAI-MODEL-JOHANNESSTIFT-DIAKONIE-EA');
+          window.openInOrcaiJsonViewer(targetKey);
         };
 
         window.openCurrentModelInJsonViewer = function() {
@@ -44244,7 +44315,7 @@
               '</ul>';
 
             chips.push('<a href="https://orcai-54321.web.app/json/?url=/ea/agent-manifest.json" target="_blank" rel="noopener noreferrer" class="agent-chip agent-chip-model" style="background:#0070f2; color:#fff; font-weight:bold; border-color:#38bdf8;">📋 Im ORCAI JSON Viewer öffnen ↗</a>');
-            chips.push('<a href="https://orcai-54321.web.app/ea/agent-manifest.json" target="_blank" rel="noopener noreferrer" class="agent-chip agent-chip-model">📄 Rohes Manifest (JSON) ↗</a>');
+            chips.push('<a href="https://orcai-54321.web.app/json/?url=/ea/agent-manifest.json&mode=raw" target="_blank" rel="noopener noreferrer" class="agent-chip agent-chip-model" title="Im ORCAI JSON Viewer im Roh-JSON Modus öffnen">📄 Roh-JSON im Viewer ↗</a>');
             chips.push('<button class="agent-chip agent-chip-proc" onclick="window.openCurrentModelInJsonViewer()">🌐 Modell im JSON Viewer ↗</button>');
             chips.push('<a href="https://github.com/gonzo42nixon/orcai-chord" target="_blank" rel="noopener noreferrer" class="agent-chip agent-chip-model">🐙 Quellcode auf GitHub ↗</a>');
 
@@ -44313,7 +44384,7 @@
             if (targetEntry) {
               chips.push('<button class="agent-chip agent-chip-proc" onclick="window.switchCurrentModel && window.switchCurrentModel(\'' + targetKey + '\')">🌐 Im Quad-Chord laden ↗</button>');
             }
-            chips.push('<a href="' + docRawUrl + '" target="_blank" rel="noopener noreferrer" class="agent-chip agent-chip-sys">📄 Rohe API Dokumenten-URL ↗</a>');
+            chips.push('<a href="https://orcai-54321.web.app/json/?url=' + encodeURIComponent(docRawUrl) + '&mode=raw" target="_blank" rel="noopener noreferrer" class="agent-chip agent-chip-sys" title="Im ORCAI JSON Viewer im Roh-JSON Modus öffnen">📄 Roh-JSON im Viewer ↗</a>');
             chips.push('<a href="https://orcai-54321.web.app/json/?url=/ea/agent-manifest.json" target="_blank" rel="noopener noreferrer" class="agent-chip agent-chip-model">🤖 AI Agent Manifest im Viewer ↗</a>');
 
             spoken = 'Das Dokument ' + (targetEntry ? targetEntry.shortName || targetKey : targetKey) + ' kann per Klick direkt im ORCAI JSON-Viewer mit interaktiven RGB-Pills und Filterung betrachtet werden.';
