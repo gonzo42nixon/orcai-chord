@@ -10,6 +10,8 @@
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/12.2.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/12.2.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.2.1/firebase-storage-compat.js"></script>
   <script src="/firebase-config.js?v=20260914-quad-chord-auth1" onerror="/* fallback config available */"></script>
   <style>
     :root, body.theme-night {
@@ -6794,7 +6796,285 @@
       color: #a855f7;
     }
 
-  </style>
+  
+    /* ==========================================================================
+       AI AGENT DAY MODE STYLES (Light Theme)
+       ========================================================================== */
+    body.theme-day #sidebarAgent,
+    #sidebarAgent.theme-day {
+      background: var(--agent-custom-bg, #f8fafc) !important;
+      color: #0f172a;
+      box-shadow: -6px 0 28px rgba(0, 0, 0, 0.12);
+      border-left: 1px solid #e2e8f0;
+    }
+    body.theme-day #sidebarAgent.agent-drawer-custom-bg,
+    #sidebarAgent.theme-day.agent-drawer-custom-bg {
+      background-color: var(--agent-custom-bg) !important;
+    }
+
+    body.theme-day .agent-sidebar,
+    #sidebarAgent.theme-day .agent-sidebar {
+      background: var(--agent-sidebar-custom-bg, #ffffff) !important;
+      border-right: 1px solid #e2e8f0 !important;
+    }
+    body.theme-day .agent-sidebar-header,
+    #sidebarAgent.theme-day .agent-sidebar-header {
+      background: linear-gradient(135deg, #ede9fe, #f1f5f9) !important;
+      border-bottom: 1px solid #e2e8f0 !important;
+    }
+    body.theme-day .agent-sidebar-title,
+    #sidebarAgent.theme-day .agent-sidebar-title {
+      color: #0f172a !important;
+    }
+    body.theme-day .agent-sidebar-chats-count,
+    #sidebarAgent.theme-day .agent-sidebar-chats-count {
+      color: #64748b !important;
+    }
+    body.theme-day .agent-sidebar-toggle-btn,
+    #sidebarAgent.theme-day .agent-sidebar-toggle-btn {
+      background: #ffffff !important;
+      border: 1px solid #cbd5e1 !important;
+      color: #475569 !important;
+    }
+    body.theme-day .agent-sidebar-toggle-btn:hover,
+    #sidebarAgent.theme-day .agent-sidebar-toggle-btn:hover {
+      background: #ede9fe !important;
+      border-color: #8b5cf6 !important;
+      color: #6d28d9 !important;
+    }
+    body.theme-day .agent-sidebar-controls,
+    #sidebarAgent.theme-day .agent-sidebar-controls {
+      border-bottom: 1px solid #e2e8f0 !important;
+    }
+    body.theme-day .agent-sidebar-new-btn,
+    #sidebarAgent.theme-day .agent-sidebar-new-btn {
+      background: linear-gradient(135deg, #8b5cf6, #3b82f6) !important;
+      border: 1px solid #7c3aed !important;
+      color: #ffffff !important;
+      box-shadow: 0 2px 6px rgba(139, 92, 246, 0.25) !important;
+    }
+    body.theme-day .agent-sidebar-new-btn:hover,
+    #sidebarAgent.theme-day .agent-sidebar-new-btn:hover {
+      background: linear-gradient(135deg, #7c3aed, #2563eb) !important;
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.35) !important;
+    }
+    body.theme-day .agent-sidebar-search-input,
+    #sidebarAgent.theme-day .agent-sidebar-search-input {
+      background: #ffffff !important;
+      border: 1px solid #cbd5e1 !important;
+      color: #0f172a !important;
+    }
+    body.theme-day .agent-sidebar-search-input::placeholder,
+    #sidebarAgent.theme-day .agent-sidebar-search-input::placeholder {
+      color: #94a3b8 !important;
+    }
+
+    body.theme-day .agent-history-item,
+    #sidebarAgent.theme-day .agent-history-item {
+      background: #ffffff !important;
+      border: 1px solid #e2e8f0 !important;
+      color: #1e293b !important;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+    }
+    body.theme-day .agent-history-item:hover,
+    #sidebarAgent.theme-day .agent-history-item:hover {
+      background: #f8fafc !important;
+      border-color: #cbd5e1 !important;
+      color: #0f172a !important;
+    }
+    body.theme-day .agent-history-item.active,
+    #sidebarAgent.theme-day .agent-history-item.active {
+      background: #ede9fe !important;
+      border-color: #8b5cf6 !important;
+      color: #4c1d95 !important;
+      box-shadow: 0 0 0 1px #8b5cf6 !important;
+    }
+    body.theme-day .agent-history-title,
+    #sidebarAgent.theme-day .agent-history-title {
+      color: #0f172a !important;
+    }
+    body.theme-day .agent-history-item.active .agent-history-title,
+    #sidebarAgent.theme-day .agent-history-item.active .agent-history-title {
+      color: #4c1d95 !important;
+    }
+    body.theme-day .agent-history-meta,
+    #sidebarAgent.theme-day .agent-history-meta {
+      color: #64748b !important;
+    }
+    body.theme-day .agent-sidebar-footer,
+    #sidebarAgent.theme-day .agent-sidebar-footer {
+      background: #f8fafc !important;
+      border-top: 1px solid #e2e8f0 !important;
+      color: #475569 !important;
+    }
+    body.theme-day .agent-user-name,
+    #sidebarAgent.theme-day .agent-user-name {
+      color: #0f172a !important;
+    }
+    body.theme-day .agent-user-id,
+    #sidebarAgent.theme-day .agent-user-id {
+      color: #64748b !important;
+    }
+
+    /* Day Mode: Right Column Chat Pane */
+    body.theme-day .agent-chat-pane,
+    #sidebarAgent.theme-day .agent-chat-pane {
+      background: var(--agent-custom-bg, #f8fafc) !important;
+    }
+    body.theme-day .agent-drawer-header,
+    #sidebarAgent.theme-day .agent-drawer-header {
+      background: #ffffff !important;
+      border-bottom: 1px solid #e2e8f0 !important;
+    }
+    body.theme-day .agent-chat-title-main,
+    #sidebarAgent.theme-day .agent-chat-title-main {
+      color: #0f172a !important;
+    }
+    body.theme-day .agent-chat-title-sub,
+    #sidebarAgent.theme-day .agent-chat-title-sub {
+      color: #7c3aed !important;
+    }
+    body.theme-day .agent-empty-hero .agent-hero-greeting,
+    #sidebarAgent.theme-day .agent-empty-hero .agent-hero-greeting {
+      background: linear-gradient(135deg, #0f172a 40%, #7c3aed 100%) !important;
+      -webkit-background-clip: text !important;
+      -webkit-text-fill-color: transparent !important;
+    }
+    body.theme-day .agent-empty-hero .agent-hero-subline,
+    #sidebarAgent.theme-day .agent-empty-hero .agent-hero-subline {
+      color: #64748b !important;
+    }
+
+    /* Day Mode: Bubbles */
+    body.theme-day .agent-bubble.agent-bubble-assistant,
+    #sidebarAgent.theme-day .agent-bubble.agent-bubble-assistant {
+      background: #ffffff !important;
+      border: 1px solid #e2e8f0 !important;
+      color: #0f172a !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
+    }
+    body.theme-day .agent-bubble.agent-bubble-user,
+    #sidebarAgent.theme-day .agent-bubble.agent-bubble-user {
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed) !important;
+      color: #ffffff !important;
+      box-shadow: 0 2px 8px rgba(139, 92, 246, 0.25) !important;
+    }
+
+    /* Day Mode: Input Area */
+    body.theme-day .agent-input-container,
+    #sidebarAgent.theme-day .agent-input-container {
+      background: #ffffff !important;
+      border-top: 1px solid #e2e8f0 !important;
+    }
+    body.theme-day .agent-input-box,
+    #sidebarAgent.theme-day .agent-input-box {
+      background: #f1f5f9 !important;
+      border: 1px solid #cbd5e1 !important;
+      color: #0f172a !important;
+    }
+    body.theme-day .agent-input-box::placeholder,
+    #sidebarAgent.theme-day .agent-input-box::placeholder {
+      color: #94a3b8 !important;
+    }
+
+    /* Day Mode: Settings Panel */
+    body.theme-day .agent-settings-panel,
+    #sidebarAgent.theme-day .agent-settings-panel {
+      background: #ffffff !important;
+      border: 1px solid #cbd5e1 !important;
+      color: #0f172a !important;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.15) !important;
+    }
+    body.theme-day .agent-settings-header,
+    #sidebarAgent.theme-day .agent-settings-header {
+      background: #f8fafc !important;
+      border-bottom: 1px solid #e2e8f0 !important;
+    }
+    body.theme-day .agent-settings-title,
+    #sidebarAgent.theme-day .agent-settings-title {
+      color: #0f172a !important;
+    }
+    body.theme-day .agent-settings-identity-banner,
+    #sidebarAgent.theme-day .agent-settings-identity-banner {
+      background: #f1f5f9 !important;
+      border: 1px solid #e2e8f0 !important;
+    }
+    body.theme-day .agent-settings-identity-name-row strong,
+    #sidebarAgent.theme-day .agent-settings-identity-name-row strong {
+      color: #0f172a !important;
+    }
+    body.theme-day .agent-settings-tab-btn,
+    #sidebarAgent.theme-day .agent-settings-tab-btn {
+      background: #f1f5f9 !important;
+      border: 1px solid #e2e8f0 !important;
+      color: #475569 !important;
+    }
+    body.theme-day .agent-settings-tab-btn.active,
+    #sidebarAgent.theme-day .agent-settings-tab-btn.active {
+      background: #ede9fe !important;
+      border-color: #8b5cf6 !important;
+      color: #5b21b6 !important;
+    }
+    body.theme-day .agent-settings-panel button.agent-settings-btn-option,
+    #sidebarAgent.theme-day .agent-settings-panel button.agent-settings-btn-option {
+      background: #f8fafc !important;
+      border: 1px solid #cbd5e1 !important;
+      color: #1e293b !important;
+    }
+    body.theme-day .agent-settings-panel button.agent-settings-btn-option:hover,
+    #sidebarAgent.theme-day .agent-settings-panel button.agent-settings-btn-option:hover {
+      background: #ede9fe !important;
+      border-color: #8b5cf6 !important;
+      color: #5b21b6 !important;
+    }
+    body.theme-day .agent-settings-panel button.agent-settings-btn-option.active,
+    #sidebarAgent.theme-day .agent-settings-panel button.agent-settings-btn-option.active {
+      background: #8b5cf6 !important;
+      border-color: #7c3aed !important;
+      color: #ffffff !important;
+      box-shadow: 0 0 10px rgba(139, 92, 246, 0.35) !important;
+    }
+    body.theme-day .agent-settings-input,
+    #sidebarAgent.theme-day .agent-settings-input {
+      background: #ffffff !important;
+      border: 1px solid #cbd5e1 !important;
+      color: #0f172a !important;
+    }
+    body.theme-day .agent-settings-label,
+    #sidebarAgent.theme-day .agent-settings-label {
+      color: #334155 !important;
+    }
+    body.theme-day .agent-settings-footer,
+    #sidebarAgent.theme-day .agent-settings-footer {
+      background: #f8fafc !important;
+      border-top: 1px solid #e2e8f0 !important;
+    }
+
+    /* ID Toast Notification Popup */
+    .agent-toast-popup {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #0f172a;
+      color: #f8fafc;
+      padding: 10px 18px;
+      border-radius: 8px;
+      border: 1px solid #38bdf8;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 99999;
+      animation: agentToastSlideUp 0.25s ease-out;
+    }
+    @keyframes agentToastSlideUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+</style>
   <link rel="stylesheet" href="./mobile-agent-navigation.css?v=20260918-1">
 </head>
 <body class="theme-night">
@@ -45498,8 +45778,9 @@
 
       const DEFAULT_AGENT_SETTINGS = {
         theme: 'dark',
-        bgColor: '#090d16',
+        bgColor: '',
         bgImage: '',
+        bgImageKey: '',
         bgOpacity: 0.15,
         savedLinks: [
           { id: 'LINK-01', title: 'FHIR R4 Spezifikation (HL7)', url: 'https://hl7.org/fhir/R4/', category: 'Standards', notes: 'Offizielle FHIR Kernspezifikation für Ressourcen' },
@@ -45511,6 +45792,142 @@
           { id: 'REPO-01', repo: 'gonzo42nixon/orcai-chord', branch: 'main', description: 'ORCAI Quad-Chord EA Viewer & Architektur-Modell', isDefault: true },
           { id: 'REPO-02', repo: 'open-telecom-cloud/okf-cloud-ea', branch: 'main', description: 'Open Knowledge Framework EA Standards & Schemata', isDefault: false }
         ]
+      };
+
+      /* =========================================================================
+         ORCAI IMAGE RESOLVER (Resolves ORCAI Keys like ORCAI-260826-21H12-IMAGE-WGETM)
+         ========================================================================= */
+      const KNOWN_ORCAI_IMAGES = {
+        'ORCAI-260826-21H12-IMAGE-WGETM': 'https://firebasestorage.googleapis.com/v0/b/orcai-54321.firebasestorage.app/o/clients%2FACME%2Frecords%2FORCAI-260826-21H12-IMAGE-WGETM%2Fpreview.png?alt=media',
+        'ORCAI-260907-23H47-IMAGE-EB3EB': 'https://firebasestorage.googleapis.com/v0/b/orcai-54321.firebasestorage.app/o/clients%2FACME%2Frecords%2FORCAI-260907-23H47-IMAGE-EB3EB%2Fpreview.png?alt=media&token=c2a4463b-25c4-44d0-8a4f-02ad3d180f10'
+      };
+
+      window.resolveOrcaiImageKey = async function(keyOrUrl) {
+        if (!keyOrUrl) return '';
+        const trimmed = keyOrUrl.trim();
+        if (/^https?:\/\//i.test(trimmed) || /^data:/i.test(trimmed) || /^blob:/i.test(trimmed)) {
+          return trimmed;
+        }
+
+        let key = trimmed;
+        // Check gs:// URL
+        if (key.startsWith('gs://')) {
+          try {
+            if (window.firebase && firebase.storage) {
+              return await firebase.storage().refFromURL(key).getDownloadURL();
+            }
+          } catch(e) {
+            console.warn('[ORCAI Image Resolver] gs:// URL resolve error:', e);
+          }
+        }
+
+        // Try Firebase Storage listAll for record key
+        if (window.firebase && firebase.storage) {
+          try {
+            const storage = firebase.storage();
+            const clients = ['ACME', 'PUBLIC', 'DEFAULT'];
+            for (const cl of clients) {
+              try {
+                const folderRef = storage.ref('clients/' + cl + '/records/' + key);
+                const list = await folderRef.listAll();
+                if (list.items && list.items.length > 0) {
+                  const previewItem = list.items.find(it => it.name.includes('preview') || /\.(png|jpe?g|webp|svg)$/i.test(it.name)) || list.items[0];
+                  const downloadUrl = await previewItem.getDownloadURL();
+                  if (downloadUrl) return downloadUrl;
+                }
+              } catch(errFolder) {}
+            }
+          } catch (e) {
+            console.warn('[ORCAI Image Resolver] Storage folder lookup error:', e);
+          }
+        }
+
+        // Try Firestore envelope document
+        if (window.firebase && firebase.firestore) {
+          try {
+            const db = firebase.firestore();
+            const clients = ['ACME', 'PUBLIC', 'DEFAULT'];
+            for (const cl of clients) {
+              try {
+                const docSnap = await db.doc('clients/' + cl + '/envelopes/' + key).get();
+                if (docSnap.exists) {
+                  const data = docSnap.data();
+                  const envUrl = data.envelope?.previewUrl || data.envelope?.url;
+                  if (envUrl) {
+                    if (envUrl.startsWith('gs://') && window.firebase.storage) {
+                      return await firebase.storage().refFromURL(envUrl).getDownloadURL();
+                    }
+                    if (/^https?:\/\//i.test(envUrl)) return envUrl;
+                  }
+                }
+              } catch(errDoc) {}
+            }
+          } catch (e) {
+            console.warn('[ORCAI Image Resolver] Firestore doc lookup error:', e);
+          }
+        }
+
+        // Known pre-indexed map
+        if (KNOWN_ORCAI_IMAGES[key]) {
+          return KNOWN_ORCAI_IMAGES[key];
+        }
+
+        // Fallback standard URL
+        return 'https://firebasestorage.googleapis.com/v0/b/orcai-54321.firebasestorage.app/o/clients%2FACME%2Frecords%2F' + encodeURIComponent(key) + '%2Fpreview.png?alt=media';
+      };
+
+      /* =========================================================================
+         CLIPBOARD & TOAST HELPERS
+         ========================================================================= */
+      window.copyTextToClipboard = function(text) {
+        if (!text) return Promise.resolve(false);
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          return navigator.clipboard.writeText(text).then(() => true).catch(() => fallbackCopy(text));
+        }
+        return Promise.resolve(fallbackCopy(text));
+
+        function fallbackCopy(str) {
+          try {
+            const ta = document.createElement('textarea');
+            ta.value = str;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            const successful = document.execCommand('copy');
+            document.body.removeChild(ta);
+            return successful;
+          } catch (e) {
+            return false;
+          }
+        }
+      };
+
+      window.showAgentToast = function(msg, duration = 3000) {
+        let t = document.getElementById('agentGlobalToast');
+        if (!t) {
+          t = document.createElement('div');
+          t.id = 'agentGlobalToast';
+          t.className = 'agent-toast-popup';
+          document.body.appendChild(t);
+        }
+        t.innerHTML = msg;
+        t.style.display = 'flex';
+        clearTimeout(t._timer);
+        t._timer = setTimeout(() => {
+          t.style.display = 'none';
+        }, duration);
+      };
+
+      window.openOrcaiAccountDetails = function() {
+        const trigger = document.getElementById('orcaiAccountTrigger');
+        if (trigger) {
+          trigger.click();
+        } else {
+          let identity = { id: 'guest', name: 'Gast' };
+          if (typeof window.getActiveOrcaiIdentity === 'function') identity = window.getActiveOrcaiIdentity();
+          window.showAgentToast('👤 Konto: ' + identity.name + ' (' + identity.id + ')');
+        }
       };
 
       class OrcaiAgentSettingsStore {
@@ -45582,10 +45999,24 @@
           const drawer = document.getElementById('sidebarAgent');
           const chatPane = document.getElementById('agentChatPane');
           const sidebar = document.querySelector('.agent-sidebar');
-          const settingsPanel = document.getElementById('agentSettingsPanel');
           if (!drawer) return;
 
-          // Apply custom background color directly and aggressively across the entire drawer
+          const isDay = s.theme === 'day';
+
+          // Apply Day / Night classes to both body AND the AI Agent drawer
+          if (isDay) {
+            drawer.classList.add('theme-day');
+            drawer.classList.remove('theme-night');
+            document.body.classList.add('theme-day');
+            document.body.classList.remove('theme-night');
+          } else {
+            drawer.classList.remove('theme-day');
+            drawer.classList.add('theme-night');
+            document.body.classList.remove('theme-day');
+            document.body.classList.add('theme-night');
+          }
+
+          // Apply background color
           if (s.bgColor) {
             drawer.style.setProperty('--agent-custom-bg', s.bgColor);
             drawer.style.setProperty('background-color', s.bgColor, 'important');
@@ -45598,7 +46029,9 @@
             }
             drawer.classList.add('agent-drawer-custom-bg');
           } else {
-            drawer.style.removeProperty('--agent-custom-bg');
+            // Default based on theme
+            const defaultBg = isDay ? '#f8fafc' : '#090d16';
+            drawer.style.setProperty('--agent-custom-bg', defaultBg);
             drawer.style.removeProperty('background-color');
             if (chatPane) {
               chatPane.style.removeProperty('background-color');
@@ -45610,26 +46043,30 @@
             drawer.classList.remove('agent-drawer-custom-bg');
           }
 
-          // Apply custom background overlay image
+          // Apply background overlay image (supports ORCAI-ID and URLs)
           let overlay = drawer.querySelector('.agent-drawer-custom-overlay');
-          if (s.bgImage) {
+          const bgImgRaw = s.bgImageKey || s.bgImage;
+          if (bgImgRaw) {
             if (!overlay) {
               overlay = document.createElement('div');
               overlay.className = 'agent-drawer-custom-overlay';
               drawer.insertBefore(overlay, drawer.firstChild);
             }
-            overlay.style.backgroundImage = 'url("' + s.bgImage + '")';
             overlay.style.opacity = s.bgOpacity !== undefined ? s.bgOpacity : 0.15;
             overlay.style.display = 'block';
+
+            // Resolve async if needed
+            window.resolveOrcaiImageKey(bgImgRaw).then(finalUrl => {
+              if (overlay && finalUrl) {
+                overlay.style.backgroundImage = 'url("' + finalUrl + '")';
+              }
+            }).catch(() => {
+              if (overlay && s.bgImage) {
+                overlay.style.backgroundImage = 'url("' + s.bgImage + '")';
+              }
+            });
           } else if (overlay) {
             overlay.style.display = 'none';
-          }
-
-          // Apply day / night theme
-          if (s.theme === 'day' && typeof window.applyEaTheme === 'function') {
-            window.applyEaTheme('day', true);
-          } else if (s.theme === 'night' && typeof window.applyEaTheme === 'function') {
-            window.applyEaTheme('night', true);
           }
         }
       }
@@ -45649,13 +46086,16 @@
         if (typeof window.getActiveOrcaiIdentity === 'function') {
           id = window.getActiveOrcaiIdentity().id;
         }
-        navigator.clipboard.writeText(id).then(() => {
-          const el = document.getElementById('settingsOrcaiIdCode');
-          if (el) {
-            el.innerHTML = id + ' <span style="color:#10b981;">✓ Kopiert!</span>';
+        window.copyTextToClipboard(id).then(() => {
+          window.showAgentToast('✓ ORCAI-ID in Zwischenablage kopiert: <code style="color:#38bdf8; font-weight:700;">' + id + '</code>');
+          const btn = document.getElementById('btnCopyOrcaiId');
+          if (btn) {
+            btn.innerHTML = '✓ Kopiert!';
+            btn.style.color = '#10b981';
             setTimeout(() => {
-              el.innerHTML = id + ' 📋';
-            }, 2000);
+              btn.innerHTML = '📋 Kopieren';
+              btn.style.color = '';
+            }, 2500);
           }
         });
       };
@@ -45690,14 +46130,37 @@
         });
       };
 
-      window.previewAgentBgImage = function(url) {
+      window.previewAgentBgImage = function(keyOrUrl) {
         const inp = document.getElementById('agentBgImageUrl');
-        if (inp) inp.value = url;
+        if (inp) inp.value = keyOrUrl;
+        const statusEl = document.getElementById('agentBgImageStatus');
         const opacityEl = document.getElementById('agentBgOpacityRange');
         const opacity = opacityEl ? parseFloat(opacityEl.value) : 0.15;
-        const current = OrcaiAgentSettingsStore.getSettings();
-        const merged = Object.assign({}, current, { bgImage: url, bgOpacity: opacity });
-        OrcaiAgentSettingsStore.applyToDOM(merged);
+
+        if (!keyOrUrl) {
+          if (statusEl) statusEl.innerHTML = '<span style="color:#94a3b8;">Kein Hintergrundbild aktiv.</span>';
+          const current = OrcaiAgentSettingsStore.getSettings();
+          const merged = Object.assign({}, current, { bgImage: '', bgImageKey: '', bgOpacity: opacity });
+          OrcaiAgentSettingsStore.applyToDOM(merged);
+          return;
+        }
+
+        if (statusEl) {
+          statusEl.innerHTML = '<span style="color:#f59e0b;">⏳ Löse Bild / ORCAI-ID auf...</span>';
+        }
+
+        window.resolveOrcaiImageKey(keyOrUrl).then(resolvedUrl => {
+          if (statusEl) {
+            statusEl.innerHTML = '<span style="color:#10b981; display:flex; align-items:center; gap:6px;">✓ Aktiv: <code style="color:#38bdf8; font-size:0.72rem;">' + keyOrUrl + '</code></span>';
+          }
+          const current = OrcaiAgentSettingsStore.getSettings();
+          const merged = Object.assign({}, current, { bgImage: resolvedUrl, bgImageKey: keyOrUrl, bgOpacity: opacity });
+          OrcaiAgentSettingsStore.applyToDOM(merged);
+        }).catch(err => {
+          if (statusEl) {
+            statusEl.innerHTML = '<span style="color:#ef4444;">✕ Konnte ORCAI-Bild nicht laden</span>';
+          }
+        });
       };
 
       window.previewAgentBgOpacity = function(val) {
@@ -45705,9 +46168,9 @@
         const lbl = document.getElementById('agentBgOpacityVal');
         if (lbl) lbl.textContent = Math.round(num * 100) + '%';
         const inp = document.getElementById('agentBgImageUrl');
-        const url = inp ? inp.value.trim() : '';
+        const keyOrUrl = inp ? inp.value.trim() : '';
         const current = OrcaiAgentSettingsStore.getSettings();
-        const merged = Object.assign({}, current, { bgImage: url, bgOpacity: num });
+        const merged = Object.assign({}, current, { bgImageKey: keyOrUrl, bgOpacity: num });
         OrcaiAgentSettingsStore.applyToDOM(merged);
       };
 
@@ -45721,37 +46184,42 @@
         if (bgColor && !bgColor.startsWith('#') && /^[0-9a-fA-F]{6}$/.test(bgColor)) {
           bgColor = '#' + bgColor;
         }
-        const bgImage = bgImgInp ? bgImgInp.value.trim() : '';
+        const bgImgRaw = bgImgInp ? bgImgInp.value.trim() : '';
         const bgOpacity = opacityEl ? parseFloat(opacityEl.value) : 0.15;
-        const theme = document.body.classList.contains('theme-day') ? 'day' : 'night';
+        const isDay = document.getElementById('sidebarAgent')?.classList.contains('theme-day') || document.body.classList.contains('theme-day');
+        const theme = isDay ? 'day' : 'night';
 
-        const updated = OrcaiAgentSettingsStore.saveSettings({
-          bgColor: bgColor,
-          bgImage: bgImage,
-          bgOpacity: bgOpacity,
-          theme: theme
-        });
+        window.resolveOrcaiImageKey(bgImgRaw).then(resolvedUrl => {
+          const updated = OrcaiAgentSettingsStore.saveSettings({
+            bgColor: bgColor,
+            bgImage: resolvedUrl,
+            bgImageKey: bgImgRaw,
+            bgOpacity: bgOpacity,
+            theme: theme
+          });
 
-        const statusEl = document.getElementById('agentSettingsStatusText');
-        const btnSave = document.getElementById('btnSaveAgentSettingsAll');
-        let identity = { id: 'guest', name: 'Benutzer' };
-        try {
-          if (typeof window.getActiveOrcaiIdentity === 'function') {
-            identity = window.getActiveOrcaiIdentity();
+          const statusEl = document.getElementById('agentSettingsStatusText');
+          const btnSave = document.getElementById('btnSaveAgentSettingsAll');
+          let identity = { id: 'guest', name: 'Benutzer' };
+          try {
+            if (typeof window.getActiveOrcaiIdentity === 'function') {
+              identity = window.getActiveOrcaiIdentity();
+            }
+          } catch(e) {}
+
+          if (statusEl) {
+            statusEl.innerHTML = '✓ Gespeichert für ORCAI-ID: <code style="color:#38bdf8;">' + identity.id + '</code>';
           }
-        } catch(e) {}
-
-        if (statusEl) {
-          statusEl.innerHTML = '✓ Gespeichert für ORCAI-ID: <code style="color:#38bdf8;">' + identity.id + '</code>';
-        }
-        if (btnSave) {
-          btnSave.innerHTML = '✓ Einstellungen gespeichert!';
-          btnSave.classList.add('saved-success');
-          setTimeout(() => {
-            btnSave.innerHTML = '💾 Einstellungen speichern';
-            btnSave.classList.remove('saved-success');
-          }, 2500);
-        }
+          if (btnSave) {
+            btnSave.innerHTML = '✓ Einstellungen gespeichert!';
+            btnSave.classList.add('saved-success');
+            setTimeout(() => {
+              btnSave.innerHTML = '💾 Einstellungen speichern';
+              btnSave.classList.remove('saved-success');
+            }, 2500);
+          }
+          window.showAgentToast('✓ Einstellungen erfolgreich gespeichert für ORCAI-ID ' + identity.id);
+        });
       };
 
       window.toggleAgentSettingsPanel = function() {
@@ -45784,7 +46252,7 @@
             <button class="agent-settings-close" onclick="window.toggleAgentSettingsPanel()" title="Schließen">✕</button>
           </div>
 
-          <!-- ORCAI Identity & ID Banner -->
+          <!-- ORCAI Identity & ID Banner with Copy and Account actions -->
           <div style="padding: 10px 14px 0 14px;">
             <div class="agent-settings-identity-banner">
               <div class="agent-settings-identity-avatar">
@@ -45795,9 +46263,13 @@
                   <strong>${identity.name}</strong>
                   <span class="agent-settings-auth-badge ${identity.isLoggedIn ? 'active' : ''}">${identity.isLoggedIn ? '● Google Login' : '○ Gast-Sitzung'}</span>
                 </div>
-                <div class="agent-settings-id-row">
-                  <span style="color:#94a3b8; font-size:0.68rem;">ORCAI-ID:</span>
-                  <code class="agent-settings-id-code" id="settingsOrcaiIdCode" title="Klicken zum Kopieren" onclick="window.copyOrcaiIdFromSettings()">${identity.id} 📋</code>
+                <div class="agent-settings-id-row" style="display:flex; align-items:center; gap:8px; margin-top:4px; flex-wrap:wrap;">
+                  <span style="color:#94a3b8; font-size:0.68rem; font-weight:600;">ORCAI-ID:</span>
+                  <span class="agent-settings-id-badge" style="font-family:monospace; font-size:0.72rem; background:rgba(0,0,0,0.25); border:1px solid rgba(56,189,248,0.35); border-radius:4px; padding:2px 7px; color:#38bdf8; word-break:break-all;">${identity.id}</span>
+                  <button type="button" class="agent-settings-btn-option" id="btnCopyOrcaiId" onclick="window.copyOrcaiIdFromSettings()" style="padding:2px 8px !important; font-size:0.68rem !important; height:24px;" title="ORCAI-ID in die Zwischenablage kopieren">
+                    📋 Kopieren
+                  </button>
+                  ${identity.isLoggedIn ? '<button type="button" class="agent-settings-btn-option" onclick="window.openOrcaiAccountDetails()" style="padding:2px 8px !important; font-size:0.68rem !important; height:24px;" title="Google-Konto öffnen">👤 Konto</button>' : ''}
                 </div>
               </div>
             </div>
@@ -45839,7 +46311,8 @@
         const settings = OrcaiAgentSettingsStore.getSettings();
 
         if (tabName === 'design') {
-          const isDay = document.body.classList.contains('theme-day');
+          const isDay = settings.theme === 'day' || document.getElementById('sidebarAgent')?.classList.contains('theme-day') || document.body.classList.contains('theme-day');
+          const currentImgVal = settings.bgImageKey || settings.bgImage || '';
           body.innerHTML = `
             <div class="agent-settings-group">
               <label class="agent-settings-label">Erscheinungsbild (Day / Night Mode)</label>
@@ -45852,8 +46325,8 @@
             <div class="agent-settings-group">
               <label class="agent-settings-label">Eigene Hintergrundfarbe für den Agenten</label>
               <div style="display:flex; align-items:center; gap:10px;">
-                <input type="color" id="agentBgColorPicker" value="${settings.bgColor || '#090d16'}" oninput="window.previewAgentBgColor(this.value)" onchange="window.previewAgentBgColor(this.value)" style="width:40px; height:34px; border:none; background:none; cursor:pointer; border-radius:6px;">
-                <input type="text" id="agentBgColorText" value="${settings.bgColor || '#090d16'}" class="agent-settings-input" style="font-family:monospace; width:120px;" oninput="window.previewAgentBgColor(this.value)" onchange="window.previewAgentBgColor(this.value)">
+                <input type="color" id="agentBgColorPicker" value="${settings.bgColor || (isDay ? '#ffffff' : '#090d16')}" oninput="window.previewAgentBgColor(this.value)" onchange="window.previewAgentBgColor(this.value)" style="width:40px; height:34px; border:none; background:none; cursor:pointer; border-radius:6px;">
+                <input type="text" id="agentBgColorText" value="${settings.bgColor || ''}" placeholder="${isDay ? '#ffffff' : '#090d16'}" class="agent-settings-input" style="font-family:monospace; width:120px;" oninput="window.previewAgentBgColor(this.value)" onchange="window.previewAgentBgColor(this.value)">
                 <button type="button" class="agent-settings-btn-option" onclick="window.previewAgentBgColor('')" title="Standardfarbe wiederherstellen">Standard</button>
               </div>
               <div class="agent-color-presets" style="margin-top:8px;">
@@ -45868,131 +46341,123 @@
               </div>
 
               <!-- Real-time Live Preview Bar -->
-              <div class="agent-color-preview-box" id="agentColorPreviewBox" style="background:${settings.bgColor || '#090d16'}; height:32px; border-radius:6px; border:1px solid rgba(255,255,255,0.25); display:flex; align-items:center; justify-content:center; color:#ffffff; font-size:0.75rem; font-weight:600; text-shadow:0 1px 2px rgba(0,0,0,0.8); margin-top:8px; box-shadow:inset 0 0 10px rgba(0,0,0,0.3);">
-                Live-Vorschau: ${settings.bgColor || 'Standard (#090d16)'}
+              <div class="agent-color-preview-box" id="agentColorPreviewBox" style="background:${settings.bgColor || (isDay ? '#ffffff' : '#090d16')}; height:32px; border-radius:6px; border:1px solid rgba(255,255,255,0.25); display:flex; align-items:center; justify-content:center; color:${isDay ? '#0f172a' : '#ffffff'}; font-size:0.75rem; font-weight:600; text-shadow:0 1px 2px rgba(0,0,0,0.5); margin-top:8px; box-shadow:inset 0 0 10px rgba(0,0,0,0.2);">
+                Live-Vorschau: ${settings.bgColor || (isDay ? 'Standard Hell (#f8fafc)' : 'Standard Dunkel (#090d16)')}
               </div>
             </div>
 
             <div class="agent-settings-group">
-              <label class="agent-settings-label">Individuelles Hintergrundbild</label>
-              <input type="url" id="agentBgImageUrl" class="agent-settings-input" placeholder="https://beispiel.de/hintergrund.jpg" value="${settings.bgImage || ''}" onchange="window.previewAgentBgImage(this.value)">
+              <label class="agent-settings-label">Hintergrundbild (ORCAI-ID oder Bild-URL)</label>
+              <div style="display:flex; gap:6px; align-items:center;">
+                <input type="text" id="agentBgImageUrl" class="agent-settings-input" placeholder="ORCAI-ID (z. B. ORCAI-260826-21H12-IMAGE-WGETM) oder URL" value="${currentImgVal}" onchange="window.previewAgentBgImage(this.value)" style="flex:1;">
+                <button type="button" class="agent-settings-btn-option" onclick="window.previewAgentBgImage(document.getElementById('agentBgImageUrl').value)" title="Bild oder ORCAI-ID laden">🔍 Laden</button>
+              </div>
+              <div id="agentBgImageStatus" style="font-size:0.72rem; margin-top:4px;">
+                ${currentImgVal ? ('<span style="color:#10b981;">✓ Aktiv: <code style="color:#38bdf8;">' + currentImgVal + '</code></span>') : '<span style="color:#94a3b8;">Kein Hintergrundbild aktiv.</span>'}
+              </div>
+
               <div style="display:flex; align-items:center; gap:8px; margin-top:6px;">
                 <span style="font-size:0.72rem; color:#94a3b8; width:70px;">Deckkraft:</span>
                 <input type="range" id="agentBgOpacityRange" min="0" max="0.4" step="0.02" value="${settings.bgOpacity !== undefined ? settings.bgOpacity : 0.15}" style="flex:1;" oninput="window.previewAgentBgOpacity(this.value)">
                 <span id="agentBgOpacityVal" style="font-size:0.72rem; color:#f8fafc; font-family:monospace; width:40px; text-align:right;">${Math.round((settings.bgOpacity !== undefined ? settings.bgOpacity : 0.15) * 100)}%</span>
               </div>
-              <div style="display:flex; gap:8px; margin-top:8px;">
-                <button type="button" class="agent-settings-btn-option" onclick="window.previewAgentBgImage('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80')">Preset: Circuit</button>
-                <button type="button" class="agent-settings-btn-option" onclick="window.previewAgentBgImage('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1200&q=80')">Preset: Network</button>
-                <button type="button" class="agent-settings-btn-option" onclick="window.previewAgentBgImage('')">Kein Bild</button>
+
+              <div style="margin-top:8px;">
+                <div style="font-size:0.68rem; color:#94a3b8; margin-bottom:4px; font-weight:600;">ORCAI-Bilder &amp; Presets:</div>
+                <div style="display:flex; flex-wrap:wrap; gap:6px;">
+                  <button type="button" class="agent-settings-btn-option" onclick="window.previewAgentBgImage('ORCAI-260826-21H12-IMAGE-WGETM')" title="ORCAI Bild WGETM">🐳 ORCAI: WGETM</button>
+                  <button type="button" class="agent-settings-btn-option" onclick="window.previewAgentBgImage('ORCAI-260907-23H47-IMAGE-EB3EB')" title="ORCAI Bild EB3EB">✨ ORCAI: EB3EB</button>
+                  <button type="button" class="agent-settings-btn-option" onclick="window.previewAgentBgImage('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80')">Preset: Circuit</button>
+                  <button type="button" class="agent-settings-btn-option" onclick="window.previewAgentBgImage('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1200&q=80')">Preset: Network</button>
+                  <button type="button" class="agent-settings-btn-option" onclick="window.previewAgentBgImage('')">Kein Bild</button>
+                </div>
               </div>
             </div>
           `;
         } else if (tabName === 'links') {
           let linksHtml = '';
-          (settings.savedLinks || []).forEach((link, idx) => {
+          (settings.savedLinks || []).forEach((l, idx) => {
             linksHtml += `
               <div class="agent-link-item">
-                <div style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1;">
-                  <div style="font-weight:600; color:#f1f5f9; display:flex; align-items:center; gap:6px;">
-                    <span>${link.title}</span>
-                    <span style="font-size:0.62rem; padding:1px 5px; border-radius:3px; background:rgba(56,189,248,0.15); color:#38bdf8;">${link.category || 'Link'}</span>
-                  </div>
-                  <div style="font-size:0.68rem; color:#94a3b8; overflow:hidden; text-overflow:ellipsis;">${link.url}</div>
+                <div class="agent-link-info">
+                  <div class="agent-link-title">${l.title}</div>
+                  <a href="${l.url}" target="_blank" rel="noopener noreferrer" class="agent-link-url">${l.url}</a>
+                  <div class="agent-link-category">${l.category || 'Allgemein'}</div>
                 </div>
-                <div style="display:flex; gap:6px;">
-                  <a href="${link.url}" target="_blank" rel="noopener noreferrer" class="agent-settings-btn-option" style="text-decoration:none; padding:4px 8px;" title="Öffnen">↗</a>
-                  <button type="button" class="agent-settings-btn-option" style="padding:4px 8px; color:#f43f5e;" onclick="window.deleteAgentSavedLink(${idx})" title="Löschen">✕</button>
-                </div>
+                <button type="button" class="agent-link-delete" onclick="window.deleteAgentLink('${l.id || idx}')" title="Link entfernen">🗑️</button>
               </div>
             `;
           });
-
           body.innerHTML = `
             <div class="agent-settings-group">
-              <label class="agent-settings-label">Gespeicherte Wissens-Links (${(settings.savedLinks || []).length})</label>
-              <div class="agent-settings-subtext">Der Agent greift auf diese Links bei Architekturfragen aktiv zu.</div>
-              <div style="display:flex; flex-direction:column; gap:6px; max-height:180px; overflow-y:auto; margin-top:4px;">
-                ${linksHtml || '<div style="color:#64748b; font-size:0.75rem;">Keine Links gespeichert.</div>'}
+              <label class="agent-settings-label">Neuen Wissens-Link hinzufügen</label>
+              <div style="display:flex; flex-direction:column; gap:6px;">
+                <input type="text" id="newLinkTitle" class="agent-settings-input" placeholder="Titel (z. B. HL7 FHIR Standard)">
+                <input type="url" id="newLinkUrl" class="agent-settings-input" placeholder="https://hl7.org/fhir/">
+                <div style="display:flex; gap:6px;">
+                  <select id="newLinkCat" class="agent-settings-input" style="flex:1;">
+                    <option value="Standards">Standards &amp; Spezifikationen</option>
+                    <option value="APQC">APQC Framework</option>
+                    <option value="GitHub">GitHub / Code</option>
+                    <option value="Wiki">Architektur-Wiki</option>
+                    <option value="Sonstiges">Sonstiges</option>
+                  </select>
+                  <button type="button" class="agent-settings-btn-option" onclick="window.saveNewAgentLink()">+ Hinzufügen</button>
+                </div>
               </div>
             </div>
-
-            <div class="agent-settings-group" style="border-top:1px solid rgba(148,163,184,0.15); padding-top:10px;">
-              <label class="agent-settings-label">+ Neuen Link speichern</label>
-              <input type="text" id="newLinkTitle" class="agent-settings-input" placeholder="Titel (z. B. FHIR R4 Core)">
-              <input type="url" id="newLinkUrl" class="agent-settings-input" placeholder="https://..." style="margin-top:4px;">
-              <div style="display:flex; gap:6px; margin-top:4px;">
-                <input type="text" id="newLinkCat" class="agent-settings-input" placeholder="Kategorie (z. B. Standards)" style="flex:1;">
-                <button type="button" class="agent-settings-btn-option" onclick="window.saveNewAgentLink()" style="white-space:nowrap; background:#0284c7 !important; border-color:#38bdf8 !important;">Speichern</button>
+            <div class="agent-settings-group">
+              <label class="agent-settings-label">Gespeicherte Wissens-Quellen (${(settings.savedLinks || []).length})</label>
+              <div class="agent-links-list">
+                ${linksHtml || '<div style="color:#64748b; font-size:0.75rem;">Noch keine Links hinterlegt.</div>'}
               </div>
             </div>
           `;
         } else if (tabName === 'repos') {
           let reposHtml = '';
-          (settings.githubRepos || []).forEach((repo, idx) => {
+          (settings.githubRepos || []).forEach((r, idx) => {
             reposHtml += `
-              <div class="agent-repo-item">
-                <div style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1;">
-                  <div style="font-weight:600; color:#f1f5f9; display:flex; align-items:center; gap:6px;">
-                    <span>${repo.ownerRepo}</span>
-                    <span style="font-size:0.62rem; padding:1px 5px; border-radius:3px; background:rgba(168,85,247,0.15); color:#a855f7;">${repo.branch || 'main'}</span>
-                  </div>
-                  <div style="font-size:0.68rem; color:#94a3b8; overflow:hidden; text-overflow:ellipsis;">${repo.description || 'GitHub OKF Repository'}</div>
+              <div class="agent-link-item">
+                <div class="agent-link-info">
+                  <div class="agent-link-title">${r.repo} <span style="font-size:0.68rem; color:#38bdf8;">(${r.branch || 'main'})</span></div>
+                  <div style="font-size:0.72rem; color:#94a3b8;">${r.description || 'Keine Beschreibung'}</div>
                 </div>
-                <div style="display:flex; gap:6px;">
-                  <a href="https://github.com/${repo.ownerRepo}" target="_blank" rel="noopener noreferrer" class="agent-settings-btn-option" style="text-decoration:none; padding:4px 8px;" title="Auf GitHub öffnen">↗</a>
-                  <button type="button" class="agent-settings-btn-option" style="padding:4px 8px; color:#f43f5e;" onclick="window.deleteAgentGithubRepo(${idx})" title="Entfernen">✕</button>
-                </div>
+                <button type="button" class="agent-link-delete" onclick="window.deleteAgentRepo('${r.id || idx}')" title="Repo entfernen">🗑️</button>
               </div>
             `;
           });
-
           body.innerHTML = `
             <div class="agent-settings-group">
-              <label class="agent-settings-label">Registrierte GitHub OKF-Repositories (${(settings.githubRepos || []).length})</label>
-              <div class="agent-settings-subtext">Open Knowledge Framework Repositories, die dem Agenten bekannt sind.</div>
-              <div style="display:flex; flex-direction:column; gap:6px; max-height:180px; overflow-y:auto; margin-top:4px;">
-                ${reposHtml || '<div style="color:#64748b; font-size:0.75rem;">Keine Repositories registriert.</div>'}
+              <label class="agent-settings-label">Individuelles GitHub OKF-Repository verknüpfen</label>
+              <div style="display:flex; flex-direction:column; gap:6px;">
+                <input type="text" id="newRepoPath" class="agent-settings-input" placeholder="owner/repository (z. B. mein-org/ea-modelle)">
+                <div style="display:flex; gap:6px;">
+                  <input type="text" id="newRepoBranch" class="agent-settings-input" placeholder="Branch (z. B. main)" value="main" style="width:120px;">
+                  <input type="text" id="newRepoDesc" class="agent-settings-input" placeholder="Beschreibung" style="flex:1;">
+                  <button type="button" class="agent-settings-btn-option" onclick="window.saveNewAgentRepo()">+ Repo</button>
+                </div>
               </div>
             </div>
-
-            <div class="agent-settings-group" style="border-top:1px solid rgba(148,163,184,0.15); padding-top:10px;">
-              <label class="agent-settings-label">+ Neues GitHub Repo registrieren</label>
-              <input type="text" id="newRepoName" class="agent-settings-input" placeholder="owner/repository (z. B. org/okf-models)">
-              <div style="display:flex; gap:6px; margin-top:4px;">
-                <input type="text" id="newRepoBranch" class="agent-settings-input" placeholder="Branch (z. B. main)" style="width:100px;" value="main">
-                <input type="text" id="newRepoDesc" class="agent-settings-input" placeholder="Kurzbeschreibung" style="flex:1;">
-                <button type="button" class="agent-settings-btn-option" onclick="window.saveNewAgentGithubRepo()" style="white-space:nowrap; background:#0284c7 !important; border-color:#38bdf8 !important;">Registrieren</button>
+            <div class="agent-settings-group">
+              <label class="agent-settings-label">Bekannte GitHub OKF-Repositories (${(settings.githubRepos || []).length})</label>
+              <div class="agent-links-list">
+                ${reposHtml || '<div style="color:#64748b; font-size:0.75rem;">Noch keine Repositories hinterlegt.</div>'}
               </div>
             </div>
           `;
         } else if (tabName === 'search') {
-          const sessions = typeof loadAllUserSessions === 'function' ? loadAllUserSessions() : [];
-          let totalMsgs = 0;
-          sessions.forEach(s => { totalMsgs += (s.messages || []).length; });
-
           body.innerHTML = `
             <div class="agent-settings-group">
-              <label class="agent-settings-label">Volltextsuche-Status</label>
-              <div class="agent-settings-subtext">
-                Die Volltextsuche indiziert automatisch sämtliche Chat-Sessions, Nutzerfragen, Agentenantworten und verlinkte Architekturobjekte.
+              <label class="agent-settings-label">Gezielte Volltext-Suche in Chat-Verläufen</label>
+              <div style="font-size:0.74rem; color:#94a3b8; margin-bottom:8px;">
+                Durchsuchen Sie alle archivierten und aktuellen Konversationen nach Fachbegriffen, HL7-Segmenten, BPMN-Prozessen oder System-IDs.
               </div>
-              <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:8px;">
-                <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(148,163,184,0.12); padding:10px; border-radius:6px; text-align:center;">
-                  <div style="font-size:1.2rem; font-weight:700; color:#38bdf8;">${sessions.length}</div>
-                  <div style="font-size:0.68rem; color:#94a3b8;">Gespeicherte Chats</div>
-                </div>
-                <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(148,163,184,0.12); padding:10px; border-radius:6px; text-align:center;">
-                  <div style="font-size:1.2rem; font-weight:700; color:#10b981;">${totalMsgs}</div>
-                  <div style="font-size:0.68rem; color:#94a3b8;">Indizierte Nachrichten</div>
-                </div>
+              <div style="display:flex; gap:6px;">
+                <input type="text" id="agentSettingsSearchInp" class="agent-settings-input" placeholder="Suchbegriff eingeben (z. B. FHIR, JSD-P-01, Groovy)..." style="flex:1;">
+                <button type="button" class="agent-settings-btn-option" onclick="window.executeSettingsChatSearch()">Suchen</button>
               </div>
-            </div>
-
-            <div class="agent-settings-group" style="margin-top:8px;">
-              <label class="agent-settings-label">Tipp zur Volltextsuche</label>
-              <div class="agent-settings-subtext">
-                Geben Sie in der Suchleiste links einfach einen beliebigen Begriff ein (z. B. <i>Manchester-Triage</i>, <i>ermöglicht</i> oder <i>HL7</i>). Die Treffer zeigen Ihnen sofort den passenden Gesprächsausschnitt mit Text-Highlighting an.
+              <div id="agentSettingsSearchResults" style="margin-top:10px; max-height:220px; overflow-y:auto;">
+                <!-- Search results will appear here -->
               </div>
             </div>
           `;
@@ -46000,10 +46465,18 @@
       };
 
       window.setAgentThemeMode = function(mode) {
-        OrcaiAgentSettingsStore.saveSettings({ theme: mode });
+        const isDay = mode === 'day';
+        const drawer = document.getElementById('sidebarAgent');
+        if (drawer) {
+          drawer.classList.toggle('theme-day', isDay);
+          drawer.classList.toggle('theme-night', !isDay);
+        }
+        document.body.classList.toggle('theme-day', isDay);
+        document.body.classList.toggle('theme-night', !isDay);
         if (typeof window.applyEaTheme === 'function') {
           window.applyEaTheme(mode, true);
         }
+        OrcaiAgentSettingsStore.saveSettings({ theme: mode });
         window.switchAgentSettingsTab('design');
       };
 
@@ -46842,9 +47315,15 @@
             idBadgeEl.title = 'ORCAI-ID: ' + identity.id + ' (Klicken zum Kopieren)';
             idBadgeEl.onclick = (e) => {
               e.stopPropagation();
-              navigator.clipboard.writeText(identity.id).then(() => {
-                alert('ORCAI-ID kopiert:\n' + identity.id);
-              });
+              if (typeof window.copyTextToClipboard === 'function') {
+                window.copyTextToClipboard(identity.id).then(() => {
+                  if (typeof window.showAgentToast === 'function') {
+                    window.showAgentToast('✓ ORCAI-ID in Zwischenablage kopiert: <code style="color:#38bdf8;">' + identity.id + '</code>');
+                  }
+                });
+              } else {
+                navigator.clipboard.writeText(identity.id).catch(() => {});
+              }
             };
           }
           if (identity.photoURL && avatarImg && avatarFallback) {
