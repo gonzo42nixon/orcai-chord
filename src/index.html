@@ -23248,16 +23248,99 @@
       };
 
       // =========================================================================
-      // TOKEN FLOW ANIMATION (INTEGRATION & E2E PROCESS FLOW)
+      // TOKEN FLOW ANIMATION (INTEGRATION & E2E PROCESS FLOW & HITL CLIENT SYNC)
       // =========================================================================
+      window.hitlActiveTokens = [];
+      window.isIntegrationSimActive = false;
+      window.isProcessSimActive = false;
+      window.isIntegSimPaused = false;
+      let hitlStandaloneTimer = null;
+      let hitlStandaloneProgress = 0;
+
+      function updateHitlTokens(progress, stepContext) {
+        if (!window.hitlActiveTokens || window.hitlActiveTokens.length === 0) return;
+        const ctx = stepContext || {};
+        const toSys = ctx.toSys || null;
+
+        window.hitlActiveTokens.forEach(item => {
+          if (!item.token || !item.pathEl) return;
+          const tgtSys = item.targetSystemId;
+          const isTargetMatch = toSys && (toSys === tgtSys);
+
+          // If step terminates at client system, response travels back (1 -> 0)
+          // Otherwise, data token travels from client to system (0 -> 1) in lockstep with process/integration clock
+          const effProgress = isTargetMatch ? Math.max(0, Math.min(1, 1 - progress)) : Math.max(0, Math.min(1, progress));
+
+          item.token.style('display', 'block');
+          const totalLen = item.totalLength || item.pathEl.getTotalLength();
+          const pt = item.pathEl.getPointAtLength(effProgress * totalLen);
+          item.token.attr('cx', pt.x).attr('cy', pt.y);
+        });
+      }
+      window.updateHitlTokens = updateHitlTokens;
+
+      function ensureHitlStandaloneAnimation() {
+        if (hitlStandaloneTimer) return;
+        if (window.isIntegrationSimActive || window.isProcessSimActive) return;
+
+        hitlStandaloneTimer = setInterval(() => {
+          if (window.isIntegrationSimActive || window.isProcessSimActive) {
+            clearInterval(hitlStandaloneTimer);
+            hitlStandaloneTimer = null;
+            return;
+          }
+          if (window.isHitlStandalonePaused) return;
+
+          hitlStandaloneProgress += 0.022;
+          if (hitlStandaloneProgress >= 1.0) {
+            hitlStandaloneProgress = 0;
+          }
+          updateHitlTokens(hitlStandaloneProgress, { stepIdx: 0 });
+        }, 28);
+      }
+      window.ensureHitlStandaloneAnimation = ensureHitlStandaloneAnimation;
+
+      function stopHitlStandaloneAnimation() {
+        if (hitlStandaloneTimer) {
+          clearInterval(hitlStandaloneTimer);
+          hitlStandaloneTimer = null;
+        }
+      }
+      window.stopHitlStandaloneAnimation = stopHitlStandaloneAnimation;
+
+      function syncHitlTokensInitialState() {
+        if (window.isIntegrationSimActive || window.isProcessSimActive) {
+          stopHitlStandaloneAnimation();
+          if (typeof window.getSimulationCurrentStepContext === 'function') {
+            const currentCtx = window.getSimulationCurrentStepContext();
+            updateHitlTokens(currentCtx.progress || 0, currentCtx);
+          } else {
+            updateHitlTokens(0, { stepIdx: 0 });
+          }
+        } else {
+          ensureHitlStandaloneAnimation();
+        }
+      }
+      window.syncHitlTokensInitialState = syncHitlTokensInitialState;
+
       function stopTokenAnimation() {
         if (animTimer) {
           clearInterval(animTimer);
           animTimer = null;
         }
+        window.isIntegrationSimActive = false;
+        window.isProcessSimActive = false;
         gTokens.selectAll("*").remove();
         d3.selectAll(".intermediate-glow").classed("intermediate-glow", false);
         d3.selectAll(".edge-link").classed("focused-step", false);
+
+        if (window.selectedHitlRoleId && typeof window.ensureHitlStandaloneAnimation === 'function') {
+          window.ensureHitlStandaloneAnimation();
+        } else if (window.hitlActiveTokens) {
+          window.hitlActiveTokens.forEach(item => {
+            if (item.token) item.token.style('display', 'none');
+          });
+        }
       }
       window.stopTokenAnimation = stopTokenAnimation;
 
@@ -23291,9 +23374,66 @@
           }
         });
 
+        stopHitlStandaloneAnimation();
+        window.isIntegrationSimActive = true;
+        window.isProcessSimActive = false;
+        window.isIntegSimPaused = false;
+
         const targetSysId = integ.targetSystem;
         let currentStepIdx = 0;
         let progress = 0;
+
+        window.jumpToIntegStep = function(stepIdx) {
+          if (stepIdx >= 0 && stepIdx < validSteps.length) {
+            currentStepIdx = stepIdx;
+            progress = 0;
+            updateStepHighlight();
+            const cur = validSteps[currentStepIdx];
+            const pathEl = cur ? (cur.pathEl || document.getElementById("link-" + cur.edge.id)) : null;
+            if (pathEl) {
+              const totalLen = pathEl.getTotalLength();
+              const effectiveProgress = cur.isReverse ? 1 : 0;
+              const pt = pathEl.getPointAtLength(effectiveProgress * totalLen);
+              token.attr("cx", pt.x).attr("cy", pt.y);
+            }
+            updateHitlTokens(0, {
+              fromSys: cur ? (cur.step.from || cur.edge.from) : null,
+              toSys: cur ? (cur.step.to || cur.edge.to) : null,
+              stepIdx: currentStepIdx,
+              totalSteps: validSteps.length,
+              isProcess: false
+            });
+          }
+        };
+
+        window.getSimulationCurrentStepContext = function() {
+          const cur = validSteps[currentStepIdx];
+          return {
+            fromSys: cur ? (cur.step.from || cur.edge.from) : null,
+            toSys: cur ? (cur.step.to || cur.edge.to) : null,
+            stepIdx: currentStepIdx,
+            totalSteps: validSteps.length,
+            progress: progress,
+            isProcess: false
+          };
+        };
+
+        window.toggleIntegrationSimulation = function(forcePause) {
+          if (forcePause !== undefined) {
+            window.isIntegSimPaused = forcePause;
+          } else {
+            window.isIntegSimPaused = !window.isIntegSimPaused;
+          }
+          const btn = document.getElementById("btnToggleSim");
+          const statusText = document.getElementById("integSimStatusText");
+          const pulseDot = document.getElementById("integSimPulseDot");
+          if (btn) btn.textContent = window.isIntegSimPaused ? "▶" : "⏸";
+          if (statusText) statusText.textContent = window.isIntegSimPaused ? "Token-Simulation pausiert" : "Token-Simulation läuft";
+          if (pulseDot) {
+            pulseDot.style.animationPlayState = window.isIntegSimPaused ? "paused" : "running";
+            pulseDot.style.opacity = window.isIntegSimPaused ? "0.35" : "1.0";
+          }
+        };
 
         const token = gTokens.append("circle")
           .attr("class", "token-bubble integ-token-bubble")
@@ -23314,6 +23454,8 @@
         updateStepHighlight();
 
         animTimer = setInterval(() => {
+          if (window.isIntegSimPaused) return;
+
           progress += 0.025;
           if (progress >= 1.0) {
             progress = 0;
@@ -23338,6 +23480,14 @@
             const pt = pathEl.getPointAtLength(effectiveProgress * totalLen);
             token.attr("cx", pt.x).attr("cy", pt.y);
           }
+
+          updateHitlTokens(progress, {
+            fromSys: cur ? (cur.step.from || cur.edge.from) : null,
+            toSys: cur ? (cur.step.to || cur.edge.to) : null,
+            stepIdx: currentStepIdx,
+            totalSteps: validSteps.length,
+            isProcess: false
+          });
         }, 28);
       }
       window.startTokenAnimationForIntegration = startTokenAnimationForIntegration;
@@ -23384,9 +23534,26 @@
           }
         });
 
+        stopHitlStandaloneAnimation();
+        window.isIntegrationSimActive = false;
+        window.isProcessSimActive = true;
+
         let currentStepIdx = 0;
         let progress = 0;
         let isPaused = false;
+        window.isProcessPaused = isPaused;
+
+        window.getSimulationCurrentStepContext = function() {
+          const cur = validSteps[currentStepIdx];
+          return {
+            fromSys: cur ? (cur.step.from || cur.edge.from) : null,
+            toSys: cur ? (cur.step.to || cur.edge.to) : null,
+            stepIdx: currentStepIdx,
+            totalSteps: validSteps.length,
+            progress: progress,
+            isProcess: true
+          };
+        };
 
         const token = gTokens.append("circle")
           .attr("class", "token-bubble proc-token-bubble")
@@ -23398,6 +23565,7 @@
 
         window.toggleProcessTokenFlow = function() {
           isPaused = !isPaused;
+          window.isProcessPaused = isPaused;
           const btn = document.getElementById('btnToggleProcToken');
           const badge = document.getElementById('procTokenStepBadge');
           if (btn) btn.innerHTML = isPaused ? '▶️ Fortsetzen' : '⏸ Anhalten';
@@ -23412,6 +23580,7 @@
           currentStepIdx = 0;
           progress = 0;
           isPaused = false;
+          window.isProcessPaused = isPaused;
           const btn = document.getElementById('btnToggleProcToken');
           if (btn) btn.innerHTML = '⏸ Anhalten';
           const badge = document.getElementById('procTokenStepBadge');
@@ -23421,6 +23590,13 @@
             badge.style.color = '#38bdf8';
           }
           updateStepUI();
+          updateHitlTokens(0, {
+            fromSys: validSteps[0] ? (validSteps[0].step.from || validSteps[0].edge.from) : null,
+            toSys: validSteps[0] ? (validSteps[0].step.to || validSteps[0].edge.to) : null,
+            stepIdx: 0,
+            totalSteps: validSteps.length,
+            isProcess: true
+          });
         };
 
         function updateStepUI() {
@@ -23471,6 +23647,14 @@
             const pt = pathEl.getPointAtLength(effectiveProgress * totalLen);
             token.attr("cx", pt.x).attr("cy", pt.y);
           }
+
+          updateHitlTokens(progress, {
+            fromSys: cur ? (cur.step.from || cur.edge.from) : null,
+            toSys: cur ? (cur.step.to || cur.edge.to) : null,
+            stepIdx: currentStepIdx,
+            totalSteps: validSteps.length,
+            isProcess: true
+          });
         }, 28);
       }
       window.startTokenAnimationForProcess = startTokenAnimationForProcess;
@@ -25163,16 +25347,15 @@
             // SIMULATION & STEPPING TOOLBAR
             '<div class="integ-sim-bar">' +
               '<div style="display:flex; align-items:center; gap:6px;">' +
-                '<span class="sim-pulse-dot"></span>' +
-                '<span style="font-size:0.7rem; font-weight:700; color:var(--text-bright);">Token-Simulation läuft</span>' +
+                '<span class="sim-pulse-dot" id="integSimPulseDot" style="' + (window.isIntegSimPaused ? 'animation-play-state:paused; opacity:0.35;' : '') + '"></span>' +
+                '<span id="integSimStatusText" style="font-size:0.7rem; font-weight:700; color:var(--text-bright);">' + (window.isIntegSimPaused ? 'Token-Simulation pausiert' : 'Token-Simulation läuft') + '</span>' +
               '</div>' +
               '<div style="display:flex; gap:4px;">' +
                 '<button class="integ-btn-step" data-action="integ-prev-step" title="Vorheriger Schritt">⏮</button>' +
-                '<button class="integ-btn-step" data-action="integ-toggle-sim" title="Simulation pausieren / fortsetzen" id="btnToggleSim">⏸</button>' +
+                '<button class="integ-btn-step" data-action="integ-toggle-sim" title="Simulation pausieren / fortsetzen" id="btnToggleSim">' + (window.isIntegSimPaused ? '▶' : '⏸') + '</button>' +
                 '<button class="integ-btn-step" data-action="integ-next-step" title="Nächster Schritt">⏭</button>' +
               '</div>' +
             '</div>' +
-
             // STEP-BY-STEP SEQUENCE EXPLORER
             '<div style="display:flex; align-items:center; justify-content:space-between; margin-top:10px; margin-bottom:4px;">' +
               '<span style="font-size:0.75rem; font-weight:700; color:var(--text-bright);">Integrationsstrecke: Alle ' + integ.steps.length + ' Schritte</span>' +
@@ -25254,6 +25437,7 @@
             selectedLink = conn;
             showEdgePopout(conn);
             renderInspectorIntegration(selectedIntegration, stepIdx);
+            if (typeof window.jumpToIntegStep === "function") window.jumpToIntegStep(stepIdx);
             updateUI();
           }
         } else if (action === "integ-prev-step") {
@@ -25266,6 +25450,7 @@
               selectedLink = prevConn;
               showEdgePopout(prevConn);
               renderInspectorIntegration(selectedIntegration, prevIdx);
+              if (typeof window.jumpToIntegStep === "function") window.jumpToIntegStep(prevIdx);
               updateUI();
             }
           }
@@ -25279,19 +25464,13 @@
               selectedLink = nextConn;
               showEdgePopout(nextConn);
               renderInspectorIntegration(selectedIntegration, nextIdx);
+              if (typeof window.jumpToIntegStep === "function") window.jumpToIntegStep(nextIdx);
               updateUI();
             }
           }
         } else if (action === "integ-toggle-sim") {
-          if (animTimer) {
-            clearInterval(animTimer);
-            animTimer = null;
-            const btn = document.getElementById("btnToggleSim");
-            if (btn) btn.textContent = "▶";
-          } else if (selectedIntegration) {
-            startTokenAnimationForIntegration(selectedIntegration);
-            const btn = document.getElementById("btnToggleSim");
-            if (btn) btn.textContent = "⏸";
+          if (typeof window.toggleIntegrationSimulation === "function") {
+            window.toggleIntegrationSimulation();
           }
         }
       });
@@ -38922,6 +39101,7 @@
           gHitl = gMainEl.append('g').attr('id', 'gHitlOverlay').attr('class', 'hitl-canvas-overlay');
         }
         gHitl.selectAll('*').remove();
+        window.hitlActiveTokens = [];
 
         const gHitlEdges = gHitl.append('g').attr('class', 'hitl-edges');
         const gHitlNodes = gHitl.append('g').attr('class', 'hitl-nodes');
@@ -39080,7 +39260,7 @@
             edge2Path = 'M ' + edge2XStart + ' ' + clientY + ' C ' + ctrlX1 + ' ' + clientY + ', ' + ctrlX2 + ' ' + tgtY + ', ' + edge2XEnd + ' ' + tgtY;
           }
 
-          gHitlEdges.append('path')
+          const edge2PathEl = gHitlEdges.append('path')
             .attr('class', 'hitl-edge hitl-edge-client-backend')
             .attr('id', 'hitl-edge-client-backend-' + clIdx)
             .attr('d', edge2Path)
@@ -39090,20 +39270,26 @@
             .attr('marker-start', 'url(#hitl-marker-client-backend-start)')
             .attr('marker-end', 'url(#hitl-marker-client-backend-end)');
 
-          // Animated Flow Token along Edge 2
+          // Animated Flow Token along Edge 2 (Synchronized with simulation / process clock)
           const token = gHitlEdges.append('circle')
             .attr('class', 'hitl-flow-token')
+            .attr('id', 'hitl-flow-token-' + clIdx)
             .attr('r', 4.5)
             .style('fill', isS4Hana ? '#60a5fa' : '#38bdf8')
             .style('stroke', '#ffffff')
             .style('stroke-width', '1.5px')
             .style('filter', 'drop-shadow(0 0 6px ' + (isS4Hana ? '#0070f2' : '#38bdf8') + ')');
 
-          const animMotion = document.createElementNS('http://www.w3.org/2000/svg', 'animateMotion');
-          animMotion.setAttribute('path', edge2Path);
-          animMotion.setAttribute('dur', '2.4s');
-          animMotion.setAttribute('repeatCount', 'indefinite');
-          token.node().appendChild(animMotion);
+          if (!window.hitlActiveTokens) window.hitlActiveTokens = [];
+          window.hitlActiveTokens.push({
+            token: token,
+            pathEl: edge2PathEl.node(),
+            totalLength: edge2PathEl.node().getTotalLength(),
+            targetSystemId: cl.targetSystemId,
+            clientId: cl.id,
+            roleId: role.id,
+            isS4Hana: isS4Hana
+          });
 
           // Badge on Edge 2 (Protocol & Message)
           const mid2X = (edge2XStart + edge2XEnd) / 2;
@@ -39321,6 +39507,9 @@
             .style('fill', isS4Hana ? '#93c5fd' : '#bae6fd')
             .text(shortLabel);
                 });
+        if (typeof window.syncHitlTokensInitialState === 'function') {
+          window.syncHitlTokensInitialState();
+        }
       }
       window.renderHitlCommunicationChain = renderHitlCommunicationChain;
 
@@ -39434,6 +39623,10 @@
           d3.selectAll('.client-touchpoint-beacon').remove();
           d3.selectAll('.locator-beacon-ring').remove();
           d3.select('#gHitlOverlay').selectAll('*').remove();
+          window.hitlActiveTokens = [];
+          if (typeof window.stopHitlStandaloneAnimation === 'function') {
+            window.stopHitlStandaloneAnimation();
+          }
         }
 
         renderPlaceholder();

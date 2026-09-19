@@ -77,9 +77,12 @@
 
     function closePanels(options) {
       const settings = options || {};
+      const hadAgentOpen = body.classList.contains('mobile-panel-agent');
       PANEL_CLASSES.forEach((className) => body.classList.remove(className));
-      if (!settings.keepAgentOpen && typeof window.toggleOrcaiAgentDrawer === 'function') {
-        window.toggleOrcaiAgentDrawer(false);
+      if (settings.closeAgent || (hadAgentOpen && !settings.keepAgentOpen)) {
+        if (typeof window.toggleOrcaiAgentDrawer === 'function') {
+          window.toggleOrcaiAgentDrawer(false);
+        }
       }
       updateNavigationState();
     }
@@ -109,21 +112,33 @@
       if (!button) return;
       const panel = button.dataset.mobilePanel;
       if (panel === 'search') {
-        closePanels();
+        closePanels({ closeAgent: true });
         document.getElementById('btnOmniSearch')?.click();
         return;
       }
       openPanel(panel);
     });
 
-    backdrop.addEventListener('click', () => closePanels());
+    backdrop.addEventListener('click', () => closePanels({ closeAgent: true }));
     document.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && isMobile() && activePanel()) closePanels();
+      if (event.key === 'Escape' && isMobile() && activePanel()) closePanels({ closeAgent: true });
     });
 
-    document.getElementById('btnLeftCollapse')?.addEventListener('click', () => closePanels());
-    document.getElementById('btnRightCollapse')?.addEventListener('click', () => closePanels());
-    document.getElementById('btnAgentCollapse')?.addEventListener('click', () => closePanels());
+    document.getElementById('btnLeftCollapse')?.addEventListener('click', () => {
+      body.classList.remove('mobile-panel-left');
+      updateNavigationState();
+    });
+    document.getElementById('btnRightCollapse')?.addEventListener('click', () => {
+      body.classList.remove('mobile-panel-right');
+      updateNavigationState();
+    });
+    document.getElementById('btnAgentCollapse')?.addEventListener('click', () => {
+      body.classList.remove('mobile-panel-agent');
+      if (typeof window.toggleOrcaiAgentDrawer === 'function') {
+        window.toggleOrcaiAgentDrawer(false);
+      }
+      updateNavigationState();
+    });
 
     document.getElementById('btnAgentToggle')?.addEventListener('click', () => {
       if (!isMobile()) return;
@@ -197,7 +212,10 @@
     });
 
     function handleBreakpoint() {
-      if (!isMobile()) closePanels();
+      if (!isMobile()) {
+        PANEL_CLASSES.forEach((className) => body.classList.remove(className));
+        updateNavigationState();
+      }
       updateContext();
     }
     mediaQuery.addEventListener?.('change', handleBreakpoint);
