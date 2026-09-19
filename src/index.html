@@ -1213,7 +1213,8 @@
     .drawer-actions {
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
+      flex-shrink: 0;
     }
     .drawer-btn-icon {
       background: var(--card-inner-bg);
@@ -4982,16 +4983,16 @@
       50% { transform: scale(1.35); opacity: 0.4; }
     }
 
-    /* Agent Drawer Container */
+    /* Agent Drawer Container - 2-Column Side-by-Side Layout */
     .drawer-agent {
-      width: 440px;
-      min-width: 320px;
-      max-width: 780px;
-      background: rgba(15, 23, 42, 0.95);
+      width: 720px;
+      min-width: 340px;
+      max-width: 960px;
+      background: rgba(15, 23, 42, 0.96);
       backdrop-filter: blur(20px);
       z-index: 45;
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       position: relative;
       flex-shrink: 0;
       transition: width 0.25s ease, transform 0.25s ease;
@@ -5011,6 +5012,198 @@
       display: none !important;
     }
 
+    /* ORCAI Logo Everywhere */
+    .agent-orcai-logo {
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      display: inline-block;
+      vertical-align: middle;
+      object-fit: cover;
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.45);
+      flex-shrink: 0;
+    }
+    .agent-msg-logo {
+      width: 17px;
+      height: 17px;
+      border-radius: 4px;
+      display: inline-block;
+      vertical-align: middle;
+      object-fit: cover;
+      box-shadow: 0 0 6px rgba(56, 189, 248, 0.35);
+      margin-right: 5px;
+      flex-shrink: 0;
+    }
+
+    /* Agent Left Column: Chat History Sidebar (ChatGPT / Gemini persistent style) */
+    .agent-sidebar {
+      width: 220px;
+      min-width: 220px;
+      max-width: 220px;
+      background: rgba(10, 15, 28, 0.96);
+      border-right: 1px solid rgba(168, 85, 247, 0.22);
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+      overflow: hidden;
+      transition: width 0.22s cubic-bezier(0.16, 1, 0.3, 1), min-width 0.22s cubic-bezier(0.16, 1, 0.3, 1), max-width 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      flex-shrink: 0;
+      z-index: 2;
+    }
+    .agent-sidebar-header {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.18), rgba(15, 23, 42, 0.8));
+      border-bottom: 1px solid rgba(168, 85, 247, 0.22);
+      padding: 6px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      flex-shrink: 0;
+      box-sizing: border-box;
+      height: 41px;
+    }
+    .agent-sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      cursor: pointer;
+      min-width: 0;
+      overflow: hidden;
+      user-select: none;
+    }
+    .agent-sidebar-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #f8fafc;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .agent-sidebar-toggle-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      color: #cbd5e1;
+      border-radius: 5px;
+      padding: 3px 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.76rem;
+      transition: all 0.15s ease;
+    }
+    .agent-sidebar-toggle-btn:hover {
+      background: rgba(168, 85, 247, 0.25);
+      color: #fff;
+      border-color: #a855f7;
+    }
+    .agent-sidebar-controls {
+      padding: 7px 9px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      flex-shrink: 0;
+      box-sizing: border-box;
+    }
+    .agent-sidebar-new-btn {
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.22), rgba(56, 189, 248, 0.18));
+      border: 1px solid rgba(168, 85, 247, 0.4);
+      color: #f8fafc;
+      padding: 5px 8px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+    .agent-sidebar-new-btn:hover {
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.38), rgba(56, 189, 248, 0.3));
+      border-color: #38bdf8;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
+      transform: translateY(-1px);
+    }
+    .agent-sidebar-footer {
+      padding: 6px 10px;
+      background: rgba(15, 23, 42, 0.6);
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.68rem;
+      color: #94a3b8;
+      flex-shrink: 0;
+      box-sizing: border-box;
+    }
+
+    /* Iconified Sidebar State (Rail Mode ~48px) */
+    .agent-sidebar.is-iconified {
+      width: 48px;
+      min-width: 48px;
+      max-width: 48px;
+    }
+    .agent-sidebar.is-iconified .agent-sidebar-title,
+    .agent-sidebar.is-iconified .agent-sidebar-new-text,
+    .agent-sidebar.is-iconified .agent-history-search-box,
+    .agent-sidebar.is-iconified .agent-history-item-info,
+    .agent-sidebar.is-iconified .agent-history-delete-btn,
+    .agent-sidebar.is-iconified .agent-sidebar-footer {
+      display: none !important;
+    }
+    .agent-sidebar.is-iconified .agent-sidebar-header {
+      padding: 7px 4px;
+      justify-content: center;
+      flex-direction: column;
+      height: auto;
+      gap: 6px;
+    }
+    .agent-sidebar.is-iconified .agent-sidebar-brand {
+      justify-content: center;
+    }
+    .agent-sidebar.is-iconified .agent-sidebar-controls {
+      padding: 6px 4px;
+      align-items: center;
+    }
+    .agent-sidebar.is-iconified .agent-sidebar-new-btn {
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      border-radius: 50%;
+    }
+    .agent-sidebar.is-iconified .agent-history-sessions-list {
+      padding: 6px 4px;
+      align-items: center;
+    }
+    .agent-sidebar.is-iconified .agent-history-item {
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      justify-content: center;
+      border-radius: 6px;
+    }
+    .agent-sidebar.is-iconified .agent-history-item::after {
+      content: '💬';
+      font-size: 0.85rem;
+    }
+
+    /* Right Column: Chat Pane */
+    .agent-chat-pane {
+      flex: 1;
+      min-width: 300px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+      background: transparent;
+      height: 100%;
+      box-sizing: border-box;
+    }
+
     /* Agent Header - Compact & Border-Safe */
     .agent-drawer-header {
       background: linear-gradient(135deg, rgba(139, 92, 246, 0.18), rgba(15, 23, 42, 0.8));
@@ -5024,20 +5217,20 @@
       overflow: hidden;
       width: 100%;
       box-sizing: border-box;
+      height: 41px;
     }
     .agent-header-brand {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 7px;
       min-width: 0;
       flex-shrink: 1;
     }
     .agent-avatar-icon {
-      font-size: 1.25rem;
       background: rgba(168, 85, 247, 0.2);
       border: 1px solid rgba(168, 85, 247, 0.4);
-      border-radius: 8px;
-      padding: 2px 5px;
+      border-radius: 6px;
+      padding: 2px 4px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -5088,7 +5281,7 @@
     .agent-chat-messages {
       flex: 1;
       overflow-y: auto;
-      padding: 14px;
+      padding: 12px 14px;
       display: flex;
       flex-direction: column;
       gap: 12px;
@@ -5133,7 +5326,7 @@
     .agent-msg-bot .agent-msg-bubble {
       background: rgba(30, 41, 59, 0.75);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      border-left: 3px solid #a855f7;
+      border-left: 3px solid #38bdf8;
       color: #e2e8f0;
       border-radius: 14px 14px 14px 2px;
       padding: 10px 12px;
@@ -5147,7 +5340,7 @@
       justify-content: space-between;
       margin-bottom: 6px;
       font-size: 0.68rem;
-      color: #a855f7;
+      color: #38bdf8;
       font-weight: 700;
     }
     .agent-msg-body {
@@ -5198,257 +5391,272 @@
       font-weight: 600;
       cursor: pointer;
       border: 1px solid transparent;
-      transition: all 0.18s ease;
-      background: rgba(255, 255, 255, 0.06);
-      color: #f1f5f9;
       text-decoration: none;
-      line-height: 1.25;
-    }
-    .agent-chip:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+      transition: all 0.2s ease;
+      user-select: none;
     }
     .agent-chip-sys {
-      background: rgba(14, 165, 233, 0.15);
+      background: rgba(56, 189, 248, 0.15);
       border-color: rgba(56, 189, 248, 0.4);
       color: #38bdf8;
     }
     .agent-chip-sys:hover {
-      background: rgba(14, 165, 233, 0.3);
-      border-color: #38bdf8;
-      box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+      background: rgba(56, 189, 248, 0.3);
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.35);
+      transform: translateY(-1px);
     }
     .agent-chip-proc {
-      background: rgba(16, 185, 129, 0.15);
-      border-color: rgba(16, 185, 129, 0.4);
-      color: #34d399;
-    }
-    .agent-chip-proc:hover {
-      background: rgba(16, 185, 129, 0.3);
-      border-color: #10b981;
-      box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
-    }
-    .agent-chip-puml {
       background: rgba(168, 85, 247, 0.15);
       border-color: rgba(168, 85, 247, 0.4);
       color: #c084fc;
     }
-    .agent-chip-puml:hover {
+    .agent-chip-proc:hover {
       background: rgba(168, 85, 247, 0.3);
-      border-color: #a855f7;
-      box-shadow: 0 0 12px rgba(168, 85, 247, 0.4);
+      box-shadow: 0 0 10px rgba(168, 85, 247, 0.35);
+      transform: translateY(-1px);
     }
-    .agent-chip-hitl {
-      background: rgba(245, 158, 11, 0.15);
-      border-color: rgba(245, 158, 11, 0.4);
-      color: #fbbf24;
+    .agent-chip-puml {
+      background: rgba(234, 88, 12, 0.15);
+      border-color: rgba(234, 88, 12, 0.4);
+      color: #fb923c;
     }
-    .agent-chip-hitl:hover {
-      background: rgba(245, 158, 11, 0.3);
-      border-color: #f59e0b;
-      box-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
-    }
-    .agent-chip-ux {
-      background: rgba(6, 182, 212, 0.15);
-      border-color: rgba(6, 182, 212, 0.4);
-      color: #22d3ee;
-    }
-    .agent-chip-ux:hover {
-      background: rgba(6, 182, 212, 0.3);
-      border-color: #06b6d4;
-      box-shadow: 0 0 12px rgba(6, 182, 212, 0.4);
-    }
-    .agent-chip-integ {
-      background: rgba(234, 179, 8, 0.15);
-      border-color: rgba(234, 179, 8, 0.4);
-      color: #facc15;
-    }
-    .agent-chip-integ:hover {
-      background: rgba(234, 179, 8, 0.3);
-      border-color: #eab308;
-      box-shadow: 0 0 12px rgba(234, 179, 8, 0.4);
+    .agent-chip-puml:hover {
+      background: rgba(234, 88, 12, 0.3);
+      box-shadow: 0 0 10px rgba(234, 88, 12, 0.35);
+      transform: translateY(-1px);
     }
     .agent-chip-model {
-      background: rgba(99, 102, 241, 0.18);
-      border-color: rgba(129, 140, 248, 0.45);
-      color: #a5b4fc;
+      background: rgba(16, 185, 129, 0.15);
+      border-color: rgba(16, 185, 129, 0.4);
+      color: #34d399;
     }
     .agent-chip-model:hover {
-      background: rgba(99, 102, 241, 0.35);
-      border-color: #6366f1;
-      box-shadow: 0 0 12px rgba(99, 102, 241, 0.4);
+      background: rgba(16, 185, 129, 0.3);
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.35);
+      transform: translateY(-1px);
     }
 
-    /* Agent Inner Drawer ("Drawer im Drawer" for Existing Chats) */
-    .agent-inner-drawer {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(11, 17, 33, 0.98);
-      backdrop-filter: blur(24px);
-      z-index: 60;
+    /* Prompt Suggestions */
+    .agent-prompt-suggestions {
+      padding: 6px 12px;
       display: flex;
-      flex-direction: column;
-      transform: translateX(-100%);
-      transition: transform 0.26s cubic-bezier(0.16, 1, 0.3, 1);
-      box-shadow: 6px 0 25px rgba(0, 0, 0, 0.7);
-      box-sizing: border-box;
-      pointer-events: none;
+      flex-wrap: wrap;
+      gap: 6px;
+      background: rgba(11, 15, 23, 0.7);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      flex-shrink: 0;
     }
-    .agent-inner-drawer.is-open {
-      transform: translateX(0);
-      pointer-events: auto;
+    .agent-prompt-chip {
+      font-size: 0.7rem;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #cbd5e1;
+      padding: 3px 8px;
+      border-radius: 12px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s ease;
     }
-    .agent-inner-drawer-header {
-      background: linear-gradient(135deg, rgba(139, 92, 246, 0.25), rgba(15, 23, 42, 0.95));
-      border-bottom: 1px solid rgba(168, 85, 247, 0.35);
-      padding: 9px 12px;
+    .agent-prompt-chip:hover {
+      background: rgba(168, 85, 247, 0.25);
+      border-color: #a855f7;
+      color: #fff;
+    }
+
+    /* Live Voice Listening Bar */
+    .agent-listening-bar {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.25), rgba(168, 85, 247, 0.25));
+      border-top: 1px solid rgba(239, 68, 68, 0.5);
+      padding: 6px 12px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      gap: 8px;
+      font-size: 0.75rem;
+      color: #fca5a5;
+      animation: pulseListening 1.5s infinite;
+      flex-shrink: 0;
+    }
+    @keyframes pulseListening {
+      0%, 100% { background: rgba(239, 68, 68, 0.2); }
+      50% { background: rgba(239, 68, 68, 0.35); }
+    }
+    .agent-mic-pulse {
+      animation: agentPulseDot 1s infinite alternate;
+    }
+    .agent-listening-text {
+      flex: 1;
+      font-weight: 600;
+    }
+    .agent-cancel-mic-btn {
+      background: none;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      font-size: 0.85rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .agent-cancel-mic-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Agent Input Bar */
+    .agent-input-bar {
+      padding: 8px 12px;
+      background: rgba(15, 23, 42, 0.95);
+      border-top: 1px solid rgba(168, 85, 247, 0.25);
+      display: flex;
+      align-items: center;
       gap: 8px;
       flex-shrink: 0;
     }
-    .agent-inner-drawer-title {
-      font-size: 0.84rem;
-      font-weight: 700;
+    .agent-text-input {
+      flex: 1;
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
       color: #f8fafc;
+      font-size: 0.78rem;
+      padding: 8px 10px;
+      outline: none;
+      resize: none;
+      font-family: inherit;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      min-height: 36px;
+      max-height: 90px;
+      box-sizing: border-box;
+    }
+    .agent-text-input:focus {
+      border-color: #38bdf8;
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.25);
+      background: rgba(30, 41, 59, 0.85);
+    }
+    .agent-mic-btn, .agent-send-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.05);
+      color: #cbd5e1;
       display: flex;
       align-items: center;
-      gap: 6px;
-    }
-    .agent-inner-back-btn {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(168, 85, 247, 0.35);
-      color: #d8b4fe;
-      border-radius: 5px;
-      padding: 3px 8px;
-      font-size: 0.74rem;
+      justify-content: center;
       cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
       transition: all 0.15s ease;
+      font-size: 0.9rem;
+      flex-shrink: 0;
     }
-    .agent-inner-back-btn:hover {
-      background: rgba(168, 85, 247, 0.3);
+    .agent-mic-btn:hover {
+      background: rgba(168, 85, 247, 0.25);
+      border-color: #a855f7;
       color: #fff;
     }
-    .agent-inner-drawer-body {
-      flex: 1;
-      overflow-y: auto;
-      padding: 10px 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
+    .agent-mic-btn.active {
+      background: #ef4444;
+      border-color: #f87171;
+      color: #fff;
+      box-shadow: 0 0 12px rgba(239, 68, 68, 0.6);
+      animation: pulseListening 1.2s infinite;
     }
-    .agent-history-user {
-      font-size: 0.72rem;
-      color: #94a3b8;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(255, 255, 255, 0.04);
-      padding: 4px 8px;
-      border-radius: 4px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+    .agent-send-btn {
+      background: linear-gradient(135deg, #0ea5e9, #6366f1);
+      border: 1px solid rgba(56, 189, 248, 0.5);
+      color: #fff;
     }
-    .agent-history-user strong {
-      color: #38bdf8;
+    .agent-send-btn:hover {
+      background: linear-gradient(135deg, #38bdf8, #818cf8);
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.5);
+      transform: translateY(-1px);
     }
-    .agent-history-search-box {
-      position: relative;
-      width: 100%;
-    }
-    .agent-history-search-input {
-      width: 100%;
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid rgba(168, 85, 247, 0.35);
-      border-radius: 6px;
-      padding: 6px 28px 6px 10px;
-      color: #f8fafc;
-      font-size: 0.76rem;
-      outline: none;
-      box-sizing: border-box;
-      transition: border-color 0.15s ease;
-    }
-    .agent-history-search-input:focus {
-      border-color: #a855f7;
-      box-shadow: 0 0 8px rgba(168, 85, 247, 0.3);
-    }
-    .agent-history-clear-search {
-      position: absolute;
-      right: 6px;
-      top: 50%;
-      transform: translateY(-50%);
+    .btn-msg-speak {
       background: none;
       border: none;
-      color: #94a3b8;
       cursor: pointer;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
+      color: #94a3b8;
       padding: 2px 4px;
-    }
-    .agent-history-actions-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 0.72rem;
-      color: #94a3b8;
-    }
-    .agent-btn-new-chat-alt {
-      background: rgba(168, 85, 247, 0.2);
-      border: 1px solid rgba(168, 85, 247, 0.45);
-      color: #d8b4fe;
-      padding: 4px 10px;
-      border-radius: 5px;
-      font-size: 0.74rem;
-      font-weight: 600;
-      cursor: pointer;
+      border-radius: 3px;
+      opacity: 0.7;
       transition: all 0.15s ease;
     }
-    .agent-btn-new-chat-alt:hover {
-      background: rgba(168, 85, 247, 0.35);
-      color: #fff;
+    .btn-msg-speak:hover {
+      opacity: 1;
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.15);
     }
+
+    /* Ultrakurze Begrüßungsformel mit integriertem i-Button */
+    .agent-info-popout-trigger {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 17px;
+      height: 17px;
+      border-radius: 50%;
+      background: rgba(56, 189, 248, 0.2);
+      border: 1px solid rgba(56, 189, 248, 0.5);
+      color: #38bdf8;
+      font-size: 0.68rem;
+      font-weight: 700;
+      cursor: pointer;
+      vertical-align: middle;
+      margin-left: 4px;
+      line-height: 1;
+      transition: all 0.15s ease;
+    }
+    .agent-info-popout-trigger:hover {
+      background: #38bdf8;
+      color: #0b0f17;
+      box-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
+      transform: scale(1.1);
+    }
+
+    /* History Sessions List Items (Expanded & Filtered) */
     .agent-history-sessions-list {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 5px;
       flex: 1;
       overflow-y: auto;
+      padding: 8px 8px;
+      box-sizing: border-box;
+    }
+    .agent-history-sessions-list::-webkit-scrollbar {
+      width: 4px;
+    }
+    .agent-history-sessions-list::-webkit-scrollbar-thumb {
+      background: rgba(168, 85, 247, 0.25);
+      border-radius: 2px;
     }
     .agent-history-item {
       background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.07);
       border-radius: 6px;
-      padding: 7px 10px;
+      padding: 6px 8px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
+      gap: 6px;
       transition: all 0.15s ease;
+      position: relative;
     }
     .agent-history-item:hover {
-      background: rgba(168, 85, 247, 0.12);
-      border-color: rgba(168, 85, 247, 0.35);
-      transform: translateX(2px);
+      background: rgba(168, 85, 247, 0.14);
+      border-color: rgba(168, 85, 247, 0.4);
     }
     .agent-history-item.active {
-      background: rgba(139, 92, 246, 0.22);
+      background: rgba(139, 92, 246, 0.25);
       border-color: #a855f7;
-      box-shadow: inset 2px 0 0 #a855f7;
+      box-shadow: inset 3px 0 0 #38bdf8;
     }
     .agent-history-item-info {
       flex: 1;
+      min-width: 0;
       overflow: hidden;
     }
     .agent-history-item-title {
-      font-size: 0.78rem;
+      font-size: 0.74rem;
       font-weight: 600;
       color: #e2e8f0;
       white-space: nowrap;
@@ -5456,20 +5664,23 @@
       text-overflow: ellipsis;
     }
     .agent-history-item-meta {
-      font-size: 0.68rem;
+      font-size: 0.65rem;
       color: #94a3b8;
       display: flex;
-      gap: 8px;
+      gap: 6px;
       margin-top: 2px;
     }
     .agent-history-snippet {
-      font-size: 0.7rem;
+      font-size: 0.67rem;
       color: #cbd5e1;
-      margin-top: 4px;
+      margin-top: 3px;
       background: rgba(0, 0, 0, 0.25);
-      padding: 3px 6px;
-      border-radius: 4px;
-      line-height: 1.3;
+      padding: 2px 5px;
+      border-radius: 3px;
+      line-height: 1.25;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .agent-search-highlight {
       background: rgba(245, 158, 11, 0.35);
@@ -5483,19 +5694,74 @@
       border: none;
       color: #64748b;
       cursor: pointer;
-      font-size: 0.85rem;
-      padding: 4px;
+      font-size: 0.8rem;
+      padding: 3px;
       border-radius: 4px;
-      opacity: 0.7;
+      opacity: 0.5;
       transition: all 0.15s ease;
+      flex-shrink: 0;
     }
     .agent-history-delete-btn:hover {
       color: #ef4444;
-      background: rgba(239, 68, 68, 0.15);
+      background: rgba(239, 68, 68, 0.18);
       opacity: 1;
     }
+    .agent-history-search-box {
+      position: relative;
+      width: 100%;
+    }
+    .agent-history-search-input {
+      width: 100%;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(168, 85, 247, 0.35);
+      border-radius: 6px;
+      padding: 5px 24px 5px 8px;
+      color: #f8fafc;
+      font-size: 0.74rem;
+      outline: none;
+      box-sizing: border-box;
+      transition: border-color 0.15s ease;
+    }
+    .agent-history-search-input:focus {
+      border-color: #38bdf8;
+      box-shadow: 0 0 8px rgba(56, 189, 248, 0.3);
+    }
+    .agent-history-clear-search {
+      position: absolute;
+      right: 5px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      font-size: 0.75rem;
+      padding: 1px 3px;
+    }
+    .agent-history-user {
+      font-size: 0.7rem;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255, 255, 255, 0.04);
+      padding: 3px 6px;
+      border-radius: 4px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .agent-history-user-name {
+      color: #38bdf8;
+      font-weight: 600;
+    }
+    .agent-history-count {
+      font-size: 0.68rem;
+      color: #94a3b8;
+    }
 
-    /* Pop-Out Info Modal ("i"-Button) */
+
+/* Pop-Out Info Modal ("i"-Button) */
     .agent-info-modal {
       position: absolute;
       top: 0;
@@ -5861,7 +6127,7 @@
       <!-- Omni-Search & Command Palette (Ctrl+K / Cmd+K) -->
       <!-- ORCAI AI Agent Bot Activation (Voice & Text) -->
       <button class="header-action-btn agent-bot-trigger-btn" id="btnAgentToggle" type="button" title="ORCAI KI-Architektur-Agent öffnen (Sprach- &amp; Texteingabe)" aria-label="KI-Architektur-Agent öffnen">
-        <span class="agent-bot-icon">🤖</span>
+        <span class="agent-bot-icon"><img src="/favicon.svg" class="agent-orcai-logo" alt="ORCAI"></span>
         <span class="agent-bot-glow-dot"></span>
       </button>
 
@@ -6280,136 +6546,146 @@
 
     <!-- AI ARCHITECTURE AGENT DRAWER (Voice & Text) -->
     <aside class="drawer drawer-agent drawer-agent-right collapsed" id="sidebarAgent">
-      <div class="agent-drawer-header">
-        <div class="agent-header-brand">
-          <span class="agent-avatar-icon">🤖</span>
-          <span class="agent-header-title">ORCAI KI-Architekt</span>
-        </div>
-        <div class="drawer-actions">
-          <button class="drawer-btn-icon" id="btnAgentNewChat" title="Neuen Chat starten (+)" aria-label="Neuer Chat">💬+</button>
-          <button class="drawer-btn-icon" id="btnAgentHistoryToggle" title="Existierende Chats (📜)" aria-label="Existierende Chats">📜</button>
-          <button class="drawer-btn-icon" id="btnAgentSideToggle" title="Seite wechseln: Links ⇄ Rechts" aria-label="Seite wechseln">⇄</button>
-          <button class="drawer-btn-icon active" id="btnAgentVoiceToggle" title="Sprachausgabe an/aus" aria-label="Sprachausgabe an/aus">🔊</button>
-          <div class="agent-size-group">
-            <button class="agent-size-btn" id="btnAgentS" title="Kompakt (360px)">S</button>
-            <button class="agent-size-btn active" id="btnAgentM" title="Standard (440px)">M</button>
-            <button class="agent-size-btn" id="btnAgentL" title="Breit (640px)">L</button>
+      <!-- LEFT COLUMN: Chat History Sidebar (Persistent 2-Column Layout like ChatGPT/Gemini) -->
+      <div class="agent-sidebar" id="agentSidebar">
+        <div class="agent-sidebar-header">
+          <div class="agent-sidebar-brand" id="agentSidebarBrand" title="ORCAI Chats (Klicken zum Umschalten)">
+            <img src="/favicon.svg" class="agent-orcai-logo" alt="ORCAI">
+            <span class="agent-sidebar-title">ORCAI Chats</span>
           </div>
-          <button class="drawer-btn-icon" id="btnAgentCollapse" title="Agent schließen (✕)">✕</button>
+          <button class="agent-sidebar-toggle-btn" id="btnToggleSidebarIconify" title="Seitenleiste ikonifizieren / ausklappen" aria-label="Seitenleiste ein-/ausklappen">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="9" y1="3" x2="9" y2="21"></line>
+            </svg>
+          </button>
         </div>
-      </div>
 
-      <!-- Drawer im Drawer: Existierende Chats (Slide-In) -->
-      <div class="agent-inner-drawer" id="agentInnerDrawer">
-        <div class="agent-inner-drawer-header">
-          <div class="agent-inner-drawer-title">
-            <button class="agent-inner-back-btn" id="btnAgentInnerBack" title="Zurück zum Chat">← Zurück</button>
-            <span>Existierende Chats</span>
-          </div>
-          <div style="display:flex; align-items:center; gap:6px;">
-            <button class="agent-btn-new-chat-alt" id="btnAgentNewChatAlt">✨ Neuer Chat</button>
-            <button class="drawer-btn-icon" id="btnAgentInnerClose" title="Schließen (✕)">✕</button>
-          </div>
-        </div>
-        <div class="agent-inner-drawer-body">
-          <div class="agent-history-user" id="agentHistoryUserBadge">
-            <span>👤</span> <strong id="agentHistoryUserName">ORCAI Benutzer</strong>
-          </div>
+        <div class="agent-sidebar-controls">
+          <button class="agent-sidebar-new-btn" id="btnAgentNewChat" title="Neuen Chat starten (+)">
+            <span class="agent-sidebar-new-icon">✨</span>
+            <span class="agent-sidebar-new-text">Neuer Chat</span>
+          </button>
           <div class="agent-history-search-box">
-            <input type="text" id="agentHistorySearchInput" class="agent-history-search-input" placeholder="🔍 In allen Chats nach Begriffen suchen..." autocomplete="off">
+            <input type="text" id="agentHistorySearchInput" class="agent-history-search-input" placeholder="🔍 In Chats suchen..." autocomplete="off">
             <button id="btnAgentClearSearch" class="agent-history-clear-search" style="display:none;" title="Suche löschen">✕</button>
           </div>
-          <div class="agent-history-actions-row">
-            <span>Gespeicherte Unterhaltungen</span>
-            <span class="agent-history-count" id="agentHistoryCount">0 Chats</span>
+        </div>
+
+        <div class="agent-history-sessions-list" id="agentHistorySessionsList">
+          <!-- Dynamically populated by OrcaiChatStore -->
+        </div>
+
+        <div class="agent-sidebar-footer">
+          <div class="agent-history-user" id="agentHistoryUserBadge" title="Aktiver Benutzer">
+            <span>👤</span> <span class="agent-history-user-name" id="agentHistoryUserName">ORCAI Benutzer</span>
           </div>
-          <div class="agent-history-sessions-list" id="agentHistorySessionsList">
-            <!-- Dynamically populated by OrcaiChatStore -->
-          </div>
+          <span class="agent-history-count" id="agentHistoryCount">0 Chats</span>
         </div>
       </div>
 
-      <!-- Pop-Out Info & Beispielfragen Modal ("i"-Button) -->
-      <div class="agent-info-modal" id="agentInfoPopoutModal" style="display:none;">
-        <div class="agent-info-modal-header">
-          <div class="agent-info-modal-title">
-            <span>ℹ️</span> <span>ORCAI KI-Architekt • Info &amp; Beispielfragen</span>
+      <!-- RIGHT COLUMN: Active Chat Pane -->
+      <div class="agent-chat-pane" id="agentChatPane">
+        <div class="agent-drawer-header">
+          <div class="agent-header-brand">
+            <img src="/favicon.svg" class="agent-orcai-logo" alt="ORCAI">
+            <span class="agent-header-title">ORCAI KI-Architekt</span>
           </div>
-          <button class="drawer-btn-icon" id="btnAgentInfoModalClose" title="Schließen (✕)">✕</button>
+          <div class="drawer-actions">
+            <button class="drawer-btn-icon" id="btnAgentHistoryToggle" title="Seitenleiste Chats ein-/ausklappen (💬)" aria-label="Chat-Verlauf">💬</button>
+            <button class="drawer-btn-icon" id="btnAgentSideToggle" title="Seite wechseln: Links ⇄ Rechts" aria-label="Seite wechseln">⇄</button>
+            <button class="drawer-btn-icon active" id="btnAgentVoiceToggle" title="Sprachausgabe an/aus" aria-label="Sprachausgabe an/aus">🔊</button>
+            <div class="agent-size-group">
+              <button class="agent-size-btn" id="btnAgentS" title="Kompakt (380px)">S</button>
+              <button class="agent-size-btn" id="btnAgentM" title="Standard (520px)">M</button>
+              <button class="agent-size-btn active" id="btnAgentL" title="Breit (720px)">L</button>
+            </div>
+            <button class="drawer-btn-icon" id="btnAgentCollapse" title="Agent schließen (✕)">✕</button>
+          </div>
         </div>
-        <div class="agent-info-modal-body">
-          <div class="agent-info-card">
-            <div class="agent-info-card-title">🤖 Über den KI-Architektur-Agenten</div>
-            <p style="margin:0 0 6px 0;">Ich bin Ihr interaktiver Sparringspartner für Enterprise- &amp; Healthcare-IT-Architekturen. Ich analysiere das geladene IT-Landschaftsmodell (Quad-Chord), Prozesse nach APQC PCF &amp; OMG BPMN 2.0, FHIR/HL7-Schnittstellen sowie Big-Tech-Hyperscaler.</p>
-            <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;">
-              <a href="https://orcai-54321.web.app/json/?url=/ea/agent-manifest.json" target="_blank" rel="noopener noreferrer" class="agent-chip agent-chip-model" style="font-size:0.7rem;">📋 AI Agent Manifest (JSON Viewer) ↗</a>
-              <a href="https://github.com/gonzo42nixon/orcai-chord" target="_blank" rel="noopener noreferrer" class="agent-chip agent-chip-model" style="font-size:0.7rem;">🐙 GitHub Repository ↗</a>
-              <button class="agent-chip agent-chip-proc" onclick="window.openCurrentModelInJsonViewer()" style="font-size:0.7rem;">🌐 Modell im JSON Viewer ↗</button>
+
+        <!-- Pop-Out Info & Beispielfragen Modal ("i"-Button) -->
+        <div class="agent-info-modal" id="agentInfoPopoutModal" style="display:none;">
+          <div class="agent-info-modal-header">
+            <div class="agent-info-modal-title">
+              <span>ℹ️</span> <span>ORCAI KI-Architekt • Info &amp; Beispielfragen</span>
+            </div>
+            <button class="drawer-btn-icon" id="btnAgentInfoModalClose" title="Schließen (✕)">✕</button>
+          </div>
+          <div class="agent-info-modal-body">
+            <div class="agent-info-card">
+              <div class="agent-info-card-title"><img src="/favicon.svg" class="agent-msg-logo" alt="ORCAI"> Über den KI-Architektur-Agenten</div>
+              <p style="margin:0 0 6px 0;">Ich bin Ihr interaktiver Sparringspartner für Enterprise- &amp; Healthcare-IT-Architekturen. Ich analysiere das geladene IT-Landschaftsmodell (Quad-Chord), Prozesse nach APQC PCF &amp; OMG BPMN 2.0, FHIR/HL7-Schnittstellen sowie Big-Tech-Hyperscaler.</p>
+              <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;">
+                <a href="https://orcai-54321.web.app/json/?url=/ea/agent-manifest.json" target="_blank" rel="noopener noreferrer" class="agent-chip agent-chip-model" style="font-size:0.7rem;"><img src="/favicon.svg" class="agent-msg-logo" alt="ORCAI"> AI Agent Manifest (JSON Viewer) ↗</a>
+                <a href="https://github.com/gonzo42nixon/orcai-chord" target="_blank" rel="noopener noreferrer" class="agent-chip agent-chip-model" style="font-size:0.7rem;">🐙 GitHub Repository ↗</a>
+                <button class="agent-chip agent-chip-proc" onclick="window.openCurrentModelInJsonViewer()" style="font-size:0.7rem;">🌐 Modell im JSON Viewer ↗</button>
+              </div>
+            </div>
+
+            <div class="agent-info-card">
+              <div class="agent-info-card-title">💡 Beispielfragen als Anregung (Klick zum Starten)</div>
+              <div class="agent-info-catalog-grid">
+                <button class="agent-info-catalog-item" onclick="window.selectCatalogQuestion('Welche Systeme gehören zur Notaufnahme?')">
+                  <span>🏥 Welche Systeme gehören zur Notaufnahme?</span> <span>➔</span>
+                </button>
+                <button class="agent-info-catalog-item" onclick="window.selectCatalogQuestion('Zeige mir den Notfallprozess JSD-P-01')">
+                  <span>📋 Zeige mir den Notfallprozess JSD-P-01 (BPMN)</span> <span>➔</span>
+                </button>
+                <button class="agent-info-catalog-item" onclick="window.selectCatalogQuestion('Wer bedient den NIDApad Mobile Client?')">
+                  <span>📱 Wer bedient den NIDApad Mobile Client?</span> <span>➔</span>
+                </button>
+                <button class="agent-info-catalog-item" onclick="window.selectCatalogQuestion('Welche Schnittstellen nutzen FHIR oder HL7?')">
+                  <span>⚡ Welche Schnittstellen nutzen FHIR oder HL7?</span> <span>➔</span>
+                </button>
+                <button class="agent-info-catalog-item" onclick="window.selectCatalogQuestion('Wie funktioniert das Quad-Chord Architekturmodell?')">
+                  <span>📐 Wie funktioniert das Quad-Chord Architekturmodell?</span> <span>➔</span>
+                </button>
+                <button class="agent-info-catalog-item" onclick="window.selectCatalogQuestion('Öffne das AI Agent Manifest im JSON Viewer')">
+                  <span>🔍 Öffne das AI Agent Manifest im ORCAI JSON Viewer</span> <span>➔</span>
+                </button>
+                <button class="agent-info-catalog-item" onclick="window.selectCatalogQuestion('Zeige mir den aktuellen Börsenstand der Big-Tech Hyperscaler')">
+                  <span>📈 Aktueller Börsenstand der Big-Tech Hyperscaler</span> <span>➔</span>
+                </button>
+              </div>
             </div>
           </div>
-
-          <div class="agent-info-card">
-            <div class="agent-info-card-title">💡 Beispielfragen als Anregung (Klick zum Starten)</div>
-            <div class="agent-info-catalog-grid">
-              <button class="agent-info-catalog-item" onclick="window.selectCatalogQuestion('Welche Systeme gehören zur Notaufnahme?')">
-                <span>🏥 Welche Systeme gehören zur Notaufnahme?</span> <span>➔</span>
-              </button>
-              <button class="agent-info-catalog-item" onclick="window.selectCatalogQuestion('Zeige mir den Notfallprozess JSD-P-01')">
-                <span>📋 Zeige mir den Notfallprozess JSD-P-01 (BPMN)</span> <span>➔</span>
-              </button>
-              <button class="agent-info-catalog-item" onclick="window.selectCatalogQuestion('Wer bedient den NIDApad Mobile Client?')">
-                <span>📱 Wer bedient den NIDApad Mobile Client?</span> <span>➔</span>
-              </button>
-              <button class="agent-info-catalog-item" onclick="window.selectCatalogQuestion('Welche Schnittstellen nutzen FHIR oder HL7?')">
-                <span>⚡ Welche Schnittstellen nutzen FHIR oder HL7?</span> <span>➔</span>
-              </button>
-              <button class="agent-info-catalog-item" onclick="window.selectCatalogQuestion('Wie funktioniert das Quad-Chord Architekturmodell?')">
-                <span>📐 Wie funktioniert das Quad-Chord Architekturmodell?</span> <span>➔</span>
-              </button>
-              <button class="agent-info-catalog-item" onclick="window.selectCatalogQuestion('Öffne das AI Agent Manifest im JSON Viewer')">
-                <span>🔍 Öffne das AI Agent Manifest im ORCAI JSON Viewer</span> <span>➔</span>
-              </button>
-              <button class="agent-info-catalog-item" onclick="window.selectCatalogQuestion('Zeige mir den aktuellen Börsenstand der Big-Tech Hyperscaler')">
-                <span>📈 Aktueller Börsenstand der Big-Tech Hyperscaler</span> <span>➔</span>
-              </button>
-            </div>
-          </div>
         </div>
-      </div>
 
-      <!-- Chat Messages Stream -->
-      <div class="agent-chat-messages" id="agentChatMessages">
-        <!-- Initial Welcome Message will be rendered by JS -->
-      </div>
+        <!-- Chat Messages Stream -->
+        <div class="agent-chat-messages" id="agentChatMessages">
+          <!-- Initial Welcome Message will be rendered by JS -->
+        </div>
 
-      <!-- Prompt Suggestions -->
-      <div class="agent-prompt-suggestions" id="agentPromptSuggestions">
-        <div class="agent-prompt-chip" onclick="window.askOrcaiAgent('Welche Systeme gehören zur Notaufnahme?')">🏥 Notaufnahme Systeme</div>
-        <div class="agent-prompt-chip" onclick="window.askOrcaiAgent('Zeige mir den Notfallprozess JSD-P-01')">📋 Notfallprozess JSD-P-01</div>
-        <div class="agent-prompt-chip" onclick="window.askOrcaiAgent('Wer bedient den NIDApad Mobile Client?')">📱 NIDApad &amp; RTW</div>
-        <div class="agent-prompt-chip" onclick="window.askOrcaiAgent('Welche Schnittstellen nutzen FHIR oder HL7?')">⚡ FHIR &amp; HL7 Schnittstellen</div>
-        <div class="agent-prompt-chip" onclick="window.askOrcaiAgent('Wie funktioniert das Quad-Chord Modell?')">ℹ️ Quad-Chord Architektur</div>
-        <div class="agent-prompt-chip" onclick="window.askOrcaiAgent('Öffne das AI Agent Manifest im JSON Viewer')">📋 Manifest im JSON Viewer</div>
-        <div class="agent-prompt-chip" onclick="window.askOrcaiAgent('Zeige das IT-Landschaftsmodell im JSON Viewer')">🔍 Modell im JSON Viewer</div>
-        <div class="agent-prompt-chip" onclick="window.askOrcaiAgent('Befundungsprozess JSD-P-02 in BPMN öffnen')">🔬 Befundung BPMN</div>
-      </div>
+        <!-- Prompt Suggestions -->
+        <div class="agent-prompt-suggestions" id="agentPromptSuggestions">
+          <div class="agent-prompt-chip" onclick="window.askOrcaiAgent('Welche Systeme gehören zur Notaufnahme?')">🏥 Notaufnahme Systeme</div>
+          <div class="agent-prompt-chip" onclick="window.askOrcaiAgent('Zeige mir den Notfallprozess JSD-P-01')">📋 Notfallprozess JSD-P-01</div>
+          <div class="agent-prompt-chip" onclick="window.askOrcaiAgent('Wer bedient den NIDApad Mobile Client?')">📱 NIDApad &amp; RTW</div>
+          <div class="agent-prompt-chip" onclick="window.askOrcaiAgent('Welche Schnittstellen nutzen FHIR oder HL7?')">⚡ FHIR &amp; HL7 Schnittstellen</div>
+          <div class="agent-prompt-chip" onclick="window.askOrcaiAgent('Wie funktioniert das Quad-Chord Modell?')">ℹ️ Quad-Chord Architektur</div>
+          <div class="agent-prompt-chip" onclick="window.askOrcaiAgent('Öffne das AI Agent Manifest im JSON Viewer')">📋 Manifest im JSON Viewer</div>
+          <div class="agent-prompt-chip" onclick="window.askOrcaiAgent('Zeige das IT-Landschaftsmodell im JSON Viewer')">🔍 Modell im JSON Viewer</div>
+          <div class="agent-prompt-chip" onclick="window.askOrcaiAgent('Befundungsprozess JSD-P-02 in BPMN öffnen')">🔬 Befundung BPMN</div>
+        </div>
 
-      <!-- Live Voice Listening Status Bar -->
-      <div class="agent-listening-bar" id="agentListeningBar" style="display:none;">
-        <span class="agent-mic-pulse">🎤</span>
-        <span class="agent-listening-text" id="agentListeningText">Ich höre zu... Sprechen Sie jetzt</span>
-        <button class="agent-cancel-mic-btn" id="btnAgentCancelMic" title="Spracheingabe abbrechen">✕</button>
-      </div>
+        <!-- Live Voice Listening Status Bar -->
+        <div class="agent-listening-bar" id="agentListeningBar" style="display:none;">
+          <span class="agent-mic-pulse">🎤</span>
+          <span class="agent-listening-text" id="agentListeningText">Ich höre zu... Sprechen Sie jetzt</span>
+          <button class="agent-cancel-mic-btn" id="btnAgentCancelMic" title="Spracheingabe abbrechen">✕</button>
+        </div>
 
-      <!-- Input Bar -->
-      <div class="agent-input-bar">
-        <button class="agent-mic-btn" id="btnAgentMic" type="button" title="Spracheingabe starten (Mikrofon)" aria-label="Spracheingabe">
-          <span class="mic-icon">🎤</span>
-        </button>
-        <textarea class="agent-text-input" id="agentTextInput" rows="1" placeholder="Frage zur Architektur stellen oder einsprechen..."></textarea>
-        <button class="agent-send-btn" id="btnAgentSend" type="button" title="Anfrage senden (Enter)" aria-label="Senden">
-          <span>➤</span>
-        </button>
+        <!-- Input Bar -->
+        <div class="agent-input-bar">
+          <button class="agent-mic-btn" id="btnAgentMic" type="button" title="Spracheingabe starten (Mikrofon)" aria-label="Spracheingabe">
+            <span class="mic-icon">🎤</span>
+          </button>
+          <textarea class="agent-text-input" id="agentTextInput" rows="1" placeholder="Frage zur Architektur stellen oder einsprechen..."></textarea>
+          <button class="agent-send-btn" id="btnAgentSend" type="button" title="Anfrage senden (Enter)" aria-label="Senden">
+            <span>➤</span>
+          </button>
+        </div>
       </div>
     </aside>
 
@@ -43591,15 +43867,12 @@
         const agentListeningBar = document.getElementById('agentListeningBar');
         const agentListeningText = document.getElementById('agentListeningText');
 
-        // History Drawer elements ("Drawer im Drawer")
-        const agentInnerDrawer = document.getElementById('agentInnerDrawer');
-        const agentHistoryPanel = agentInnerDrawer || document.getElementById('agentHistoryPanel');
+        // Sidebar and History elements
+        const agentSidebar = document.getElementById('agentSidebar');
+        const agentSidebarBrand = document.getElementById('agentSidebarBrand');
+        const btnToggleSidebarIconify = document.getElementById('btnToggleSidebarIconify');
         const agentHistorySearchInput = document.getElementById('agentHistorySearchInput');
         const btnAgentClearSearch = document.getElementById('btnAgentClearSearch');
-        const btnAgentHistoryClose = document.getElementById('btnAgentHistoryClose');
-        const btnAgentInnerClose = document.getElementById('btnAgentInnerClose');
-        const btnAgentInnerBack = document.getElementById('btnAgentInnerBack');
-        const btnAgentNewChatAlt = document.getElementById('btnAgentNewChatAlt');
         const agentHistorySessionsList = document.getElementById('agentHistorySessionsList');
         const agentHistoryUserName = document.getElementById('agentHistoryUserName');
         const agentHistoryCount = document.getElementById('agentHistoryCount');
@@ -43607,6 +43880,11 @@
         // Pop-Out Info Modal elements
         const agentInfoPopoutModal = document.getElementById('agentInfoPopoutModal');
         const btnAgentInfoModalClose = document.getElementById('btnAgentInfoModalClose');
+
+        // Width S / M / L buttons
+        const btnAgentS = document.getElementById('btnAgentS');
+        const btnAgentM = document.getElementById('btnAgentM');
+        const btnAgentL = document.getElementById('btnAgentL');
 
         // Drawer Layout & Docking Management
         function applyDockSide(side) {
@@ -43632,6 +43910,35 @@
           if (window.onWindowResize) window.onWindowResize();
         }
 
+        function setAgentWidth(w, activeBtn) {
+          if (!sidebarAgent) return;
+          sidebarAgent.style.width = w;
+          [btnAgentS, btnAgentM, btnAgentL].forEach(b => b && b.classList.remove('active'));
+          if (activeBtn) activeBtn.classList.add('active');
+          if (window.onWindowResize) window.onWindowResize();
+        }
+
+        if (btnAgentS) {
+          btnAgentS.onclick = () => {
+            setAgentWidth('380px', btnAgentS);
+            if (agentSidebar) agentSidebar.classList.add('is-iconified');
+          };
+        }
+        if (btnAgentM) {
+          btnAgentM.onclick = () => {
+            setAgentWidth('520px', btnAgentM);
+          };
+        }
+        if (btnAgentL) {
+          btnAgentL.onclick = () => {
+            setAgentWidth('720px', btnAgentL);
+            if (agentSidebar) agentSidebar.classList.remove('is-iconified');
+          };
+        }
+
+        let wasInspectorOpenBeforeAgent = false;
+
+        // Toggle / Open Agent Drawer (Always opens in mode "L" = 720px by default)
         function toggleAgentDrawer(forceOpen) {
           if (!sidebarAgent) return;
           const shouldOpen = forceOpen !== undefined ? forceOpen : sidebarAgent.classList.contains('collapsed');
@@ -43640,6 +43947,34 @@
             sidebarAgent.classList.remove('collapsed');
             isAgentOpen = true;
             if (btnAgentToggle) btnAgentToggle.classList.add('active');
+
+            // On standard screens (< 1750px), if agent is docked on right, collapse inspector to grant full width to Agent (720px)
+            if (agentDockSide === 'right' && window.innerWidth < 1750) {
+              const sidebarRight = document.getElementById('sidebarRight');
+              const resizerRight = document.getElementById('resizerRight');
+              const btnReopenRight = document.getElementById('btnReopenRight');
+              if (sidebarRight && !sidebarRight.classList.contains('collapsed')) {
+                sidebarRight.classList.add('collapsed');
+                if (resizerRight) resizerRight.style.display = 'none';
+                if (btnReopenRight) btnReopenRight.style.display = 'flex';
+                wasInspectorOpenBeforeAgent = true;
+              }
+            }
+
+            // Default to "L" (Large = 720px) on open
+            setAgentWidth('720px', btnAgentL);
+
+            // Expand sidebar unless on very narrow viewport
+            if (agentSidebar) {
+              const wasIconified = localStorage.getItem('orcai_agent_sidebar_iconified') === 'true';
+              if (wasIconified && window.innerWidth < 800) {
+                agentSidebar.classList.add('is-iconified');
+              } else {
+                agentSidebar.classList.remove('is-iconified');
+              }
+            }
+
+            updateHistoryUI();
             if (window.onWindowResize) window.onWindowResize();
 
             // Auto-focus input on open
@@ -43652,6 +43987,20 @@
             if (btnAgentToggle) btnAgentToggle.classList.remove('active');
             if (window.speechSynthesis) window.speechSynthesis.cancel();
             stopSpeechRecognition();
+
+            // Restore inspector if it was collapsed by opening the agent
+            if (wasInspectorOpenBeforeAgent) {
+              wasInspectorOpenBeforeAgent = false;
+              const sidebarRight = document.getElementById('sidebarRight');
+              const resizerRight = document.getElementById('resizerRight');
+              const btnReopenRight = document.getElementById('btnReopenRight');
+              if (sidebarRight) {
+                sidebarRight.classList.remove('collapsed');
+                if (resizerRight) resizerRight.style.display = 'block';
+                if (btnReopenRight) btnReopenRight.style.display = 'none';
+              }
+            }
+
             if (window.onWindowResize) window.onWindowResize();
           }
         }
@@ -43669,28 +44018,10 @@
           btnAgentVoiceToggle.classList.toggle('active', isVoiceOutputEnabled);
         }
 
-        // Width S / M / L
-        const btnAgentS = document.getElementById('btnAgentS');
-        const btnAgentM = document.getElementById('btnAgentM');
-        const btnAgentL = document.getElementById('btnAgentL');
-
-        function setAgentWidth(w, activeBtn) {
-          if (!sidebarAgent) return;
-          sidebarAgent.style.width = w;
-          [btnAgentS, btnAgentM, btnAgentL].forEach(b => b && b.classList.remove('active'));
-          if (activeBtn) activeBtn.classList.add('active');
-          if (window.onWindowResize) window.onWindowResize();
-        }
-
-        if (btnAgentS) btnAgentS.onclick = () => setAgentWidth('360px', btnAgentS);
-        if (btnAgentM) btnAgentM.onclick = () => setAgentWidth('440px', btnAgentM);
-        if (btnAgentL) btnAgentL.onclick = () => setAgentWidth('640px', btnAgentL);
-
         // =====================================================================
         // CHAT SESSION PERSISTENCE & USER IDENTITY ENGINE
         // =====================================================================
         function getActiveOrcaiIdentity() {
-          // Check if currentUser is set in orcaiAccount
           if (typeof currentUser !== 'undefined' && currentUser && (currentUser.email || currentUser.uid)) {
             return {
               id: currentUser.uid || currentUser.email,
@@ -43699,7 +44030,6 @@
               isLoggedIn: true
             };
           }
-          // Try reading from DOM elements
           const emailEl = document.getElementById('orcaiAccountEmail');
           const nameEl = document.getElementById('orcaiAccountName');
           if (emailEl && emailEl.textContent.trim()) {
@@ -43711,7 +44041,6 @@
               isLoggedIn: true
             };
           }
-          // Fallback guest identity (persisted in localStorage)
           let guestId = localStorage.getItem('orcai_agent_guest_id');
           if (!guestId) {
             guestId = 'orcai_user_' + Math.random().toString(36).substring(2, 9);
@@ -43720,100 +44049,92 @@
           return {
             id: guestId,
             email: 'gast@orcai.local',
-            name: 'ORCAI Benutzer',
+            name: 'Gast ' + guestId.substring(11, 15),
             isLoggedIn: false
           };
         }
 
-        function getStorageKeyForUser() {
-          const identity = getActiveOrcaiIdentity();
-          return 'orcai_agent_chats_' + encodeURIComponent(identity.id);
+        function getUserSessionsStorageKey() {
+          const id = getActiveOrcaiIdentity();
+          return 'orcai_agent_sessions_' + encodeURIComponent(id.id);
         }
 
         function loadAllUserSessions() {
-          const key = getStorageKeyForUser();
           try {
-            const raw = localStorage.getItem(key);
-            if (!raw) return [];
-            const parsed = JSON.parse(raw);
-            return Array.isArray(parsed) ? parsed : [];
+            const raw = localStorage.getItem(getUserSessionsStorageKey());
+            return raw ? JSON.parse(raw) : [];
           } catch (e) {
-            console.warn('Error reading chat sessions:', e);
+            console.warn('[OrcaiAgent] Error loading sessions:', e);
             return [];
           }
         }
 
         function saveAllUserSessions(sessions) {
-          const key = getStorageKeyForUser();
           try {
-            localStorage.setItem(key, JSON.stringify(sessions));
+            localStorage.setItem(getUserSessionsStorageKey(), JSON.stringify(sessions));
           } catch (e) {
-            console.warn('Error saving chat sessions:', e);
+            console.warn('[OrcaiAgent] Error saving sessions:', e);
           }
         }
 
-        function getActiveSession() {
+        function getActiveChatSession() {
           const sessions = loadAllUserSessions();
-          if (!currentSessionId && sessions.length > 0) {
-            currentSessionId = sessions[0].id;
+          if (!currentSessionId) {
+            return null;
           }
-          let session = sessions.find(s => s.id === currentSessionId);
-          if (!session) {
-            session = createNewSessionObject();
-            sessions.unshift(session);
-            saveAllUserSessions(sessions);
-            currentSessionId = session.id;
-          }
-          return session;
+          return sessions.find(s => s.id === currentSessionId) || null;
         }
 
-        function createNewSessionObject(initialTitle = 'Neuer Chat') {
-          const identity = getActiveOrcaiIdentity();
-          return {
-            id: 'chat_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6),
-            userId: identity.id,
-            userEmail: identity.email,
-            userName: identity.name,
+        function createNewChatSession(initialTitle = 'Neuer Chat') {
+          const sessions = loadAllUserSessions();
+          const newSession = {
+            id: 'orcai_session_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7),
             title: initialTitle,
             createdAt: Date.now(),
             updatedAt: Date.now(),
             messages: []
           };
-        }
-
-        function saveMessageToActiveSession(msgObj) {
-          const sessions = loadAllUserSessions();
-          let session = sessions.find(s => s.id === currentSessionId);
-          if (!session) {
-            session = createNewSessionObject();
-            currentSessionId = session.id;
-            sessions.unshift(session);
-          }
-          // Set dynamic title from first user query
-          if (msgObj.isUser && (session.title === 'Neuer Chat' || !session.title)) {
-            const cleanTitle = msgObj.html.replace(/<[^>]*>/g, '').trim();
-            session.title = cleanTitle.slice(0, 36) + (cleanTitle.length > 36 ? '...' : '');
-          }
-          session.updatedAt = Date.now();
-          session.messages.push(msgObj);
-          saveAllUserSessions(sessions);
-          updateHistoryUI();
-        }
-
-        function startNewChat() {
-          const sessions = loadAllUserSessions();
-          const newSession = createNewSessionObject();
           sessions.unshift(newSession);
           saveAllUserSessions(sessions);
           currentSessionId = newSession.id;
+          return newSession;
+        }
 
+        function saveMessageToActiveSession(msgObj) {
+          let sessions = loadAllUserSessions();
+          let session = sessions.find(s => s.id === currentSessionId);
+          if (!session) {
+            session = createNewChatSession();
+            sessions = loadAllUserSessions();
+          }
+
+          if (session.messages.length === 0 && msgObj.isUser) {
+            const cleanTitle = msgObj.html.replace(/<[^>]*>/g, '').trim().substring(0, 42);
+            if (cleanTitle) session.title = cleanTitle;
+          }
+
+          session.messages.push(msgObj);
+          session.updatedAt = Date.now();
+
+          const idx = sessions.findIndex(s => s.id === session.id);
+          if (idx !== -1) {
+            sessions.splice(idx, 1);
+            sessions.unshift(session);
+          }
+
+          saveAllUserSessions(sessions);
+          updateHistoryUI(agentHistorySearchInput ? agentHistorySearchInput.value : '');
+        }
+
+        function startNewChat() {
+          currentSessionId = null;
           if (agentChatMessages) agentChatMessages.innerHTML = '';
           renderInitialAgentGreeting();
-          closeHistoryPanel();
-          updateHistoryUI();
+          updateHistoryUI(agentHistorySearchInput ? agentHistorySearchInput.value : '');
         }
         window.startNewAgentChat = startNewChat;
 
+        // Load existing session - smoothly switches between chats without closing or displacing sidebar!
         function loadChatSession(sessionId) {
           const sessions = loadAllUserSessions();
           const session = sessions.find(s => s.id === sessionId);
@@ -43829,8 +44150,8 @@
               appendMessage(m.html, m.isUser, m.chips, m.spoken, true);
             });
           }
-          closeHistoryPanel();
-          updateHistoryUI();
+          // Highlight active session without hiding the sidebar
+          updateHistoryUI(agentHistorySearchInput ? agentHistorySearchInput.value : '');
         }
         window.loadAgentChatSession = loadChatSession;
 
@@ -43847,48 +44168,25 @@
               startNewChat();
             }
           } else {
-            updateHistoryUI();
+            updateHistoryUI(agentHistorySearchInput ? agentHistorySearchInput.value : '');
           }
         }
         window.deleteAgentChatSession = deleteChatSession;
 
-        function toggleHistoryPanel() {
-          const drawer = agentInnerDrawer || agentHistoryPanel;
-          if (!drawer) return;
-          const isOpen = drawer.classList.contains('is-open') || drawer.style.display === 'flex';
-          if (!isOpen) {
-            openHistoryPanel();
+        // Toggle Sidebar between Expanded (220px) and Iconified Rail (48px)
+        function toggleHistorySidebar(forceState) {
+          if (!agentSidebar) return;
+          const isIconified = (forceState !== undefined) ? !forceState : !agentSidebar.classList.contains('is-iconified');
+          if (isIconified) {
+            agentSidebar.classList.add('is-iconified');
+            localStorage.setItem('orcai_agent_sidebar_iconified', 'true');
           } else {
-            closeHistoryPanel();
+            agentSidebar.classList.remove('is-iconified');
+            localStorage.setItem('orcai_agent_sidebar_iconified', 'false');
           }
+          if (window.onWindowResize) window.onWindowResize();
         }
-
-        function openHistoryPanel() {
-          const drawer = agentInnerDrawer || agentHistoryPanel;
-          if (!drawer) return;
-          drawer.classList.add('is-open');
-          drawer.style.display = 'flex';
-          if (btnAgentHistoryToggle) btnAgentHistoryToggle.classList.add('active');
-          const identity = getActiveOrcaiIdentity();
-          if (agentHistoryUserName) {
-            agentHistoryUserName.textContent = identity.name + (identity.isLoggedIn ? ' (' + identity.email + ')' : ' (Gast)');
-          }
-          if (agentHistorySearchInput) {
-            agentHistorySearchInput.value = '';
-            agentHistorySearchInput.focus();
-          }
-          updateHistoryUI();
-        }
-
-        function closeHistoryPanel() {
-          const drawer = agentInnerDrawer || agentHistoryPanel;
-          if (!drawer) return;
-          drawer.classList.remove('is-open');
-          if (!drawer.classList.contains('agent-inner-drawer')) {
-            drawer.style.display = 'none';
-          }
-          if (btnAgentHistoryToggle) btnAgentHistoryToggle.classList.remove('active');
-        }
+        window.toggleOrcaiAgentSidebar = toggleHistorySidebar;
 
         // Pop-Out Info Modal handlers
         function openAgentInfoPopout() {
@@ -43906,13 +44204,22 @@
           window.askOrcaiAgent(q);
         };
         if (btnAgentInfoModalClose) btnAgentInfoModalClose.onclick = closeAgentInfoPopout;
-        if (btnAgentInnerBack) btnAgentInnerBack.onclick = closeHistoryPanel;
-        if (btnAgentInnerClose) btnAgentInnerClose.onclick = closeHistoryPanel;
+
+        // Sidebar and Session Event Listeners
+        if (btnToggleSidebarIconify) btnToggleSidebarIconify.onclick = () => toggleHistorySidebar();
+        if (agentSidebarBrand) agentSidebarBrand.onclick = () => toggleHistorySidebar();
+        if (btnAgentHistoryToggle) btnAgentHistoryToggle.onclick = () => toggleHistorySidebar();
+        if (btnAgentNewChat) btnAgentNewChat.onclick = startNewChat;
 
         function updateHistoryUI(filterQuery = '') {
           if (!agentHistorySessionsList) return;
           const sessions = loadAllUserSessions();
-          const q = filterQuery.trim().toLowerCase();
+          const q = (filterQuery || '').trim().toLowerCase();
+
+          const identity = getActiveOrcaiIdentity();
+          if (agentHistoryUserName) {
+            agentHistoryUserName.textContent = identity.name + (identity.isLoggedIn ? ' (' + identity.email + ')' : ' (Gast)');
+          }
 
           if (agentHistoryCount) {
             agentHistoryCount.textContent = sessions.length + (sessions.length === 1 ? ' Chat' : ' Chats');
@@ -43923,9 +44230,9 @@
             filtered = sessions.map(s => ({ session: s, snippet: '' }));
           } else {
             sessions.forEach(s => {
-              const titleMatch = s.title.toLowerCase().includes(q);
+              const titleMatch = (s.title || '').toLowerCase().includes(q);
               let snippet = '';
-              for (const m of s.messages) {
+              for (const m of (s.messages || [])) {
                 const plain = (m.isUser ? m.html : (m.spoken || m.html)).replace(/<[^>]*>/g, ' ');
                 const idx = plain.toLowerCase().indexOf(q);
                 if (idx !== -1) {
@@ -43942,7 +44249,7 @@
           }
 
           if (filtered.length === 0) {
-            agentHistorySessionsList.innerHTML = '<div style="font-size:0.75rem; color:#64748b; padding:12px 6px; text-align:center;">Keine passenden Chats gefunden.</div>';
+            agentHistorySessionsList.innerHTML = '<div style="font-size:0.75rem; color:#64748b; padding:12px 6px; text-align:center;">' + (q ? 'Keine Treffer' : 'Noch keine Chats') + '</div>';
             return;
           }
 
@@ -43954,7 +44261,7 @@
             const timeStr = d.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' }) + ' ' + d.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
             const msgCount = (s.messages || []).length;
 
-            let displayTitle = s.title;
+            let displayTitle = s.title || 'Neuer Chat';
             let displaySnippet = item.snippet;
 
             if (q) {
@@ -43965,9 +44272,9 @@
               }
             }
 
-            listHtml += '<div class="agent-history-item ' + (isActive ? 'active' : '') + '" onclick="window.loadAgentChatSession(\'' + s.id + '\')">' +
+            listHtml += '<div class="agent-history-item ' + (isActive ? 'active' : '') + '" onclick="window.loadAgentChatSession(\'' + s.id + '\')" title="' + (s.title || 'Chat').replace(/"/g, '&quot;') + '">' +
               '<div class="agent-history-item-info">' +
-                '<div class="agent-history-item-title">' + (displayTitle || 'Neuer Chat') + '</div>' +
+                '<div class="agent-history-item-title">' + displayTitle + '</div>' +
                 '<div class="agent-history-item-meta">' +
                   '<span>🕒 ' + timeStr + '</span>' +
                   '<span>💬 ' + msgCount + '</span>' +
@@ -43998,10 +44305,6 @@
             }
           };
         }
-        if (btnAgentNewChat) btnAgentNewChat.onclick = startNewChat;
-        if (btnAgentNewChatAlt) btnAgentNewChatAlt.onclick = startNewChat;
-        if (btnAgentHistoryToggle) btnAgentHistoryToggle.onclick = toggleHistoryPanel;
-        if (btnAgentHistoryClose) btnAgentHistoryClose.onclick = closeHistoryPanel;
 
         if (btnAgentVoiceToggle) {
           btnAgentVoiceToggle.onclick = () => {
@@ -44014,7 +44317,7 @@
           };
         }
 
-        // =====================================================================
+// =====================================================================
         // VOICE MANAGEMENT & TEXT-TO-SPEECH (TTS) OPTIMIZATION
         // =====================================================================
         let cachedGermanVoice = null;
@@ -44258,7 +44561,7 @@
           let inner = '<div class="agent-msg-bubble">';
           if (!isUser) {
             inner += '<div class="agent-msg-header">' +
-              '<span>🤖 ORCAI Architekt</span>' +
+              '<span style="display:inline-flex;align-items:center;gap:5px;"><img src="/favicon.svg" class="agent-msg-logo" alt="ORCAI"> ORCAI Architekt</span>' +
               '<button class="btn-msg-speak" title="Antwort vorlesen">🔊</button>' +
             '</div>';
           }
@@ -44322,7 +44625,7 @@
           const typingEl = document.createElement('div');
           typingEl.id = typingId;
           typingEl.className = 'agent-msg agent-msg-bot';
-          typingEl.innerHTML = '<div class="agent-msg-bubble"><div style="font-size:0.75rem; color:#94a3b8; display:flex; align-items:center; gap:6px;"><span>🤖</span> <em>Analysiere IT-Landschaft, Web &amp; Architekturmodelle...</em></div></div>';
+          typingEl.innerHTML = '<div class="agent-msg-bubble"><div style="font-size:0.75rem; color:#94a3b8; display:flex; align-items:center; gap:6px;"><img src="/favicon.svg" class="agent-msg-logo" alt="ORCAI"> <em>Analysiere IT-Landschaft, Web &amp; Architekturmodelle...</em></div></div>';
           agentChatMessages.appendChild(typingEl);
           agentChatMessages.scrollTop = agentChatMessages.scrollHeight;
 
@@ -44601,7 +44904,7 @@
           // C. SELBSTERKENNTNIS: AI AGENT MANIFEST (IDENTITÄT & DEFINITION)
           // -------------------------------------------------------------------
           if (qLower.includes('manifest') || qLower.includes('wer bist du') || qLower.includes('deine identität') || qLower.includes('deine definition') || qLower.includes('system prompt') || qLower.includes('agentendefinition')) {
-            html = '<p><strong>🤖 KI-Agenten-Identität &amp; AI Agent Manifest</strong></p>' +
+            html = '<p><strong><img src="/favicon.svg" class="agent-msg-logo" alt="ORCAI"> KI-Agenten-Identität &amp; AI Agent Manifest</strong></p>' +
               '<p>Meine vollständige Rollendefinition, Fähigkeits-Matrix und Schnittstellen sind im standardisierten <strong>ORCAI AI Agent Manifest</strong> hinterlegt:</p>' +
               '<p><a href="https://orcai-54321.web.app/json/?url=/ea/agent-manifest.json" target="_blank" rel="noopener noreferrer" style="color:#38bdf8; font-weight:700; text-decoration:underline;">https://orcai-54321.web.app/json/?url=/ea/agent-manifest.json ↗</a></p>' +
               '<p>🔍 <strong>ORCAI JSON Viewer:</strong> Nutzen Sie den interaktiven <strong>ORCAI JSON Viewer</strong> mit auf- und zuklappbaren Pills zur strukturierten Analyse meiner Manifest-Definition:<br>' +
@@ -44684,7 +44987,7 @@
               chips.push('<button class="agent-chip agent-chip-proc" onclick="window.switchCurrentModel && window.switchCurrentModel(\'' + targetKey + '\')">🌐 Im Quad-Chord laden ↗</button>');
             }
             chips.push('<a href="https://orcai-54321.web.app/json/?url=' + encodeURIComponent(docRawUrl) + '&mode=raw" target="_blank" rel="noopener noreferrer" class="agent-chip agent-chip-sys" title="Im ORCAI JSON Viewer im Roh-JSON Modus öffnen">📄 Roh-JSON im Viewer ↗</a>');
-            chips.push('<a href="https://orcai-54321.web.app/json/?url=/ea/agent-manifest.json" target="_blank" rel="noopener noreferrer" class="agent-chip agent-chip-model">🤖 AI Agent Manifest im Viewer ↗</a>');
+            chips.push('<a href="https://orcai-54321.web.app/json/?url=/ea/agent-manifest.json" target="_blank" rel="noopener noreferrer" class="agent-chip agent-chip-model"><img src="/favicon.svg" class="agent-msg-logo" alt="ORCAI"> AI Agent Manifest im Viewer ↗</a>');
 
             spoken = 'Das Dokument ' + (targetEntry ? targetEntry.shortName || targetKey : targetKey) + ' kann per Klick direkt im ORCAI JSON-Viewer mit interaktiven RGB-Pills und Filterung betrachtet werden.';
             return { html, chips, spoken };
@@ -44725,7 +45028,7 @@
               '<p>Der <strong>ORCAI JSON Viewer</strong> visualisiert JSON-Objekte wahlweise als Quellcode oder als interaktive, farbcodierte <strong>auf- und zuklappbare RGB-Pills</strong> mit Volltext-Filterung, Syntax-Validierung und Export.</p>' +
               '<p><strong>Verfügbare JSON-Objekte &amp; Architekturmodelle:</strong></p>' +
               '<ul>' +
-                '<li><strong>🤖 AI Agent Manifest (v1.2.0):</strong> Meine Spezifikation, Systemfähigkeiten &amp; Standards<br>' +
+                '<li><strong><img src="/favicon.svg" class="agent-msg-logo" alt="ORCAI"> AI Agent Manifest (v1.2.0):</strong> Meine Spezifikation, Systemfähigkeiten &amp; Standards<br>' +
                   '<a href="https://orcai-54321.web.app/json/?url=/ea/agent-manifest.json" target="_blank" rel="noopener noreferrer" style="color:#38bdf8; font-weight:700;">https://orcai-54321.web.app/json/?url=/ea/agent-manifest.json ↗</a></li>' +
                 '<li><strong>🌐 ' + escapeHtml(activeModelTitle) + ':</strong> Vollständige JSON-Datenstruktur (' + sysCount + ' Systeme, ' + conCount + ' Kanten, ' + procCount + ' Prozesse)<br>' +
                   '<a href="https://orcai-54321.web.app/json/?url=' + encodeURIComponent(activeModel?.url || ('https://orcai-54321.web.app/api/orcai/v1/docs/' + activeModelKey)) + '" target="_blank" rel="noopener noreferrer" style="color:#38bdf8; font-weight:700;">https://orcai-54321.web.app/json/?url=' + encodeURIComponent(activeModel?.url || ('https://orcai-54321.web.app/api/orcai/v1/docs/' + activeModelKey)) + ' ↗</a></li>' +
@@ -44734,7 +45037,7 @@
               '</ul>' +
               '<p>Wählen Sie eine der Aktionen, um das gewünschte JSON-Objekt im Viewer zu öffnen:</p>';
 
-            chips.push('<a href="https://orcai-54321.web.app/json/?url=/ea/agent-manifest.json" target="_blank" rel="noopener noreferrer" class="agent-chip agent-chip-model" style="background:#0070f2; color:#fff; font-weight:bold; border-color:#38bdf8;">🤖 Manifest im JSON Viewer ↗</a>');
+            chips.push('<a href="https://orcai-54321.web.app/json/?url=/ea/agent-manifest.json" target="_blank" rel="noopener noreferrer" class="agent-chip agent-chip-model" style="background:#0070f2; color:#fff; font-weight:bold; border-color:#38bdf8;"><img src="/favicon.svg" class="agent-msg-logo" alt="ORCAI"> Manifest im JSON Viewer ↗</a>');
             chips.push('<button class="agent-chip agent-chip-proc" onclick="window.openCurrentModelInJsonViewer()">🌐 Aktives Modell im JSON Viewer ↗</button>');
             chips.push('<a href="https://orcai-54321.web.app/json/?key=ORCAI-S4HBP-JSDMDM-JSD-BP-100007" target="_blank" rel="noopener noreferrer" class="agent-chip agent-chip-sys">🏢 S/4HANA BP Sample ↗</a>');
             chips.push('<button class="agent-chip agent-chip-model" onclick="window.askOrcaiAgent(\'Zeige mir alle 5 Modelle im JSON Viewer\')">📚 Alle 5 Modelle als JSON...</button>');
