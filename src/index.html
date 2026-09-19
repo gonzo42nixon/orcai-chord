@@ -7300,10 +7300,96 @@
       transform: translateY(-1px);
     }
 
+
+    /* ==========================================================================
+       CENTRAL STATIONARY BACKGROUND & CONTROLLABLE DRAWER GLASS
+       ========================================================================== */
+    .ea-central-bg-layer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .ea-central-bg-color {
+      position: absolute;
+      inset: 0;
+      background: var(--canvas-bg, radial-gradient(circle at center, rgba(17, 30, 56, 0.45) 0%, rgba(11, 15, 23, 1) 78%));
+      transition: background 0.3s ease;
+    }
+    .ea-central-bg-overlay {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
+      display: none;
+      transition: opacity 0.3s ease, filter 0.3s ease;
+    }
+
+    .workspace {
+      background: transparent !important;
+      position: relative;
+      z-index: 1;
+    }
+    .canvas-container {
+      background: transparent !important;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* All Drawers (Left, Right Inspector, AI Agent) share controllable transparency & blur */
+    :root {
+      --drawer-bg: rgba(15, 23, 42, 0.85);
+      --drawer-blur: 16px;
+      --drawer-opacity: 0.85;
+      --drawer-color: #0f172a;
+    }
+
+    .drawer {
+      background: var(--drawer-bg, rgba(15, 23, 42, 0.85)) !important;
+      backdrop-filter: blur(var(--drawer-blur, 16px)) !important;
+      -webkit-backdrop-filter: blur(var(--drawer-blur, 16px)) !important;
+      z-index: 40;
+    }
+    .drawer-agent {
+      background: var(--drawer-bg, rgba(15, 23, 42, 0.85)) !important;
+      backdrop-filter: blur(var(--drawer-blur, 16px)) !important;
+      -webkit-backdrop-filter: blur(var(--drawer-blur, 16px)) !important;
+      z-index: 45;
+    }
+
+    /* Crucial: Agent Sidebar & Chat Pane share identical opacity & background! */
+    .agent-sidebar,
+    #sidebarAgent .agent-sidebar,
+    body.theme-day .agent-sidebar,
+    #sidebarAgent.theme-day .agent-sidebar {
+      background: transparent !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+
+    .agent-chat-pane,
+    #sidebarAgent .agent-chat-pane,
+    body.theme-day .agent-chat-pane,
+    #sidebarAgent.theme-day .agent-chat-pane {
+      background: transparent !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+
 </style>
   <link rel="stylesheet" href="./mobile-agent-navigation.css?v=20260918-1">
 </head>
 <body class="theme-night">
+  <!-- Global Central Stationary Background (Fixed Viewport - Invariant to Drawer Opening/Closing) -->
+  <div class="ea-central-bg-layer" id="eaCentralBgLayer">
+    <div class="ea-central-bg-color" id="eaCentralBgColor"></div>
+    <div class="ea-central-bg-overlay" id="eaCentralBgOverlay"></div>
+  </div>
 
   <!-- Header with Centered Dynamic Drilldown Title & Subtitle -->
   <header>
@@ -46719,6 +46805,17 @@
       /* =========================================================================
          ORCAI EA-APP SETTINGS & ARCHITECTURE LANDSCAPE PERSONALIZATION STORE
          ========================================================================= */
+      function hexToRgba(hex, alpha) {
+        let c = (hex || '#0f172a').replace('#', '').trim();
+        if (c.length === 3) c = c.split('').map(x => x + x).join('');
+        if (c.length !== 6) c = '0f172a';
+        const num = parseInt(c, 16);
+        const r = (num >> 16) & 255;
+        const g = (num >> 8) & 255;
+        const b = num & 255;
+        return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + (alpha !== undefined ? alpha : 0.85) + ')';
+      }
+
       const DEFAULT_EA_SETTINGS = {
         theme: 'night',
         canvasBgColor: '',
@@ -46726,6 +46823,11 @@
         canvasBgImageKey: '',
         canvasBgOpacity: 0.15,
         canvasBgBlur: 0,
+        // Drawer Appearance Controls (Left, Right, Agent)
+        drawerColor: '#0f172a',
+        drawerOpacity: 0.85,
+        drawerBlur: 16,
+        // Views & Model defaults
         defaultLevel: '1',
         defaultRadarDimension: 'system',
         defaultOnlyActive: true,
@@ -46777,6 +46879,8 @@
           try {
             if (typeof window.getActiveOrcaiIdentity === 'function') {
               identity = window.getActiveOrcaiIdentity();
+            } else if (typeof getActiveOrcaiIdentity === 'function') {
+              identity = getActiveOrcaiIdentity();
             }
           } catch(e) {}
 
@@ -46786,7 +46890,7 @@
             localStorage.setItem('orcai_ea_settings_v1', JSON.stringify(updated));
             localStorage.setItem('orcai_ea_active_settings', JSON.stringify(updated));
 
-            // Also synchronize with profile
+            // Synchronize with profile
             const profileKey = 'orcai_profile_' + identity.id;
             let profileRaw = localStorage.getItem(profileKey);
             let profile = profileRaw ? JSON.parse(profileRaw) : { orcaiId: identity.id, name: identity.name };
@@ -46803,55 +46907,83 @@
 
         static applyToDOM(settings) {
           const s = settings || this.getSettings();
-          const canvas = document.getElementById('canvasContainer');
-          const overlay = document.getElementById('eaCanvasCustomOverlay');
+          const isDay = s.theme === 'day';
 
           // 1. Theme application
-          if (s.theme === 'day' && typeof window.applyEaTheme === 'function') {
+          if (isDay && typeof window.applyEaTheme === 'function') {
             window.applyEaTheme('day', true);
-          } else if (s.theme === 'night' && typeof window.applyEaTheme === 'function') {
+          } else if (!isDay && typeof window.applyEaTheme === 'function') {
             window.applyEaTheme('night', true);
           }
 
-          // 2. Canvas Background Color
-          if (canvas) {
+          // 2. Central Stationary Background (Fixed Viewport - Never Changes on Drawer Opening/Closing)
+          const centralColor = document.getElementById('eaCentralBgColor');
+          const centralOverlay = document.getElementById('eaCentralBgOverlay');
+
+          if (centralColor) {
             if (s.canvasBgColor) {
-              canvas.style.setProperty('background', s.canvasBgColor, 'important');
-              document.documentElement.style.setProperty('--canvas-bg', s.canvasBgColor);
-              canvas.classList.add('ea-canvas-custom-bg');
+              centralColor.style.background = s.canvasBgColor;
             } else {
-              canvas.style.removeProperty('background');
-              const isDay = document.body.classList.contains('theme-day');
-              const defaultCanvas = isDay ? 'radial-gradient(circle at center, #ffffff 0%, #f1f5f9 85%)' : 'radial-gradient(circle at center, rgba(17, 30, 56, 0.45) 0%, rgba(11, 15, 23, 1) 78%)';
-              document.documentElement.style.setProperty('--canvas-bg', defaultCanvas);
-              canvas.classList.remove('ea-canvas-custom-bg');
+              const defaultGrad = isDay ? 'radial-gradient(circle at center, #ffffff 0%, #f1f5f9 85%)' : 'radial-gradient(circle at center, rgba(17, 30, 56, 0.45) 0%, rgba(11, 15, 23, 1) 78%)';
+              centralColor.style.background = defaultGrad;
             }
           }
 
-          // 3. Canvas Background Image (Supports ORCAI-ID and URLs)
-          if (overlay) {
+          if (centralOverlay) {
             const rawKey = s.canvasBgImageKey || s.canvasBgImage;
             if (rawKey) {
-              overlay.style.opacity = s.canvasBgOpacity !== undefined ? s.canvasBgOpacity : 0.15;
-              overlay.style.filter = 'blur(' + (s.canvasBgBlur || 0) + 'px)';
-              overlay.style.display = 'block';
+              centralOverlay.style.opacity = s.canvasBgOpacity !== undefined ? s.canvasBgOpacity : 0.15;
+              centralOverlay.style.filter = 'blur(' + (s.canvasBgBlur || 0) + 'px)';
+              centralOverlay.style.display = 'block';
 
               if (typeof window.resolveOrcaiImageKey === 'function') {
                 window.resolveOrcaiImageKey(rawKey).then(resolvedUrl => {
-                  if (overlay && resolvedUrl) {
-                    overlay.style.backgroundImage = 'url("' + resolvedUrl + '")';
+                  if (centralOverlay && resolvedUrl) {
+                    centralOverlay.style.backgroundImage = 'url("' + resolvedUrl + '")';
                   }
                 }).catch(() => {
-                  if (overlay && s.canvasBgImage) {
-                    overlay.style.backgroundImage = 'url("' + s.canvasBgImage + '")';
+                  if (centralOverlay && s.canvasBgImage) {
+                    centralOverlay.style.backgroundImage = 'url("' + s.canvasBgImage + '")';
                   }
                 });
               } else if (s.canvasBgImage) {
-                overlay.style.backgroundImage = 'url("' + s.canvasBgImage + '")';
+                centralOverlay.style.backgroundImage = 'url("' + s.canvasBgImage + '")';
               }
             } else {
-              overlay.style.display = 'none';
+              centralOverlay.style.display = 'none';
             }
+          }
+
+          // 3. Drawer Styling (Left, Right, Agent - Color, Opacity & Blur)
+          const dColor = s.drawerColor || (isDay ? '#ffffff' : '#0f172a');
+          const dOpacity = s.drawerOpacity !== undefined ? s.drawerOpacity : (isDay ? 0.92 : 0.85);
+          const dBlur = s.drawerBlur !== undefined ? s.drawerBlur : 16;
+          const dRgba = hexToRgba(dColor, dOpacity);
+
+          document.documentElement.style.setProperty('--drawer-bg', dRgba);
+          document.documentElement.style.setProperty('--drawer-blur', dBlur + 'px');
+          document.documentElement.style.setProperty('--drawer-opacity', dOpacity);
+          document.documentElement.style.setProperty('--drawer-color', dColor);
+
+          const allDrawers = document.querySelectorAll('.drawer, .drawer-left, .drawer-right, .drawer-agent, #sidebarLeft, #sidebarRight, #sidebarAgent');
+          allDrawers.forEach(d => {
+            d.style.setProperty('background', dRgba, 'important');
+            d.style.setProperty('backdrop-filter', 'blur(' + dBlur + 'px)', 'important');
+            d.style.setProperty('-webkit-backdrop-filter', 'blur(' + dBlur + 'px)', 'important');
+          });
+
+          // Ensure Agent Sidebar matches Agent Chat Pane with identical opacity
+          const agentSidebar = document.querySelector('.agent-sidebar');
+          const agentChatPane = document.querySelector('.agent-chat-pane');
+          if (agentSidebar) {
+            agentSidebar.style.setProperty('background', 'transparent', 'important');
+            agentSidebar.style.setProperty('backdrop-filter', 'none', 'important');
+            agentSidebar.style.setProperty('-webkit-backdrop-filter', 'none', 'important');
+          }
+          if (agentChatPane) {
+            agentChatPane.style.setProperty('background', 'transparent', 'important');
+            agentChatPane.style.setProperty('backdrop-filter', 'none', 'important');
+            agentChatPane.style.setProperty('-webkit-backdrop-filter', 'none', 'important');
           }
 
           // 4. Radar Dimension Default
@@ -46985,8 +47117,87 @@
               </div>
             </div>
 
+            <!-- Drawer Controls: Left, Right Inspector, AI-Agent -->
             <div class="ea-settings-group">
-              <label class="ea-settings-label">Hintergrundfarbe der EA-Zeichenfläche (Canvas / Landschaft)</label>
+              <label class="ea-settings-label">Drawer links &amp; rechts (Seitenleisten Transparenz, Blur &amp; Farbe)</label>
+              <div style="font-size:0.72rem; color:#94a3b8; margin-bottom:4px;">
+                Steuert Farbe, Deckkraft und Milchglas-Blur aller Drawer. Die auf- und zuklappbare Agent-Seitenleiste übernimmt exakt die gleiche Deckkraft.
+              </div>
+
+              <div style="display:flex; align-items:center; gap:10px;">
+                <input type="color" id="eaDrawerColorPicker" value="${settings.drawerColor || (isDay ? '#ffffff' : '#0f172a')}" oninput="window.previewEaDrawerStyle()" onchange="window.previewEaDrawerStyle()" style="width:40px; height:34px; border:none; background:none; cursor:pointer; border-radius:6px;">
+                <input type="text" id="eaDrawerColorText" value="${settings.drawerColor || ''}" placeholder="${isDay ? '#ffffff' : '#0f172a'}" class="agent-settings-input" style="font-family:monospace; width:120px;" oninput="window.previewEaDrawerStyle()" onchange="window.previewEaDrawerStyle()">
+                <button type="button" class="agent-settings-btn-option" onclick="window.resetEaDrawerColor()" title="Standardfarbe wiederherstellen">Standard</button>
+              </div>
+
+              <div class="agent-color-presets" style="margin-top:6px;">
+                <span style="font-size:0.72rem; color:#94a3b8; margin-right:6px;">Presets:</span>
+                <button type="button" class="agent-color-chip ${settings.drawerColor === '#0f172a' ? 'active' : ''}" style="background:#0f172a;" onclick="window.setEaDrawerColorPreset('#0f172a')" title="Default Slate"></button>
+                <button type="button" class="agent-color-chip ${settings.drawerColor === '#090d16' ? 'active' : ''}" style="background:#090d16;" onclick="window.setEaDrawerColorPreset('#090d16')" title="Obsidian Night"></button>
+                <button type="button" class="agent-color-chip ${settings.drawerColor === '#0a192f' ? 'active' : ''}" style="background:#0a192f;" onclick="window.setEaDrawerColorPreset('#0a192f')" title="Hospital Navy"></button>
+                <button type="button" class="agent-color-chip ${settings.drawerColor === '#1e1b4b' ? 'active' : ''}" style="background:#1e1b4b;" onclick="window.setEaDrawerColorPreset('#1e1b4b')" title="Indigo Void"></button>
+                <button type="button" class="agent-color-chip ${settings.drawerColor === '#064e3b' ? 'active' : ''}" style="background:#064e3b;" onclick="window.setEaDrawerColorPreset('#064e3b')" title="Emerald Shadow"></button>
+                <button type="button" class="agent-color-chip ${settings.drawerColor === '#ffffff' ? 'active' : ''}" style="background:#ffffff;" onclick="window.setEaDrawerColorPreset('#ffffff')" title="Architect White"></button>
+              </div>
+
+              <div style="display:flex; align-items:center; gap:8px; margin-top:8px;">
+                <span style="font-size:0.72rem; color:#94a3b8; width:75px;">Deckkraft:</span>
+                <input type="range" id="eaDrawerOpacityRange" min="0.2" max="1.0" step="0.02" value="${settings.drawerOpacity !== undefined ? settings.drawerOpacity : 0.85}" style="flex:1;" oninput="window.previewEaDrawerStyle()">
+                <span id="eaDrawerOpacityVal" style="font-size:0.72rem; color:#f8fafc; font-family:monospace; width:45px; text-align:right;">${Math.round((settings.drawerOpacity !== undefined ? settings.drawerOpacity : 0.85) * 100)}%</span>
+              </div>
+
+              <div style="display:flex; align-items:center; gap:8px; margin-top:6px;">
+                <span style="font-size:0.72rem; color:#94a3b8; width:75px;">Milchglas Blur:</span>
+                <input type="range" id="eaDrawerBlurRange" min="0" max="30" step="1" value="${settings.drawerBlur !== undefined ? settings.drawerBlur : 16}" style="flex:1;" oninput="window.previewEaDrawerStyle()">
+                <span id="eaDrawerBlurVal" style="font-size:0.72rem; color:#f8fafc; font-family:monospace; width:45px; text-align:right;">${settings.drawerBlur !== undefined ? settings.drawerBlur : 16}px</span>
+              </div>
+
+              <div class="agent-color-preview-box" id="eaDrawerPreviewBox" style="background:${hexToRgba(settings.drawerColor || (isDay ? '#ffffff' : '#0f172a'), settings.drawerOpacity !== undefined ? settings.drawerOpacity : 0.85)}; height:32px; border-radius:6px; border:1px solid rgba(255,255,255,0.25); display:flex; align-items:center; justify-content:center; color:${isDay ? '#0f172a' : '#ffffff'}; font-size:0.75rem; font-weight:600; margin-top:8px;">
+                Live-Vorschau Drawer: ${settings.drawerColor || (isDay ? '#ffffff' : '#0f172a')} · ${Math.round((settings.drawerOpacity !== undefined ? settings.drawerOpacity : 0.85) * 100)}% Deckkraft · ${settings.drawerBlur !== undefined ? settings.drawerBlur : 16}px Blur
+              </div>
+            </div>
+
+            <!-- Central Stationary Background Controls -->
+            <div class="ea-settings-group">
+              <label class="ea-settings-label">Zentrales Hintergrundbild (Bleibt fest beim Öffnen/Schließen der Drawer)</label>
+              <div style="font-size:0.72rem; color:#94a3b8; margin-bottom:4px;">
+                Das Hintergrundbild ist global zentriert verankert und verschiebt oder verzieht sich nicht beim Ein- und Ausklappen der Seitenleisten.
+              </div>
+              <div style="display:flex; gap:6px; align-items:center;">
+                <input type="text" id="eaCanvasBgImageUrl" class="agent-settings-input" placeholder="ORCAI-ID (z. B. ORCAI-260826-21H12-IMAGE-WGETM) oder URL" value="${currentImgVal}" onchange="window.previewEaBgImage(this.value)" style="flex:1;">
+                <button type="button" class="agent-settings-btn-option" onclick="window.previewEaBgImage(document.getElementById('eaCanvasBgImageUrl').value)" title="Bild oder ORCAI-ID laden">🔍 Laden</button>
+              </div>
+              <div id="eaCanvasBgImageStatus" style="font-size:0.72rem; margin-top:4px;">
+                ${currentImgVal ? ('<span style="color:#10b981;">✓ Aktiv: <code style="color:#38bdf8;">' + currentImgVal + '</code></span>') : '<span style="color:#94a3b8;">Kein Hintergrundbild aktiv.</span>'}
+              </div>
+
+              <div style="display:flex; align-items:center; gap:8px; margin-top:6px;">
+                <span style="font-size:0.72rem; color:#94a3b8; width:75px;">Deckkraft:</span>
+                <input type="range" id="eaCanvasBgOpacityRange" min="0" max="0.4" step="0.02" value="${settings.canvasBgOpacity !== undefined ? settings.canvasBgOpacity : 0.15}" style="flex:1;" oninput="window.previewEaBgOpacity(this.value)">
+                <span id="eaCanvasBgOpacityVal" style="font-size:0.72rem; color:#f8fafc; font-family:monospace; width:45px; text-align:right;">${Math.round((settings.canvasBgOpacity !== undefined ? settings.canvasBgOpacity : 0.15) * 100)}%</span>
+              </div>
+
+              <div style="display:flex; align-items:center; gap:8px; margin-top:4px;">
+                <span style="font-size:0.72rem; color:#94a3b8; width:75px;">Weichzeichner:</span>
+                <input type="range" id="eaCanvasBgBlurRange" min="0" max="10" step="1" value="${settings.canvasBgBlur || 0}" style="flex:1;" oninput="window.previewEaBgBlur(this.value)">
+                <span id="eaCanvasBgBlurVal" style="font-size:0.72rem; color:#f8fafc; font-family:monospace; width:45px; text-align:right;">${settings.canvasBgBlur || 0}px</span>
+              </div>
+
+              <div style="margin-top:8px;">
+                <div style="font-size:0.68rem; color:#94a3b8; margin-bottom:4px; font-weight:600;">ORCAI-Bilder &amp; Presets für den zentralen Hintergrund:</div>
+                <div style="display:flex; flex-wrap:wrap; gap:6px;">
+                  <button type="button" class="agent-settings-btn-option" onclick="window.previewEaBgImage('ORCAI-260826-21H12-IMAGE-WGETM')" title="ORCAI Bild WGETM">🐳 ORCAI: WGETM</button>
+                  <button type="button" class="agent-settings-btn-option" onclick="window.previewEaBgImage('ORCAI-260907-23H47-IMAGE-EB3EB')" title="ORCAI Bild EB3EB">✨ ORCAI: EB3EB</button>
+                  <button type="button" class="agent-settings-btn-option" onclick="window.previewEaBgImage('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1400&q=80')">Blueprint Grid</button>
+                  <button type="button" class="agent-settings-btn-option" onclick="window.previewEaBgImage('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1400&q=80')">Network Cloud</button>
+                  <button type="button" class="agent-settings-btn-option" onclick="window.previewEaBgImage('')">Kein Bild</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Central Canvas Color -->
+            <div class="ea-settings-group">
+              <label class="ea-settings-label">Hintergrund-Grundfarbe der EA-Landschaft</label>
               <div style="display:flex; align-items:center; gap:10px;">
                 <input type="color" id="eaCanvasBgColorPicker" value="${settings.canvasBgColor || (isDay ? '#ffffff' : '#0b0f17')}" oninput="window.previewEaBgColor(this.value)" onchange="window.previewEaBgColor(this.value)" style="width:40px; height:34px; border:none; background:none; cursor:pointer; border-radius:6px;">
                 <input type="text" id="eaCanvasBgColorText" value="${settings.canvasBgColor || ''}" placeholder="${isDay ? '#ffffff' : '#0b0f17'}" class="agent-settings-input" style="font-family:monospace; width:120px;" oninput="window.previewEaBgColor(this.value)" onchange="window.previewEaBgColor(this.value)">
@@ -47000,45 +47211,6 @@
                 <button type="button" class="agent-color-chip ${settings.canvasBgColor === '#172554' ? 'active' : ''}" style="background:#172554;" onclick="window.previewEaBgColor('#172554')" title="Blueprint Navy"></button>
                 <button type="button" class="agent-color-chip ${settings.canvasBgColor === '#064e3b' ? 'active' : ''}" style="background:#064e3b;" onclick="window.previewEaBgColor('#064e3b')" title="Emerald Matrix"></button>
                 <button type="button" class="agent-color-chip ${settings.canvasBgColor === '#f8fafc' ? 'active' : ''}" style="background:#f8fafc;" onclick="window.previewEaBgColor('#f8fafc')" title="Architect Light"></button>
-              </div>
-
-              <!-- Live Preview Bar -->
-              <div class="agent-color-preview-box" id="eaCanvasColorPreviewBox" style="background:${settings.canvasBgColor || (isDay ? '#ffffff' : '#0b0f17')}; height:32px; border-radius:6px; border:1px solid rgba(255,255,255,0.25); display:flex; align-items:center; justify-content:center; color:${isDay ? '#0f172a' : '#ffffff'}; font-size:0.75rem; font-weight:600; text-shadow:0 1px 2px rgba(0,0,0,0.5); margin-top:8px; box-shadow:inset 0 0 10px rgba(0,0,0,0.2);">
-                Live-Vorschau Landschaft: ${settings.canvasBgColor || (isDay ? 'Standard Hell (#ffffff / #f1f5f9)' : 'Standard Radial-Verlauf (#0b0f17)')}
-              </div>
-            </div>
-
-            <div class="ea-settings-group">
-              <label class="ea-settings-label">Hintergrundbild der EA-Landschaft (ORCAI-ID oder Bild-URL)</label>
-              <div style="display:flex; gap:6px; align-items:center;">
-                <input type="text" id="eaCanvasBgImageUrl" class="agent-settings-input" placeholder="ORCAI-ID (z. B. ORCAI-260826-21H12-IMAGE-WGETM) oder URL" value="${currentImgVal}" onchange="window.previewEaBgImage(this.value)" style="flex:1;">
-                <button type="button" class="agent-settings-btn-option" onclick="window.previewEaBgImage(document.getElementById('eaCanvasBgImageUrl').value)" title="Bild oder ORCAI-ID laden">🔍 Laden</button>
-              </div>
-              <div id="eaCanvasBgImageStatus" style="font-size:0.72rem; margin-top:4px;">
-                ${currentImgVal ? ('<span style="color:#10b981;">✓ Aktiv: <code style="color:#38bdf8;">' + currentImgVal + '</code></span>') : '<span style="color:#94a3b8;">Kein Hintergrundbild aktiv.</span>'}
-              </div>
-
-              <div style="display:flex; align-items:center; gap:8px; margin-top:6px;">
-                <span style="font-size:0.72rem; color:#94a3b8; width:70px;">Deckkraft:</span>
-                <input type="range" id="eaCanvasBgOpacityRange" min="0" max="0.4" step="0.02" value="${settings.canvasBgOpacity !== undefined ? settings.canvasBgOpacity : 0.15}" style="flex:1;" oninput="window.previewEaBgOpacity(this.value)">
-                <span id="eaCanvasBgOpacityVal" style="font-size:0.72rem; color:#f8fafc; font-family:monospace; width:40px; text-align:right;">${Math.round((settings.canvasBgOpacity !== undefined ? settings.canvasBgOpacity : 0.15) * 100)}%</span>
-              </div>
-
-              <div style="display:flex; align-items:center; gap:8px; margin-top:4px;">
-                <span style="font-size:0.72rem; color:#94a3b8; width:70px;">Weichzeichner:</span>
-                <input type="range" id="eaCanvasBgBlurRange" min="0" max="10" step="1" value="${settings.canvasBgBlur || 0}" style="flex:1;" oninput="window.previewEaBgBlur(this.value)">
-                <span id="eaCanvasBgBlurVal" style="font-size:0.72rem; color:#f8fafc; font-family:monospace; width:40px; text-align:right;">${settings.canvasBgBlur || 0}px</span>
-              </div>
-
-              <div style="margin-top:8px;">
-                <div style="font-size:0.68rem; color:#94a3b8; margin-bottom:4px; font-weight:600;">ORCAI-Bilder &amp; Presets für die Landschaft:</div>
-                <div style="display:flex; flex-wrap:wrap; gap:6px;">
-                  <button type="button" class="agent-settings-btn-option" onclick="window.previewEaBgImage('ORCAI-260826-21H12-IMAGE-WGETM')" title="ORCAI Bild WGETM">🐳 ORCAI: WGETM</button>
-                  <button type="button" class="agent-settings-btn-option" onclick="window.previewEaBgImage('ORCAI-260907-23H47-IMAGE-EB3EB')" title="ORCAI Bild EB3EB">✨ ORCAI: EB3EB</button>
-                  <button type="button" class="agent-settings-btn-option" onclick="window.previewEaBgImage('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1400&q=80')">Blueprint Grid</button>
-                  <button type="button" class="agent-settings-btn-option" onclick="window.previewEaBgImage('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1400&q=80')">Network Cloud</button>
-                  <button type="button" class="agent-settings-btn-option" onclick="window.previewEaBgImage('')">Kein Bild</button>
-                </div>
               </div>
             </div>
           `;
@@ -47158,6 +47330,54 @@
         window.switchEaSettingsTab('design');
       };
 
+      /* Drawer Style Controller Methods */
+      window.previewEaDrawerStyle = function() {
+        const colorPicker = document.getElementById('eaDrawerColorPicker');
+        const colorText = document.getElementById('eaDrawerColorText');
+        const opacityEl = document.getElementById('eaDrawerOpacityRange');
+        const blurEl = document.getElementById('eaDrawerBlurRange');
+        const previewBox = document.getElementById('eaDrawerPreviewBox');
+        const opacityVal = document.getElementById('eaDrawerOpacityVal');
+        const blurVal = document.getElementById('eaDrawerBlurVal');
+
+        let color = (colorText && colorText.value.trim()) || (colorPicker && colorPicker.value.trim()) || '#0f172a';
+        if (color && !color.startsWith('#') && /^[0-9a-fA-F]{6}$/.test(color)) color = '#' + color;
+        const opacity = opacityEl ? parseFloat(opacityEl.value) : 0.85;
+        const blur = blurEl ? parseInt(blurEl.value) : 16;
+
+        if (colorPicker && color.startsWith('#')) colorPicker.value = color;
+        if (colorText) colorText.value = color;
+        if (opacityVal) opacityVal.textContent = Math.round(opacity * 100) + '%';
+        if (blurVal) blurVal.textContent = blur + 'px';
+
+        const rgba = hexToRgba(color, opacity);
+        if (previewBox) {
+          previewBox.style.backgroundColor = rgba;
+          previewBox.textContent = 'Live-Vorschau Drawer: ' + color + ' · ' + Math.round(opacity * 100) + '% Deckkraft · ' + blur + 'px Blur';
+        }
+
+        OrcaiEaSettingsStore.saveSettings({
+          drawerColor: color,
+          drawerOpacity: opacity,
+          drawerBlur: blur
+        });
+      };
+
+      window.setEaDrawerColorPreset = function(presetColor) {
+        const picker = document.getElementById('eaDrawerColorPicker');
+        const text = document.getElementById('eaDrawerColorText');
+        if (picker) picker.value = presetColor;
+        if (text) text.value = presetColor;
+        window.previewEaDrawerStyle();
+      };
+
+      window.resetEaDrawerColor = function() {
+        const isDay = document.body.classList.contains('theme-day');
+        const defColor = isDay ? '#ffffff' : '#0f172a';
+        window.setEaDrawerColorPreset(defColor);
+      };
+
+      /* Central Landscape Background & Canvas Controllers */
       window.previewEaBgColor = function(color) {
         let finalColor = (color || '').trim();
         if (finalColor && !finalColor.startsWith('#') && /^[0-9a-fA-F]{6}$/.test(finalColor)) {
@@ -47165,13 +47385,8 @@
         }
         const picker = document.getElementById('eaCanvasBgColorPicker');
         const text = document.getElementById('eaCanvasBgColorText');
-        const previewBox = document.getElementById('eaCanvasColorPreviewBox');
         if (picker && finalColor && finalColor.startsWith('#')) picker.value = finalColor;
         if (text) text.value = finalColor;
-        if (previewBox) {
-          previewBox.style.backgroundColor = finalColor || '#0b0f17';
-          previewBox.textContent = 'Live-Vorschau Landschaft: ' + (finalColor || 'Standard Radial-Verlauf');
-        }
 
         OrcaiEaSettingsStore.saveSettings({ canvasBgColor: finalColor });
 
@@ -47215,9 +47430,7 @@
         if (lbl) lbl.textContent = Math.round(num * 100) + '%';
         const inp = document.getElementById('eaCanvasBgImageUrl');
         const keyOrUrl = inp ? inp.value.trim() : '';
-        const current = OrcaiEaSettingsStore.getSettings();
-        const merged = Object.assign({}, current, { canvasBgImageKey: keyOrUrl, canvasBgOpacity: num });
-        OrcaiEaSettingsStore.applyToDOM(merged);
+        OrcaiEaSettingsStore.saveSettings({ canvasBgImageKey: keyOrUrl, canvasBgOpacity: num });
       };
 
       window.previewEaBgBlur = function(val) {
@@ -47226,15 +47439,27 @@
         if (lbl) lbl.textContent = num + 'px';
         const inp = document.getElementById('eaCanvasBgImageUrl');
         const keyOrUrl = inp ? inp.value.trim() : '';
-        const current = OrcaiEaSettingsStore.getSettings();
-        const merged = Object.assign({}, current, { canvasBgImageKey: keyOrUrl, canvasBgBlur: num });
-        OrcaiEaSettingsStore.applyToDOM(merged);
+        OrcaiEaSettingsStore.saveSettings({ canvasBgImageKey: keyOrUrl, canvasBgBlur: num });
       };
 
       window.saveAllEaSettingsFromUi = function() {
         const current = OrcaiEaSettingsStore.getSettings();
         const patch = {};
 
+        // Read drawer settings if DOM elements exist
+        const drawerColorText = document.getElementById('eaDrawerColorText');
+        const drawerColorPicker = document.getElementById('eaDrawerColorPicker');
+        if (drawerColorText || drawerColorPicker) {
+          let dColor = (drawerColorText && drawerColorText.value.trim()) || (drawerColorPicker && drawerColorPicker.value.trim()) || '#0f172a';
+          if (dColor && !dColor.startsWith('#') && /^[0-9a-fA-F]{6}$/.test(dColor)) dColor = '#' + dColor;
+          patch.drawerColor = dColor;
+        }
+        const drawerOpacityEl = document.getElementById('eaDrawerOpacityRange');
+        if (drawerOpacityEl) patch.drawerOpacity = parseFloat(drawerOpacityEl.value);
+        const drawerBlurEl = document.getElementById('eaDrawerBlurRange');
+        if (drawerBlurEl) patch.drawerBlur = parseInt(drawerBlurEl.value) || 0;
+
+        // Read canvas background settings if DOM elements exist
         const colorText = document.getElementById('eaCanvasBgColorText');
         const colorPicker = document.getElementById('eaCanvasBgColorPicker');
         if (colorText || colorPicker) {
@@ -47360,8 +47585,8 @@
         OrcaiEaSettingsStore.saveSettings({ githubEaRepos: repos });
         window.switchEaSettingsTab('repos');
       };
-
-window.saveNewAgentLink = function() {
+      
+      window.saveNewAgentLink = function() {
         const titleEl = document.getElementById('newLinkTitle');
         const urlEl = document.getElementById('newLinkUrl');
         const catEl = document.getElementById('newLinkCat');
