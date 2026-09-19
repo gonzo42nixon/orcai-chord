@@ -5381,6 +5381,239 @@
     /* ==========================================================================
        AGENT SETTINGS & USER PERSONALIZATION STYLES
        ========================================================================== */
+    
+    /* High-Contrast Buttons & Elements in Agent Settings Panel */
+    .agent-settings-panel button,
+    .agent-settings-panel .agent-settings-btn-option,
+    .agent-settings-panel .insp-action-btn {
+      background: rgba(30, 41, 59, 0.95) !important;
+      border: 1px solid rgba(148, 163, 184, 0.35) !important;
+      color: #f8fafc !important;
+      font-size: 0.76rem !important;
+      font-weight: 600 !important;
+      padding: 7px 12px !important;
+      border-radius: 6px !important;
+      cursor: pointer !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 6px !important;
+      transition: all 0.2s ease !important;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+    }
+    .agent-settings-panel button:hover,
+    .agent-settings-panel .agent-settings-btn-option:hover,
+    .agent-settings-panel .insp-action-btn:hover {
+      background: rgba(56, 189, 248, 0.25) !important;
+      border-color: #38bdf8 !important;
+      color: #ffffff !important;
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.3) !important;
+    }
+    .agent-settings-panel button.active,
+    .agent-settings-panel .agent-settings-btn-option.active,
+    .agent-settings-panel .insp-action-btn.active {
+      background: linear-gradient(135deg, #0284c7, #0369a1) !important;
+      border-color: #38bdf8 !important;
+      color: #ffffff !important;
+      box-shadow: 0 0 14px rgba(56, 189, 248, 0.5) !important;
+    }
+
+    /* Identity Banner at Top of Settings */
+    .agent-settings-identity-banner {
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95));
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 8px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+    .agent-settings-identity-avatar {
+      width: 38px;
+      height: 38px;
+      min-width: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #0284c7, #38bdf8);
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+    }
+    .agent-settings-identity-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .agent-settings-identity-info {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .agent-settings-identity-name-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+    }
+    .agent-settings-identity-name-row strong {
+      color: #f8fafc;
+      font-size: 0.82rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .agent-settings-auth-badge {
+      font-size: 0.62rem;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 10px;
+      background: rgba(148, 163, 184, 0.15);
+      color: #94a3b8;
+      white-space: nowrap;
+    }
+    .agent-settings-auth-badge.active {
+      background: rgba(16, 185, 129, 0.2);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.4);
+    }
+    .agent-settings-id-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 2px;
+    }
+    .agent-settings-id-code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.70rem;
+      background: rgba(0, 0, 0, 0.4);
+      color: #38bdf8;
+      padding: 2px 7px;
+      border-radius: 4px;
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s ease;
+    }
+    .agent-settings-id-code:hover {
+      background: rgba(56, 189, 248, 0.2);
+      border-color: #38bdf8;
+      color: #ffffff;
+    }
+
+    /* Sticky Footer with Save Button */
+    .agent-settings-footer {
+      padding: 10px 14px;
+      background: rgba(10, 15, 29, 0.98);
+      border-top: 1px solid rgba(148, 163, 184, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .agent-settings-status {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: #10b981;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .agent-settings-btn-save {
+      background: linear-gradient(135deg, #0284c7, #0369a1) !important;
+      border: 1px solid #38bdf8 !important;
+      color: #ffffff !important;
+      font-weight: 700 !important;
+      font-size: 0.78rem !important;
+      padding: 8px 16px !important;
+      border-radius: 6px !important;
+      cursor: pointer !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4) !important;
+      transition: all 0.2s ease !important;
+      margin-left: auto;
+    }
+    .agent-settings-btn-save:hover {
+      background: linear-gradient(135deg, #0369a1, #075985) !important;
+      box-shadow: 0 6px 18px rgba(2, 132, 199, 0.6) !important;
+      transform: translateY(-1px);
+    }
+    .agent-settings-btn-save.saved-success {
+      background: linear-gradient(135deg, #10b981, #059669) !important;
+      border-color: #34d399 !important;
+    }
+
+    /* Footer Gear Button in Agent Sidebar (Rechts vom Avatar-Icon) */
+    .agent-footer-gear-btn {
+      width: 28px;
+      height: 28px;
+      min-width: 28px;
+      border-radius: 6px;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      background: rgba(255, 255, 255, 0.08);
+      color: #cbd5e1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.18s ease;
+      flex-shrink: 0;
+    }
+    .agent-footer-gear-btn:hover {
+      background: rgba(56, 189, 248, 0.25);
+      border-color: #38bdf8;
+      color: #ffffff;
+      transform: rotate(30deg);
+    }
+    .agent-user-details {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      flex: 1;
+      overflow: hidden;
+    }
+    .agent-user-id-badge {
+      font-size: 0.60rem;
+      font-family: monospace;
+      color: #38bdf8;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    .agent-user-id-badge:hover {
+      text-decoration: underline;
+    }
+    .agent-color-chip {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.3) !important;
+      cursor: pointer;
+      display: inline-block;
+      transition: transform 0.15s, border-color 0.15s;
+    }
+    .agent-color-chip:hover {
+      transform: scale(1.2);
+      border-color: #38bdf8 !important;
+    }
+    .agent-color-chip.active {
+      border-color: #38bdf8 !important;
+      box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.6) !important;
+    }
+
     .agent-settings-panel {
       position: absolute;
       top: 48px;
@@ -6630,10 +6863,7 @@
         </div>
       </div>
 
-      <!-- Agent Settings Button (Rechts vom Login wie bei Gemini) -->
-      <button class="header-action-btn" id="btnHeaderAgentSettings" type="button" title="⚙️ AI-Agent Einstellungen (Design, Links, GitHub, Volltextsuche)" aria-label="AI-Agent Einstellungen" onclick="window.openAgentSettingsFromHeader()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width: 18px; height: 18px;"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-      </button>
+
     </div>
   </header>
 
@@ -7044,15 +7274,21 @@
           <!-- Dynamically populated by OrcaiChatStore -->
         </div>
 
-        <div class="agent-sidebar-footer">
+<div class="agent-sidebar-footer">
           <div class="agent-user-badge" id="agentHistoryUserBadge" title="Angemeldet">
             <div class="agent-user-avatar" id="agentUserAvatar">
               <img id="agentUserAvatarImg" src="" alt="" style="display:none;">
               <span id="agentUserAvatarFallback">U</span>
             </div>
-            <span class="agent-user-name" id="agentHistoryUserName">Benutzer</span>
+            <div class="agent-user-details">
+              <span class="agent-user-name" id="agentHistoryUserName">Benutzer</span>
+              <span class="agent-user-id-badge" id="agentHistoryUserIdBadge" title="Ihre persönliche ORCAI-ID (Klicken zum Kopieren)">ID: Gast</span>
+            </div>
           </div>
-          <span class="agent-history-count" id="agentHistoryCount">0 Chats</span>
+          <button class="agent-footer-gear-btn" id="btnAgentFooterSettings" type="button" title="⚙️ Agent-Einstellungen (Design, Links, Repos, ORCAI-ID)" onclick="window.toggleAgentSettingsPanel()" aria-label="Agent-Einstellungen">
+            <span>⚙️</span>
+          </button>
+          <span class="agent-history-count" id="agentHistoryCount" style="display:none;"></span>
         </div>
       </div>
 
@@ -20198,6 +20434,7 @@
         }
       }
 
+      window.applyEaTheme = applyTheme;
       applyTheme(getInitialTheme(), false);
 
       themeToggleBtn.onclick = () => {
@@ -45275,9 +45512,18 @@
       };
 
       class OrcaiAgentSettingsStore {
+        static getStorageKey() {
+          const id = (typeof getActiveOrcaiIdentity === 'function') ? getActiveOrcaiIdentity().id : 'guest';
+          return 'orcai_agent_settings_' + id;
+        }
+
         static getSettings() {
           try {
-            const raw = localStorage.getItem('orcai_agent_settings_v1');
+            const userKey = this.getStorageKey();
+            let raw = localStorage.getItem(userKey);
+            if (!raw) {
+              raw = localStorage.getItem('orcai_agent_settings_v1');
+            }
             if (raw) {
               const parsed = JSON.parse(raw);
               return Object.assign({}, DEFAULT_AGENT_SETTINGS, parsed);
@@ -45289,24 +45535,47 @@
         static saveSettings(patch) {
           const current = this.getSettings();
           const updated = Object.assign({}, current, patch);
+          const identity = (typeof getActiveOrcaiIdentity === 'function') ? getActiveOrcaiIdentity() : { id: 'guest', name: 'Benutzer' };
+
           try {
+            const userKey = this.getStorageKey();
+            localStorage.setItem(userKey, JSON.stringify(updated));
             localStorage.setItem('orcai_agent_settings_v1', JSON.stringify(updated));
-          } catch (e) {}
+
+            const profileRecord = {
+              orcaiId: identity.id,
+              name: identity.name,
+              email: identity.email || '',
+              photoURL: identity.photoURL || '',
+              isLoggedIn: !!identity.isLoggedIn,
+              settings: updated,
+              lastSavedAt: new Date().toISOString()
+            };
+            localStorage.setItem('orcai_profile_' + identity.id, JSON.stringify(profileRecord));
+          } catch (e) {
+            console.warn('[OrcaiAgent] Error saving settings:', e);
+          }
+
           this.applyToDOM(updated);
           return updated;
         }
 
         static applyToDOM(settings) {
           const s = settings || this.getSettings();
-          const drawer = document.getElementById('sidebarAgent') || document.getElementById('agentChatPane');
-          const chatMsgs = document.getElementById('agentChatMessages');
+          const drawer = document.getElementById('sidebarAgent');
+          const chatPane = document.getElementById('agentChatPane');
           if (!drawer) return;
 
-          // Apply custom background color
+          // Apply custom background color directly
           if (s.bgColor) {
             drawer.style.setProperty('--agent-custom-bg', s.bgColor);
+            drawer.style.backgroundColor = s.bgColor;
+            if (chatPane) chatPane.style.backgroundColor = s.bgColor;
             drawer.classList.add('agent-drawer-custom-bg');
           } else {
+            drawer.style.removeProperty('--agent-custom-bg');
+            drawer.style.backgroundColor = '';
+            if (chatPane) chatPane.style.backgroundColor = '';
             drawer.classList.remove('agent-drawer-custom-bg');
           }
 
@@ -45325,7 +45594,7 @@
             overlay.style.display = 'none';
           }
 
-          // Apply day / night theme if specified
+          // Apply day / night theme
           if (s.theme === 'day' && typeof window.applyEaTheme === 'function') {
             window.applyEaTheme('day', true);
           } else if (s.theme === 'night' && typeof window.applyEaTheme === 'function') {
@@ -45344,21 +45613,84 @@
          SETTINGS PANEL UI (Popout / Overlay)
          ========================================================================= */
 
-      
-      window.openAgentSettingsFromHeader = function() {
-        const drawer = document.getElementById('sidebarAgent');
-        const isCollapsed = drawer && drawer.classList.contains('collapsed');
-        if (isCollapsed && typeof window.toggleOrcaiAgentDrawer === 'function') {
-          window.toggleOrcaiAgentDrawer(true);
-        }
-        setTimeout(() => {
-          const panel = document.getElementById('agentSettingsPanel');
-          if (!panel && typeof window.toggleAgentSettingsPanel === 'function') {
-            window.toggleAgentSettingsPanel();
-          } else if (panel && !isCollapsed) {
-            panel.remove();
+      window.copyOrcaiIdFromSettings = function() {
+        const id = (typeof getActiveOrcaiIdentity === 'function') ? getActiveOrcaiIdentity().id : 'guest';
+        navigator.clipboard.writeText(id).then(() => {
+          const el = document.getElementById('settingsOrcaiIdCode');
+          if (el) {
+            el.innerHTML = id + ' <span style="color:#10b981;">✓ Kopiert!</span>';
+            setTimeout(() => {
+              el.innerHTML = id + ' 📋';
+            }, 2000);
           }
-        }, isCollapsed ? 250 : 0);
+        });
+      };
+
+      window.previewAgentBgColor = function(color) {
+        const picker = document.getElementById('agentBgColorPicker');
+        const text = document.getElementById('agentBgColorText');
+        if (picker) picker.value = color || '#090d16';
+        if (text) text.value = color || '#090d16';
+
+        // Real-time live preview
+        OrcaiAgentSettingsStore.applyToDOM({ bgColor: color });
+
+        // Update preset active state
+        document.querySelectorAll('.agent-color-chip').forEach(chip => {
+          chip.classList.toggle('active', chip.getAttribute('onclick')?.includes(color));
+        });
+      };
+
+      window.previewAgentBgImage = function(url) {
+        const inp = document.getElementById('agentBgImageUrl');
+        if (inp) inp.value = url;
+        const opacityEl = document.getElementById('agentBgOpacityRange');
+        const opacity = opacityEl ? parseFloat(opacityEl.value) : 0.15;
+        OrcaiAgentSettingsStore.applyToDOM({ bgImage: url, bgOpacity: opacity });
+      };
+
+      window.previewAgentBgOpacity = function(val) {
+        const num = parseFloat(val);
+        const lbl = document.getElementById('agentBgOpacityVal');
+        if (lbl) lbl.textContent = Math.round(num * 100) + '%';
+        const inp = document.getElementById('agentBgImageUrl');
+        const url = inp ? inp.value.trim() : '';
+        OrcaiAgentSettingsStore.applyToDOM({ bgImage: url, bgOpacity: num });
+      };
+
+      window.saveAllAgentSettingsFromUi = function() {
+        const colorText = document.getElementById('agentBgColorText');
+        const bgImgInp = document.getElementById('agentBgImageUrl');
+        const opacityEl = document.getElementById('agentBgOpacityRange');
+
+        const bgColor = colorText ? colorText.value.trim() : '';
+        const bgImage = bgImgInp ? bgImgInp.value.trim() : '';
+        const bgOpacity = opacityEl ? parseFloat(opacityEl.value) : 0.15;
+        const theme = document.body.classList.contains('theme-day') ? 'day' : 'night';
+
+        const updated = OrcaiAgentSettingsStore.saveSettings({
+          bgColor: bgColor,
+          bgImage: bgImage,
+          bgOpacity: bgOpacity,
+          theme: theme
+        });
+
+        const statusEl = document.getElementById('agentSettingsStatusText');
+        const btnSave = document.getElementById('btnSaveAgentSettingsAll');
+        const identity = (typeof getActiveOrcaiIdentity === 'function') ? getActiveOrcaiIdentity() : { id: 'guest' };
+
+        if (statusEl) {
+          statusEl.innerHTML = '✓ Gespeichert für ORCAI-ID: ' + identity.id.substring(0, 10) + '...';
+        }
+        if (btnSave) {
+          btnSave.innerHTML = '✓ Einstellungen gespeichert!';
+          btnSave.classList.add('saved-success');
+          setTimeout(() => {
+            btnSave.innerHTML = '💾 Einstellungen speichern';
+            btnSave.classList.remove('saved-success');
+            if (statusEl) statusEl.innerHTML = '';
+          }, 2500);
+        }
       };
 
       window.toggleAgentSettingsPanel = function() {
@@ -45372,6 +45704,8 @@
         const drawer = document.getElementById('agentChatPane') || document.getElementById('sidebarAgent');
         if (!drawer) return;
 
+        const identity = (typeof getActiveOrcaiIdentity === 'function') ? getActiveOrcaiIdentity() : { id: 'guest', name: 'Benutzer' };
+
         panel = document.createElement('div');
         panel.id = 'agentSettingsPanel';
         panel.className = 'agent-settings-panel';
@@ -45379,18 +45713,47 @@
         panel.innerHTML = `
           <div class="agent-settings-header">
             <div class="agent-settings-title">
-              <span>⚙️ Agent-Einstellungen</span>
+              <span>⚙️ AI-Agent Einstellungen</span>
             </div>
             <button class="agent-settings-close" onclick="window.toggleAgentSettingsPanel()" title="Schließen">✕</button>
           </div>
-          <div class="agent-settings-tabs">
+
+          <!-- ORCAI Identity & ID Banner -->
+          <div style="padding: 10px 14px 0 14px;">
+            <div class="agent-settings-identity-banner">
+              <div class="agent-settings-identity-avatar">
+                ${identity.photoURL ? ('<img src="' + identity.photoURL + '" alt="' + identity.name + '">') : ('<span>' + (identity.name || 'U').charAt(0).toUpperCase() + '</span>')}
+              </div>
+              <div class="agent-settings-identity-info">
+                <div class="agent-settings-identity-name-row">
+                  <strong>${identity.name}</strong>
+                  <span class="agent-settings-auth-badge ${identity.isLoggedIn ? 'active' : ''}">${identity.isLoggedIn ? '● Google Login' : '○ Gast-Sitzung'}</span>
+                </div>
+                <div class="agent-settings-id-row">
+                  <span style="color:#94a3b8; font-size:0.68rem;">ORCAI-ID:</span>
+                  <code class="agent-settings-id-code" id="settingsOrcaiIdCode" title="Klicken zum Kopieren" onclick="window.copyOrcaiIdFromSettings()">${identity.id} 📋</code>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="agent-settings-tabs" style="margin-top:10px;">
             <button class="agent-settings-tab-btn active" onclick="window.switchAgentSettingsTab('design')">🎨 Design &amp; Theme</button>
             <button class="agent-settings-tab-btn" onclick="window.switchAgentSettingsTab('links')">🔗 Gespeicherte Links</button>
             <button class="agent-settings-tab-btn" onclick="window.switchAgentSettingsTab('repos')">🐙 GitHub OKF</button>
             <button class="agent-settings-tab-btn" onclick="window.switchAgentSettingsTab('search')">🔍 Chat-Suche</button>
           </div>
+
           <div class="agent-settings-body" id="agentSettingsBody">
             <!-- Dynamic Tab Content -->
+          </div>
+
+          <!-- Prominent Save Footer -->
+          <div class="agent-settings-footer">
+            <div class="agent-settings-status" id="agentSettingsStatusText"></div>
+            <button type="button" class="agent-settings-btn-save" id="btnSaveAgentSettingsAll" onclick="window.saveAllAgentSettingsFromUi()">
+              💾 Einstellungen speichern
+            </button>
           </div>
         `;
 
@@ -45415,40 +45778,40 @@
             <div class="agent-settings-group">
               <label class="agent-settings-label">Erscheinungsbild (Day / Night Mode)</label>
               <div style="display:flex; gap:8px;">
-                <button type="button" class="insp-action-btn ${!isDay ? 'active' : ''}" style="flex:1; padding:6px;" onclick="window.setAgentThemeMode('night')">🌙 Night Mode (Dunkel)</button>
-                <button type="button" class="insp-action-btn ${isDay ? 'active' : ''}" style="flex:1; padding:6px;" onclick="window.setAgentThemeMode('day')">☀️ Day Mode (Hell)</button>
+                <button type="button" class="agent-settings-btn-option ${!isDay ? 'active' : ''}" style="flex:1;" onclick="window.setAgentThemeMode('night')">🌙 Night Mode (Dunkel)</button>
+                <button type="button" class="agent-settings-btn-option ${isDay ? 'active' : ''}" style="flex:1;" onclick="window.setAgentThemeMode('day')">☀️ Day Mode (Hell)</button>
               </div>
             </div>
 
             <div class="agent-settings-group">
               <label class="agent-settings-label">Eigene Hintergrundfarbe für den Agenten</label>
               <div style="display:flex; align-items:center; gap:10px;">
-                <input type="color" id="agentBgColorPicker" value="${settings.bgColor || '#090d16'}" onchange="window.updateAgentBgColor(this.value)" style="width:36px; height:32px; border:none; background:none; cursor:pointer; border-radius:4px;">
-                <input type="text" id="agentBgColorText" value="${settings.bgColor || '#090d16'}" class="agent-settings-input" style="font-family:monospace; width:100px;" onchange="window.updateAgentBgColor(this.value)">
-                <button type="button" class="insp-action-btn" onclick="window.updateAgentBgColor('')" title="Standardfarbe wiederherstellen">Standard</button>
+                <input type="color" id="agentBgColorPicker" value="${settings.bgColor || '#090d16'}" oninput="window.previewAgentBgColor(this.value)" style="width:38px; height:34px; border:none; background:none; cursor:pointer; border-radius:6px;">
+                <input type="text" id="agentBgColorText" value="${settings.bgColor || '#090d16'}" class="agent-settings-input" style="font-family:monospace; width:110px;" oninput="window.previewAgentBgColor(this.value)">
+                <button type="button" class="agent-settings-btn-option" onclick="window.previewAgentBgColor('')" title="Standardfarbe wiederherstellen">Standard</button>
               </div>
-              <div class="agent-color-presets" style="margin-top:6px;">
-                <span style="font-size:0.7rem; color:#64748b;">Presets:</span>
-                <span class="agent-color-chip" style="background:#090d16;" onclick="window.updateAgentBgColor('#090d16')" title="Deep Obsidian"></span>
-                <span class="agent-color-chip" style="background:#0f172a;" onclick="window.updateAgentBgColor('#0f172a')" title="Slate Navy"></span>
-                <span class="agent-color-chip" style="background:#1e1b4b;" onclick="window.updateAgentBgColor('#1e1b4b')" title="Indigo Void"></span>
-                <span class="agent-color-chip" style="background:#020617;" onclick="window.updateAgentBgColor('#020617')" title="Midnight Pitch"></span>
-                <span class="agent-color-chip" style="background:#f8fafc;" onclick="window.updateAgentBgColor('#f8fafc')" title="Paper Light"></span>
+              <div class="agent-color-presets" style="margin-top:8px;">
+                <span style="font-size:0.72rem; color:#94a3b8; margin-right:6px;">Presets:</span>
+                <button type="button" class="agent-color-chip ${settings.bgColor === '#090d16' ? 'active' : ''}" style="background:#090d16;" onclick="window.previewAgentBgColor('#090d16')" title="Deep Obsidian"></button>
+                <button type="button" class="agent-color-chip ${settings.bgColor === '#0f172a' ? 'active' : ''}" style="background:#0f172a;" onclick="window.previewAgentBgColor('#0f172a')" title="Slate Navy"></button>
+                <button type="button" class="agent-color-chip ${settings.bgColor === '#1e1b4b' ? 'active' : ''}" style="background:#1e1b4b;" onclick="window.previewAgentBgColor('#1e1b4b')" title="Indigo Void"></button>
+                <button type="button" class="agent-color-chip ${settings.bgColor === '#050811' ? 'active' : ''}" style="background:#050811;" onclick="window.previewAgentBgColor('#050811')" title="Midnight Pitch"></button>
+                <button type="button" class="agent-color-chip ${settings.bgColor === '#ffffff' ? 'active' : ''}" style="background:#ffffff;" onclick="window.previewAgentBgColor('#ffffff')" title="Paper Light"></button>
               </div>
             </div>
 
             <div class="agent-settings-group">
               <label class="agent-settings-label">Individuelles Hintergrundbild</label>
-              <input type="url" id="agentBgImageUrl" class="agent-settings-input" placeholder="https://beispiel.de/hintergrund.jpg" value="${settings.bgImage || ''}" onchange="window.updateAgentBgImage(this.value)">
-              <div style="display:flex; align-items:center; gap:10px; margin-top:4px;">
-                <span style="font-size:0.7rem; color:#94a3b8;">Deckkraft:</span>
-                <input type="range" min="0.02" max="0.4" step="0.02" value="${settings.bgOpacity || 0.15}" oninput="window.updateAgentBgOpacity(this.value)" style="flex:1;">
-                <span id="agentBgOpacityVal" style="font-size:0.7rem; color:#cbd5e1; font-family:monospace;">${Math.round((settings.bgOpacity || 0.15) * 100)}%</span>
+              <input type="url" id="agentBgImageUrl" class="agent-settings-input" placeholder="https://beispiel.de/hintergrund.jpg" value="${settings.bgImage || ''}" onchange="window.previewAgentBgImage(this.value)">
+              <div style="display:flex; align-items:center; gap:8px; margin-top:6px;">
+                <span style="font-size:0.72rem; color:#94a3b8; width:70px;">Deckkraft:</span>
+                <input type="range" id="agentBgOpacityRange" min="0" max="0.4" step="0.02" value="${settings.bgOpacity !== undefined ? settings.bgOpacity : 0.15}" style="flex:1;" oninput="window.previewAgentBgOpacity(this.value)">
+                <span id="agentBgOpacityVal" style="font-size:0.72rem; color:#f8fafc; font-family:monospace; width:40px; text-align:right;">${Math.round((settings.bgOpacity !== undefined ? settings.bgOpacity : 0.15) * 100)}%</span>
               </div>
-              <div style="display:flex; gap:6px; margin-top:4px;">
-                <button type="button" class="insp-action-btn" style="font-size:0.68rem;" onclick="window.updateAgentBgImage('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80')">Preset: Circuit</button>
-                <button type="button" class="insp-action-btn" style="font-size:0.68rem;" onclick="window.updateAgentBgImage('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1200&q=80')">Preset: Network</button>
-                <button type="button" class="insp-action-btn" style="font-size:0.68rem;" onclick="window.updateAgentBgImage('')">Kein Bild</button>
+              <div style="display:flex; gap:8px; margin-top:8px;">
+                <button type="button" class="agent-settings-btn-option" onclick="window.previewAgentBgImage('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80')">Preset: Circuit</button>
+                <button type="button" class="agent-settings-btn-option" onclick="window.previewAgentBgImage('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1200&q=80')">Preset: Network</button>
+                <button type="button" class="agent-settings-btn-option" onclick="window.previewAgentBgImage('')">Kein Bild</button>
               </div>
             </div>
           `;
@@ -45462,11 +45825,11 @@
                     <span>${link.title}</span>
                     <span style="font-size:0.62rem; padding:1px 5px; border-radius:3px; background:rgba(56,189,248,0.15); color:#38bdf8;">${link.category || 'Link'}</span>
                   </div>
-                  <div style="font-size:0.68rem; color:#64748b; overflow:hidden; text-overflow:ellipsis;">${link.url}</div>
+                  <div style="font-size:0.68rem; color:#94a3b8; overflow:hidden; text-overflow:ellipsis;">${link.url}</div>
                 </div>
-                <div style="display:flex; gap:4px;">
-                  <a href="${link.url}" target="_blank" rel="noopener noreferrer" class="insp-action-btn" style="text-decoration:none; padding:3px 6px;" title="Öffnen">↗</a>
-                  <button type="button" class="insp-action-btn" style="padding:3px 6px; color:#f43f5e;" onclick="window.deleteAgentSavedLink(${idx})" title="Löschen">✕</button>
+                <div style="display:flex; gap:6px;">
+                  <a href="${link.url}" target="_blank" rel="noopener noreferrer" class="agent-settings-btn-option" style="text-decoration:none; padding:4px 8px;" title="Öffnen">↗</a>
+                  <button type="button" class="agent-settings-btn-option" style="padding:4px 8px; color:#f43f5e;" onclick="window.deleteAgentSavedLink(${idx})" title="Löschen">✕</button>
                 </div>
               </div>
             `;
@@ -45487,25 +45850,25 @@
               <input type="url" id="newLinkUrl" class="agent-settings-input" placeholder="https://..." style="margin-top:4px;">
               <div style="display:flex; gap:6px; margin-top:4px;">
                 <input type="text" id="newLinkCat" class="agent-settings-input" placeholder="Kategorie (z. B. Standards)" style="flex:1;">
-                <button type="button" class="insp-action-btn primary" onclick="window.saveNewAgentLink()" style="white-space:nowrap;">Speichern</button>
+                <button type="button" class="agent-settings-btn-option" onclick="window.saveNewAgentLink()" style="white-space:nowrap; background:#0284c7 !important; border-color:#38bdf8 !important;">Speichern</button>
               </div>
             </div>
           `;
         } else if (tabName === 'repos') {
           let reposHtml = '';
-          (settings.githubRepos || []).forEach((r, idx) => {
+          (settings.githubRepos || []).forEach((repo, idx) => {
             reposHtml += `
               <div class="agent-repo-item">
                 <div style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1;">
                   <div style="font-weight:600; color:#f1f5f9; display:flex; align-items:center; gap:6px;">
-                    <span>🐙 ${r.repo}</span>
-                    <span style="font-size:0.62rem; padding:1px 5px; border-radius:3px; background:rgba(16,185,129,0.15); color:#10b981;">${r.branch || 'main'}</span>
+                    <span>${repo.ownerRepo}</span>
+                    <span style="font-size:0.62rem; padding:1px 5px; border-radius:3px; background:rgba(168,85,247,0.15); color:#a855f7;">${repo.branch || 'main'}</span>
                   </div>
-                  <div style="font-size:0.68rem; color:#64748b; overflow:hidden; text-overflow:ellipsis;">${r.description || ''}</div>
+                  <div style="font-size:0.68rem; color:#94a3b8; overflow:hidden; text-overflow:ellipsis;">${repo.description || 'GitHub OKF Repository'}</div>
                 </div>
-                <div style="display:flex; gap:4px;">
-                  <a href="https://github.com/${r.repo}" target="_blank" rel="noopener noreferrer" class="insp-action-btn" style="text-decoration:none; padding:3px 6px;" title="Auf GitHub öffnen">↗</a>
-                  <button type="button" class="insp-action-btn" style="padding:3px 6px; color:#f43f5e;" onclick="window.deleteAgentGithubRepo(${idx})" title="Entfernen">✕</button>
+                <div style="display:flex; gap:6px;">
+                  <a href="https://github.com/${repo.ownerRepo}" target="_blank" rel="noopener noreferrer" class="agent-settings-btn-option" style="text-decoration:none; padding:4px 8px;" title="Auf GitHub öffnen">↗</a>
+                  <button type="button" class="agent-settings-btn-option" style="padding:4px 8px; color:#f43f5e;" onclick="window.deleteAgentGithubRepo(${idx})" title="Entfernen">✕</button>
                 </div>
               </div>
             `;
@@ -45526,12 +45889,12 @@
               <div style="display:flex; gap:6px; margin-top:4px;">
                 <input type="text" id="newRepoBranch" class="agent-settings-input" placeholder="Branch (z. B. main)" style="width:100px;" value="main">
                 <input type="text" id="newRepoDesc" class="agent-settings-input" placeholder="Kurzbeschreibung" style="flex:1;">
-                <button type="button" class="insp-action-btn primary" onclick="window.saveNewAgentGithubRepo()" style="white-space:nowrap;">Registrieren</button>
+                <button type="button" class="agent-settings-btn-option" onclick="window.saveNewAgentGithubRepo()" style="white-space:nowrap; background:#0284c7 !important; border-color:#38bdf8 !important;">Registrieren</button>
               </div>
             </div>
           `;
         } else if (tabName === 'search') {
-          const sessions = loadAllUserSessions();
+          const sessions = typeof loadAllUserSessions === 'function' ? loadAllUserSessions() : [];
           let totalMsgs = 0;
           sessions.forEach(s => { totalMsgs += (s.messages || []).length; });
 
@@ -45556,7 +45919,7 @@
             <div class="agent-settings-group" style="margin-top:8px;">
               <label class="agent-settings-label">Tipp zur Volltextsuche</label>
               <div class="agent-settings-subtext">
-                Geben Sie in der Suchleiste links einfach einen beliebigen Begriff ein (z. B. <i>Manchester-Triage</i>, <i>NIDApad</i> oder <i>HL7</i>). Die Treffer zeigen Ihnen sofort den passenden Gesprächsausschnitt mit Text-Highlighting an.
+                Geben Sie in der Suchleiste links einfach einen beliebigen Begriff ein (z. B. <i>Manchester-Triage</i>, <i>ermöglicht</i> oder <i>HL7</i>). Die Treffer zeigen Ihnen sofort den passenden Gesprächsausschnitt mit Text-Highlighting an.
               </div>
             </div>
           `;
@@ -45571,27 +45934,6 @@
         window.switchAgentSettingsTab('design');
       };
 
-      window.updateAgentBgColor = function(color) {
-        OrcaiAgentSettingsStore.saveSettings({ bgColor: color });
-        const picker = document.getElementById('agentBgColorPicker');
-        const text = document.getElementById('agentBgColorText');
-        if (picker) picker.value = color || '#090d16';
-        if (text) text.value = color || '#090d16';
-      };
-
-      window.updateAgentBgImage = function(url) {
-        OrcaiAgentSettingsStore.saveSettings({ bgImage: url });
-        const inp = document.getElementById('agentBgImageUrl');
-        if (inp) inp.value = url;
-      };
-
-      window.updateAgentBgOpacity = function(val) {
-        const num = parseFloat(val);
-        OrcaiAgentSettingsStore.saveSettings({ bgOpacity: num });
-        const lbl = document.getElementById('agentBgOpacityVal');
-        if (lbl) lbl.textContent = Math.round(num * 100) + '%';
-      };
-
       window.saveNewAgentLink = function() {
         const titleEl = document.getElementById('newLinkTitle');
         const urlEl = document.getElementById('newLinkUrl');
@@ -45604,8 +45946,7 @@
           id: 'LINK-' + String(links.length + 1).padStart(2, '0'),
           title: titleEl.value.trim() || 'Link',
           url: urlEl.value.trim(),
-          category: (catEl && catEl.value.trim()) || 'Allgemein',
-          createdAt: new Date().toISOString()
+          category: catEl?.value.trim() || 'Standards'
         });
         OrcaiAgentSettingsStore.saveSettings({ savedLinks: links });
         window.switchAgentSettingsTab('links');
@@ -45620,19 +45961,17 @@
       };
 
       window.saveNewAgentGithubRepo = function() {
-        const repoEl = document.getElementById('newRepoName');
+        const nameEl = document.getElementById('newRepoName');
         const branchEl = document.getElementById('newRepoBranch');
         const descEl = document.getElementById('newRepoDesc');
-        if (!repoEl || !repoEl.value.trim()) return;
+        if (!nameEl || !nameEl.value.trim()) return;
 
         const settings = OrcaiAgentSettingsStore.getSettings();
         const repos = settings.githubRepos || [];
         repos.push({
-          id: 'REPO-' + String(repos.length + 1).padStart(2, '0'),
-          repo: repoEl.value.trim(),
-          branch: (branchEl && branchEl.value.trim()) || 'main',
-          description: (descEl && descEl.value.trim()) || '',
-          isDefault: false
+          ownerRepo: nameEl.value.trim(),
+          branch: branchEl?.value.trim() || 'main',
+          description: descEl?.value.trim() || 'OKF Repository'
         });
         OrcaiAgentSettingsStore.saveSettings({ githubRepos: repos });
         window.switchAgentSettingsTab('repos');
@@ -46422,6 +46761,18 @@
           }
           if (nameEl) {
             nameEl.textContent = identity.name;
+          }
+          const idBadgeEl = document.getElementById('agentHistoryUserIdBadge');
+          if (idBadgeEl) {
+            const shortId = identity.id.length > 15 ? (identity.id.substring(0, 13) + '..') : identity.id;
+            idBadgeEl.textContent = 'ID: ' + shortId;
+            idBadgeEl.title = 'ORCAI-ID: ' + identity.id + ' (Klicken zum Kopieren)';
+            idBadgeEl.onclick = (e) => {
+              e.stopPropagation();
+              navigator.clipboard.writeText(identity.id).then(() => {
+                alert('ORCAI-ID kopiert:\n' + identity.id);
+              });
+            };
           }
           if (identity.photoURL && avatarImg && avatarFallback) {
             avatarImg.src = identity.photoURL;
