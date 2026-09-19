@@ -36192,7 +36192,7 @@
                   '</div>' +
                 '</div>' +
               '</div>' +
-              '<a href="https://orcai-54321.web.app/api/orcai/v1/docs/ORCAI-CONFIG-STARTUP-LANDSCAPE" target="_blank" rel="noopener noreferrer" style="font-size:0.67rem; color:var(--accent); text-decoration:none; display:inline-flex; align-items:center; gap:4px; padding:4px 9px; background:rgba(56,189,248,0.15); border:1px solid var(--accent); border-radius:5px; font-weight:700; white-space:nowrap;" title="ORCAI Start-Settings JSON im neuen Tab öffnen">' +
+              '<a href="https://orcai-54321.web.app/json/?url=https%3A%2F%2Forcai-54321.web.app%2Fapi%2Forcai%2Fv1%2Fdocs%2FORCAI-CONFIG-STARTUP-LANDSCAPE" onclick="window.openInOrcaiJsonViewer(\'https://orcai-54321.web.app/api/orcai/v1/docs/ORCAI-CONFIG-STARTUP-LANDSCAPE\'); return false;" target="_blank" rel="noopener noreferrer" style="font-size:0.67rem; color:var(--accent); text-decoration:none; display:inline-flex; align-items:center; gap:4px; padding:4px 9px; background:rgba(56,189,248,0.15); border:1px solid var(--accent); border-radius:5px; font-weight:700; white-space:nowrap;" title="ORCAI Start-Settings JSON im ORCAI JSON Viewer betrachten">' +
                 '<span>ORCAI Settings JSON</span> ↗' +
               '</a>' +
             '</div>' +
@@ -36271,7 +36271,7 @@
             '<div style="font-size:0.68rem; color:var(--text-muted); line-height:1.35; margin-bottom:6px;">' + m.desc + '</div>' +
             '<div style="display:flex; justify-content:space-between; align-items:center; font-size:0.65rem; color:var(--text-muted); border-top:1px solid rgba(255,255,255,0.06); padding-top:4px;">' +
               '<span>📊 ' + m.stats.systems + ' Systeme · ' + m.stats.connections + ' Kanten · ' + m.stats.integrations + ' Integrationen</span>' +
-              '<a href="' + m.url + '" target="_blank" style="color:var(--accent); text-decoration:none; display:flex; align-items:center; gap:2px;">' +
+              '<a href="https://orcai-54321.web.app/json/?url=' + encodeURIComponent(m.url) + '" onclick="window.openInOrcaiJsonViewer(\'' + m.url + '\'); return false;" target="_blank" rel="noopener noreferrer" style="color:var(--accent); text-decoration:none; display:flex; align-items:center; gap:2px;" title="Modell ' + m.id + ' im ORCAI JSON Viewer betrachten">' +
                 '<span>ORCAI JSON</span> ↗' +
               '</a>' +
             '</div>';

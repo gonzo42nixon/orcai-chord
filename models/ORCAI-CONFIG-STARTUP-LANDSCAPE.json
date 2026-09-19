@@ -1,0 +1,10 @@
+{
+  "schema": "https://orcai-54321.web.app/schemas/ea-landscape-config-v1.json",
+  "startupModelId": "ORCAI-MODEL-JOHANNESSTIFT-DIAKONIE-EA",
+  "organization": "Johannesstift Diakonie gAG & Conciliamus IT",
+  "modelTitle": "Johannesstift Diakonie Enterprise Architecture (Conciliamus IT, Kliniken & Services)",
+  "docUrl": "https://orcai-54321.web.app/api/orcai/v1/docs/ORCAI-MODEL-JOHANNESSTIFT-DIAKONIE-EA?v=1.0.0",
+  "settingsUrl": "https://orcai-54321.web.app/api/orcai/v1/docs/ORCAI-CONFIG-STARTUP-LANDSCAPE",
+  "updatedAt": "2026-09-16T14:23:48.458Z",
+  "updatedBy": "Interactive User Settings"
+}
