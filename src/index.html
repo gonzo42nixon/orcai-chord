@@ -5687,7 +5687,7 @@
       </button>
 
       <!-- (i) Dokumentation -->
-      <a href="https://orcai-54321.web.app/markdown/?key=ORCAI-260913-23H55-QUAD-CHORD" target="_blank" rel="noopener noreferrer" class="header-action-btn" id="btnAppInfo" title="Architektur-Dokumentation &amp; Benutzerhandbuch im ORCAI Markdown Viewer öffnen (Key: ORCAI-260913-23H55-QUAD-CHORD)" aria-label="Architektur-Dokumentation öffnen">
+      <a href="https://orcai-54321.web.app/markdown/?key=ORCAI-260913-23H55-QUAD-CHORD" target="_blank" rel="noopener noreferrer" class="header-action-btn" id="btnAppInfo" title="Architektur-Dokumentation, Handbuch &amp; ORCAI JSON Viewer im Markdown Viewer öffnen (Key: ORCAI-260913-23H55-QUAD-CHORD)" aria-label="Architektur-Dokumentation &amp; Handbuch öffnen">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
       </a>
 
@@ -38914,11 +38914,24 @@
             badgeClass: 'omni-badge-action',
             badgeText: 'Aktion',
             title: 'Architektur-Dokumentation & Handbuch öffnen',
-            sub: 'ORCAI Markdown Viewer (Key: ORCAI-260913-23H55-QUAD-CHORD)',
+            sub: 'ORCAI Markdown Viewer: Methodik, 4 Quadranten, APQC, HITL & JSON Viewer (Key: ORCAI-260913-23H55-QUAD-CHORD)',
             shortcut: 'Info',
-            searchText: 'dokumentation handbuch dsl e2e architektur info hilfe manual orcai',
+            searchText: 'dokumentation handbuch dsl e2e architektur info hilfe manual orcai json viewer dateninspektion kapitel 10',
             onSelect: () => {
               window.open("https://orcai-54321.web.app/markdown/?key=ORCAI-260913-23H55-QUAD-CHORD", "_blank", "noopener,noreferrer");
+            }
+          },
+          {
+            id: 'act-open-json-viewer',
+            type: 'action',
+            badgeClass: 'omni-badge-action',
+            badgeText: 'JSON Viewer',
+            title: 'ORCAI JSON Viewer öffnen',
+            sub: 'Interaktive Dateninspektion, Schemas & Entitäten-Hierarchien (Key: ORCAI-CONFIG-STARTUP-LANDSCAPE)',
+            shortcut: 'JSON',
+            searchText: 'json viewer daten inspektor schema raw entitäten payload objekt eam handbuch kapitel 10',
+            onSelect: () => {
+              window.openInOrcaiJsonViewer ? window.openInOrcaiJsonViewer('ORCAI-CONFIG-STARTUP-LANDSCAPE') : window.open('https://orcai-54321.web.app/json/', '_blank');
             }
           },
           {
@@ -44288,13 +44301,37 @@
                 '<li>4-Quadranten-Kreis: Intern/Extern &amp; Cloud/On-Premises</li>' +
                 '<li>Sicherheits-Korridore: Hybrid Cloud Bridge &amp; Perimeter DMZ</li>' +
                 '<li>2-stufige Human-in-the-Loop Interaktion (Mensch ➔ Client ➔ Backend)</li>' +
+                '<li>Interaktive Dateninspektion (Kapitel 10): <strong>ORCAI JSON Viewer</strong> &amp; <code>{ } JSON</code>-Buttons in allen Inspektoren</li>' +
                 '<li>Popout-Bay und Seitenverhältnis-Sperre (Aspect Ratio Locking)</li>' +
               '</ul>';
 
             chips.push('<a href="https://orcai-54321.web.app/markdown/?key=ORCAI-260913-23H55-QUAD-CHORD" target="_blank" rel="noopener noreferrer" class="agent-chip agent-chip-model">📖 Offizielles Handbuch öffnen ↗</a>');
+            chips.push('<a href="https://orcai-54321.web.app/json/" target="_blank" rel="noopener noreferrer" class="agent-chip agent-chip-model" style="background:#0070f2; color:#fff; font-weight:bold; border-color:#38bdf8;">👁️ ORCAI JSON Viewer öffnen ↗</a>');
             chips.push('<a href="https://github.com/gonzo42nixon/orcai-chord" target="_blank" rel="noopener noreferrer" class="agent-chip agent-chip-model">🐙 Quellcode auf GitHub ↗</a>');
 
-            spoken = 'Der Info-Button in der Kopfzeile verlinkt auf das offizielle Quad-Chord Benutzerhandbuch mit dem Schlüssel ORCAI 260913 23H55. Sie können es über den Link direkt im ORCAI Markdown-Viewer öffnen.';
+            spoken = 'Der Info-Button in der Kopfzeile verlinkt auf das offizielle Quad-Chord Benutzerhandbuch mit dem Schlüssel ORCAI 260913 23H55. Es beschreibt neben der Quadranten-Methodik und HITL auch die neue interaktive JSON-Dateninspektion in Kapitel 10.';
+            return { html, chips, spoken };
+          }
+
+          // -------------------------------------------------------------------
+          // B2. SELBSTERKENNTNIS: ORCAI JSON VIEWER & DATENINSPEKTION (KAPITEL 10)
+          // -------------------------------------------------------------------
+          if (qLower.includes('json viewer') || qLower.includes('json-viewer') || qLower.includes('{ } json') || qLower.includes('json inspektor') || qLower.includes('json button') || qLower.includes('json-button') || qLower.includes('dateninspektion') || (qLower.includes('json') && (qLower.includes('betrachten') || qLower.includes('öffnen') || qLower.includes('ansehen') || qLower.includes('anzeigen')))) {
+            html = '<p><strong>🔍 Interaktiver ORCAI JSON Viewer &amp; Dateninspektion</strong></p>' +
+              '<p>Der <strong>ORCAI JSON Viewer</strong> ist nahtlos in die gesamte Plattform integriert, um maschinenlesbare EAM-Objekte strukturiert und typisiert zu analysieren:</p>' +
+              '<ul>' +
+                '<li><strong>Entitäten-Inspektoren:</strong> Jeder Inspektor (Systeme, Geschäftsprozesse, Domänen, Integrationen, Verbindungen, HITL-Rollen) besitzt in der Aktionsleiste die Schaltfläche <code>{ } JSON</code> zur Ad-hoc-Inspektion.</li>' +
+                '<li><strong>Modell-Katalog:</strong> Alle 5 IT-Landschaften bieten Direktlinks <code>ORCAI JSON ↗</code>. Zudem ermöglicht <code>👁️ Im JSON Viewer</code> die sofortige Prüfung jedes beliebigen ORCAI-Dokumentschlüssels.</li>' +
+                '<li><strong>Diagramm-Popouts:</strong> BPMN- und PlantUML-Header verfügen über einen <code>{ } JSON</code>-Button zum Datenvergleich.</li>' +
+                '<li><strong>Features:</strong> Typisierte Badges (z. B. <code>EA SYSTEM (JSON)</code>), hierarchische RGB-Pills und Rohcode-Modus (<code>&amp;mode=raw</code>).</li>' +
+              '</ul>' +
+              '<p>Ausführlich dokumentiert ist dies in <strong>Kapitel 10 des offiziellen Handbuchs</strong> (erreichbar über den "i"-Button in der Kopfzeile).</p>';
+
+            chips.push('<a href="https://orcai-54321.web.app/json/" target="_blank" rel="noopener noreferrer" class="agent-chip agent-chip-model" style="background:#0070f2; color:#fff; font-weight:bold; border-color:#38bdf8;">👁️ ORCAI JSON Viewer öffnen ↗</a>');
+            chips.push('<a href="https://orcai-54321.web.app/markdown/?key=ORCAI-260913-23H55-QUAD-CHORD" target="_blank" rel="noopener noreferrer" class="agent-chip agent-chip-model">📖 Handbuch (Kapitel 10) ↗</a>');
+            chips.push('<button class="agent-chip agent-chip-sys" onclick="window.openLandscapeCatalogPopout && window.openLandscapeCatalogPopout();">🏛️ Modell-Katalog öffnen</button>');
+
+            spoken = 'Der ORCAI JSON Viewer ermöglicht die strukturierte Dateninspektion aller Systeme, Prozesse und Modelle per Klick auf den JSON-Button. Details finden Sie in Kapitel 10 des offiziellen Handbuchs.';
             return { html, chips, spoken };
           }
 
