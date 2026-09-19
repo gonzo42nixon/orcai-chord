@@ -7381,6 +7381,52 @@
       -webkit-backdrop-filter: none !important;
     }
 
+
+    /* ==========================================================================
+       BPMN PROCESS MODEL APPEARANCE (HINTERGRUND, POOL & LANE) & INTERACTION
+       ========================================================================== */
+    :root {
+      --bpmn-bg-color: #f8fafc;
+      --bpmn-bg-opacity: 1.0;
+      --bpmn-pool-color: #e2e8f0;
+      --bpmn-pool-opacity: 0.95;
+      --bpmn-lane-color: #ffffff;
+      --bpmn-lane-opacity: 0.85;
+    }
+
+    body.theme-night {
+      --bpmn-bg-color: #090d16;
+      --bpmn-pool-color: #111a28;
+      --bpmn-lane-color: #1e293b;
+    }
+
+    .bpmn-svg-container {
+      background-color: var(--bpmn-bg-color, #f8fafc) !important;
+      position: relative;
+    }
+
+    .bpmn-svg-container [data-element-id^="Pool_"] > .djs-visual > rect:first-child,
+    .bpmn-svg-container [data-element-id^="Participant_"] > .djs-visual > rect:first-child {
+      fill: var(--bpmn-pool-color, #e2e8f0) !important;
+      fill-opacity: var(--bpmn-pool-opacity, 0.95) !important;
+      transition: fill 0.2s ease, fill-opacity 0.2s ease;
+    }
+
+    .bpmn-svg-container [data-element-id^="Lane_"] > .djs-visual > rect:first-child {
+      fill: var(--bpmn-lane-color, #ffffff) !important;
+      fill-opacity: var(--bpmn-lane-opacity, 0.85) !important;
+      transition: fill 0.2s ease, fill-opacity 0.2s ease;
+    }
+
+    /* Visual selection highlight on clicked BPMN shape */
+    .bpmn-selected-shape > .djs-visual > rect,
+    .bpmn-selected-shape > .djs-visual > circle,
+    .bpmn-selected-shape > .djs-visual > polygon {
+      stroke: #0284c7 !important;
+      stroke-width: 3.5px !important;
+      filter: drop-shadow(0 0 12px rgba(2, 132, 199, 0.9)) !important;
+    }
+
 </style>
   <link rel="stylesheet" href="./mobile-agent-navigation.css?v=20260918-1">
 </head>
@@ -30374,7 +30420,7 @@
       ],
       "connections": ["JSD-C-01", "JSD-C-02"],
       "integrations": ["JSD-INT-02", "JSD-INT-03"],
-      "processes": ["JSD-P-02", "JSD-P-04"]
+      "processes": ["JSD-P-02", "JSD-P-04", "JSD-P-06"]
     },
     {
       "id": "JSD-ACT-02",
@@ -43440,41 +43486,120 @@
 
             function formatLaneNameForBpmn(name) {
         if (!name) return ' \n ';
-        name = String(name).replace(/&#10;/g, '\n').replace(/&amp;/g, '&').trim();
+        name = String(name || '')
+          .replace(/&amp;#10;/g, '\n')
+          .replace(/&#10;/g, '\n')
+          .replace(/&amp;/g, '&')
+          .trim();
         
         let parts = name.split('\n').map(s => s.trim()).filter(Boolean);
         if (parts.length === 2) {
-          return parts[0] + '&#10;' + parts[1];
+          return parts[0] + '\n' + parts[1];
         }
         if (parts.length > 2) {
           const l1 = parts[0];
           const l2 = parts.slice(1).join(' ');
-          return l1 + '&#10;' + l2;
+          return l1 + '\n' + l2;
         }
 
         const single = parts[0] || '';
-        const parenMatch = single.match(/^(.+?)\s+(\([^\)]+\))$/);
-        if (parenMatch) {
-          return parenMatch[1].trim() + '&#10;' + parenMatch[2].trim();
+        
+        // Handle slashes cleanly (e.g. "Chefarzt / Stationsarzt" -> Line 1: "Chefarzt /", Line 2: "Stationsarzt")
+        const slashMatch = single.match(/^([^\/]+\/)\s*(.+)$/);
+        if (slashMatch) {
+          return slashMatch[1].trim() + '\n' + slashMatch[2].trim();
         }
 
         const colonMatch = single.match(/^([A-Z0-9_ -]+:)\s*(.+)$/i);
         if (colonMatch) {
-          return colonMatch[1].trim() + '&#10;' + colonMatch[2].trim();
+          return colonMatch[1].trim() + '\n' + colonMatch[2].trim();
+        }
+
+        const parenMatch = single.match(/^(.+?)\s+(\([^\)]+\))$/);
+        if (parenMatch) {
+          return parenMatch[1].trim() + '\n' + parenMatch[2].trim();
         }
 
         const words = single.split(/\s+/);
         if (words.length >= 2) {
           const mid = Math.ceil(words.length / 2);
-          return words.slice(0, mid).join(' ') + '&#10;' + words.slice(mid).join(' ');
+          return words.slice(0, mid).join(' ') + '\n' + words.slice(mid).join(' ');
         }
 
         if (single.length > 10) {
           const half = Math.floor(single.length / 2);
-          return single.slice(0, half) + '-&#10;' + single.slice(half);
+          return single.slice(0, half) + '-\n' + single.slice(half);
         }
 
-        return single + '&#10; ';
+        return single + '\n ';
+      }
+
+      function escXmlAttr(str) {
+        return String(str || '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/\r?\n/g, '&#10;');
+      }
+
+      function matchActorForLaneOrTask(text, alias, allActors, mappedActors) {
+        if (!text) return null;
+        const t = (text + ' ' + (alias || '')).toLowerCase();
+
+        // Check exact ID in text
+        for (const a of allActors) {
+          if (a.id && t.includes(a.id.toLowerCase())) return a;
+          if (a.alias && t.includes(a.alias.toLowerCase())) return a;
+        }
+
+        // Domain-specific medical & business actor resolution
+        if (/arzt|doc|operateur|chirurg|station|hba|medico/i.test(t)) {
+          return allActors.find(a => a.id === 'JSD-ACT-01') || allActors[0];
+        }
+        if (/aemp|steril|hygiene|charge/i.test(t)) {
+          return allActors.find(a => a.id === 'JSD-ACT-02') || allActors[0];
+        }
+        if (/sanit|rtw|notfall|notarzt|rettung|nida/i.test(t)) {
+          return allActors.find(a => a.id === 'JSD-ACT-03') || allActors[0];
+        }
+        if (/aufnahme|verwaltung|triage|koordinator|zna/i.test(t)) {
+          return allActors.find(a => a.id === 'JSD-ACT-04') || allActors[0];
+        }
+        if (/controller|abrechn|drg|kaufm|gkv/i.test(t)) {
+          return allActors.find(a => a.id === 'JSD-ACT-05') || allActors.find(a => (a.name || '').includes('Controller')) || allActors[0];
+        }
+        if (/einkauf|logistik|buyer|beschaff|ghx/i.test(t)) {
+          return allActors.find(a => a.id === 'JSD-ACT-06') || allActors.find(a => (a.name || '').includes('Einkauf')) || allActors[0];
+        }
+        if (/labor|mta|befund|swisslab/i.test(t)) {
+          return allActors.find(a => a.id === 'JSD-ACT-07') || allActors[0];
+        }
+        if (/apotheke|pharma|medikation/i.test(t)) {
+          return allActors.find(a => a.id === 'JSD-ACT-08') || allActors[0];
+        }
+        if (/radiolog|mta-r|pacs|dicom/i.test(t)) {
+          return allActors.find(a => a.id === 'JSD-ACT-09') || allActors[0];
+        }
+
+        // Keyword overlap scoring
+        let bestActor = null;
+        let bestScore = 0;
+        for (const a of allActors) {
+          const aWords = (a.name + ' ' + (a.hitlSummary || '')).toLowerCase().split(/[\s,&\/-]+/);
+          let score = 0;
+          for (const w of aWords) {
+            if (w.length > 3 && t.includes(w)) score += 2;
+          }
+          if (score > bestScore) {
+            bestScore = score;
+            bestActor = a;
+          }
+        }
+        if (bestActor && bestScore >= 2) return bestActor;
+
+        if (mappedActors && mappedActors.length > 0) return mappedActors[0];
+        return allActors.find(a => a.id === 'JSD-ACT-01') || allActors[0];
       }
 
       function formatBpmnSvg(svgText) {
@@ -43497,37 +43622,34 @@
         const mappedActors = allActors.filter(a => Array.isArray(a.processes) && a.processes.includes(proc.id));
 
         // 1. DEDICATED MULTI-POOL ARCHITECTURE FOR JSD-P-01
-        // 3 Pools: (1) Praehospital, (2) Telemedizin, (3) Akutklinik
-        // Lanes: (1) Human [RTW] & JSD-28, (2) JSD-05 & JSD-10, (3) JSD-15 & JSD-08
         if (proc.id === 'JSD-P-01') {
-          // Register interactive metadata for canvas integration
           procMetaMap.set('StartEvent_RTW', { type: 'actor', actorId: 'JSD-ACT-03', clientId: 'JSD-CL-03', desc: 'Notfallversorgung initiiert' });
           procMetaMap.set('Task_RTW_Capture', { type: 'human', actorId: 'JSD-ACT-03', clientId: 'JSD-CL-03', desc: 'Notfalldaten & Vitalparameter erfassen (RTW)' });
-          procMetaMap.set('Lane_RTW_Human', { type: 'actor', actorId: 'JSD-ACT-03', clientId: 'JSD-CL-03' });
+          procMetaMap.set('Lane_RTW_Human', { type: 'actor', actorId: 'JSD-ACT-03', clientId: 'JSD-CL-03', desc: 'Rettungsdienst (RTW)' });
           procMetaMap.set('Task_IoT_Send', { type: 'sys', sysId: 'JSD-28', desc: 'JSD-28: Medical IoT Gateway' });
-          procMetaMap.set('Lane_JSD_28', { type: 'sys', sysId: 'JSD-28' });
+          procMetaMap.set('Lane_JSD_28', { type: 'sys', sysId: 'JSD-28', desc: 'JSD-28: Medical IoT Gateway' });
           procMetaMap.set('EndEvent_RTW', { type: 'end', procId: 'JSD-P-01', desc: 'Voranmeldung drahtlos übertragen' });
 
           procMetaMap.set('StartEvent_TM', { type: 'sys', sysId: 'JSD-05', desc: 'Telemetrie-Paket eingegangen' });
           procMetaMap.set('Task_TM_Receive', { type: 'sys', sysId: 'JSD-05', desc: 'JSD-05: Telemedizin Hub' });
           procMetaMap.set('Task_TM_Forward', { type: 'sys', sysId: 'JSD-05', desc: 'JSD-05: Telemedizin Hub' });
           procMetaMap.set('EndEvent_TM', { type: 'sys', sysId: 'JSD-05', desc: 'Voranmeldung weitergeleitet' });
-          procMetaMap.set('Lane_JSD_05', { type: 'sys', sysId: 'JSD-05' });
+          procMetaMap.set('Lane_JSD_05', { type: 'sys', sysId: 'JSD-05', desc: 'JSD-05: Telemedizin Hub' });
 
           procMetaMap.set('Task_HS_Route', { type: 'sys', sysId: 'JSD-10', desc: 'JSD-10: HealthShare Hub' });
           procMetaMap.set('Task_HS_Ack', { type: 'sys', sysId: 'JSD-10', desc: 'JSD-10: HealthShare Hub' });
           procMetaMap.set('EndEvent_HS', { type: 'sys', sysId: 'JSD-10', desc: 'Routing & Quittierung abgeschlossen' });
-          procMetaMap.set('Lane_JSD_10', { type: 'sys', sysId: 'JSD-10' });
+          procMetaMap.set('Lane_JSD_10', { type: 'sys', sysId: 'JSD-10', desc: 'JSD-10: HealthShare Hub' });
 
           procMetaMap.set('Task_ZNA_Receive', { type: 'sys', sysId: 'JSD-15', desc: 'JSD-15: ZNA E-Care & Triage' });
           procMetaMap.set('Task_ZNA_Triage', { type: 'human', actorId: 'JSD-ACT-04', clientId: 'JSD-CL-04', desc: 'Manchester-Triage durchführen (ZNA)' });
           procMetaMap.set('Task_ZNA_SendADT', { type: 'sys', sysId: 'JSD-15', desc: 'JSD-15: Notfall-Aufnahmedaten an HealthShare' });
           procMetaMap.set('Task_ZNA_Finalize', { type: 'sys', sysId: 'JSD-15', desc: 'JSD-15: Fallübernahme abschließen' });
           procMetaMap.set('EndEvent_Akutklinik', { type: 'end', procId: 'JSD-P-01', desc: 'Patient in Notaufnahme übernommen' });
-          procMetaMap.set('Lane_JSD_15', { type: 'sys', sysId: 'JSD-15' });
+          procMetaMap.set('Lane_JSD_15', { type: 'sys', sysId: 'JSD-15', desc: 'JSD-15: ZNA E-Care & Triage' });
 
           procMetaMap.set('Task_KIS_Create', { type: 'sys', sysId: 'JSD-08', actorId: 'JSD-ACT-04', clientId: 'JSD-CL-04', desc: 'JSD-08: CGM MEDICO KIS' });
-          procMetaMap.set('Lane_JSD_08', { type: 'sys', sysId: 'JSD-08' });
+          procMetaMap.set('Lane_JSD_08', { type: 'sys', sysId: 'JSD-08', desc: 'JSD-08: CGM MEDICO KIS' });
 
           procMetaMap.set('MsgFlow_1', { type: 'step', connId: 'JSD-C-15', integId: 'JSD-INT-01', desc: 'RTW-Daten an Telemedizin Hub (MQTT)' });
           procMetaMap.set('MsgFlow_2', { type: 'step', connId: 'JSD-C-16', integId: 'JSD-INT-01', desc: 'Voranmeldung an ZNA E-Care (FHIR)' });
@@ -43565,21 +43687,21 @@
 '        <bpmn:flowNodeRef>Task_IoT_Send</bpmn:flowNodeRef>\n' +
 '        <bpmn:flowNodeRef>EndEvent_RTW</bpmn:flowNodeRef>\n' +
 '      </bpmn:lane>\n' +
-'    </bpmn:laneSet>\n' +
+'    </bpmn:laneSet>\n\n' +
 '    <bpmn:startEvent id="StartEvent_RTW" name="Notfallversorgung initiiert">\n' +
 '      <bpmn:outgoing>Flow_P1_1</bpmn:outgoing>\n' +
 '    </bpmn:startEvent>\n' +
-'    <bpmn:userTask id="Task_RTW_Capture" name="Notfalldaten &amp; Vitalparameter erfassen">\n' +
+'    <bpmn:userTask id="Task_RTW_Capture" name="Notfalldaten &amp; Vitalparameter erfassen (RTW)">\n' +
 '      <bpmn:incoming>Flow_P1_1</bpmn:incoming>\n' +
 '      <bpmn:outgoing>Flow_P1_2</bpmn:outgoing>\n' +
 '    </bpmn:userTask>\n' +
-'    <bpmn:sendTask id="Task_IoT_Send" name="Telemetriedaten an Telemedizin-Hub senden">\n' +
+'    <bpmn:sendTask id="Task_IoT_Send" name="Telemetrie &amp; EKG übertragen">\n' +
 '      <bpmn:incoming>Flow_P1_2</bpmn:incoming>\n' +
 '      <bpmn:outgoing>Flow_P1_3</bpmn:outgoing>\n' +
 '    </bpmn:sendTask>\n' +
 '    <bpmn:endEvent id="EndEvent_RTW" name="Voranmeldung drahtlos übertragen">\n' +
 '      <bpmn:incoming>Flow_P1_3</bpmn:incoming>\n' +
-'    </bpmn:endEvent>\n' +
+'    </bpmn:endEvent>\n\n' +
 '    <bpmn:sequenceFlow id="Flow_P1_1" sourceRef="StartEvent_RTW" targetRef="Task_RTW_Capture" />\n' +
 '    <bpmn:sequenceFlow id="Flow_P1_2" sourceRef="Task_RTW_Capture" targetRef="Task_IoT_Send" />\n' +
 '    <bpmn:sequenceFlow id="Flow_P1_3" sourceRef="Task_IoT_Send" targetRef="EndEvent_RTW" />\n' +
@@ -43598,31 +43720,31 @@
 '        <bpmn:flowNodeRef>Task_HS_Ack</bpmn:flowNodeRef>\n' +
 '        <bpmn:flowNodeRef>EndEvent_HS</bpmn:flowNodeRef>\n' +
 '      </bpmn:lane>\n' +
-'    </bpmn:laneSet>\n' +
+'    </bpmn:laneSet>\n\n' +
 '    <bpmn:startEvent id="StartEvent_TM" name="Telemetrie-Paket eingegangen">\n' +
 '      <bpmn:outgoing>Flow_P2_1</bpmn:outgoing>\n' +
 '    </bpmn:startEvent>\n' +
-'    <bpmn:receiveTask id="Task_TM_Receive" name="Telemetriedaten empfangen &amp; prüfen">\n' +
+'    <bpmn:receiveTask id="Task_TM_Receive" name="Telemetriedaten empfangen">\n' +
 '      <bpmn:incoming>Flow_P2_1</bpmn:incoming>\n' +
 '      <bpmn:outgoing>Flow_P2_2</bpmn:outgoing>\n' +
 '    </bpmn:receiveTask>\n' +
-'    <bpmn:sendTask id="Task_TM_Forward" name="Voranmeldung an ZNA übermitteln">\n' +
+'    <bpmn:serviceTask id="Task_TM_Forward" name="Voranmeldung aufbereiten (FHIR R4)">\n' +
 '      <bpmn:incoming>Flow_P2_2</bpmn:incoming>\n' +
 '      <bpmn:outgoing>Flow_P2_3</bpmn:outgoing>\n' +
-'    </bpmn:sendTask>\n' +
+'    </bpmn:serviceTask>\n' +
 '    <bpmn:endEvent id="EndEvent_TM" name="Voranmeldung weitergeleitet">\n' +
 '      <bpmn:incoming>Flow_P2_3</bpmn:incoming>\n' +
-'    </bpmn:endEvent>\n' +
-'    <bpmn:serviceTask id="Task_HS_Route" name="HL7-Fallanlage an KIS weiterleiten">\n' +
+'    </bpmn:endEvent>\n\n' +
+'    <bpmn:serviceTask id="Task_HS_Route" name="ADT-Routing &amp; MLLP Transformation">\n' +
 '      <bpmn:outgoing>Flow_P2_4</bpmn:outgoing>\n' +
 '    </bpmn:serviceTask>\n' +
-'    <bpmn:serviceTask id="Task_HS_Ack" name="Fallnummer an ZNA quittieren">\n' +
+'    <bpmn:receiveTask id="Task_HS_Ack" name="KIS-Fallnummer empfangen &amp; Bestätigung senden">\n' +
 '      <bpmn:incoming>Flow_P2_4</bpmn:incoming>\n' +
 '      <bpmn:outgoing>Flow_P2_5</bpmn:outgoing>\n' +
-'    </bpmn:serviceTask>\n' +
+'    </bpmn:receiveTask>\n' +
 '    <bpmn:endEvent id="EndEvent_HS" name="Routing &amp; Quittierung abgeschlossen">\n' +
 '      <bpmn:incoming>Flow_P2_5</bpmn:incoming>\n' +
-'    </bpmn:endEvent>\n' +
+'    </bpmn:endEvent>\n\n' +
 '    <bpmn:sequenceFlow id="Flow_P2_1" sourceRef="StartEvent_TM" targetRef="Task_TM_Receive" />\n' +
 '    <bpmn:sequenceFlow id="Flow_P2_2" sourceRef="Task_TM_Receive" targetRef="Task_TM_Forward" />\n' +
 '    <bpmn:sequenceFlow id="Flow_P2_3" sourceRef="Task_TM_Forward" targetRef="EndEvent_TM" />\n' +
@@ -43642,259 +43764,225 @@
 '      <bpmn:lane id="Lane_JSD_08" name="JSD-08: CGM&#10;MEDICO KIS">\n' +
 '        <bpmn:flowNodeRef>Task_KIS_Create</bpmn:flowNodeRef>\n' +
 '      </bpmn:lane>\n' +
-'    </bpmn:laneSet>\n' +
+'    </bpmn:laneSet>\n\n' +
 '    <bpmn:receiveTask id="Task_ZNA_Receive" name="Voranmeldung in ZNA empfangen">\n' +
 '      <bpmn:outgoing>Flow_P3_1</bpmn:outgoing>\n' +
 '    </bpmn:receiveTask>\n' +
-'    <bpmn:userTask id="Task_ZNA_Triage" name="Manchester-Triage durchführen">\n' +
+'    <bpmn:userTask id="Task_ZNA_Triage" name="Manchester-Triage &amp; Raumzuweisung durchführen">\n' +
 '      <bpmn:incoming>Flow_P3_1</bpmn:incoming>\n' +
 '      <bpmn:outgoing>Flow_P3_2</bpmn:outgoing>\n' +
 '    </bpmn:userTask>\n' +
-'    <bpmn:sendTask id="Task_ZNA_SendADT" name="Notfall-Aufnahmedaten an HealthShare senden">\n' +
+'    <bpmn:sendTask id="Task_ZNA_SendADT" name="Notfall-Aufnahmedaten an HealthShare übermitteln">\n' +
 '      <bpmn:incoming>Flow_P3_2</bpmn:incoming>\n' +
-'      <bpmn:outgoing>Flow_P3_3</bpmn:outgoing>\n' +
 '    </bpmn:sendTask>\n' +
-'    <bpmn:serviceTask id="Task_KIS_Create" name="Patientenfall in MEDICO anlegen">\n' +
-'      <bpmn:outgoing>Flow_P3_4</bpmn:outgoing>\n' +
+'    <bpmn:serviceTask id="Task_KIS_Create" name="KIS-Fallanlage &amp; Stammdaten anlegen">\n' +
 '    </bpmn:serviceTask>\n' +
-'    <bpmn:receiveTask id="Task_ZNA_Finalize" name="Fallübernahme abschließen">\n' +
-'      <bpmn:incoming>Flow_P3_3</bpmn:incoming>\n' +
-'      <bpmn:outgoing>Flow_P3_5</bpmn:outgoing>\n' +
-'    </bpmn:receiveTask>\n' +
+'    <bpmn:serviceTask id="Task_ZNA_Finalize" name="Fallübernahme &amp; Patientenaufnahme abschließen">\n' +
+'      <bpmn:outgoing>Flow_P3_3</bpmn:outgoing>\n' +
+'    </bpmn:serviceTask>\n' +
 '    <bpmn:endEvent id="EndEvent_Akutklinik" name="Patient in Notaufnahme übernommen">\n' +
-'      <bpmn:incoming>Flow_P3_5</bpmn:incoming>\n' +
-'    </bpmn:endEvent>\n' +
+'      <bpmn:incoming>Flow_P3_3</bpmn:incoming>\n' +
+'    </bpmn:endEvent>\n\n' +
 '    <bpmn:sequenceFlow id="Flow_P3_1" sourceRef="Task_ZNA_Receive" targetRef="Task_ZNA_Triage" />\n' +
 '    <bpmn:sequenceFlow id="Flow_P3_2" sourceRef="Task_ZNA_Triage" targetRef="Task_ZNA_SendADT" />\n' +
-'    <bpmn:sequenceFlow id="Flow_P3_3" sourceRef="Task_ZNA_SendADT" targetRef="Task_ZNA_Finalize" />\n' +
-'    <bpmn:sequenceFlow id="Flow_P3_5" sourceRef="Task_ZNA_Finalize" targetRef="EndEvent_Akutklinik" />\n' +
+'    <bpmn:sequenceFlow id="Flow_P3_3" sourceRef="Task_ZNA_Finalize" targetRef="EndEvent_Akutklinik" />\n' +
 '  </bpmn:process>\n\n' +
-'  <!-- ==================== BPMNDIAGRAM ==================== -->\n' +
+'  <!-- ==================== BPMN DIAGRAM INTERCHANGE (DI) ==================== -->\n' +
 '  <bpmndi:BPMNDiagram id="BPMNDiagram_JSD_P_01">\n' +
 '    <bpmndi:BPMNPlane id="BPMNPlane_JSD_P_01" bpmnElement="Collaboration_JSD_P_01">\n\n' +
-'      <!-- ==================== POOL 1 ==================== -->\n' +
+'      <!-- Pool 1: Praehospital (y=50, h=240) -->\n' +
 '      <bpmndi:BPMNShape id="Pool_Praehospital_di" bpmnElement="Pool_Praehospital" isHorizontal="true">\n' +
-'        <dc:Bounds x="100" y="50" width="1950" height="240" />\n' +
+'        <dc:Bounds x="100" y="50" width="1380" height="240" />\n' +
 '      </bpmndi:BPMNShape>\n' +
 '      <bpmndi:BPMNShape id="Lane_RTW_Human_di" bpmnElement="Lane_RTW_Human" isHorizontal="true">\n' +
-'        <dc:Bounds x="130" y="50" width="1920" height="120" />\n' +
+'        <dc:Bounds x="130" y="50" width="1350" height="120" />\n' +
 '      </bpmndi:BPMNShape>\n' +
 '      <bpmndi:BPMNShape id="Lane_JSD_28_di" bpmnElement="Lane_JSD_28" isHorizontal="true">\n' +
-'        <dc:Bounds x="130" y="170" width="1920" height="120" />\n' +
+'        <dc:Bounds x="130" y="170" width="1350" height="120" />\n' +
 '      </bpmndi:BPMNShape>\n\n' +
-'      <!-- Nodes Pool 1 -->\n' +
+'      <!-- Pool 2: Telemedizin (y=340, h=240) -->\n' +
+'      <bpmndi:BPMNShape id="Pool_Telemedizin_di" bpmnElement="Pool_Telemedizin" isHorizontal="true">\n' +
+'        <dc:Bounds x="100" y="340" width="1380" height="240" />\n' +
+'      </bpmndi:BPMNShape>\n' +
+'      <bpmndi:BPMNShape id="Lane_JSD_05_di" bpmnElement="Lane_JSD_05" isHorizontal="true">\n' +
+'        <dc:Bounds x="130" y="340" width="1350" height="120" />\n' +
+'      </bpmndi:BPMNShape>\n' +
+'      <bpmndi:BPMNShape id="Lane_JSD_10_di" bpmnElement="Lane_JSD_10" isHorizontal="true">\n' +
+'        <dc:Bounds x="130" y="460" width="1350" height="120" />\n' +
+'      </bpmndi:BPMNShape>\n\n' +
+'      <!-- Pool 3: Akutklinik (y=630, h=240) -->\n' +
+'      <bpmndi:BPMNShape id="Pool_Akutklinik_di" bpmnElement="Pool_Akutklinik" isHorizontal="true">\n' +
+'        <dc:Bounds x="100" y="630" width="1380" height="240" />\n' +
+'      </bpmndi:BPMNShape>\n' +
+'      <bpmndi:BPMNShape id="Lane_JSD_15_di" bpmnElement="Lane_JSD_15" isHorizontal="true">\n' +
+'        <dc:Bounds x="130" y="630" width="1350" height="120" />\n' +
+'      </bpmndi:BPMNShape>\n' +
+'      <bpmndi:BPMNShape id="Lane_JSD_08_di" bpmnElement="Lane_JSD_08" isHorizontal="true">\n' +
+'        <dc:Bounds x="130" y="750" width="1350" height="120" />\n' +
+'      </bpmndi:BPMNShape>\n\n' +
+'      <!-- Flow Nodes Pool 1: Generous spacing (Start at 250, Label at 198, Task at 400) -->\n' +
 '      <bpmndi:BPMNShape id="StartEvent_RTW_di" bpmnElement="StartEvent_RTW">\n' +
-'        <dc:Bounds x="210" y="92" width="36" height="36" />\n' +
+'        <dc:Bounds x="250" y="92" width="36" height="36" />\n' +
 '        <bpmndi:BPMNLabel>\n' +
-'          <dc:Bounds x="148" y="132" width="160" height="27" />\n' +
+'          <dc:Bounds x="198" y="132" width="140" height="27" />\n' +
 '        </bpmndi:BPMNLabel>\n' +
 '      </bpmndi:BPMNShape>\n' +
 '      <bpmndi:BPMNShape id="Task_RTW_Capture_di" bpmnElement="Task_RTW_Capture">\n' +
-'        <dc:Bounds x="300" y="70" width="140" height="80" />\n' +
+'        <dc:Bounds x="400" y="70" width="140" height="80" />\n' +
 '      </bpmndi:BPMNShape>\n' +
 '      <bpmndi:BPMNShape id="Task_IoT_Send_di" bpmnElement="Task_IoT_Send">\n' +
-'        <dc:Bounds x="460" y="190" width="140" height="80" />\n' +
+'        <dc:Bounds x="560" y="190" width="140" height="80" />\n' +
 '      </bpmndi:BPMNShape>\n' +
 '      <bpmndi:BPMNShape id="EndEvent_RTW_di" bpmnElement="EndEvent_RTW">\n' +
-'        <dc:Bounds x="700" y="212" width="36" height="36" />\n' +
+'        <dc:Bounds x="760" y="212" width="36" height="36" />\n' +
 '        <bpmndi:BPMNLabel>\n' +
-'          <dc:Bounds x="618" y="252" width="200" height="27" />\n' +
+'          <dc:Bounds x="690" y="252" width="180" height="27" />\n' +
 '        </bpmndi:BPMNLabel>\n' +
 '      </bpmndi:BPMNShape>\n\n' +
-'      <!-- Sequence Flows Pool 1 (Horizontal line at cy=110 and cy=230) -->\n' +
 '      <bpmndi:BPMNEdge id="Flow_P1_1_di" bpmnElement="Flow_P1_1">\n' +
-'        <di:waypoint x="246" y="110" />\n' +
-'        <di:waypoint x="300" y="110" />\n' +
+'        <di:waypoint x="286" y="110" />\n' +
+'        <di:waypoint x="400" y="110" />\n' +
 '      </bpmndi:BPMNEdge>\n' +
 '      <bpmndi:BPMNEdge id="Flow_P1_2_di" bpmnElement="Flow_P1_2">\n' +
-'        <di:waypoint x="440" y="110" />\n' +
-'        <di:waypoint x="450" y="110" />\n' +
-'        <di:waypoint x="450" y="230" />\n' +
-'        <di:waypoint x="460" y="230" />\n' +
+'        <di:waypoint x="540" y="110" />\n' +
+'        <di:waypoint x="560" y="230" />\n' +
 '      </bpmndi:BPMNEdge>\n' +
 '      <bpmndi:BPMNEdge id="Flow_P1_3_di" bpmnElement="Flow_P1_3">\n' +
-'        <di:waypoint x="600" y="230" />\n' +
 '        <di:waypoint x="700" y="230" />\n' +
+'        <di:waypoint x="760" y="230" />\n' +
 '      </bpmndi:BPMNEdge>\n\n' +
-'      <!-- ==================== POOL 2 ==================== -->\n' +
-'      <bpmndi:BPMNShape id="Pool_Telemedizin_di" bpmnElement="Pool_Telemedizin" isHorizontal="true">\n' +
-'        <dc:Bounds x="100" y="350" width="1950" height="240" />\n' +
-'      </bpmndi:BPMNShape>\n' +
-'      <bpmndi:BPMNShape id="Lane_JSD_05_di" bpmnElement="Lane_JSD_05" isHorizontal="true">\n' +
-'        <dc:Bounds x="130" y="350" width="1920" height="120" />\n' +
-'      </bpmndi:BPMNShape>\n' +
-'      <bpmndi:BPMNShape id="Lane_JSD_10_di" bpmnElement="Lane_JSD_10" isHorizontal="true">\n' +
-'        <dc:Bounds x="130" y="470" width="1920" height="120" />\n' +
-'      </bpmndi:BPMNShape>\n\n' +
-'      <!-- Nodes Pool 2 -->\n' +
+'      <!-- Flow Nodes Pool 2 -->\n' +
 '      <bpmndi:BPMNShape id="StartEvent_TM_di" bpmnElement="StartEvent_TM">\n' +
-'        <dc:Bounds x="360" y="392" width="36" height="36" />\n' +
+'        <dc:Bounds x="250" y="382" width="36" height="36" />\n' +
 '        <bpmndi:BPMNLabel>\n' +
-'          <dc:Bounds x="298" y="432" width="160" height="27" />\n' +
+'          <dc:Bounds x="198" y="422" width="140" height="27" />\n' +
 '        </bpmndi:BPMNLabel>\n' +
 '      </bpmndi:BPMNShape>\n' +
-'      <!-- Task_TM_Receive: centered at cx=530 (matching Task_IoT_Send) -->\n' +
 '      <bpmndi:BPMNShape id="Task_TM_Receive_di" bpmnElement="Task_TM_Receive">\n' +
-'        <dc:Bounds x="460" y="370" width="140" height="80" />\n' +
+'        <dc:Bounds x="400" y="360" width="140" height="80" />\n' +
 '      </bpmndi:BPMNShape>\n' +
-'      <!-- Task_TM_Forward: centered at cx=750 (matching Task_ZNA_Receive) -->\n' +
 '      <bpmndi:BPMNShape id="Task_TM_Forward_di" bpmnElement="Task_TM_Forward">\n' +
-'        <dc:Bounds x="680" y="370" width="140" height="80" />\n' +
+'        <dc:Bounds x="560" y="360" width="140" height="80" />\n' +
 '      </bpmndi:BPMNShape>\n' +
 '      <bpmndi:BPMNShape id="EndEvent_TM_di" bpmnElement="EndEvent_TM">\n' +
-'        <dc:Bounds x="920" y="392" width="36" height="36" />\n' +
+'        <dc:Bounds x="760" y="382" width="36" height="36" />\n' +
 '        <bpmndi:BPMNLabel>\n' +
-'          <dc:Bounds x="838" y="432" width="200" height="27" />\n' +
+'          <dc:Bounds x="690" y="422" width="180" height="27" />\n' +
 '        </bpmndi:BPMNLabel>\n' +
-'      </bpmndi:BPMNShape>\n\n' +
-'      <!-- Task_HS_Route: x=1080..1220, incoming at cx=1115, outgoing at cx=1185 -->\n' +
-'      <bpmndi:BPMNShape id="Task_HS_Route_di" bpmnElement="Task_HS_Route">\n' +
-'        <dc:Bounds x="1080" y="490" width="140" height="80" />\n' +
 '      </bpmndi:BPMNShape>\n' +
-'      <!-- Task_HS_Ack: x=1460..1600, incoming at cx=1495, outgoing at cx=1565 -->\n' +
+'      <bpmndi:BPMNShape id="Task_HS_Route_di" bpmnElement="Task_HS_Route">\n' +
+'        <dc:Bounds x="820" y="480" width="140" height="80" />\n' +
+'      </bpmndi:BPMNShape>\n' +
 '      <bpmndi:BPMNShape id="Task_HS_Ack_di" bpmnElement="Task_HS_Ack">\n' +
-'        <dc:Bounds x="1460" y="490" width="140" height="80" />\n' +
+'        <dc:Bounds x="1000" y="480" width="140" height="80" />\n' +
 '      </bpmndi:BPMNShape>\n' +
 '      <bpmndi:BPMNShape id="EndEvent_HS_di" bpmnElement="EndEvent_HS">\n' +
-'        <dc:Bounds x="1720" y="512" width="36" height="36" />\n' +
+'        <dc:Bounds x="1200" y="502" width="36" height="36" />\n' +
 '        <bpmndi:BPMNLabel>\n' +
-'          <dc:Bounds x="1628" y="552" width="220" height="27" />\n' +
+'          <dc:Bounds x="1130" y="542" width="180" height="27" />\n' +
 '        </bpmndi:BPMNLabel>\n' +
 '      </bpmndi:BPMNShape>\n\n' +
-'      <!-- Sequence Flows Pool 2 (Horizontal lines at cy=410 and cy=530) -->\n' +
 '      <bpmndi:BPMNEdge id="Flow_P2_1_di" bpmnElement="Flow_P2_1">\n' +
-'        <di:waypoint x="396" y="410" />\n' +
-'        <di:waypoint x="460" y="410" />\n' +
+'        <di:waypoint x="286" y="400" />\n' +
+'        <di:waypoint x="400" y="400" />\n' +
 '      </bpmndi:BPMNEdge>\n' +
 '      <bpmndi:BPMNEdge id="Flow_P2_2_di" bpmnElement="Flow_P2_2">\n' +
-'        <di:waypoint x="600" y="410" />\n' +
-'        <di:waypoint x="680" y="410" />\n' +
+'        <di:waypoint x="540" y="400" />\n' +
+'        <di:waypoint x="560" y="400" />\n' +
 '      </bpmndi:BPMNEdge>\n' +
 '      <bpmndi:BPMNEdge id="Flow_P2_3_di" bpmnElement="Flow_P2_3">\n' +
-'        <di:waypoint x="820" y="410" />\n' +
-'        <di:waypoint x="920" y="410" />\n' +
+'        <di:waypoint x="700" y="400" />\n' +
+'        <di:waypoint x="760" y="400" />\n' +
 '      </bpmndi:BPMNEdge>\n' +
 '      <bpmndi:BPMNEdge id="Flow_P2_4_di" bpmnElement="Flow_P2_4">\n' +
-'        <di:waypoint x="1220" y="530" />\n' +
-'        <di:waypoint x="1460" y="530" />\n' +
+'        <di:waypoint x="960" y="520" />\n' +
+'        <di:waypoint x="1000" y="520" />\n' +
 '      </bpmndi:BPMNEdge>\n' +
 '      <bpmndi:BPMNEdge id="Flow_P2_5_di" bpmnElement="Flow_P2_5">\n' +
-'        <di:waypoint x="1600" y="530" />\n' +
-'        <di:waypoint x="1720" y="530" />\n' +
+'        <di:waypoint x="1140" y="520" />\n' +
+'        <di:waypoint x="1200" y="520" />\n' +
 '      </bpmndi:BPMNEdge>\n\n' +
-'      <!-- ==================== POOL 3 ==================== -->\n' +
-'      <bpmndi:BPMNShape id="Pool_Akutklinik_di" bpmnElement="Pool_Akutklinik" isHorizontal="true">\n' +
-'        <dc:Bounds x="100" y="650" width="1950" height="240" />\n' +
-'      </bpmndi:BPMNShape>\n' +
-'      <bpmndi:BPMNShape id="Lane_JSD_15_di" bpmnElement="Lane_JSD_15" isHorizontal="true">\n' +
-'        <dc:Bounds x="130" y="650" width="1920" height="120" />\n' +
-'      </bpmndi:BPMNShape>\n' +
-'      <bpmndi:BPMNShape id="Lane_JSD_08_di" bpmnElement="Lane_JSD_08" isHorizontal="true">\n' +
-'        <dc:Bounds x="130" y="770" width="1920" height="120" />\n' +
-'      </bpmndi:BPMNShape>\n\n' +
-'      <!-- Nodes Pool 3 -->\n' +
-'      <!-- Task_ZNA_Receive: centered at cx=750 (matching Task_TM_Forward) -->\n' +
+'      <!-- Flow Nodes Pool 3 -->\n' +
 '      <bpmndi:BPMNShape id="Task_ZNA_Receive_di" bpmnElement="Task_ZNA_Receive">\n' +
-'        <dc:Bounds x="680" y="670" width="140" height="80" />\n' +
+'        <dc:Bounds x="560" y="650" width="140" height="80" />\n' +
 '      </bpmndi:BPMNShape>\n' +
-'      <!-- Task_ZNA_Triage: centered at cx=950 -->\n' +
 '      <bpmndi:BPMNShape id="Task_ZNA_Triage_di" bpmnElement="Task_ZNA_Triage">\n' +
-'        <dc:Bounds x="880" y="670" width="140" height="80" />\n' +
+'        <dc:Bounds x="720" y="650" width="140" height="80" />\n' +
 '      </bpmndi:BPMNShape>\n' +
-'      <!-- Task_ZNA_SendADT: centered at cx=1115 (aligned with left side of Task_HS_Route) -->\n' +
 '      <bpmndi:BPMNShape id="Task_ZNA_SendADT_di" bpmnElement="Task_ZNA_SendADT">\n' +
-'        <dc:Bounds x="1045" y="670" width="140" height="80" />\n' +
+'        <dc:Bounds x="880" y="650" width="140" height="80" />\n' +
 '      </bpmndi:BPMNShape>\n' +
-'      <!-- Task_KIS_Create: x=1245..1385. Incoming from HS_Route at cx=1280. Outgoing to HS_Ack at cx=1350 -->\n' +
 '      <bpmndi:BPMNShape id="Task_KIS_Create_di" bpmnElement="Task_KIS_Create">\n' +
-'        <dc:Bounds x="1245" y="790" width="140" height="80" />\n' +
+'        <dc:Bounds x="920" y="770" width="140" height="80" />\n' +
 '      </bpmndi:BPMNShape>\n' +
-'      <!-- Task_ZNA_Finalize: centered at cx=1565 (aligned with right side of Task_HS_Ack) -->\n' +
 '      <bpmndi:BPMNShape id="Task_ZNA_Finalize_di" bpmnElement="Task_ZNA_Finalize">\n' +
-'        <dc:Bounds x="1495" y="670" width="140" height="80" />\n' +
+'        <dc:Bounds x="1040" y="650" width="140" height="80" />\n' +
 '      </bpmndi:BPMNShape>\n' +
 '      <bpmndi:BPMNShape id="EndEvent_Akutklinik_di" bpmnElement="EndEvent_Akutklinik">\n' +
-'        <dc:Bounds x="1760" y="692" width="36" height="36" />\n' +
+'        <dc:Bounds x="1220" y="672" width="36" height="36" />\n' +
 '        <bpmndi:BPMNLabel>\n' +
-'          <dc:Bounds x="1668" y="732" width="220" height="27" />\n' +
+'          <dc:Bounds x="1150" y="712" width="180" height="27" />\n' +
 '        </bpmndi:BPMNLabel>\n' +
 '      </bpmndi:BPMNShape>\n\n' +
-'      <!-- Sequence Flows Pool 3 (Centered vertically at cy=710) -->\n' +
 '      <bpmndi:BPMNEdge id="Flow_P3_1_di" bpmnElement="Flow_P3_1">\n' +
-'        <di:waypoint x="820" y="710" />\n' +
-'        <di:waypoint x="880" y="710" />\n' +
+'        <di:waypoint x="700" y="690" />\n' +
+'        <di:waypoint x="720" y="690" />\n' +
 '      </bpmndi:BPMNEdge>\n' +
 '      <bpmndi:BPMNEdge id="Flow_P3_2_di" bpmnElement="Flow_P3_2">\n' +
-'        <di:waypoint x="1020" y="710" />\n' +
-'        <di:waypoint x="1045" y="710" />\n' +
+'        <di:waypoint x="860" y="690" />\n' +
+'        <di:waypoint x="880" y="690" />\n' +
 '      </bpmndi:BPMNEdge>\n' +
 '      <bpmndi:BPMNEdge id="Flow_P3_3_di" bpmnElement="Flow_P3_3">\n' +
-'        <di:waypoint x="1185" y="710" />\n' +
-'        <di:waypoint x="1495" y="710" />\n' +
-'      </bpmndi:BPMNEdge>\n' +
-'      <bpmndi:BPMNEdge id="Flow_P3_5_di" bpmnElement="Flow_P3_5">\n' +
-'        <di:waypoint x="1635" y="710" />\n' +
-'        <di:waypoint x="1760" y="710" />\n' +
+'        <di:waypoint x="1180" y="690" />\n' +
+'        <di:waypoint x="1220" y="690" />\n' +
 '      </bpmndi:BPMNEdge>\n\n' +
-'      <!-- ==================== MESSAGE FLOWS (INTER-POOL) ==================== -->\n' +
-'      <!-- MsgFlow 1: Task_IoT_Send (cx=530) -> Task_TM_Receive (cx=530) -->\n' +
-'      <!-- Circle offset: y=274 (+4px). Arrow tip: y=370 (outer top border). Straight vertical! -->\n' +
+'      <!-- Message Flows -->\n' +
 '      <bpmndi:BPMNEdge id="MsgFlow_1_di" bpmnElement="MsgFlow_1">\n' +
-'        <di:waypoint x="530" y="274" />\n' +
-'        <di:waypoint x="530" y="370" />\n' +
+'        <di:waypoint x="630" y="274" />\n' +
+'        <di:waypoint x="630" y="320" />\n' +
+'        <di:waypoint x="470" y="320" />\n' +
+'        <di:waypoint x="470" y="360" />\n' +
 '        <bpmndi:BPMNLabel>\n' +
-'          <dc:Bounds x="540" y="305" width="140" height="27" />\n' +
+'          <dc:Bounds x="500" y="300" width="170" height="27" />\n' +
 '        </bpmndi:BPMNLabel>\n' +
-'      </bpmndi:BPMNEdge>\n\n' +
-'      <!-- MsgFlow 2: Task_TM_Forward (cx=750) -> Task_ZNA_Receive (cx=750) -->\n' +
-'      <!-- Circle offset: y=454 (+4px). Arrow tip: y=670 (outer top border). Straight vertical! -->\n' +
+'      </bpmndi:BPMNEdge>\n' +
 '      <bpmndi:BPMNEdge id="MsgFlow_2_di" bpmnElement="MsgFlow_2">\n' +
-'        <di:waypoint x="750" y="454" />\n' +
-'        <di:waypoint x="750" y="670" />\n' +
+'        <di:waypoint x="630" y="444" />\n' +
+'        <di:waypoint x="630" y="650" />\n' +
 '        <bpmndi:BPMNLabel>\n' +
-'          <dc:Bounds x="760" y="540" width="140" height="27" />\n' +
+'          <dc:Bounds x="640" y="550" width="180" height="27" />\n' +
 '        </bpmndi:BPMNLabel>\n' +
-'      </bpmndi:BPMNEdge>\n\n' +
-'      <!-- MsgFlow 3: Task_ZNA_SendADT (cx=1115) -> Task_HS_Route (left side cx=1115) -->\n' +
-'      <!-- Going UP: Circle offset: y=666 (-4px). Arrow tip: y=570 (outer bottom border). Straight vertical! -->\n' +
+'      </bpmndi:BPMNEdge>\n' +
 '      <bpmndi:BPMNEdge id="MsgFlow_3_di" bpmnElement="MsgFlow_3">\n' +
-'        <di:waypoint x="1115" y="666" />\n' +
-'        <di:waypoint x="1115" y="570" />\n' +
+'        <di:waypoint x="950" y="646" />\n' +
+'        <di:waypoint x="950" y="600" />\n' +
+'        <di:waypoint x="890" y="600" />\n' +
+'        <di:waypoint x="890" y="560" />\n' +
 '        <bpmndi:BPMNLabel>\n' +
-'          <dc:Bounds x="965" y="605" width="140" height="27" />\n' +
+'          <dc:Bounds x="860" y="580" width="180" height="27" />\n' +
 '        </bpmndi:BPMNLabel>\n' +
-'      </bpmndi:BPMNEdge>\n\n' +
-'      <!-- MsgFlow 4: Task_HS_Route (right side cx=1185) -> Task_KIS_Create (left side cx=1280) -->\n' +
-'      <!-- Circle offset: y=574 (+4px). Arrow tip: y=790 (outer top border). Clean orthogonal! -->\n' +
+'      </bpmndi:BPMNEdge>\n' +
 '      <bpmndi:BPMNEdge id="MsgFlow_4_di" bpmnElement="MsgFlow_4">\n' +
-'        <di:waypoint x="1185" y="574" />\n' +
-'        <di:waypoint x="1185" y="625" />\n' +
-'        <di:waypoint x="1280" y="625" />\n' +
-'        <di:waypoint x="1280" y="790" />\n' +
+'        <di:waypoint x="940" y="564" />\n' +
+'        <di:waypoint x="940" y="770" />\n' +
 '        <bpmndi:BPMNLabel>\n' +
-'          <dc:Bounds x="1195" y="585" width="130" height="27" />\n' +
+'          <dc:Bounds x="950" y="660" width="160" height="27" />\n' +
 '        </bpmndi:BPMNLabel>\n' +
-'      </bpmndi:BPMNEdge>\n\n' +
-'      <!-- MsgFlow 5: Task_KIS_Create (right side cx=1350) -> Task_HS_Ack (left side cx=1495) -->\n' +
-'      <!-- Going UP: Circle offset: y=786 (-4px). Arrow tip: y=570 (outer bottom border). Clean orthogonal! -->\n' +
+'      </bpmndi:BPMNEdge>\n' +
 '      <bpmndi:BPMNEdge id="MsgFlow_5_di" bpmnElement="MsgFlow_5">\n' +
-'        <di:waypoint x="1350" y="786" />\n' +
-'        <di:waypoint x="1350" y="645" />\n' +
-'        <di:waypoint x="1495" y="645" />\n' +
-'        <di:waypoint x="1495" y="570" />\n' +
+'        <di:waypoint x="1020" y="766" />\n' +
+'        <di:waypoint x="1020" y="560" />\n' +
 '        <bpmndi:BPMNLabel>\n' +
-'          <dc:Bounds x="1360" y="650" width="130" height="27" />\n' +
+'          <dc:Bounds x="1030" y="660" width="170" height="27" />\n' +
 '        </bpmndi:BPMNLabel>\n' +
-'      </bpmndi:BPMNEdge>\n\n' +
-'      <!-- MsgFlow 6: Task_HS_Ack (right side cx=1565) -> Task_ZNA_Finalize (cx=1565) -->\n' +
-'      <!-- Circle offset: y=574 (+4px). Arrow tip: y=670 (outer top border). Straight vertical! -->\n' +
+'      </bpmndi:BPMNEdge>\n' +
 '      <bpmndi:BPMNEdge id="MsgFlow_6_di" bpmnElement="MsgFlow_6">\n' +
-'        <di:waypoint x="1565" y="574" />\n' +
-'        <di:waypoint x="1565" y="670" />\n' +
+'        <di:waypoint x="1070" y="564" />\n' +
+'        <di:waypoint x="1070" y="650" />\n' +
 '        <bpmndi:BPMNLabel>\n' +
-'          <dc:Bounds x="1575" y="605" width="130" height="27" />\n' +
+'          <dc:Bounds x="1080" y="600" width="150" height="27" />\n' +
 '        </bpmndi:BPMNLabel>\n' +
-'      </bpmndi:BPMNEdge>\n\n' +
+'      </bpmndi:BPMNEdge>\n' +
 '    </bpmndi:BPMNPlane>\n' +
 '  </bpmndi:BPMNDiagram>\n' +
 '</bpmn:definitions>';
@@ -43903,7 +43991,7 @@
           return jsdXml;
         }
 
-        // 2. PARSE PLANTUML FOR MULTI-POOL COLLABORATIONS (e.g. Other JSD and SEEBURGER processes)
+        // 2. PARSE PLANTUML FOR MULTI-POOL COLLABORATIONS (e.g. JSD-P-06 and other processes)
         const pumlText = proc.plantUml || (typeof window.generatePlantUmlFromProcess === 'function' ? window.generatePlantUmlFromProcess(proc) : '');
         const lines = pumlText ? pumlText.split('\n') : [];
 
@@ -43972,20 +44060,9 @@
               }
             }
 
-            // Fallback match by actor name or alias if no tag
-            if (!matchedActor && (isActor || line.toLowerCase().includes('ux') || line.toLowerCase().includes('client') || line.toLowerCase().includes('human'))) {
-              const normRaw = rawName.toLowerCase();
-              matchedActor = mappedActors.find(a => 
-                normRaw.includes(a.name.toLowerCase()) || 
-                a.name.toLowerCase().includes(normRaw) ||
-                (a.alias && normRaw.includes(a.alias.toLowerCase())) ||
-                normRaw.includes(a.id.toLowerCase())
-              ) || allActors.find(a => 
-                normRaw.includes(a.name.toLowerCase()) || 
-                a.name.toLowerCase().includes(normRaw) ||
-                (a.alias && normRaw.includes(a.alias.toLowerCase())) ||
-                normRaw.includes(a.id.toLowerCase())
-              );
+            // Intelligent Fallback Matcher: Matches actors and roles by keywords, aliases, and domains
+            if (!matchedActor && (isActor || line.toLowerCase().includes('ux') || line.toLowerCase().includes('client') || line.toLowerCase().includes('human') || /arzt|doc|pflege|sanit|notfall|aufnahme|triage|controller|einkauf|labor|pharma|radiolog/i.test(rawName))) {
+              matchedActor = matchActorForLaneOrTask(rawName, alias, allActors, mappedActors);
               if (matchedActor && !matchedClient && Array.isArray(matchedActor.clients) && matchedActor.clients.length > 0) {
                 matchedClient = matchedActor.clients[0];
               }
@@ -44013,10 +44090,16 @@
               aliasToPool.set(alias, targetPool);
               aliasToLane.set(alias, lane);
 
+              // Register metadata for EVERY lane (sys or human role)
               if (sysId && !isHumanLane) {
                 procMetaMap.set(laneId, { type: 'sys', sysId: sysId, desc: rawName });
-              } else if (laneActorId || laneClientId) {
-                procMetaMap.set(laneId, { type: 'human', actorId: laneActorId, clientId: laneClientId, desc: rawName });
+              } else if (laneActorId || laneClientId || isHumanLane) {
+                procMetaMap.set(laneId, { 
+                  type: 'human', 
+                  actorId: laneActorId || 'JSD-ACT-01', 
+                  clientId: laneClientId || 'JSD-CL-01', 
+                  desc: rawName 
+                });
               }
             }
           }
@@ -44030,12 +44113,17 @@
           const p3 = { id: 'Pool_' + safeProcId + '_3', processId: 'Process_' + safeProcId + '_3', name: 'Zielsysteme & Verbundpartner', lanes: [] };
           pools.push(p1, p2, p3);
 
-          const l1 = { id: 'Lane_' + safeProcId + '_1', name: mappedActors.length ? mappedActors[0].name : 'Prozess-Anwender', alias: 'User', isActor: true, pool: p1, flowNodes: [] };
+          const l1 = { id: 'Lane_' + safeProcId + '_1', name: mappedActors.length ? mappedActors[0].name : 'Prozess-Anwender', alias: 'User', isActor: true, actorId: mappedActors.length ? mappedActors[0].id : 'JSD-ACT-01', clientId: 'JSD-CL-01', pool: p1, flowNodes: [] };
           p1.lanes.push(l1);
-          const l2 = { id: 'Lane_' + safeProcId + '_2', name: isSeeburger ? 'SEE-01: BIS Core Engine' : 'EAI Middleware Platform', alias: 'Hub', isActor: false, pool: p2, flowNodes: [] };
+          procMetaMap.set(l1.id, { type: 'human', actorId: l1.actorId, clientId: l1.clientId, desc: l1.name });
+
+          const l2 = { id: 'Lane_' + safeProcId + '_2', name: isSeeburger ? 'SEE-01: BIS Core Engine' : 'EAI Middleware Platform', alias: 'Hub', isActor: false, sysId: isSeeburger ? 'SEE-01' : 'JSD-10', pool: p2, flowNodes: [] };
           p2.lanes.push(l2);
-          const l3 = { id: 'Lane_' + safeProcId + '_3', name: 'Backends & Partner', alias: 'Backend', isActor: false, pool: p3, flowNodes: [] };
+          procMetaMap.set(l2.id, { type: 'sys', sysId: l2.sysId, desc: l2.name });
+
+          const l3 = { id: 'Lane_' + safeProcId + '_3', name: 'Backends & Partner', alias: 'Backend', isActor: false, sysId: 'JSD-08', pool: p3, flowNodes: [] };
           p3.lanes.push(l3);
+          procMetaMap.set(l3.id, { type: 'sys', sysId: l3.sysId, desc: l3.name });
         }
 
         // Parse Interactions from PlantUML
@@ -44096,9 +44184,8 @@
         const allNodes = [];
         const messageFlows = [];
         const sequenceFlows = [];
-        let nodeX = 300;
 
-        // Process 1 (Initiator) gets Start Event
+        // START EVENT POSITIONING (Problem 1: Generous Margin of 90px from Lane Header, 114px from first Task)
         const p1 = pools[0];
         const l1 = p1.lanes[0];
         const startEventId = 'StartEvent_' + safeProcId;
@@ -44108,7 +44195,7 @@
           type: 'startEvent',
           lane: l1,
           pool: p1,
-          x: 210,
+          x: 250, // Generous x position: well clear of Lane header at x=130-160
           y: l1.y + 42,
           width: 36,
           height: 36
@@ -44116,20 +44203,22 @@
         l1.flowNodes.push(startEvent);
         allNodes.push(startEvent);
 
-        if (mappedActors.length > 0) {
-          procMetaMap.set(startEventId, { type: 'actor', actorId: mappedActors[0].id, clientId: mappedActors[0].clients && mappedActors[0].clients[0] ? mappedActors[0].clients[0].id : null });
-        }
+        const p1Actor = l1.actorId || (mappedActors.length > 0 ? mappedActors[0].id : 'JSD-ACT-01');
+        procMetaMap.set(startEventId, { type: 'actor', actorId: p1Actor, clientId: l1.clientId || 'JSD-CL-01', desc: startEvent.name });
 
         const prevNodeInPool = new Map();
         prevNodeInPool.set(p1.id, startEvent);
 
+        // FIRST TASK STARTS AT nodeX = 400 (leaves 114px gap for Start Event & its label!)
+        let nodeX = 400;
+
         if (interactions.length === 0) {
-          // Fallback if no arrows parsed
-          const t1 = { id: 'Task_' + safeProcId + '_1', name: 'Fachliche Daten erfassen', type: 'userTask', lane: l1, pool: p1, x: 300, y: l1.y + 20, width: 130, height: 80 };
+          const t1 = { id: 'Task_' + safeProcId + '_1', name: 'Fachliche Daten erfassen', type: 'userTask', lane: l1, pool: p1, x: 400, y: l1.y + 20, width: 130, height: 80 };
           l1.flowNodes.push(t1); allNodes.push(t1);
+          procMetaMap.set(t1.id, { type: 'human', actorId: p1Actor, clientId: l1.clientId || 'JSD-CL-01', desc: t1.name });
           sequenceFlows.push({ id: 'Flow_' + safeProcId + '_1', pool: p1, source: startEvent, target: t1 });
           prevNodeInPool.set(p1.id, t1);
-          nodeX = 480;
+          nodeX = 580;
         }
 
         interactions.forEach((it, idx) => {
@@ -44140,19 +44229,15 @@
           const connMatch = (it.rawDesc || '').match(/#conn-([A-Z0-9_-]+)/);
           const connId = connMatch ? connMatch[1] : null;
 
-          // Resolve step-specific Actor & Client from description or lanes
-          const descHitl = (it.rawDesc || '').match(/\[\[#hitl-([A-Za-z0-9_-]+)/);
-          const descUx = (it.rawDesc || '').match(/\[\[#ux-([A-Za-z0-9_-]+)/);
-          let stepActorId = descHitl ? descHitl[1] : (it.srcLane.actorId || (it.tgtLane && it.tgtLane.actorId) || null);
-          let stepClientId = descUx ? descUx[1] : (it.srcLane.clientId || (it.tgtLane && it.tgtLane.clientId) || null);
+          // Resolve step-specific Actor & Client
+          let stepActorId = it.srcLane.actorId || (it.tgtLane && it.tgtLane.actorId) || null;
+          let stepClientId = it.srcLane.clientId || (it.tgtLane && it.tgtLane.clientId) || null;
 
-          if (stepActorId && !stepClientId) {
-            const aObj = allActors.find(a => a.id === stepActorId);
-            if (aObj && Array.isArray(aObj.clients) && aObj.clients.length > 0) stepClientId = aObj.clients[0].id;
-          }
-          if (stepClientId && !stepActorId) {
-            for (const a of allActors) {
-              if ((a.clients || []).some(c => c.id === stepClientId)) { stepActorId = a.id; break; }
+          if (!stepActorId && it.srcLane.isActor) {
+            const matchedA = matchActorForLaneOrTask(it.rawDesc || it.srcLane.name, it.srcLane.alias, allActors, mappedActors);
+            if (matchedA) {
+              stepActorId = matchedA.id;
+              if (Array.isArray(matchedA.clients) && matchedA.clients.length > 0) stepClientId = matchedA.clients[0].id;
             }
           }
 
@@ -44174,13 +44259,11 @@
             it.srcLane.flowNodes.push(sendTask);
             allNodes.push(sendTask);
 
-            if (it.srcLane.sysId && !isSrcHuman) {
-              procMetaMap.set(sendTaskId, { type: 'sys', sysId: it.srcLane.sysId, desc: taskName });
-            } else if (stepActorId || stepClientId || it.srcLane.actorId || it.srcLane.clientId) {
+            if (isSrcHuman) {
               procMetaMap.set(sendTaskId, { 
                 type: 'human', 
-                actorId: stepActorId || it.srcLane.actorId, 
-                clientId: stepClientId || it.srcLane.clientId, 
+                actorId: stepActorId || it.srcLane.actorId || 'JSD-ACT-01', 
+                clientId: stepClientId || it.srcLane.clientId || 'JSD-CL-01', 
                 desc: taskName 
               });
             } else if (it.srcLane.sysId) {
@@ -44211,8 +44294,13 @@
 
             if (it.tgtLane.sysId) {
               procMetaMap.set(recvTaskId, { type: 'sys', sysId: it.tgtLane.sysId, desc: recvTask.name });
-            } else if (it.tgtLane.actorId || it.tgtLane.clientId) {
-              procMetaMap.set(recvTaskId, { type: 'human', actorId: it.tgtLane.actorId, clientId: it.tgtLane.clientId, desc: recvTask.name });
+            } else if (it.tgtLane.actorId || it.tgtLane.clientId || it.tgtLane.isActor) {
+              procMetaMap.set(recvTaskId, { 
+                type: 'human', 
+                actorId: it.tgtLane.actorId || 'JSD-ACT-01', 
+                clientId: it.tgtLane.clientId || 'JSD-CL-01', 
+                desc: recvTask.name 
+              });
             }
 
             const prevTgt = prevNodeInPool.get(it.tgtPool.id);
@@ -44233,6 +44321,7 @@
             if (connId) procMetaMap.set(msgFlowId, { type: 'step', connId: connId, desc: cleanMsgName });
             nodeX += 170;
           } else {
+            // INTRA-POOL TASK (e.g. Doc -> KIS in JSD-P-06)
             const taskId = 'Task_' + safeProcId + '_Intra_' + stepNum;
             const task = {
               id: taskId,
@@ -44248,13 +44337,12 @@
             it.srcLane.flowNodes.push(task);
             allNodes.push(task);
 
-            if (it.srcLane.sysId && !isSrcHuman) {
-              procMetaMap.set(taskId, { type: 'sys', sysId: it.srcLane.sysId, desc: taskName });
-            } else if (stepActorId || stepClientId || it.srcLane.actorId || it.srcLane.clientId) {
+            // Crucial: Register in procMetaMap so clicking on the Human Task works!
+            if (isSrcHuman) {
               procMetaMap.set(taskId, { 
                 type: 'human', 
-                actorId: stepActorId || it.srcLane.actorId, 
-                clientId: stepClientId || it.srcLane.clientId, 
+                actorId: stepActorId || it.srcLane.actorId || 'JSD-ACT-01', 
+                clientId: stepClientId || it.srcLane.clientId || 'JSD-CL-01', 
                 desc: taskName 
               });
             } else if (it.srcLane.sysId) {
@@ -44270,37 +44358,30 @@
           }
         });
 
-        // Add End Event for each pool
+        // Add End Events for pools
         pools.forEach((pool, pIdx) => {
-          const lastLane = pool.lanes[pool.lanes.length - 1];
-          const prev = prevNodeInPool.get(pool.id);
-          if (prev) {
-            const endEventId = 'EndEvent_' + safeProcId + '_' + (pIdx + 1);
+          const lastNode = prevNodeInPool.get(pool.id);
+          if (lastNode) {
+            const endId = 'EndEvent_' + safeProcId + '_' + (pIdx + 1);
             const endEvent = {
-              id: endEventId,
-              name: pool.name + ' abgeschlossen',
+              id: endId,
+              name: 'Prozessende (' + pool.name + ')',
               type: 'endEvent',
-              lane: prev.lane || lastLane,
+              lane: lastNode.lane,
               pool: pool,
-              x: Math.max(nodeX + 40, prev.x + 200),
-              y: (prev.lane ? prev.lane.y : lastLane.y) + 42,
+              x: nodeX,
+              y: lastNode.lane.y + 42,
               width: 36,
               height: 36
             };
-            (prev.lane || lastLane).flowNodes.push(endEvent);
+            lastNode.lane.flowNodes.push(endEvent);
             allNodes.push(endEvent);
-            procMetaMap.set(endEventId, { type: 'end', procId: proc.id });
-
-            sequenceFlows.push({
-              id: 'Flow_' + safeProcId + '_End_' + (pIdx + 1),
-              pool: pool,
-              source: prev,
-              target: endEvent
-            });
+            procMetaMap.set(endId, { type: 'end', procId: proc.id, desc: endEvent.name });
+            sequenceFlows.push({ id: 'Flow_' + safeProcId + '_End_' + (pIdx + 1), pool: pool, source: lastNode, target: endEvent });
           }
         });
 
-        // Assemble Collaboration XML
+        // ==================== BUILD BPMN 2.0 XML ====================
         let xml = '<?xml version="1.0" encoding="UTF-8"?>\n' +
 '<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"\n' +
 '                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"\n' +
@@ -44311,11 +44392,11 @@
 '  <bpmn:collaboration id="Collaboration_' + safeProcId + '">\n';
 
         pools.forEach(pool => {
-          xml += '    <bpmn:participant id="' + pool.id + '" name="' + escXml(pool.name) + '" processRef="' + pool.processId + '" />\n';
+          xml += '    <bpmn:participant id="' + pool.id + '" name="' + escXmlAttr(pool.name) + '" processRef="' + pool.processId + '" />\n';
         });
 
         messageFlows.forEach(mf => {
-          xml += '    <bpmn:messageFlow id="' + mf.id + '" name="' + escXml(mf.name) + '" sourceRef="' + mf.source.id + '" targetRef="' + mf.target.id + '" />\n';
+          xml += '    <bpmn:messageFlow id="' + mf.id + '" name="' + escXmlAttr(mf.name) + '" sourceRef="' + mf.source.id + '" targetRef="' + mf.target.id + '" />\n';
         });
 
         xml += '  </bpmn:collaboration>\n\n';
@@ -44324,7 +44405,8 @@
           xml += '  <bpmn:process id="' + pool.processId + '" isExecutable="false">\n' +
 '    <bpmn:laneSet id="LaneSet_' + pool.id + '">\n';
           pool.lanes.forEach(lane => {
-            xml += '      <bpmn:lane id="' + lane.id + '" name="' + escXml(formatLaneNameForBpmn(lane.name)) + '">\n';
+            // Problem 2 Fix: escXmlAttr ensures single &#10; entity for multi-line vertical lane titles
+            xml += '      <bpmn:lane id="' + lane.id + '" name="' + escXmlAttr(formatLaneNameForBpmn(lane.name)) + '">\n';
             lane.flowNodes.forEach(fn => {
               xml += '        <bpmn:flowNodeRef>' + fn.id + '</bpmn:flowNodeRef>\n';
             });
@@ -44333,18 +44415,24 @@
           xml += '    </bpmn:laneSet>\n\n';
 
           pool.lanes.forEach(lane => {
-            lane.flowNodes.forEach(node => {
-              const escNodeName = escXml(node.name);
-              if (node.type === 'startEvent') xml += '    <bpmn:startEvent id="' + node.id + '" name="' + escNodeName + '" />\n';
-              else if (node.type === 'endEvent') xml += '    <bpmn:endEvent id="' + node.id + '" name="' + escNodeName + '" />\n';
-              else if (node.type === 'userTask') xml += '    <bpmn:userTask id="' + node.id + '" name="' + escNodeName + '" />\n';
-              else if (node.type === 'sendTask') xml += '    <bpmn:sendTask id="' + node.id + '" name="' + escNodeName + '" />\n';
-              else if (node.type === 'receiveTask') xml += '    <bpmn:receiveTask id="' + node.id + '" name="' + escNodeName + '" />\n';
-              else xml += '    <bpmn:serviceTask id="' + node.id + '" name="' + escNodeName + '" />\n';
+            lane.flowNodes.forEach(fn => {
+              if (fn.type === 'startEvent') {
+                xml += '    <bpmn:startEvent id="' + fn.id + '" name="' + escXmlAttr(fn.name) + '" />\n';
+              } else if (fn.type === 'endEvent') {
+                xml += '    <bpmn:endEvent id="' + fn.id + '" name="' + escXmlAttr(fn.name) + '" />\n';
+              } else if (fn.type === 'userTask') {
+                xml += '    <bpmn:userTask id="' + fn.id + '" name="' + escXmlAttr(fn.name) + '" />\n';
+              } else if (fn.type === 'sendTask') {
+                xml += '    <bpmn:sendTask id="' + fn.id + '" name="' + escXmlAttr(fn.name) + '" />\n';
+              } else if (fn.type === 'receiveTask') {
+                xml += '    <bpmn:receiveTask id="' + fn.id + '" name="' + escXmlAttr(fn.name) + '" />\n';
+              } else {
+                xml += '    <bpmn:serviceTask id="' + fn.id + '" name="' + escXmlAttr(fn.name) + '" />\n';
+              }
             });
           });
 
-          sequenceFlows.filter(sf => sf.pool.id === pool.id).forEach(sf => {
+          sequenceFlows.filter(sf => sf.pool === pool).forEach(sf => {
             xml += '    <bpmn:sequenceFlow id="' + sf.id + '" sourceRef="' + sf.source.id + '" targetRef="' + sf.target.id + '" />\n';
           });
 
@@ -44371,7 +44459,8 @@
           xml += '      <bpmndi:BPMNShape id="' + node.id + '_di" bpmnElement="' + node.id + '">\n' +
 '        <dc:Bounds x="' + node.x + '" y="' + node.y + '" width="' + node.width + '" height="' + node.height + '" />\n';
           if (node.type === 'startEvent' || node.type === 'endEvent') {
-            const labelWidth = 180;
+            // Problem 1 Fix: Label width 140 centered at cx -> labelX = 198 (38px away from lane boundary at 160!)
+            const labelWidth = 140;
             const cx = Math.round(node.x + node.width / 2);
             const labelX = Math.round(cx - labelWidth / 2);
             const labelY = Math.round(node.y + node.height + 4);
@@ -44407,9 +44496,7 @@
           const sX = Math.round(s.x + s.width / 2);
           const tX = Math.round(t.x + t.width / 2);
           const isDown = s.y < t.y;
-          // Quell-Kringel berührt den Rand des BPMN-Symbols von außen (±4px Offset)
           const sY = isDown ? (s.y + s.height + 4) : (s.y - 4);
-          // Pfeilspitze landet exakt am äußeren Rand des Zielsymbols
           const tY = isDown ? t.y : (t.y + t.height);
 
           xml += '      <bpmndi:BPMNEdge id="' + mf.id + '_di" bpmnElement="' + mf.id + '">\n';
@@ -44503,7 +44590,7 @@
         }, 120);
       };
 
-      window.openBpmnModal = async function(procId, forceRefresh = false) {
+      window.openBpmnPopout = window.openBpmnModal = async function(procId, forceRefresh = false) {
         if (!procId) return null;
         const proc = (typeof PROCESSES_DATA !== 'undefined' ? PROCESSES_DATA : []).find(p => p.id === procId);
         if (!proc) return null;
@@ -44779,24 +44866,50 @@
               elemId = elemId.replace(/_label$/, '');
             }
 
+            // Visual feedback: select clicked shape with glowing outline
+            try {
+              svgContainer.querySelectorAll('.bpmn-selected-shape').forEach(el => el.classList.remove('bpmn-selected-shape'));
+              hitShape.classList.add('bpmn-selected-shape');
+            } catch(e) {}
+
             const metaMap = bpmnElementMetaMap.get(proc.id);
             let meta = metaMap ? metaMap.get(elemId) : null;
 
-            // Fallback: If not registered in metaMap, check if element ID contains system, actor, or client ID
+            // Problem 3 Fix: Comprehensive Smart Fallback for Human Tasks, Roles & Systems
             if (!meta) {
-              const sysMatch = elemId.match(/\b([A-Z]{2,4}-[A-Z0-9_-]+)\b/);
+              const text = (hitShape.textContent || '').trim();
+              const fullText = (text + ' ' + elemId).toLowerCase();
+
+              // 1. Check if shape text contains any known system code
+              const sysMatch = (text + ' ' + elemId).match(/\b([A-Z]{2,4}-[A-Z0-9_-]+)\b/);
               if (sysMatch && Array.isArray(SYSTEMS_DATA) && SYSTEMS_DATA.some(s => s.id === sysMatch[1])) {
-                meta = { type: 'sys', sysId: sysMatch[1] };
-              } else {
-                const actMatch = elemId.match(/\b([A-Z]{2,4}-ACT-[0-9_-]+)\b/);
-                if (actMatch) {
-                  meta = { type: 'human', actorId: actMatch[1] };
-                } else {
-                  const clMatch = elemId.match(/\b([A-Z]{2,4}-CL-[0-9_-]+)\b/);
-                  if (clMatch) {
-                    meta = { type: 'client', clientId: clMatch[1] };
-                  }
-                }
+                meta = { type: 'sys', sysId: sysMatch[1], desc: text };
+              }
+              // 2. Doctor / Clinical Signer / Station role
+              else if (/arzt|doc|hba|signier|finalisier|station|chefarzt|usertask|human/i.test(fullText)) {
+                meta = { type: 'human', actorId: 'JSD-ACT-01', clientId: 'JSD-CL-01', desc: text || 'Stationsarzt & Klinischer Operateur' };
+              }
+              // 3. RTW / Emergency role
+              else if (/sanit|rtw|notfall|notarzt|rettung/i.test(fullText)) {
+                meta = { type: 'human', actorId: 'JSD-ACT-03', clientId: 'JSD-CL-03', desc: text || 'Notfallsanitäter & RTW-Besatzung' };
+              }
+              // 4. Admission / Triage role
+              else if (/aufnahme|verwaltung|triage|koordinator/i.test(fullText)) {
+                meta = { type: 'human', actorId: 'JSD-ACT-04', clientId: 'JSD-CL-04', desc: text || 'Patientenaufnahme & ZNA-Koordinator' };
+              }
+              // 5. Controlling / Billing role
+              else if (/controller|abrechn|drg|kaufm/i.test(fullText)) {
+                meta = { type: 'human', actorId: 'JSD-ACT-05', desc: text || 'Krankenhaus-Abrechner & Controller' };
+              }
+              // 6. Purchasing / Logistics role
+              else if (/einkauf|logistik|buyer|beschaff/i.test(fullText)) {
+                meta = { type: 'human', actorId: 'JSD-ACT-06', desc: text || 'Einkäufer & Logistik' };
+              }
+              // 7. Fallback for any Lane or Human Task
+              else if (elemId.startsWith('Lane_')) {
+                meta = { type: 'human', actorId: 'JSD-ACT-01', clientId: 'JSD-CL-01', desc: text || 'Prozess-Schwimmbahn' };
+              } else if (elemId.startsWith('Task_')) {
+                meta = { type: 'human', actorId: 'JSD-ACT-01', clientId: 'JSD-CL-01', desc: text || 'Prozess-Aufgabe' };
               }
             }
 
@@ -46827,6 +46940,13 @@
         drawerColor: '#0f172a',
         drawerOpacity: 0.85,
         drawerBlur: 16,
+        // BPMN Process Model Appearance (Hintergrund, Pool & Lane)
+        bpmnBgColor: '',
+        bpmnBgOpacity: 1.0,
+        bpmnPoolColor: '',
+        bpmnPoolOpacity: 0.95,
+        bpmnLaneColor: '',
+        bpmnLaneOpacity: 0.85,
         // Views & Model defaults
         defaultLevel: '1',
         defaultRadarDimension: 'system',
@@ -46986,7 +47106,40 @@
             agentChatPane.style.setProperty('-webkit-backdrop-filter', 'none', 'important');
           }
 
-          // 4. Radar Dimension Default
+          // 4. BPMN Process Model Styling (Problem 4: Background, Pool & Lane Color and Opacity)
+          const bpmnBg = s.bpmnBgColor || (isDay ? '#f8fafc' : '#090d16');
+          const bpmnBgOp = s.bpmnBgOpacity !== undefined ? s.bpmnBgOpacity : 1.0;
+          const bpmnPool = s.bpmnPoolColor || (isDay ? '#e2e8f0' : '#111a28');
+          const bpmnPoolOp = s.bpmnPoolOpacity !== undefined ? s.bpmnPoolOpacity : 0.95;
+          const bpmnLane = s.bpmnLaneColor || (isDay ? '#ffffff' : '#1e293b');
+          const bpmnLaneOp = s.bpmnLaneOpacity !== undefined ? s.bpmnLaneOpacity : 0.85;
+
+          document.documentElement.style.setProperty('--bpmn-bg-color', bpmnBg);
+          document.documentElement.style.setProperty('--bpmn-bg-opacity', bpmnBgOp);
+          document.documentElement.style.setProperty('--bpmn-pool-color', bpmnPool);
+          document.documentElement.style.setProperty('--bpmn-pool-opacity', bpmnPoolOp);
+          document.documentElement.style.setProperty('--bpmn-lane-color', bpmnLane);
+          document.documentElement.style.setProperty('--bpmn-lane-opacity', bpmnLaneOp);
+
+          // Update any currently open BPMN SVG containers
+          const allBpmnContainers = document.querySelectorAll('.bpmn-svg-container');
+          allBpmnContainers.forEach(container => {
+            container.style.setProperty('background-color', bpmnBg, 'important');
+            
+            const poolRects = container.querySelectorAll('[data-element-id^="Pool_"] > .djs-visual > rect:first-child, [data-element-id^="Participant_"] > .djs-visual > rect:first-child');
+            poolRects.forEach(r => {
+              r.style.setProperty('fill', bpmnPool, 'important');
+              r.style.setProperty('fill-opacity', String(bpmnPoolOp), 'important');
+            });
+
+            const laneRects = container.querySelectorAll('[data-element-id^="Lane_"] > .djs-visual > rect:first-child');
+            laneRects.forEach(r => {
+              r.style.setProperty('fill', bpmnLane, 'important');
+              r.style.setProperty('fill-opacity', String(bpmnLaneOp), 'important');
+            });
+          });
+
+          // 5. Radar Dimension Default
           if (s.defaultRadarDimension) {
             const radarSel = document.getElementById('radarDimension');
             if (radarSel && radarSel.value !== s.defaultRadarDimension) {
@@ -47002,6 +47155,8 @@
       setTimeout(() => {
         try { OrcaiEaSettingsStore.applyToDOM(); } catch(e) {}
       }, 100);
+
+      window.OrcaiEaSettingsStore = OrcaiEaSettingsStore;
 
       /* =========================================================================
          EA SETTINGS MODAL UI CONTROLLER
@@ -47108,6 +47263,14 @@
 
         if (tabName === 'design') {
           const currentImgVal = settings.canvasBgImageKey || settings.canvasBgImage || '';
+          
+          const bpmnBgVal = settings.bpmnBgColor || (isDay ? '#f8fafc' : '#090d16');
+          const bpmnBgOpVal = settings.bpmnBgOpacity !== undefined ? settings.bpmnBgOpacity : 1.0;
+          const bpmnPoolVal = settings.bpmnPoolColor || (isDay ? '#e2e8f0' : '#111a28');
+          const bpmnPoolOpVal = settings.bpmnPoolOpacity !== undefined ? settings.bpmnPoolOpacity : 0.95;
+          const bpmnLaneVal = settings.bpmnLaneColor || (isDay ? '#ffffff' : '#1e293b');
+          const bpmnLaneOpVal = settings.bpmnLaneOpacity !== undefined ? settings.bpmnLaneOpacity : 0.85;
+
           body.innerHTML = `
             <div class="ea-settings-group">
               <label class="ea-settings-label">Erscheinungsbild der EA-App (Day / Night Mode)</label>
@@ -47154,6 +47317,64 @@
 
               <div class="agent-color-preview-box" id="eaDrawerPreviewBox" style="background:${hexToRgba(settings.drawerColor || (isDay ? '#ffffff' : '#0f172a'), settings.drawerOpacity !== undefined ? settings.drawerOpacity : 0.85)}; height:32px; border-radius:6px; border:1px solid rgba(255,255,255,0.25); display:flex; align-items:center; justify-content:center; color:${isDay ? '#0f172a' : '#ffffff'}; font-size:0.75rem; font-weight:600; margin-top:8px;">
                 Live-Vorschau Drawer: ${settings.drawerColor || (isDay ? '#ffffff' : '#0f172a')} · ${Math.round((settings.drawerOpacity !== undefined ? settings.drawerOpacity : 0.85) * 100)}% Deckkraft · ${settings.drawerBlur !== undefined ? settings.drawerBlur : 16}px Blur
+              </div>
+            </div>
+
+            <!-- Problem 4: BPMN Process Model Appearance (Hintergrund, Pool & Lane) -->
+            <div class="ea-settings-group">
+              <label class="ea-settings-label">📐 BPMN Prozessmodell (Transparenz &amp; Farbe für Hintergrund, Pool &amp; Lane)</label>
+              <div style="font-size:0.72rem; color:#94a3b8; margin-bottom:8px;">
+                Definiert individuelle Farben und Transparenzen für Zeichenfläche, Pools und Schwimmbahnen (Lanes), damit das Prozessmodell kontrastreich und leicht lesbar ist.
+              </div>
+
+              <!-- 1. BPMN Hintergrund -->
+              <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+                <span style="font-size:0.72rem; color:#94a3b8; width:85px; font-weight:600;">Hintergrund:</span>
+                <input type="color" id="eaBpmnBgColorPicker" value="${bpmnBgVal}" oninput="window.previewEaBpmnStyle()" onchange="window.previewEaBpmnStyle()" style="width:34px; height:28px; border:none; background:none; cursor:pointer; border-radius:4px;">
+                <input type="text" id="eaBpmnBgColorText" value="${settings.bpmnBgColor || ''}" placeholder="${isDay ? '#f8fafc' : '#090d16'}" class="agent-settings-input" style="font-family:monospace; width:95px; height:28px;" oninput="window.previewEaBpmnStyle()" onchange="window.previewEaBpmnStyle()">
+                <span style="font-size:0.70rem; color:#94a3b8; margin-left:4px;">Deckkraft:</span>
+                <input type="range" id="eaBpmnBgOpacityRange" min="0.1" max="1.0" step="0.05" value="${bpmnBgOpVal}" style="flex:1;" oninput="window.previewEaBpmnStyle()">
+                <span id="eaBpmnBgOpacityVal" style="font-size:0.70rem; color:#f8fafc; font-family:monospace; width:40px; text-align:right;">${Math.round(bpmnBgOpVal * 100)}%</span>
+              </div>
+
+              <!-- 2. BPMN Pool -->
+              <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+                <span style="font-size:0.72rem; color:#94a3b8; width:85px; font-weight:600;">Pool:</span>
+                <input type="color" id="eaBpmnPoolColorPicker" value="${bpmnPoolVal}" oninput="window.previewEaBpmnStyle()" onchange="window.previewEaBpmnStyle()" style="width:34px; height:28px; border:none; background:none; cursor:pointer; border-radius:4px;">
+                <input type="text" id="eaBpmnPoolColorText" value="${settings.bpmnPoolColor || ''}" placeholder="${isDay ? '#e2e8f0' : '#111a28'}" class="agent-settings-input" style="font-family:monospace; width:95px; height:28px;" oninput="window.previewEaBpmnStyle()" onchange="window.previewEaBpmnStyle()">
+                <span style="font-size:0.70rem; color:#94a3b8; margin-left:4px;">Deckkraft:</span>
+                <input type="range" id="eaBpmnPoolOpacityRange" min="0.2" max="1.0" step="0.05" value="${bpmnPoolOpVal}" style="flex:1;" oninput="window.previewEaBpmnStyle()">
+                <span id="eaBpmnPoolOpacityVal" style="font-size:0.70rem; color:#f8fafc; font-family:monospace; width:40px; text-align:right;">${Math.round(bpmnPoolOpVal * 100)}%</span>
+              </div>
+
+              <!-- 3. BPMN Lane -->
+              <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+                <span style="font-size:0.72rem; color:#94a3b8; width:85px; font-weight:600;">Lane (Bahn):</span>
+                <input type="color" id="eaBpmnLaneColorPicker" value="${bpmnLaneVal}" oninput="window.previewEaBpmnStyle()" onchange="window.previewEaBpmnStyle()" style="width:34px; height:28px; border:none; background:none; cursor:pointer; border-radius:4px;">
+                <input type="text" id="eaBpmnLaneColorText" value="${settings.bpmnLaneColor || ''}" placeholder="${isDay ? '#ffffff' : '#1e293b'}" class="agent-settings-input" style="font-family:monospace; width:95px; height:28px;" oninput="window.previewEaBpmnStyle()" onchange="window.previewEaBpmnStyle()">
+                <span style="font-size:0.70rem; color:#94a3b8; margin-left:4px;">Deckkraft:</span>
+                <input type="range" id="eaBpmnLaneOpacityRange" min="0.2" max="1.0" step="0.05" value="${bpmnLaneOpVal}" style="flex:1;" oninput="window.previewEaBpmnStyle()">
+                <span id="eaBpmnLaneOpacityVal" style="font-size:0.70rem; color:#f8fafc; font-family:monospace; width:40px; text-align:right;">${Math.round(bpmnLaneOpVal * 100)}%</span>
+              </div>
+
+              <!-- Presets -->
+              <div class="agent-color-presets" style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:8px;">
+                <span style="font-size:0.70rem; color:#94a3b8; margin-right:4px;">Presets:</span>
+                <button type="button" class="agent-settings-btn-option" onclick="window.setEaBpmnPreset('high-contrast')" title="Klarer Kontrast Hell">Klinisch Kontrastreich</button>
+                <button type="button" class="agent-settings-btn-option" onclick="window.setEaBpmnPreset('blueprint')" title="Dunkles Architektur Blueprint">Architektur Slate</button>
+                <button type="button" class="agent-settings-btn-option" onclick="window.setEaBpmnPreset('healthcare')" title="Zartes Healthcare Grün/Blau">Healthcare Soft</button>
+                <button type="button" class="agent-settings-btn-option" onclick="window.setEaBpmnPreset('obsidian')" title="Obsidian Darkmode">Obsidian Dark</button>
+                <button type="button" class="agent-settings-btn-option" onclick="window.resetEaBpmnStyle()" title="Standard wiederherstellen">Standard</button>
+              </div>
+
+              <!-- Nested Live Preview Box -->
+              <div id="bpmnStylePreviewBox" style="padding:10px; border-radius:6px; border:1px solid rgba(255,255,255,0.15); background:${hexToRgba(bpmnBgVal, bpmnBgOpVal)};">
+                <div id="bpmnPoolPreviewBox" style="padding:8px; border-radius:4px; border:1.5px solid #64748b; background:${hexToRgba(bpmnPoolVal, bpmnPoolOpVal)};">
+                  <div id="bpmnPoolPreviewText" style="font-size:0.68rem; font-weight:700; color:${isDay ? '#0f172a' : '#f8fafc'}; margin-bottom:4px;">Vorschau Pool: ${bpmnPoolVal} (${Math.round(bpmnPoolOpVal * 100)}% Deckkraft)</div>
+                  <div id="bpmnLanePreviewBox" style="padding:6px; border-radius:3px; border:1px solid #94a3b8; background:${hexToRgba(bpmnLaneVal, bpmnLaneOpVal)};">
+                    <div id="bpmnLanePreviewText" style="font-size:0.68rem; font-weight:600; color:${isDay ? '#0f172a' : '#f8fafc'};">Vorschau Schwimmbahn (Lane): ${bpmnLaneVal} (${Math.round(bpmnLaneOpVal * 100)}% Deckkraft)</div>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -47377,6 +47598,114 @@
         window.setEaDrawerColorPreset(defColor);
       };
 
+      /* Problem 4: BPMN Process Model Style Controller Methods */
+      window.previewEaBpmnStyle = function() {
+        const bgPicker = document.getElementById('eaBpmnBgColorPicker');
+        const bgText = document.getElementById('eaBpmnBgColorText');
+        const bgOpRange = document.getElementById('eaBpmnBgOpacityRange');
+        const bgOpVal = document.getElementById('eaBpmnBgOpacityVal');
+
+        const poolPicker = document.getElementById('eaBpmnPoolColorPicker');
+        const poolText = document.getElementById('eaBpmnPoolColorText');
+        const poolOpRange = document.getElementById('eaBpmnPoolOpacityRange');
+        const poolOpVal = document.getElementById('eaBpmnPoolOpacityVal');
+
+        const lanePicker = document.getElementById('eaBpmnLaneColorPicker');
+        const laneText = document.getElementById('eaBpmnLaneColorText');
+        const laneOpRange = document.getElementById('eaBpmnLaneOpacityRange');
+        const laneOpVal = document.getElementById('eaBpmnLaneOpacityVal');
+
+        const isDay = document.body.classList.contains('theme-day');
+
+        let bgColor = (bgText && bgText.value.trim()) || (bgPicker && bgPicker.value.trim()) || (isDay ? '#f8fafc' : '#090d16');
+        if (bgColor && !bgColor.startsWith('#') && /^[0-9a-fA-F]{6}$/.test(bgColor)) bgColor = '#' + bgColor;
+        const bgOp = bgOpRange ? parseFloat(bgOpRange.value) : 1.0;
+
+        let poolColor = (poolText && poolText.value.trim()) || (poolPicker && poolPicker.value.trim()) || (isDay ? '#e2e8f0' : '#111a28');
+        if (poolColor && !poolColor.startsWith('#') && /^[0-9a-fA-F]{6}$/.test(poolColor)) poolColor = '#' + poolColor;
+        const poolOp = poolOpRange ? parseFloat(poolOpRange.value) : 0.95;
+
+        let laneColor = (laneText && laneText.value.trim()) || (lanePicker && lanePicker.value.trim()) || (isDay ? '#ffffff' : '#1e293b');
+        if (laneColor && !laneColor.startsWith('#') && /^[0-9a-fA-F]{6}$/.test(laneColor)) laneColor = '#' + laneColor;
+        const laneOp = laneOpRange ? parseFloat(laneOpRange.value) : 0.85;
+
+        if (bgPicker && bgColor.startsWith('#')) bgPicker.value = bgColor;
+        if (bgText) bgText.value = bgColor;
+        if (bgOpVal) bgOpVal.textContent = Math.round(bgOp * 100) + '%';
+
+        if (poolPicker && poolColor.startsWith('#')) poolPicker.value = poolColor;
+        if (poolText) poolText.value = poolColor;
+        if (poolOpVal) poolOpVal.textContent = Math.round(poolOp * 100) + '%';
+
+        if (lanePicker && laneColor.startsWith('#')) lanePicker.value = laneColor;
+        if (laneText) laneText.value = laneColor;
+        if (laneOpVal) laneOpVal.textContent = Math.round(laneOp * 100) + '%';
+
+        // Update preview boxes
+        const previewBgBox = document.getElementById('bpmnStylePreviewBox');
+        const previewPoolBox = document.getElementById('bpmnPoolPreviewBox');
+        const previewLaneBox = document.getElementById('bpmnLanePreviewBox');
+        const previewPoolText = document.getElementById('bpmnPoolPreviewText');
+        const previewLaneText = document.getElementById('bpmnLanePreviewText');
+
+        if (previewBgBox) previewBgBox.style.backgroundColor = hexToRgba(bgColor, bgOp);
+        if (previewPoolBox) previewPoolBox.style.backgroundColor = hexToRgba(poolColor, poolOp);
+        if (previewLaneBox) previewLaneBox.style.backgroundColor = hexToRgba(laneColor, laneOp);
+
+        if (previewPoolText) previewPoolText.textContent = 'Vorschau Pool: ' + poolColor + ' (' + Math.round(poolOp * 100) + '% Deckkraft)';
+        if (previewLaneText) previewLaneText.textContent = 'Vorschau Schwimmbahn (Lane): ' + laneColor + ' (' + Math.round(laneOp * 100) + '% Deckkraft)';
+
+        OrcaiEaSettingsStore.saveSettings({
+          bpmnBgColor: bgColor,
+          bpmnBgOpacity: bgOp,
+          bpmnPoolColor: poolColor,
+          bpmnPoolOpacity: poolOp,
+          bpmnLaneColor: laneColor,
+          bpmnLaneOpacity: laneOp
+        });
+      };
+
+      window.setEaBpmnPreset = function(presetKey) {
+        const presets = {
+          'high-contrast': { bg: '#f8fafc', bgOp: 1.0, pool: '#e2e8f0', poolOp: 0.95, lane: '#ffffff', laneOp: 0.85 },
+          'blueprint': { bg: '#0f172a', bgOp: 1.0, pool: '#1e293b', poolOp: 0.95, lane: '#0f172a', laneOp: 0.80 },
+          'healthcare': { bg: '#f0fdf4', bgOp: 1.0, pool: '#e0f2fe', poolOp: 0.95, lane: '#ffffff', laneOp: 0.85 },
+          'obsidian': { bg: '#090d16', bgOp: 1.0, pool: '#111a28', poolOp: 0.95, lane: '#1e293b', laneOp: 0.75 }
+        };
+        const p = presets[presetKey] || presets['high-contrast'];
+
+        const bgPicker = document.getElementById('eaBpmnBgColorPicker');
+        const bgText = document.getElementById('eaBpmnBgColorText');
+        const bgOpRange = document.getElementById('eaBpmnBgOpacityRange');
+
+        const poolPicker = document.getElementById('eaBpmnPoolColorPicker');
+        const poolText = document.getElementById('eaBpmnPoolColorText');
+        const poolOpRange = document.getElementById('eaBpmnPoolOpacityRange');
+
+        const lanePicker = document.getElementById('eaBpmnLaneColorPicker');
+        const laneText = document.getElementById('eaBpmnLaneColorText');
+        const laneOpRange = document.getElementById('eaBpmnLaneOpacityRange');
+
+        if (bgPicker) bgPicker.value = p.bg;
+        if (bgText) bgText.value = p.bg;
+        if (bgOpRange) bgOpRange.value = p.bgOp;
+
+        if (poolPicker) poolPicker.value = p.pool;
+        if (poolText) poolText.value = p.pool;
+        if (poolOpRange) poolOpRange.value = p.poolOp;
+
+        if (lanePicker) lanePicker.value = p.lane;
+        if (laneText) laneText.value = p.lane;
+        if (laneOpRange) laneOpRange.value = p.laneOp;
+
+        window.previewEaBpmnStyle();
+      };
+
+      window.resetEaBpmnStyle = function() {
+        const isDay = document.body.classList.contains('theme-day');
+        window.setEaBpmnPreset(isDay ? 'high-contrast' : 'obsidian');
+      };
+
       /* Central Landscape Background & Canvas Controllers */
       window.previewEaBgColor = function(color) {
         let finalColor = (color || '').trim();
@@ -47458,6 +47787,37 @@
         if (drawerOpacityEl) patch.drawerOpacity = parseFloat(drawerOpacityEl.value);
         const drawerBlurEl = document.getElementById('eaDrawerBlurRange');
         if (drawerBlurEl) patch.drawerBlur = parseInt(drawerBlurEl.value) || 0;
+
+        // Problem 4: Read BPMN Process Model settings
+        const bpmnBgText = document.getElementById('eaBpmnBgColorText');
+        const bpmnBgPicker = document.getElementById('eaBpmnBgColorPicker');
+        if (bpmnBgText || bpmnBgPicker) {
+          let bColor = (bpmnBgText && bpmnBgText.value.trim()) || (bpmnBgPicker && bpmnBgPicker.value.trim()) || '';
+          if (bColor && !bColor.startsWith('#') && /^[0-9a-fA-F]{6}$/.test(bColor)) bColor = '#' + bColor;
+          patch.bpmnBgColor = bColor;
+        }
+        const bpmnBgOpEl = document.getElementById('eaBpmnBgOpacityRange');
+        if (bpmnBgOpEl) patch.bpmnBgOpacity = parseFloat(bpmnBgOpEl.value);
+
+        const bpmnPoolText = document.getElementById('eaBpmnPoolColorText');
+        const bpmnPoolPicker = document.getElementById('eaBpmnPoolColorPicker');
+        if (bpmnPoolText || bpmnPoolPicker) {
+          let pColor = (bpmnPoolText && bpmnPoolText.value.trim()) || (bpmnPoolPicker && bpmnPoolPicker.value.trim()) || '';
+          if (pColor && !pColor.startsWith('#') && /^[0-9a-fA-F]{6}$/.test(pColor)) pColor = '#' + pColor;
+          patch.bpmnPoolColor = pColor;
+        }
+        const bpmnPoolOpEl = document.getElementById('eaBpmnPoolOpacityRange');
+        if (bpmnPoolOpEl) patch.bpmnPoolOpacity = parseFloat(bpmnPoolOpEl.value);
+
+        const bpmnLaneText = document.getElementById('eaBpmnLaneColorText');
+        const bpmnLanePicker = document.getElementById('eaBpmnLaneColorPicker');
+        if (bpmnLaneText || bpmnLanePicker) {
+          let lColor = (bpmnLaneText && bpmnLaneText.value.trim()) || (bpmnLanePicker && bpmnLanePicker.value.trim()) || '';
+          if (lColor && !lColor.startsWith('#') && /^[0-9a-fA-F]{6}$/.test(lColor)) lColor = '#' + lColor;
+          patch.bpmnLaneColor = lColor;
+        }
+        const bpmnLaneOpEl = document.getElementById('eaBpmnLaneOpacityRange');
+        if (bpmnLaneOpEl) patch.bpmnLaneOpacity = parseFloat(bpmnLaneOpEl.value);
 
         // Read canvas background settings if DOM elements exist
         const colorText = document.getElementById('eaCanvasBgColorText');
@@ -47585,7 +47945,7 @@
         OrcaiEaSettingsStore.saveSettings({ githubEaRepos: repos });
         window.switchEaSettingsTab('repos');
       };
-      
+
       window.saveNewAgentLink = function() {
         const titleEl = document.getElementById('newLinkTitle');
         const urlEl = document.getElementById('newLinkUrl');
