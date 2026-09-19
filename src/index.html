@@ -44881,6 +44881,8 @@
           };
         }
 
+        window.getActiveOrcaiIdentity = getActiveOrcaiIdentity;
+
         function getUserSessionsStorageKey() {
           const id = getActiveOrcaiIdentity();
           return 'orcai_agent_sessions_' + encodeURIComponent(id.id);
@@ -45513,7 +45515,14 @@
 
       class OrcaiAgentSettingsStore {
         static getStorageKey() {
-          const id = (typeof getActiveOrcaiIdentity === 'function') ? getActiveOrcaiIdentity().id : 'guest';
+          let id = 'guest';
+          try {
+            if (typeof window.getActiveOrcaiIdentity === 'function') {
+              id = window.getActiveOrcaiIdentity().id;
+            } else if (typeof getActiveOrcaiIdentity === 'function') {
+              id = getActiveOrcaiIdentity().id;
+            }
+          } catch(e) {}
           return 'orcai_agent_settings_' + id;
         }
 
@@ -45535,12 +45544,20 @@
         static saveSettings(patch) {
           const current = this.getSettings();
           const updated = Object.assign({}, current, patch);
-          const identity = (typeof getActiveOrcaiIdentity === 'function') ? getActiveOrcaiIdentity() : { id: 'guest', name: 'Benutzer' };
+          let identity = { id: 'guest', name: 'Benutzer' };
+          try {
+            if (typeof window.getActiveOrcaiIdentity === 'function') {
+              identity = window.getActiveOrcaiIdentity();
+            } else if (typeof getActiveOrcaiIdentity === 'function') {
+              identity = getActiveOrcaiIdentity();
+            }
+          } catch(e) {}
 
           try {
             const userKey = this.getStorageKey();
             localStorage.setItem(userKey, JSON.stringify(updated));
             localStorage.setItem('orcai_agent_settings_v1', JSON.stringify(updated));
+            localStorage.setItem('orcai_agent_active_settings', JSON.stringify(updated));
 
             const profileRecord = {
               orcaiId: identity.id,
@@ -45564,18 +45581,32 @@
           const s = settings || this.getSettings();
           const drawer = document.getElementById('sidebarAgent');
           const chatPane = document.getElementById('agentChatPane');
+          const sidebar = document.querySelector('.agent-sidebar');
+          const settingsPanel = document.getElementById('agentSettingsPanel');
           if (!drawer) return;
 
-          // Apply custom background color directly
+          // Apply custom background color directly and aggressively across the entire drawer
           if (s.bgColor) {
             drawer.style.setProperty('--agent-custom-bg', s.bgColor);
-            drawer.style.backgroundColor = s.bgColor;
-            if (chatPane) chatPane.style.backgroundColor = s.bgColor;
+            drawer.style.setProperty('background-color', s.bgColor, 'important');
+            if (chatPane) {
+              chatPane.style.setProperty('background-color', s.bgColor, 'important');
+            }
+            if (sidebar) {
+              sidebar.style.setProperty('--agent-sidebar-custom-bg', s.bgColor);
+              sidebar.style.setProperty('background-color', s.bgColor, 'important');
+            }
             drawer.classList.add('agent-drawer-custom-bg');
           } else {
             drawer.style.removeProperty('--agent-custom-bg');
-            drawer.style.backgroundColor = '';
-            if (chatPane) chatPane.style.backgroundColor = '';
+            drawer.style.removeProperty('background-color');
+            if (chatPane) {
+              chatPane.style.removeProperty('background-color');
+            }
+            if (sidebar) {
+              sidebar.style.removeProperty('--agent-sidebar-custom-bg');
+              sidebar.style.removeProperty('background-color');
+            }
             drawer.classList.remove('agent-drawer-custom-bg');
           }
 
@@ -45614,7 +45645,10 @@
          ========================================================================= */
 
       window.copyOrcaiIdFromSettings = function() {
-        const id = (typeof getActiveOrcaiIdentity === 'function') ? getActiveOrcaiIdentity().id : 'guest';
+        let id = 'guest';
+        if (typeof window.getActiveOrcaiIdentity === 'function') {
+          id = window.getActiveOrcaiIdentity().id;
+        }
         navigator.clipboard.writeText(id).then(() => {
           const el = document.getElementById('settingsOrcaiIdCode');
           if (el) {
@@ -45627,17 +45661,32 @@
       };
 
       window.previewAgentBgColor = function(color) {
+        let finalColor = (color || '').trim();
+        if (finalColor && !finalColor.startsWith('#') && /^[0-9a-fA-F]{6}$/.test(finalColor)) {
+          finalColor = '#' + finalColor;
+        }
         const picker = document.getElementById('agentBgColorPicker');
         const text = document.getElementById('agentBgColorText');
-        if (picker) picker.value = color || '#090d16';
-        if (text) text.value = color || '#090d16';
+        const previewBox = document.getElementById('agentColorPreviewBox');
+        if (picker && finalColor && finalColor.startsWith('#')) {
+          picker.value = finalColor;
+        }
+        if (text) {
+          text.value = finalColor;
+        }
+        if (previewBox) {
+          previewBox.style.backgroundColor = finalColor || '#090d16';
+          previewBox.textContent = 'Live-Vorschau: ' + (finalColor || 'Standard (#090d16)');
+        }
 
-        // Real-time live preview
-        OrcaiAgentSettingsStore.applyToDOM({ bgColor: color });
+        // Real-time live application to the entire drawer
+        const current = OrcaiAgentSettingsStore.getSettings();
+        const merged = Object.assign({}, current, { bgColor: finalColor });
+        OrcaiAgentSettingsStore.applyToDOM(merged);
 
         // Update preset active state
         document.querySelectorAll('.agent-color-chip').forEach(chip => {
-          chip.classList.toggle('active', chip.getAttribute('onclick')?.includes(color));
+          chip.classList.toggle('active', chip.getAttribute('onclick')?.includes(finalColor));
         });
       };
 
@@ -45646,7 +45695,9 @@
         if (inp) inp.value = url;
         const opacityEl = document.getElementById('agentBgOpacityRange');
         const opacity = opacityEl ? parseFloat(opacityEl.value) : 0.15;
-        OrcaiAgentSettingsStore.applyToDOM({ bgImage: url, bgOpacity: opacity });
+        const current = OrcaiAgentSettingsStore.getSettings();
+        const merged = Object.assign({}, current, { bgImage: url, bgOpacity: opacity });
+        OrcaiAgentSettingsStore.applyToDOM(merged);
       };
 
       window.previewAgentBgOpacity = function(val) {
@@ -45655,15 +45706,21 @@
         if (lbl) lbl.textContent = Math.round(num * 100) + '%';
         const inp = document.getElementById('agentBgImageUrl');
         const url = inp ? inp.value.trim() : '';
-        OrcaiAgentSettingsStore.applyToDOM({ bgImage: url, bgOpacity: num });
+        const current = OrcaiAgentSettingsStore.getSettings();
+        const merged = Object.assign({}, current, { bgImage: url, bgOpacity: num });
+        OrcaiAgentSettingsStore.applyToDOM(merged);
       };
 
       window.saveAllAgentSettingsFromUi = function() {
         const colorText = document.getElementById('agentBgColorText');
+        const colorPicker = document.getElementById('agentBgColorPicker');
         const bgImgInp = document.getElementById('agentBgImageUrl');
         const opacityEl = document.getElementById('agentBgOpacityRange');
 
-        const bgColor = colorText ? colorText.value.trim() : '';
+        let bgColor = (colorText && colorText.value.trim()) || (colorPicker && colorPicker.value.trim()) || '';
+        if (bgColor && !bgColor.startsWith('#') && /^[0-9a-fA-F]{6}$/.test(bgColor)) {
+          bgColor = '#' + bgColor;
+        }
         const bgImage = bgImgInp ? bgImgInp.value.trim() : '';
         const bgOpacity = opacityEl ? parseFloat(opacityEl.value) : 0.15;
         const theme = document.body.classList.contains('theme-day') ? 'day' : 'night';
@@ -45677,10 +45734,15 @@
 
         const statusEl = document.getElementById('agentSettingsStatusText');
         const btnSave = document.getElementById('btnSaveAgentSettingsAll');
-        const identity = (typeof getActiveOrcaiIdentity === 'function') ? getActiveOrcaiIdentity() : { id: 'guest' };
+        let identity = { id: 'guest', name: 'Benutzer' };
+        try {
+          if (typeof window.getActiveOrcaiIdentity === 'function') {
+            identity = window.getActiveOrcaiIdentity();
+          }
+        } catch(e) {}
 
         if (statusEl) {
-          statusEl.innerHTML = '✓ Gespeichert für ORCAI-ID: ' + identity.id.substring(0, 10) + '...';
+          statusEl.innerHTML = '✓ Gespeichert für ORCAI-ID: <code style="color:#38bdf8;">' + identity.id + '</code>';
         }
         if (btnSave) {
           btnSave.innerHTML = '✓ Einstellungen gespeichert!';
@@ -45688,7 +45750,6 @@
           setTimeout(() => {
             btnSave.innerHTML = '💾 Einstellungen speichern';
             btnSave.classList.remove('saved-success');
-            if (statusEl) statusEl.innerHTML = '';
           }, 2500);
         }
       };
@@ -45704,7 +45765,12 @@
         const drawer = document.getElementById('agentChatPane') || document.getElementById('sidebarAgent');
         if (!drawer) return;
 
-        const identity = (typeof getActiveOrcaiIdentity === 'function') ? getActiveOrcaiIdentity() : { id: 'guest', name: 'Benutzer' };
+        let identity = { id: 'guest', name: 'Benutzer' };
+        try {
+          if (typeof window.getActiveOrcaiIdentity === 'function') {
+            identity = window.getActiveOrcaiIdentity();
+          }
+        } catch(e) {}
 
         panel = document.createElement('div');
         panel.id = 'agentSettingsPanel';
@@ -45786,8 +45852,8 @@
             <div class="agent-settings-group">
               <label class="agent-settings-label">Eigene Hintergrundfarbe für den Agenten</label>
               <div style="display:flex; align-items:center; gap:10px;">
-                <input type="color" id="agentBgColorPicker" value="${settings.bgColor || '#090d16'}" oninput="window.previewAgentBgColor(this.value)" style="width:38px; height:34px; border:none; background:none; cursor:pointer; border-radius:6px;">
-                <input type="text" id="agentBgColorText" value="${settings.bgColor || '#090d16'}" class="agent-settings-input" style="font-family:monospace; width:110px;" oninput="window.previewAgentBgColor(this.value)">
+                <input type="color" id="agentBgColorPicker" value="${settings.bgColor || '#090d16'}" oninput="window.previewAgentBgColor(this.value)" onchange="window.previewAgentBgColor(this.value)" style="width:40px; height:34px; border:none; background:none; cursor:pointer; border-radius:6px;">
+                <input type="text" id="agentBgColorText" value="${settings.bgColor || '#090d16'}" class="agent-settings-input" style="font-family:monospace; width:120px;" oninput="window.previewAgentBgColor(this.value)" onchange="window.previewAgentBgColor(this.value)">
                 <button type="button" class="agent-settings-btn-option" onclick="window.previewAgentBgColor('')" title="Standardfarbe wiederherstellen">Standard</button>
               </div>
               <div class="agent-color-presets" style="margin-top:8px;">
@@ -45796,7 +45862,14 @@
                 <button type="button" class="agent-color-chip ${settings.bgColor === '#0f172a' ? 'active' : ''}" style="background:#0f172a;" onclick="window.previewAgentBgColor('#0f172a')" title="Slate Navy"></button>
                 <button type="button" class="agent-color-chip ${settings.bgColor === '#1e1b4b' ? 'active' : ''}" style="background:#1e1b4b;" onclick="window.previewAgentBgColor('#1e1b4b')" title="Indigo Void"></button>
                 <button type="button" class="agent-color-chip ${settings.bgColor === '#050811' ? 'active' : ''}" style="background:#050811;" onclick="window.previewAgentBgColor('#050811')" title="Midnight Pitch"></button>
+                <button type="button" class="agent-color-chip ${settings.bgColor === '#172554' ? 'active' : ''}" style="background:#172554;" onclick="window.previewAgentBgColor('#172554')" title="Royal Cobalt"></button>
+                <button type="button" class="agent-color-chip ${settings.bgColor === '#064e3b' ? 'active' : ''}" style="background:#064e3b;" onclick="window.previewAgentBgColor('#064e3b')" title="Emerald Forest"></button>
                 <button type="button" class="agent-color-chip ${settings.bgColor === '#ffffff' ? 'active' : ''}" style="background:#ffffff;" onclick="window.previewAgentBgColor('#ffffff')" title="Paper Light"></button>
+              </div>
+
+              <!-- Real-time Live Preview Bar -->
+              <div class="agent-color-preview-box" id="agentColorPreviewBox" style="background:${settings.bgColor || '#090d16'}; height:32px; border-radius:6px; border:1px solid rgba(255,255,255,0.25); display:flex; align-items:center; justify-content:center; color:#ffffff; font-size:0.75rem; font-weight:600; text-shadow:0 1px 2px rgba(0,0,0,0.8); margin-top:8px; box-shadow:inset 0 0 10px rgba(0,0,0,0.3);">
+                Live-Vorschau: ${settings.bgColor || 'Standard (#090d16)'}
               </div>
             </div>
 
