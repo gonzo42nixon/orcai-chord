@@ -5060,6 +5060,13 @@
       overflow: hidden;
       user-select: none;
     }
+    .agent-sidebar-chats-count {
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: #94a3b8;
+      margin-left: 4px;
+      letter-spacing: 0.02em;
+    }
     .agent-sidebar-title {
       font-size: 0.82rem;
       font-weight: 700;
@@ -6622,6 +6629,11 @@
           <button class="orcai-account-action" id="orcaiAccountAction" type="button" role="menuitem">Mit Google anmelden</button>
         </div>
       </div>
+
+      <!-- Agent Settings Button (Rechts vom Login wie bei Gemini) -->
+      <button class="header-action-btn" id="btnHeaderAgentSettings" type="button" title="⚙️ AI-Agent Einstellungen (Design, Links, GitHub, Volltextsuche)" aria-label="AI-Agent Einstellungen" onclick="window.openAgentSettingsFromHeader()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width: 18px; height: 18px;"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </button>
     </div>
   </header>
 
@@ -7007,7 +7019,7 @@
         <div class="agent-sidebar-header">
           <div class="agent-sidebar-brand" id="agentSidebarBrand" title="ORCAI Chats (Klicken zum Umschalten)">
             <img src="/favicon.svg" class="agent-orcai-logo" alt="ORCAI">
-            <span class="agent-sidebar-title">ORCAI Chats</span>
+            <span class="agent-sidebar-title">ORCAI Chats <span class="agent-sidebar-chats-count" id="agentSidebarChatsCount">(0)</span></span>
           </div>
           <button class="agent-sidebar-toggle-btn" id="btnToggleSidebarIconify" title="Seitenleiste ikonifizieren / ausklappen" aria-label="Seitenleiste ein-/ausklappen">
             <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -45332,6 +45344,23 @@
          SETTINGS PANEL UI (Popout / Overlay)
          ========================================================================= */
 
+      
+      window.openAgentSettingsFromHeader = function() {
+        const drawer = document.getElementById('sidebarAgent');
+        const isCollapsed = drawer && drawer.classList.contains('collapsed');
+        if (isCollapsed && typeof window.toggleOrcaiAgentDrawer === 'function') {
+          window.toggleOrcaiAgentDrawer(true);
+        }
+        setTimeout(() => {
+          const panel = document.getElementById('agentSettingsPanel');
+          if (!panel && typeof window.toggleAgentSettingsPanel === 'function') {
+            window.toggleAgentSettingsPanel();
+          } else if (panel && !isCollapsed) {
+            panel.remove();
+          }
+        }, isCollapsed ? 250 : 0);
+      };
+
       window.toggleAgentSettingsPanel = function() {
         let panel = document.getElementById('agentSettingsPanel');
         if (panel) {
@@ -46410,6 +46439,11 @@
             filtered = sessions.map(s => ({ session: s, snippet: '', matchCount: 0 }));
             if (agentHistoryCount) {
               agentHistoryCount.textContent = sessions.length + (sessions.length === 1 ? ' Chat' : ' Chats');
+            const brandCountEl = document.getElementById('agentSidebarChatsCount');
+            if (brandCountEl) {
+              brandCountEl.textContent = '(' + sessions.length + ')';
+              brandCountEl.title = sessions.length + (sessions.length === 1 ? ' Chat' : ' Chats');
+            }
               agentHistoryCount.style.color = '';
               agentHistoryCount.style.fontWeight = '';
             }
@@ -46448,6 +46482,11 @@
 
             if (agentHistoryCount) {
               agentHistoryCount.textContent = totalHitsAllChats + ' Treffer in ' + filtered.length + ' Chat' + (filtered.length === 1 ? '' : 's');
+            const brandCountEl = document.getElementById('agentSidebarChatsCount');
+            if (brandCountEl) {
+              brandCountEl.textContent = '(' + filtered.length + ')';
+              brandCountEl.title = totalHitsAllChats + ' Treffer in ' + filtered.length + ' Chat(s)';
+            }
               agentHistoryCount.style.color = '#f59e0b';
               agentHistoryCount.style.fontWeight = '700';
             }
