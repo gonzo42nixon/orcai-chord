@@ -5334,6 +5334,43 @@
       box-shadow: 0 0 6px rgba(139, 92, 246, 0.5);
     }
 
+    /* Hero Empty-State Greeting (Gemini, ChatGPT, Claude, Grok Style) */
+    .agent-empty-hero {
+      margin: auto 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 30px 14px;
+      animation: agentHeroFadeIn 0.3s ease-out;
+      user-select: none;
+    }
+    @keyframes agentHeroFadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .agent-hero-greeting {
+      margin: 0 0 10px 0;
+      font-size: 1.32rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.25;
+      background: linear-gradient(135deg, #ffffff 40%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .agent-hero-subline {
+      font-size: 0.76rem;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      line-height: 1.4;
+      max-width: 380px;
+    }
+
     /* Timeline Topic Banner (ChatGPT & Claude style) */
     .agent-timeline-headline-banner {
       padding: 12px 14px;
@@ -19925,6 +19962,7 @@
 
         function renderUser(user) {
           currentUser = user || null;
+          window.currentUser = user || null;
           showError("");
           root.dataset.authenticated = user ? "true" : "false";
           if (identity) identity.hidden = !user;
@@ -44119,13 +44157,14 @@
         }
 
         function getActiveOrcaiIdentity() {
-          if (typeof currentUser !== 'undefined' && currentUser && (currentUser.email || currentUser.uid)) {
-            const displayName = currentUser.displayName || (currentUser.email ? currentUser.email.split('@')[0] : 'ORCAI Benutzer');
+          const userObj = (typeof window !== 'undefined' && window.currentUser) || (typeof currentUser !== 'undefined' && currentUser);
+          if (userObj && (userObj.email || userObj.uid || userObj.displayName)) {
+            const displayName = userObj.displayName || (userObj.email ? userObj.email.split('@')[0] : 'ORCAI Benutzer');
             return {
-              id: currentUser.uid || currentUser.email,
-              email: currentUser.email || '',
+              id: userObj.uid || userObj.email,
+              email: userObj.email || '',
               name: displayName,
-              photoURL: currentUser.photoURL || '',
+              photoURL: userObj.photoURL || '',
               isLoggedIn: true
             };
           }
@@ -44257,6 +44296,55 @@
           updateHistoryUI(agentHistorySearchInput ? agentHistorySearchInput.value : '');
         }
 
+        function getHeroGreeting() {
+          const identity = getActiveOrcaiIdentity();
+          let firstName = '';
+          if (identity && identity.name && !identity.name.startsWith('Gast') && !identity.name.startsWith('ORCAI')) {
+            firstName = identity.name.trim().split(' ')[0];
+          }
+          if (firstName) {
+            const hour = new Date().getHours();
+            if (hour >= 5 && hour < 11) {
+              return `Guten Morgen, ${firstName}! Womit kann ich dir helfen?`;
+            }
+            const options = [
+              `Womit kann ich dir helfen, ${firstName}?`,
+              `Hallo, ${firstName}. Bist du bereit?`,
+              `Wieder am Start, ${firstName}?`,
+              `Was möchtest du heute analysieren, ${firstName}?`
+            ];
+            const idx = Math.floor(Math.random() * options.length);
+            return options[idx];
+          } else {
+            const options = [
+              'Womit kann ich dir helfen?',
+              'Bereit für die IT-Landschaft?',
+              'Was möchtest du heute analysieren?',
+              'Architektur, Prozesse & Standards erkunden'
+            ];
+            const idx = Math.floor(Math.random() * options.length);
+            return options[idx];
+          }
+        }
+
+        function renderEmptyHeroGreeting() {
+          if (!agentChatMessages) return;
+          agentChatMessages.innerHTML = '';
+          const greetingText = getHeroGreeting();
+
+          const heroEl = document.createElement('div');
+          heroEl.className = 'agent-empty-hero';
+          heroEl.id = 'agentEmptyHero';
+          heroEl.innerHTML = `
+            <h1 class="agent-hero-greeting" id="agentHeroGreetingText">${greetingText}</h1>
+            <div class="agent-hero-subline">
+              <span>Ihr interaktiver Sparringspartner für Modelle, Prozesse &amp; Standards</span>
+              <button class="agent-info-popout-trigger" onclick="window.openAgentInfoPopout()" title="Details, Manifest &amp; Beispielfragen">ℹ️</button>
+            </div>
+          `;
+          agentChatMessages.appendChild(heroEl);
+        }
+
         function ensureTimelineBannerElement() {
           if (!agentChatMessages) return;
           let banner = document.getElementById('agentTimelineBanner');
@@ -44276,15 +44364,14 @@
 
         function startNewChat() {
           currentSessionId = null;
-          if (agentChatMessages) agentChatMessages.innerHTML = '';
-          ensureTimelineBannerElement();
-          renderTimelineHeadlineBanner('Neuer Chat', Date.now());
-          renderInitialAgentGreeting();
+          renderEmptyHeroGreeting();
+          const headerTitleEl = document.getElementById('agentChatHeaderTitle');
+          if (headerTitleEl) headerTitleEl.textContent = 'Neuer Chat';
           updateHistoryUI(agentHistorySearchInput ? agentHistorySearchInput.value : '');
         }
         window.startNewAgentChat = startNewChat;
 
-        // Load existing session - smoothly switches between chats and updates timeline headline!
+        // Load existing session - displays hero greeting if empty, or real conversation stream with headline banner
         function loadChatSession(sessionId) {
           const sessions = loadAllUserSessions();
           const session = sessions.find(s => s.id === sessionId);
@@ -44293,13 +44380,20 @@
           currentSessionId = session.id;
           if (agentChatMessages) agentChatMessages.innerHTML = '';
 
-          ensureTimelineBannerElement();
-          renderTimelineHeadlineBanner(session.title || 'Neuer Chat', session.createdAt);
+          const headerTitleEl = document.getElementById('agentChatHeaderTitle');
+          if (headerTitleEl) headerTitleEl.textContent = session.title || 'Neuer Chat';
 
-          if (session.messages.length === 0) {
-            renderInitialAgentGreeting();
+          const realUserMsgs = (session.messages || []).filter(m => m.isUser);
+          if (realUserMsgs.length === 0) {
+            renderEmptyHeroGreeting();
           } else {
+            ensureTimelineBannerElement();
+            renderTimelineHeadlineBanner(session.title || 'Neuer Chat', session.createdAt);
             session.messages.forEach(m => {
+              // Filter out legacy initial greeting bubbles
+              if (!m.isUser && m.html && m.html.includes('Hallo! Ihr EA-Sparringspartner für Modelle')) {
+                return;
+              }
               appendMessage(m.html, m.isUser, m.chips, m.spoken, true);
             });
           }
@@ -44775,11 +44869,7 @@
 
         // Initial Greeting: Ultrakurze Motivation als Halbsatz mit integriertem i-Button
         function renderInitialAgentGreeting() {
-          const greetingHtml = '<p>Hallo! Ihr EA-Sparringspartner für Modelle, Prozesse &amp; Standards ' +
-            '<button class="agent-info-popout-trigger" id="btnAgentInfoTrigger" onclick="window.openAgentInfoPopout()" title="Details, Manifest &amp; Beispielfragen">ℹ️</button></p>';
-
-          const defaultChips = [];
-          appendMessage(greetingHtml, false, defaultChips, 'Hallo! Ich bin Ihr EA-Sparringspartner für Architektur, Prozesse und Standards.', false);
+          renderEmptyHeroGreeting();
         }
 
         // =====================================================================
@@ -44788,6 +44878,11 @@
         function processAgentQuery(query, wasVoice = false) {
           const q = String(query || '').trim();
           if (!q) return;
+
+          const heroEl = document.getElementById('agentEmptyHero');
+          if (heroEl) heroEl.remove();
+
+          ensureTimelineBannerElement();
 
           appendMessage(q, true);
 
