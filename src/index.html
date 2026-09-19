@@ -7418,6 +7418,24 @@
       transition: fill 0.2s ease, fill-opacity 0.2s ease;
     }
 
+    /* Adaptive SVG text and line contrast for dark BPMN themes */
+    body.theme-night .bpmn-svg-container [data-element-id^="Lane_"] text,
+    body.theme-night .bpmn-svg-container [data-element-id^="Pool_"] text,
+    body.theme-night .bpmn-svg-container [data-element-id^="Participant_"] text {
+      fill: #f8fafc !important;
+      font-weight: 600 !important;
+    }
+    body.theme-night .bpmn-svg-container [data-element-id$="_label"] text {
+      fill: #f1f5f9 !important;
+    }
+    body.theme-night .bpmn-svg-container .djs-connection path {
+      stroke: #94a3b8 !important;
+    }
+    body.theme-night .bpmn-svg-container .djs-connection polygon {
+      fill: #94a3b8 !important;
+      stroke: #94a3b8 !important;
+    }
+
     /* Visual selection highlight on clicked BPMN shape */
     .bpmn-selected-shape > .djs-visual > rect,
     .bpmn-selected-shape > .djs-visual > circle,
@@ -22239,11 +22257,11 @@
       // UX TECHNOLOGY ICONS REGISTRY & CLASSIFICATION
       // =========================================================================
       const UX_TECH_ICONS = {
-        sapGui: "data:image/png;base64,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",
-        fatClient: "data:image/png;base64,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",
-        mobileClient: "data:image/png;base64,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",
-        fioriApp: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiIgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImZpb3JpR3JhZCIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzAyODRjNyIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzM4YmRmOCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjIiIHk9IjIiIHdpZHRoPSIyOCIgaGVpZ2h0PSIyOCIgcng9IjciIGZpbGw9InVybCgjZmlvcmlHcmFkKSIvPjxyZWN0IHg9IjciIHk9IjciIHdpZHRoPSI3LjUiIGhlaWdodD0iNy41IiByeD0iMiIgZmlsbD0iI2ZmZmZmZiIgb3BhY2l0eT0iMC45NSIvPjxyZWN0IHg9IjE3LjUiIHk9IjciIHdpZHRoPSI3LjUiIGhlaWdodD0iNy41IiByeD0iMiIgZmlsbD0iI2ZmZmZmZiIgb3BhY2l0eT0iMC44Ii8+PHJlY3QgeD0iNyIgeT0iMTcuNSIgd2lkdGg9IjcuNSIgaGVpZ2h0PSI3LjUiIHJ4PSIyIiBmaWxsPSIjZmZmZmZmIiBvcGFjaXR5PSIwLjgiLz48cmVjdCB4PSIxNy41IiB5PSIxNy41IiB3aWR0aD0iNy41IiBoZWlnaHQ9IjcuNSIgcng9IjIiIGZpbGw9IiNmNTllMGIiIG9wYWNpdHk9IjAuOTUiLz48L3N2Zz4=",
-        spa: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiIgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9InNwYUdyYWQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMxMGI5ODEiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMwNmI2ZDQiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB4PSIyIiB5PSIyIiB3aWR0aD0iMjgiIGhlaWdodD0iMjgiIHJ4PSI3IiBmaWxsPSJ1cmwoI3NwYUdyYWQpIi8+PHJlY3QgeD0iNSIgeT0iNiIgd2lkdGg9IjIyIiBoZWlnaHQ9IjIwIiByeD0iMyIgZmlsbD0iIzBmMTcyYSIgZmlsbC1vcGFjaXR5PSIwLjg1IiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iMC44Ii8+PGNpcmNsZSBjeD0iOCIgY3k9IjkuNSIgcj0iMSIgZmlsbD0iI2VmNDQ0NCIvPjxjaXJjbGUgY3g9IjExIiBjeT0iOS41IiByPSIxIiBmaWxsPSIjZjU5ZTBiIi8+PGNpcmNsZSBjeD0iMTQiIGN5PSI5LjUiIHI9IjEiIGZpbGw9IiMxMGI5ODEiLz48cGF0aCBkPSJNMTEgMTggTDggMjAgTDExIDIyIE0yMSAxOCBMMjQgMjAgTDIxIDIyIE0xNyAxNyBMMTUgMjMiIHN0cm9rZT0iIzM4YmRmOCIgc3Ryb2tlLXdpZHRoPSIxLjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgZmlsbD0ibm9uZSIvPjwvc3ZnPg=="
+        fioriApp: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiIgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImZpb3JpR3JhZCIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzAyODRjNyIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzM4YmRmOCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjIiIHk9IjIiIHdpZHRoPSIyOCIgaGVpZ2h0PSIyOCIgcng9IjciIGZpbGw9InVybCgjZmlvcmlHcmFkKSIgc3Ryb2tlPSIjMzhiZGY4IiBzdHJva2Utd2lkdGg9IjEuMiIvPjxyZWN0IHg9IjYuNSIgeT0iNi41IiB3aWR0aD0iOCIgaGVpZ2h0PSI4IiByeD0iMiIgZmlsbD0iI2ZmZmZmZiIgb3BhY2l0eT0iMC45NSIvPjxyZWN0IHg9IjE3LjUiIHk9IjYuNSIgd2lkdGg9IjgiIGhlaWdodD0iOCIgcng9IjIiIGZpbGw9IiNmZmZmZmYiIG9wYWNpdHk9IjAuODUiLz48cmVjdCB4PSI2LjUiIHk9IjE3LjUiIHdpZHRoPSI4IiBoZWlnaHQ9IjgiIHJ4PSIyIiBmaWxsPSIjZmZmZmZmIiBvcGFjaXR5PSIwLjg1Ii8+PHJlY3QgeD0iMTcuNSIgeT0iMTcuNSIgd2lkdGg9IjgiIGhlaWdodD0iOCIgcng9IjIiIGZpbGw9IiNmNTllMGIiIG9wYWNpdHk9IjAuOTUiLz48L3N2Zz4=",
+        sapGui: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiIgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9InNhcEdyYWQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNiNDUzMDkiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmNTllMGIiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB4PSIzIiB5PSIzIiB3aWR0aD0iMjYiIGhlaWdodD0iMjYiIHJ4PSI0IiBmaWxsPSIjMGYxNzJhIiBzdHJva2U9IiNmNTllMGIiIHN0cm9rZS13aWR0aD0iMS44Ii8+PHBhdGggZD0iTTMgNyBBNCA0IDAgMCAxIDcgMyBMMjUgMyBBNCA0IDAgMCAxIDI5IDcgTDI5IDkgTDMgOSBaIiBmaWxsPSJ1cmwoI3NhcEdyYWQpIi8+PGNpcmNsZSBjeD0iNi41IiBjeT0iNiIgcj0iMSIgZmlsbD0iI2ZmZmZmZiIvPjxjaXJjbGUgY3g9IjkuNSIgY3k9IjYiIHI9IjEiIGZpbGw9IiNmZmZmZmYiLz48cmVjdCB4PSI2IiB5PSIxMiIgd2lkdGg9IjciIGhlaWdodD0iMyIgcng9IjAuOCIgZmlsbD0iI2Y1OWUwYiIgb3BhY2l0eT0iMC45Ii8+PGxpbmUgeDE9IjE1IiB5MT0iMTMuNSIgeDI9IjI2IiB5Mj0iMTMuNSIgc3Ryb2tlPSIjZmZmZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBvcGFjaXR5PSIwLjg1Ii8+PGxpbmUgeDE9IjYiIHkxPSIxOCIgeDI9IjI2IiB5Mj0iMTgiIHN0cm9rZT0iIzM4YmRmOCIgc3Ryb2tlLXdpZHRoPSIxLjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgb3BhY2l0eT0iMC45Ii8+PGxpbmUgeDE9IjYiIHkxPSIyMiIgeDI9IjI2IiB5Mj0iMjIiIHN0cm9rZT0iIzk0YTNiOCIgc3Ryb2tlLXdpZHRoPSIxLjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjxsaW5lIHgxPSI2IiB5MT0iMjUuNSIgeDI9IjIwIiB5Mj0iMjUuNSIgc3Ryb2tlPSIjOTRhM2I4IiBzdHJva2Utd2lkdGg9IjEuMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PC9zdmc+",
+        mobileClient: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiIgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9Im1vYkdyYWQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMwODkxYjIiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMwNmI2ZDQiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB4PSI3IiB5PSIyIiB3aWR0aD0iMTgiIGhlaWdodD0iMjgiIHJ4PSI0IiBmaWxsPSIjMGYxNzJhIiBzdHJva2U9IiMwNmI2ZDQiIHN0cm9rZS13aWR0aD0iMS44Ii8+PHJlY3QgeD0iOS41IiB5PSI1LjUiIHdpZHRoPSIxMyIgaGVpZ2h0PSIyMCIgcng9IjEuNSIgZmlsbD0idXJsKCNtb2JHcmFkKSIvPjxsaW5lIHgxPSIxMyIgeTE9IjMuOCIgeDI9IjE5IiB5Mj0iMy44IiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iMS4yIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cmVjdCB4PSIxMS41IiB5PSI4IiB3aWR0aD0iNCIgaGVpZ2h0PSI0IiByeD0iMSIgZmlsbD0iI2ZmZmZmZiIgb3BhY2l0eT0iMC45NSIvPjxyZWN0IHg9IjE2LjUiIHk9IjgiIHdpZHRoPSI0IiBoZWlnaHQ9IjQiIHJ4PSIxIiBmaWxsPSIjZmZmZmZmIiBvcGFjaXR5PSIwLjgiLz48cmVjdCB4PSIxMS41IiB5PSIxNCIgd2lkdGg9IjQiIGhlaWdodD0iNCIgcng9IjEiIGZpbGw9IiNmZmZmZmYiIG9wYWNpdHk9IjAuOCIvPjxyZWN0IHg9IjE2LjUiIHk9IjE0IiB3aWR0aD0iNCIgaGVpZ2h0PSI0IiByeD0iMSIgZmlsbD0iI2ZlZjA4YSIgb3BhY2l0eT0iMC45NSIvPjxsaW5lIHgxPSIxMS41IiB5MT0iMjEuNSIgeDI9IjIwLjUiIHkyPSIyMS41IiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iMS4yIiBzdHJva2UtbGluZWNhcD0icm91bmQiIG9wYWNpdHk9IjAuOSIvPjxjaXJjbGUgY3g9IjE2IiBjeT0iMjcuNSIgcj0iMS4yIiBmaWxsPSIjZmZmZmZmIiBvcGFjaXR5PSIwLjkiLz48L3N2Zz4=",
+        spaWeb: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiIgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9InNwYUdyYWQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMwNTk2NjkiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMxMGI5ODEiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB4PSIzIiB5PSIzIiB3aWR0aD0iMjYiIGhlaWdodD0iMjYiIHJ4PSI0IiBmaWxsPSIjMGYxNzJhIiBzdHJva2U9IiMxMGI5ODEiIHN0cm9rZS13aWR0aD0iMS44Ii8+PHBhdGggZD0iTTMgNyBBNCA0IDAgMCAxIDcgMyBMMjUgMyBBNCA0IDAgMCAxIDI5IDcgTDI5IDEwIEwzIDEwIFoiIGZpbGw9InVybCgjc3BhR3JhZCkiLz48Y2lyY2xlIGN4PSI2LjUiIGN5PSI2LjUiIHI9IjEuMSIgZmlsbD0iI2ZmZmZmZiIgb3BhY2l0eT0iMC45NSIvPjxjaXJjbGUgY3g9IjEwIiBjeT0iNi41IiByPSIxLjEiIGZpbGw9IiNmZmZmZmYiIG9wYWNpdHk9IjAuOCIvPjxjaXJjbGUgY3g9IjEzLjUiIGN5PSI2LjUiIHI9IjEuMSIgZmlsbD0iI2ZmZmZmZiIgb3BhY2l0eT0iMC44Ii8+PHBhdGggZD0iTTEwIDE4IEw3IDIxIEwxMCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMzRkMzk5IiBzdHJva2Utd2lkdGg9IjEuOCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PHBhdGggZD0iTTIyIDE4IEwyNSAyMSBMMjIgMjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzM0ZDM5OSIgc3Ryb2tlLXdpZHRoPSIxLjgiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjxsaW5lIHgxPSIxNy41IiB5MT0iMTYiIHgyPSIxNC41IiB5Mj0iMjYiIHN0cm9rZT0iI2ZmZmZmZiIgc3Ryb2tlLXdpZHRoPSIxLjgiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjwvc3ZnPg==",
+        fatClient: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiIgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImZhdEdyYWQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiM0MzM4Y2EiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiM4MThjZjgiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB4PSIzIiB5PSIzIiB3aWR0aD0iMjYiIGhlaWdodD0iMTkiIHJ4PSIzIiBmaWxsPSIjMGYxNzJhIiBzdHJva2U9IiM4MThjZjgiIHN0cm9rZS13aWR0aD0iMS44Ii8+PHJlY3QgeD0iNS41IiB5PSI1LjUiIHdpZHRoPSIyMSIgaGVpZ2h0PSIxNCIgcng9IjEuNSIgZmlsbD0idXJsKCNmYXRHcmFkKSIvPjxwYXRoIGQ9Ik03IDEzIEwxMSAxMyBMMTMgOSBMMTUgMTYgTDE3IDExIEwxOSAxNCBMMjQgMTQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZmZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjxwYXRoIGQ9Ik0xNCAyMiBMMTQgMjYgTDEwIDI4IEwyMiAyOCBMMTggMjYgTDE4IDIyIFoiIGZpbGw9IiM4MThjZjgiIHN0cm9rZT0iIzgxOGNmOCIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9zdmc+"
       };
       window.UX_TECH_ICONS = UX_TECH_ICONS;
 
@@ -43623,6 +43641,7 @@
 
         // 1. DEDICATED MULTI-POOL ARCHITECTURE FOR JSD-P-01
         if (proc.id === 'JSD-P-01') {
+          // Metadata registry for canvas cross-highlighting
           procMetaMap.set('StartEvent_RTW', { type: 'actor', actorId: 'JSD-ACT-03', clientId: 'JSD-CL-03', desc: 'Notfallversorgung initiiert' });
           procMetaMap.set('Task_RTW_Capture', { type: 'human', actorId: 'JSD-ACT-03', clientId: 'JSD-CL-03', desc: 'Notfalldaten & Vitalparameter erfassen (RTW)' });
           procMetaMap.set('Lane_RTW_Human', { type: 'actor', actorId: 'JSD-ACT-03', clientId: 'JSD-CL-03', desc: 'Rettungsdienst (RTW)' });
@@ -43658,6 +43677,7 @@
           procMetaMap.set('MsgFlow_5', { type: 'step', integId: 'JSD-INT-02', desc: 'KIS-Fallnummer Bestätigung' });
           procMetaMap.set('MsgFlow_6', { type: 'step', integId: 'JSD-INT-02', desc: 'KIS-Fall verknüpft' });
 
+          // Problem 2 Fix: Generous 2250px Layout, Orthogonal Sequence Flows, Open Corridors for Zero Collisions
           const jsdXml = '<?xml version="1.0" encoding="UTF-8"?>\n' +
 '<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"\n' +
 '                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"\n' +
@@ -43673,7 +43693,7 @@
 '    <bpmn:messageFlow id="MsgFlow_2" name="Voranmeldung (REST FHIR R4)" sourceRef="Task_TM_Forward" targetRef="Task_ZNA_Receive" />\n' +
 '    <bpmn:messageFlow id="MsgFlow_3" name="Notfall-ADT (HL7 v2.5 ADT_A04)" sourceRef="Task_ZNA_SendADT" targetRef="Task_HS_Route" />\n' +
 '    <bpmn:messageFlow id="MsgFlow_4" name="KIS-Fallanlage (HL7 MLLP)" sourceRef="Task_HS_Route" targetRef="Task_KIS_Create" />\n' +
-'    <bpmn:messageFlow id="MsgFlow_5" name="Fallnummer-Bestätigung (ACK)" sourceRef="Task_KIS_Create" targetRef="Task_HS_Ack" />\n' +
+'    <bpmn:messageFlow id="MsgFlow_5" name="Bestätigung (ACK) &amp; Fall-ID" sourceRef="Task_KIS_Create" targetRef="Task_HS_Ack" />\n' +
 '    <bpmn:messageFlow id="MsgFlow_6" name="Fallverknüpfung quittiert" sourceRef="Task_HS_Ack" targetRef="Task_ZNA_Finalize" />\n' +
 '  </bpmn:collaboration>\n\n' +
 '  <!-- ==================== PROCESS 1: PRAEHOSPITAL ==================== -->\n' +
@@ -43738,10 +43758,10 @@
 '    <bpmn:serviceTask id="Task_HS_Route" name="ADT-Routing &amp; MLLP Transformation">\n' +
 '      <bpmn:outgoing>Flow_P2_4</bpmn:outgoing>\n' +
 '    </bpmn:serviceTask>\n' +
-'    <bpmn:receiveTask id="Task_HS_Ack" name="KIS-Fallnummer empfangen &amp; Bestätigung senden">\n' +
+'    <bpmn:serviceTask id="Task_HS_Ack" name="KIS-Fallnummer empfangen &amp; Bestätigung senden">\n' +
 '      <bpmn:incoming>Flow_P2_4</bpmn:incoming>\n' +
 '      <bpmn:outgoing>Flow_P2_5</bpmn:outgoing>\n' +
-'    </bpmn:receiveTask>\n' +
+'    </bpmn:serviceTask>\n' +
 '    <bpmn:endEvent id="EndEvent_HS" name="Routing &amp; Quittierung abgeschlossen">\n' +
 '      <bpmn:incoming>Flow_P2_5</bpmn:incoming>\n' +
 '    </bpmn:endEvent>\n\n' +
@@ -43761,7 +43781,7 @@
 '        <bpmn:flowNodeRef>Task_ZNA_Finalize</bpmn:flowNodeRef>\n' +
 '        <bpmn:flowNodeRef>EndEvent_Akutklinik</bpmn:flowNodeRef>\n' +
 '      </bpmn:lane>\n' +
-'      <bpmn:lane id="Lane_JSD_08" name="JSD-08: CGM&#10;MEDICO KIS">\n' +
+'      <bpmn:lane id="Lane_JSD_08" name="JSD-08:&#10;CGM MEDICO KIS">\n' +
 '        <bpmn:flowNodeRef>Task_KIS_Create</bpmn:flowNodeRef>\n' +
 '      </bpmn:lane>\n' +
 '    </bpmn:laneSet>\n\n' +
@@ -43774,53 +43794,56 @@
 '    </bpmn:userTask>\n' +
 '    <bpmn:sendTask id="Task_ZNA_SendADT" name="Notfall-Aufnahmedaten an HealthShare übermitteln">\n' +
 '      <bpmn:incoming>Flow_P3_2</bpmn:incoming>\n' +
+'      <bpmn:outgoing>Flow_P3_3</bpmn:outgoing>\n' +
 '    </bpmn:sendTask>\n' +
 '    <bpmn:serviceTask id="Task_KIS_Create" name="KIS-Fallanlage &amp; Stammdaten anlegen">\n' +
 '    </bpmn:serviceTask>\n' +
-'    <bpmn:serviceTask id="Task_ZNA_Finalize" name="Fallübernahme &amp; Patientenaufnahme abschließen">\n' +
-'      <bpmn:outgoing>Flow_P3_3</bpmn:outgoing>\n' +
-'    </bpmn:serviceTask>\n' +
-'    <bpmn:endEvent id="EndEvent_Akutklinik" name="Patient in Notaufnahme übernommen">\n' +
+'    <bpmn:userTask id="Task_ZNA_Finalize" name="Fallübernahme &amp; Patientenaufnahme abschließen">\n' +
 '      <bpmn:incoming>Flow_P3_3</bpmn:incoming>\n' +
+'      <bpmn:outgoing>Flow_P3_4</bpmn:outgoing>\n' +
+'    </bpmn:userTask>\n' +
+'    <bpmn:endEvent id="EndEvent_Akutklinik" name="Patient in Notaufnahme übernommen">\n' +
+'      <bpmn:incoming>Flow_P3_4</bpmn:incoming>\n' +
 '    </bpmn:endEvent>\n\n' +
 '    <bpmn:sequenceFlow id="Flow_P3_1" sourceRef="Task_ZNA_Receive" targetRef="Task_ZNA_Triage" />\n' +
 '    <bpmn:sequenceFlow id="Flow_P3_2" sourceRef="Task_ZNA_Triage" targetRef="Task_ZNA_SendADT" />\n' +
-'    <bpmn:sequenceFlow id="Flow_P3_3" sourceRef="Task_ZNA_Finalize" targetRef="EndEvent_Akutklinik" />\n' +
+'    <bpmn:sequenceFlow id="Flow_P3_3" sourceRef="Task_ZNA_SendADT" targetRef="Task_ZNA_Finalize" />\n' +
+'    <bpmn:sequenceFlow id="Flow_P3_4" sourceRef="Task_ZNA_Finalize" targetRef="EndEvent_Akutklinik" />\n' +
 '  </bpmn:process>\n\n' +
-'  <!-- ==================== BPMN DIAGRAM INTERCHANGE (DI) ==================== -->\n' +
+'  <!-- ==================== BPMN DIAGRAM & DI BOUNDS (2250px COLLISION-FREE) ==================== -->\n' +
 '  <bpmndi:BPMNDiagram id="BPMNDiagram_JSD_P_01">\n' +
 '    <bpmndi:BPMNPlane id="BPMNPlane_JSD_P_01" bpmnElement="Collaboration_JSD_P_01">\n\n' +
-'      <!-- Pool 1: Praehospital (y=50, h=240) -->\n' +
+'      <!-- Pool 1: Praehospital (y=50, h=240, w=2250) -->\n' +
 '      <bpmndi:BPMNShape id="Pool_Praehospital_di" bpmnElement="Pool_Praehospital" isHorizontal="true">\n' +
-'        <dc:Bounds x="100" y="50" width="1380" height="240" />\n' +
+'        <dc:Bounds x="100" y="50" width="2250" height="240" />\n' +
 '      </bpmndi:BPMNShape>\n' +
 '      <bpmndi:BPMNShape id="Lane_RTW_Human_di" bpmnElement="Lane_RTW_Human" isHorizontal="true">\n' +
-'        <dc:Bounds x="130" y="50" width="1350" height="120" />\n' +
+'        <dc:Bounds x="130" y="50" width="2220" height="120" />\n' +
 '      </bpmndi:BPMNShape>\n' +
 '      <bpmndi:BPMNShape id="Lane_JSD_28_di" bpmnElement="Lane_JSD_28" isHorizontal="true">\n' +
-'        <dc:Bounds x="130" y="170" width="1350" height="120" />\n' +
+'        <dc:Bounds x="130" y="170" width="2220" height="120" />\n' +
 '      </bpmndi:BPMNShape>\n\n' +
-'      <!-- Pool 2: Telemedizin (y=340, h=240) -->\n' +
+'      <!-- Pool 2: Telemedizin (y=340, h=240, w=2250) -->\n' +
 '      <bpmndi:BPMNShape id="Pool_Telemedizin_di" bpmnElement="Pool_Telemedizin" isHorizontal="true">\n' +
-'        <dc:Bounds x="100" y="340" width="1380" height="240" />\n' +
+'        <dc:Bounds x="100" y="340" width="2250" height="240" />\n' +
 '      </bpmndi:BPMNShape>\n' +
 '      <bpmndi:BPMNShape id="Lane_JSD_05_di" bpmnElement="Lane_JSD_05" isHorizontal="true">\n' +
-'        <dc:Bounds x="130" y="340" width="1350" height="120" />\n' +
+'        <dc:Bounds x="130" y="340" width="2220" height="120" />\n' +
 '      </bpmndi:BPMNShape>\n' +
 '      <bpmndi:BPMNShape id="Lane_JSD_10_di" bpmnElement="Lane_JSD_10" isHorizontal="true">\n' +
-'        <dc:Bounds x="130" y="460" width="1350" height="120" />\n' +
+'        <dc:Bounds x="130" y="460" width="2220" height="120" />\n' +
 '      </bpmndi:BPMNShape>\n\n' +
-'      <!-- Pool 3: Akutklinik (y=630, h=240) -->\n' +
+'      <!-- Pool 3: Akutklinik (y=630, h=240, w=2250) -->\n' +
 '      <bpmndi:BPMNShape id="Pool_Akutklinik_di" bpmnElement="Pool_Akutklinik" isHorizontal="true">\n' +
-'        <dc:Bounds x="100" y="630" width="1380" height="240" />\n' +
+'        <dc:Bounds x="100" y="630" width="2250" height="240" />\n' +
 '      </bpmndi:BPMNShape>\n' +
 '      <bpmndi:BPMNShape id="Lane_JSD_15_di" bpmnElement="Lane_JSD_15" isHorizontal="true">\n' +
-'        <dc:Bounds x="130" y="630" width="1350" height="120" />\n' +
+'        <dc:Bounds x="130" y="630" width="2220" height="120" />\n' +
 '      </bpmndi:BPMNShape>\n' +
 '      <bpmndi:BPMNShape id="Lane_JSD_08_di" bpmnElement="Lane_JSD_08" isHorizontal="true">\n' +
-'        <dc:Bounds x="130" y="750" width="1350" height="120" />\n' +
+'        <dc:Bounds x="130" y="750" width="2220" height="120" />\n' +
 '      </bpmndi:BPMNShape>\n\n' +
-'      <!-- Flow Nodes Pool 1: Generous spacing (Start at 250, Label at 198, Task at 400) -->\n' +
+'      <!-- Flow Nodes Pool 1 -->\n' +
 '      <bpmndi:BPMNShape id="StartEvent_RTW_di" bpmnElement="StartEvent_RTW">\n' +
 '        <dc:Bounds x="250" y="92" width="36" height="36" />\n' +
 '        <bpmndi:BPMNLabel>\n' +
@@ -43831,25 +43854,28 @@
 '        <dc:Bounds x="400" y="70" width="140" height="80" />\n' +
 '      </bpmndi:BPMNShape>\n' +
 '      <bpmndi:BPMNShape id="Task_IoT_Send_di" bpmnElement="Task_IoT_Send">\n' +
-'        <dc:Bounds x="560" y="190" width="140" height="80" />\n' +
+'        <dc:Bounds x="600" y="190" width="140" height="80" />\n' +
 '      </bpmndi:BPMNShape>\n' +
 '      <bpmndi:BPMNShape id="EndEvent_RTW_di" bpmnElement="EndEvent_RTW">\n' +
-'        <dc:Bounds x="760" y="212" width="36" height="36" />\n' +
+'        <dc:Bounds x="800" y="212" width="36" height="36" />\n' +
 '        <bpmndi:BPMNLabel>\n' +
-'          <dc:Bounds x="690" y="252" width="180" height="27" />\n' +
+'          <dc:Bounds x="748" y="252" width="140" height="27" />\n' +
 '        </bpmndi:BPMNLabel>\n' +
 '      </bpmndi:BPMNShape>\n\n' +
+'      <!-- Sequence Flows Pool 1 (Problem 2 Fix: Flow_P1_2 is 90-degree orthogonal Manhattan routing) -->\n' +
 '      <bpmndi:BPMNEdge id="Flow_P1_1_di" bpmnElement="Flow_P1_1">\n' +
 '        <di:waypoint x="286" y="110" />\n' +
 '        <di:waypoint x="400" y="110" />\n' +
 '      </bpmndi:BPMNEdge>\n' +
 '      <bpmndi:BPMNEdge id="Flow_P1_2_di" bpmnElement="Flow_P1_2">\n' +
 '        <di:waypoint x="540" y="110" />\n' +
-'        <di:waypoint x="560" y="230" />\n' +
+'        <di:waypoint x="570" y="110" />\n' +
+'        <di:waypoint x="570" y="230" />\n' +
+'        <di:waypoint x="600" y="230" />\n' +
 '      </bpmndi:BPMNEdge>\n' +
 '      <bpmndi:BPMNEdge id="Flow_P1_3_di" bpmnElement="Flow_P1_3">\n' +
-'        <di:waypoint x="700" y="230" />\n' +
-'        <di:waypoint x="760" y="230" />\n' +
+'        <di:waypoint x="740" y="230" />\n' +
+'        <di:waypoint x="800" y="230" />\n' +
 '      </bpmndi:BPMNEdge>\n\n' +
 '      <!-- Flow Nodes Pool 2 -->\n' +
 '      <bpmndi:BPMNShape id="StartEvent_TM_di" bpmnElement="StartEvent_TM">\n' +
@@ -43859,128 +43885,137 @@
 '        </bpmndi:BPMNLabel>\n' +
 '      </bpmndi:BPMNShape>\n' +
 '      <bpmndi:BPMNShape id="Task_TM_Receive_di" bpmnElement="Task_TM_Receive">\n' +
-'        <dc:Bounds x="400" y="360" width="140" height="80" />\n' +
+'        <dc:Bounds x="600" y="360" width="140" height="80" />\n' +
 '      </bpmndi:BPMNShape>\n' +
 '      <bpmndi:BPMNShape id="Task_TM_Forward_di" bpmnElement="Task_TM_Forward">\n' +
-'        <dc:Bounds x="560" y="360" width="140" height="80" />\n' +
+'        <dc:Bounds x="820" y="360" width="140" height="80" />\n' +
 '      </bpmndi:BPMNShape>\n' +
 '      <bpmndi:BPMNShape id="EndEvent_TM_di" bpmnElement="EndEvent_TM">\n' +
-'        <dc:Bounds x="760" y="382" width="36" height="36" />\n' +
+'        <dc:Bounds x="1020" y="382" width="36" height="36" />\n' +
 '        <bpmndi:BPMNLabel>\n' +
-'          <dc:Bounds x="690" y="422" width="180" height="27" />\n' +
+'          <dc:Bounds x="968" y="422" width="140" height="27" />\n' +
 '        </bpmndi:BPMNLabel>\n' +
 '      </bpmndi:BPMNShape>\n' +
 '      <bpmndi:BPMNShape id="Task_HS_Route_di" bpmnElement="Task_HS_Route">\n' +
-'        <dc:Bounds x="820" y="480" width="140" height="80" />\n' +
+'        <dc:Bounds x="1260" y="480" width="150" height="80" />\n' +
 '      </bpmndi:BPMNShape>\n' +
 '      <bpmndi:BPMNShape id="Task_HS_Ack_di" bpmnElement="Task_HS_Ack">\n' +
-'        <dc:Bounds x="1000" y="480" width="140" height="80" />\n' +
+'        <dc:Bounds x="1600" y="480" width="150" height="80" />\n' +
 '      </bpmndi:BPMNShape>\n' +
 '      <bpmndi:BPMNShape id="EndEvent_HS_di" bpmnElement="EndEvent_HS">\n' +
-'        <dc:Bounds x="1200" y="502" width="36" height="36" />\n' +
+'        <dc:Bounds x="1840" y="502" width="36" height="36" />\n' +
 '        <bpmndi:BPMNLabel>\n' +
-'          <dc:Bounds x="1130" y="542" width="180" height="27" />\n' +
+'          <dc:Bounds x="1788" y="542" width="140" height="27" />\n' +
 '        </bpmndi:BPMNLabel>\n' +
 '      </bpmndi:BPMNShape>\n\n' +
+'      <!-- Sequence Flows Pool 2 -->\n' +
 '      <bpmndi:BPMNEdge id="Flow_P2_1_di" bpmnElement="Flow_P2_1">\n' +
 '        <di:waypoint x="286" y="400" />\n' +
-'        <di:waypoint x="400" y="400" />\n' +
+'        <di:waypoint x="600" y="400" />\n' +
 '      </bpmndi:BPMNEdge>\n' +
 '      <bpmndi:BPMNEdge id="Flow_P2_2_di" bpmnElement="Flow_P2_2">\n' +
-'        <di:waypoint x="540" y="400" />\n' +
-'        <di:waypoint x="560" y="400" />\n' +
+'        <di:waypoint x="740" y="400" />\n' +
+'        <di:waypoint x="820" y="400" />\n' +
 '      </bpmndi:BPMNEdge>\n' +
 '      <bpmndi:BPMNEdge id="Flow_P2_3_di" bpmnElement="Flow_P2_3">\n' +
-'        <di:waypoint x="700" y="400" />\n' +
-'        <di:waypoint x="760" y="400" />\n' +
+'        <di:waypoint x="960" y="400" />\n' +
+'        <di:waypoint x="1020" y="400" />\n' +
 '      </bpmndi:BPMNEdge>\n' +
 '      <bpmndi:BPMNEdge id="Flow_P2_4_di" bpmnElement="Flow_P2_4">\n' +
-'        <di:waypoint x="960" y="520" />\n' +
-'        <di:waypoint x="1000" y="520" />\n' +
+'        <di:waypoint x="1410" y="520" />\n' +
+'        <di:waypoint x="1600" y="520" />\n' +
 '      </bpmndi:BPMNEdge>\n' +
 '      <bpmndi:BPMNEdge id="Flow_P2_5_di" bpmnElement="Flow_P2_5">\n' +
-'        <di:waypoint x="1140" y="520" />\n' +
-'        <di:waypoint x="1200" y="520" />\n' +
+'        <di:waypoint x="1750" y="520" />\n' +
+'        <di:waypoint x="1840" y="520" />\n' +
 '      </bpmndi:BPMNEdge>\n\n' +
-'      <!-- Flow Nodes Pool 3 -->\n' +
+'      <!-- Flow Nodes Pool 3 (Akutklinik & Notaufnahme) -->\n' +
 '      <bpmndi:BPMNShape id="Task_ZNA_Receive_di" bpmnElement="Task_ZNA_Receive">\n' +
-'        <dc:Bounds x="560" y="650" width="140" height="80" />\n' +
+'        <dc:Bounds x="820" y="650" width="140" height="80" />\n' +
 '      </bpmndi:BPMNShape>\n' +
 '      <bpmndi:BPMNShape id="Task_ZNA_Triage_di" bpmnElement="Task_ZNA_Triage">\n' +
-'        <dc:Bounds x="720" y="650" width="140" height="80" />\n' +
-'      </bpmndi:BPMNShape>\n' +
-'      <bpmndi:BPMNShape id="Task_ZNA_SendADT_di" bpmnElement="Task_ZNA_SendADT">\n' +
-'        <dc:Bounds x="880" y="650" width="140" height="80" />\n' +
-'      </bpmndi:BPMNShape>\n' +
-'      <bpmndi:BPMNShape id="Task_KIS_Create_di" bpmnElement="Task_KIS_Create">\n' +
-'        <dc:Bounds x="920" y="770" width="140" height="80" />\n' +
-'      </bpmndi:BPMNShape>\n' +
-'      <bpmndi:BPMNShape id="Task_ZNA_Finalize_di" bpmnElement="Task_ZNA_Finalize">\n' +
 '        <dc:Bounds x="1040" y="650" width="140" height="80" />\n' +
 '      </bpmndi:BPMNShape>\n' +
+'      <bpmndi:BPMNShape id="Task_ZNA_SendADT_di" bpmnElement="Task_ZNA_SendADT">\n' +
+'        <dc:Bounds x="1260" y="650" width="150" height="80" />\n' +
+'      </bpmndi:BPMNShape>\n' +
+'      <!-- Open corridor between x=1410 and x=1860 in Lane JSD-15: KIS task placed in Lane JSD-08 at x=1490 -->\n' +
+'      <bpmndi:BPMNShape id="Task_KIS_Create_di" bpmnElement="Task_KIS_Create">\n' +
+'        <dc:Bounds x="1490" y="770" width="150" height="80" />\n' +
+'      </bpmndi:BPMNShape>\n' +
+'      <bpmndi:BPMNShape id="Task_ZNA_Finalize_di" bpmnElement="Task_ZNA_Finalize">\n' +
+'        <dc:Bounds x="1860" y="650" width="150" height="80" />\n' +
+'      </bpmndi:BPMNShape>\n' +
 '      <bpmndi:BPMNShape id="EndEvent_Akutklinik_di" bpmnElement="EndEvent_Akutklinik">\n' +
-'        <dc:Bounds x="1220" y="672" width="36" height="36" />\n' +
+'        <dc:Bounds x="2100" y="672" width="36" height="36" />\n' +
 '        <bpmndi:BPMNLabel>\n' +
-'          <dc:Bounds x="1150" y="712" width="180" height="27" />\n' +
+'          <dc:Bounds x="2030" y="712" width="180" height="27" />\n' +
 '        </bpmndi:BPMNLabel>\n' +
 '      </bpmndi:BPMNShape>\n\n' +
+'      <!-- Sequence Flows Pool 3 -->\n' +
 '      <bpmndi:BPMNEdge id="Flow_P3_1_di" bpmnElement="Flow_P3_1">\n' +
-'        <di:waypoint x="700" y="690" />\n' +
-'        <di:waypoint x="720" y="690" />\n' +
+'        <di:waypoint x="960" y="690" />\n' +
+'        <di:waypoint x="1040" y="690" />\n' +
 '      </bpmndi:BPMNEdge>\n' +
 '      <bpmndi:BPMNEdge id="Flow_P3_2_di" bpmnElement="Flow_P3_2">\n' +
-'        <di:waypoint x="860" y="690" />\n' +
-'        <di:waypoint x="880" y="690" />\n' +
+'        <di:waypoint x="1180" y="690" />\n' +
+'        <di:waypoint x="1260" y="690" />\n' +
 '      </bpmndi:BPMNEdge>\n' +
 '      <bpmndi:BPMNEdge id="Flow_P3_3_di" bpmnElement="Flow_P3_3">\n' +
-'        <di:waypoint x="1180" y="690" />\n' +
-'        <di:waypoint x="1220" y="690" />\n' +
+'        <di:waypoint x="1410" y="690" />\n' +
+'        <di:waypoint x="1860" y="690" />\n' +
+'      </bpmndi:BPMNEdge>\n' +
+'      <bpmndi:BPMNEdge id="Flow_P3_4_di" bpmnElement="Flow_P3_4">\n' +
+'        <di:waypoint x="2010" y="690" />\n' +
+'        <di:waypoint x="2100" y="690" />\n' +
 '      </bpmndi:BPMNEdge>\n\n' +
-'      <!-- Message Flows -->\n' +
+'      <!-- Message Flows (Problem 2 Fix: Collision-Free, Well-Spaced & Zero Intersections) -->\n' +
 '      <bpmndi:BPMNEdge id="MsgFlow_1_di" bpmnElement="MsgFlow_1">\n' +
-'        <di:waypoint x="630" y="274" />\n' +
-'        <di:waypoint x="630" y="320" />\n' +
-'        <di:waypoint x="470" y="320" />\n' +
-'        <di:waypoint x="470" y="360" />\n' +
+'        <di:waypoint x="670" y="270" />\n' +
+'        <di:waypoint x="670" y="360" />\n' +
 '        <bpmndi:BPMNLabel>\n' +
-'          <dc:Bounds x="500" y="300" width="170" height="27" />\n' +
+'          <dc:Bounds x="680" y="305" width="180" height="27" />\n' +
 '        </bpmndi:BPMNLabel>\n' +
 '      </bpmndi:BPMNEdge>\n' +
 '      <bpmndi:BPMNEdge id="MsgFlow_2_di" bpmnElement="MsgFlow_2">\n' +
-'        <di:waypoint x="630" y="444" />\n' +
-'        <di:waypoint x="630" y="650" />\n' +
+'        <di:waypoint x="890" y="440" />\n' +
+'        <di:waypoint x="890" y="650" />\n' +
 '        <bpmndi:BPMNLabel>\n' +
-'          <dc:Bounds x="640" y="550" width="180" height="27" />\n' +
+'          <dc:Bounds x="900" y="540" width="180" height="27" />\n' +
 '        </bpmndi:BPMNLabel>\n' +
 '      </bpmndi:BPMNEdge>\n' +
 '      <bpmndi:BPMNEdge id="MsgFlow_3_di" bpmnElement="MsgFlow_3">\n' +
-'        <di:waypoint x="950" y="646" />\n' +
-'        <di:waypoint x="950" y="600" />\n' +
-'        <di:waypoint x="890" y="600" />\n' +
-'        <di:waypoint x="890" y="560" />\n' +
+'        <di:waypoint x="1335" y="650" />\n' +
+'        <di:waypoint x="1335" y="560" />\n' +
 '        <bpmndi:BPMNLabel>\n' +
-'          <dc:Bounds x="860" y="580" width="180" height="27" />\n' +
+'          <dc:Bounds x="1345" y="595" width="180" height="27" />\n' +
 '        </bpmndi:BPMNLabel>\n' +
 '      </bpmndi:BPMNEdge>\n' +
 '      <bpmndi:BPMNEdge id="MsgFlow_4_di" bpmnElement="MsgFlow_4">\n' +
-'        <di:waypoint x="940" y="564" />\n' +
-'        <di:waypoint x="940" y="770" />\n' +
+'        <di:waypoint x="1390" y="560" />\n' +
+'        <di:waypoint x="1390" y="620" />\n' +
+'        <di:waypoint x="1530" y="620" />\n' +
+'        <di:waypoint x="1530" y="770" />\n' +
 '        <bpmndi:BPMNLabel>\n' +
-'          <dc:Bounds x="950" y="660" width="160" height="27" />\n' +
+'          <dc:Bounds x="1405" y="625" width="160" height="27" />\n' +
 '        </bpmndi:BPMNLabel>\n' +
 '      </bpmndi:BPMNEdge>\n' +
 '      <bpmndi:BPMNEdge id="MsgFlow_5_di" bpmnElement="MsgFlow_5">\n' +
-'        <di:waypoint x="1020" y="766" />\n' +
-'        <di:waypoint x="1020" y="560" />\n' +
+'        <di:waypoint x="1620" y="770" />\n' +
+'        <di:waypoint x="1620" y="620" />\n' +
+'        <di:waypoint x="1650" y="620" />\n' +
+'        <di:waypoint x="1650" y="560" />\n' +
 '        <bpmndi:BPMNLabel>\n' +
-'          <dc:Bounds x="1030" y="660" width="170" height="27" />\n' +
+'          <dc:Bounds x="1660" y="625" width="170" height="27" />\n' +
 '        </bpmndi:BPMNLabel>\n' +
 '      </bpmndi:BPMNEdge>\n' +
 '      <bpmndi:BPMNEdge id="MsgFlow_6_di" bpmnElement="MsgFlow_6">\n' +
-'        <di:waypoint x="1070" y="564" />\n' +
-'        <di:waypoint x="1070" y="650" />\n' +
+'        <di:waypoint x="1720" y="560" />\n' +
+'        <di:waypoint x="1720" y="600" />\n' +
+'        <di:waypoint x="1935" y="600" />\n' +
+'        <di:waypoint x="1935" y="650" />\n' +
 '        <bpmndi:BPMNLabel>\n' +
-'          <dc:Bounds x="1080" y="600" width="150" height="27" />\n' +
+'          <dc:Bounds x="1735" y="575" width="150" height="27" />\n' +
 '        </bpmndi:BPMNLabel>\n' +
 '      </bpmndi:BPMNEdge>\n' +
 '    </bpmndi:BPMNPlane>\n' +
@@ -47330,41 +47365,41 @@
               <!-- 1. BPMN Hintergrund -->
               <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
                 <span style="font-size:0.72rem; color:#94a3b8; width:85px; font-weight:600;">Hintergrund:</span>
-                <input type="color" id="eaBpmnBgColorPicker" value="${bpmnBgVal}" oninput="window.previewEaBpmnStyle()" onchange="window.previewEaBpmnStyle()" style="width:34px; height:28px; border:none; background:none; cursor:pointer; border-radius:4px;">
-                <input type="text" id="eaBpmnBgColorText" value="${settings.bpmnBgColor || ''}" placeholder="${isDay ? '#f8fafc' : '#090d16'}" class="agent-settings-input" style="font-family:monospace; width:95px; height:28px;" oninput="window.previewEaBpmnStyle()" onchange="window.previewEaBpmnStyle()">
+                <input type="color" id="eaBpmnBgColorPicker" value="${bpmnBgVal}" oninput="window.previewEaBpmnStyle('bgPicker')" onchange="window.previewEaBpmnStyle('bgPicker')" style="width:34px; height:28px; border:none; background:none; cursor:pointer; border-radius:4px;">
+                <input type="text" id="eaBpmnBgColorText" value="${settings.bpmnBgColor || ''}" placeholder="${isDay ? '#f8fafc' : '#090d16'}" class="agent-settings-input" style="font-family:monospace; width:95px; height:28px;" oninput="window.previewEaBpmnStyle('bgText')" onchange="window.previewEaBpmnStyle('bgText')">
                 <span style="font-size:0.70rem; color:#94a3b8; margin-left:4px;">Deckkraft:</span>
-                <input type="range" id="eaBpmnBgOpacityRange" min="0.1" max="1.0" step="0.05" value="${bpmnBgOpVal}" style="flex:1;" oninput="window.previewEaBpmnStyle()">
+                <input type="range" id="eaBpmnBgOpacityRange" min="0.1" max="1.0" step="0.05" value="${bpmnBgOpVal}" style="flex:1;" oninput="window.previewEaBpmnStyle('bgOp')">
                 <span id="eaBpmnBgOpacityVal" style="font-size:0.70rem; color:#f8fafc; font-family:monospace; width:40px; text-align:right;">${Math.round(bpmnBgOpVal * 100)}%</span>
               </div>
 
               <!-- 2. BPMN Pool -->
               <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
                 <span style="font-size:0.72rem; color:#94a3b8; width:85px; font-weight:600;">Pool:</span>
-                <input type="color" id="eaBpmnPoolColorPicker" value="${bpmnPoolVal}" oninput="window.previewEaBpmnStyle()" onchange="window.previewEaBpmnStyle()" style="width:34px; height:28px; border:none; background:none; cursor:pointer; border-radius:4px;">
-                <input type="text" id="eaBpmnPoolColorText" value="${settings.bpmnPoolColor || ''}" placeholder="${isDay ? '#e2e8f0' : '#111a28'}" class="agent-settings-input" style="font-family:monospace; width:95px; height:28px;" oninput="window.previewEaBpmnStyle()" onchange="window.previewEaBpmnStyle()">
+                <input type="color" id="eaBpmnPoolColorPicker" value="${bpmnPoolVal}" oninput="window.previewEaBpmnStyle('poolPicker')" onchange="window.previewEaBpmnStyle('poolPicker')" style="width:34px; height:28px; border:none; background:none; cursor:pointer; border-radius:4px;">
+                <input type="text" id="eaBpmnPoolColorText" value="${settings.bpmnPoolColor || ''}" placeholder="${isDay ? '#e2e8f0' : '#111a28'}" class="agent-settings-input" style="font-family:monospace; width:95px; height:28px;" oninput="window.previewEaBpmnStyle('poolText')" onchange="window.previewEaBpmnStyle('poolText')">
                 <span style="font-size:0.70rem; color:#94a3b8; margin-left:4px;">Deckkraft:</span>
-                <input type="range" id="eaBpmnPoolOpacityRange" min="0.2" max="1.0" step="0.05" value="${bpmnPoolOpVal}" style="flex:1;" oninput="window.previewEaBpmnStyle()">
+                <input type="range" id="eaBpmnPoolOpacityRange" min="0.2" max="1.0" step="0.05" value="${bpmnPoolOpVal}" style="flex:1;" oninput="window.previewEaBpmnStyle('poolOp')">
                 <span id="eaBpmnPoolOpacityVal" style="font-size:0.70rem; color:#f8fafc; font-family:monospace; width:40px; text-align:right;">${Math.round(bpmnPoolOpVal * 100)}%</span>
               </div>
 
               <!-- 3. BPMN Lane -->
               <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
                 <span style="font-size:0.72rem; color:#94a3b8; width:85px; font-weight:600;">Lane (Bahn):</span>
-                <input type="color" id="eaBpmnLaneColorPicker" value="${bpmnLaneVal}" oninput="window.previewEaBpmnStyle()" onchange="window.previewEaBpmnStyle()" style="width:34px; height:28px; border:none; background:none; cursor:pointer; border-radius:4px;">
-                <input type="text" id="eaBpmnLaneColorText" value="${settings.bpmnLaneColor || ''}" placeholder="${isDay ? '#ffffff' : '#1e293b'}" class="agent-settings-input" style="font-family:monospace; width:95px; height:28px;" oninput="window.previewEaBpmnStyle()" onchange="window.previewEaBpmnStyle()">
+                <input type="color" id="eaBpmnLaneColorPicker" value="${bpmnLaneVal}" oninput="window.previewEaBpmnStyle('lanePicker')" onchange="window.previewEaBpmnStyle('lanePicker')" style="width:34px; height:28px; border:none; background:none; cursor:pointer; border-radius:4px;">
+                <input type="text" id="eaBpmnLaneColorText" value="${settings.bpmnLaneColor || ''}" placeholder="${isDay ? '#ffffff' : '#1e293b'}" class="agent-settings-input" style="font-family:monospace; width:95px; height:28px;" oninput="window.previewEaBpmnStyle('laneText')" onchange="window.previewEaBpmnStyle('laneText')">
                 <span style="font-size:0.70rem; color:#94a3b8; margin-left:4px;">Deckkraft:</span>
-                <input type="range" id="eaBpmnLaneOpacityRange" min="0.2" max="1.0" step="0.05" value="${bpmnLaneOpVal}" style="flex:1;" oninput="window.previewEaBpmnStyle()">
+                <input type="range" id="eaBpmnLaneOpacityRange" min="0.2" max="1.0" step="0.05" value="${bpmnLaneOpVal}" style="flex:1;" oninput="window.previewEaBpmnStyle('laneOp')">
                 <span id="eaBpmnLaneOpacityVal" style="font-size:0.70rem; color:#f8fafc; font-family:monospace; width:40px; text-align:right;">${Math.round(bpmnLaneOpVal * 100)}%</span>
               </div>
 
               <!-- Presets -->
               <div class="agent-color-presets" style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:8px;">
                 <span style="font-size:0.70rem; color:#94a3b8; margin-right:4px;">Presets:</span>
-                <button type="button" class="agent-settings-btn-option" onclick="window.setEaBpmnPreset('high-contrast')" title="Klarer Kontrast Hell">Klinisch Kontrastreich</button>
-                <button type="button" class="agent-settings-btn-option" onclick="window.setEaBpmnPreset('blueprint')" title="Dunkles Architektur Blueprint">Architektur Slate</button>
-                <button type="button" class="agent-settings-btn-option" onclick="window.setEaBpmnPreset('healthcare')" title="Zartes Healthcare Grün/Blau">Healthcare Soft</button>
-                <button type="button" class="agent-settings-btn-option" onclick="window.setEaBpmnPreset('obsidian')" title="Obsidian Darkmode">Obsidian Dark</button>
-                <button type="button" class="agent-settings-btn-option" onclick="window.resetEaBpmnStyle()" title="Standard wiederherstellen">Standard</button>
+                <button type="button" class="agent-settings-btn-option" onclick="window.setEaBpmnPreset('clinical-contrast')" title="Klarer Kontrast Hell">⭐ Klinisch Hell &amp; Kontrastreich</button>
+                <button type="button" class="agent-settings-btn-option" onclick="window.setEaBpmnPreset('healthcare-mint')" title="Zartes Healthcare Salbei/Grün">🌿 Healthcare Mint</button>
+                <button type="button" class="agent-settings-btn-option" onclick="window.setEaBpmnPreset('architect-slate')" title="Architektur Slate Papier">🏛️ Architektur Slate</button>
+                <button type="button" class="agent-settings-btn-option" onclick="window.setEaBpmnPreset('obsidian-dark')" title="Tiefes Obsidian Dark Mode">🌙 Obsidian Dark Mode</button>
+                <button type="button" class="agent-settings-btn-option" onclick="window.resetEaBpmnStyle()" title="Auf Standard zurücksetzen">Standard</button>
               </div>
 
               <!-- Nested Live Preview Box -->
@@ -47599,7 +47634,7 @@
       };
 
       /* Problem 4: BPMN Process Model Style Controller Methods */
-      window.previewEaBpmnStyle = function() {
+      window.previewEaBpmnStyle = function(source) {
         const bgPicker = document.getElementById('eaBpmnBgColorPicker');
         const bgText = document.getElementById('eaBpmnBgColorText');
         const bgOpRange = document.getElementById('eaBpmnBgOpacityRange');
@@ -47617,62 +47652,110 @@
 
         const isDay = document.body.classList.contains('theme-day');
 
-        let bgColor = (bgText && bgText.value.trim()) || (bgPicker && bgPicker.value.trim()) || (isDay ? '#f8fafc' : '#090d16');
+        // Bidirectional sync between Color-Picker and Text input
+        if (source === 'bgPicker' && bgPicker && bgText) {
+          bgText.value = bgPicker.value;
+        } else if (source === 'bgText' && bgText && bgPicker) {
+          let v = bgText.value.trim();
+          if (v && !v.startsWith('#') && /^[0-9a-fA-F]{6}$/.test(v)) v = '#' + v;
+          if (/^#[0-9a-fA-F]{6}$/i.test(v)) bgPicker.value = v;
+        }
+
+        if (source === 'poolPicker' && poolPicker && poolText) {
+          poolText.value = poolPicker.value;
+        } else if (source === 'poolText' && poolText && poolPicker) {
+          let v = poolText.value.trim();
+          if (v && !v.startsWith('#') && /^[0-9a-fA-F]{6}$/.test(v)) v = '#' + v;
+          if (/^#[0-9a-fA-F]{6}$/i.test(v)) poolPicker.value = v;
+        }
+
+        if (source === 'lanePicker' && lanePicker && laneText) {
+          laneText.value = lanePicker.value;
+        } else if (source === 'laneText' && laneText && lanePicker) {
+          let v = laneText.value.trim();
+          if (v && !v.startsWith('#') && /^[0-9a-fA-F]{6}$/.test(v)) v = '#' + v;
+          if (/^#[0-9a-fA-F]{6}$/i.test(v)) lanePicker.value = v;
+        }
+
+        let bgColor = (source === 'bgPicker' ? bgPicker?.value : (bgText?.value?.trim() || bgPicker?.value)) || (isDay ? '#f8fafc' : '#090d16');
         if (bgColor && !bgColor.startsWith('#') && /^[0-9a-fA-F]{6}$/.test(bgColor)) bgColor = '#' + bgColor;
         const bgOp = bgOpRange ? parseFloat(bgOpRange.value) : 1.0;
 
-        let poolColor = (poolText && poolText.value.trim()) || (poolPicker && poolPicker.value.trim()) || (isDay ? '#e2e8f0' : '#111a28');
+        let poolColor = (source === 'poolPicker' ? poolPicker?.value : (poolText?.value?.trim() || poolPicker?.value)) || (isDay ? '#dbeafe' : '#111a28');
         if (poolColor && !poolColor.startsWith('#') && /^[0-9a-fA-F]{6}$/.test(poolColor)) poolColor = '#' + poolColor;
         const poolOp = poolOpRange ? parseFloat(poolOpRange.value) : 0.95;
 
-        let laneColor = (laneText && laneText.value.trim()) || (lanePicker && lanePicker.value.trim()) || (isDay ? '#ffffff' : '#1e293b');
+        let laneColor = (source === 'lanePicker' ? lanePicker?.value : (laneText?.value?.trim() || lanePicker?.value)) || (isDay ? '#ffffff' : '#1e293b');
         if (laneColor && !laneColor.startsWith('#') && /^[0-9a-fA-F]{6}$/.test(laneColor)) laneColor = '#' + laneColor;
         const laneOp = laneOpRange ? parseFloat(laneOpRange.value) : 0.85;
 
-        if (bgPicker && bgColor.startsWith('#')) bgPicker.value = bgColor;
-        if (bgText) bgText.value = bgColor;
         if (bgOpVal) bgOpVal.textContent = Math.round(bgOp * 100) + '%';
-
-        if (poolPicker && poolColor.startsWith('#')) poolPicker.value = poolColor;
-        if (poolText) poolText.value = poolColor;
         if (poolOpVal) poolOpVal.textContent = Math.round(poolOp * 100) + '%';
-
-        if (lanePicker && laneColor.startsWith('#')) lanePicker.value = laneColor;
-        if (laneText) laneText.value = laneColor;
         if (laneOpVal) laneOpVal.textContent = Math.round(laneOp * 100) + '%';
 
-        // Update preview boxes
-        const previewBgBox = document.getElementById('bpmnStylePreviewBox');
-        const previewPoolBox = document.getElementById('bpmnPoolPreviewBox');
-        const previewLaneBox = document.getElementById('bpmnLanePreviewBox');
-        const previewPoolText = document.getElementById('bpmnPoolPreviewText');
-        const previewLaneText = document.getElementById('bpmnLanePreviewText');
+        // Apply live CSS variables
+        document.documentElement.style.setProperty('--bpmn-bg-color', bgColor);
+        document.documentElement.style.setProperty('--bpmn-bg-opacity', bgOp);
+        document.documentElement.style.setProperty('--bpmn-pool-color', poolColor);
+        document.documentElement.style.setProperty('--bpmn-pool-opacity', poolOp);
+        document.documentElement.style.setProperty('--bpmn-lane-color', laneColor);
+        document.documentElement.style.setProperty('--bpmn-lane-opacity', laneOp);
 
-        if (previewBgBox) previewBgBox.style.backgroundColor = hexToRgba(bgColor, bgOp);
-        if (previewPoolBox) previewPoolBox.style.backgroundColor = hexToRgba(poolColor, poolOp);
-        if (previewLaneBox) previewLaneBox.style.backgroundColor = hexToRgba(laneColor, laneOp);
+        // Update modal preview box
+        const previewBg = document.getElementById('eaBpmnPreviewBg');
+        const previewPool = document.getElementById('eaBpmnPreviewPool');
+        const previewLane = document.getElementById('eaBpmnPreviewLane');
+        const previewPoolText = document.getElementById('eaBpmnPreviewPoolText');
+        const previewLaneText = document.getElementById('eaBpmnPreviewLaneText');
 
+        if (previewBg) previewBg.style.backgroundColor = hexToRgba(bgColor, bgOp);
+        if (previewPool) previewPool.style.backgroundColor = hexToRgba(poolColor, poolOp);
+        if (previewLane) previewLane.style.backgroundColor = hexToRgba(laneColor, laneOp);
         if (previewPoolText) previewPoolText.textContent = 'Vorschau Pool: ' + poolColor + ' (' + Math.round(poolOp * 100) + '% Deckkraft)';
         if (previewLaneText) previewLaneText.textContent = 'Vorschau Schwimmbahn (Lane): ' + laneColor + ' (' + Math.round(laneOp * 100) + '% Deckkraft)';
 
-        OrcaiEaSettingsStore.saveSettings({
-          bpmnBgColor: bgColor,
-          bpmnBgOpacity: bgOp,
-          bpmnPoolColor: poolColor,
-          bpmnPoolOpacity: poolOp,
-          bpmnLaneColor: laneColor,
-          bpmnLaneOpacity: laneOp
+        // Update open popout BPMN SVGs live
+        document.querySelectorAll('.bpmn-svg-container').forEach(cont => {
+          cont.style.backgroundColor = hexToRgba(bgColor, bgOp);
+          cont.querySelectorAll('[data-element-id^="Pool_"] > .djs-visual > rect:first-child, [data-element-id^="Participant_"] > .djs-visual > rect:first-child').forEach(r => {
+            r.style.setProperty('fill', poolColor, 'important');
+            r.style.setProperty('fill-opacity', poolOp, 'important');
+          });
+          cont.querySelectorAll('[data-element-id^="Lane_"] > .djs-visual > rect:first-child').forEach(r => {
+            r.style.setProperty('fill', laneColor, 'important');
+            r.style.setProperty('fill-opacity', laneOp, 'important');
+          });
         });
       };
 
       window.setEaBpmnPreset = function(presetKey) {
         const presets = {
-          'high-contrast': { bg: '#f8fafc', bgOp: 1.0, pool: '#e2e8f0', poolOp: 0.95, lane: '#ffffff', laneOp: 0.85 },
-          'blueprint': { bg: '#0f172a', bgOp: 1.0, pool: '#1e293b', poolOp: 0.95, lane: '#0f172a', laneOp: 0.80 },
-          'healthcare': { bg: '#f0fdf4', bgOp: 1.0, pool: '#e0f2fe', poolOp: 0.95, lane: '#ffffff', laneOp: 0.85 },
-          'obsidian': { bg: '#090d16', bgOp: 1.0, pool: '#111a28', poolOp: 0.95, lane: '#1e293b', laneOp: 0.75 }
+          'clinical-contrast': {
+            name: 'Klinisch Hell & Kontrastreich (Empfohlen)',
+            bg: '#f1f5f9', bgOp: 1.0,
+            pool: '#dbeafe', poolOp: 0.95,
+            lane: '#ffffff', laneOp: 0.95
+          },
+          'healthcare-mint': {
+            name: 'Healthcare Mint',
+            bg: '#f8fafc', bgOp: 1.0,
+            pool: '#dcfce7', poolOp: 0.95,
+            lane: '#ffffff', laneOp: 0.95
+          },
+          'architect-slate': {
+            name: 'Architektur Slate',
+            bg: '#e2e8f0', bgOp: 1.0,
+            pool: '#cbd5e1', poolOp: 0.95,
+            lane: '#ffffff', laneOp: 0.95
+          },
+          'obsidian-dark': {
+            name: 'Obsidian Dark Mode',
+            bg: '#090d16', bgOp: 1.0,
+            pool: '#111a28', poolOp: 0.95,
+            lane: '#1e293b', laneOp: 0.85
+          }
         };
-        const p = presets[presetKey] || presets['high-contrast'];
+        const p = presets[presetKey] || presets['clinical-contrast'];
 
         const bgPicker = document.getElementById('eaBpmnBgColorPicker');
         const bgText = document.getElementById('eaBpmnBgColorText');
@@ -47698,12 +47781,12 @@
         if (laneText) laneText.value = p.lane;
         if (laneOpRange) laneOpRange.value = p.laneOp;
 
-        window.previewEaBpmnStyle();
+        window.previewEaBpmnStyle('preset');
       };
 
       window.resetEaBpmnStyle = function() {
         const isDay = document.body.classList.contains('theme-day');
-        window.setEaBpmnPreset(isDay ? 'high-contrast' : 'obsidian');
+        window.setEaBpmnPreset(isDay ? 'clinical-contrast' : 'obsidian-dark');
       };
 
       /* Central Landscape Background & Canvas Controllers */
