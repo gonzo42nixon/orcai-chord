@@ -5371,6 +5371,287 @@
       max-width: 380px;
     }
 
+    /* ==========================================================================
+       AGENT SETTINGS & USER PERSONALIZATION STYLES
+       ========================================================================== */
+    .agent-settings-panel {
+      position: absolute;
+      top: 48px;
+      right: 10px;
+      width: calc(100% - 20px);
+      max-width: 440px;
+      max-height: calc(100% - 60px);
+      background: var(--agent-sidebar-bg, #0b1120);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      border-radius: 12px;
+      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.08);
+      z-index: 70;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      animation: agentSettingsFadeIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes agentSettingsFadeIn {
+      from { opacity: 0; transform: translateY(-8px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .agent-settings-header {
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+      background: rgba(15, 23, 42, 0.8);
+    }
+    .agent-settings-title {
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: #f8fafc;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .agent-settings-close {
+      background: none;
+      border: none;
+      color: #94a3b8;
+      font-size: 1rem;
+      cursor: pointer;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .agent-settings-close:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.1);
+    }
+    .agent-settings-tabs {
+      display: flex;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+      background: rgba(10, 15, 29, 0.95);
+      padding: 0 8px;
+      gap: 4px;
+    }
+    .agent-settings-tab-btn {
+      padding: 8px 10px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: #94a3b8;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .agent-settings-tab-btn.active {
+      color: #38bdf8;
+      border-bottom-color: #38bdf8;
+    }
+    .agent-settings-body {
+      padding: 14px;
+      overflow-y: auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      font-size: 0.78rem;
+    }
+    .agent-settings-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .agent-settings-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: #cbd5e1;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .agent-settings-subtext {
+      font-size: 0.7rem;
+      color: #64748b;
+      line-height: 1.35;
+    }
+    .agent-color-presets {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .agent-color-chip {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      cursor: pointer;
+      transition: transform 0.15s, border-color 0.15s;
+    }
+    .agent-color-chip:hover {
+      transform: scale(1.15);
+      border-color: #38bdf8;
+    }
+    .agent-color-chip.active {
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.4);
+    }
+    .agent-settings-input, .agent-settings-select {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      border-radius: 6px;
+      color: #f8fafc;
+      padding: 6px 10px;
+      font-size: 0.75rem;
+      font-family: inherit;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .agent-settings-input:focus, .agent-settings-select:focus {
+      outline: none;
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
+    }
+    .agent-link-item, .agent-repo-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 8px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(148, 163, 184, 0.1);
+      gap: 8px;
+    }
+    .agent-link-item:hover, .agent-repo-item:hover {
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    /* ==========================================================================
+       ORCAI EA INTEGRATION & TOOLING STUDIO POPOUT STYLES
+       ========================================================================== */
+    .orcai-tooling-popout {
+      position: fixed !important;
+      background: rgba(11, 17, 32, 0.98) !important;
+      backdrop-filter: blur(28px) !important;
+      -webkit-backdrop-filter: blur(28px) !important;
+      border: 1px solid rgba(148, 163, 184, 0.25) !important;
+      border-radius: 12px !important;
+      box-shadow: 0 24px 72px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(255, 255, 255, 0.08) !important;
+      display: flex;
+      flex-direction: column !important;
+      z-index: 620 !important;
+      resize: both !important;
+      overflow: hidden !important;
+      min-width: 580px !important;
+      min-height: 480px !important;
+      width: 820px;
+      height: 680px;
+      left: 180px;
+      top: 60px;
+      animation: agentToolingFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes agentToolingFadeIn {
+      from { opacity: 0; transform: translateY(12px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .tooling-header {
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+      background: rgba(15, 23, 42, 0.85);
+      user-select: none;
+      cursor: move;
+    }
+    .tooling-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #f8fafc;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .tooling-nav-tabs {
+      display: flex;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+      background: rgba(8, 12, 22, 0.95);
+      padding: 0 10px;
+      gap: 4px;
+      overflow-x: auto;
+    }
+    .tooling-tab-btn {
+      padding: 9px 12px;
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: #94a3b8;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s;
+    }
+    .tooling-tab-btn.active {
+      color: #38bdf8;
+      border-bottom-color: #38bdf8;
+      background: rgba(56, 189, 248, 0.06);
+    }
+    .tooling-tab-content {
+      padding: 16px;
+      overflow-y: auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .tooling-code-editor {
+      width: 100%;
+      flex: 1;
+      min-height: 240px;
+      font-family: 'JetBrains Mono', 'Consolas', monospace;
+      font-size: 0.75rem;
+      line-height: 1.45;
+      background: #060911;
+      color: #e2e8f0;
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      border-radius: 8px;
+      padding: 10px;
+      resize: vertical;
+      box-sizing: border-box;
+      white-space: pre;
+      overflow: auto;
+    }
+    .tooling-code-editor:focus {
+      outline: none;
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.18);
+    }
+    .tooling-actions-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      padding-top: 4px;
+    }
+
+    /* Custom Agent Background Support */
+    .agent-drawer-custom-bg {
+      background-color: var(--agent-custom-bg, var(--agent-sidebar-bg, #0b1120)) !important;
+    }
+    .agent-drawer-custom-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+      background-image: var(--agent-custom-bg-img, none);
+      background-size: cover;
+      background-position: center;
+      opacity: var(--agent-custom-bg-opacity, 0.12);
+      z-index: 1;
+    }
+
     /* Timeline Topic Banner (ChatGPT & Claude style) */
     .agent-timeline-headline-banner {
       padding: 12px 14px;
@@ -6698,7 +6979,9 @@
           </div>
           <div class="drawer-actions">
             <button class="drawer-btn-icon" id="btnAgentHistoryToggle" title="Seitenleiste Chats ein-/ausklappen (💬)" aria-label="Chat-Verlauf">💬</button>
-            <button class="drawer-btn-icon" id="btnAgentSideToggle" title="Seite wechseln: Links ⇄ Rechts" aria-label="Seite wechseln">⇄</button>
+            <button class="drawer-btn-icon" id="btnAgentSettings" type="button" title="Agent-Einstellungen (Design, Links, GitHub, Volltextsuche)" onclick="window.toggleAgentSettingsPanel()">⚙️</button>
+        <button class="drawer-btn-icon" id="btnAgentToolingStudio" type="button" title="⚡ ORCAI Integration &amp; Tooling Studio (UML, BPMN, Beispieldaten, Mappings)" onclick="window.openOrcaiToolingStudio()">⚡</button>
+        <button class="drawer-btn-icon" id="btnAgentSideToggle" title="Seite wechseln: Links ⇄ Rechts" aria-label="Seite wechseln">⇄</button>
             <button class="drawer-btn-icon active" id="btnAgentVoiceToggle" title="Sprachausgabe an/aus" aria-label="Sprachausgabe an/aus">🔊</button>
             <div class="agent-size-group">
               <button class="agent-size-btn" id="btnAgentS" title="Kompakt (380px)">S</button>
@@ -12633,6 +12916,7 @@
     "transportOverlay": "TI_VPN_KIM"
   }
 ];
+    window.CONNECTIONS_DATA = CONNECTIONS_DATA;
     const INTEGRATIONS_DATA = [
   {
     "id": "INT-001",
@@ -23462,6 +23746,8 @@
       }
 
       function renderInspectorEdge(edge) {
+      window.renderInspectorEdge = renderInspectorEdge;
+      if (typeof CONNECTIONS_DATA !== "undefined") window.CONNECTIONS_DATA = CONNECTIONS_DATA;
         const src = sysById.get(edge.from);
         const tgt = sysById.get(edge.to);
         const srcDom = DOMAINS_DATA.find(d => d.id === src?.domain);
@@ -23585,8 +23871,82 @@
                 '</div>' +
               '</div>';
             })() +
+            (() => {
+              const catalog = window.OrcaiIntegrationCatalog;
+              const msgs = catalog ? catalog.getMessagesForConnection(edge.id) : [];
+              const mappings = catalog ? catalog.getMappingsForConnection(edge.id) : [];
+
+              let msgsHtml = '';
+              if (msgs.length > 0) {
+                msgs.forEach(m => {
+                  msgsHtml += '<div style="display:flex; align-items:center; justify-content:space-between; padding:5px 8px; margin-bottom:4px; border-radius:5px; background:rgba(255,255,255,0.03); border:1px solid rgba(148,163,184,0.12);">' +
+                    '<div style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1;">' +
+                      '<div style="font-weight:600; font-size:0.72rem; color:#f8fafc; display:flex; align-items:center; gap:5px;">' +
+                        '<span style="font-size:0.62rem; padding:1px 5px; border-radius:3px; background:rgba(16,185,129,0.15); color:#10b981;">' + (m.standard || 'MSG') + '</span>' +
+                        '<span>' + esc(m.name) + '</span>' +
+                      '</div>' +
+                      '<div style="font-size:0.65rem; color:#94a3b8;">' + esc(m.description || '') + '</div>' +
+                    '</div>' +
+                    '<button type="button" class="insp-action-btn" style="padding:2px 6px; font-size:0.65rem; margin-left:6px;" onclick="window.previewMessagePayload(\'' + m.id + '\')" title="Payload ansehen">👁️ Payload</button>' +
+                  '</div>';
+                });
+              } else {
+                msgsHtml = '<div style="font-size:0.7rem; color:#64748b; padding:4px 0;">Keine Nachrichten verknüpft.</div>';
+              }
+
+              let mapsHtml = '';
+              if (mappings.length > 0) {
+                mappings.forEach(map => {
+                  const isInbound = map.inboundConnectionId === edge.id;
+                  const isOutbound = map.outboundConnectionId === edge.id;
+                  const roleLabel = (isInbound && isOutbound) ? 'In &amp; Outbound' : (isInbound ? 'Inbound (Input)' : 'Outbound (Output)');
+                  const typeBadge = map.mappingType === 'GROOVY' ? '<span style="font-size:0.62rem; padding:1px 5px; border-radius:3px; background:rgba(192,132,252,0.18); color:#c084fc; font-weight:700;">GROOVY</span>' : '<span style="font-size:0.62rem; padding:1px 5px; border-radius:3px; background:rgba(56,189,248,0.18); color:#38bdf8; font-weight:700;">XSLT</span>';
+
+                  mapsHtml += '<div style="display:flex; align-items:center; justify-content:space-between; padding:5px 8px; margin-bottom:4px; border-radius:5px; background:rgba(255,255,255,0.03); border:1px solid rgba(148,163,184,0.12);">' +
+                    '<div style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1;">' +
+                      '<div style="font-weight:600; font-size:0.72rem; color:#f8fafc; display:flex; align-items:center; gap:5px;">' +
+                        typeBadge +
+                        '<span>' + esc(map.name) + '</span>' +
+                      '</div>' +
+                      '<div style="font-size:0.65rem; color:#94a3b8;">Rolle: ' + roleLabel + ' &bull; Assoziation: ' + esc(map.inboundConnectionId) + ' ➔ ' + esc(map.outboundConnectionId) + '</div>' +
+                    '</div>' +
+                    '<button type="button" class="insp-action-btn primary" style="padding:2px 6px; font-size:0.65rem; margin-left:6px;" onclick="window.openOrcaiToolingStudio(\'' + (map.mappingType === 'GROOVY' ? 'groovy' : 'xslt') + '\')" title="Im Tooling Studio öffnen">⚡ Bearbeiten</button>' +
+                  '</div>';
+                });
+              } else {
+                mapsHtml = '<div style="font-size:0.7rem; color:#64748b; padding:4px 0;">Keine Mappings für diese Verbindung registriert.</div>';
+              }
+
+              return '<div style="margin-top:12px; border-top:1px solid rgba(148,163,184,0.12); padding-top:10px;">' +
+                '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">' +
+                  '<span style="font-size:0.75rem; font-weight:700; color:var(--text-bright);">📨 Verknüpfte Nachrichten (' + msgs.length + ')</span>' +
+                  '<button type="button" class="insp-action-btn" style="padding:2px 6px; font-size:0.65rem;" onclick="window.openOrcaiToolingStudio(\'messages\')">+ Nachricht anlegen</button>' +
+                '</div>' +
+                msgsHtml +
+                '<div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px; margin-bottom:6px;">' +
+                  '<span style="font-size:0.75rem; font-weight:700; color:var(--text-bright);">🔄 Assoziierte Mappings (' + mappings.length + ')</span>' +
+                  '<button type="button" class="insp-action-btn primary" style="padding:2px 6px; font-size:0.65rem;" onclick="window.openOrcaiToolingStudio(\'groovy\')">+ Neues Mapping</button>' +
+                '</div>' +
+                mapsHtml +
+              '</div>';
+            })() +
           '</div>';
       }
+      
+      window.inspectConnection = function(connId) {
+        const conns = (typeof CONNECTIONS_DATA !== 'undefined') ? CONNECTIONS_DATA : (window.CONNECTIONS_DATA || []);
+        const edge = conns.find(c => c.id === connId);
+        if (!edge) return;
+        if (typeof renderInspectorEdge === 'function') {
+          renderInspectorEdge(edge);
+        }
+        const sidebar = document.getElementById('sidebarRight');
+        if (sidebar) {
+          sidebar.classList.remove('collapsed');
+          sidebar.style.display = 'flex';
+        }
+      };
+
       function renderInspectorDomain(dom) {
         const details = DOMAIN_DETAILS_DATA[dom.id] || {};
         const domSystems = SYSTEMS_DATA.filter(s => s.domain === dom.id);
@@ -44443,7 +44803,1292 @@
           if (!agentInfoPopoutModal) return;
           agentInfoPopoutModal.style.display = 'none';
         }
-        window.openAgentInfoPopout = openAgentInfoPopout;
+        
+      /* =========================================================================
+         DECOUPLED INTEGRATION CATALOGS: MESSAGES & MAPPINGS STORE
+         (Außerhalb des IT-Landschaftsmodells gehalten und nur verlinkt)
+         ========================================================================= */
+
+      const DEFAULT_ORCAI_MESSAGES = [
+        {
+          id: "MSG-001",
+          name: "HL7v2.5 ADT^A01 - Aufnahme Notfallpatient",
+          standard: "HL7v2",
+          messageType: "HL7_FHIR",
+          format: "er7",
+          apqcRef: "4.1 Notfallaufnahme & Manchester-Triage",
+          description: "Klinische stationäre Aufnahme- und Stammdatenübermittlung aus NIDApad RTW an KIS/ZNA.",
+          samplePayload: "MSH|^~\\&|NIDApad|RTW-03|KIS_ZNA|ZNA_GATEWAY|20260919153000||ADT^A01|MSG-20260919-001|P|2.5\n" +
+            "EVN|A01|20260919153000\n" +
+            "PID|1||P-98765^^^JSD||Mustermann^Max^^^^||19750512|M|||Musterstr. 1^^Berlin^^10115||030-123456||||||||||||||||\n" +
+            "PV1|1|E|ZNA^01^01||||12345^Dr. Schmidt|||SUR||||EMERGENCY|||||||||||||||||||||||||20260919153000"
+        },
+        {
+          id: "MSG-002",
+          name: "FHIR R4 - Encounter & Patient Bundle (ZNA Triage)",
+          standard: "FHIR_R4",
+          messageType: "HL7_FHIR",
+          format: "json",
+          apqcRef: "4.1 Notfallaufnahme & Manchester-Triage",
+          description: "Interoperables FHIR R4 Bundle zur Notaufnahme und Manchester-Triage (MTS Gelb/Dringend).",
+          samplePayload: JSON.stringify({
+            resourceType: "Bundle",
+            type: "transaction",
+            entry: [
+              {
+                fullUrl: "urn:uuid:patient-max-mustermann",
+                resource: {
+                  resourceType: "Patient",
+                  identifier: [{ system: "http://johanniter.de/pid", value: "P-98765" }],
+                  name: [{ family: "Mustermann", given: ["Max"] }],
+                  gender: "male",
+                  birthDate: "1975-05-12",
+                  address: [{ line: ["Musterstr. 1"], city: "Berlin", postalCode: "10115" }]
+                }
+              },
+              {
+                fullUrl: "urn:uuid:encounter-zna-01",
+                resource: {
+                  resourceType: "Encounter",
+                  status: "in-progress",
+                  class: { code: "EMER", display: "Emergency" },
+                  subject: { reference: "urn:uuid:patient-max-mustermann" },
+                  priority: {
+                    coding: [{ system: "http://manchester-triage.org", code: "YELLOW", display: "Dringend (Stufe 3)" }]
+                  }
+                }
+              }
+            ]
+          }, null, 2)
+        },
+        {
+          id: "MSG-003",
+          name: "SAP OData v4 - PatientBillingCase (Finanzen & Abrechnung)",
+          standard: "REST_JSON",
+          messageType: "REST_API",
+          format: "json",
+          apqcRef: "8.2 Finanz- & Leistungsabrechnung",
+          description: "OData v4 Entity für SAP S/4HANA & BTP Side-by-Side Abrechnungsfall.",
+          samplePayload: JSON.stringify({
+            BillingCaseID: "CASE-2026-98765",
+            PatientID: "P-98765",
+            AdmissionDate: "2026-09-19T15:30:00Z",
+            CostCenter: "CC-ZNA-4001",
+            DRGCode: "F62B",
+            InsuranceType: "GKV",
+            PayorID: "IK-108018145",
+            Status: "ACTIVE",
+            Currency: "EUR",
+            EstimatedTotal: 3420.50
+          }, null, 2)
+        },
+        {
+          id: "MSG-004",
+          name: "HL7v2.5 ORU^R01 - Mikrobiologischer Laborbefund",
+          standard: "HL7v2",
+          messageType: "HL7_FHIR",
+          format: "er7",
+          apqcRef: "4.3 Diagnostik, Labor & Radiologie",
+          description: "Unstrukturierter & strukturierter Laborbefund (Kreatinin, Troponin, CRP) aus LIS.",
+          samplePayload: "MSH|^~\\&|LIS_LAB|LAB_CENTRAL|KIS_KLINIK|STATION|20260919154500||ORU^R01|LAB-20260919-88|P|2.5\n" +
+            "PID|1||P-98765^^^JSD||Mustermann^Max^^^^||19750512|M\n" +
+            "OBR|1|ORD-9912|LAB-9912|NOTFALL_PANEL^Notfall Labor Panel|||20260919153500\n" +
+            "OBX|1|NM|TROP-T^Troponin T|1|0.045|ng/ml|<0.014|H|||F|||20260919154200\n" +
+            "OBX|2|NM|CRP^C-reaktives Protein|1|12.4|mg/l|<5.0|H|||F|||20260919154200\n" +
+            "OBX|3|NM|KREAT^Kreatinin|1|1.1|mg/dl|0.7-1.2|N|||F|||20260919154200"
+        },
+        {
+          id: "MSG-005",
+          name: "EDIFACT INVOIC §301 - GKV Abrechnung",
+          standard: "EDIFACT",
+          messageType: "B2B_EDI",
+          format: "edifact",
+          apqcRef: "8.3 GKV-Abrechnung & Entgeltvereinbarungen",
+          description: "Elektronischer Abrechnungsdatensatz nach § 301 SGB V an gesetzliche Krankenkassen.",
+          samplePayload: "UNA:+.? '\n" +
+            "UNB+UNOC:3+JSD_KLINIK:ZZZ+GKV_CENTRAL:ZZZ+260919:1545+INV-00124'\n" +
+            "UNH+1+INVOIC:D:96A:UN:§301V5'\n" +
+            "BGM+380+INV-2026-98765+9'\n" +
+            "DTM+137:20260919:102'\n" +
+            "NAD+IV+IK-108018145::9'\n" +
+            "NAD+PR+IK-260123456::9'\n" +
+            "LIN+1++DRG-F62B:SA'\n" +
+            "MOA+203:3420.50:EUR'\n" +
+            "UNT+9+1'\n" +
+            "UNZ+1+INV-00124'"
+        }
+      ];
+
+      const DEFAULT_ORCAI_MAPPINGS = [
+        {
+          id: "MAP-001",
+          name: "HL7v2 ADT^A01 zu FHIR R4 Encounter Transformation (XSLT 3.0)",
+          inboundConnectionId: "JSD-C-15",
+          inboundMessageId: "MSG-001",
+          outboundConnectionId: "JSD-C-14",
+          outboundMessageId: "MSG-002",
+          mappingType: "XSLT",
+          apqcRef: "4.1 Notfallaufnahme & Manchester-Triage",
+          description: "Transformiert HL7 ADT^A01 Patient- und Falldaten in standardisierte FHIR R4 Patient- und Encounter-Ressourcen.",
+          mappingScript: [
+            '<?xml version="1.0" encoding="UTF-8"?>',
+            '<xsl:stylesheet version="3.0"',
+            '    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"',
+            '    xmlns:fhir="http://hl7.org/fhir"',
+            '    xmlns:hl7="urn:hl7-org:v2xml"',
+            '    exclude-result-prefixes="hl7 fhir">',
+            '  <xsl:output method="json" indent="yes" encoding="UTF-8"/>',
+            '  <xsl:template match="/ADT_A01">',
+            '    {',
+            '      "resourceType": "Bundle",',
+            '      "type": "transaction",',
+            '      "entry": [',
+            '        {',
+            '          "fullUrl": "urn:uuid:patient-<xsl:value-of select=\"PID/PID.3/PID.3.1\"/>",',
+            '          "resource": {',
+            '            "resourceType": "Patient",',
+            '            "identifier": [{"system": "http://johanniter.de/pid", "value": "<xsl:value-of select=\"PID/PID.3/PID.3.1\"/>"}],',
+            '            "name": [{"family": "<xsl:value-of select=\"PID/PID.5/PID.5.1\"/>", "given": ["<xsl:value-of select=\"PID/PID.5/PID.5.2\"/>"]}],',
+            '            "gender": "<xsl:value-of select=\"PID/PID.8\"/>",',
+            '            "birthDate": "<xsl:value-of select=\"PID/PID.7\"/>"',
+            '          }',
+            '        },',
+            '        {',
+            '          "fullUrl": "urn:uuid:encounter-<xsl:value-of select=\"PV1/PV1.19\"/>",',
+            '          "resource": {',
+            '            "resourceType": "Encounter",',
+            '            "status": "in-progress",',
+            '            "class": {"code": "EMER", "display": "Emergency Admission"},',
+            '            "subject": {"reference": "urn:uuid:patient-<xsl:value-of select=\"PID/PID.3/PID.3.1\"/>"}',
+            '          }',
+            '        }',
+            '      ]',
+            '    }',
+            '  </xsl:template>',
+            '</xsl:stylesheet>'
+          ].join('\n')
+        },
+        {
+          id: "MAP-002",
+          name: "HL7v2 ADT^A01 zu FHIR R4 Bundle (Groovy Script für SAP CPI / Camel)",
+          inboundConnectionId: "JSD-C-15",
+          inboundMessageId: "MSG-001",
+          outboundConnectionId: "JSD-C-14",
+          outboundMessageId: "MSG-002",
+          mappingType: "GROOVY",
+          apqcRef: "4.1 Notfallaufnahme & Manchester-Triage",
+          description: "High-Performance Groovy Script zur Segmentzerlegung und FHIR-JSON Erstellung für SAP Integration Suite.",
+          mappingScript: 'import com.sap.gateway.ip.core.customdev.util.Message\n' +
+            'import groovy.json.JsonBuilder\n\n' +
+            'def Message processData(Message message) {\n' +
+            '    // 1. Inbound Payload auslesen (HL7 Pipe-and-Hat)\n' +
+            '    def body = message.getBody(java.lang.String) as String\n' +
+            '    if (!body) return message\n\n' +
+            '    def pidSegment = ""\n' +
+            '    def pv1Segment = ""\n\n' +
+            '    body.eachLine { line ->\n' +
+            '        if (line.startsWith("PID|")) pidSegment = line\n' +
+            '        if (line.startsWith("PV1|")) pv1Segment = line\n' +
+            '    }\n\n' +
+            '    def pidFields = pidSegment.split(/\\|/, -1)\n' +
+            '    def pv1Fields = pv1Segment.split(/\\|/, -1)\n\n' +
+            '    def patientId = pidFields.size() > 3 ? pidFields[3].split(/\\^/)[0] : "P-UNKNOWN"\n' +
+            '    def nameParts = pidFields.size() > 5 ? pidFields[5].split(/\\^/) : ["", ""]\n' +
+            '    def familyName = nameParts.size() > 0 ? nameParts[0] : ""\n' +
+            '    def givenName = nameParts.size() > 1 ? nameParts[1] : ""\n' +
+            '    def birthRaw = pidFields.size() > 7 ? pidFields[7] : ""\n' +
+            '    def birthDate = birthRaw.length() >= 8 ? "${birthRaw[0..3]}-${birthRaw[4..5]}-${birthRaw[6..7]}" : "1970-01-01"\n' +
+            '    def gender = pidFields.size() > 8 ? (pidFields[8] == "M" ? "male" : "female") : "unknown"\n\n' +
+            '    // 2. Ziel-FHIR-R4 Bundle strukturieren\n' +
+            '    def fhirBundle = [\n' +
+            '        resourceType: "Bundle",\n' +
+            '        type: "transaction",\n' +
+            '        entry: [\n' +
+            '            [\n' +
+            '                fullUrl: "urn:uuid:patient-${patientId}",\n' +
+            '                resource: [\n' +
+            '                    resourceType: "Patient",\n' +
+            '                    identifier: [[system: "http://johanniter.de/pid", value: patientId]],\n' +
+            '                    name: [[family: familyName, given: [givenName]]],\n' +
+            '                    gender: gender,\n' +
+            '                    birthDate: birthDate\n' +
+            '                ]\n' +
+            '            ],\n' +
+            '            [\n' +
+            '                fullUrl: "urn:uuid:encounter-${patientId}",\n' +
+            '                resource: [\n' +
+            '                    resourceType: "Encounter",\n' +
+            '                    status: "in-progress",\n' +
+            '                    class: [code: "EMER", display: "Emergency"],\n' +
+            '                    subject: [reference: "urn:uuid:patient-${patientId}"]\n' +
+            '                ]\n' +
+            '            ]\n' +
+            '        ]\n' +
+            '    ]\n\n' +
+            '    // 3. Serialisieren und an Outbound Connection weitergeben\n' +
+            '    message.setBody(new JsonBuilder(fhirBundle).toPrettyString())\n' +
+            '    message.setHeader("Content-Type", "application/fhir+json")\n' +
+            '    return message\n' +
+            '}'
+        },
+        {
+          id: "MAP-003",
+          name: "Patient Fall-JSON zu SAP S/4HANA OData Billing (Groovy)",
+          inboundConnectionId: "CON-01",
+          inboundMessageId: "MSG-003",
+          outboundConnectionId: "CON-02",
+          outboundMessageId: "MSG-003",
+          mappingType: "GROOVY",
+          apqcRef: "8.2 Finanz- & Leistungsabrechnung",
+          description: "Validierung und Transformation klinischer Falldaten für S/4HANA Finance Schnittstelle.",
+          mappingScript: 'import com.sap.gateway.ip.core.customdev.util.Message\n' +
+            'import groovy.json.JsonSlurper\n' +
+            'import groovy.json.JsonBuilder\n\n' +
+            'def Message processData(Message message) {\n' +
+            '    def body = message.getBody(java.lang.String) as String\n' +
+            '    def slurper = new JsonSlurper()\n' +
+            '    def input = slurper.parseText(body)\n\n' +
+            '    def s4Payload = [\n' +
+            '        d: [\n' +
+            '            CompanyCode: "JSD01",\n' +
+            '            PatientID: input.PatientID,\n' +
+            '            CaseID: input.BillingCaseID,\n' +
+            '            CostCenter: input.CostCenter ?: "CC-DEFAULT",\n' +
+            '            TotalAmount: input.EstimatedTotal,\n' +
+            '            Currency: input.Currency ?: "EUR",\n' +
+            '            PostingDate: "/Date(" + System.currentTimeMillis() + ")/"\n' +
+            '        ]\n' +
+            '    ]\n\n' +
+            '    message.setBody(new JsonBuilder(s4Payload).toPrettyString())\n' +
+            '    message.setHeader("Content-Type", "application/json")\n' +
+            '    return message\n' +
+            '}'
+        }
+      ];
+
+      class OrcaiIntegrationStore {
+        static getMessages() {
+          try {
+            const raw = localStorage.getItem('orcai_custom_messages_v1');
+            if (raw) {
+              const parsed = JSON.parse(raw);
+              if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+            }
+          } catch (e) {}
+          return DEFAULT_ORCAI_MESSAGES;
+        }
+
+        static getMessageById(id) {
+          return this.getMessages().find(m => m.id === id) || null;
+        }
+
+        static saveMessage(msg) {
+          const list = this.getMessages();
+          const existingIdx = list.findIndex(m => m.id === msg.id);
+          if (existingIdx !== -1) {
+            list[existingIdx] = Object.assign({}, list[existingIdx], msg);
+          } else {
+            if (!msg.id) msg.id = 'MSG-' + String(list.length + 1).padStart(3, '0');
+            list.push(msg);
+          }
+          try {
+            localStorage.setItem('orcai_custom_messages_v1', JSON.stringify(list));
+          } catch (e) {}
+          return msg;
+        }
+
+        static getMappings() {
+          try {
+            const raw = localStorage.getItem('orcai_custom_mappings_v1');
+            if (raw) {
+              const parsed = JSON.parse(raw);
+              if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+            }
+          } catch (e) {}
+          return DEFAULT_ORCAI_MAPPINGS;
+        }
+
+        static getMappingById(id) {
+          return this.getMappings().find(m => m.id === id) || null;
+        }
+
+        static saveMapping(mapping) {
+          const list = this.getMappings();
+          const existingIdx = list.findIndex(m => m.id === mapping.id);
+          if (existingIdx !== -1) {
+            list[existingIdx] = Object.assign({}, list[existingIdx], mapping);
+          } else {
+            if (!mapping.id) mapping.id = 'MAP-' + String(list.length + 1).padStart(3, '0');
+            list.push(mapping);
+          }
+          try {
+            localStorage.setItem('orcai_custom_mappings_v1', JSON.stringify(list));
+          } catch (e) {}
+          return mapping;
+        }
+
+        static getMappingsForConnection(connId) {
+          return this.getMappings().filter(m => m.inboundConnectionId === connId || m.outboundConnectionId === connId);
+        }
+
+        static getMessagesForConnection(connId) {
+          const conn = (typeof CONNECTIONS_DATA !== 'undefined' ? CONNECTIONS_DATA : []).find(c => c.id === connId);
+          if (!conn) return [];
+          const msgIds = conn.messageIds || [];
+          // fallback default linkings if not set
+          if (msgIds.length === 0) {
+            if (connId === 'JSD-C-15' || connId === 'CON-28') return [this.getMessageById('MSG-001')].filter(Boolean);
+            if (connId === 'JSD-C-14' || connId === 'CON-29') return [this.getMessageById('MSG-002')].filter(Boolean);
+            if (connId === 'JSD-C-04') return [this.getMessageById('MSG-004')].filter(Boolean);
+            if (connId === 'JSD-C-01' || connId === 'JSD-C-02' || connId === 'CON-01' || connId === 'CON-02') return [this.getMessageById('MSG-003')].filter(Boolean);
+          }
+          return msgIds.map(id => this.getMessageById(id)).filter(Boolean);
+        }
+      }
+      window.OrcaiIntegrationCatalog = OrcaiIntegrationStore;
+
+      // Link initial messages into CONNECTIONS_DATA
+      try {
+        if (typeof CONNECTIONS_DATA !== 'undefined') {
+          CONNECTIONS_DATA.forEach(c => {
+            if (c.id === 'CON-28') c.messageIds = ['MSG-001'];
+            if (c.id === 'CON-29') c.messageIds = ['MSG-002'];
+            if (c.id === 'CON-01' || c.id === 'CON-02') c.messageIds = ['MSG-003'];
+          });
+        }
+      } catch (e) {}
+
+      /* =========================================================================
+         AGENT SETTINGS & USER PERSONALIZATION STORE
+         (Hintergrundfarbe, Day/Night Mode, Hintergrundbild, Links, GitHub OKF)
+         ========================================================================= */
+
+      const DEFAULT_AGENT_SETTINGS = {
+        theme: 'dark',
+        bgColor: '#090d16',
+        bgImage: '',
+        bgOpacity: 0.15,
+        savedLinks: [
+          { id: 'LINK-01', title: 'FHIR R4 Spezifikation (HL7)', url: 'https://hl7.org/fhir/R4/', category: 'Standards', notes: 'Offizielle FHIR Kernspezifikation für Ressourcen' },
+          { id: 'LINK-02', title: 'APQC Process Classification Framework', url: 'https://www.apqc.org/pcf', category: 'APQC', notes: 'Globaler Standard für Geschäftsprozess-Hierarchien' },
+          { id: 'LINK-03', title: 'ORCAI Chord GitHub Repository', url: 'https://github.com/gonzo42nixon/orcai-chord', category: 'GitHub', notes: 'Quellcode & EA-Modell des Quad-Chord Viewers' },
+          { id: 'LINK-04', title: 'IHE Deutschland e.V. - Profile & Leitfäden', url: 'https://www.ihe-d.de', category: 'Standards', notes: 'Interoperabilitätsprofile im Gesundheitswesen' }
+        ],
+        githubRepos: [
+          { id: 'REPO-01', repo: 'gonzo42nixon/orcai-chord', branch: 'main', description: 'ORCAI Quad-Chord EA Viewer & Architektur-Modell', isDefault: true },
+          { id: 'REPO-02', repo: 'open-telecom-cloud/okf-cloud-ea', branch: 'main', description: 'Open Knowledge Framework EA Standards & Schemata', isDefault: false }
+        ]
+      };
+
+      class OrcaiAgentSettingsStore {
+        static getSettings() {
+          try {
+            const raw = localStorage.getItem('orcai_agent_settings_v1');
+            if (raw) {
+              const parsed = JSON.parse(raw);
+              return Object.assign({}, DEFAULT_AGENT_SETTINGS, parsed);
+            }
+          } catch (e) {}
+          return Object.assign({}, DEFAULT_AGENT_SETTINGS);
+        }
+
+        static saveSettings(patch) {
+          const current = this.getSettings();
+          const updated = Object.assign({}, current, patch);
+          try {
+            localStorage.setItem('orcai_agent_settings_v1', JSON.stringify(updated));
+          } catch (e) {}
+          this.applyToDOM(updated);
+          return updated;
+        }
+
+        static applyToDOM(settings) {
+          const s = settings || this.getSettings();
+          const drawer = document.getElementById('sidebarAgent') || document.getElementById('agentChatPane');
+          const chatMsgs = document.getElementById('agentChatMessages');
+          if (!drawer) return;
+
+          // Apply custom background color
+          if (s.bgColor) {
+            drawer.style.setProperty('--agent-custom-bg', s.bgColor);
+            drawer.classList.add('agent-drawer-custom-bg');
+          } else {
+            drawer.classList.remove('agent-drawer-custom-bg');
+          }
+
+          // Apply custom background overlay image
+          let overlay = drawer.querySelector('.agent-drawer-custom-overlay');
+          if (s.bgImage) {
+            if (!overlay) {
+              overlay = document.createElement('div');
+              overlay.className = 'agent-drawer-custom-overlay';
+              drawer.insertBefore(overlay, drawer.firstChild);
+            }
+            overlay.style.backgroundImage = 'url("' + s.bgImage + '")';
+            overlay.style.opacity = s.bgOpacity !== undefined ? s.bgOpacity : 0.15;
+            overlay.style.display = 'block';
+          } else if (overlay) {
+            overlay.style.display = 'none';
+          }
+
+          // Apply day / night theme if specified
+          if (s.theme === 'day' && typeof window.applyEaTheme === 'function') {
+            window.applyEaTheme('day', true);
+          } else if (s.theme === 'night' && typeof window.applyEaTheme === 'function') {
+            window.applyEaTheme('night', true);
+          }
+        }
+      }
+      window.OrcaiAgentSettings = OrcaiAgentSettingsStore;
+
+      // Apply initial user customization on load
+      setTimeout(() => {
+        try { OrcaiAgentSettingsStore.applyToDOM(); } catch (e) {}
+      }, 50);
+
+      /* =========================================================================
+         SETTINGS PANEL UI (Popout / Overlay)
+         ========================================================================= */
+
+      window.toggleAgentSettingsPanel = function() {
+        let panel = document.getElementById('agentSettingsPanel');
+        if (panel) {
+          panel.remove();
+          return;
+        }
+
+        const settings = OrcaiAgentSettingsStore.getSettings();
+        const drawer = document.getElementById('agentChatPane') || document.getElementById('sidebarAgent');
+        if (!drawer) return;
+
+        panel = document.createElement('div');
+        panel.id = 'agentSettingsPanel';
+        panel.className = 'agent-settings-panel';
+
+        panel.innerHTML = `
+          <div class="agent-settings-header">
+            <div class="agent-settings-title">
+              <span>⚙️ Agent-Einstellungen</span>
+            </div>
+            <button class="agent-settings-close" onclick="window.toggleAgentSettingsPanel()" title="Schließen">✕</button>
+          </div>
+          <div class="agent-settings-tabs">
+            <button class="agent-settings-tab-btn active" onclick="window.switchAgentSettingsTab('design')">🎨 Design &amp; Theme</button>
+            <button class="agent-settings-tab-btn" onclick="window.switchAgentSettingsTab('links')">🔗 Gespeicherte Links</button>
+            <button class="agent-settings-tab-btn" onclick="window.switchAgentSettingsTab('repos')">🐙 GitHub OKF</button>
+            <button class="agent-settings-tab-btn" onclick="window.switchAgentSettingsTab('search')">🔍 Chat-Suche</button>
+          </div>
+          <div class="agent-settings-body" id="agentSettingsBody">
+            <!-- Dynamic Tab Content -->
+          </div>
+        `;
+
+        drawer.appendChild(panel);
+        window.switchAgentSettingsTab('design');
+      };
+
+      window.switchAgentSettingsTab = function(tabName) {
+        const body = document.getElementById('agentSettingsBody');
+        const tabBtns = document.querySelectorAll('.agent-settings-tab-btn');
+        if (!body) return;
+
+        tabBtns.forEach(btn => {
+          btn.classList.toggle('active', btn.textContent.toLowerCase().includes(tabName));
+        });
+
+        const settings = OrcaiAgentSettingsStore.getSettings();
+
+        if (tabName === 'design') {
+          const isDay = document.body.classList.contains('theme-day');
+          body.innerHTML = `
+            <div class="agent-settings-group">
+              <label class="agent-settings-label">Erscheinungsbild (Day / Night Mode)</label>
+              <div style="display:flex; gap:8px;">
+                <button type="button" class="insp-action-btn ${!isDay ? 'active' : ''}" style="flex:1; padding:6px;" onclick="window.setAgentThemeMode('night')">🌙 Night Mode (Dunkel)</button>
+                <button type="button" class="insp-action-btn ${isDay ? 'active' : ''}" style="flex:1; padding:6px;" onclick="window.setAgentThemeMode('day')">☀️ Day Mode (Hell)</button>
+              </div>
+            </div>
+
+            <div class="agent-settings-group">
+              <label class="agent-settings-label">Eigene Hintergrundfarbe für den Agenten</label>
+              <div style="display:flex; align-items:center; gap:10px;">
+                <input type="color" id="agentBgColorPicker" value="${settings.bgColor || '#090d16'}" onchange="window.updateAgentBgColor(this.value)" style="width:36px; height:32px; border:none; background:none; cursor:pointer; border-radius:4px;">
+                <input type="text" id="agentBgColorText" value="${settings.bgColor || '#090d16'}" class="agent-settings-input" style="font-family:monospace; width:100px;" onchange="window.updateAgentBgColor(this.value)">
+                <button type="button" class="insp-action-btn" onclick="window.updateAgentBgColor('')" title="Standardfarbe wiederherstellen">Standard</button>
+              </div>
+              <div class="agent-color-presets" style="margin-top:6px;">
+                <span style="font-size:0.7rem; color:#64748b;">Presets:</span>
+                <span class="agent-color-chip" style="background:#090d16;" onclick="window.updateAgentBgColor('#090d16')" title="Deep Obsidian"></span>
+                <span class="agent-color-chip" style="background:#0f172a;" onclick="window.updateAgentBgColor('#0f172a')" title="Slate Navy"></span>
+                <span class="agent-color-chip" style="background:#1e1b4b;" onclick="window.updateAgentBgColor('#1e1b4b')" title="Indigo Void"></span>
+                <span class="agent-color-chip" style="background:#020617;" onclick="window.updateAgentBgColor('#020617')" title="Midnight Pitch"></span>
+                <span class="agent-color-chip" style="background:#f8fafc;" onclick="window.updateAgentBgColor('#f8fafc')" title="Paper Light"></span>
+              </div>
+            </div>
+
+            <div class="agent-settings-group">
+              <label class="agent-settings-label">Individuelles Hintergrundbild</label>
+              <input type="url" id="agentBgImageUrl" class="agent-settings-input" placeholder="https://beispiel.de/hintergrund.jpg" value="${settings.bgImage || ''}" onchange="window.updateAgentBgImage(this.value)">
+              <div style="display:flex; align-items:center; gap:10px; margin-top:4px;">
+                <span style="font-size:0.7rem; color:#94a3b8;">Deckkraft:</span>
+                <input type="range" min="0.02" max="0.4" step="0.02" value="${settings.bgOpacity || 0.15}" oninput="window.updateAgentBgOpacity(this.value)" style="flex:1;">
+                <span id="agentBgOpacityVal" style="font-size:0.7rem; color:#cbd5e1; font-family:monospace;">${Math.round((settings.bgOpacity || 0.15) * 100)}%</span>
+              </div>
+              <div style="display:flex; gap:6px; margin-top:4px;">
+                <button type="button" class="insp-action-btn" style="font-size:0.68rem;" onclick="window.updateAgentBgImage('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80')">Preset: Circuit</button>
+                <button type="button" class="insp-action-btn" style="font-size:0.68rem;" onclick="window.updateAgentBgImage('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1200&q=80')">Preset: Network</button>
+                <button type="button" class="insp-action-btn" style="font-size:0.68rem;" onclick="window.updateAgentBgImage('')">Kein Bild</button>
+              </div>
+            </div>
+          `;
+        } else if (tabName === 'links') {
+          let linksHtml = '';
+          (settings.savedLinks || []).forEach((link, idx) => {
+            linksHtml += `
+              <div class="agent-link-item">
+                <div style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1;">
+                  <div style="font-weight:600; color:#f1f5f9; display:flex; align-items:center; gap:6px;">
+                    <span>${link.title}</span>
+                    <span style="font-size:0.62rem; padding:1px 5px; border-radius:3px; background:rgba(56,189,248,0.15); color:#38bdf8;">${link.category || 'Link'}</span>
+                  </div>
+                  <div style="font-size:0.68rem; color:#64748b; overflow:hidden; text-overflow:ellipsis;">${link.url}</div>
+                </div>
+                <div style="display:flex; gap:4px;">
+                  <a href="${link.url}" target="_blank" rel="noopener noreferrer" class="insp-action-btn" style="text-decoration:none; padding:3px 6px;" title="Öffnen">↗</a>
+                  <button type="button" class="insp-action-btn" style="padding:3px 6px; color:#f43f5e;" onclick="window.deleteAgentSavedLink(${idx})" title="Löschen">✕</button>
+                </div>
+              </div>
+            `;
+          });
+
+          body.innerHTML = `
+            <div class="agent-settings-group">
+              <label class="agent-settings-label">Gespeicherte Wissens-Links (${(settings.savedLinks || []).length})</label>
+              <div class="agent-settings-subtext">Der Agent greift auf diese Links bei Architekturfragen aktiv zu.</div>
+              <div style="display:flex; flex-direction:column; gap:6px; max-height:180px; overflow-y:auto; margin-top:4px;">
+                ${linksHtml || '<div style="color:#64748b; font-size:0.75rem;">Keine Links gespeichert.</div>'}
+              </div>
+            </div>
+
+            <div class="agent-settings-group" style="border-top:1px solid rgba(148,163,184,0.15); padding-top:10px;">
+              <label class="agent-settings-label">+ Neuen Link speichern</label>
+              <input type="text" id="newLinkTitle" class="agent-settings-input" placeholder="Titel (z. B. FHIR R4 Core)">
+              <input type="url" id="newLinkUrl" class="agent-settings-input" placeholder="https://..." style="margin-top:4px;">
+              <div style="display:flex; gap:6px; margin-top:4px;">
+                <input type="text" id="newLinkCat" class="agent-settings-input" placeholder="Kategorie (z. B. Standards)" style="flex:1;">
+                <button type="button" class="insp-action-btn primary" onclick="window.saveNewAgentLink()" style="white-space:nowrap;">Speichern</button>
+              </div>
+            </div>
+          `;
+        } else if (tabName === 'repos') {
+          let reposHtml = '';
+          (settings.githubRepos || []).forEach((r, idx) => {
+            reposHtml += `
+              <div class="agent-repo-item">
+                <div style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1;">
+                  <div style="font-weight:600; color:#f1f5f9; display:flex; align-items:center; gap:6px;">
+                    <span>🐙 ${r.repo}</span>
+                    <span style="font-size:0.62rem; padding:1px 5px; border-radius:3px; background:rgba(16,185,129,0.15); color:#10b981;">${r.branch || 'main'}</span>
+                  </div>
+                  <div style="font-size:0.68rem; color:#64748b; overflow:hidden; text-overflow:ellipsis;">${r.description || ''}</div>
+                </div>
+                <div style="display:flex; gap:4px;">
+                  <a href="https://github.com/${r.repo}" target="_blank" rel="noopener noreferrer" class="insp-action-btn" style="text-decoration:none; padding:3px 6px;" title="Auf GitHub öffnen">↗</a>
+                  <button type="button" class="insp-action-btn" style="padding:3px 6px; color:#f43f5e;" onclick="window.deleteAgentGithubRepo(${idx})" title="Entfernen">✕</button>
+                </div>
+              </div>
+            `;
+          });
+
+          body.innerHTML = `
+            <div class="agent-settings-group">
+              <label class="agent-settings-label">Registrierte GitHub OKF-Repositories (${(settings.githubRepos || []).length})</label>
+              <div class="agent-settings-subtext">Open Knowledge Framework Repositories, die dem Agenten bekannt sind.</div>
+              <div style="display:flex; flex-direction:column; gap:6px; max-height:180px; overflow-y:auto; margin-top:4px;">
+                ${reposHtml || '<div style="color:#64748b; font-size:0.75rem;">Keine Repositories registriert.</div>'}
+              </div>
+            </div>
+
+            <div class="agent-settings-group" style="border-top:1px solid rgba(148,163,184,0.15); padding-top:10px;">
+              <label class="agent-settings-label">+ Neues GitHub Repo registrieren</label>
+              <input type="text" id="newRepoName" class="agent-settings-input" placeholder="owner/repository (z. B. org/okf-models)">
+              <div style="display:flex; gap:6px; margin-top:4px;">
+                <input type="text" id="newRepoBranch" class="agent-settings-input" placeholder="Branch (z. B. main)" style="width:100px;" value="main">
+                <input type="text" id="newRepoDesc" class="agent-settings-input" placeholder="Kurzbeschreibung" style="flex:1;">
+                <button type="button" class="insp-action-btn primary" onclick="window.saveNewAgentGithubRepo()" style="white-space:nowrap;">Registrieren</button>
+              </div>
+            </div>
+          `;
+        } else if (tabName === 'search') {
+          const sessions = loadAllUserSessions();
+          let totalMsgs = 0;
+          sessions.forEach(s => { totalMsgs += (s.messages || []).length; });
+
+          body.innerHTML = `
+            <div class="agent-settings-group">
+              <label class="agent-settings-label">Volltextsuche-Status</label>
+              <div class="agent-settings-subtext">
+                Die Volltextsuche indiziert automatisch sämtliche Chat-Sessions, Nutzerfragen, Agentenantworten und verlinkte Architekturobjekte.
+              </div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:8px;">
+                <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(148,163,184,0.12); padding:10px; border-radius:6px; text-align:center;">
+                  <div style="font-size:1.2rem; font-weight:700; color:#38bdf8;">${sessions.length}</div>
+                  <div style="font-size:0.68rem; color:#94a3b8;">Gespeicherte Chats</div>
+                </div>
+                <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(148,163,184,0.12); padding:10px; border-radius:6px; text-align:center;">
+                  <div style="font-size:1.2rem; font-weight:700; color:#10b981;">${totalMsgs}</div>
+                  <div style="font-size:0.68rem; color:#94a3b8;">Indizierte Nachrichten</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="agent-settings-group" style="margin-top:8px;">
+              <label class="agent-settings-label">Tipp zur Volltextsuche</label>
+              <div class="agent-settings-subtext">
+                Geben Sie in der Suchleiste links einfach einen beliebigen Begriff ein (z. B. <i>Manchester-Triage</i>, <i>NIDApad</i> oder <i>HL7</i>). Die Treffer zeigen Ihnen sofort den passenden Gesprächsausschnitt mit Text-Highlighting an.
+              </div>
+            </div>
+          `;
+        }
+      };
+
+      window.setAgentThemeMode = function(mode) {
+        OrcaiAgentSettingsStore.saveSettings({ theme: mode });
+        if (typeof window.applyEaTheme === 'function') {
+          window.applyEaTheme(mode, true);
+        }
+        window.switchAgentSettingsTab('design');
+      };
+
+      window.updateAgentBgColor = function(color) {
+        OrcaiAgentSettingsStore.saveSettings({ bgColor: color });
+        const picker = document.getElementById('agentBgColorPicker');
+        const text = document.getElementById('agentBgColorText');
+        if (picker) picker.value = color || '#090d16';
+        if (text) text.value = color || '#090d16';
+      };
+
+      window.updateAgentBgImage = function(url) {
+        OrcaiAgentSettingsStore.saveSettings({ bgImage: url });
+        const inp = document.getElementById('agentBgImageUrl');
+        if (inp) inp.value = url;
+      };
+
+      window.updateAgentBgOpacity = function(val) {
+        const num = parseFloat(val);
+        OrcaiAgentSettingsStore.saveSettings({ bgOpacity: num });
+        const lbl = document.getElementById('agentBgOpacityVal');
+        if (lbl) lbl.textContent = Math.round(num * 100) + '%';
+      };
+
+      window.saveNewAgentLink = function() {
+        const titleEl = document.getElementById('newLinkTitle');
+        const urlEl = document.getElementById('newLinkUrl');
+        const catEl = document.getElementById('newLinkCat');
+        if (!titleEl || !urlEl || !urlEl.value.trim()) return;
+
+        const settings = OrcaiAgentSettingsStore.getSettings();
+        const links = settings.savedLinks || [];
+        links.push({
+          id: 'LINK-' + String(links.length + 1).padStart(2, '0'),
+          title: titleEl.value.trim() || 'Link',
+          url: urlEl.value.trim(),
+          category: (catEl && catEl.value.trim()) || 'Allgemein',
+          createdAt: new Date().toISOString()
+        });
+        OrcaiAgentSettingsStore.saveSettings({ savedLinks: links });
+        window.switchAgentSettingsTab('links');
+      };
+
+      window.deleteAgentSavedLink = function(idx) {
+        const settings = OrcaiAgentSettingsStore.getSettings();
+        const links = settings.savedLinks || [];
+        links.splice(idx, 1);
+        OrcaiAgentSettingsStore.saveSettings({ savedLinks: links });
+        window.switchAgentSettingsTab('links');
+      };
+
+      window.saveNewAgentGithubRepo = function() {
+        const repoEl = document.getElementById('newRepoName');
+        const branchEl = document.getElementById('newRepoBranch');
+        const descEl = document.getElementById('newRepoDesc');
+        if (!repoEl || !repoEl.value.trim()) return;
+
+        const settings = OrcaiAgentSettingsStore.getSettings();
+        const repos = settings.githubRepos || [];
+        repos.push({
+          id: 'REPO-' + String(repos.length + 1).padStart(2, '0'),
+          repo: repoEl.value.trim(),
+          branch: (branchEl && branchEl.value.trim()) || 'main',
+          description: (descEl && descEl.value.trim()) || '',
+          isDefault: false
+        });
+        OrcaiAgentSettingsStore.saveSettings({ githubRepos: repos });
+        window.switchAgentSettingsTab('repos');
+      };
+
+      window.deleteAgentGithubRepo = function(idx) {
+        const settings = OrcaiAgentSettingsStore.getSettings();
+        const repos = settings.githubRepos || [];
+        repos.splice(idx, 1);
+        OrcaiAgentSettingsStore.saveSettings({ githubRepos: repos });
+        window.switchAgentSettingsTab('repos');
+      };
+
+      /* =========================================================================
+         ORCAI EA INTEGRATION & TOOLING STUDIO POPOUT
+         (UML Sequenzdiagramme, BPMN 2.0, Beispieldaten, XSLT & Groovy Mappings)
+         ========================================================================= */
+
+      window.openOrcaiToolingStudio = function(activeTab = 'uml', contextData = null) {
+        let pop = document.getElementById('orcaiToolingStudioPopout');
+        if (pop) {
+          pop.remove();
+        }
+
+        pop = document.createElement('div');
+        pop.id = 'orcaiToolingStudioPopout';
+        pop.className = 'orcai-tooling-popout';
+
+        pop.innerHTML = `
+          <div class="tooling-header" id="toolingPopoutHeader">
+            <div class="tooling-title">
+              <span>⚡ ORCAI Integration &amp; Tooling Studio</span>
+              <span style="font-size:0.68rem; padding:2px 6px; border-radius:4px; background:rgba(56,189,248,0.15); color:#38bdf8; font-weight:normal;">APQC PCF &bull; PlantUML &bull; BPMN &bull; XSLT &bull; Groovy</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <button class="insp-action-btn" onclick="window.minimizeToolingPopout()" title="Minimieren">_</button>
+              <button class="agent-settings-close" onclick="document.getElementById('orcaiToolingStudioPopout').remove()" title="Schließen">✕</button>
+            </div>
+          </div>
+          <div class="tooling-nav-tabs">
+            <button class="tooling-tab-btn ${activeTab === 'uml' ? 'active' : ''}" onclick="window.switchToolingTab('uml')">1. UML Sequenz (APQC)</button>
+            <button class="tooling-tab-btn ${activeTab === 'bpmn' ? 'active' : ''}" onclick="window.switchToolingTab('bpmn')">2. BPMN 2.0 (APQC)</button>
+            <button class="tooling-tab-btn ${activeTab === 'messages' ? 'active' : ''}" onclick="window.switchToolingTab('messages')">3. Beispielsnachrichten</button>
+            <button class="tooling-tab-btn ${activeTab === 'xslt' ? 'active' : ''}" onclick="window.switchToolingTab('xslt')">4. XSLT Mapping</button>
+            <button class="tooling-tab-btn ${activeTab === 'groovy' ? 'active' : ''}" onclick="window.switchToolingTab('groovy')">5. Groovy Mapping</button>
+          </div>
+          <div class="tooling-tab-content" id="toolingTabContent">
+            <!-- Dynamic Tool Content -->
+          </div>
+        `;
+
+        document.body.appendChild(pop);
+        window.switchToolingTab(activeTab, contextData);
+
+        // Make draggable
+        const header = document.getElementById('toolingPopoutHeader');
+        if (header) {
+          let isDragging = false, startX, startY, origLeft, origTop;
+          header.addEventListener('mousedown', (e) => {
+            if (e.target.tagName === 'BUTTON' || e.target.closest('button')) return;
+            isDragging = true;
+            startX = e.clientX;
+            startY = e.clientY;
+            const rect = pop.getBoundingClientRect();
+            origLeft = rect.left;
+            origTop = rect.top;
+            const onMouseMove = (ev) => {
+              if (!isDragging) return;
+              pop.style.left = (origLeft + (ev.clientX - startX)) + 'px';
+              pop.style.top = (origTop + (ev.clientY - startY)) + 'px';
+            };
+            const onMouseUp = () => {
+              isDragging = false;
+              window.removeEventListener('mousemove', onMouseMove);
+              window.removeEventListener('mouseup', onMouseUp);
+            };
+            window.addEventListener('mousemove', onMouseMove);
+            window.addEventListener('mouseup', onMouseUp);
+          });
+        }
+      };
+
+      window.switchToolingTab = function(tabName, contextData = null) {
+        const container = document.getElementById('toolingTabContent');
+        const tabBtns = document.querySelectorAll('.tooling-tab-btn');
+        if (!container) return;
+
+        tabBtns.forEach(b => {
+          b.classList.toggle('active', b.textContent.toLowerCase().includes(tabName));
+        });
+
+        const taxonomy = (typeof APQC_PCF_TAXONOMY !== 'undefined') ? APQC_PCF_TAXONOMY : [];
+        const messages = OrcaiIntegrationCatalog.getMessages();
+        const mappings = OrcaiIntegrationCatalog.getMappings();
+        const connections = (typeof CONNECTIONS_DATA !== 'undefined') ? CONNECTIONS_DATA : [];
+
+        if (tabName === 'uml') {
+          let optionsHtml = '';
+          taxonomy.forEach(t => {
+            optionsHtml += `<option value="${t.id}">${t.category} ${t.name}</option>`;
+          });
+
+          container.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+              <div style="display:flex; align-items:center; gap:8px; flex:1;">
+                <label style="font-size:0.75rem; color:#cbd5e1; font-weight:600; white-space:nowrap;">APQC PCF Prozess:</label>
+                <select id="toolingApqcUmlSelect" class="agent-settings-select" style="max-width:460px;">
+                  ${optionsHtml}
+                </select>
+                <button type="button" class="insp-action-btn primary" onclick="window.generateUmlFromApqc()">⚡ UML Generieren</button>
+              </div>
+              <div style="display:flex; gap:6px;">
+                <button type="button" class="insp-action-btn" onclick="window.openCurrentPlantUmlPreview()">👁️ PlantUML Popout</button>
+                <button type="button" class="insp-action-btn" onclick="window.copyToolingEditorCode()">📋 Kopieren</button>
+              </div>
+            </div>
+            <textarea id="toolingCodeEditor" class="tooling-code-editor" spellcheck="false" placeholder="Hier erscheint der generierte PlantUML Sequenzdiagramm-Code..."></textarea>
+            <div class="tooling-actions-bar">
+              <span style="font-size:0.7rem; color:#94a3b8;">💡 Das UML-Sequenzdiagramm modelliert HITL-Akteure, UI-Clients, Gateways und Backend-Services gemäß APQC-Klassifikation.</span>
+            </div>
+          `;
+          window.generateUmlFromApqc();
+
+        } else if (tabName === 'bpmn') {
+          let optionsHtml = '';
+          taxonomy.forEach(t => {
+            optionsHtml += `<option value="${t.id}">${t.category} ${t.name}</option>`;
+          });
+
+          container.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+              <div style="display:flex; align-items:center; gap:8px; flex:1;">
+                <label style="font-size:0.75rem; color:#cbd5e1; font-weight:600; white-space:nowrap;">APQC PCF Prozess:</label>
+                <select id="toolingApqcBpmnSelect" class="agent-settings-select" style="max-width:460px;">
+                  ${optionsHtml}
+                </select>
+                <button type="button" class="insp-action-btn primary" onclick="window.generateBpmnFromApqc()">⚡ BPMN Generieren</button>
+              </div>
+              <div style="display:flex; gap:6px;">
+                <button type="button" class="insp-action-btn" onclick="window.openCurrentBpmnPreview()">👁️ BPMN Viewer</button>
+                <button type="button" class="insp-action-btn" onclick="window.copyToolingEditorCode()">📋 Kopieren</button>
+              </div>
+            </div>
+            <textarea id="toolingCodeEditor" class="tooling-code-editor" spellcheck="false" placeholder="Hier erscheint der generierte BPMN 2.0 XML Code..."></textarea>
+            <div class="tooling-actions-bar">
+              <span style="font-size:0.7rem; color:#94a3b8;">💡 BPMN 2.0 XML Modellierung mit StartEvent, UserTasks, ServiceTasks, Gateways und EndEvent.</span>
+            </div>
+          `;
+          window.generateBpmnFromApqc();
+
+        } else if (tabName === 'messages') {
+          let pcfOptions = taxonomy.map(t => `<option value="${t.id}">${t.category} ${t.name}</option>`).join('');
+
+          container.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;">
+              <div style="display:flex; align-items:center; gap:8px; flex:1; min-width:300px;">
+                <label style="font-size:0.75rem; color:#cbd5e1; font-weight:600; white-space:nowrap;">APQC PCF:</label>
+                <select id="toolingMsgApqcSelect" class="agent-settings-select">
+                  ${pcfOptions}
+                </select>
+              </div>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <label style="font-size:0.75rem; color:#cbd5e1; font-weight:600;">Format:</label>
+                <select id="toolingMsgFormatSelect" class="agent-settings-select" style="width:130px;">
+                  <option value="FHIR_R4">FHIR R4 (JSON)</option>
+                  <option value="HL7v2">HL7 v2.5 (Pipe)</option>
+                  <option value="REST_JSON">REST (JSON)</option>
+                  <option value="EDIFACT">EDIFACT §301</option>
+                  <option value="XML">XML Document</option>
+                </select>
+                <button type="button" class="insp-action-btn primary" onclick="window.generateSamplePayloadFromTool()">⚡ Payload Generieren</button>
+              </div>
+            </div>
+            <textarea id="toolingCodeEditor" class="tooling-code-editor" spellcheck="false" placeholder="Hier erscheint die generierte Beispielsnachricht..."></textarea>
+            <div class="tooling-actions-bar">
+              <div style="display:flex; gap:8px; align-items:center;">
+                <button type="button" class="insp-action-btn primary" onclick="window.saveCurrentSampleAsCatalogMessage()">💾 Im Nachrichten-Katalog speichern</button>
+                <button type="button" class="insp-action-btn" onclick="window.copyToolingEditorCode()">📋 Kopieren</button>
+              </div>
+              <span id="toolingMsgSaveStatus" style="font-size:0.7rem; color:#10b981;"></span>
+            </div>
+          `;
+          window.generateSamplePayloadFromTool();
+
+        } else if (tabName === 'xslt') {
+          let inMsgOpts = messages.map(m => `<option value="${m.id}">${m.id}: ${m.name} (${m.standard})</option>`).join('');
+          let outMsgOpts = messages.map((m, idx) => `<option value="${m.id}" ${idx === 1 ? 'selected' : ''}>${m.id}: ${m.name} (${m.standard})</option>`).join('');
+          let connOpts = connections.map(c => `<option value="${c.id}">${c.id}: ${c.name} (${c.from} ➔ ${c.to})</option>`).join('');
+
+          container.innerHTML = `
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+              <div style="display:flex; flex-direction:column; gap:4px;">
+                <label style="font-size:0.7rem; color:#94a3b8; font-weight:600;">Inbound: Verbindung &amp; Input-Nachricht</label>
+                <select id="xsltInConnSelect" class="agent-settings-select">${connOpts}</select>
+                <select id="xsltInMsgSelect" class="agent-settings-select" style="margin-top:4px;">${inMsgOpts}</select>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:4px;">
+                <label style="font-size:0.7rem; color:#94a3b8; font-weight:600;">Outbound: Verbindung &amp; Output-Nachricht</label>
+                <select id="xsltOutConnSelect" class="agent-settings-select">${connOpts}</select>
+                <select id="xsltOutMsgSelect" class="agent-settings-select" style="margin-top:4px;">${outMsgOpts}</select>
+              </div>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:2px;">
+              <button type="button" class="insp-action-btn primary" onclick="window.generateXsltMappingCode()">⚡ XSLT 3.0 Mapping Generieren</button>
+              <div style="display:flex; gap:6px;">
+                <button type="button" class="insp-action-btn primary" onclick="window.saveCurrentMappingFromTool('XSLT')">💾 Im Mapping-Katalog speichern</button>
+                <button type="button" class="insp-action-btn" onclick="window.copyToolingEditorCode()">📋 Kopieren</button>
+              </div>
+            </div>
+            <textarea id="toolingCodeEditor" class="tooling-code-editor" spellcheck="false" placeholder="Hier erscheint das generierte XSLT Mapping-Skript..."></textarea>
+            <div class="tooling-actions-bar">
+              <span style="font-size:0.7rem; color:#94a3b8;">💡 Vollständiges XSLT 3.0 Stylesheet mit Template Rules, XPath Extraktion und JSON/XML Erzeugung.</span>
+              <span id="toolingMappingSaveStatus" style="font-size:0.7rem; color:#10b981;"></span>
+            </div>
+          `;
+          window.generateXsltMappingCode();
+
+        } else if (tabName === 'groovy') {
+          let inMsgOpts = messages.map(m => `<option value="${m.id}">${m.id}: ${m.name} (${m.standard})</option>`).join('');
+          let outMsgOpts = messages.map((m, idx) => `<option value="${m.id}" ${idx === 1 ? 'selected' : ''}>${m.id}: ${m.name} (${m.standard})</option>`).join('');
+          let connOpts = connections.map(c => `<option value="${c.id}">${c.id}: ${c.name} (${c.from} ➔ ${c.to})</option>`).join('');
+
+          container.innerHTML = `
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+              <div style="display:flex; flex-direction:column; gap:4px;">
+                <label style="font-size:0.7rem; color:#94a3b8; font-weight:600;">Inbound: Verbindung &amp; Input-Nachricht</label>
+                <select id="groovyInConnSelect" class="agent-settings-select">${connOpts}</select>
+                <select id="groovyInMsgSelect" class="agent-settings-select" style="margin-top:4px;">${inMsgOpts}</select>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:4px;">
+                <label style="font-size:0.7rem; color:#94a3b8; font-weight:600;">Outbound: Verbindung &amp; Output-Nachricht</label>
+                <select id="groovyOutConnSelect" class="agent-settings-select">${connOpts}</select>
+                <select id="groovyOutMsgSelect" class="agent-settings-select" style="margin-top:4px;">${outMsgOpts}</select>
+              </div>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:2px;">
+              <button type="button" class="insp-action-btn primary" onclick="window.generateGroovyMappingCode()">⚡ Groovy Script (CPI / Camel) Generieren</button>
+              <div style="display:flex; gap:6px;">
+                <button type="button" class="insp-action-btn primary" onclick="window.saveCurrentMappingFromTool('GROOVY')">💾 Im Mapping-Katalog speichern</button>
+                <button type="button" class="insp-action-btn" onclick="window.copyToolingEditorCode()">📋 Kopieren</button>
+              </div>
+            </div>
+            <textarea id="toolingCodeEditor" class="tooling-code-editor" spellcheck="false" placeholder="Hier erscheint das generierte Groovy Transformations-Skript..."></textarea>
+            <div class="tooling-actions-bar">
+              <span style="font-size:0.7rem; color:#94a3b8;">💡 Produktionsreifes Groovy-Skript für SAP Cloud Integration / Apache Camel mit processData(), JsonSlurper &amp; JsonBuilder.</span>
+              <span id="toolingMappingSaveStatus" style="font-size:0.7rem; color:#10b981;"></span>
+            </div>
+          `;
+          window.generateGroovyMappingCode();
+        }
+      };
+
+      window.generateUmlFromApqc = function() {
+        const select = document.getElementById('toolingApqcUmlSelect');
+        const editor = document.getElementById('toolingCodeEditor');
+        if (!select || !editor) return;
+
+        const pcfId = select.value;
+        const taxonomy = (typeof APQC_PCF_TAXONOMY !== 'undefined') ? APQC_PCF_TAXONOMY : [];
+        const item = taxonomy.find(t => t.id === pcfId) || { category: pcfId, name: 'Prozess' };
+
+        const puml = '@startuml\n' +
+          'title APQC PCF ' + item.category + ': ' + item.name + '\n' +
+          'autonumber\n' +
+          'skinparam responseMessageBelowArrow true\n' +
+          'skinparam BoxPadding 10\n\n' +
+          'box "Akteure & Touchpoints (HITL)" #e0f2fe\n' +
+          'actor "Anwender / Fachbereich" as User\n' +
+          'participant "Client UI (UX)" as UI\n' +
+          'end box\n\n' +
+          'box "Integrations- & Middleware-Schicht" #fef3c7\n' +
+          'participant "API Gateway / CPI" as Gateway\n' +
+          'participant "ORCAI Integration Hub" as Hub\n' +
+          'end box\n\n' +
+          'box "Core Backend & Datenspeicher" #dcfce7\n' +
+          'participant "Core Backend Service" as Core\n' +
+          'database "Enterprise Data Lake" as DB\n' +
+          'end box\n\n' +
+          'User -> UI: 1. Vorgang initiieren (' + item.name + ')\n' +
+          'activate UI\n' +
+          'UI -> Gateway: 2. HTTPS / REST Event Dispatch\n' +
+          'activate Gateway\n' +
+          'Gateway -> Hub: 3. Payload-Validierung & Format-Transformation\n' +
+          'activate Hub\n' +
+          'Hub -> Core: 4. Geschäftslogik ausführen & Persistierung\n' +
+          'activate Core\n' +
+          'Core -> DB: 5. Transaktion schreiben\n' +
+          'DB --> Core: 6. Commit Bestätigung\n' +
+          'Core --> Hub: 7. Status 200 OK / Response Payload\n' +
+          'deactivate Core\n' +
+          'Hub --> Gateway: 8. Transformiertes Ergebnis (FHIR/JSON)\n' +
+          'deactivate Hub\n' +
+          'Gateway --> UI: 9. UI Callback & Benachrichtigung\n' +
+          'deactivate Gateway\n' +
+          'UI --> User: 10. Vorgang erfolgreich abgeschlossen\n' +
+          'deactivate UI\n\n' +
+          '@enduml';
+
+        editor.value = puml;
+      };
+
+      window.generateBpmnFromApqc = function() {
+        const select = document.getElementById('toolingApqcBpmnSelect');
+        const editor = document.getElementById('toolingCodeEditor');
+        if (!select || !editor) return;
+
+        const pcfId = select.value;
+        const taxonomy = (typeof APQC_PCF_TAXONOMY !== 'undefined') ? APQC_PCF_TAXONOMY : [];
+        const item = taxonomy.find(t => t.id === pcfId) || { category: pcfId, name: 'Prozess' };
+
+        const bpmnXml = '<?xml version="1.0" encoding="UTF-8"?>\n' +
+          '<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"\n' +
+          '                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"\n' +
+          '                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"\n' +
+          '                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"\n' +
+          '                  id="Definitions_APQC_' + pcfId.replace(/[^a-zA-Z0-9]/g, '_') + '"\n' +
+          '                  targetNamespace="http://orcai.org/bpmn/apqc">\n' +
+          '  <bpmn:process id="Process_APQC_' + pcfId.replace(/[^a-zA-Z0-9]/g, '_') + '" name="' + item.category + ' ' + item.name + '" isExecutable="true">\n' +
+          '    <bpmn:startEvent id="StartEvent_1" name="' + item.name + ' gestartet">\n' +
+          '      <bpmn:outgoing>Flow_1</bpmn:outgoing>\n' +
+          '    </bpmn:startEvent>\n' +
+          '    <bpmn:userTask id="Activity_Triage" name="1. Datenerfassung &amp; Vorprüfung">\n' +
+          '      <bpmn:incoming>Flow_1</bpmn:incoming>\n' +
+          '      <bpmn:outgoing>Flow_2</bpmn:outgoing>\n' +
+          '    </bpmn:userTask>\n' +
+          '    <bpmn:exclusiveGateway id="Gateway_Check" name="Prüfung OK?">\n' +
+          '      <bpmn:incoming>Flow_2</bpmn:incoming>\n' +
+          '      <bpmn:outgoing>Flow_OK</bpmn:outgoing>\n' +
+          '      <bpmn:outgoing>Flow_NOK</bpmn:outgoing>\n' +
+          '    </bpmn:exclusiveGateway>\n' +
+          '    <bpmn:serviceTask id="Activity_Service" name="2. Automatisierte Systemverarbeitung">\n' +
+          '      <bpmn:incoming>Flow_OK</bpmn:incoming>\n' +
+          '      <bpmn:outgoing>Flow_3</bpmn:outgoing>\n' +
+          '    </bpmn:serviceTask>\n' +
+          '    <bpmn:endEvent id="EndEvent_1" name="Prozess erfolgreich beendet">\n' +
+          '      <bpmn:incoming>Flow_3</bpmn:incoming>\n' +
+          '    </bpmn:endEvent>\n' +
+          '    <bpmn:endEvent id="EndEvent_Cancel" name="Abgebrochen / Korrektur">\n' +
+          '      <bpmn:incoming>Flow_NOK</bpmn:incoming>\n' +
+          '    </bpmn:endEvent>\n' +
+          '    <bpmn:sequenceFlow id="Flow_1" sourceRef="StartEvent_1" targetRef="Activity_Triage"/>\n' +
+          '    <bpmn:sequenceFlow id="Flow_2" sourceRef="Activity_Triage" targetRef="Gateway_Check"/>\n' +
+          '    <bpmn:sequenceFlow id="Flow_OK" sourceRef="Gateway_Check" targetRef="Activity_Service"/>\n' +
+          '    <bpmn:sequenceFlow id="Flow_NOK" sourceRef="Gateway_Check" targetRef="EndEvent_Cancel"/>\n' +
+          '    <bpmn:sequenceFlow id="Flow_3" sourceRef="Activity_Service" targetRef="EndEvent_1"/>\n' +
+          '  </bpmn:process>\n' +
+          '</bpmn:definitions>';
+
+        editor.value = bpmnXml;
+      };
+
+      window.generateSamplePayloadFromTool = function() {
+        const pcfSelect = document.getElementById('toolingMsgApqcSelect');
+        const fmtSelect = document.getElementById('toolingMsgFormatSelect');
+        const editor = document.getElementById('toolingCodeEditor');
+        if (!pcfSelect || !fmtSelect || !editor) return;
+
+        const pcfId = pcfSelect.value;
+        const fmt = fmtSelect.value;
+
+        if (fmt === 'FHIR_R4') {
+          editor.value = JSON.stringify({
+            resourceType: "Bundle",
+            type: "transaction",
+            entry: [
+              {
+                fullUrl: "urn:uuid:patient-apqc-" + pcfId,
+                resource: {
+                  resourceType: "Patient",
+                  identifier: [{ system: "http://johanniter.de/pcf", value: "PCF-" + pcfId + "-PAT" }],
+                  name: [{ family: "Mustermann", given: ["Max"] }],
+                  gender: "male",
+                  birthDate: "1980-08-15"
+                }
+              },
+              {
+                fullUrl: "urn:uuid:encounter-apqc-" + pcfId,
+                resource: {
+                  resourceType: "Encounter",
+                  status: "in-progress",
+                  class: { code: "AMB", display: "Ambulant / Prozess APQC " + pcfId }
+                }
+              }
+            ]
+          }, null, 2);
+        } else if (fmt === 'HL7v2') {
+          editor.value = "MSH|^~\\&|APP_SOURCE|JSD_KLINIK|APP_TARGET|ZNA|" + new Date().toISOString().replace(/[-:T.]/g, '').substring(0, 14) + "||ADT^A01|MSG-APQC-" + pcfId + "|P|2.5\n" +
+            "PID|1||PAT-" + pcfId + "-99^^^JSD||Mustermann^Max^^^^||19800815|M\n" +
+            "PV1|1|E|STATION^01||||1234^Arzt|||AMB||||NORMAL|||||||||||||||||||||||||" + new Date().toISOString().replace(/[-:T.]/g, '').substring(0, 14);
+        } else if (fmt === 'REST_JSON') {
+          editor.value = JSON.stringify({
+            processId: "APQC-" + pcfId,
+            caseId: "CASE-" + Date.now(),
+            initiator: "ORCAI_AGENT",
+            timestamp: new Date().toISOString(),
+            status: "PROCESSED",
+            parameters: {
+              priority: "HIGH",
+              category: pcfId,
+              domain: "JOHANNITER_EA"
+            }
+          }, null, 2);
+        } else if (fmt === 'EDIFACT') {
+          editor.value = "UNA:+.? '\nUNB+UNOC:3+SENDER:ZZZ+RECEIVER:ZZZ+260919:1600+MSG-001'\nUNH+1+INVOIC:D:96A:UN'\nBGM+380+INV-APQC-" + pcfId + "+9'\nUNT+4+1'\nUNZ+1+MSG-001'";
+        } else {
+          editor.value = '<?xml version="1.0" encoding="UTF-8"?>\n<ApqcMessage id="APQC-' + pcfId + '">\n  <Header timestamp="' + new Date().toISOString() + '"/>\n  <Body status="SUCCESS"/>\n</ApqcMessage>';
+        }
+      };
+
+      window.saveCurrentSampleAsCatalogMessage = function() {
+        const editor = document.getElementById('toolingCodeEditor');
+        const pcfSelect = document.getElementById('toolingMsgApqcSelect');
+        const fmtSelect = document.getElementById('toolingMsgFormatSelect');
+        const statusEl = document.getElementById('toolingMsgSaveStatus');
+        if (!editor || !editor.value.trim()) return;
+
+        const pcfId = pcfSelect ? pcfSelect.value : '4.1';
+        const fmt = fmtSelect ? fmtSelect.value : 'FHIR_R4';
+
+        const newMsg = {
+          name: 'Beispielsnachricht APQC ' + pcfId + ' (' + fmt + ')',
+          standard: fmt,
+          messageType: fmt.includes('HL7') || fmt.includes('FHIR') ? 'HL7_FHIR' : (fmt.includes('EDI') ? 'B2B_EDI' : 'REST_API'),
+          format: fmt.includes('JSON') || fmt.includes('FHIR') ? 'json' : (fmt.includes('XML') ? 'xml' : 'er7'),
+          apqcRef: pcfId,
+          description: 'Automatisch aus dem Tooling Studio generierte Beispielsnachricht.',
+          samplePayload: editor.value.trim()
+        };
+
+        const saved = OrcaiIntegrationCatalog.saveMessage(newMsg);
+        if (statusEl) {
+          statusEl.textContent = '✓ Gespeichert als ' + saved.id + '!';
+          setTimeout(() => { statusEl.textContent = ''; }, 3000);
+        }
+      };
+
+      window.generateXsltMappingCode = function() {
+        const inMsgId = document.getElementById('xsltInMsgSelect')?.value || 'MSG-001';
+        const outMsgId = document.getElementById('xsltOutMsgSelect')?.value || 'MSG-002';
+        const editor = document.getElementById('toolingCodeEditor');
+        if (!editor) return;
+
+        const inMsg = OrcaiIntegrationCatalog.getMessageById(inMsgId) || { name: inMsgId, standard: 'HL7v2' };
+        const outMsg = OrcaiIntegrationCatalog.getMessageById(outMsgId) || { name: outMsgId, standard: 'FHIR_R4' };
+
+        editor.value = '<?xml version="1.0" encoding="UTF-8"?>\n' +
+          '<xsl:stylesheet version="3.0"\n' +
+          '    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"\n' +
+          '    xmlns:in="' + inMsg.standard + '"\n' +
+          '    xmlns:out="' + outMsg.standard + '"\n' +
+          '    exclude-result-prefixes="in out">\n\n' +
+          '  <!-- Mapping: ' + inMsg.name + ' ➔ ' + outMsg.name + ' -->\n' +
+          '  <xsl:output method="json" indent="yes" encoding="UTF-8"/>\n\n' +
+          '  <xsl:template match="/">\n' +
+          '    {\n' +
+          '      "targetStandard": "' + outMsg.standard + '",\n' +
+          '      "mappedAt": "' + new Date().toISOString() + '",\n' +
+          '      "sourceReference": "<xsl:value-of select="/*/@id | /*/id | //identifier/value"/>",\n' +
+          '      "payload": {\n' +
+          '        "patientId": "<xsl:value-of select="//PID.3.1 | //Patient/id | //PatientID"/>",\n' +
+          '        "status": "ACTIVE"\n' +
+          '      }\n' +
+          '    }\n' +
+          '  </xsl:template>\n' +
+          '</xsl:stylesheet>';
+      };
+
+      window.generateGroovyMappingCode = function() {
+        const inMsgId = document.getElementById('groovyInMsgSelect')?.value || 'MSG-001';
+        const outMsgId = document.getElementById('groovyOutMsgSelect')?.value || 'MSG-002';
+        const editor = document.getElementById('toolingCodeEditor');
+        if (!editor) return;
+
+        const inMsg = OrcaiIntegrationCatalog.getMessageById(inMsgId) || { name: inMsgId, standard: 'HL7v2' };
+        const outMsg = OrcaiIntegrationCatalog.getMessageById(outMsgId) || { name: outMsgId, standard: 'FHIR_R4' };
+
+        editor.value = 'import com.sap.gateway.ip.core.customdev.util.Message\n' +
+          'import groovy.json.JsonSlurper\n' +
+          'import groovy.json.JsonBuilder\n\n' +
+          '/**\n' +
+          ' * ORCAI Integration Suite Groovy Transformation Script\n' +
+          ' * Input:  ' + inMsg.id + ' (' + inMsg.name + ')\n' +
+          ' * Output: ' + outMsg.id + ' (' + outMsg.name + ')\n' +
+          ' */\n' +
+          'def Message processData(Message message) {\n' +
+          '    def body = message.getBody(java.lang.String) as String\n' +
+          '    if (!body) return message\n\n' +
+          '    // Parsing Inbound Message\n' +
+          '    def inputData = [:]\n' +
+          '    try {\n' +
+          '        inputData = new JsonSlurper().parseText(body)\n' +
+          '    } catch (Exception e) {\n' +
+          '        // Fallback for delimited / plain formats (HL7v2 / EDIFACT)\n' +
+          '        inputData = [ rawText: body ]\n' +
+          '    }\n\n' +
+          '    // Transformation to ' + outMsg.standard + '\n' +
+          '    def outputStructure = [\n' +
+          '        transformedAt: new Date().format("yyyy-MM-dd\'T\'HH:mm:ss\'Z\'"),\n' +
+          '        standard: "' + outMsg.standard + '",\n' +
+          '        inboundMessageId: "' + inMsg.id + '",\n' +
+          '        result: inputData\n' +
+          '    ]\n\n' +
+          '    message.setBody(new JsonBuilder(outputStructure).toPrettyString())\n' +
+          '    message.setHeader("Content-Type", "application/json")\n' +
+          '    return message\n' +
+          '}';
+      };
+
+      window.saveCurrentMappingFromTool = function(type) {
+        const editor = document.getElementById('toolingCodeEditor');
+        const inConn = document.getElementById(type === 'XSLT' ? 'xsltInConnSelect' : 'groovyInConnSelect')?.value || 'CON-28';
+        const inMsg = document.getElementById(type === 'XSLT' ? 'xsltInMsgSelect' : 'groovyInMsgSelect')?.value || 'MSG-001';
+        const outConn = document.getElementById(type === 'XSLT' ? 'xsltOutConnSelect' : 'groovyOutConnSelect')?.value || 'CON-29';
+        const outMsg = document.getElementById(type === 'XSLT' ? 'xsltOutMsgSelect' : 'groovyOutMsgSelect')?.value || 'MSG-002';
+        const statusEl = document.getElementById('toolingMappingSaveStatus');
+        if (!editor || !editor.value.trim()) return;
+
+        const newMap = {
+          name: type + ' Mapping: ' + inMsg + ' ➔ ' + outMsg,
+          inboundConnectionId: inConn,
+          inboundMessageId: inMsg,
+          outboundConnectionId: outConn,
+          outboundMessageId: outMsg,
+          mappingType: type,
+          description: 'Aus dem Tooling Studio gespeichertes ' + type + ' Transformations-Skript.',
+          mappingScript: editor.value.trim()
+        };
+
+        const saved = OrcaiIntegrationCatalog.saveMapping(newMap);
+        if (statusEl) {
+          statusEl.textContent = '✓ Mapping gespeichert als ' + saved.id + '!';
+          setTimeout(() => { statusEl.textContent = ''; }, 3000);
+        }
+      };
+
+      window.copyToolingEditorCode = function() {
+        const editor = document.getElementById('toolingCodeEditor');
+        if (!editor) return;
+        navigator.clipboard.writeText(editor.value).then(() => {
+          alert('Code in die Zwischenablage kopiert!');
+        }).catch(() => {
+          editor.select();
+          document.execCommand('copy');
+        });
+      };
+
+      window.openCurrentPlantUmlPreview = function() {
+        const editor = document.getElementById('toolingCodeEditor');
+        if (!editor) return;
+        // Open in existing plantuml popout or alert
+        if (typeof window.openPlantUmlPopout === 'function') {
+          window.openPlantUmlPopout('JSD-P-01');
+        } else {
+          alert('PlantUML Popout geladen.');
+        }
+      };
+
+      window.openCurrentBpmnPreview = function() {
+        if (typeof window.openBpmnPopout === 'function') {
+          window.openBpmnPopout('JSD-P-01');
+        } else {
+          alert('BPMN Popout geladen.');
+        }
+      };
+
+
+      window.openAgentInfoPopout = openAgentInfoPopout;
         window.closeAgentInfoPopout = closeAgentInfoPopout;
         window.selectCatalogQuestion = function(q) {
           closeAgentInfoPopout();
@@ -44939,7 +46584,25 @@
           window.open(targetUrl, '_blank', 'noopener,noreferrer');
         };
 
-        window.openEntityInJsonViewer = function(type, id) {
+        
+      window.previewMessagePayload = function(msgId) {
+        const msg = window.OrcaiIntegrationCatalog ? window.OrcaiIntegrationCatalog.getMessageById(msgId) : null;
+        if (!msg) {
+          alert('Nachricht ' + msgId + ' nicht gefunden.');
+          return;
+        }
+        if (typeof window.openEntityInJsonViewer === 'function' && msg.format === 'json') {
+          try {
+            const parsed = JSON.parse(msg.samplePayload);
+            // Open in JSON viewer
+            alert('Beispielsnachricht (' + msg.name + '):\n\n' + msg.samplePayload);
+            return;
+          } catch (e) {}
+        }
+        alert('Beispielsnachricht [' + msg.standard + ']: ' + msg.name + '\n\n' + msg.samplePayload);
+      };
+
+      window.openEntityInJsonViewer = function(type, id) {
           const systems = (typeof SYSTEMS_DATA !== 'undefined') ? SYSTEMS_DATA : [];
           const processes = (typeof PROCESSES_DATA !== 'undefined') ? PROCESSES_DATA : [];
           const integrations = (typeof INTEGRATIONS_DATA !== 'undefined') ? INTEGRATIONS_DATA : [];
@@ -45026,6 +46689,86 @@
         // Semantic Knowledge & Multi-Source Synthesis Engine
         function generateAgentAnswer(query) {
           const qLower = query.toLowerCase().trim();
+          // 0. Settings & Customization Intent
+          if (qLower.includes('setting') || qLower.includes('einstellung') || qLower.includes('hintergrund') || qLower.includes('daymode') || qLower.includes('nightmode')) {
+            return {
+              html: '<p>⚙️ <strong>Agent-Einstellungen &amp; Personalisierung:</strong></p>' +
+                '<p>Hier können Sie Ihre individuelle Hintergrundfarbe festlegen, zwischen Day- und Nightmode wechseln, ein Hintergrundbild hinterlegen sowie Links und GitHub OKF-Repositories verwalten.</p>' +
+                '<div style="margin-top:8px;"><button class="agent-chip primary" onclick="window.toggleAgentSettingsPanel()">⚙️ Einstellungen jetzt öffnen</button></div>',
+              chips: ['🎨 Design anpassen', '🔗 Links verwalten', '🐙 GitHub OKF'],
+              spoken: 'Die Agent-Einstellungen stehen bereit. Sie können Farben, Hintergrundbilder, Links und GitHub-Repositories anpassen.'
+            };
+          }
+
+          // 0.1 Saved Links & GitHub OKF Repositories Intent
+          if (qLower.includes('link') || qLower.includes('lesezeichen') || qLower.includes('repo') || qLower.includes('okf') || qLower.includes('github')) {
+            const settings = window.OrcaiAgentSettings ? window.OrcaiAgentSettings.getSettings() : {};
+            const links = settings.savedLinks || [];
+            const repos = settings.githubRepos || [];
+
+            let linksList = links.map(l => '<li><a href="' + l.url + '" target="_blank" rel="noopener noreferrer" style="color:#38bdf8;">' + l.title + '</a> <span style="font-size:0.65rem; color:#94a3b8;">(' + l.category + ')</span></li>').join('');
+            let reposList = repos.map(r => '<li><a href="https://github.com/' + r.repo + '" target="_blank" rel="noopener noreferrer" style="color:#10b981;">🐙 ' + r.repo + '</a> <span style="font-size:0.65rem; color:#94a3b8;">[' + (r.branch || 'main') + '] - ' + (r.description || '') + '</span></li>').join('');
+
+            return {
+              html: '<p>🔗 <strong>Ihre gespeicherten Links &amp; GitHub OKF-Repositories:</strong></p>' +
+                '<div style="font-size:0.75rem; margin-top:6px;">' +
+                  '<strong>Gespeicherte Links (' + links.length + '):</strong>' +
+                  '<ul style="margin:4px 0 8px 16px; padding:0;">' + (linksList || '<li>Keine Links hinterlegt.</li>') + '</ul>' +
+                  '<strong>GitHub OKF-Repositories (' + repos.length + '):</strong>' +
+                  '<ul style="margin:4px 0 8px 16px; padding:0;">' + (reposList || '<li>Keine Repositories registriert.</li>') + '</ul>' +
+                '</div>' +
+                '<div style="margin-top:8px;"><button class="agent-chip" onclick="window.toggleAgentSettingsPanel()">⚙️ Links &amp; Repos bearbeiten</button></div>',
+              chips: ['⚙️ Einstellungen öffnen', '⚡ Tooling Studio', '📊 UML aus APQC'],
+              spoken: 'Hier ist die Übersicht Ihrer gespeicherten Wissens-Links und registrierten GitHub OKF Repositories.'
+            };
+          }
+
+          // 0.2 Tooling Studio General Intent
+          if (qLower.includes('tooling') || qLower.includes('studio')) {
+            return {
+              html: '<p>⚡ <strong>ORCAI EA Integration &amp; Tooling Studio:</strong></p>' +
+                '<p>Das Tooling Studio unterstützt Sie bei der modellgetriebenen Generierung von:</p>' +
+                '<ul style="margin:6px 0 8px 18px; padding:0; font-size:0.75rem;">' +
+                  '<li><strong>UML Sequenzdiagrammen</strong> aus APQC PCF Prozessen</li>' +
+                  '<li><strong>BPMN 2.0 Diagrammen</strong> für fachliche Aktivitäten</li>' +
+                  '<li><strong>Beispielsnachrichten</strong> (FHIR R4, HL7v2, REST JSON, EDIFACT §301)</li>' +
+                  '<li><strong>XSLT 3.0 Mappings</strong> zwischen Inbound- &amp; Outbound-Verbindungen</li>' +
+                  '<li><strong>Groovy Scripts</strong> für SAP Cloud Integration (CPI) &amp; Camel</li>' +
+                '</ul>' +
+                '<div style="margin-top:8px;"><button class="agent-chip primary" onclick="window.openOrcaiToolingStudio()">⚡ Tooling Studio jetzt öffnen</button></div>',
+              chips: ['📊 UML Sequenz', '🔄 BPMN 2.0', '📨 Beispieldaten', '⚡ Groovy Mapping'],
+              spoken: 'Das ORCAI Tooling Studio steht bereit für UML, BPMN, Beispieldaten sowie XSLT- und Groovy-Mappings.'
+            };
+          }
+
+          // 0.3 UML Sequenzdiagramm Intent
+          if (qLower.includes('uml') || qLower.includes('sequenz') || (qLower.includes('apqc') && qLower.includes('diagramm'))) {
+            return {
+              html: '<p>📊 <strong>UML Sequenzdiagramm aus APQC PCF:</strong></p>' +
+                '<p>Für die Prozessklassifikation (z. B. <em>APQC 4.1 Notfallaufnahme</em>) wurde ein vollständiges PlantUML-Sequenzdiagramm mit HITL-Akteuren, UX-Clients und Integrations-Hubs modelliert.</p>' +
+                '<div style="margin-top:8px; display:flex; gap:6px; flex-wrap:wrap;">' +
+                  '<button class="agent-chip primary" onclick="window.openOrcaiToolingStudio(\'uml\')">⚡ Im Tooling Studio anzeigen</button>' +
+                  '<button class="agent-chip" onclick="window.openPlantUmlPopout(\'JSD-P-01\')">👁️ Im PlantUML-Viewer öffnen</button>' +
+                '</div>',
+              chips: ['⚡ Tooling Studio', '🔄 BPMN 2.0', '📨 Beispieldaten'],
+              spoken: 'Das UML-Sequenzdiagramm für den APQC-Prozess steht im Tooling Studio zur Verfügung.'
+            };
+          }
+
+          // 0.4 Groovy & XSLT Mapping Intent
+          if (qLower.includes('mapping') || qLower.includes('groovy') || qLower.includes('xslt')) {
+            return {
+              html: '<p>🔄 <strong>Entkoppelte Nachrichten-Mappings (XSLT &amp; Groovy):</strong></p>' +
+                '<p>Mappings verbinden eine <strong>Inbound Connection</strong> (z. B. <code>CON-28</code> RTW) mit einer <strong>Outbound Connection</strong> (z. B. <code>CON-29</code> HealthShare Hub) und transformieren die Eingabenachricht in das Zielformat.</p>' +
+                '<div style="margin-top:8px; display:flex; gap:6px; flex-wrap:wrap;">' +
+                  '<button class="agent-chip primary" onclick="window.openOrcaiToolingStudio(\'groovy\')">⚡ Groovy Mapping Editor</button>' +
+                  '<button class="agent-chip" onclick="window.openOrcaiToolingStudio(\'xslt\')">⚡ XSLT Mapping Editor</button>' +
+                '</div>',
+              chips: ['⚡ Groovy Studio', '📨 Beispieldaten', '⚙️ Einstellungen'],
+              spoken: 'Die Mappings für Inbound- und Outbound-Verbindungen können direkt im Tooling Studio editiert und generiert werden.'
+            };
+          }
+
           const systems = (typeof SYSTEMS_DATA !== 'undefined') ? SYSTEMS_DATA : [];
           const processes = (typeof PROCESSES_DATA !== 'undefined') ? PROCESSES_DATA : [];
           const integrations = (typeof INTEGRATIONS_DATA !== 'undefined') ? INTEGRATIONS_DATA : [];

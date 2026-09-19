@@ -52,7 +52,7 @@
     ].map(([action, label]) =>
       '<button type="button" class="mobile-agent-quick-action" data-agent-nav="' + action + '">' + label + '</button>'
     ).join('');
-    if (sidebarAgent && agentSuggestions) sidebarAgent.insertBefore(quickNavigation, agentSuggestions);
+    if (sidebarAgent && agentSuggestions && agentSuggestions.parentNode === sidebarAgent) { sidebarAgent.insertBefore(quickNavigation, agentSuggestions); } else if (agentSuggestions && agentSuggestions.parentNode) { agentSuggestions.parentNode.insertBefore(quickNavigation, agentSuggestions); }
 
     function isMobile() {
       return mediaQuery.matches;
