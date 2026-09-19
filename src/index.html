@@ -5012,7 +5012,7 @@
       display: none !important;
     }
 
-    /* ORCAI Logo Everywhere */
+    /* ORCAI Logo - Exclusively in Chat Overview & Iconified Rail */
     .agent-orcai-logo {
       width: 22px;
       height: 22px;
@@ -5023,19 +5023,8 @@
       box-shadow: 0 0 10px rgba(56, 189, 248, 0.45);
       flex-shrink: 0;
     }
-    .agent-msg-logo {
-      width: 17px;
-      height: 17px;
-      border-radius: 4px;
-      display: inline-block;
-      vertical-align: middle;
-      object-fit: cover;
-      box-shadow: 0 0 6px rgba(56, 189, 248, 0.35);
-      margin-right: 5px;
-      flex-shrink: 0;
-    }
 
-    /* Agent Left Column: Chat History Sidebar (ChatGPT / Gemini persistent style) */
+    /* Agent Left Column: Chat History Sidebar */
     .agent-sidebar {
       width: 220px;
       min-width: 220px;
@@ -5128,17 +5117,73 @@
       box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
       transform: translateY(-1px);
     }
+
+    /* Sidebar Footer: Compact User Badge matching https://orcai-54321.web.app/ea */
     .agent-sidebar-footer {
       padding: 6px 10px;
-      background: rgba(15, 23, 42, 0.6);
-      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      background: rgba(15, 23, 42, 0.75);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 8px;
       font-size: 0.68rem;
       color: #94a3b8;
       flex-shrink: 0;
       box-sizing: border-box;
+      height: 42px;
+      overflow: hidden;
+    }
+    .agent-user-badge {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      min-width: 0;
+      flex: 1;
+      overflow: hidden;
+      cursor: default;
+    }
+    .agent-user-avatar {
+      width: 24px;
+      height: 24px;
+      min-width: 24px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #0284c7, #38bdf8);
+      color: #fff;
+      font-size: 0.72rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      flex-shrink: 0;
+      box-shadow: 0 0 6px rgba(56, 189, 248, 0.35);
+    }
+    .agent-user-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+    .agent-user-name {
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: #f1f5f9;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      min-width: 0;
+      flex: 1;
+    }
+    .agent-history-count {
+      font-size: 0.67rem;
+      color: #94a3b8;
+      white-space: nowrap;
+      flex-shrink: 0;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 2px 6px;
+      border-radius: 10px;
     }
 
     /* Iconified Sidebar State (Rail Mode ~48px) */
@@ -5152,7 +5197,8 @@
     .agent-sidebar.is-iconified .agent-history-search-box,
     .agent-sidebar.is-iconified .agent-history-item-info,
     .agent-sidebar.is-iconified .agent-history-delete-btn,
-    .agent-sidebar.is-iconified .agent-sidebar-footer {
+    .agent-sidebar.is-iconified .agent-user-name,
+    .agent-sidebar.is-iconified .agent-history-count {
       display: none !important;
     }
     .agent-sidebar.is-iconified .agent-sidebar-header {
@@ -5190,6 +5236,13 @@
       content: '💬';
       font-size: 0.85rem;
     }
+    .agent-sidebar.is-iconified .agent-sidebar-footer {
+      padding: 6px 4px;
+      justify-content: center;
+    }
+    .agent-sidebar.is-iconified .agent-user-badge {
+      justify-content: center;
+    }
 
     /* Right Column: Chat Pane */
     .agent-chat-pane {
@@ -5204,7 +5257,7 @@
       box-sizing: border-box;
     }
 
-    /* Agent Header - Compact & Border-Safe */
+    /* Agent Chat Header - Distinct Chat Title & Subtitle without Whale Icon */
     .agent-drawer-header {
       background: linear-gradient(135deg, rgba(139, 92, 246, 0.18), rgba(15, 23, 42, 0.8));
       border-bottom: 1px solid rgba(168, 85, 247, 0.25);
@@ -5222,30 +5275,34 @@
     .agent-header-brand {
       display: flex;
       align-items: center;
-      gap: 7px;
       min-width: 0;
       flex-shrink: 1;
+      overflow: hidden;
     }
-    .agent-avatar-icon {
-      background: rgba(168, 85, 247, 0.2);
-      border: 1px solid rgba(168, 85, 247, 0.4);
-      border-radius: 6px;
-      padding: 2px 4px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 0 10px rgba(168, 85, 247, 0.3);
-      flex-shrink: 0;
+    .agent-chat-title-wrap {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      overflow: hidden;
     }
-    .agent-header-title {
-      font-size: 0.82rem;
+    .agent-chat-title-main {
+      font-size: 0.84rem;
       font-weight: 700;
-      color: var(--text-bright);
-      line-height: 1.15;
+      color: #f8fafc;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      line-height: 1.2;
     }
+    .agent-chat-title-sub {
+      font-size: 0.64rem;
+      color: #a855f7;
+      font-weight: 600;
+      line-height: 1;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
     /* S/M/L Segmented Size Group */
     .agent-size-group {
       display: inline-flex;
@@ -5275,6 +5332,32 @@
       background: #8b5cf6;
       color: #ffffff;
       box-shadow: 0 0 6px rgba(139, 92, 246, 0.5);
+    }
+
+    /* Timeline Topic Banner (ChatGPT & Claude style) */
+    .agent-timeline-headline-banner {
+      padding: 12px 14px;
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), rgba(15, 23, 42, 0.5));
+      border: 1px solid rgba(168, 85, 247, 0.22);
+      border-radius: 8px;
+      margin-bottom: 4px;
+      flex-shrink: 0;
+    }
+    .agent-timeline-headline {
+      margin: 0;
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: #f8fafc;
+      letter-spacing: -0.01em;
+      line-height: 1.25;
+    }
+    .agent-timeline-subline {
+      margin-top: 3px;
+      font-size: 0.68rem;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
     /* Chat Messages Stream */
@@ -5326,7 +5409,7 @@
     .agent-msg-bot .agent-msg-bubble {
       background: rgba(30, 41, 59, 0.75);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      border-left: 3px solid #38bdf8;
+      border-left: 3px solid #a855f7;
       color: #e2e8f0;
       border-radius: 14px 14px 14px 2px;
       padding: 10px 12px;
@@ -5340,7 +5423,7 @@
       justify-content: space-between;
       margin-bottom: 6px;
       font-size: 0.68rem;
-      color: #38bdf8;
+      color: #a855f7;
       font-weight: 700;
     }
     .agent-msg-body {
@@ -5611,7 +5694,7 @@
       transform: scale(1.1);
     }
 
-    /* History Sessions List Items (Expanded & Filtered) */
+    /* History Sessions List Items */
     .agent-history-sessions-list {
       display: flex;
       flex-direction: column;
@@ -5737,27 +5820,6 @@
       cursor: pointer;
       font-size: 0.75rem;
       padding: 1px 3px;
-    }
-    .agent-history-user {
-      font-size: 0.7rem;
-      color: #94a3b8;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      background: rgba(255, 255, 255, 0.04);
-      padding: 3px 6px;
-      border-radius: 4px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-    .agent-history-user-name {
-      color: #38bdf8;
-      font-weight: 600;
-    }
-    .agent-history-count {
-      font-size: 0.68rem;
-      color: #94a3b8;
     }
 
 
@@ -6577,8 +6639,12 @@
         </div>
 
         <div class="agent-sidebar-footer">
-          <div class="agent-history-user" id="agentHistoryUserBadge" title="Aktiver Benutzer">
-            <span>👤</span> <span class="agent-history-user-name" id="agentHistoryUserName">ORCAI Benutzer</span>
+          <div class="agent-user-badge" id="agentHistoryUserBadge" title="Angemeldet">
+            <div class="agent-user-avatar" id="agentUserAvatar">
+              <img id="agentUserAvatarImg" src="" alt="" style="display:none;">
+              <span id="agentUserAvatarFallback">U</span>
+            </div>
+            <span class="agent-user-name" id="agentHistoryUserName">Benutzer</span>
           </div>
           <span class="agent-history-count" id="agentHistoryCount">0 Chats</span>
         </div>
@@ -6588,8 +6654,10 @@
       <div class="agent-chat-pane" id="agentChatPane">
         <div class="agent-drawer-header">
           <div class="agent-header-brand">
-            <img src="/favicon.svg" class="agent-orcai-logo" alt="ORCAI">
-            <span class="agent-header-title">ORCAI KI-Architekt</span>
+            <div class="agent-chat-title-wrap">
+              <span class="agent-chat-title-main" id="agentChatHeaderTitle">Neuer Chat</span>
+              <span class="agent-chat-title-sub">ORCAI KI-Architekt</span>
+            </div>
           </div>
           <div class="drawer-actions">
             <button class="drawer-btn-icon" id="btnAgentHistoryToggle" title="Seitenleiste Chats ein-/ausklappen (💬)" aria-label="Chat-Verlauf">💬</button>
@@ -44021,23 +44089,57 @@
         // =====================================================================
         // CHAT SESSION PERSISTENCE & USER IDENTITY ENGINE
         // =====================================================================
+        function generateChatTitleFromQuery(text) {
+          if (!text) return 'Neuer Chat';
+          let t = text.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+          const prefixes = [
+            /^(kannst du mir bitte|kannst du mir|bitte zeige mir|bitte zeig mir|bitte erkläre mir|bitte erkläre|bitte sage mir|bitte sag mir)\s+(den|die|das|dem|einen|eine|ein)?\s*/i,
+            /^(zeige mir bitte|zeig mir bitte|zeige mir|zeig mir|zeige|zeig)\s+(den|die|das|dem|einen|eine|ein)?\s*/i,
+            /^(welche systeme gehören zur|welche systeme gehören zum|welche systeme gehören zu|welche systeme sind in der|welche systeme sind im|welche systeme gibt es in|welche systeme)\s*/i,
+            /^(welche schnittstellen nutzen|welche schnittstellen gibt es für|welche schnittstellen gibt es|welche schnittstellen)\s*/i,
+            /^(wer bedient den|wer bedient die|wer bedient das|wer bedient)\s*/i,
+            /^(wie funktioniert das|wie funktioniert die|wie funktioniert der|wie funktioniert)\s*/i,
+            /^(was ist das|was ist die|was ist der|was ist)\s*/i,
+            /^(öffne das|öffne den|öffne die|öffne)\s*/i,
+            /^(erkläre mir bitte|erkläre mir|erkläre)\s+(den|die|das|dem|einen|eine|ein)?\s*/i
+          ];
+          for (const p of prefixes) {
+            t = t.replace(p, '');
+          }
+          t = t.replace(/[\?\.!;,]+$/, '').trim();
+          if (t.length > 0) {
+            t = t.charAt(0).toUpperCase() + t.slice(1);
+          }
+          if (t.length > 36) {
+            const cut = t.substring(0, 36);
+            const lastSpace = cut.lastIndexOf(' ');
+            t = (lastSpace > 20 ? cut.substring(0, lastSpace) : cut) + '...';
+          }
+          return t || 'Neuer Chat';
+        }
+
         function getActiveOrcaiIdentity() {
           if (typeof currentUser !== 'undefined' && currentUser && (currentUser.email || currentUser.uid)) {
+            const displayName = currentUser.displayName || (currentUser.email ? currentUser.email.split('@')[0] : 'ORCAI Benutzer');
             return {
               id: currentUser.uid || currentUser.email,
-              email: currentUser.email || 'user@orcai.io',
-              name: currentUser.displayName || (currentUser.email ? currentUser.email.split('@')[0] : 'ORCAI Benutzer'),
+              email: currentUser.email || '',
+              name: displayName,
+              photoURL: currentUser.photoURL || '',
               isLoggedIn: true
             };
           }
           const emailEl = document.getElementById('orcaiAccountEmail');
           const nameEl = document.getElementById('orcaiAccountName');
+          const photoEl = document.getElementById('orcaiAccountPhoto');
           if (emailEl && emailEl.textContent.trim()) {
             const email = emailEl.textContent.trim();
+            const displayName = nameEl?.textContent.trim() || email.split('@')[0];
             return {
               id: email,
               email: email,
-              name: nameEl?.textContent.trim() || email.split('@')[0],
+              name: displayName,
+              photoURL: (photoEl && !photoEl.hidden && photoEl.src) ? photoEl.src : '',
               isLoggedIn: true
             };
           }
@@ -44048,8 +44150,9 @@
           }
           return {
             id: guestId,
-            email: 'gast@orcai.local',
+            email: '',
             name: 'Gast ' + guestId.substring(11, 15),
+            photoURL: '',
             isLoggedIn: false
           };
         }
@@ -44062,7 +44165,21 @@
         function loadAllUserSessions() {
           try {
             const raw = localStorage.getItem(getUserSessionsStorageKey());
-            return raw ? JSON.parse(raw) : [];
+            const sessions = raw ? JSON.parse(raw) : [];
+            let changed = false;
+            sessions.forEach(s => {
+              if ((!s.title || s.title === 'Neuer Chat') && Array.isArray(s.messages)) {
+                const firstUser = s.messages.find(m => m.isUser);
+                if (firstUser) {
+                  s.title = generateChatTitleFromQuery(firstUser.html);
+                  changed = true;
+                }
+              }
+            });
+            if (changed) {
+              try { localStorage.setItem(getUserSessionsStorageKey(), JSON.stringify(sessions)); } catch (_) {}
+            }
+            return sessions;
           } catch (e) {
             console.warn('[OrcaiAgent] Error loading sessions:', e);
             return [];
@@ -44100,6 +44217,20 @@
           return newSession;
         }
 
+        function renderTimelineHeadlineBanner(title, timestamp) {
+          const headlineBanner = document.getElementById('agentTimelineBanner');
+          const headlineEl = document.getElementById('agentTimelineHeadline');
+          const metaEl = document.getElementById('agentTimelineSubline');
+          if (headlineEl) headlineEl.textContent = title || 'Neuer Chat';
+          if (metaEl) {
+            const d = new Date(timestamp || Date.now());
+            const dateStr = d.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' }) + ' ' + d.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+            metaEl.textContent = 'Unterhaltung gestartet • ' + dateStr;
+          }
+          const headerTitleEl = document.getElementById('agentChatHeaderTitle');
+          if (headerTitleEl) headerTitleEl.textContent = title || 'Neuer Chat';
+        }
+
         function saveMessageToActiveSession(msgObj) {
           let sessions = loadAllUserSessions();
           let session = sessions.find(s => s.id === currentSessionId);
@@ -44108,9 +44239,9 @@
             sessions = loadAllUserSessions();
           }
 
-          if (session.messages.length === 0 && msgObj.isUser) {
-            const cleanTitle = msgObj.html.replace(/<[^>]*>/g, '').trim().substring(0, 42);
-            if (cleanTitle) session.title = cleanTitle;
+          if (msgObj.isUser && (!session.title || session.title === 'Neuer Chat')) {
+            session.title = generateChatTitleFromQuery(msgObj.html);
+            renderTimelineHeadlineBanner(session.title, session.createdAt);
           }
 
           session.messages.push(msgObj);
@@ -44126,15 +44257,34 @@
           updateHistoryUI(agentHistorySearchInput ? agentHistorySearchInput.value : '');
         }
 
+        function ensureTimelineBannerElement() {
+          if (!agentChatMessages) return;
+          let banner = document.getElementById('agentTimelineBanner');
+          if (!banner) {
+            banner = document.createElement('div');
+            banner.className = 'agent-timeline-headline-banner';
+            banner.id = 'agentTimelineBanner';
+            banner.innerHTML = '<h2 class="agent-timeline-headline" id="agentTimelineHeadline">Neuer Chat</h2><div class="agent-timeline-subline" id="agentTimelineSubline">Unterhaltung gestartet</div>';
+            if (agentChatMessages.firstChild) {
+              agentChatMessages.insertBefore(banner, agentChatMessages.firstChild);
+            } else {
+              agentChatMessages.appendChild(banner);
+            }
+          }
+          return banner;
+        }
+
         function startNewChat() {
           currentSessionId = null;
           if (agentChatMessages) agentChatMessages.innerHTML = '';
+          ensureTimelineBannerElement();
+          renderTimelineHeadlineBanner('Neuer Chat', Date.now());
           renderInitialAgentGreeting();
           updateHistoryUI(agentHistorySearchInput ? agentHistorySearchInput.value : '');
         }
         window.startNewAgentChat = startNewChat;
 
-        // Load existing session - smoothly switches between chats without closing or displacing sidebar!
+        // Load existing session - smoothly switches between chats and updates timeline headline!
         function loadChatSession(sessionId) {
           const sessions = loadAllUserSessions();
           const session = sessions.find(s => s.id === sessionId);
@@ -44143,6 +44293,9 @@
           currentSessionId = session.id;
           if (agentChatMessages) agentChatMessages.innerHTML = '';
 
+          ensureTimelineBannerElement();
+          renderTimelineHeadlineBanner(session.title || 'Neuer Chat', session.createdAt);
+
           if (session.messages.length === 0) {
             renderInitialAgentGreeting();
           } else {
@@ -44150,7 +44303,6 @@
               appendMessage(m.html, m.isUser, m.chips, m.spoken, true);
             });
           }
-          // Highlight active session without hiding the sidebar
           updateHistoryUI(agentHistorySearchInput ? agentHistorySearchInput.value : '');
         }
         window.loadAgentChatSession = loadChatSession;
@@ -44217,8 +44369,26 @@
           const q = (filterQuery || '').trim().toLowerCase();
 
           const identity = getActiveOrcaiIdentity();
-          if (agentHistoryUserName) {
-            agentHistoryUserName.textContent = identity.name + (identity.isLoggedIn ? ' (' + identity.email + ')' : ' (Gast)');
+          const badgeEl = document.getElementById('agentHistoryUserBadge');
+          const nameEl = document.getElementById('agentHistoryUserName');
+          const avatarImg = document.getElementById('agentUserAvatarImg');
+          const avatarFallback = document.getElementById('agentUserAvatarFallback');
+
+          if (badgeEl) {
+            badgeEl.title = identity.name + (identity.email ? ' • ' + identity.email : '');
+          }
+          if (nameEl) {
+            nameEl.textContent = identity.name;
+          }
+          if (identity.photoURL && avatarImg && avatarFallback) {
+            avatarImg.src = identity.photoURL;
+            avatarImg.style.display = 'block';
+            avatarFallback.style.display = 'none';
+          } else if (avatarFallback) {
+            if (avatarImg) avatarImg.style.display = 'none';
+            avatarFallback.style.display = 'flex';
+            const initial = (identity.name || 'U').trim().charAt(0).toUpperCase();
+            avatarFallback.textContent = initial || 'U';
           }
 
           if (agentHistoryCount) {
@@ -44561,7 +44731,7 @@
           let inner = '<div class="agent-msg-bubble">';
           if (!isUser) {
             inner += '<div class="agent-msg-header">' +
-              '<span style="display:inline-flex;align-items:center;gap:5px;"><img src="/favicon.svg" class="agent-msg-logo" alt="ORCAI"> ORCAI Architekt</span>' +
+              '<span>ORCAI Architekt</span>' +
               '<button class="btn-msg-speak" title="Antwort vorlesen">🔊</button>' +
             '</div>';
           }
@@ -44625,7 +44795,7 @@
           const typingEl = document.createElement('div');
           typingEl.id = typingId;
           typingEl.className = 'agent-msg agent-msg-bot';
-          typingEl.innerHTML = '<div class="agent-msg-bubble"><div style="font-size:0.75rem; color:#94a3b8; display:flex; align-items:center; gap:6px;"><img src="/favicon.svg" class="agent-msg-logo" alt="ORCAI"> <em>Analysiere IT-Landschaft, Web &amp; Architekturmodelle...</em></div></div>';
+          typingEl.innerHTML = '<div class="agent-msg-bubble"><div style="font-size:0.75rem; color:#94a3b8; display:flex; align-items:center; gap:6px;"><em>Analysiere IT-Landschaft, Web &amp; Architekturmodelle...</em></div></div>';
           agentChatMessages.appendChild(typingEl);
           agentChatMessages.scrollTop = agentChatMessages.scrollHeight;
 
